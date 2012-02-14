@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:form id="formMenu">
+	<div id="menu">
+		<div id="menu2">
+			<ul>
+				<li>
+					<a href="#">Inicio</a>
+				</li>
+				<li>
+					<h:outputLink value="../sap/cliente.jsf">
+						<h:outputText value="Clientes" />
+					</h:outputLink>
+				</li>
+				<li>
+					<h:outputLink value="../sap/pedido.jsf">
+						<h:outputText value="Pedidos" />
+					</h:outputLink>
+				</li>
+				<li><a href="#">Acerca de...</a></li>
+				<li>
+					<h:commandLink value="Cerrar" action="#{loginBacking.logout}" />
+				</li>
+			</ul>
+		</div>
+	</div>
+</h:form>
+
+</html>

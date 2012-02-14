@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../layout/main.xhtml">
+	<ui:define name="content">
+
+		<div id="content1">
+			<h3>#{msg['weeks']}</h3>
+			<p></p>
+		</div>
+
+		<div id="content2">
+			<h:form id="form">
+
+				<p:dataTable id="recordTable" var="rec"
+					value="#{kpiWeekBacking.model}" rowKey="#{rec.id}"
+					selectionMode="single" selection="#{kpiWeekBacking.selected}">
+
+					<p:ajax event="rowSelect" update=":editForm:dialogPanel"
+						oncomplete="dialogPanel.show()" />
+
+					<p:column headerText="#{msg['wk_name']}">#{rec.name}</p:column>
+
+					<p:column headerText="#{msg['assigned_orders']}">#{rec.assignedOrders}</p:column>
+
+					<p:column headerText="#{msg['star_date']}">
+						<h:outputLabel value="#{rec.startDate}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputLabel>
+					</p:column>
+
+					<p:column headerText="#{msg['end_date']}">
+						<h:outputLabel value="#{rec.endDate}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputLabel>
+					</p:column>
+
+					<p:column headerText="#{msg['state']}">#{rec.state}</p:column>
+
+				</p:dataTable>
+
+				<p:spacer height="10" />
+
+				<h:panelGrid columns="2" style="align='left'">
+					<p:commandButton id="cmdNew" action="#{kpiWeekBacking.newAction}"
+						update=":editForm:dialogPanel" icon="ui-icon-plusthick"
+						value="#{msg['btn_new']}" oncomplete="dialogPanel.show()" />
+				</h:panelGrid>
+
+				<p:spacer height="10" />
+			</h:form>
+
+			<h:form id="editForm" prependId="false">
+
+				<p:dialog id="dialogPanel"
+					header="#{msg['msg_record_selected']} #{kpiWeekBacking.selected.name}"
+					widgetVar="dialogPanel" resizable="false" modal="true" width="500">
+
+					<p:messages id="messages" showDetail="true" autoUpdate="true" />
+
+					<h:panelGrid id="display" columns="2" width="100%">
+
+						<h:outputText value="#{msg['assigned_orders']}" />
+						<p:spinner value="#{kpiWeekBacking.selected.assignedOrders}"
+							min="1" max="999" maxlength="3">
+							<f:validator validatorId="workOrderValidator" />
+							<f:attribute name="fieldLabel" value="OT Programadas" />
+						</p:spinner>
+
+						<h:outputText value="#{msg['star_date']}" />
+						<p:calendar value="#{kpiWeekBacking.selected.startDate}"
+							showOn="button" navigator="true" />
+
+						<h:outputText value="#{msg['end_date']}" />
+						<p:calendar value="#{kpiWeekBacking.selected.endDate}"
+							showOn="button" navigator="true" />
+
+						<h:outputText value="#{msg['state']}" />
+						<p:selectOneMenu value="#{kpiWeekBacking.selected.state}"
+							style="width:100%">
+							<f:selectItem itemLabel="#{msg['ot_state_40']}"
+								itemValue="#{msg['ot_state_40']}" />
+							<f:selectItem itemLabel="#{msg['ot_state_60']}"
+								itemValue="#{msg['ot_state_60']}" />
+						</p:selectOneMenu>
+
+					</h:panelGrid>
+
+					<f:facet name="footer">
+						<p:commandButton id="cmdSave"
+							action="#{kpiWeekBacking.saveAction}"
+							update=":form:recordTable :editForm:display" icon="ui-icon-disk"
+							value="#{msg['btn_save']}" />
+					</f:facet>
+				</p:dialog>
+
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>
+
+</html>
