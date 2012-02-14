@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../layout/main.xhtml">
+	<ui:define name="content">
+
+		<div id="content1">
+			<h3>#{msg['title_schedule_days']}</h3>
+			<p></p>
+		</div>
+
+		<div id="content2">
+			<h:form id="form">
+
+				<p:panel width="100%">
+					<h:panelGrid id="pnlCalendarWeeks" columns="2" width="100%">
+						<h:outputText value="#{msg['wos_calendar_week']}"
+							style="width:100%" />
+						<p:selectOneMenu value="#{kpiDailyBacking.kpiWeekSelected}"
+							style="width:420px">
+							<f:selectItems value="#{kpiDailyBacking.listCalendarWeeks}" />
+							<p:ajax update="recordTable"
+								listener="#{kpiDailyBacking.handleWeekChange}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+				</p:panel>
+
+				<p:spacer height="10" />
+
+				<p:dataTable id="recordTable" var="rec"
+					value="#{kpiDailyBacking.model}" rowKey="#{rec.id}"
+					selectionMode="single" selection="#{kpiDailyBacking.selected}">
+
+					<p:ajax event="rowSelect" update=":editForm:display"
+						oncomplete="dialogPanel.show()" />
+
+					<p:column headerText="#{msg['wos_day']}">
+						<h:outputLabel value="#{rec.currentDay}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputLabel>
+					</p:column>
+
+					<p:column headerText="#{msg['wos_wo_scheduled']}">#{rec.scheduledOrders}</p:column>
+
+					<p:column headerText="#{msg['wos_wo_finished']}">#{rec.finishedOrders}</p:column>
+
+					<p:column headerText="#{msg['wos_wo_failures']}">#{rec.failuresOrders}</p:column>
+
+					<p:column headerText="#{msg['state']}">#{rec.state == 0?msg['day_state_open']:msg['day_state_close']}</p:column>
+
+				</p:dataTable>
+
+				<p:spacer height="10" />
+
+				<h:panelGrid columns="2" style="align='left'">
+					<p:commandButton id="cmdNew" action="#{kpiDailyBacking.newAction}"
+						icon="ui-icon-plusthick" value="#{msg['btn_new']}"
+						update=":editForm:dialogPanel" oncomplete="dialogPanel.show()" />
+				</h:panelGrid>
+
+				<p:spacer height="10" />
+
+			</h:form>
+			<h:form id="editForm" prependId="false">
+				<p:dialog id="dialogPanel"
+					header="#{msg['msg_record_selected']} #{kpiWeekBacking.selected.name}"
+					widgetVar="dialogPanel" resizable="false" modal="true" width="500">
+
+					<p:messages id="messages" showDetail="true" autoUpdate="true" />
+
+					<h:panelGrid id="display" columns="2" width="100%">
+
+						<h:outputText value="#{msg['wos_day']}" />
+						<p:calendar id="currentDay"
+							value="#{kpiDailyBacking.selected.currentDay}" showOn="button"
+							navigator="true" mindate="#{kpiDailyBacking.minDate}"
+							maxdate="#{kpiDailyBacking.maxDate}"
+							disabled="#{kpiDailyBacking.selected.id == null?false:true}" />
+
+						<h:outputText value="#{msg['wos_wo_scheduled']}" />
+						<p:spinner value="#{kpiDailyBacking.selected.scheduledOrders}"
+							min="1" max="999" maxlength="3">
+							<f:validator validatorId="workOrderValidator" />
+							<f:attribute name="fieldLabel" value="OT Asignadas" />
+						</p:spinner>
+
+						<h:outputText value="#{msg['state']}" rendered="#{kpiDailyBacking.selected.id == null?false:true}"/>
+						<p:selectOneMenu value="#{kpiDailyBacking.selected.state}" rendered="#{kpiDailyBacking.selected.id == null?false:true}">
+							<f:selectItem itemLabel="#{msg['day_state_open']}" itemValue="0" />
+							<f:selectItem itemLabel="#{msg['day_state_close']}" itemValue="1" />
+						</p:selectOneMenu>
+
+					</h:panelGrid>
+
+					<f:facet name="footer">
+						<p:commandButton id="cmdSave"
+							action="#{kpiDailyBacking.saveAction}"
+							update=":form:recordTable :editForm:display" icon="ui-icon-disk"
+							value="#{msg['btn_save']}" process="@form" />
+					</f:facet>
+				</p:dialog>
+			</h:form>
+
+			<script type="text/javascript">  
+	            function handleSubmitRequest(xhr, status, args) {  
+	                if(args.saved!='true') {  
+	                    jQuery('#dialogPanel').effect("shake", { times:1 }, 50);   
+	                } else {                                      
+	                	dialogPanel.hide();   
+	                }
+	            }
+        	</script>
+		</div>
+	</ui:define>
+</ui:composition>
+
+</html>

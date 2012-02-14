@@ -1,0 +1,268 @@
+/*
+  Template 0168
+  Designed by CSS Templates For Free and licensed under the Creative Commons Attribution 3.0
+  Website: http://www.csstemplatesforfree.org/
+  Twitter: @cssforfree
+*/
+* {
+	margin: 0;
+	padding: 0;
+}
+
+a {
+	color: #696916;
+	text-decoration: underline;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+body {
+	font-family: Georgia, serif;
+	font-size: 11pt;
+	line-height: 1.5em;
+	background: #285858 url('../images/bg1.gif') repeat-x left top;
+	color: #C9D5D5;
+}
+
+br.clear-all {
+	clear: both;
+}
+
+h1,h2,h3,h4 {
+	text-transform: uppercase;
+}
+
+h2 {
+	font-size: 1.5em;
+}
+
+h2,h3,h4 {
+	margin-bottom: 0.75em;
+	font-family: Georgia, serif;
+	color: #FFF;
+}
+
+h3 {
+	font-size: 1.25em;
+}
+
+h4 {
+	font-size: 1em;
+}
+
+img.float-left {
+	float: left;
+	margin: 5px 20px 20px 0;
+}
+
+img.float-top {
+	margin: 5px 0 20px 0;
+}
+
+p {
+	margin-bottom: 1.25em;
+}
+
+ul {
+	margin-bottom: 1.25em;
+}
+
+ul h4 {
+	margin-bottom: 0.3em;
+}
+
+#column1 {
+	padding: 0;
+	width: 940px;
+}
+
+#content1 {
+	width: 940px;
+	overflow: hidden;
+	margin: 0 0 15px 0;
+}
+
+#content2 {
+	width: 940px;
+	overflow: hidden;
+	float: left;
+}
+
+#content3 {
+	width: 460px;
+	margin: 0 0 0 475px;
+	overflow: hidden;
+}
+
+#footer {
+	border-bottom: solid 1px #14280B;
+	width: 940px;
+	color: #D8E1D4;
+	background: #33631D url('../images/bg2.gif') repeat-x left top;
+	padding: 30px 20px 20px 20px;
+	position: relative;
+	border-top: solid 1px #66C639;
+}
+
+#footer a {
+	color: #EDF1EB;
+}
+
+#footer h2,#footer h3,#footer h4 {
+	color: #FFF;
+}
+
+#footer ul {
+	list-style: none;
+}
+
+#footer ul li {
+	padding: 5px 0 5px 0;
+	border-top: solid 1px #6C8F5C;
+}
+
+#footer ul li.first-item {
+	padding-top: 0;
+	border-top: 0;
+}
+
+#footer-column1 {
+	width: 940px;
+}
+
+#header {
+	height: 100px;
+	position: relative;
+	padding: 20px;
+}
+
+#inner-container {
+	margin: 0 0 0 0;
+	color: #303030;
+	position: relative;
+	width: 940px;
+	border-bottom: solid 1px #D9D9D9;
+	background: #FFFFFF url('../images/bg3.gif') repeat-x left top;
+	padding: 40px 20px 20px 20px;
+}
+
+#inner-container .features {
+	list-style: none;
+	padding-left: 0;
+}
+
+#inner-container .features li {
+	clear: both;
+	padding: 10px 0 10px 0;
+}
+
+#inner-container a {
+	color: #171717;
+}
+
+#inner-container h2,#inner-container h3,#inner-container h4 {
+	color: #1A1A1A;
+}
+
+#inner-container strong {
+	color: #171717;
+}
+
+#inner-container ul {
+	list-style: none;
+}
+
+#inner-container ul li {
+	padding: 5px 0 5px 0;
+	border-top: solid 1px #B8B8B8;
+}
+
+#inner-container ul li.first-item {
+	padding-top: 0;
+	border-top: 0;
+}
+
+#main-logo {
+	left: 20px;
+	top: 20px;
+	height: 135px;
+	line-height: 135px;
+	position: absolute;
+}
+
+#main-logo a {
+	color: #FFF;
+	text-decoration: none;
+}
+
+#main-logo h1 {
+	font-size: 1.75em;
+	font-family: Georgia, serif;
+}
+
+#main-logo h2 {
+	font-size: 1.45em;
+	font-family: Georgia, serif;
+}
+
+#main-menu {
+	line-height: 60px;
+	top: 57px;
+	height: 60px;
+	right: 20px;
+	position: absolute;
+}
+
+#main-menu a {
+	color: #ECF0F0;
+	text-transform: uppercase;
+	text-decoration: none;
+}
+
+#main-menu ul {
+	list-style: none;
+	padding: 0 10px 0 10px;
+}
+
+#main-menu ul li {
+	display: inline;
+	padding: 0 5px 0 5px;
+}
+
+#outer-container {
+	margin: 0 auto 0 auto;
+	width: 980px;
+	position: relative;
+}
+
+#search-form input.btn {
+	padding: 6px;
+	background: #696916 url('../images/bg4.gif') repeat-x left top;
+	border-bottom: solid 1px #2A2A09;
+	margin-left: 1em;
+	border: 0;
+	color: #FFF;
+	border-top: solid 1px #D2D22D;
+}
+
+#search-form input.txt {
+	border: solid 1px #FFF;
+	padding: 5px;
+}
+
+#site-credits {
+	text-align: center;
+	margin: 0 0 0 0;
+	padding: 35px 0 55px 0;
+}
+
+#site-credits a {
+	color: #C9D5D5;
+}
+
+.actions td {
+	border: 0px none !important;
+	padding: 2px !important;
+}

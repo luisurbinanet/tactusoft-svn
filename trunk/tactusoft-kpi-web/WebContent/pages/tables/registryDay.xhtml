@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../layout/main.xhtml">
+	<ui:define name="content">
+
+		<div id="content1">
+			<h3>#{msg['title_registry_days']}</h3>
+			<p></p>
+		</div>
+
+		<div id="content2">
+			<h:form id="form">
+
+				<p:panel width="100%">
+					<h:panelGrid id="pnlParameter" columns="2" width="100%">
+						<h:outputText value="#{msg['wos_calendar_week']}"
+							style="width:100%" />
+						<p:selectOneMenu value="#{kpiDailyBacking.kpiWeekSelected}"
+							style="width:430px">
+							<f:selectItems value="#{kpiDailyBacking.listCalendarWeeks}" />
+							<p:ajax update="selDay :editForm:display"
+								listener="#{kpiDailyBacking.handleWeekChange}" />
+						</p:selectOneMenu>
+						
+						<h:outputText value="#{msg['wos_day']}" style="width:100%" />
+						<p:selectOneMenu id="selDay"
+							value="#{kpiDailyBacking.kpiDailySelected}" style="width:430px">
+							<f:selectItems value="#{kpiDailyBacking.listDays}" />
+							<p:ajax update=":editForm:display :editForm:cmdSave"
+								listener="#{kpiDailyBacking.handleDayChange}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+				</p:panel>
+
+				<p:spacer height="10" />
+
+			</h:form>
+			<h:form id="editForm" prependId="false">
+				<p:panel style="widht:100%">
+
+					<f:facet name="header">
+						#{msg['msg_record_selected']}
+					</f:facet>
+
+					<p:messages id="messages" showDetail="true" autoUpdate="true" />
+
+					<h:panelGrid id="display" columns="2" width="100%">
+
+						<h:outputText value="#{msg['wos_wo_scheduled']}" />
+						<p:spinner value="#{kpiDailyBacking.selected.scheduledOrders}"
+							min="1" max="999" maxlength="3" disabled="true" />
+
+						<h:outputText value="#{msg['wos_wo_finished']}" />
+						<p:spinner value="#{kpiDailyBacking.selected.finishedOrders}"
+							min="1" max="999" maxlength="3"
+							disabled="#{kpiDailyBacking.selected.state == 1?true:false}">
+							<f:validator validatorId="finishedOrderValidator" />
+							<f:attribute name="fieldLabel" value="#{msg['wos_wo_finished']}" />
+							<f:attribute name="scheduledOrders"
+								value="#{kpiDailyBacking.selected.scheduledOrders}" />
+							<f:attribute name="failuresOrders" value="#{failuresOrders}" />
+						</p:spinner>
+
+						<h:outputText value="#{msg['wos_wo_failures']}" />
+						<p:spinner id="failuresOrders"
+							value="#{kpiDailyBacking.selected.failuresOrders}" min="1"
+							max="999" maxlength="3" binding="#{failuresOrders}"
+							disabled="#{kpiDailyBacking.selected.state == 1?true:false}" />
+
+					</h:panelGrid>
+
+					<f:facet name="footer">
+						<p:commandButton id="cmdSave"
+							action="#{kpiDailyBacking.saveAction}" update=":editForm:display"
+							icon="ui-icon-disk" value="#{msg['btn_save']}" process="@form" 
+							disabled="#{kpiDailyBacking.selected.state == 1?true:false}"/>
+					</f:facet>
+				</p:panel>
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>
+
+</html>
