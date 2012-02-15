@@ -75,17 +75,17 @@ ul h4 {
 
 #column1 {
 	padding: 0;
-	width: 940px;
+	width: 1000px;
 }
 
 #content1 {
-	width: 940px;
+	width: 1000px;
 	overflow: hidden;
 	margin: 0 0 15px 0;
 }
 
 #content2 {
-	width: 940px;
+	width: 1000px;
 	overflow: hidden;
 	float: left;
 }
@@ -98,7 +98,7 @@ ul h4 {
 
 #footer {
 	border-bottom: solid 1px #14280B;
-	width: 940px;
+	width: 1000px;
 	color: #D8E1D4;
 	background: #33631D url('../images/bg2.gif') repeat-x left top;
 	padding: 30px 20px 20px 20px;
@@ -129,7 +129,7 @@ ul h4 {
 }
 
 #footer-column1 {
-	width: 940px;
+	width: 1000px;
 }
 
 #header {
@@ -142,7 +142,7 @@ ul h4 {
 	margin: 0 0 0 0;
 	color: #303030;
 	position: relative;
-	width: 940px;
+	width: 1000px;
 	border-bottom: solid 1px #D9D9D9;
 	background: #FFFFFF url('../images/bg3.gif') repeat-x left top;
 	padding: 40px 20px 20px 20px;
@@ -265,4 +265,8 @@ ul h4 {
 .actions td {
 	border: 0px none !important;
 	padding: 2px !important;
+}
+
+.vertAlign {
+    text-align: center;
 }
