@@ -32,14 +32,14 @@ public class KpiWeek implements java.io.Serializable {
 	private Date startDate;
 	private Date endDate;
 	private int assignedOrders;
-	private String state;
+	private int state;
 	private Set<KpiDaily> kpiDailies = new HashSet<KpiDaily>(0);
 
 	public KpiWeek() {
 	}
 
 	public KpiWeek(BigDecimal id, Date startDate, Date endDate,
-			int assignedOrders, String state) {
+			int assignedOrders, int state) {
 		this.id = id;
 		this.startDate = startDate;
 		this.endDate = endDate;
@@ -48,7 +48,7 @@ public class KpiWeek implements java.io.Serializable {
 	}
 
 	public KpiWeek(BigDecimal id, String name, String description,
-			Date startDate, Date endDate, int assignedOrders, String state,
+			Date startDate, Date endDate, int assignedOrders, int state,
 			Set<KpiDaily> kpiDailies) {
 		this.id = id;
 		this.name = name;
@@ -117,12 +117,12 @@ public class KpiWeek implements java.io.Serializable {
 		this.assignedOrders = assignedOrders;
 	}
 
-	@Column(name = "state", nullable = false, length = 30)
-	public String getState() {
+	@Column(name = "state", nullable = false)
+	public int getState() {
 		return this.state;
 	}
 
-	public void setState(String state) {
+	public void setState(int state) {
 		this.state = state;
 	}
 
