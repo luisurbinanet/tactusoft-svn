@@ -47,24 +47,28 @@ public class ProcessBo implements Serializable {
 		int id = 0;
 		int index;
 		List<ReportDaily> listResult = new ArrayList<ReportDaily>();
-		ReportDaily reportDaily = new ReportDaily();
+		ReportDaily reportDaily;
+		Double[] listPlan;
+		String[] style;
+		
+		reportDaily = new ReportDaily();
 		reportDaily.setId(new BigDecimal(id));
 		reportDaily.setMetric("Cumplimiento Programa Semanal HH");
 		reportDaily.setUm("%");
-		reportDaily.setType("Actual");
+		reportDaily.setType("Plan");
 
-		Double[] listPlan = new Double[list.size()];
+		listPlan = new Double[list.size()];
 		index = 0;
 		for (KpiDaily row : list) {
-			double scheduledOrders = row.getScheduledOrders();
-			if (scheduledOrders != 0d) {
-				double finishedOrders = row.getFinishedOrders();
-				double res = finishedOrders / scheduledOrders;
-				listPlan[index] = res;
-				index++;
-			}
+			// double scheduledOrders = row.getScheduledOrders();
+			// if (scheduledOrders != 0d) {
+			// double finishedOrders = row.getFinishedOrders();
+			// double res = finishedOrders / scheduledOrders;
+			listPlan[index] = 0.8;
+			index++;
+			// }
 		}
-		
+
 		reportDaily.setListPlan(listPlan);
 		listResult.add(reportDaily);
 		id++;
@@ -73,59 +77,42 @@ public class ProcessBo implements Serializable {
 		reportDaily.setId(new BigDecimal(id));
 		//reportDaily.setMetric("Cumplimiento Programa Semanal HH");
 		reportDaily.setUm("%");
-		reportDaily.setType("Plan");
-
-		listPlan = new Double[list.size()];
-		index = 0;
-		for (KpiDaily row : list) {
-			//double scheduledOrders = row.getScheduledOrders();
-			//if (scheduledOrders != 0d) {
-				//double finishedOrders = row.getFinishedOrders();
-				//double res = finishedOrders / scheduledOrders;
-				listPlan[index] = 0.8;
-				index++;
-			//}
-		}
-
-		reportDaily.setListPlan(listPlan);
-		listResult.add(reportDaily);
-		id++;
-
-		reportDaily = new ReportDaily();
-		reportDaily.setId(new BigDecimal(id));
-		reportDaily.setMetric("Imprevistos");
-		reportDaily.setUm("%");
 		reportDaily.setType("Actual");
 
 		listPlan = new Double[list.size()];
+		style = new String[list.size()];
 		index = 0;
 		for (KpiDaily row : list) {
-			double finishedOrders = row.getFinishedOrders();
-			double failuresOrders = row.getFailuresOrders();
-			if ((finishedOrders - failuresOrders) != 0d) {
-				double res = failuresOrders / (failuresOrders + finishedOrders);
+			double scheduledOrders = row.getScheduledOrders();
+			if (scheduledOrders != 0d) {
+				double finishedOrders = row.getFinishedOrders();
+				double res = finishedOrders / scheduledOrders;
 				listPlan[index] = res;
+				if(res < 0.8){
+					style[index]="style1";
+				} else {
+					style[index]="style2";
+				}
+				
 				index++;
 			}
 		}
 
 		reportDaily.setListPlan(listPlan);
+		reportDaily.setStyle(style);
 		listResult.add(reportDaily);
 		id++;
-
+		
 		reportDaily = new ReportDaily();
 		reportDaily.setId(new BigDecimal(id));
-		reportDaily.setMetric("Demoras");
-		reportDaily.setUm("Hr");
-		reportDaily.setType("Actual");
+		reportDaily.setMetric("Imprevistos");
+		reportDaily.setUm("%");
+		reportDaily.setType("Plan");
 
 		listPlan = new Double[list.size()];
 		index = 0;
 		for (KpiDaily row : list) {
-			double res = row.getS() + row.getEe() + row.getDr() + row.getRa()
-					+ row.getFh() + row.getCa() + row.getLu() + row.getTr()
-					+ row.getFp() + row.getCn() + row.getFc() + row.getRt();
-			listPlan[index] = res;
+			listPlan[index] = 0.2;
 			index++;
 		}
 
@@ -133,33 +120,111 @@ public class ProcessBo implements Serializable {
 		listResult.add(reportDaily);
 		id++;
 
+		reportDaily = new ReportDaily();
+		reportDaily.setId(new BigDecimal(id));
+		//reportDaily.setMetric("Imprevistos");
+		reportDaily.setUm("%");
+		reportDaily.setType("Actual");
+
+		listPlan = new Double[list.size()];
+		style = new String[list.size()];
+		index = 0;
+		for (KpiDaily row : list) {
+			double finishedOrders = row.getFinishedOrders();
+			double failuresOrders = row.getFailuresOrders();
+			if ((finishedOrders - failuresOrders) != 0d) {
+				double res = failuresOrders / (failuresOrders + finishedOrders);
+				listPlan[index] = res;
+				if(res < 0.2){
+					style[index]="style1";
+				} else {
+					style[index]="style2";
+				}
+				index++;
+			}
+		}
+
+		reportDaily.setListPlan(listPlan);
+		reportDaily.setStyle(style);
+		listResult.add(reportDaily);
+		id++;
+		
+		reportDaily = new ReportDaily();
+		reportDaily.setId(new BigDecimal(id));
+		reportDaily.setMetric("Demoras");
+		reportDaily.setUm("Hr");
+		reportDaily.setType("Plan");
+
+		listPlan = new Double[list.size()];
+		index = 0;
+		for (KpiDaily row : list) {
+			listPlan[index] = 23d;
+			index++;
+		}
+
+		reportDaily.setListPlan(listPlan);
+		listResult.add(reportDaily);
+		id++;
+
+		reportDaily = new ReportDaily();
+		reportDaily.setId(new BigDecimal(id));
+		//reportDaily.setMetric("Demoras");
+		reportDaily.setUm("Hr");
+		reportDaily.setType("Actual");
+
+		listPlan = new Double[list.size()];
+		style = new String[list.size()];
+		index = 0;
+		for (KpiDaily row : list) {
+			double res = row.getS() + row.getEe() + row.getDr() + row.getRa()
+					+ row.getFh() + row.getCa() + row.getLu() + row.getTr()
+					+ row.getFp() + row.getCn() + row.getFc() + row.getRt();
+			listPlan[index] = res;
+			if(res < 23d){
+				style[index]="style1";
+			} else {
+				style[index]="style2";
+			}
+			index++;
+		}
+
+		reportDaily.setListPlan(listPlan);
+		reportDaily.setStyle(style);
+		listResult.add(reportDaily);
+		id++;
+
 		return listResult;
 	}
-	
+
 	public ChartSeries getGraphDaily(BigDecimal idKpiWeek) {
-		ChartSeries chartSeries  = new ChartSeries();
-		
+		ChartSeries chartSeries = new ChartSeries();
+
 		List<KpiDaily> list = dao.find("from KpiDaily o where o.kpiWeek.id = "
 				+ idKpiWeek + " order by o.currentDay");
-		int lastIndex  = list.size() - 1;
-		
-		KpiDaily lastRow = list.get(lastIndex);
-		chartSeries.setLabel("Códigos de Demora");
-		chartSeries.set("Seguridad", lastRow.getS());
-		chartSeries.set("Entrega Equipo", lastRow.getEe());
-		chartSeries.set("Disp. Repuesto", lastRow.getDr());
-		chartSeries.set("Reasig. Trabajo", lastRow.getRa());
-		
-		chartSeries.set("Falta Herram.", lastRow.getFh());
-		chartSeries.set("Cambio Alcace Trab.", lastRow.getCa());
-		chartSeries.set("Camión Lubricador", lastRow.getLu());
-		chartSeries.set("Tronadura", lastRow.getTr());
-		
-		chartSeries.set("Falta de Personal", lastRow.getFp());
-		chartSeries.set("Causas Naturales", lastRow.getCn());
-		chartSeries.set("Falta de Conoc.", lastRow.getFc());
-		chartSeries.set("Retrabajo", lastRow.getRt());
-		
+		int lastIndex = list.size() - 1;
+
+		if (lastIndex >= 0) {
+			KpiDaily lastRow = list.get(lastIndex);
+			chartSeries.setLabel("Códigos de Demora");
+			chartSeries.set("Seguridad", lastRow.getS());
+			chartSeries.set("Entrega Equipo", lastRow.getEe());
+			chartSeries.set("Disp. Repuesto", lastRow.getDr());
+			chartSeries.set("Reasig. Trabajo", lastRow.getRa());
+
+			chartSeries.set("Falta Herram.", lastRow.getFh());
+			chartSeries.set("Cambio Alcace Trab.", lastRow.getCa());
+			chartSeries.set("Camión Lubricador", lastRow.getLu());
+			chartSeries.set("Tronadura", lastRow.getTr());
+
+			chartSeries.set("Falta de Personal", lastRow.getFp());
+			chartSeries.set("Causas Naturales", lastRow.getCn());
+			chartSeries.set("Falta de Conoc.", lastRow.getFc());
+			chartSeries.set("Retrabajo", lastRow.getRt());
+		} else {
+			chartSeries.setLabel("-- SIN INFORMACION -- ");
+			chartSeries.set("", 0);
+		}
+
 		return chartSeries;
 	}
 }

@@ -1248,7 +1248,7 @@ ul.rco-vmenu ul li li li li li a:hover, ul.rco-vmenu ul li li li li li a:hover.a
   color: #FFFFFF;
   margin-right: 10px;
   margin-left: 10px;
-  font-size: 12px;
+  font-size: 18px;
   margin:0;
   padding: 0 30px 0 10px;
   white-space: nowrap;
@@ -1731,4 +1731,22 @@ img.image
     margin:0;
     padding:0;
     border:none;
+}
+
+.style1
+{
+	background-color:red;
+	color: white;
+}
+
+.style2
+{
+	background-color:green;
+	color: black;
+}
+
+.style3
+{
+	background-color:red;
+	color: white;
 }
