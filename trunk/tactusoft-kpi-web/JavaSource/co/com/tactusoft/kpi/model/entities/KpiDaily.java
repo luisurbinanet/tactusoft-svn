@@ -32,18 +32,18 @@ public class KpiDaily implements java.io.Serializable {
 	private Integer scheduledOrders;
 	private Integer finishedOrders;
 	private Integer failuresOrders;
-	private BigDecimal s;
-	private BigDecimal ee;
-	private BigDecimal dr;
-	private BigDecimal ra;
-	private BigDecimal fh;
-	private BigDecimal ca;
-	private BigDecimal lu;
-	private BigDecimal tr;
-	private BigDecimal fp;
-	private BigDecimal cn;
-	private BigDecimal fc;
-	private BigDecimal rt;
+	private Double s;
+	private Double ee;
+	private Double dr;
+	private Double ra;
+	private Double fh;
+	private Double ca;
+	private Double lu;
+	private Double tr;
+	private Double fp;
+	private Double cn;
+	private Double fc;
+	private Double rt;
 	private Integer state;
 
 	public KpiDaily() {
@@ -57,10 +57,10 @@ public class KpiDaily implements java.io.Serializable {
 
 	public KpiDaily(BigDecimal id, KpiWeek kpiWeek, Date currentDay,
 			String description, Integer scheduledOrders,
-			Integer finishedOrders, Integer failuresOrders, BigDecimal s,
-			BigDecimal ee, BigDecimal dr, BigDecimal ra, BigDecimal fh,
-			BigDecimal ca, BigDecimal lu, BigDecimal tr, BigDecimal fp,
-			BigDecimal cn, BigDecimal fc, BigDecimal rt) {
+			Integer finishedOrders, Integer failuresOrders, Double s,
+			Double ee, Double dr, Double ra, Double fh,
+			Double ca, Double lu, Double tr, Double fp,
+			Double cn, Double fc, Double rt) {
 		this.id = id;
 		this.kpiWeek = kpiWeek;
 		this.currentDay = currentDay;
@@ -148,111 +148,111 @@ public class KpiDaily implements java.io.Serializable {
 		this.failuresOrders = failuresOrders;
 	}
 
-	@Column(name = "s", precision = 5)
-	public BigDecimal getS() {
+	@Column(name = "s", precision = 5, scale = 2)
+	public Double getS() {
 		return this.s;
 	}
 
-	public void setS(BigDecimal s) {
+	public void setS(Double s) {
 		this.s = s;
 	}
 
-	@Column(name = "ee", precision = 5)
-	public BigDecimal getEe() {
+	@Column(name = "ee", precision = 5, scale = 2)
+	public Double getEe() {
 		return this.ee;
 	}
 
-	public void setEe(BigDecimal ee) {
+	public void setEe(Double ee) {
 		this.ee = ee;
 	}
 
-	@Column(name = "dr", precision = 5)
-	public BigDecimal getDr() {
+	@Column(name = "dr", precision = 5, scale = 2)
+	public Double getDr() {
 		return this.dr;
 	}
 
-	public void setDr(BigDecimal dr) {
+	public void setDr(Double dr) {
 		this.dr = dr;
 	}
 
-	@Column(name = "ra", precision = 5)
-	public BigDecimal getRa() {
+	@Column(name = "ra", precision = 5, scale = 2)
+	public Double getRa() {
 		return this.ra;
 	}
 
-	public void setRa(BigDecimal ra) {
+	public void setRa(Double ra) {
 		this.ra = ra;
 	}
 
-	@Column(name = "fh", precision = 5)
-	public BigDecimal getFh() {
+	@Column(name = "fh", precision = 5, scale = 2)
+	public Double getFh() {
 		return this.fh;
 	}
 
-	public void setFh(BigDecimal fh) {
+	public void setFh(Double fh) {
 		this.fh = fh;
 	}
 
-	@Column(name = "ca", precision = 5)
-	public BigDecimal getCa() {
+	@Column(name = "ca", precision = 5, scale = 2)
+	public Double getCa() {
 		return this.ca;
 	}
 
-	public void setCa(BigDecimal ca) {
+	public void setCa(Double ca) {
 		this.ca = ca;
 	}
 
-	@Column(name = "lu", precision = 5)
-	public BigDecimal getLu() {
+	@Column(name = "lu", precision = 5, scale = 2)
+	public Double getLu() {
 		return this.lu;
 	}
 
-	public void setLu(BigDecimal lu) {
+	public void setLu(Double lu) {
 		this.lu = lu;
 	}
 
-	@Column(name = "tr", precision = 5)
-	public BigDecimal getTr() {
+	@Column(name = "tr", precision = 5, scale = 2)
+	public Double getTr() {
 		return this.tr;
 	}
 
-	public void setTr(BigDecimal tr) {
+	public void setTr(Double tr) {
 		this.tr = tr;
 	}
 
-	@Column(name = "fp", precision = 5)
-	public BigDecimal getFp() {
+	@Column(name = "fp", precision = 5, scale = 2)
+	public Double getFp() {
 		return this.fp;
 	}
 
-	public void setFp(BigDecimal fp) {
+	public void setFp(Double fp) {
 		this.fp = fp;
 	}
 
-	@Column(name = "cn", precision = 5)
-	public BigDecimal getCn() {
+	@Column(name = "cn", precision = 5, scale = 2)
+	public Double getCn() {
 		return this.cn;
 	}
 
-	public void setCn(BigDecimal cn) {
+	public void setCn(Double cn) {
 		this.cn = cn;
 	}
 
-	@Column(name = "fc", precision = 5)
-	public BigDecimal getFc() {
+	@Column(name = "fc", precision = 5, scale = 2)
+	public Double getFc() {
 		return this.fc;
 	}
 
-	public void setFc(BigDecimal fc) {
+	public void setFc(Double fc) {
 		this.fc = fc;
 	}
 
-	@Column(name = "rt", precision = 5)
-	public BigDecimal getRt() {
+	@Column(name = "rt", precision = 5, scale = 2)
+	public Double getRt() {
 		return this.rt;
 	}
 
-	public void setRt(BigDecimal rt) {
+	public void setRt(Double rt) {
 		this.rt = rt;
 	}
 
