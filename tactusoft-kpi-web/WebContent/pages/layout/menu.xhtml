@@ -6,28 +6,31 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <h:form id="formMenu">
-	<div id="menu">
-		<div id="menu2">
-			<ul>
-				<li>
-					<a href="#">Inicio</a>
-				</li>
-				<li>
-					<h:outputLink value="../sap/cliente.jsf">
-						<h:outputText value="Clientes" />
-					</h:outputLink>
-				</li>
-				<li>
-					<h:outputLink value="../sap/pedido.jsf">
-						<h:outputText value="Pedidos" />
-					</h:outputLink>
-				</li>
-				<li><a href="#">Acerca de...</a></li>
-				<li>
-					<h:commandLink value="Cerrar" action="#{loginBacking.logout}" />
-				</li>
-			</ul>
-		</div>
+	<div class="rco-nav">
+		<div class="l"></div>
+		<div class="r"></div>
+		<ul class="rco-menu">
+			<li><a href="#" class="active"><span class="l"></span><span
+					class="r"></span><span class="t">Home</span> </a>
+			</li>
+			<li><a href="#"><span class="l"></span><span class="r"></span><span
+					class="t">Menu Item</span> </a>
+				<ul>
+					<li><a href="#">Menu Subitem 1</a>
+						<ul>
+							<li><a href="#">Menu Subitem 1.1</a></li>
+							<li><a href="#">Menu Subitem 1.2</a></li>
+							<li><a href="#">Menu Subitem 1.3</a></li>
+						</ul>
+					</li>
+					<li><a href="#">Menu Subitem 2</a></li>
+					<li><a href="#">Menu Subitem 3</a></li>
+				</ul>
+			</li>
+			<li><a href="#"><span class="l"></span><span class="r"></span><span
+					class="t">About</span> </a>
+			</li>
+		</ul>
 	</div>
 </h:form>
 
