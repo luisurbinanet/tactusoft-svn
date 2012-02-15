@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../layout/main.xhtml">
+	<ui:define name="content">
+
+		<div id="content1">
+			<h3>#{msg['title_report_daymonth']}</h3>
+			<p></p>
+		</div>
+
+		<div id="content2">
+			<h:form id="form">
+
+				<p:panel width="100%">
+					<h:panelGrid id="pnlParameter" columns="2" width="100%">
+						<h:outputText value="#{msg['wos_calendar_week']}"
+							style="width:100%" />
+						<p:selectOneMenu value="#{reportBacking.idKpiWeek}"
+							style="width:430px">
+							<f:selectItems value="#{reportBacking.listItemWeeks}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+
+					<f:facet name="footer">
+						<p:commandButton id="cmdOK" update="recordTable chrt1"
+							value="#{msg['btn_ok']}" action="#{reportBacking.generateAction}"
+							process="@form" />
+					</f:facet>
+
+				</p:panel>
+
+				<p:spacer height="10" />
+
+				<h:panelGrid id="display" width="100%">
+					<p:dataTable id="recordTable" var="rec"
+						value="#{reportBacking.model}">
+
+						<p:column headerText="Daily Metrics" rowspan="2">
+							<h:outputLabel value="#{rec.metric}" />
+						</p:column>
+
+						<p:column headerText="UM">
+							<h:outputLabel value="#{rec.um}" />
+						</p:column>
+						
+						<p:column headerText="">
+							<h:outputLabel value="#{rec.type}" />
+						</p:column>
+
+						<p:columns value="#{reportBacking.columns}" var="column"
+							columnIndexVar="colIndex">
+							<f:facet name="header">
+                				#{column.header}
+            				</f:facet>
+
+							<h:outputLabel value="#{rec.listPlan[colIndex]}"
+								rendered="#{rec.um eq '%'?true:false}">
+								<f:convertNumber type="percent" />
+							</h:outputLabel>
+
+							<h:outputLabel value="#{rec.listPlan[colIndex]}"
+								rendered="#{rec.um eq '%'?false:true}">
+								<f:convertNumber type="number" />
+							</h:outputLabel>
+
+						</p:columns>
+
+					</p:dataTable>
+
+					<p:spacer height="20" />
+
+					<p:barChart id="chrt1" value="#{reportBacking.categoryModel}"
+						title="Demoras del Día Anterior" min="0" max="40"
+						style="height:450px" yaxisLabel="Horas" xaxisAngle="90" />
+
+				</h:panelGrid>
+
+				<p:spacer height="10" />
+			</h:form>
+
+		</div>
+	</ui:define>
+</ui:composition>
+
+</html>

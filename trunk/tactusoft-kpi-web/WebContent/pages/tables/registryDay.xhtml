@@ -23,15 +23,16 @@
 						<p:selectOneMenu value="#{kpiDailyBacking.kpiWeekSelected}"
 							style="width:430px">
 							<f:selectItems value="#{kpiDailyBacking.listCalendarWeeks}" />
-							<p:ajax update="selDay :editForm:display"
+							<p:ajax update="selDay :editForm:display :editForm:display2 :editForm:cmdSave"
 								listener="#{kpiDailyBacking.handleWeekChange}" />
 						</p:selectOneMenu>
-						
+
 						<h:outputText value="#{msg['wos_day']}" style="width:100%" />
 						<p:selectOneMenu id="selDay"
 							value="#{kpiDailyBacking.kpiDailySelected}" style="width:430px">
 							<f:selectItems value="#{kpiDailyBacking.listDays}" />
-							<p:ajax update=":editForm:display :editForm:cmdSave"
+							<p:ajax
+								update=":editForm:display :editForm:display2 :editForm:cmdSave"
 								listener="#{kpiDailyBacking.handleDayChange}" />
 						</p:selectOneMenu>
 					</h:panelGrid>
@@ -44,7 +45,7 @@
 				<p:panel style="widht:100%">
 
 					<f:facet name="header">
-						#{msg['msg_record_selected']}
+						#{msg['work_order']}
 					</f:facet>
 
 					<p:messages id="messages" showDetail="true" autoUpdate="true" />
@@ -74,13 +75,97 @@
 
 					</h:panelGrid>
 
+				</p:panel>
+
+				<p:panel style="widht:100%">
+
+					<f:facet name="header">
+						#{msg['msg_delays']}
+					</f:facet>
+
+					<h:panelGrid id="display2" columns="4" width="100%">
+						<h:outputText value="#{msg['day_s']}" />
+						<p:spinner value="#{kpiDailyBacking.selected.s}" min="1.0" max="999.9"
+							disabled="#{kpiDailyBacking.selected.state == 1?true:false}"
+							stepFactor="0.50" />
+
+						<h:outputText value="#{msg['day_ee']}" />
+						<p:spinner value="#{kpiDailyBacking.selected.ee}" min="1"
+							max="999" maxlength="3"
+							disabled="#{kpiDailyBacking.selected.state == 1?true:false}"
+							stepFactor="0.5" />
+
+						<h:outputText value="#{msg['day_dr']}" />
+						<p:spinner value="#{kpiDailyBacking.selected.dr}" min="1"
+							max="999" maxlength="3"
+							disabled="#{kpiDailyBacking.selected.state == 1?true:false}"
+							stepFactor="0.5" />
+
+						<h:outputText value="#{msg['day_ra']}" />
+						<p:spinner value="#{kpiDailyBacking.selected.ra}" min="1"
+							max="999" maxlength="3"
+							disabled="#{kpiDailyBacking.selected.state == 1?true:false}"
+							stepFactor="0.5" />
+
+						<h:outputText value="#{msg['day_fh']}" />
+						<p:spinner value="#{kpiDailyBacking.selected.fh}" min="1"
+							max="999" maxlength="3"
+							disabled="#{kpiDailyBacking.selected.state == 1?true:false}"
+							stepFactor="0.1" />
+
+						<h:outputText value="#{msg['day_ca']}" />
+						<p:spinner value="#{kpiDailyBacking.selected.ca}" min="1"
+							max="999" maxlength="3"
+							disabled="#{kpiDailyBacking.selected.state == 1?true:false}"
+							stepFactor="0.5" />
+
+						<h:outputText value="#{msg['day_lu']}" />
+						<p:spinner value="#{kpiDailyBacking.selected.lu}" min="1"
+							max="999" maxlength="3"
+							disabled="#{kpiDailyBacking.selected.state == 1?true:false}"
+							stepFactor="0.1" />
+
+						<h:outputText value="#{msg['day_tr']}" />
+						<p:spinner value="#{kpiDailyBacking.selected.tr}" min="1"
+							max="999" maxlength="3"
+							disabled="#{kpiDailyBacking.selected.state == 1?true:false}"
+							stepFactor="0.5" />
+
+						<h:outputText value="#{msg['day_fp']}" />
+						<p:spinner value="#{kpiDailyBacking.selected.fp}" min="1"
+							max="999" maxlength="3"
+							disabled="#{kpiDailyBacking.selected.state == 1?true:false}"
+							stepFactor="0.5" />
+
+						<h:outputText value="#{msg['day_cn']}" />
+						<p:spinner value="#{kpiDailyBacking.selected.cn}" min="1"
+							max="999" maxlength="3"
+							disabled="#{kpiDailyBacking.selected.state == 1?true:false}"
+							stepFactor="0.5" />
+
+						<h:outputText value="#{msg['day_fc']}" />
+						<p:spinner value="#{kpiDailyBacking.selected.fc}" min="1"
+							max="999" maxlength="3"
+							disabled="#{kpiDailyBacking.selected.state == 1?true:false}"
+							stepFactor="0.5" />
+
+						<h:outputText value="#{msg['day_rt']}" />
+						<p:spinner value="#{kpiDailyBacking.selected.rt}" min="1"
+							max="999" maxlength="3"
+							disabled="#{kpiDailyBacking.selected.state == 1?true:false}"
+							stepFactor="0.5" />
+					</h:panelGrid>
+
 					<f:facet name="footer">
 						<p:commandButton id="cmdSave"
-							action="#{kpiDailyBacking.saveAction}" update=":editForm:display"
-							icon="ui-icon-disk" value="#{msg['btn_save']}" process="@form" 
-							disabled="#{kpiDailyBacking.selected.state == 1?true:false}"/>
+							action="#{kpiDailyBacking.saveAction}"
+							update=":editForm:display :editForm:display2" icon="ui-icon-disk"
+							value="#{msg['btn_save']}" process="@form"
+							disabled="#{kpiDailyBacking.selected.state == 1?true:false || kpiDailyBacking.selected.id == null}" />
 					</f:facet>
+
 				</p:panel>
+
 			</h:form>
 		</div>
 	</ui:define>

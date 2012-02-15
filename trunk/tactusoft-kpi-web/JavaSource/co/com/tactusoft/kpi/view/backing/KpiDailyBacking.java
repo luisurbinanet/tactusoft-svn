@@ -94,7 +94,13 @@ public class KpiDailyBacking implements Serializable {
 			for (KpiWeek row : list) {
 				SelectItem item = new SelectItem();
 				item.setValue(row.getId());
-				item.setLabel(row.getName());
+				
+				SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
+				String startDate = sdf.format(row.getStartDate());
+				String endDate = sdf.format(row.getEndDate());
+				String label = row.getName() + ": " + startDate + " - " + endDate;
+				
+				item.setLabel(label);
 
 				listCalendarWeeks.add(item);
 
@@ -182,6 +188,9 @@ public class KpiDailyBacking implements Serializable {
 				selected.setId(service.getId("KpiDaily"));
 				selected.setFinishedOrders(0);
 				selected.setFailuresOrders(0);
+				
+				selected.setS(0d);
+				
 				selected.setState(0);
 			}
 
@@ -222,6 +231,8 @@ public class KpiDailyBacking implements Serializable {
 		if (listDays.size() > 0) {
 			this.kpiDailySelected = list.get(0).getId();
 			selected = mapKpiDaily.get(kpiDailySelected);
+		} else {
+			selected = new KpiDaily();
 		}
 	}
 
