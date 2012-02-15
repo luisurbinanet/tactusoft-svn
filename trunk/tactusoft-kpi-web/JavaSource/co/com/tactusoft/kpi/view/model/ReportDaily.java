@@ -15,6 +15,7 @@ public class ReportDaily implements Serializable {
 	private String type;
 	private Double[] listPlan;
 	private Double[] listCurrent;
+	private String[] style;
 
 	public ReportDaily() {
 
@@ -66,6 +67,14 @@ public class ReportDaily implements Serializable {
 
 	public void setListCurrent(Double[] listCurrent) {
 		this.listCurrent = listCurrent;
+	}
+
+	public String[] getStyle() {
+		return style;
+	}
+
+	public void setStyle(String[] style) {
+		this.style = style;
 	}
 
 }
