@@ -3,16 +3,23 @@ package co.com.tactusoft.kpi.controller.bo;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.annotation.Resource;
 
-import org.primefaces.model.chart.ChartSeries;
 import org.springframework.stereotype.Service;
 
 import co.com.tactusoft.kpi.model.dao.CustomHibernateDao;
 import co.com.tactusoft.kpi.model.entities.KpiDaily;
 import co.com.tactusoft.kpi.model.entities.KpiWeek;
+import co.com.tactusoft.kpi.view.model.GraphDaily;
 import co.com.tactusoft.kpi.view.model.ReportDaily;
 
 @Service
@@ -50,7 +57,7 @@ public class ProcessBo implements Serializable {
 		ReportDaily reportDaily;
 		Double[] listPlan;
 		String[] style;
-		
+
 		reportDaily = new ReportDaily();
 		reportDaily.setId(new BigDecimal(id));
 		reportDaily.setMetric("Cumplimiento Programa Semanal HH");
@@ -72,10 +79,10 @@ public class ProcessBo implements Serializable {
 		reportDaily.setListPlan(listPlan);
 		listResult.add(reportDaily);
 		id++;
-		
+
 		reportDaily = new ReportDaily();
 		reportDaily.setId(new BigDecimal(id));
-		//reportDaily.setMetric("Cumplimiento Programa Semanal HH");
+		// reportDaily.setMetric("Cumplimiento Programa Semanal HH");
 		reportDaily.setUm("%");
 		reportDaily.setType("Actual");
 
@@ -88,12 +95,12 @@ public class ProcessBo implements Serializable {
 				double finishedOrders = row.getFinishedOrders();
 				double res = finishedOrders / scheduledOrders;
 				listPlan[index] = res;
-				if(res < 0.8){
-					style[index]="style1";
+				if (res < 0.8) {
+					style[index] = "style1";
 				} else {
-					style[index]="style2";
+					style[index] = "style2";
 				}
-				
+
 				index++;
 			}
 		}
@@ -102,7 +109,7 @@ public class ProcessBo implements Serializable {
 		reportDaily.setStyle(style);
 		listResult.add(reportDaily);
 		id++;
-		
+
 		reportDaily = new ReportDaily();
 		reportDaily.setId(new BigDecimal(id));
 		reportDaily.setMetric("Imprevistos");
@@ -122,7 +129,7 @@ public class ProcessBo implements Serializable {
 
 		reportDaily = new ReportDaily();
 		reportDaily.setId(new BigDecimal(id));
-		//reportDaily.setMetric("Imprevistos");
+		// reportDaily.setMetric("Imprevistos");
 		reportDaily.setUm("%");
 		reportDaily.setType("Actual");
 
@@ -135,10 +142,10 @@ public class ProcessBo implements Serializable {
 			if ((finishedOrders - failuresOrders) != 0d) {
 				double res = failuresOrders / (failuresOrders + finishedOrders);
 				listPlan[index] = res;
-				if(res < 0.2){
-					style[index]="style1";
+				if (res < 0.2) {
+					style[index] = "style1";
 				} else {
-					style[index]="style2";
+					style[index] = "style2";
 				}
 				index++;
 			}
@@ -148,7 +155,7 @@ public class ProcessBo implements Serializable {
 		reportDaily.setStyle(style);
 		listResult.add(reportDaily);
 		id++;
-		
+
 		reportDaily = new ReportDaily();
 		reportDaily.setId(new BigDecimal(id));
 		reportDaily.setMetric("Demoras");
@@ -168,7 +175,7 @@ public class ProcessBo implements Serializable {
 
 		reportDaily = new ReportDaily();
 		reportDaily.setId(new BigDecimal(id));
-		//reportDaily.setMetric("Demoras");
+		// reportDaily.setMetric("Demoras");
 		reportDaily.setUm("Hr");
 		reportDaily.setType("Actual");
 
@@ -180,10 +187,10 @@ public class ProcessBo implements Serializable {
 					+ row.getFh() + row.getCa() + row.getLu() + row.getTr()
 					+ row.getFp() + row.getCn() + row.getFc() + row.getRt();
 			listPlan[index] = res;
-			if(res < 23d){
-				style[index]="style1";
+			if (res < 23d) {
+				style[index] = "style1";
 			} else {
-				style[index]="style2";
+				style[index] = "style2";
 			}
 			index++;
 		}
@@ -196,35 +203,130 @@ public class ProcessBo implements Serializable {
 		return listResult;
 	}
 
-	public ChartSeries getGraphDaily(BigDecimal idKpiWeek) {
-		ChartSeries chartSeries = new ChartSeries();
+	public String getGraphDaily(BigDecimal idKpiWeek) {
+		StringBuffer data = new StringBuffer();
+		// ChartSeries chartSeries = new ChartSeries();
 
 		List<KpiDaily> list = dao.find("from KpiDaily o where o.kpiWeek.id = "
 				+ idKpiWeek + " order by o.currentDay");
 		int lastIndex = list.size() - 1;
-
+		List<GraphDaily> listDelay = new ArrayList<GraphDaily>();
 		if (lastIndex >= 0) {
 			KpiDaily lastRow = list.get(lastIndex);
-			chartSeries.setLabel("Códigos de Demora");
-			chartSeries.set("Seguridad", lastRow.getS());
-			chartSeries.set("Entrega Equipo", lastRow.getEe());
-			chartSeries.set("Disp. Repuesto", lastRow.getDr());
-			chartSeries.set("Reasig. Trabajo", lastRow.getRa());
+			GraphDaily graphDaily;
 
-			chartSeries.set("Falta Herram.", lastRow.getFh());
-			chartSeries.set("Cambio Alcace Trab.", lastRow.getCa());
-			chartSeries.set("Camión Lubricador", lastRow.getLu());
-			chartSeries.set("Tronadura", lastRow.getTr());
+			if (lastRow.getS() > 0d) {
+				graphDaily = new GraphDaily();
+				graphDaily.setLabel("Seguridad");
+				graphDaily.setValue(lastRow.getS());
+				listDelay.add(graphDaily);
+			}
 
-			chartSeries.set("Falta de Personal", lastRow.getFp());
-			chartSeries.set("Causas Naturales", lastRow.getCn());
-			chartSeries.set("Falta de Conoc.", lastRow.getFc());
-			chartSeries.set("Retrabajo", lastRow.getRt());
+			if (lastRow.getEe() > 0d) {
+				graphDaily = new GraphDaily();
+				graphDaily.setLabel("Entrega Equipo");
+				graphDaily.setValue(lastRow.getEe());
+				listDelay.add(graphDaily);
+			}
+
+			if (lastRow.getDr() > 0d) {
+				graphDaily = new GraphDaily();
+				graphDaily.setLabel("Disp. Repuesto");
+				graphDaily.setValue(lastRow.getDr());
+				listDelay.add(graphDaily);
+			}
+
+			if (lastRow.getRa() > 0d) {
+				graphDaily = new GraphDaily();
+				graphDaily.setLabel("Reasig. Trabajo");
+				graphDaily.setValue(lastRow.getRa());
+				listDelay.add(graphDaily);
+			}
+
+			if (lastRow.getFh() > 0d) {
+				graphDaily = new GraphDaily();
+				graphDaily.setLabel("Falta Herram.");
+				graphDaily.setValue(lastRow.getFh());
+				listDelay.add(graphDaily);
+			}
+
+			if (lastRow.getCa() > 0d) {
+				graphDaily = new GraphDaily();
+				graphDaily.setLabel("Cambio Alcace Trab.");
+				graphDaily.setValue(lastRow.getCa());
+				listDelay.add(graphDaily);
+			}
+
+			if (lastRow.getLu() > 0d) {
+				graphDaily = new GraphDaily();
+				graphDaily.setLabel("Camión Lubricador");
+				graphDaily.setValue(lastRow.getLu());
+				listDelay.add(graphDaily);
+			}
+
+			if (lastRow.getTr() > 0d) {
+				graphDaily = new GraphDaily();
+				graphDaily.setLabel("Tronadura");
+				graphDaily.setValue(lastRow.getTr());
+				listDelay.add(graphDaily);
+			}
+
+			if (lastRow.getFp() > 0d) {
+				graphDaily = new GraphDaily();
+				graphDaily.setLabel("Falta de Personal");
+				graphDaily.setValue(lastRow.getFp());
+				listDelay.add(graphDaily);
+			}
+
+			if (lastRow.getCn() > 0d) {
+				graphDaily = new GraphDaily();
+				graphDaily.setLabel("Causas Naturales");
+				graphDaily.setValue(lastRow.getCn());
+				listDelay.add(graphDaily);
+			}
+
+			if (lastRow.getFc() > 0d) {
+				graphDaily = new GraphDaily();
+				graphDaily.setLabel("Falta de Conoc.");
+				graphDaily.setValue(lastRow.getFc());
+				listDelay.add(graphDaily);
+			}
+
+			if (lastRow.getRt() > 0d) {
+				graphDaily = new GraphDaily();
+				graphDaily.setLabel("Retrabajo");
+				graphDaily.setValue(lastRow.getRt());
+				listDelay.add(graphDaily);
+			}
+
+			Collections.sort(listDelay, new Comparator<Object>() {
+				public int compare(Object o1, Object o2) {
+					GraphDaily g1 = (GraphDaily) o1;
+					GraphDaily g2 = (GraphDaily) o2;
+					return g2.getValue().compareTo(g1.getValue());
+				}
+			});
+
+			data.append("data.addRows(" + listDelay.size() + ");");
+			data.append("data.addColumn('string', 'codigo');");
+			data.append("data.addColumn('number', 'Demoras');");
+			data.append("data.addColumn('number', 'Promedio');");
+
+			for (int index = 0; index < listDelay.size(); index++) {
+				GraphDaily object = listDelay.get(index);
+				data.append("data.setValue(" + index + ", 0, '"
+						+ object.getLabel() + "');");
+				data.append("data.setValue(" + index + ", 1, "
+						+ object.getValue() + ");");
+			}
+
 		} else {
-			chartSeries.setLabel("-- SIN INFORMACION -- ");
-			chartSeries.set("", 0);
+			data.append("data.addRows(0);");
+			data.append("data.addColumn('string', 'codigo');");
+			data.append("data.addColumn('number', 'Demoras');");
+			data.append("data.addColumn('number', 'Promedio');");
 		}
 
-		return chartSeries;
+		return data.toString();
 	}
 }

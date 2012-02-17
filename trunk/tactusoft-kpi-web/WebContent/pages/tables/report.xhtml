@@ -6,6 +6,7 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="../layout/main.xhtml">
+	
 	<ui:define name="content">
 
 		<div class="rco-blockheader">
@@ -28,9 +29,11 @@
 					</h:panelGrid>
 
 					<f:facet name="footer">
-						<p:commandButton id="cmdOK" update="recordTable chrt1"
-							value="#{msg['btn_ok']}" action="#{reportBacking.generateAction}"
-							process="@form" />
+						<p:commandButton id="cmdOK" update="display"
+							value="#{msg['btn_ok']}"
+							actionListener="#{reportBacking.generateAction}" oncomplete="drawVisualization();">
+							<f:ajax event="change" render="chart_div"/>
+						</p:commandButton>
 					</f:facet>
 
 				</p:panel>
@@ -76,18 +79,43 @@
 
 					</p:dataTable>
 
-					<p:spacer height="20" />
+					<p:spacer height="10" />
 
-					<p:barChart id="chrt1" value="#{reportBacking.categoryModel}"
-						title="Demoras del Día Anterior" min="0" max="40"
-						style="height:450px" yaxisLabel="Horas" xaxisAngle="90" />
+					<h:panelGroup id="chart_div" style="width: 100%; height: 450px;"
+						layout="block" />
 
 				</h:panelGrid>
 
-				<p:spacer height="10" />
 			</h:form>
 
 		</div>
+
+		<script type="text/javascript">
+          google.load('visualization', '1', {packages: ['corechart']});
+ 
+          function drawVisualization() {
+            var data = new google.visualization.DataTable();
+            <h:outputFormat value="#{reportBacking.graphData}"/>
+
+            var options = {
+                    title : 'Demoras del Dia Anterior',
+                    vAxis: {title: "Horas"},
+                    hAxis: {title: ""},
+                    seriesType: "bars",
+                    series: {5: {type: "line"}}
+                  };
+ 
+            var chart = new google.visualization.ComboChart(document.getElementById('form:chart_div'));
+            chart.draw(data, options);
+          }
+
+          function handleLoginRequest(xhr, status, args) {
+         	 drawVisualization();
+          }
+ 
+          google.setOnLoadCallback(drawVisualization);
+		</script>
+
 	</ui:define>
 </ui:composition>
 

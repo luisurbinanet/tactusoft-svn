@@ -9,7 +9,7 @@ public class GraphDaily implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private String label;
-	private double value;
+	private Double value;
 
 	public GraphDaily() {
 
@@ -28,11 +28,11 @@ public class GraphDaily implements Serializable {
 		this.label = label;
 	}
 
-	public double getValue() {
+	public Double getValue() {
 		return value;
 	}
 
-	public void setValue(double value) {
+	public void setValue(Double value) {
 		this.value = value;
 	}
 

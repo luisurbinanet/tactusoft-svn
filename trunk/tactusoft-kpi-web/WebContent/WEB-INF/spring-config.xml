@@ -8,7 +8,7 @@
 	<!-- Configure annotated beans -->
 	<context:annotation-config />
 	<context:component-scan base-package="co.com.tactusoft.kpi" />
-	
+
 	<tx:annotation-driven transaction-manager="transactionManager" />
 
 	<!-- Datasource -->
@@ -39,14 +39,7 @@
 				<!-- <prop key="hibernate.hbm2ddl.auto">create-drop</prop> -->
 			</props>
 		</property>
-		<property name="annotatedClasses">
-			<list>
-				<value>co.com.tactusoft.kpi.model.entities.KpiGroup</value>
-				<value>co.com.tactusoft.kpi.model.entities.KpiWorkOrder</value>
-				<value>co.com.tactusoft.kpi.model.entities.KpiWeek</value>
-				<value>co.com.tactusoft.kpi.model.entities.KpiDaily</value>
-			</list>
-		</property>
+		<property name="packagesToScan" value="co.com.tactusoft.kpi.model.entities" />
 	</bean>
 
 	<bean id="transactionManager"

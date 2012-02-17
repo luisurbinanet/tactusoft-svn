@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
 import org.primefaces.model.chart.CartesianChartModel;
@@ -37,6 +38,7 @@ public class ReportBacking {
 	private BigDecimal idKpiWeek;
 
 	private CartesianChartModel categoryModel;
+	private String graphData;
 
 	public ReportBacking() {
 
@@ -104,14 +106,14 @@ public class ReportBacking {
 	}
 
 	public CartesianChartModel getCategoryModel() {
-		if(categoryModel == null){
+		if (categoryModel == null) {
 			categoryModel = new CartesianChartModel();
-			
+
 			ChartSeries test = new ChartSeries();
 			test.setLabel("-- SIN INFORMACION -- ");
 
-	        categoryModel.addSeries(test);
-	        test.set("", 0);
+			categoryModel.addSeries(test);
+			test.set("", 0);
 		}
 		return categoryModel;
 	}
@@ -120,7 +122,18 @@ public class ReportBacking {
 		this.categoryModel = categoryModel;
 	}
 
-	public void generateAction() {
+	public String getGraphData() {
+		if (graphData == null) {
+			graphData = generateData();
+		}
+		return graphData;
+	}
+
+	public void setGraphData(String graphData) {
+		this.graphData = graphData;
+	}
+
+	public void generateAction(ActionEvent actionEvent) {
 		List<KpiDaily> list = service.getListKpiDailyByWeek(idKpiWeek);
 		columns = new ArrayList<ColumnModel>();
 
@@ -133,10 +146,30 @@ public class ReportBacking {
 
 		List<ReportDaily> data = service.getReportDaily(idKpiWeek);
 		model = new ReportDailyModel(data);
+		graphData = service.getGraphDaily(idKpiWeek);
+	}
 
-		categoryModel = new CartesianChartModel();
-		ChartSeries chartSeries = service.getGraphDaily(idKpiWeek);
-		categoryModel.addSeries(chartSeries);
+	private String generateData() {
+		StringBuffer data = new StringBuffer();
+
+		data.append("data.addRows(0);");
+		data.append("data.addColumn('string', 'codigo');");
+		data.append("data.addColumn('number', 'Demoras');");
+		data.append("data.addColumn('number', 'Promedio');");
+		/*
+		 * data.append("data.setValue(0, 0, 'Bolivia');");
+		 * data.append("data.setValue(0, 1, 165);");
+		 * data.append("data.setValue(1, 0, 'Ecuador');");
+		 * data.append("data.setValue(1, 1, 135);");
+		 * data.append("data.setValue(2, 0, 'Madagascar');");
+		 * data.append("data.setValue(2, 1, 157);");
+		 * data.append("data.setValue(3, 0, 'Papua Guinea');");
+		 * data.append("data.setValue(3, 1, 139);");
+		 * data.append("data.setValue(4, 0, 'Rwanda');");
+		 * data.append("data.setValue(4, 1, 136);");
+		 */
+
+		return data.toString();
 	}
 
 }
