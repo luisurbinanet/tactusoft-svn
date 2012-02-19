@@ -5,15 +5,13 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 import javax.annotation.Resource;
 
+import org.primefaces.json.JSONArray;
+import org.primefaces.json.JSONException;
+import org.primefaces.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import co.com.tactusoft.kpi.model.dao.CustomHibernateDao;
@@ -203,9 +201,8 @@ public class ProcessBo implements Serializable {
 		return listResult;
 	}
 
-	public String getGraphDaily(BigDecimal idKpiWeek) {
-		StringBuffer data = new StringBuffer();
-		// ChartSeries chartSeries = new ChartSeries();
+	public JSONArray getGraphDaily(BigDecimal idKpiWeek) {
+		JSONArray result = new JSONArray();
 
 		List<KpiDaily> list = dao.find("from KpiDaily o where o.kpiWeek.id = "
 				+ idKpiWeek + " order by o.currentDay");
@@ -214,12 +211,14 @@ public class ProcessBo implements Serializable {
 		if (lastIndex >= 0) {
 			KpiDaily lastRow = list.get(lastIndex);
 			GraphDaily graphDaily;
+			double sum = 0;
 
 			if (lastRow.getS() > 0d) {
 				graphDaily = new GraphDaily();
 				graphDaily.setLabel("Seguridad");
 				graphDaily.setValue(lastRow.getS());
 				listDelay.add(graphDaily);
+				sum = sum + lastRow.getS();
 			}
 
 			if (lastRow.getEe() > 0d) {
@@ -227,6 +226,7 @@ public class ProcessBo implements Serializable {
 				graphDaily.setLabel("Entrega Equipo");
 				graphDaily.setValue(lastRow.getEe());
 				listDelay.add(graphDaily);
+				sum = sum + lastRow.getEe();
 			}
 
 			if (lastRow.getDr() > 0d) {
@@ -234,6 +234,7 @@ public class ProcessBo implements Serializable {
 				graphDaily.setLabel("Disp. Repuesto");
 				graphDaily.setValue(lastRow.getDr());
 				listDelay.add(graphDaily);
+				sum = sum + lastRow.getDr();
 			}
 
 			if (lastRow.getRa() > 0d) {
@@ -241,6 +242,7 @@ public class ProcessBo implements Serializable {
 				graphDaily.setLabel("Reasig. Trabajo");
 				graphDaily.setValue(lastRow.getRa());
 				listDelay.add(graphDaily);
+				sum = sum + lastRow.getRa();
 			}
 
 			if (lastRow.getFh() > 0d) {
@@ -248,6 +250,7 @@ public class ProcessBo implements Serializable {
 				graphDaily.setLabel("Falta Herram.");
 				graphDaily.setValue(lastRow.getFh());
 				listDelay.add(graphDaily);
+				sum = sum + lastRow.getFh();
 			}
 
 			if (lastRow.getCa() > 0d) {
@@ -255,6 +258,7 @@ public class ProcessBo implements Serializable {
 				graphDaily.setLabel("Cambio Alcace Trab.");
 				graphDaily.setValue(lastRow.getCa());
 				listDelay.add(graphDaily);
+				sum = sum + lastRow.getCa();
 			}
 
 			if (lastRow.getLu() > 0d) {
@@ -262,6 +266,7 @@ public class ProcessBo implements Serializable {
 				graphDaily.setLabel("Camión Lubricador");
 				graphDaily.setValue(lastRow.getLu());
 				listDelay.add(graphDaily);
+				sum = sum + lastRow.getLu();
 			}
 
 			if (lastRow.getTr() > 0d) {
@@ -269,6 +274,7 @@ public class ProcessBo implements Serializable {
 				graphDaily.setLabel("Tronadura");
 				graphDaily.setValue(lastRow.getTr());
 				listDelay.add(graphDaily);
+				sum = sum + lastRow.getTr();
 			}
 
 			if (lastRow.getFp() > 0d) {
@@ -276,6 +282,7 @@ public class ProcessBo implements Serializable {
 				graphDaily.setLabel("Falta de Personal");
 				graphDaily.setValue(lastRow.getFp());
 				listDelay.add(graphDaily);
+				sum = sum + lastRow.getFp();
 			}
 
 			if (lastRow.getCn() > 0d) {
@@ -283,6 +290,7 @@ public class ProcessBo implements Serializable {
 				graphDaily.setLabel("Causas Naturales");
 				graphDaily.setValue(lastRow.getCn());
 				listDelay.add(graphDaily);
+				sum = sum + lastRow.getCn();
 			}
 
 			if (lastRow.getFc() > 0d) {
@@ -290,6 +298,7 @@ public class ProcessBo implements Serializable {
 				graphDaily.setLabel("Falta de Conoc.");
 				graphDaily.setValue(lastRow.getFc());
 				listDelay.add(graphDaily);
+				sum = sum + lastRow.getFc();
 			}
 
 			if (lastRow.getRt() > 0d) {
@@ -297,6 +306,7 @@ public class ProcessBo implements Serializable {
 				graphDaily.setLabel("Retrabajo");
 				graphDaily.setValue(lastRow.getRt());
 				listDelay.add(graphDaily);
+				sum = sum + lastRow.getRt();
 			}
 
 			Collections.sort(listDelay, new Comparator<Object>() {
@@ -307,26 +317,23 @@ public class ProcessBo implements Serializable {
 				}
 			});
 
-			data.append("data.addRows(" + listDelay.size() + ");");
-			data.append("data.addColumn('string', 'codigo');");
-			data.append("data.addColumn('number', 'Demoras');");
-			data.append("data.addColumn('number', 'Promedio');");
-
-			for (int index = 0; index < listDelay.size(); index++) {
-				GraphDaily object = listDelay.get(index);
-				data.append("data.setValue(" + index + ", 0, '"
-						+ object.getLabel() + "');");
-				data.append("data.setValue(" + index + ", 1, "
-						+ object.getValue() + ");");
+			for (GraphDaily row : listDelay) {
+				JSONObject obj = new JSONObject();
+				try {
+					obj.put("label", row.getLabel());
+					obj.put("value", row.getValue());
+					double avg = row.getValue() / sum;
+					obj.put("avg", avg);
+					result.put(obj);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
 			}
 
 		} else {
-			data.append("data.addRows(0);");
-			data.append("data.addColumn('string', 'codigo');");
-			data.append("data.addColumn('number', 'Demoras');");
-			data.append("data.addColumn('number', 'Promedio');");
+
 		}
 
-		return data.toString();
+		return result;
 	}
 }
