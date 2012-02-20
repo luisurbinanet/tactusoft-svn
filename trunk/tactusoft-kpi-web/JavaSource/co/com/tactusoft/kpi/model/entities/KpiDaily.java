@@ -1,6 +1,6 @@
 package co.com.tactusoft.kpi.model.entities;
 
-// Generated 8/02/2012 04:50:21 PM by Hibernate Tools 3.4.0.CR1
+// Generated 19/02/2012 08:20:21 PM by Hibernate Tools 3.4.0.CR1
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -32,35 +32,36 @@ public class KpiDaily implements java.io.Serializable {
 	private Integer scheduledOrders;
 	private Integer finishedOrders;
 	private Integer failuresOrders;
-	private Double s;
-	private Double ee;
-	private Double dr;
-	private Double ra;
-	private Double fh;
-	private Double ca;
-	private Double lu;
-	private Double tr;
-	private Double fp;
-	private Double cn;
-	private Double fc;
-	private Double rt;
-	private Integer state;
+	private BigDecimal s;
+	private BigDecimal ee;
+	private BigDecimal dr;
+	private BigDecimal ra;
+	private BigDecimal fh;
+	private BigDecimal ca;
+	private BigDecimal lu;
+	private BigDecimal tr;
+	private BigDecimal fp;
+	private BigDecimal cn;
+	private BigDecimal fc;
+	private BigDecimal rt;
+	private int state;
 
 	public KpiDaily() {
 	}
 
-	public KpiDaily(BigDecimal id, KpiWeek kpiWeek, Date currentDay) {
+	public KpiDaily(BigDecimal id, KpiWeek kpiWeek, Date currentDay, int state) {
 		this.id = id;
 		this.kpiWeek = kpiWeek;
 		this.currentDay = currentDay;
+		this.state = state;
 	}
 
 	public KpiDaily(BigDecimal id, KpiWeek kpiWeek, Date currentDay,
 			String description, Integer scheduledOrders,
-			Integer finishedOrders, Integer failuresOrders, Double s,
-			Double ee, Double dr, Double ra, Double fh,
-			Double ca, Double lu, Double tr, Double fp,
-			Double cn, Double fc, Double rt) {
+			Integer finishedOrders, Integer failuresOrders, BigDecimal s,
+			BigDecimal ee, BigDecimal dr, BigDecimal ra, BigDecimal fh,
+			BigDecimal ca, BigDecimal lu, BigDecimal tr, BigDecimal fp,
+			BigDecimal cn, BigDecimal fc, BigDecimal rt, int state) {
 		this.id = id;
 		this.kpiWeek = kpiWeek;
 		this.currentDay = currentDay;
@@ -80,6 +81,7 @@ public class KpiDaily implements java.io.Serializable {
 		this.cn = cn;
 		this.fc = fc;
 		this.rt = rt;
+		this.state = state;
 	}
 
 	@Id
@@ -148,120 +150,120 @@ public class KpiDaily implements java.io.Serializable {
 		this.failuresOrders = failuresOrders;
 	}
 
-	@Column(name = "s", precision = 5, scale = 2)
-	public Double getS() {
+	@Column(name = "s", precision = 5)
+	public BigDecimal getS() {
 		return this.s;
 	}
 
-	public void setS(Double s) {
+	public void setS(BigDecimal s) {
 		this.s = s;
 	}
 
-	@Column(name = "ee", precision = 5, scale = 2)
-	public Double getEe() {
+	@Column(name = "ee", precision = 5)
+	public BigDecimal getEe() {
 		return this.ee;
 	}
 
-	public void setEe(Double ee) {
+	public void setEe(BigDecimal ee) {
 		this.ee = ee;
 	}
 
-	@Column(name = "dr", precision = 5, scale = 2)
-	public Double getDr() {
+	@Column(name = "dr", precision = 5)
+	public BigDecimal getDr() {
 		return this.dr;
 	}
 
-	public void setDr(Double dr) {
+	public void setDr(BigDecimal dr) {
 		this.dr = dr;
 	}
 
-	@Column(name = "ra", precision = 5, scale = 2)
-	public Double getRa() {
+	@Column(name = "ra", precision = 5)
+	public BigDecimal getRa() {
 		return this.ra;
 	}
 
-	public void setRa(Double ra) {
+	public void setRa(BigDecimal ra) {
 		this.ra = ra;
 	}
 
-	@Column(name = "fh", precision = 5, scale = 2)
-	public Double getFh() {
+	@Column(name = "fh", precision = 5)
+	public BigDecimal getFh() {
 		return this.fh;
 	}
 
-	public void setFh(Double fh) {
+	public void setFh(BigDecimal fh) {
 		this.fh = fh;
 	}
 
-	@Column(name = "ca", precision = 5, scale = 2)
-	public Double getCa() {
+	@Column(name = "ca", precision = 5)
+	public BigDecimal getCa() {
 		return this.ca;
 	}
 
-	public void setCa(Double ca) {
+	public void setCa(BigDecimal ca) {
 		this.ca = ca;
 	}
 
-	@Column(name = "lu", precision = 5, scale = 2)
-	public Double getLu() {
+	@Column(name = "lu", precision = 5)
+	public BigDecimal getLu() {
 		return this.lu;
 	}
 
-	public void setLu(Double lu) {
+	public void setLu(BigDecimal lu) {
 		this.lu = lu;
 	}
 
-	@Column(name = "tr", precision = 5, scale = 2)
-	public Double getTr() {
+	@Column(name = "tr", precision = 5)
+	public BigDecimal getTr() {
 		return this.tr;
 	}
 
-	public void setTr(Double tr) {
+	public void setTr(BigDecimal tr) {
 		this.tr = tr;
 	}
 
-	@Column(name = "fp", precision = 5, scale = 2)
-	public Double getFp() {
+	@Column(name = "fp", precision = 5)
+	public BigDecimal getFp() {
 		return this.fp;
 	}
 
-	public void setFp(Double fp) {
+	public void setFp(BigDecimal fp) {
 		this.fp = fp;
 	}
 
-	@Column(name = "cn", precision = 5, scale = 2)
-	public Double getCn() {
+	@Column(name = "cn", precision = 5)
+	public BigDecimal getCn() {
 		return this.cn;
 	}
 
-	public void setCn(Double cn) {
+	public void setCn(BigDecimal cn) {
 		this.cn = cn;
 	}
 
-	@Column(name = "fc", precision = 5, scale = 2)
-	public Double getFc() {
+	@Column(name = "fc", precision = 5)
+	public BigDecimal getFc() {
 		return this.fc;
 	}
 
-	public void setFc(Double fc) {
+	public void setFc(BigDecimal fc) {
 		this.fc = fc;
 	}
 
-	@Column(name = "rt", precision = 5, scale = 2)
-	public Double getRt() {
+	@Column(name = "rt", precision = 5)
+	public BigDecimal getRt() {
 		return this.rt;
 	}
 
-	public void setRt(Double rt) {
+	public void setRt(BigDecimal rt) {
 		this.rt = rt;
 	}
 
 	@Column(name = "state", nullable = false)
-	public Integer getState() {
-		return state;
+	public int getState() {
+		return this.state;
 	}
 
-	public void setState(Integer state) {
+	public void setState(int state) {
 		this.state = state;
 	}
 

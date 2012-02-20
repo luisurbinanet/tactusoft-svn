@@ -9,7 +9,7 @@
 	<ui:define name="content">
 
 		<div id="content1">
-			<h3>#{msg['work_order']}</h3>
+			<h3>#{msg['group']}</h3>
 			<p></p>
 		</div>
 
@@ -17,22 +17,20 @@
 			<h:form id="form">
 
 				<p:dataTable id="recordTable" var="rec"
-					value="#{kpiWorkOrderBacking.model}" rowKey="#{rec.id}" selectionMode="single">
+					value="#{groupBacking.model}" rowKey="#{rec.id}" selectionMode="single">
 
 					<p:column headerText="#{msg['name']}">#{rec.name}</p:column>
 
 					<p:column headerText="#{msg['description']}">#{rec.description}</p:column>
 					
-					<p:column headerText="#{msg['scheduled_hours']}">#{rec.scheduledHours}</p:column>
-					
-					<p:column headerText="#{msg['state']}">#{rec.state}</p:column>
+					<p:column headerText="#{msg['state']}">#{rec.state==1?msg['state_active']:msg['state_inactive']}</p:column>
 
 					<p:column style="width:40px">
 						<h:panelGrid columns="3" styleClass="actions" cellpadding="2">
 							<p:commandButton id="selectButton" update=":form:display, :form:pnlDetail"
 								icon="ui-icon-search" title="#{msg['btn_edit']}">
 								<f:setPropertyActionListener value="#{rec}"
-									target="#{kpiWorkOrderBacking.selected}" />
+									target="#{groupBacking.selected}" />
 							</p:commandButton>
 						</h:panelGrid>
 					</p:column>
@@ -42,7 +40,7 @@
 				<p:spacer height="10" />
 
 				<h:panelGrid columns="2" style="align='left'">
-					<p:commandButton id="cmdNew" action="#{kpiWorkOrderBacking.newAction}"
+					<p:commandButton id="cmdNew" action="#{groupBacking.newAction}"
 						update=":form:display" icon="ui-icon-plusthick"
 						value="#{msg['btn_new']}" />
 				</h:panelGrid>
@@ -56,24 +54,21 @@
 					<h:panelGrid id="display" columns="2" width="100%">
 
 						<h:outputText value="#{msg['name']}" />
-						<p:inputText value="#{kpiWorkOrderBacking.selected.name}" style="width:100%"/>
+						<p:inputText value="#{groupBacking.selected.name}" style="width:100%"/>
 
 						<h:outputText value="#{msg['description']}" />
-						<p:inputTextarea value="#{kpiWorkOrderBacking.selected.description}" style="width:100%" rows="3" maxlength="255"/>
-						
-						<h:outputText value="#{msg['scheduled_hours']}" />
-						<p:spinner value="#{kpiWorkOrderBacking.selected.scheduledHours}" min="1" max="999" maxlength="3"/>
+						<p:inputText value="#{groupBacking.selected.description}" style="width:100%"/>
 
 						<h:outputText value="#{msg['state']}" />
-						<p:selectOneMenu value="#{kpiWorkOrderBacking.selected.state}" style="width:100%">
-				            <f:selectItem itemLabel="#{msg['state_active']}" itemValue="#{msg['state_active']}" />
-				            <f:selectItem itemLabel="#{msg['state_inactive']}" itemValue="#{msg['state_inactive']}" />
+						<p:selectOneMenu value="#{groupBacking.selected.state}" style="width:100%">
+				            <f:selectItem itemLabel="#{msg['state_active']}" itemValue="1" />
+				            <f:selectItem itemLabel="#{msg['state_inactive']}" itemValue="0" />
 				        </p:selectOneMenu>
 
 					</h:panelGrid>
 
 					<h:panelGrid columns="2">
-						<p:commandButton id="cmdSave" action="#{kpiWorkOrderBacking.saveAction}"
+						<p:commandButton id="cmdSave" action="#{groupBacking.saveAction}"
 							update="recordTable,:form:display" icon="ui-icon-disk"
 							value="#{msg['btn_save']}" />
 					</h:panelGrid>

@@ -9,9 +9,9 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import co.com.tactusoft.kpi.model.dao.CustomHibernateDao;
-import co.com.tactusoft.kpi.model.entities.KpiGroup;
+import co.com.tactusoft.kpi.model.entities.KpiCompany;
+import co.com.tactusoft.kpi.model.entities.KpiDelay;
 import co.com.tactusoft.kpi.model.entities.KpiWeek;
-import co.com.tactusoft.kpi.model.entities.KpiWorkOrder;
 
 @Service
 public class TablesBo implements Serializable{
@@ -23,12 +23,12 @@ public class TablesBo implements Serializable{
 	@Resource
 	private CustomHibernateDao dao;
 
-	public List<KpiGroup> getListKpiGroup() {
-		return dao.find("from KpiGroup o");
+	public List<KpiCompany> getListKpiCompany() {
+		return dao.find("from KpiCompany o");
 	}
 	
-	public List<KpiWorkOrder> getListKpiWorkOrder() {
-		return dao.find("from KpiWorkOrder o");
+	public List<KpiDelay> getListKpiDelay() {
+		return dao.find("from KpiDelay o");
 	}
 	
 	public List<KpiWeek> getListKpiKpiWeek() {

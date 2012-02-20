@@ -188,9 +188,6 @@ public class KpiDailyBacking implements Serializable {
 				selected.setId(service.getId("KpiDaily"));
 				selected.setFinishedOrders(0);
 				selected.setFailuresOrders(0);
-				
-				selected.setS(0d);
-				
 				selected.setState(0);
 			}
 

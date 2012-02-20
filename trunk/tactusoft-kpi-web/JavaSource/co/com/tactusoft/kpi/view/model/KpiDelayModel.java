@@ -6,27 +6,27 @@ import javax.faces.model.ListDataModel;
 
 import org.primefaces.model.SelectableDataModel;
 
-import co.com.tactusoft.kpi.model.entities.KpiWorkOrder;
+import co.com.tactusoft.kpi.model.entities.KpiDelay;
 
-public class KpiWorkOrderModel extends ListDataModel<KpiWorkOrder> implements
-		SelectableDataModel<KpiWorkOrder> {
+public class KpiDelayModel extends ListDataModel<KpiDelay> implements
+		SelectableDataModel<KpiDelay> {
 
-	public KpiWorkOrderModel() {
+	public KpiDelayModel() {
 	}
 
-	public KpiWorkOrderModel(List<KpiWorkOrder> data) {
+	public KpiDelayModel(List<KpiDelay> data) {
 		super(data);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public KpiWorkOrder getRowData(String rowKey) {
+	public KpiDelay getRowData(String rowKey) {
 		// In a real app, a more efficient way like a query by rowKey should be
 		// implemented to deal with huge data
 
-		List<KpiWorkOrder> list = (List<KpiWorkOrder>) getWrappedData();
+		List<KpiDelay> list = (List<KpiDelay>) getWrappedData();
 
-		for (KpiWorkOrder row : list) {
+		for (KpiDelay row : list) {
 			if (row.getId().equals(rowKey))
 				return row;
 		}
@@ -35,7 +35,7 @@ public class KpiWorkOrderModel extends ListDataModel<KpiWorkOrder> implements
 	}
 
 	@Override
-	public Object getRowKey(KpiWorkOrder car) {
+	public Object getRowKey(KpiDelay car) {
 		return car.getId();
 	}
 }

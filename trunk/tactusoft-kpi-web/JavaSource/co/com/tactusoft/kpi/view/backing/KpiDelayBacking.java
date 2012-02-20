@@ -8,13 +8,13 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import co.com.tactusoft.kpi.controller.bo.TablesBo;
-import co.com.tactusoft.kpi.model.entities.KpiGroup;
+import co.com.tactusoft.kpi.model.entities.KpiDelay;
 import co.com.tactusoft.kpi.util.Util;
-import co.com.tactusoft.kpi.view.model.KpiGroupModel;
+import co.com.tactusoft.kpi.view.model.KpiDelayModel;
 
 @Controller
 @Scope("session")
-public class GroupBacking implements Serializable {
+public class KpiDelayBacking implements Serializable {
 
 	/**
 	 * 
@@ -24,42 +24,42 @@ public class GroupBacking implements Serializable {
 	@Resource
 	private TablesBo service;
 
-	private KpiGroupModel model;
-	private KpiGroup selected;
+	private KpiDelayModel model;
+	private KpiDelay selected;
 
-	public GroupBacking() {
-		selected = new KpiGroup();
+	public KpiDelayBacking() {
+		selected = new KpiDelay();
 	}
 
-	public KpiGroupModel getModel() {
+	public KpiDelayModel getModel() {
 		if (model == null) {
-			model = new KpiGroupModel(service.getListKpiGroup());
+			model = new KpiDelayModel(service.getListKpiDelay());
 		}
 		return model;
 	}
 
-	public void setModel(KpiGroupModel model) {
+	public void setModel(KpiDelayModel model) {
 		this.model = model;
 	}
 
-	public KpiGroup getSelected() {
+	public KpiDelay getSelected() {
 		return selected;
 	}
 
-	public void setSelected(KpiGroup selected) {
+	public void setSelected(KpiDelay selected) {
 		if (selected == null) {
-			selected = new KpiGroup();
+			selected = new KpiDelay();
 		}
 		this.selected = selected;
 	}
 
 	public void newAction() {
-		selected = new KpiGroup();
+		selected = new KpiDelay();
 	}
 
 	public void deleteAction() {
 		service.remove(selected);
-		model = new KpiGroupModel(service.getListKpiGroup());
+		model = new KpiDelayModel(service.getListKpiDelay());
 	}
 
 	public void saveAction() {
@@ -78,7 +78,8 @@ public class GroupBacking implements Serializable {
 
 		if (message == null) {
 			if (selected.getId() == null) {
-				selected.setId(service.getId("KpiGroup"));
+				selected.setId(service.getId("KpiDelay"));
+				selected.setState(1);
 			}
 
 			selected.setName(selected.getName().toUpperCase());
@@ -86,8 +87,8 @@ public class GroupBacking implements Serializable {
 			service.save(selected);
 			message = "El registro " + selected.getName()
 					+ " actualizado con Exito";
-			selected = new KpiGroup();
-			model = new KpiGroupModel(service.getListKpiGroup());
+			selected = new KpiDelay();
+			model = new KpiDelayModel(service.getListKpiDelay());
 			Util.addInfo("Información", message);
 
 		}
