@@ -21,7 +21,7 @@
 			<p:dataTable id="recordTable" var="rec"
 				value="#{kpiCompanyBacking.model}" rowKey="#{rec.id}"
 				selectionMode="single" selection="#{kpiCompanyBacking.selected}"
-				paginator="true" rows="10">
+				paginator="true" rows="20">
 
 				<p:ajax event="rowSelect" update=":editForm:dialogPanel"
 					oncomplete="dialogPanel.show()" />
@@ -32,7 +32,7 @@
 
 				<p:column headerText="#{msg['cmp_legal_rep']}">#{rec.legalRep}</p:column>
 
-				<p:column headerText="#{msg['state']}">#{rec.state==1?msg['state_active']:msg['state_inactive']}</p:column>
+				<p:column headerText="#{msg['state']}">#{rec.state==1?msg['glb_state_active']:msg['glb_state_inactive']}</p:column>
 
 			</p:dataTable>
 
@@ -80,8 +80,8 @@
 					<p:selectOneMenu value="#{kpiCompanyBacking.selected.state}"
 						style="width:100%"
 						rendered="#{kpiCompanyBacking.selected.id != null?true:false}">
-						<f:selectItem itemLabel="#{msg['state_active']}" itemValue="1" />
-						<f:selectItem itemLabel="#{msg['state_inactive']}" itemValue="0" />
+						<f:selectItem itemLabel="#{msg['glb_state_active']}" itemValue="1" />
+						<f:selectItem itemLabel="#{msg['glb_state_inactive']}" itemValue="0" />
 					</p:selectOneMenu>
 
 				</h:panelGrid>
