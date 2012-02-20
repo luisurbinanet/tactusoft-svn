@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 
 import co.com.tactusoft.kpi.controller.bo.TablesBo;
 import co.com.tactusoft.kpi.model.entities.KpiDelay;
-import co.com.tactusoft.kpi.util.Util;
+import co.com.tactusoft.kpi.util.FacesUtil;
 import co.com.tactusoft.kpi.view.model.KpiDelayModel;
 
 @Controller
@@ -68,12 +68,12 @@ public class KpiDelayBacking implements Serializable {
 
 		if (selected.getName().length() == 0) {
 			message = "El Campo Nombre es Obligatorio\n";
-			Util.addWarn("Advertencia", message);
+			FacesUtil.addWarn("Advertencia", message);
 		}
 
 		if (selected.getDescription().length() == 0) {
 			message = "El Campo Descripción es Obligatorio";
-			Util.addWarn("Advertencia", message);
+			FacesUtil.addWarn("Advertencia", message);
 		}
 
 		if (message == null) {
@@ -89,7 +89,7 @@ public class KpiDelayBacking implements Serializable {
 					+ " actualizado con Exito";
 			selected = new KpiDelay();
 			model = new KpiDelayModel(service.getListKpiDelay());
-			Util.addInfo("Información", message);
+			FacesUtil.addInfo("Información", message);
 
 		}
 	}

@@ -13,7 +13,7 @@
 			<div class="r"></div>
 			<div class="t">#{msg['title_company']}</div>
 		</div>
-		
+
 		<p:spacer height="20" />
 
 		<h:form id="form">
@@ -26,11 +26,11 @@
 				<p:ajax event="rowSelect" update=":editForm:dialogPanel"
 					oncomplete="dialogPanel.show()" />
 
-				<p:column headerText="#{msg['name']}">#{rec.name}</p:column>
+				<p:column headerText="#{msg['cmp_name']}">#{rec.name}</p:column>
 
-				<p:column headerText="#{msg['email']}">#{rec.email}</p:column>
+				<p:column headerText="#{msg['cmp_email']}">#{rec.email}</p:column>
 
-				<p:column headerText="#{msg['legal_rep']}">#{rec.legalRep}</p:column>
+				<p:column headerText="#{msg['cmp_legal_rep']}">#{rec.legalRep}</p:column>
 
 				<p:column headerText="#{msg['state']}">#{rec.state==1?msg['state_active']:msg['state_inactive']}</p:column>
 
@@ -49,29 +49,37 @@
 
 		<h:form id="editForm" prependId="false">
 
+			<p:growl id="growl" showDetail="true" />
+
 			<p:dialog id="dialogPanel"
 				header="#{msg['msg_record_selected']} #{kpiCompanyBacking.selected.name}"
 				widgetVar="dialogPanel" resizable="false" modal="false" width="500">
 
-				<p:messages id="messages" showDetail="true" autoUpdate="true" />
-
 				<h:panelGrid id="display" columns="2" width="100%">
 
-					<h:outputText value="#{msg['name']}" />
+					<h:outputText value="#{msg['cmp_name']}" />
 					<p:inputText value="#{kpiCompanyBacking.selected.name}"
 						style="width:100%" />
 
-					<h:outputText value="#{msg['email']}" />
-					<p:inputText value="#{kpiCompanyBacking.selected.email}"
-						style="width:100%" maxlength="255" />
-
-					<h:outputText value="#{msg['legal_rep']}" />
+					<h:outputText value="#{msg['cmp_legal_rep']}" />
 					<p:inputText value="#{kpiCompanyBacking.selected.legalRep}"
 						style="width:100%" maxlength="255" />
 
-					<h:outputText value="#{msg['state']}" />
+					<h:outputText value="#{msg['cmp_email']}" />
+					<p:inputText value="#{kpiCompanyBacking.selected.email}"
+						style="width:100%" maxlength="255">
+						<f:validator validatorId="emailValidator" />
+					</p:inputText>
+					
+					<h:outputText value="#{msg['cmp_phone']}" />
+					<p:inputText value="#{kpiCompanyBacking.selected.phone}"
+						style="width:100%" maxlength="45"/>
+
+					<h:outputText value="#{msg['glb_state']}"
+						rendered="#{kpiCompanyBacking.selected.id != null?true:false}" />
 					<p:selectOneMenu value="#{kpiCompanyBacking.selected.state}"
-						style="width:100%">
+						style="width:100%"
+						rendered="#{kpiCompanyBacking.selected.id != null?true:false}">
 						<f:selectItem itemLabel="#{msg['state_active']}" itemValue="1" />
 						<f:selectItem itemLabel="#{msg['state_inactive']}" itemValue="0" />
 					</p:selectOneMenu>
@@ -81,8 +89,8 @@
 				<f:facet name="footer">
 					<p:commandButton id="cmdSave"
 						action="#{kpiCompanyBacking.saveAction}"
-						update=":form:recordTable :editForm:display" icon="ui-icon-disk"
-						value="#{msg['btn_save']}" />
+						update=":form:recordTable :editForm:display growl"
+						icon="ui-icon-disk" value="#{msg['btn_save']}" />
 				</f:facet>
 			</p:dialog>
 		</h:form>
