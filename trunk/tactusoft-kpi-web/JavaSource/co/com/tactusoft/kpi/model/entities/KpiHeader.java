@@ -1,6 +1,6 @@
 package co.com.tactusoft.kpi.model.entities;
 
-// Generated 19/02/2012 08:20:21 PM by Hibernate Tools 3.4.0.CR1
+// Generated 20/02/2012 11:10:42 AM by Hibernate Tools 3.4.0.CR1
 
 import java.math.BigDecimal;
 import java.util.HashSet;
