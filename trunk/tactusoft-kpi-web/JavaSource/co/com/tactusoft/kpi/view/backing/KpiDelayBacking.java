@@ -65,15 +65,12 @@ public class KpiDelayBacking implements Serializable {
 	public void saveAction() {
 
 		String message = null;
+		String field = null;
 
 		if (selected.getName().length() == 0) {
-			message = "El Campo Nombre es Obligatorio\n";
-			FacesUtil.addWarn("Advertencia", message);
-		}
-
-		if (selected.getDescription().length() == 0) {
-			message = "El Campo Descripción es Obligatorio";
-			FacesUtil.addWarn("Advertencia", message);
+			field = FacesUtil.getMessage("del_name");
+			message = FacesUtil.getMessage("msg_field_required",field);
+			FacesUtil.addWarn(message);
 		}
 
 		if (message == null) {
@@ -82,15 +79,12 @@ public class KpiDelayBacking implements Serializable {
 				selected.setState(1);
 			}
 
-			selected.setName(selected.getName().toUpperCase());
-			selected.setDescription(selected.getDescription().toUpperCase());
+			//selected.setName(selected.getName().toUpperCase());
+			//selected.setDescription(selected.getDescription().toUpperCase());
 			service.save(selected);
-			message = "El registro " + selected.getName()
-					+ " actualizado con Exito";
-			selected = new KpiDelay();
+			message = FacesUtil.getMessage("msg_record_ok", selected.getName());
 			model = new KpiDelayModel(service.getListKpiDelay());
-			FacesUtil.addInfo("Información", message);
-
+			FacesUtil.addInfo(message);
 		}
 	}
 
