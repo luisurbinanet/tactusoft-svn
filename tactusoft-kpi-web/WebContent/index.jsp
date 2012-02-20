@@ -1,5 +1,4 @@
 <%
-    //String redirectURL = "pages/general/menu.jsf";
-	String redirectURL = "pages/tables/report.jsf";
+	String redirectURL = "pages/tables/company.jsf";
     response.sendRedirect(redirectURL);
 %>

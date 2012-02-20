@@ -6,27 +6,27 @@ import javax.faces.model.ListDataModel;
 
 import org.primefaces.model.SelectableDataModel;
 
-import co.com.tactusoft.kpi.model.entities.KpiGroup;
+import co.com.tactusoft.kpi.model.entities.KpiCompany;
 
-public class KpiGroupModel extends ListDataModel<KpiGroup> implements
-		SelectableDataModel<KpiGroup> {
+public class KpiCompanyModel extends ListDataModel<KpiCompany> implements
+		SelectableDataModel<KpiCompany> {
 
-	public KpiGroupModel() {
+	public KpiCompanyModel() {
 	}
 
-	public KpiGroupModel(List<KpiGroup> data) {
+	public KpiCompanyModel(List<KpiCompany> data) {
 		super(data);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public KpiGroup getRowData(String rowKey) {
+	public KpiCompany getRowData(String rowKey) {
 		// In a real app, a more efficient way like a query by rowKey should be
 		// implemented to deal with huge data
 
-		List<KpiGroup> list = (List<KpiGroup>) getWrappedData();
+		List<KpiCompany> list = (List<KpiCompany>) getWrappedData();
 
-		for (KpiGroup row : list) {
+		for (KpiCompany row : list) {
 			if (row.getId().equals(rowKey))
 				return row;
 		}
@@ -35,7 +35,7 @@ public class KpiGroupModel extends ListDataModel<KpiGroup> implements
 	}
 
 	@Override
-	public Object getRowKey(KpiGroup car) {
+	public Object getRowKey(KpiCompany car) {
 		return car.getId();
 	}
 }

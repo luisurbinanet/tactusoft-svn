@@ -58,7 +58,7 @@ public class ProcessBo implements Serializable {
 
 		reportDaily = new ReportDaily();
 		reportDaily.setId(new BigDecimal(id));
-		reportDaily.setMetric("Cumplimiento Programa Semanal HH");
+		reportDaily.setMetric("Cumplimiento Programa Diario OT");
 		reportDaily.setUm("%");
 		reportDaily.setType("Plan");
 
@@ -180,18 +180,18 @@ public class ProcessBo implements Serializable {
 		listPlan = new Double[list.size()];
 		style = new String[list.size()];
 		index = 0;
-		for (KpiDaily row : list) {
+		/*for (KpiDaily row : list) {
 			double res = row.getS() + row.getEe() + row.getDr() + row.getRa()
 					+ row.getFh() + row.getCa() + row.getLu() + row.getTr()
 					+ row.getFp() + row.getCn() + row.getFc() + row.getRt();
 			listPlan[index] = res;
-			if (res < 23d) {
+			if (res > 23d) {
 				style[index] = "style1";
 			} else {
 				style[index] = "style2";
 			}
 			index++;
-		}
+		}*/
 
 		reportDaily.setListPlan(listPlan);
 		reportDaily.setStyle(style);
@@ -213,7 +213,7 @@ public class ProcessBo implements Serializable {
 			GraphDaily graphDaily;
 			double sum = 0;
 
-			if (lastRow.getS() > 0d) {
+			/*if (lastRow.getS() > 0d) {
 				graphDaily = new GraphDaily();
 				graphDaily.setLabel("Seguridad");
 				graphDaily.setValue(lastRow.getS());
@@ -317,18 +317,20 @@ public class ProcessBo implements Serializable {
 				}
 			});
 
+			double oldAvg = 0;
 			for (GraphDaily row : listDelay) {
 				JSONObject obj = new JSONObject();
 				try {
 					obj.put("label", row.getLabel());
 					obj.put("value", row.getValue());
-					double avg = row.getValue() / sum;
+					double avg = oldAvg + (row.getValue() / sum) ;
 					obj.put("avg", avg);
 					result.put(obj);
+					oldAvg = avg;
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-			}
+			}*/
 
 		} else {
 

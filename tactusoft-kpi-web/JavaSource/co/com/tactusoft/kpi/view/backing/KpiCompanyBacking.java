@@ -8,13 +8,13 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import co.com.tactusoft.kpi.controller.bo.TablesBo;
-import co.com.tactusoft.kpi.model.entities.KpiWorkOrder;
+import co.com.tactusoft.kpi.model.entities.KpiCompany;
 import co.com.tactusoft.kpi.util.Util;
-import co.com.tactusoft.kpi.view.model.KpiWorkOrderModel;
+import co.com.tactusoft.kpi.view.model.KpiCompanyModel;
 
 @Controller
 @Scope("session")
-public class KpiWorkOrderBacking implements Serializable {
+public class KpiCompanyBacking implements Serializable {
 
 	/**
 	 * 
@@ -24,42 +24,42 @@ public class KpiWorkOrderBacking implements Serializable {
 	@Resource
 	private TablesBo service;
 
-	private KpiWorkOrderModel model;
-	private KpiWorkOrder selected; 
+	private KpiCompanyModel model;
+	private KpiCompany selected; 
 
-	public KpiWorkOrderBacking() {
-		selected = new KpiWorkOrder();
+	public KpiCompanyBacking() {
+		selected = new KpiCompany();
 	}
 
-	public KpiWorkOrderModel getModel() {
+	public KpiCompanyModel getModel() {
 		if (model == null) {
-			model = new KpiWorkOrderModel(service.getListKpiWorkOrder());
+			model = new KpiCompanyModel(service.getListKpiCompany());
 		}
 		return model;
 	}
 
-	public void setModel(KpiWorkOrderModel model) {
+	public void setModel(KpiCompanyModel model) {
 		this.model = model;
 	}
 
-	public KpiWorkOrder getSelected() {
+	public KpiCompany getSelected() {
 		return selected;
 	}
 
-	public void setSelected(KpiWorkOrder selected) {
+	public void setSelected(KpiCompany selected) {
 		if (selected == null) {
-			selected = new KpiWorkOrder();
+			selected = new KpiCompany();
 		}
 		this.selected = selected;
 	}
 
 	public void newAction() {
-		selected = new KpiWorkOrder();
+		selected = new KpiCompany();
 	}
 
 	public void deleteAction() {
 		service.remove(selected);
-		model = new KpiWorkOrderModel(service.getListKpiWorkOrder());
+		model = new KpiCompanyModel(service.getListKpiCompany());
 	}
 
 	public void saveAction() {
@@ -71,28 +71,29 @@ public class KpiWorkOrderBacking implements Serializable {
 			Util.addWarn("Advertencia", message);
 		}
 
-		if (selected.getDescription().length() == 0) {
-			message = "El Campo Descripción es Obligatorio";
+		if (selected.getLegalRep().length() == 0) {
+			message = "El Representante Legal es Obligatorio";
 			Util.addWarn("Advertencia", message);
 		}
 		
-		if (selected.getScheduledHours() == 0) {
-			message = "El Campo Horas es Obligatorio";
+		if (selected.getEmail().length() == 0) {
+			message = "El Correo Electrónico es Obligatorio";
 			Util.addWarn("Advertencia", message);
 		}
 
 		if (message == null) {
 			if (selected.getId() == null) {
-				selected.setId(service.getId("KpiWorkOrder"));
+				selected.setId(service.getId("KpiCompany"));
 			}
 
 			selected.setName(selected.getName().toUpperCase());
-			selected.setDescription(selected.getDescription().toUpperCase());
+			selected.setLegalRep(selected.getLegalRep().toUpperCase());
+			selected.setEmail(selected.getEmail());
 			service.save(selected);
 			message = "El registro " + selected.getName()
 					+ " actualizado con Exito";
-			//selected = new KpiWorkOrder();
-			model = new KpiWorkOrderModel(service.getListKpiWorkOrder());
+			//selected = new KpiCompany();
+			model = new KpiCompanyModel(service.getListKpiCompany());
 			Util.addInfo("Información", message);
 
 		}
