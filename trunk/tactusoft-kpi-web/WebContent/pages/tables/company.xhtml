@@ -26,6 +26,8 @@
 				<p:ajax event="rowSelect" update=":editForm:dialogPanel"
 					oncomplete="dialogPanel.show()" />
 
+				<p:column headerText="#{msg['cmp_code']}">#{rec.code}</p:column>
+
 				<p:column headerText="#{msg['cmp_name']}">#{rec.name}</p:column>
 
 				<p:column headerText="#{msg['cmp_email']}">#{rec.email}</p:column>
@@ -57,6 +59,10 @@
 
 				<h:panelGrid id="display" columns="2" width="100%">
 
+					<h:outputText value="#{msg['cmp_code']}" />
+					<p:inputText value="#{kpiCompanyBacking.selected.code}"
+						style="width:100%" maxlength="255"/>
+
 					<h:outputText value="#{msg['cmp_name']}" />
 					<p:inputText value="#{kpiCompanyBacking.selected.name}"
 						style="width:100%" />
@@ -70,10 +76,10 @@
 						style="width:100%" maxlength="255">
 						<f:validator validatorId="emailValidator" />
 					</p:inputText>
-					
+
 					<h:outputText value="#{msg['cmp_phone']}" />
 					<p:inputText value="#{kpiCompanyBacking.selected.phone}"
-						style="width:100%" maxlength="45"/>
+						style="width:100%" maxlength="45" />
 
 					<h:outputText value="#{msg['glb_state']}"
 						rendered="#{kpiCompanyBacking.selected.id != null?true:false}" />
@@ -81,7 +87,8 @@
 						style="width:100%"
 						rendered="#{kpiCompanyBacking.selected.id != null?true:false}">
 						<f:selectItem itemLabel="#{msg['glb_state_active']}" itemValue="1" />
-						<f:selectItem itemLabel="#{msg['glb_state_inactive']}" itemValue="0" />
+						<f:selectItem itemLabel="#{msg['glb_state_inactive']}"
+							itemValue="0" />
 					</p:selectOneMenu>
 
 				</h:panelGrid>

@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../layout/main.xhtml">
+	<ui:define name="content">
+
+		<div class="rco-blockheader">
+			<div class="l"></div>
+			<div class="r"></div>
+			<div class="t">#{msg['title_header']}</div>
+		</div>
+
+		<p:spacer height="20" />
+
+		<h:form id="form">
+
+			<p:panel width="100%">
+				<h:panelGrid id="pnlParameter" columns="2" width="100%">
+					<h:outputText value="#{msg['hdr_company']}" style="width:100%" />
+					<p:selectOneMenu value="#{kpiHeaderBacking.idSelectedCompany}"
+						style="width:430px">
+						<f:selectItems value="#{kpiHeaderBacking.listItemCompany}" />
+					</p:selectOneMenu>
+					<h:outputText value="#{msg['hdr_name']}" />
+					<p:inputText value="#{kpiHeaderBacking.selected.name}"
+						style="width:100%" />
+					<h:outputText value="#{msg['hdr_description']}" />
+					<p:inputTextarea value="#{kpiHeaderBacking.selected.description}"
+						style="width:100%" maxlength="255" rows="3" />
+				</h:panelGrid>
+
+				<f:facet name="footer">
+					<p:commandButton id="cmdNew" update="pnlParameter recordTable"
+						value="#{msg['btn_new']}"
+						actionListener="#{kpiHeaderBacking.searchAction}">
+					</p:commandButton>
+					<p:commandButton id="cmdSearch" update="pnlParameter recordTable"
+						value="#{msg['btn_search']}"
+						actionListener="#{kpiHeaderBacking.saveAction}">
+					</p:commandButton>
+					<p:commandButton id="cmdOK" update="pnlParameter recordTable"
+						value="#{msg['btn_ok']}"
+						actionListener="#{kpiHeaderBacking.saveAction}">
+					</p:commandButton>
+				</f:facet>
+
+			</p:panel>
+
+			<p:spacer height="10" />
+
+			<p:dataTable id="recordTable" var="rec"
+				value="#{kpiDelayBacking.model}" rowKey="#{rec.id}"
+				selectionMode="single" 
+				paginator="true" rows="8">
+
+				<p:ajax event="rowSelect" update=":editForm:dialogPanel"
+					oncomplete="dialogPanel.show()" />
+
+				<p:column headerText="#{msg['del_name']}">#{rec.name}</p:column>
+
+				<p:column headerText="#{msg['del_description']}">#{rec.description}</p:column>
+
+				<p:column headerText="#{msg['glb_state']}">#{rec.state==1?msg['glb_state_active']:msg['glb_state_inactive']}</p:column>
+
+			</p:dataTable>
+
+			<p:spacer height="10" />
+
+			<h:panelGrid columns="2" style="align='left'">
+				<p:commandButton id="cmdAdd" action="#{kpiDelayBacking.newAction}"
+					update=":editForm:dialogPanel" icon="ui-icon-plusthick"
+					value="#{msg['btn_new']}" oncomplete="dialogPanel.show()" />
+			</h:panelGrid>
+
+			<p:spacer height="10" />
+
+		</h:form>
+
+		<h:form id="editForm">
+
+			<p:growl id="growl" showDetail="true" />
+
+			<p:dialog id="dialogPanel"
+				header="#{msg['msg_record_selected']} #{kpiDelayBacking.selected.name}"
+				widgetVar="dialogPanel" resizable="false" modal="false" width="500">
+
+				<h:panelGrid id="display" columns="2" width="100%">
+
+					<h:outputText value="#{msg['del_name']}" />
+					<p:inputText value="#{kpiDelayBacking.selected.name}"
+						style="width:100%" />
+
+					<h:outputText value="#{msg['del_description']}" />
+					<p:inputText value="#{kpiDelayBacking.selected.description}"
+						style="width:100%" />
+
+					<h:outputText value="#{msg['glb_state']}"
+						rendered="#{kpiDelayBacking.selected.id != null?true:false}" />
+					<p:selectOneMenu value="#{kpiDelayBacking.selected.state}"
+						style="width:100%"
+						rendered="#{kpiDelayBacking.selected.id != null?true:false}">
+						<f:selectItem itemLabel="#{msg['glb_state_active']}" itemValue="1" />
+						<f:selectItem itemLabel="#{msg['glb_state_inactive']}"
+							itemValue="0" />
+					</p:selectOneMenu>
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<p:commandButton id="cmdSave"
+						action="#{kpiDelayBacking.saveAction}"
+						update=":form:recordTable :editForm:display growl"
+						icon="ui-icon-disk" value="#{msg['btn_save']}" />
+				</h:panelGrid>
+			</p:dialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>
+
+</html>

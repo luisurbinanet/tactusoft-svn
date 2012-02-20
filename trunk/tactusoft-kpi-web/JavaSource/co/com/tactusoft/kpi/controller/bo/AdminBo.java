@@ -14,7 +14,7 @@ import co.com.tactusoft.kpi.model.entities.KpiDelay;
 import co.com.tactusoft.kpi.model.entities.KpiWeek;
 
 @Service
-public class TablesBo implements Serializable{
+public class AdminBo implements Serializable {
 
 	/**
 	 * 
@@ -23,31 +23,31 @@ public class TablesBo implements Serializable{
 	@Resource
 	private CustomHibernateDao dao;
 
+	public AdminBo() {
+
+	}
+
 	public List<KpiCompany> getListKpiCompany() {
 		return dao.find("from KpiCompany o");
 	}
-	
-	public List<KpiCompany> getListKpiCompanyActive() {
-		return dao.find("from KpiCompany o where o.state = 1");
-	}
-	
+
 	public List<KpiDelay> getListKpiDelay() {
 		return dao.find("from KpiDelay o");
 	}
-	
+
 	public List<KpiWeek> getListKpiKpiWeek() {
 		return dao.find("from KpiWeek o");
 	}
-	
-	public void save(Object entity){
+
+	public void save(Object entity) {
 		dao.persist(entity);
 	}
-	
-	public void remove(Object entity){
+
+	public void remove(Object entity) {
 		dao.delete(entity);
 	}
-	
-	public BigDecimal getId(String clasz){
+
+	public BigDecimal getId(String clasz) {
 		return dao.getId(clasz);
 	}
 
