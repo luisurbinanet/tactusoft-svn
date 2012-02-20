@@ -28,7 +28,7 @@ public class KpiHeader implements java.io.Serializable {
 	private BigDecimal id;
 	private KpiCompany kpiCompany;
 	private String name;
-	private String desc;
+	private String description;
 	private int state;
 	private Set<KpiConfig> kpiConfigs = new HashSet<KpiConfig>(0);
 
@@ -44,11 +44,11 @@ public class KpiHeader implements java.io.Serializable {
 	}
 
 	public KpiHeader(BigDecimal id, KpiCompany kpiCompany, String name,
-			String desc, int state, Set<KpiConfig> kpiConfigs) {
+			String description, int state, Set<KpiConfig> kpiConfigs) {
 		this.id = id;
 		this.kpiCompany = kpiCompany;
 		this.name = name;
-		this.desc = desc;
+		this.description = description;
 		this.state = state;
 		this.kpiConfigs = kpiConfigs;
 	}
@@ -82,13 +82,13 @@ public class KpiHeader implements java.io.Serializable {
 		this.name = name;
 	}
 
-	@Column(name = "desc")
-	public String getDesc() {
-		return this.desc;
+	@Column(name = "description")
+	public String getDescription() {
+		return this.description;
 	}
 
-	public void setDesc(String desc) {
-		this.desc = desc;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	@Column(name = "state", nullable = false)

@@ -24,6 +24,7 @@ public class KpiCompany implements java.io.Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
+	private String code;
 	private String name;
 	private String phone;
 	private String legalRep;
@@ -34,16 +35,19 @@ public class KpiCompany implements java.io.Serializable {
 	public KpiCompany() {
 	}
 
-	public KpiCompany(BigDecimal id, String name, String email, int state) {
+	public KpiCompany(BigDecimal id, String code, String name, String email,
+			int state) {
 		this.id = id;
+		this.code = code;
 		this.name = name;
 		this.email = email;
 		this.state = state;
 	}
 
-	public KpiCompany(BigDecimal id, String name, String phone,
+	public KpiCompany(BigDecimal id, String code, String name, String phone,
 			String legalRep, String email, int state, Set<KpiHeader> kpiHeaders) {
 		this.id = id;
+		this.code = code;
 		this.name = name;
 		this.phone = phone;
 		this.legalRep = legalRep;
@@ -60,6 +64,15 @@ public class KpiCompany implements java.io.Serializable {
 
 	public void setId(BigDecimal id) {
 		this.id = id;
+	}
+
+	@Column(name = "code", nullable = true)
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	@Column(name = "name", nullable = false)
