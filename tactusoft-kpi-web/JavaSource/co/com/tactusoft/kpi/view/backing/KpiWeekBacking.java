@@ -16,7 +16,7 @@ import org.springframework.stereotype.Controller;
 
 import co.com.tactusoft.kpi.controller.bo.TablesBo;
 import co.com.tactusoft.kpi.model.entities.KpiWeek;
-import co.com.tactusoft.kpi.util.Util;
+import co.com.tactusoft.kpi.util.FacesUtil;
 import co.com.tactusoft.kpi.view.model.CalendarWeek;
 import co.com.tactusoft.kpi.view.model.KpiWeekModel;
 
@@ -111,12 +111,12 @@ public class KpiWeekBacking implements Serializable {
 
 		if (selected.getAssignedOrders() == 0) {
 			message = "El Campo OT Asignadas es Obligatorio";
-			Util.addWarn("Advertencia", message);
+			FacesUtil.addWarn("Advertencia", message);
 		}
 
 		if (selected.getEndDate().compareTo(selected.getStartDate()) < 0) {
 			message = "La Fecha Inicial debe ser menor a la Fecha Final";
-			Util.addWarn("Advertencia", message);
+			FacesUtil.addWarn("Advertencia", message);
 		}
 
 		if (message == null) {
@@ -137,7 +137,7 @@ public class KpiWeekBacking implements Serializable {
 					+ " actualizado con Exito";
 			//selected = new KpiWeek();
 			model = new KpiWeekModel(service.getListKpiKpiWeek());
-			Util.addInfo("Información", message);
+			FacesUtil.addInfo("Información", message);
 
 		}
 	}

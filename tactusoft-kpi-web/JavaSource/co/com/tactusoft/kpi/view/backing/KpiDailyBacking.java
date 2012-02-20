@@ -20,7 +20,7 @@ import org.springframework.stereotype.Controller;
 import co.com.tactusoft.kpi.controller.bo.ProcessBo;
 import co.com.tactusoft.kpi.model.entities.KpiDaily;
 import co.com.tactusoft.kpi.model.entities.KpiWeek;
-import co.com.tactusoft.kpi.util.Util;
+import co.com.tactusoft.kpi.util.FacesUtil;
 import co.com.tactusoft.kpi.view.model.KpiDailyModel;
 
 @Controller
@@ -164,7 +164,7 @@ public class KpiDailyBacking implements Serializable {
 
 		if (selected.getCurrentDay() == null) {
 			message = "El Campo Día es Obligatorio";
-			Util.addWarn("Advertencia", message);
+			FacesUtil.addWarn("Advertencia", message);
 		} else {
 			boolean exists = false;
 			Iterator<KpiDaily> it = model.iterator();
@@ -178,7 +178,7 @@ public class KpiDailyBacking implements Serializable {
 
 			if ((exists) && (selected.getId() == null)) {
 				message = "Ya existe una programación para este día";
-				Util.addWarn("Advertencia", message);
+				FacesUtil.addWarn("Advertencia", message);
 			}
 		}
 
@@ -197,7 +197,7 @@ public class KpiDailyBacking implements Serializable {
 			// selected = new KpiDaily();
 			model = new KpiDailyModel(
 					service.getListKpiDailyByWeek(kpiWeekSelected));
-			Util.addInfo("Información", message);
+			FacesUtil.addInfo("Información", message);
 			context.addCallbackParam("saved", "true");
 		} else {
 			context.addCallbackParam("saved", "false");
