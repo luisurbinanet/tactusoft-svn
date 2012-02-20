@@ -1,6 +1,6 @@
 package co.com.tactusoft.kpi.model.entities;
 
-// Generated 19/02/2012 08:20:21 PM by Hibernate Tools 3.4.0.CR1
+// Generated 20/02/2012 11:10:42 AM by Hibernate Tools 3.4.0.CR1
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -26,7 +26,9 @@ public class KpiDelay implements java.io.Serializable {
 	private BigDecimal id;
 	private String name;
 	private String description;
+	private Integer korder;
 	private int state;
+	private Set<KpiDailyDelay> kpiDailyDelaies = new HashSet<KpiDailyDelay>(0);
 	private Set<KpiConfig> kpiConfigs = new HashSet<KpiConfig>(0);
 
 	public KpiDelay() {
@@ -38,12 +40,15 @@ public class KpiDelay implements java.io.Serializable {
 		this.state = state;
 	}
 
-	public KpiDelay(BigDecimal id, String name, String description, int state,
+	public KpiDelay(BigDecimal id, String name, String description,
+			Integer korder, int state, Set<KpiDailyDelay> kpiDailyDelaies,
 			Set<KpiConfig> kpiConfigs) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
+		this.korder = korder;
 		this.state = state;
+		this.kpiDailyDelaies = kpiDailyDelaies;
 		this.kpiConfigs = kpiConfigs;
 	}
 
@@ -75,6 +80,15 @@ public class KpiDelay implements java.io.Serializable {
 		this.description = description;
 	}
 
+	@Column(name = "KORDER")
+	public Integer getKorder() {
+		return this.korder;
+	}
+
+	public void setKorder(Integer korder) {
+		this.korder = korder;
+	}
+
 	@Column(name = "STATE", nullable = false)
 	public int getState() {
 		return this.state;
@@ -82,6 +96,15 @@ public class KpiDelay implements java.io.Serializable {
 
 	public void setState(int state) {
 		this.state = state;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "kpiDelay")
+	public Set<KpiDailyDelay> getKpiDailyDelaies() {
+		return this.kpiDailyDelaies;
+	}
+
+	public void setKpiDailyDelaies(Set<KpiDailyDelay> kpiDailyDelaies) {
+		this.kpiDailyDelaies = kpiDailyDelaies;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "kpiDelay")
