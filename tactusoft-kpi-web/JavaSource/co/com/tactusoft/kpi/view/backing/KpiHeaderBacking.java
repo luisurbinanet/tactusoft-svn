@@ -14,12 +14,14 @@ import javax.faces.model.SelectItem;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import co.com.tactusoft.kpi.controller.bo.AdminBo;
 import co.com.tactusoft.kpi.controller.bo.TablesBo;
 import co.com.tactusoft.kpi.model.entities.KpiCompany;
 import co.com.tactusoft.kpi.model.entities.KpiHeader;
 import co.com.tactusoft.kpi.util.Constant;
 import co.com.tactusoft.kpi.util.FacesUtil;
-import co.com.tactusoft.kpi.view.model.KpiCompanyModel;
+import co.com.tactusoft.kpi.view.model.KpiConfigModel;
+import co.com.tactusoft.kpi.view.model.KpiHeaderModel;
 
 @Controller
 @Scope("session")
@@ -32,8 +34,12 @@ public class KpiHeaderBacking implements Serializable {
 
 	@Resource
 	private TablesBo tableService;
+	@Resource
+	private AdminBo tableAdmin;
 
-	private KpiCompanyModel model;
+	private KpiHeaderModel model;
+	private KpiConfigModel modelConfig;
+	
 	private KpiHeader selected;
 
 	private List<SelectItem> listItemCompany;
@@ -44,15 +50,20 @@ public class KpiHeaderBacking implements Serializable {
 		selected = new KpiHeader();
 	}
 
-	public KpiCompanyModel getModel() {
-		if (model == null) {
-			model = new KpiCompanyModel(tableService.getListKpiCompany());
-		}
+	public KpiHeaderModel getModel() {
 		return model;
 	}
 
-	public void setModel(KpiCompanyModel model) {
+	public void setModel(KpiHeaderModel model) {
 		this.model = model;
+	}
+
+	public KpiConfigModel getModelConfig() {
+		return modelConfig;
+	}
+
+	public void setModelConfig(KpiConfigModel modelConfig) {
+		this.modelConfig = modelConfig;
 	}
 
 	public KpiHeader getSelected() {
@@ -80,7 +91,7 @@ public class KpiHeaderBacking implements Serializable {
 			}
 
 			if (listItemCompany.size() > 0) {
-				// this.idKpiWeek = list.get(0).getId();
+				this.idSelectedCompany = list.get(0).getId();
 			}
 		}
 		return listItemCompany;
@@ -98,13 +109,14 @@ public class KpiHeaderBacking implements Serializable {
 		this.idSelectedCompany = idSelectedCompany;
 	}
 
-	public void searchAction(ActionEvent event) {
+	public void newAction(ActionEvent event) {
 		selected = new KpiHeader();
 	}
 
-	public void deleteAction() {
-		tableService.remove(selected);
-		model = new KpiCompanyModel(tableService.getListKpiCompany());
+	public void searchAction(ActionEvent event) {
+		selected = new KpiHeader();
+		model = new KpiHeaderModel(
+				tableAdmin.getListKpiHeaderByCompany(this.idSelectedCompany));
 	}
 
 	public void saveAction() {
@@ -128,7 +140,8 @@ public class KpiHeaderBacking implements Serializable {
 			selected.setName(selected.getName().toUpperCase());
 			tableService.save(selected);
 			message = FacesUtil.getMessage("msg_record_ok", selected.getName());
-			model = new KpiCompanyModel(tableService.getListKpiCompany());
+			model = new KpiHeaderModel(
+					tableAdmin.getListKpiHeaderByCompany(this.idSelectedCompany));
 			FacesUtil.addInfo(message);
 		}
 	}

@@ -9,9 +9,8 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import co.com.tactusoft.kpi.model.dao.CustomHibernateDao;
-import co.com.tactusoft.kpi.model.entities.KpiCompany;
-import co.com.tactusoft.kpi.model.entities.KpiDelay;
-import co.com.tactusoft.kpi.model.entities.KpiWeek;
+import co.com.tactusoft.kpi.model.entities.KpiConfig;
+import co.com.tactusoft.kpi.model.entities.KpiHeader;
 
 @Service
 public class AdminBo implements Serializable {
@@ -27,28 +26,17 @@ public class AdminBo implements Serializable {
 
 	}
 
-	public List<KpiCompany> getListKpiCompany() {
-		return dao.find("from KpiCompany o");
+	public List<KpiHeader> getListKpiHeader() {
+		return dao.find("from KpiHeader o");
 	}
 
-	public List<KpiDelay> getListKpiDelay() {
-		return dao.find("from KpiDelay o");
+	public List<KpiHeader> getListKpiHeaderByCompany(BigDecimal idCompany) {
+		return dao
+				.find("from KpiHeader o where o.kpiCompany.id = " + idCompany);
 	}
 
-	public List<KpiWeek> getListKpiKpiWeek() {
-		return dao.find("from KpiWeek o");
-	}
-
-	public void save(Object entity) {
-		dao.persist(entity);
-	}
-
-	public void remove(Object entity) {
-		dao.delete(entity);
-	}
-
-	public BigDecimal getId(String clasz) {
-		return dao.getId(clasz);
+	public List<KpiConfig> getListKpiConfigByHeader(BigDecimal idHeader) {
+		return dao.find("from KpiConfig o where o.kpiHeader.id = " + idHeader);
 	}
 
 }
