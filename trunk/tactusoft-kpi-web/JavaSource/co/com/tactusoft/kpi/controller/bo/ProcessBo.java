@@ -12,6 +12,7 @@ import javax.annotation.Resource;
 import org.primefaces.json.JSONArray;
 import org.primefaces.json.JSONException;
 import org.primefaces.json.JSONObject;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import co.com.tactusoft.kpi.model.dao.CustomHibernateDao;
@@ -21,6 +22,7 @@ import co.com.tactusoft.kpi.view.model.GraphDaily;
 import co.com.tactusoft.kpi.view.model.ReportDaily;
 
 @Service
+@Scope("singleton")
 public class ProcessBo implements Serializable {
 
 	private static final long serialVersionUID = 1L;

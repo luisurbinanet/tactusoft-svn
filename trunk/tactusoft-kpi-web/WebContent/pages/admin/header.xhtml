@@ -20,18 +20,14 @@
 
 			<p:panel width="100%">
 				<h:panelGrid id="pnlParameter" columns="2" width="100%">
-					<h:outputText value="#{msg['hdr_company']}" style="width:100%" />
+					<h:outputText value="#{msg['hdr_company']}" style="width:500p" />
 					<p:selectOneMenu value="#{kpiHeaderBacking.idSelectedCompany}"
-						style="width:430px">
+						style="width:700px">
 						<f:selectItems value="#{kpiHeaderBacking.listItemCompany}" />
+						<p:ajax update="recordTable :form:recordTable2 :form:pnlButtons"
+							listener="#{kpiHeaderBacking.searchAction}" />
 					</p:selectOneMenu>
 				</h:panelGrid>
-
-				<f:facet name="footer">
-					<p:commandButton id="cmdSearch" update="pnlParameter recordTable"
-						value="#{msg['btn_search']}"
-						actionListener="#{kpiHeaderBacking.searchAction}" />
-				</f:facet>
 
 			</p:panel>
 
@@ -39,7 +35,8 @@
 
 			<p:dataTable id="recordTable" var="rec"
 				value="#{kpiHeaderBacking.model}" rowKey="#{rec.id}"
-				selectionMode="single" paginator="true" rows="8">
+				selectionMode="single" paginator="true" rows="8"
+				selection="#{kpiHeaderBacking.selected}">
 
 				<p:ajax event="rowSelect" listener="#{kpiHeaderBacking.onRowSelect}"
 					update=":form:recordTable2" />
@@ -64,33 +61,42 @@
 			</p:dataTable>
 
 			<p:spacer height="10" />
-			<h:panelGrid columns="2">
+
+			<h:panelGrid id="pnlButtons" columns="2">
 				<p:commandButton id="cmdAdd"
 					actionListener="#{kpiHeaderBacking.newAction}"
 					update=":editForm:dialogPanel" icon="ui-icon-plusthick"
-					value="#{msg['btn_new']}" oncomplete="dialogPanel.show()" />
-				<p:commandButton id="cmdSave"
-					action="#{kpiHeaderBacking.saveAction}"
+					value="#{msg['btn_new']}" oncomplete="dialogPanel.show()"
+					disabled="#{kpiHeaderBacking.selected.id == -1?true:false}" />
+				<p:commandButton id="cmdOK"
+					actionListener="#{kpiHeaderBacking.saveAllAction}"
 					update=":form:recordTable :editForm:display :editForm:growl"
-					icon="ui-icon-disk" value="#{msg['btn_save']}" />
+					icon="ui-icon-check" value="#{msg['btn_save_all']}" 
+					disabled="#{kpiHeaderBacking.selected.id == null?true:false}"/>
 			</h:panelGrid>
+
 			<p:spacer height="10" />
 
 			<p:dataTable id="recordTable2" var="rec"
 				value="#{kpiHeaderBacking.modelHeaderDelay}" rowKey="#{rec.id}"
-				selectionMode="single" paginator="true" rows="8">
+				selection="#{kpiHeaderBacking.listDelete}" paginator="true" rows="8">
+
+				<p:column selectionMode="multiple" style="width:18px" />
 
 				<p:column headerText="#{msg['hdr_delay']}">#{rec.kpiDelay.name}</p:column>
 
-				<p:column style="width:40px">
-					<h:panelGrid columns="3" styleClass="actions" cellpadding="2">
-						<p:commandButton id="cmdDelDelay" icon="ui-icon-close"
-							title="#{msg['btn_delete']}"
-							actionListener="#{kpiHeaderBacking.deleteAction}">
-
-						</p:commandButton>
-					</h:panelGrid>
-				</p:column>
+				<f:facet name="footer">
+					<p:commandButton id="cmdAdd"
+						actionListener="#{kpiHeaderBacking.addAction}"
+						update=":editForm:display2" icon="ui-icon-plusthick"
+						value="#{msg['btn_new']}" oncomplete="dialogPanel2.show()" 
+						disabled="#{kpiHeaderBacking.idSelectedCompany == -1?true:false}"/>
+					<p:commandButton id="cmdDelete"
+						actionListener="#{kpiHeaderBacking.deleteAction}"
+						update=":form:recordTable2 :editForm:display2"
+						icon="ui-icon-check" value="#{msg['btn_delete']}" 
+						disabled="#{kpiHeaderBacking.idSelectedCompany == -1?true:false}"/>
+				</f:facet>
 
 			</p:dataTable>
 
@@ -102,8 +108,7 @@
 
 			<p:growl id="growl" showDetail="true" />
 
-			<p:dialog id="dialogPanel"
-				header="#{msg['msg_record_selected']} #{kpiHeaderBacking.selected.name}"
+			<p:dialog id="dialogPanel" header="#{msg['msg_detail']}"
 				widgetVar="dialogPanel" resizable="false" modal="false" width="500">
 
 				<h:panelGrid id="display" columns="2" width="100%">
@@ -126,6 +131,35 @@
 					</p:selectOneMenu>
 
 				</h:panelGrid>
+
+				<f:facet name="footer">
+					<p:commandButton id="cmdSave"
+						action="#{kpiHeaderBacking.saveAction}"
+						update=":form:recordTable :editForm:display :editForm:growl"
+						icon="ui-icon-disk" value="#{msg['btn_save']}" />
+				</f:facet>
+
+			</p:dialog>
+
+			<p:dialog id="dialogPanel2" header="#{msg['msg_detail']}"
+				resizable="false" modal="false" width="500" widgetVar="dialogPanel2">
+
+				<h:panelGrid id="display2" columns="2" width="100%">
+
+					<h:outputText value="#{msg['glb_state']}" />
+					<p:selectOneMenu value="#{kpiHeaderBacking.idSelectedDelay}"
+						style="width:400px">
+						<f:selectItems value="#{kpiHeaderBacking.listItemDelay}" />
+					</p:selectOneMenu>
+
+				</h:panelGrid>
+
+				<f:facet name="footer">
+					<p:commandButton id="cmdSave2"
+						actionListener="#{kpiHeaderBacking.addSaveAction}"
+						update=":form:recordTable2" icon="ui-icon-disk"
+						value="#{msg['btn_save']}" oncomplete="dialogPanel2.hide()" />
+				</f:facet>
 
 			</p:dialog>
 
