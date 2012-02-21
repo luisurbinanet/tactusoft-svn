@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import co.com.tactusoft.kpi.model.dao.CustomHibernateDao;
-import co.com.tactusoft.kpi.model.entities.KpiConfig;
+import co.com.tactusoft.kpi.model.entities.KpiHeaderDelay;
 import co.com.tactusoft.kpi.model.entities.KpiHeader;
 
 @Service
@@ -35,8 +35,9 @@ public class AdminBo implements Serializable {
 				.find("from KpiHeader o where o.kpiCompany.id = " + idCompany);
 	}
 
-	public List<KpiConfig> getListKpiConfigByHeader(BigDecimal idHeader) {
-		return dao.find("from KpiConfig o where o.kpiHeader.id = " + idHeader);
+	public List<KpiHeaderDelay> getListKpiConfigByHeader(BigDecimal idHeader) {
+		return dao.find("from KpiHeaderDelay o where o.kpiHeader.id = "
+				+ idHeader + " order by o.kpiDelay.korder");
 	}
 
 }

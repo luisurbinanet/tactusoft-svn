@@ -11,6 +11,7 @@ import javax.annotation.Resource;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
+import org.primefaces.event.SelectEvent;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
@@ -20,7 +21,7 @@ import co.com.tactusoft.kpi.model.entities.KpiCompany;
 import co.com.tactusoft.kpi.model.entities.KpiHeader;
 import co.com.tactusoft.kpi.util.Constant;
 import co.com.tactusoft.kpi.util.FacesUtil;
-import co.com.tactusoft.kpi.view.model.KpiConfigModel;
+import co.com.tactusoft.kpi.view.model.KpiHeaderDelayModel;
 import co.com.tactusoft.kpi.view.model.KpiHeaderModel;
 
 @Controller
@@ -35,11 +36,11 @@ public class KpiHeaderBacking implements Serializable {
 	@Resource
 	private TablesBo tableService;
 	@Resource
-	private AdminBo tableAdmin;
+	private AdminBo adminService;
 
 	private KpiHeaderModel model;
-	private KpiConfigModel modelConfig;
-	
+	private KpiHeaderDelayModel modelHeaderDelay;
+
 	private KpiHeader selected;
 
 	private List<SelectItem> listItemCompany;
@@ -58,12 +59,12 @@ public class KpiHeaderBacking implements Serializable {
 		this.model = model;
 	}
 
-	public KpiConfigModel getModelConfig() {
-		return modelConfig;
+	public KpiHeaderDelayModel getModelHeaderDelay() {
+		return modelHeaderDelay;
 	}
 
-	public void setModelConfig(KpiConfigModel modelConfig) {
-		this.modelConfig = modelConfig;
+	public void setModelHeaderDelay(KpiHeaderDelayModel modelConfig) {
+		this.modelHeaderDelay = modelConfig;
 	}
 
 	public KpiHeader getSelected() {
@@ -116,7 +117,7 @@ public class KpiHeaderBacking implements Serializable {
 	public void searchAction(ActionEvent event) {
 		selected = new KpiHeader();
 		model = new KpiHeaderModel(
-				tableAdmin.getListKpiHeaderByCompany(this.idSelectedCompany));
+				adminService.getListKpiHeaderByCompany(this.idSelectedCompany));
 	}
 
 	public void saveAction() {
@@ -137,13 +138,23 @@ public class KpiHeaderBacking implements Serializable {
 				selected.setKpiCompany(mapKpiCompany.get(idSelectedCompany));
 			}
 
-			selected.setName(selected.getName().toUpperCase());
 			tableService.save(selected);
 			message = FacesUtil.getMessage("msg_record_ok", selected.getName());
 			model = new KpiHeaderModel(
-					tableAdmin.getListKpiHeaderByCompany(this.idSelectedCompany));
+					adminService
+							.getListKpiHeaderByCompany(this.idSelectedCompany));
 			FacesUtil.addInfo(message);
 		}
+	}
+
+	public void deleteAction(ActionEvent event) {
+
+	}
+
+	public void onRowSelect(SelectEvent event) {
+		BigDecimal idSelectedHeader = ((KpiHeader) event.getObject()).getId();
+		modelHeaderDelay = new KpiHeaderDelayModel(
+				adminService.getListKpiConfigByHeader(idSelectedHeader));
 	}
 
 }
