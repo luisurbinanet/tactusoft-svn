@@ -30,7 +30,7 @@ public class KpiHeader implements java.io.Serializable {
 	private String name;
 	private String description;
 	private int state;
-	private Set<KpiConfig> kpiConfigs = new HashSet<KpiConfig>(0);
+	private Set<KpiHeaderDelay> kpiConfigs = new HashSet<KpiHeaderDelay>(0);
 
 	public KpiHeader() {
 	}
@@ -44,7 +44,7 @@ public class KpiHeader implements java.io.Serializable {
 	}
 
 	public KpiHeader(BigDecimal id, KpiCompany kpiCompany, String name,
-			String description, int state, Set<KpiConfig> kpiConfigs) {
+			String description, int state, Set<KpiHeaderDelay> kpiConfigs) {
 		this.id = id;
 		this.kpiCompany = kpiCompany;
 		this.name = name;
@@ -101,11 +101,11 @@ public class KpiHeader implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "kpiHeader")
-	public Set<KpiConfig> getKpiConfigs() {
+	public Set<KpiHeaderDelay> getKpiConfigs() {
 		return this.kpiConfigs;
 	}
 
-	public void setKpiConfigs(Set<KpiConfig> kpiConfigs) {
+	public void setKpiConfigs(Set<KpiHeaderDelay> kpiConfigs) {
 		this.kpiConfigs = kpiConfigs;
 	}
 

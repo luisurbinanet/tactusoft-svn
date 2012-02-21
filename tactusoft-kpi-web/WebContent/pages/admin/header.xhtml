@@ -39,11 +39,10 @@
 
 			<p:dataTable id="recordTable" var="rec"
 				value="#{kpiHeaderBacking.model}" rowKey="#{rec.id}"
-				selectionMode="single" selection="#{kpiHeaderBacking.selected}"
-				paginator="true" rows="8">
+				selectionMode="single" paginator="true" rows="8">
 
-				<p:ajax event="rowSelect" update=":editForm:dialogPanel"
-					oncomplete="dialogPanel.show()" />
+				<p:ajax event="rowSelect" listener="#{kpiHeaderBacking.onRowSelect}"
+					update=":form:recordTable2" />
 
 				<p:column headerText="#{msg['hdr_name']}">#{rec.name}</p:column>
 
@@ -51,16 +50,49 @@
 
 				<p:column headerText="#{msg['glb_state']}">#{rec.state==1?msg['glb_state_active']:msg['glb_state_inactive']}</p:column>
 
+				<p:column style="width:30px">
+					<h:panelGrid columns="3" styleClass="actions" cellpadding="2">
+						<p:commandButton id="selectButton" update=":editForm:dialogPanel"
+							oncomplete="dialogPanel.show()" icon="ui-icon-search"
+							title="#{msg['btn_edit']}">
+							<f:setPropertyActionListener value="#{rec}"
+								target="#{kpiHeaderBacking.selected}" />
+						</p:commandButton>
+					</h:panelGrid>
+				</p:column>
+
 			</p:dataTable>
 
 			<p:spacer height="10" />
-
-			<h:panelGrid columns="2" style="align='left'">
+			<h:panelGrid columns="2">
 				<p:commandButton id="cmdAdd"
 					actionListener="#{kpiHeaderBacking.newAction}"
 					update=":editForm:dialogPanel" icon="ui-icon-plusthick"
 					value="#{msg['btn_new']}" oncomplete="dialogPanel.show()" />
+				<p:commandButton id="cmdSave"
+					action="#{kpiHeaderBacking.saveAction}"
+					update=":form:recordTable :editForm:display :editForm:growl"
+					icon="ui-icon-disk" value="#{msg['btn_save']}" />
 			</h:panelGrid>
+			<p:spacer height="10" />
+
+			<p:dataTable id="recordTable2" var="rec"
+				value="#{kpiHeaderBacking.modelHeaderDelay}" rowKey="#{rec.id}"
+				selectionMode="single" paginator="true" rows="8">
+
+				<p:column headerText="#{msg['hdr_delay']}">#{rec.kpiDelay.name}</p:column>
+
+				<p:column style="width:40px">
+					<h:panelGrid columns="3" styleClass="actions" cellpadding="2">
+						<p:commandButton id="cmdDelDelay" icon="ui-icon-close"
+							title="#{msg['btn_delete']}"
+							actionListener="#{kpiHeaderBacking.deleteAction}">
+
+						</p:commandButton>
+					</h:panelGrid>
+				</p:column>
+
+			</p:dataTable>
 
 			<p:spacer height="10" />
 
@@ -82,7 +114,7 @@
 					<h:outputText value="#{msg['hdr_description']}" />
 					<p:inputTextarea value="#{kpiHeaderBacking.selected.description}"
 						style="width:100%" maxlength="255" rows="3" />
-						
+
 					<h:outputText value="#{msg['glb_state']}"
 						rendered="#{kpiHeaderBacking.selected.id != null?true:false}" />
 					<p:selectOneMenu value="#{kpiHeaderBacking.selected.state}"
@@ -95,15 +127,10 @@
 
 				</h:panelGrid>
 
-				<h:panelGrid columns="2">
-					<p:commandButton id="cmdSave"
-						action="#{kpiHeaderBacking.saveAction}"
-						update=":form:recordTable :editForm:display growl"
-						icon="ui-icon-disk" value="#{msg['btn_save']}" />
-				</h:panelGrid>
 			</p:dialog>
 
 		</h:form>
+
 	</ui:define>
 </ui:composition>
 
