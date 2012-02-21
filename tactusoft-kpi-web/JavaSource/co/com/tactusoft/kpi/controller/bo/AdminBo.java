@@ -6,13 +6,15 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import co.com.tactusoft.kpi.model.dao.CustomHibernateDao;
-import co.com.tactusoft.kpi.model.entities.KpiHeaderDelay;
 import co.com.tactusoft.kpi.model.entities.KpiHeader;
+import co.com.tactusoft.kpi.model.entities.KpiHeaderDelay;
 
 @Service
+@Scope("singleton")
 public class AdminBo implements Serializable {
 
 	/**
@@ -38,6 +40,14 @@ public class AdminBo implements Serializable {
 	public List<KpiHeaderDelay> getListKpiConfigByHeader(BigDecimal idHeader) {
 		return dao.find("from KpiHeaderDelay o where o.kpiHeader.id = "
 				+ idHeader + " order by o.kpiDelay.korder");
+	}
+
+	public void save(Object entity) {
+		dao.persist(entity);
+	}
+
+	public void remove(Object entity) {
+		dao.delete(entity);
 	}
 
 }

@@ -1,5 +1,6 @@
 package co.com.tactusoft.kpi.view.backing;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,7 +27,9 @@ import co.com.tactusoft.kpi.view.model.ReportDailyModel;
 
 @Controller
 @Scope("session")
-public class ReportBacking {
+public class ReportBacking implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 
 	@Resource
 	private ProcessBo service;
