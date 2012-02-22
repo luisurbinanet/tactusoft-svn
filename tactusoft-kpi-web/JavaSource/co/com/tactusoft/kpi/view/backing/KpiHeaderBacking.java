@@ -246,8 +246,8 @@ public class KpiHeaderBacking implements Serializable {
 		for (KpiDelay row : tableService.getListKpiDelay()) {
 			boolean sw = true;
 			for (int i = 0; i < listHeaderDelay.size(); i++) {
-				if (listHeaderDelay.get(i).getId().intValue() == row.getId()
-						.intValue()) {
+				if (listHeaderDelay.get(i).getKpiDelay().getId().intValue() == row
+						.getId().intValue()) {
 					sw = false;
 					break;
 				}
