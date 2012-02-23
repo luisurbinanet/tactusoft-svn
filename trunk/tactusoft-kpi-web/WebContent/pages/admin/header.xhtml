@@ -116,6 +116,7 @@
 					<h:outputText value="#{msg['hdr_name']}" />
 					<p:inputText value="#{kpiHeaderBacking.selected.name}"
 						style="width:100%" />
+						
 					<h:outputText value="#{msg['hdr_description']}" />
 					<p:inputTextarea value="#{kpiHeaderBacking.selected.description}"
 						style="width:100%" maxlength="255" rows="3" />
@@ -158,7 +159,9 @@
 					<p:commandButton id="cmdSave2"
 						actionListener="#{kpiHeaderBacking.addSaveAction}"
 						update=":form:recordTable2" icon="ui-icon-disk"
-						value="#{msg['btn_save']}" oncomplete="dialogPanel2.hide()" />
+						value="#{msg['btn_save']}" oncomplete="dialogPanel2.hide()" 
+						process="@parent">
+					</p:commandButton>	
 				</f:facet>
 
 			</p:dialog>
