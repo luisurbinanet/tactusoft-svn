@@ -1,4 +1,4 @@
 <%
-	String redirectURL = "pages/admin/header.jsf";
+	String redirectURL = "pages/process/daily.jsf";
     response.sendRedirect(redirectURL);
 %>

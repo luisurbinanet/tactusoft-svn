@@ -194,7 +194,6 @@ public class KpiDailyBacking implements Serializable {
 			selected.setKpiWeek(mapKpiWeek.get(kpiWeekSelected));
 			service.save(selected);
 			message = "El registro se ha actualizado con Exito";
-			// selected = new KpiDaily();
 			model = new KpiDailyModel(
 					service.getListKpiDailyByWeek(kpiWeekSelected));
 			FacesUtil.addInfo("Información", message);
