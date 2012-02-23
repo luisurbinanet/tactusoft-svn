@@ -54,6 +54,7 @@ public class KpiHeaderBacking implements Serializable {
 	private List<SelectItem> listItemCompany;
 	private List<SelectItem> listItemDelay;
 	private Map<BigDecimal, KpiCompany> mapKpiCompany;
+	private Map<BigDecimal, KpiHeader> mapKpiHeader;
 	private Map<BigDecimal, KpiDelay> mapKpiDelay;
 	private BigDecimal idSelectedCompany;
 	private BigDecimal idSelectedDelay;
@@ -162,10 +163,16 @@ public class KpiHeaderBacking implements Serializable {
 	public void searchAction() {
 		selected = new KpiHeader();
 		modelHeaderDelay = new KpiHeaderDelayModel();
+		mapKpiHeader = new HashMap<BigDecimal, KpiHeader>();
 		if (this.idSelectedCompany.intValue() != -1) {
-			model = new KpiHeaderModel(
-					adminService
-							.getListKpiHeaderByCompany(this.idSelectedCompany));
+			List<KpiHeader> list = adminService
+					.getListKpiHeaderByCompany(this.idSelectedCompany);
+			model = new KpiHeaderModel(list);
+			
+			for(KpiHeader row: list){
+				mapKpiHeader.put(row.getId(), row);
+			}
+			
 		} else {
 			model = new KpiHeaderModel();
 			listDeleteOld = null;
@@ -175,7 +182,6 @@ public class KpiHeaderBacking implements Serializable {
 	}
 
 	public void saveAction() {
-
 		String message = null;
 		String field = null;
 
@@ -210,6 +216,8 @@ public class KpiHeaderBacking implements Serializable {
 	}
 
 	public void saveAllAction(ActionEvent event) {
+		selected = mapKpiHeader.get(selected.getId());
+		
 		try {
 			for (KpiHeaderDelay row : listDeleteOld) {
 				adminService.remove(row);
@@ -267,6 +275,7 @@ public class KpiHeaderBacking implements Serializable {
 	public void addSaveAction(ActionEvent event) {
 		listNew.add(mapKpiDelay.get(idSelectedDelay));
 		KpiHeaderDelay object = new KpiHeaderDelay();
+		object.setKpiHeader(selected);
 		object.setKpiDelay(mapKpiDelay.get(idSelectedDelay));
 		listHeaderDelay.add(object);
 		modelHeaderDelay = new KpiHeaderDelayModel(listHeaderDelay);
