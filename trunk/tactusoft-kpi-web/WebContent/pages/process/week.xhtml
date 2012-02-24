@@ -13,35 +13,36 @@
 			<div class="r"></div>
 			<div class="t">#{msg['title_week']}</div>
 		</div>
-		
+
 		<p:spacer height="20" />
 
 		<h:form id="form">
 
 			<p:dataTable id="recordTable" var="rec"
 				value="#{kpiWeekBacking.model}" rowKey="#{rec.id}"
-				selectionMode="single" selection="#{kpiWeekBacking.selected}">
+				selectionMode="single" selection="#{kpiWeekBacking.selected}"
+				paginator="true" rows="20">
 
 				<p:ajax event="rowSelect" update=":editForm:dialogPanel"
 					oncomplete="dialogPanel.show()" />
 
 				<p:column headerText="#{msg['wk_name']}">#{rec.name}</p:column>
 
-				<p:column headerText="#{msg['assigned_orders']}">#{rec.assignedOrders}</p:column>
+				<p:column headerText="#{msg['wek_assigned_orders']}">#{rec.assignedOrders}</p:column>
 
-				<p:column headerText="#{msg['star_date']}">
+				<p:column headerText="#{msg['wek_star_date']}">
 					<h:outputLabel value="#{rec.startDate}">
 						<f:convertDateTime pattern="dd/MM/yyyy" />
 					</h:outputLabel>
 				</p:column>
 
-				<p:column headerText="#{msg['end_date']}">
+				<p:column headerText="#{msg['wek_end_date']}">
 					<h:outputLabel value="#{rec.endDate}">
 						<f:convertDateTime pattern="dd/MM/yyyy" />
 					</h:outputLabel>
 				</p:column>
 
-				<p:column headerText="#{msg['state']}">#{rec.state}</p:column>
+				<p:column headerText="#{msg['glb_state']}">#{rec.state == 40?msg['wek_state_40']:msg['wek_state_60']}</p:column>
 
 			</p:dataTable>
 
@@ -62,42 +63,56 @@
 				header="#{msg['msg_record_selected']} #{kpiWeekBacking.selected.name}"
 				widgetVar="dialogPanel" resizable="false" modal="false" width="400">
 
-				<p:messages id="messages" showDetail="true" autoUpdate="true" />
+				<p:growl id="growl" showDetail="true" />
 
 				<h:panelGrid id="display" columns="2" width="100%">
 
-					<h:outputText value="#{msg['assigned_orders']}" />
+					<h:outputText value="#{msg['wek_assigned_orders']}" />
 					<p:spinner value="#{kpiWeekBacking.selected.assignedOrders}"
 						min="1" max="999" maxlength="3">
 						<f:validator validatorId="workOrderValidator" />
 						<f:attribute name="fieldLabel" value="OT Programadas" />
 					</p:spinner>
 
-					<h:outputText value="#{msg['star_date']}" />
+					<h:outputText value="#{msg['wek_star_date']}" />
 					<p:calendar value="#{kpiWeekBacking.selected.startDate}"
 						showOn="button" navigator="true" />
 
-					<h:outputText value="#{msg['end_date']}" />
+					<h:outputText value="#{msg['wek_end_date']}" />
 					<p:calendar value="#{kpiWeekBacking.selected.endDate}"
 						showOn="button" navigator="true" />
 
-					<h:outputText value="#{msg['state']}" />
+					<h:outputText value="#{msg['glb_state']}" />
 					<p:selectOneMenu value="#{kpiWeekBacking.selected.state}"
 						style="width:100%">
-						<f:selectItem itemLabel="#{msg['ot_state_40']}" itemValue="40" />
-						<f:selectItem itemLabel="#{msg['ot_state_60']}" itemValue="60" />
+						<f:selectItem itemValue="40" itemLabel="#{msg['wek_state_40']}" />
+						<f:selectItem itemValue="60" itemLabel="#{msg['wek_state_60']}" />
 					</p:selectOneMenu>
 
 				</h:panelGrid>
 
 				<f:facet name="footer">
 					<p:commandButton id="cmdSave" action="#{kpiWeekBacking.saveAction}"
-						update=":form:recordTable :editForm:display" icon="ui-icon-disk"
-						value="#{msg['btn_save']}" />
+						update=":form:recordTable :editForm:display growl"
+						icon="ui-icon-disk" value="#{msg['btn_save']}"
+						oncomplete="handleSubmitRequest(xhr, status, args);" />
 				</f:facet>
 			</p:dialog>
 
 		</h:form>
+
+		<p:spacer height="200" />
+
+		<script type="text/javascript">  
+	         function handleSubmitRequest(xhr, status, args) {  
+	             if(args.saved!='true') {  
+	                 jQuery('#dialogPanel').effect("shake", { times:1 }, 50);   
+	             } else {                                      
+	             	dialogPanel.hide();   
+	             }
+	         }
+        </script>
+
 	</ui:define>
 </ui:composition>
 
