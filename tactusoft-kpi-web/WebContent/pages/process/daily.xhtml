@@ -107,7 +107,10 @@
 						action="#{kpiDailyBacking.saveAction}"
 						update=":form:recordTable :editForm:display growl"
 						icon="ui-icon-disk" value="#{msg['btn_save']}" process="@form"
-						oncomplete="handleSubmitRequest(xhr, status, args);" />
+						oncomplete="handleSubmitRequest(xhr, status, args);">
+						<f:setPropertyActionListener target="#{kpiDailyBacking.pageType}"
+							value="daily" />
+					</p:commandButton>
 				</f:facet>
 			</p:dialog>
 

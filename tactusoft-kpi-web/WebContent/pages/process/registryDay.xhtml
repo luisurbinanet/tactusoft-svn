@@ -8,166 +8,118 @@
 <ui:composition template="../layout/main.xhtml">
 	<ui:define name="content">
 
-		<div id="content1">
-			<h3>#{msg['title_registry_days']}</h3>
-			<p></p>
+		<div class="rco-blockheader">
+			<div class="l"></div>
+			<div class="r"></div>
+			<div class="t">#{msg['title_registry_days']}</div>
 		</div>
 
-		<div id="content2">
-			<h:form id="form">
+		<p:spacer height="20" />
 
-				<p:panel width="100%">
-					<h:panelGrid id="pnlParameter" columns="2" width="100%">
-						<h:outputText value="#{msg['wos_calendar_week']}"
-							style="width:100%" />
-						<p:selectOneMenu value="#{kpiDailyBacking.kpiWeekSelected}"
-							style="width:430px">
-							<f:selectItems value="#{kpiDailyBacking.listCalendarWeeks}" />
-							<p:ajax update="selDay :editForm:display :editForm:display2 :editForm:cmdSave"
-								listener="#{kpiDailyBacking.handleWeekChange}" />
-						</p:selectOneMenu>
+		<h:form id="form">
 
-						<h:outputText value="#{msg['wos_day']}" style="width:100%" />
-						<p:selectOneMenu id="selDay"
-							value="#{kpiDailyBacking.kpiDailySelected}" style="width:430px">
-							<f:selectItems value="#{kpiDailyBacking.listDays}" />
-							<p:ajax
-								update=":editForm:display :editForm:display2 :editForm:cmdSave"
-								listener="#{kpiDailyBacking.handleDayChange}" />
-						</p:selectOneMenu>
-					</h:panelGrid>
-				</p:panel>
+			<p:panel width="100%">
+				<h:panelGrid id="pnlParameter" columns="2" width="100%">
+					<h:outputText value="#{msg['day_calendar_week']}"
+						style="width:100%" />
+					<p:selectOneMenu value="#{kpiDailyBacking.kpiWeekSelected}"
+						style="width:430px">
+						<f:selectItems value="#{kpiDailyBacking.listCalendarWeeks}" />
+						<p:ajax
+							update="selDay :editForm:display :editForm:recordTable :editForm:cmdSave"
+							listener="#{kpiDailyBacking.handleWeekChange}" />
+					</p:selectOneMenu>
 
-				<p:spacer height="10" />
+					<h:outputText value="#{msg['day_day']}" style="width:100%" />
+					<p:selectOneMenu id="selDay"
+						value="#{kpiDailyBacking.kpiDailySelected}" style="width:430px">
+						<f:selectItems value="#{kpiDailyBacking.listDays}" />
+						<p:ajax
+							update=":editForm:display :editForm:recordTable :editForm:cmdSave"
+							listener="#{kpiDailyBacking.handleDayChange}" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+			</p:panel>
 
-			</h:form>
-			<h:form id="editForm" prependId="false">
-				<p:panel style="widht:100%">
+			<p:spacer height="10" />
 
-					<f:facet name="header">
-						#{msg['work_order']}
-					</f:facet>
+		</h:form>
+		<h:form id="editForm" prependId="false">
+			<p:panel style="widht:100%" header="#{msg['work_order']}">
 
-					<p:messages id="messages" showDetail="true" autoUpdate="true" />
+				<p:growl id="growl" showDetail="true" />
 
-					<h:panelGrid id="display" columns="2" width="100%">
+				<h:panelGrid id="display" columns="2" width="100%">
 
-						<h:outputText value="#{msg['wos_wo_scheduled']}" />
-						<p:spinner value="#{kpiDailyBacking.selected.scheduledOrders}"
-							min="1" max="999" maxlength="3" disabled="true" />
+					<h:outputLabel value="#{msg['glb_state']}" />
+					<h:outputText
+						value="#{kpiDailyBacking.selected.state == 1?msg['glb_state_open']:msg['glb_state_close']}" />
 
-						<h:outputText value="#{msg['wos_wo_finished']}" />
-						<p:spinner value="#{kpiDailyBacking.selected.finishedOrders}"
-							min="1" max="999" maxlength="3"
-							disabled="#{kpiDailyBacking.selected.state == 1?true:false}">
-							<f:validator validatorId="finishedOrderValidator" />
-							<f:attribute name="fieldLabel" value="#{msg['wos_wo_finished']}" />
-							<f:attribute name="scheduledOrders"
-								value="#{kpiDailyBacking.selected.scheduledOrders}" />
-							<f:attribute name="failuresOrders" value="#{failuresOrders}" />
-						</p:spinner>
+					<h:outputLabel value="#{msg['day_wo_scheduled']}" />
+					<p:spinner value="#{kpiDailyBacking.selected.scheduledOrders}"
+						min="1" max="999" maxlength="3" disabled="true" />
 
-						<h:outputText value="#{msg['wos_wo_failures']}" />
-						<p:spinner id="failuresOrders"
-							value="#{kpiDailyBacking.selected.failuresOrders}" min="1"
-							max="999" maxlength="3" binding="#{failuresOrders}"
-							disabled="#{kpiDailyBacking.selected.state == 1?true:false}" />
+					<h:outputLabel value="#{msg['day_wo_finished']}" />
+					<p:spinner value="#{kpiDailyBacking.selected.finishedOrders}"
+						min="1" max="999" maxlength="3"
+						disabled="#{kpiDailyBacking.selected.state == 1?true:false}">
+						<f:validator validatorId="finishedOrderValidator" />
+						<f:attribute name="fieldLabel" value="#{msg['wos_wo_finished']}" />
+						<f:attribute name="scheduledOrders"
+							value="#{kpiDailyBacking.selected.scheduledOrders}" />
+						<f:attribute name="failuresOrders" value="#{failuresOrders}" />
+					</p:spinner>
 
-					</h:panelGrid>
+					<h:outputLabel value="#{msg['day_wo_failures']}" />
+					<p:spinner id="failuresOrders"
+						value="#{kpiDailyBacking.selected.failuresOrders}" min="1"
+						max="999" maxlength="3" binding="#{failuresOrders}"
+						disabled="#{kpiDailyBacking.selected.state == 1?true:false}" />
 
-				</p:panel>
+				</h:panelGrid>
 
-				<p:panel style="widht:100%">
+			</p:panel>
 
-					<f:facet name="header">
-						#{msg['msg_delays']}
-					</f:facet>
+			<p:panel style="widht:100%" header="#{msg['day_wo_delays']}">
 
-					<h:panelGrid id="display2" columns="4" width="100%">
-						<h:outputText value="#{msg['day_s']}" />
-						<p:spinner value="#{kpiDailyBacking.selected.s}" min="1.0" max="999.9"
-							disabled="#{kpiDailyBacking.selected.state == 1?true:false}"
-							stepFactor="0.50" />
+				<p:dataTable id="recordTable" var="rec"
+					value="#{kpiDailyBacking.modelDailyDelay}" rowKey="#{rec.id}"
+					paginator="true" rows="20">
 
-						<h:outputText value="#{msg['day_ee']}" />
-						<p:spinner value="#{kpiDailyBacking.selected.ee}" min="1"
-							max="999" maxlength="3"
-							disabled="#{kpiDailyBacking.selected.state == 1?true:false}"
-							stepFactor="0.5" />
+					<p:column headerText="#{msg['day_wo_delays']}" style="width:75%">#{rec.kpiDelay.name}</p:column>
 
-						<h:outputText value="#{msg['day_dr']}" />
-						<p:spinner value="#{kpiDailyBacking.selected.dr}" min="1"
-							max="999" maxlength="3"
-							disabled="#{kpiDailyBacking.selected.state == 1?true:false}"
-							stepFactor="0.5" />
+					<p:column headerText="#{msg['day_wo_num_hours']}" style="width:20%">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{rec.numHours}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:spinner value="#{rec.numHours}" style="width:100%" min="0"
+									max="999" maxlength="3" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
 
-						<h:outputText value="#{msg['day_ra']}" />
-						<p:spinner value="#{kpiDailyBacking.selected.ra}" min="1"
-							max="999" maxlength="3"
-							disabled="#{kpiDailyBacking.selected.state == 1?true:false}"
-							stepFactor="0.5" />
+					<p:column headerText="Options" style="width:5%">
+						<p:rowEditor />
+					</p:column>
 
-						<h:outputText value="#{msg['day_fh']}" />
-						<p:spinner value="#{kpiDailyBacking.selected.fh}" min="1"
-							max="999" maxlength="3"
-							disabled="#{kpiDailyBacking.selected.state == 1?true:false}"
-							stepFactor="0.1" />
+				</p:dataTable>
 
-						<h:outputText value="#{msg['day_ca']}" />
-						<p:spinner value="#{kpiDailyBacking.selected.ca}" min="1"
-							max="999" maxlength="3"
-							disabled="#{kpiDailyBacking.selected.state == 1?true:false}"
-							stepFactor="0.5" />
+				<f:facet name="footer">
+					<p:commandButton id="cmdSave"
+						action="#{kpiDailyBacking.saveAction}"
+						update=":editForm:display :editForm:recordTable growl"
+						icon="ui-icon-disk" value="#{msg['btn_save']}" process="@form"
+						disabled="#{kpiDailyBacking.selected.state == 0?true:false || kpiDailyBacking.selected.id == null}">
+						<f:setPropertyActionListener target="#{kpiDailyBacking.pageType}"
+							value="registryDay" />
+					</p:commandButton>
+				</f:facet>
 
-						<h:outputText value="#{msg['day_lu']}" />
-						<p:spinner value="#{kpiDailyBacking.selected.lu}" min="1"
-							max="999" maxlength="3"
-							disabled="#{kpiDailyBacking.selected.state == 1?true:false}"
-							stepFactor="0.1" />
+			</p:panel>
 
-						<h:outputText value="#{msg['day_tr']}" />
-						<p:spinner value="#{kpiDailyBacking.selected.tr}" min="1"
-							max="999" maxlength="3"
-							disabled="#{kpiDailyBacking.selected.state == 1?true:false}"
-							stepFactor="0.5" />
-
-						<h:outputText value="#{msg['day_fp']}" />
-						<p:spinner value="#{kpiDailyBacking.selected.fp}" min="1"
-							max="999" maxlength="3"
-							disabled="#{kpiDailyBacking.selected.state == 1?true:false}"
-							stepFactor="0.5" />
-
-						<h:outputText value="#{msg['day_cn']}" />
-						<p:spinner value="#{kpiDailyBacking.selected.cn}" min="1"
-							max="999" maxlength="3"
-							disabled="#{kpiDailyBacking.selected.state == 1?true:false}"
-							stepFactor="0.5" />
-
-						<h:outputText value="#{msg['day_fc']}" />
-						<p:spinner value="#{kpiDailyBacking.selected.fc}" min="1"
-							max="999" maxlength="3"
-							disabled="#{kpiDailyBacking.selected.state == 1?true:false}"
-							stepFactor="0.5" />
-
-						<h:outputText value="#{msg['day_rt']}" />
-						<p:spinner value="#{kpiDailyBacking.selected.rt}" min="1"
-							max="999" maxlength="3"
-							disabled="#{kpiDailyBacking.selected.state == 1?true:false}"
-							stepFactor="0.5" />
-					</h:panelGrid>
-
-					<f:facet name="footer">
-						<p:commandButton id="cmdSave"
-							action="#{kpiDailyBacking.saveAction}"
-							update=":editForm:display :editForm:display2" icon="ui-icon-disk"
-							value="#{msg['btn_save']}" process="@form"
-							disabled="#{kpiDailyBacking.selected.state == 1?true:false || kpiDailyBacking.selected.id == null}" />
-					</f:facet>
-
-				</p:panel>
-
-			</h:form>
-		</div>
+		</h:form>
 	</ui:define>
 </ui:composition>
 
