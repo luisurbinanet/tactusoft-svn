@@ -25,6 +25,7 @@ import co.com.tactusoft.kpi.model.entities.KpiDelay;
 import co.com.tactusoft.kpi.model.entities.KpiWeek;
 import co.com.tactusoft.kpi.util.Constant;
 import co.com.tactusoft.kpi.util.FacesUtil;
+import co.com.tactusoft.kpi.view.model.KpiDailyDelayModel;
 import co.com.tactusoft.kpi.view.model.KpiDailyModel;
 
 @Controller
@@ -49,12 +50,16 @@ public class KpiDailyBacking implements Serializable {
 	private BigDecimal kpiWeekSelected;
 	private List<SelectItem> listDays;
 	private BigDecimal kpiDailySelected;
+	private KpiDailyDelayModel modelDailyDelay;
+	private List<KpiDailyDelay> listDailyDelay;
 
 	private Date minDate;
 	private Date maxDate;
 
 	private Map<BigDecimal, KpiWeek> mapKpiWeek = new HashMap<BigDecimal, KpiWeek>();
 	private Map<BigDecimal, KpiDaily> mapKpiDaily = new HashMap<BigDecimal, KpiDaily>();
+
+	private String pageType;
 
 	public KpiDailyBacking() {
 		selected = new KpiDaily();
@@ -98,8 +103,14 @@ public class KpiDailyBacking implements Serializable {
 
 			List<KpiWeek> list = service.getListKpiKpiWeek40();
 
+			SelectItem item = new SelectItem();
+			item.setValue(Constant.defaultValue);
+			item.setLabel(Constant.defaultLabel);
+			listCalendarWeeks.add(item);
+			this.kpiWeekSelected = new BigDecimal(-1);
+
 			for (KpiWeek row : list) {
-				SelectItem item = new SelectItem();
+				item = new SelectItem();
 				item.setValue(row.getId());
 
 				SimpleDateFormat sdf = new java.text.SimpleDateFormat(
@@ -114,15 +125,6 @@ public class KpiDailyBacking implements Serializable {
 				listCalendarWeeks.add(item);
 
 				mapKpiWeek.put(row.getId(), row);
-			}
-
-			if (listCalendarWeeks.size() > 0) {
-				this.kpiWeekSelected = list.get(0).getId();
-				this.minDate = mapKpiWeek.get(kpiWeekSelected).getStartDate();
-				this.maxDate = mapKpiWeek.get(kpiWeekSelected).getEndDate();
-				model = new KpiDailyModel(
-						service.getListKpiDailyByWeek(kpiWeekSelected));
-				handleWeekChange();
 			}
 		}
 		return listCalendarWeeks;
@@ -154,6 +156,30 @@ public class KpiDailyBacking implements Serializable {
 
 	public void setMaxDate(Date maxDate) {
 		this.maxDate = maxDate;
+	}
+
+	public List<KpiDailyDelay> getListDailyDelay() {
+		return listDailyDelay;
+	}
+
+	public void setListDailyDelay(List<KpiDailyDelay> listDailyDelay) {
+		this.listDailyDelay = listDailyDelay;
+	}
+
+	public KpiDailyDelayModel getModelDailyDelay() {
+		return modelDailyDelay;
+	}
+
+	public void setModelDailyDelay(KpiDailyDelayModel modelDailyDelay) {
+		this.modelDailyDelay = modelDailyDelay;
+	}
+
+	public String getPageType() {
+		return pageType;
+	}
+
+	public void setPageType(String pageType) {
+		this.pageType = pageType;
 	}
 
 	public void searchAction() {
@@ -221,51 +247,69 @@ public class KpiDailyBacking implements Serializable {
 				}
 			}
 
+			if (pageType.equals("registryDay")) {
+				for (KpiDailyDelay row : listDailyDelay) {
+					adminService.save(row);
+				}
+			}
+
 			SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
 			String date = sdf.format(selected.getCurrentDay());
 			message = FacesUtil.getMessage("msg_record_ok", date);
 			FacesUtil.addInfo(message);
 			context.addCallbackParam("saved", "true");
-			
+
 			model = new KpiDailyModel(
 					service.getListKpiDailyByWeek(kpiWeekSelected));
-			
+
 		} else {
 			context.addCallbackParam("saved", "false");
 		}
 	}
 
 	public void handleWeekChange() {
-		this.minDate = mapKpiWeek.get(kpiWeekSelected).getStartDate();
-		this.maxDate = mapKpiWeek.get(kpiWeekSelected).getEndDate();
+		if (this.kpiWeekSelected.intValue() != -1) {
+			this.minDate = mapKpiWeek.get(kpiWeekSelected).getStartDate();
+			this.maxDate = mapKpiWeek.get(kpiWeekSelected).getEndDate();
 
-		List<KpiDaily> list = service.getListKpiDailyByWeek(kpiWeekSelected);
+			List<KpiDaily> list = service
+					.getListKpiDailyByWeek(kpiWeekSelected);
 
-		model = new KpiDailyModel(list);
-		listDays = new ArrayList<SelectItem>();
+			model = new KpiDailyModel(list);
+			listDays = new ArrayList<SelectItem>();
 
-		for (KpiDaily row : list) {
-			SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
-			String date = sdf.format(row.getCurrentDay());
+			for (KpiDaily row : list) {
+				SimpleDateFormat sdf = new java.text.SimpleDateFormat(
+						"dd/MM/yyyy");
+				String date = sdf.format(row.getCurrentDay());
 
-			SelectItem item = new SelectItem();
-			item.setValue(row.getId());
-			item.setLabel(date);
+				SelectItem item = new SelectItem();
+				item.setValue(row.getId());
+				item.setLabel(date);
 
-			listDays.add(item);
-			mapKpiDaily.put(row.getId(), row);
-		}
+				listDays.add(item);
+				mapKpiDaily.put(row.getId(), row);
+			}
 
-		if (listDays.size() > 0) {
-			this.kpiDailySelected = list.get(0).getId();
-			selected = mapKpiDaily.get(kpiDailySelected);
+			if (listDays.size() > 0) {
+				this.kpiDailySelected = list.get(0).getId();
+				handleDayChange();
+			} else {
+				selected = new KpiDaily();
+			}
 		} else {
 			selected = new KpiDaily();
+			model = new KpiDailyModel();
+			modelDailyDelay = new KpiDailyDelayModel();
+			listDays = new ArrayList<SelectItem>();
 		}
 	}
 
 	public void handleDayChange() {
 		selected = mapKpiDaily.get(kpiDailySelected);
+		listDailyDelay = adminService.getListKpiDailyDelayByDay(selected
+				.getId());
+		modelDailyDelay = new KpiDailyDelayModel(listDailyDelay);
 	}
 
 }

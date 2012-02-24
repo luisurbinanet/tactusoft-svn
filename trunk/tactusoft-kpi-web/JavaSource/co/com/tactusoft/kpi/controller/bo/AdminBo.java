@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import co.com.tactusoft.kpi.model.dao.CustomHibernateDao;
+import co.com.tactusoft.kpi.model.entities.KpiDailyDelay;
 import co.com.tactusoft.kpi.model.entities.KpiDelay;
 import co.com.tactusoft.kpi.model.entities.KpiHeader;
 import co.com.tactusoft.kpi.model.entities.KpiHeaderDelay;
@@ -47,6 +48,10 @@ public class AdminBo implements Serializable {
 		return dao
 				.find("select o.kpiDelay from KpiHeaderDelay o where o.kpiHeader.id = "
 						+ idHeader + " order by o.kpiDelay.korder");
+	}
+
+	public List<KpiDailyDelay> getListKpiDailyDelayByDay(BigDecimal idDay) {
+		return dao.find("from KpiDailyDelay o where o.kpiDaily.id = " + idDay);
 	}
 
 	public void save(Object entity) {
