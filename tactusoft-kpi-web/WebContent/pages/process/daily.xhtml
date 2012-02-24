@@ -14,6 +14,8 @@
 			<div class="t">#{msg['title_schedule_days']}</div>
 		</div>
 
+		<p:spacer height="20" />
+
 		<h:form id="form">
 
 			<p:panel width="100%">
@@ -114,14 +116,14 @@
 		</h:form>
 
 		<script type="text/javascript">  
-	            function handleSubmitRequest(xhr, status, args) {  
-	                if(args.saved!='true') {  
-	                    jQuery('#dialogPanel').effect("shake", { times:1 }, 50);   
-	                } else {                                      
-	                	dialogPanel.hide();   
-	                }
-	            }
-        	</script>
+	         function handleSubmitRequest(xhr, status, args) {  
+	             if(args.saved!='true') {  
+	                 jQuery('#dialogPanel').effect("shake", { times:1 }, 50);   
+	             } else {                                      
+	             	dialogPanel.hide();   
+	             }
+	         }
+        </script>
 	</ui:define>
 </ui:composition>
 

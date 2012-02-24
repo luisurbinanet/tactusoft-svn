@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.faces.model.SelectItem;
 
+import org.primefaces.context.RequestContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
@@ -96,34 +97,41 @@ public class KpiWeekBacking implements Serializable {
 	}
 
 	public void saveAction() {
-
 		String message = null;
+		String field = null;
+		int validate = 0;
 
-		/*
-		 * if (selected.getName().length() == 0) { message =
-		 * "El Campo Nombre es Obligatorio\n"; Util.addWarn("Advertencia",
-		 * message); }
-		 * 
-		 * if (selected.getDescription().length() == 0) { message =
-		 * "El Campo Descripción es Obligatorio"; Util.addWarn("Advertencia",
-		 * message); }
-		 */
-
-		if (selected.getAssignedOrders() == 0) {
-			message = "El Campo OT Asignadas es Obligatorio";
-			FacesUtil.addWarn("Advertencia", message);
+		if (selected.getStartDate() == null) {
+			field = FacesUtil.getMessage("wek_star_date");
+			message = FacesUtil.getMessage("msg_field_required", field);
+			FacesUtil.addWarn(message);
+		} else {
+			validate++;
 		}
 
-		if (selected.getEndDate().compareTo(selected.getStartDate()) < 0) {
-			message = "La Fecha Inicial debe ser menor a la Fecha Final";
-			FacesUtil.addWarn("Advertencia", message);
+		if (selected.getEndDate() == null) {
+			field = FacesUtil.getMessage("wek_end_date");
+			message = FacesUtil.getMessage("msg_field_required", field);
+			FacesUtil.addWarn(message);
+		} else {
+			validate++;
 		}
 
+		if (validate == 2) {
+			if (selected.getEndDate().compareTo(selected.getStartDate()) < 0) {
+				message = FacesUtil.getMessage("msg_wek_validate_dates");
+				FacesUtil.addWarn(message);
+			}
+		}
+
+		RequestContext context = RequestContext.getCurrentInstance();
 		if (message == null) {
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(selected.getStartDate());
 
-			String name = "SC" + calendar.get(Calendar.YEAR)
+			String seq = FacesUtil.getMessage("wek_seq");
+
+			String name = seq + calendar.get(Calendar.YEAR)
 					+ calendar.get(Calendar.WEEK_OF_MONTH);
 
 			if (selected.getId() == null) {
@@ -131,14 +139,16 @@ public class KpiWeekBacking implements Serializable {
 			}
 
 			selected.setName(name);
-			selected.setDescription(selected.getDescription().toUpperCase());
+			// selected.setDescription(selected.getDescription().toUpperCase());
 			service.save(selected);
-			message = "El registro " + selected.getName()
-					+ " actualizado con Exito";
-			//selected = new KpiWeek();
-			model = new KpiWeekModel(service.getListKpiKpiWeek());
-			FacesUtil.addInfo("Información", message);
 
+			message = FacesUtil.getMessage("msg_record_ok", selected.getName());
+			FacesUtil.addInfo(message);
+
+			model = new KpiWeekModel(service.getListKpiKpiWeek());
+			context.addCallbackParam("saved", "true");
+		} else {
+			context.addCallbackParam("saved", "false");
 		}
 	}
 
