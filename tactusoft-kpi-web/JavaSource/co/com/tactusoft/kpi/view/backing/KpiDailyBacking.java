@@ -17,9 +17,13 @@ import org.primefaces.context.RequestContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import co.com.tactusoft.kpi.controller.bo.AdminBo;
 import co.com.tactusoft.kpi.controller.bo.ProcessBo;
 import co.com.tactusoft.kpi.model.entities.KpiDaily;
+import co.com.tactusoft.kpi.model.entities.KpiDailyDelay;
+import co.com.tactusoft.kpi.model.entities.KpiDelay;
 import co.com.tactusoft.kpi.model.entities.KpiWeek;
+import co.com.tactusoft.kpi.util.Constant;
 import co.com.tactusoft.kpi.util.FacesUtil;
 import co.com.tactusoft.kpi.view.model.KpiDailyModel;
 
@@ -34,6 +38,9 @@ public class KpiDailyBacking implements Serializable {
 
 	@Resource
 	private ProcessBo service;
+
+	@Resource
+	private AdminBo adminService;
 
 	private KpiDailyModel model;
 	private KpiDaily selected;
@@ -94,12 +101,14 @@ public class KpiDailyBacking implements Serializable {
 			for (KpiWeek row : list) {
 				SelectItem item = new SelectItem();
 				item.setValue(row.getId());
-				
-				SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
+
+				SimpleDateFormat sdf = new java.text.SimpleDateFormat(
+						"dd/MM/yyyy");
 				String startDate = sdf.format(row.getStartDate());
 				String endDate = sdf.format(row.getEndDate());
-				String label = row.getName() + ": " + startDate + " - " + endDate;
-				
+				String label = row.getName() + ": " + startDate + " - "
+						+ endDate;
+
 				item.setLabel(label);
 
 				listCalendarWeeks.add(item);
@@ -161,10 +170,12 @@ public class KpiDailyBacking implements Serializable {
 
 	public void saveAction() {
 		String message = null;
+		String field = null;
 
 		if (selected.getCurrentDay() == null) {
-			message = "El Campo Día es Obligatorio";
-			FacesUtil.addWarn("Advertencia", message);
+			field = FacesUtil.getMessage("day_day");
+			message = FacesUtil.getMessage("msg_field_required", field);
+			FacesUtil.addWarn(message);
 		} else {
 			boolean exists = false;
 			Iterator<KpiDaily> it = model.iterator();
@@ -177,27 +188,48 @@ public class KpiDailyBacking implements Serializable {
 			}
 
 			if ((exists) && (selected.getId() == null)) {
-				message = "Ya existe una programación para este día";
-				FacesUtil.addWarn("Advertencia", message);
+				message = FacesUtil.getMessage("msg_day_validate_day");
+				FacesUtil.addWarn(message);
 			}
 		}
 
 		RequestContext context = RequestContext.getCurrentInstance();
 		if (message == null) {
+			boolean newRecord = false;
 			if (selected.getId() == null) {
 				selected.setId(service.getId("KpiDaily"));
 				selected.setFinishedOrders(0);
 				selected.setFailuresOrders(0);
-				selected.setState(0);
+				selected.setState(Constant.STATE_ACTIVE);
+				newRecord = true;
 			}
 
 			selected.setKpiWeek(mapKpiWeek.get(kpiWeekSelected));
 			service.save(selected);
-			message = "El registro se ha actualizado con Exito";
+
+			if (newRecord) {
+				BigDecimal idHeader = new BigDecimal(1);
+				List<KpiDelay> list = adminService
+						.getListKpiDelayByHeader(idHeader);
+				for (KpiDelay row : list) {
+					KpiDailyDelay object = new KpiDailyDelay();
+					object.setId(service.getId("KpiDailyDelay"));
+					object.setKpiDelay(row);
+					object.setKpiDaily(selected);
+					object.setNumHours(new BigDecimal(0));
+					adminService.save(object);
+				}
+			}
+
+			SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
+			String date = sdf.format(selected.getCurrentDay());
+			message = FacesUtil.getMessage("msg_record_ok", date);
+			FacesUtil.addInfo(message);
+			context.addCallbackParam("saved", "true");
+			
 			model = new KpiDailyModel(
 					service.getListKpiDailyByWeek(kpiWeekSelected));
-			FacesUtil.addInfo("Información", message);
-			context.addCallbackParam("saved", "true");
+			
 		} else {
 			context.addCallbackParam("saved", "false");
 		}
