@@ -89,8 +89,9 @@
 				<script type="text/javascript">
 					if(loaded)
 					{
-						chartData = new google.visualization.DataTable(#{reportBacking.graphData});
-						chartData.addRows(6);
+						var size = #{reportBacking.size};
+						chartData = new google.visualization.DataTable();
+						chartData.addRows(size);
 						chartData.addColumn('string', 'codigo');
 						chartData.addColumn('number', 'Horas');
 						chartData.addColumn('number', 'Promedio');
@@ -145,22 +146,6 @@
 	
 				//first arg to draw is an instance of chartData, the second are options 
 				chart.draw(chartData, chartOptions);
-			}
-
-			function updateChart(){
-				chartData = new google.visualization.DataTable();
-				chartData.addRows(6);
-				chartData.addColumn('string', 'codigo');
-				chartData.addColumn('number', 'Horas');
-				chartData.addColumn('number', 'Promedio');
-				
-				var index = 0;
-				var list = jQuery.parseJSON('#{reportBacking.graphData}');
-				$.each(list, function(id, row) {
-					chartData.setValue(index,0,row.label);
-					chartData.setValue(index,1,row.value);
-					index++;
-				});	
 			}
 		</script>
 
