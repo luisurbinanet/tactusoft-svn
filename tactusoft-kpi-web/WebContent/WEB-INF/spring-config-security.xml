@@ -16,7 +16,7 @@
 
 	<bean id="logoutFilter"
 		class="org.springframework.security.web.authentication.logout.LogoutFilter">
-		<constructor-arg value="/pages/secure/login.jsf" />
+		<constructor-arg value="/pages/secure/login.jsf?faces-redirect=true" />
 		<!-- URL redirected to after logout -->
 		<constructor-arg>
 			<list>
@@ -42,7 +42,6 @@
 		<property name="rememberMeServices" ref="rememberMeServices" />
 		<property name="authenticationFailureHandler" ref="failureHandler" />
 		<property name="authenticationSuccessHandler" ref="successHandler" />
-		<!-- <property name="sessionAuthenticationStrategy" ref="sas" /> -->
 	</bean>
 	
 	<bean id="sas"
@@ -53,7 +52,7 @@
 
 	<bean id="successHandler"
 		class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
-		<property name="defaultTargetUrl" value="/pages/general/viewer.jsf" />
+		<property name="defaultTargetUrl" value="/pages/reports/report.jsf" />
 	</bean>
 
 	<bean id="failureHandler"
@@ -72,7 +71,7 @@
 
 	<bean id="anonymousAuthFilter"
 		class="org.springframework.security.web.authentication.AnonymousAuthenticationFilter">
-		<property name="key" value="changeThis" />
+		<property name="key" value="kpi123" />
 		<property name="userAttribute" value="anonymousUser,ROL_ANONYMOUS" />
 	</bean>
 
@@ -119,7 +118,7 @@
 	<bean id="rememberMeServices"
 		class="org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices">
 		<property name="userDetailsService" ref="userDetailsService" />
-		<property name="key" value="changeThis" />
+		<property name="key" value="kpi123" />
 		<property name="tokenValiditySeconds" value="0" />
 	</bean>
 
@@ -130,11 +129,11 @@
 				<ref local="daoAuthenticationProvider" />
 				<bean
 					class="org.springframework.security.authentication.AnonymousAuthenticationProvider">
-					<property name="key" value="changeThis" />
+					<property name="key" value="kpi123" />
 				</bean>
 				<bean
 					class="org.springframework.security.authentication.RememberMeAuthenticationProvider">
-					<property name="key" value="changeThis" />
+					<property name="key" value="kpi123" />
 				</bean>
 			</list>
 		</property>

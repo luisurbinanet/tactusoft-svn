@@ -1,7 +1,7 @@
 package co.com.tactusoft.kpi.security;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -19,7 +19,7 @@ public class UserData implements UserDetails {
 
 	private String username;
 	private String password;
-	private String role;
+	private List<String> roles;
 	private KpiUser kpiUser;
 
 	public void setUsername(String username) {
@@ -38,12 +38,12 @@ public class UserData implements UserDetails {
 		return password;
 	}
 
-	public String getRole() {
-		return role;
+	public List<String> getRoles() {
+		return roles;
 	}
 
-	public void setRole(String role) {
-		this.role = role;
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
 	}
 
 	public KpiUser getKpiUser() {
@@ -72,8 +72,10 @@ public class UserData implements UserDetails {
 
 	@Override
 	public Collection<GrantedAuthority> getAuthorities() {
-		List<GrantedAuthority> list = new LinkedList<GrantedAuthority>();
-		list.add(new GrantedAuthorityImpl(role));
+		List<GrantedAuthority> list = new ArrayList<GrantedAuthority>();
+		for (String role : roles) {
+			list.add(new GrantedAuthorityImpl(role));
+		}
 		return list;
 	}
 }

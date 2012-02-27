@@ -9,16 +9,17 @@
 
 	<ui:define name="content">
 
-		<p:spacer height="100" />
-
 		<h:form>
 
 			<center>
-				<p:panelGrid columns="2" style="width:50%">
 
-					<f:facet name="header">
-        			#{msg['title_login']}
-    			</f:facet>
+				<div class="rco-blockheader" style="width:50%">
+					<div class="l"></div>
+					<div class="r"></div>
+					<div class="t">#{msg['title_login']}</div>
+				</div>
+
+				<h:panelGrid columns="2" style="width:50%">
 
 					<h:outputLabel value="#{msg['log_username']}" />
 					<h:inputText id="txtUsuario" value="#{loginBacking.userName}"
@@ -27,14 +28,19 @@
 					<h:inputSecret value="#{loginBacking.password}" style="width:100%" />
 
 					<f:facet name="footer">
-						<p:commandButton value="#{msg['btn_ok']}"
-							action="#{loginBacking.doLogin}" />
-						<p:messages showDetail="true" autoUpdate="true" />
+						<h:commandButton value="#{msg['btn_ok']}"
+							action="#{loginBacking.doLogin}" >
+						</h:commandButton>
 					</f:facet>
-				</p:panelGrid>
-			</center>
+				</h:panelGrid>
 
-			<p:spacer height="100" />
+				<h:panelGrid id="pnlMessages"
+					rendered="#{loginBacking.visibleBadCredentials}"
+					style="align:center">
+					<h:outputLabel value="#{msg['log_msg_validate_credentials']}"
+						styleClass="rcoErrorLabel" />
+				</h:panelGrid>
+			</center>
 
 		</h:form>
 	</ui:define>
