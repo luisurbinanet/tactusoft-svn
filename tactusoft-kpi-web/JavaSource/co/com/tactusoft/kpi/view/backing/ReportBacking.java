@@ -28,7 +28,7 @@ import co.com.tactusoft.kpi.view.model.ReportDailyModel;
 @Controller
 @Scope("session")
 public class ReportBacking implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	@Resource
@@ -148,6 +148,14 @@ public class ReportBacking implements Serializable {
 		List<ReportDaily> data = service.getReportDaily(idKpiWeek);
 		model = new ReportDailyModel(data);
 		graphData = service.getGraphDaily(idKpiWeek);
+	}
+
+	public int getSize() {
+		int result = 0;
+		if (graphData != null) {
+			result = graphData.length();
+		}
+		return result;
 	}
 
 }
