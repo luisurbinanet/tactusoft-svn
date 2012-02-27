@@ -1,6 +1,8 @@
 package co.com.tactusoft.kpi.util;
 
+import java.math.BigDecimal;
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -10,6 +12,9 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.security.core.context.SecurityContextHolder;
+
+import co.com.tactusoft.kpi.model.entities.KpiUser;
+import co.com.tactusoft.kpi.security.UserData;
 
 public class FacesUtil {
 
@@ -75,5 +80,21 @@ public class FacesUtil {
 		HttpSession session = (HttpSession) ectx.getSession(false);
 		SecurityContextHolder.clearContext();
 		session.invalidate();
+	}
+
+	public static KpiUser getCurrentUser() {
+		UserData userData = (UserData) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
+		return userData.getKpiUser();
+	}
+
+	public static BigDecimal getCurrentIdUsuario() {
+		return getCurrentUser().getId();
+	}
+	
+	public static List<String> getCurrentRoles() {
+		UserData userData = (UserData) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
+		return userData.getRoles();
 	}
 }

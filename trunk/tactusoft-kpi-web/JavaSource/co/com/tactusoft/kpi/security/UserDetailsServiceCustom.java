@@ -1,5 +1,8 @@
 package co.com.tactusoft.kpi.security;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.hibernate.HibernateException;
@@ -10,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import co.com.tactusoft.kpi.controller.bo.SecurityBo;
+import co.com.tactusoft.kpi.model.entities.KpiRole;
 import co.com.tactusoft.kpi.model.entities.KpiUser;
 
 @Service
@@ -22,13 +26,20 @@ public class UserDetailsServiceCustom implements UserDetailsService {
 			throws UsernameNotFoundException, DataAccessException {
 		UserData user = null;
 		try {
-			KpiUser object = service.getObject(userName);
+			KpiUser object = service.getObject(userName.toLowerCase());
 
 			if (object != null) {
 				user = new UserData();
-				user.setUsername(userName);
+				user.setUsername(object.getUsername());
 				user.setPassword(object.getPassword());
-				user.setRole("SUPER_ADMIN");
+
+				List<KpiRole> list = service.getRoles(object.getId());
+				List<String> roles = new ArrayList<String>();
+				for (KpiRole role : list) {
+					roles.add(role.getName());
+				}
+
+				user.setRoles(roles);
 				user.setKpiUser(object);
 			}
 		} catch (HibernateException e) {

@@ -6,11 +6,9 @@ import javax.faces.context.FacesContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
 
-import co.com.tactusoft.kpi.security.UserData;
 import co.com.tactusoft.kpi.util.FacesUtil;
 
 @Controller
@@ -19,7 +17,6 @@ public class LoginBacking {
 
 	private String userName;
 	private String password;
-	private String grupo;
 	private boolean visibleBadCredentials;
 
 	public LoginBacking() {
@@ -46,14 +43,6 @@ public class LoginBacking {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public String getGrupo() {
-		return grupo;
-	}
-
-	public void setGrupo(String grupo) {
-		this.grupo = grupo;
 	}
 
 	public boolean isVisibleBadCredentials() {
@@ -92,11 +81,8 @@ public class LoginBacking {
 		} else {
 			this.init();
 			this.visibleBadCredentials = false;
-			UserData userData = (UserData) SecurityContextHolder.getContext()
-					.getAuthentication().getPrincipal();
-			grupo = userData.getRole();
-
 		}
+
 		context.renderResponse();
 	}
 
