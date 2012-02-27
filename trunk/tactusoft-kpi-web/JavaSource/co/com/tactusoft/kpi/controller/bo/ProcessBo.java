@@ -3,8 +3,6 @@ package co.com.tactusoft.kpi.controller.bo;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -17,8 +15,9 @@ import org.springframework.stereotype.Service;
 
 import co.com.tactusoft.kpi.model.dao.CustomHibernateDao;
 import co.com.tactusoft.kpi.model.entities.KpiDaily;
+import co.com.tactusoft.kpi.model.entities.KpiDailySumHours;
+import co.com.tactusoft.kpi.model.entities.KpiLastDayWeek;
 import co.com.tactusoft.kpi.model.entities.KpiWeek;
-import co.com.tactusoft.kpi.view.model.GraphDaily;
 import co.com.tactusoft.kpi.view.model.ReportDaily;
 
 @Service
@@ -182,18 +181,20 @@ public class ProcessBo implements Serializable {
 		listPlan = new Double[list.size()];
 		style = new String[list.size()];
 		index = 0;
-		/*for (KpiDaily row : list) {
-			double res = row.getS() + row.getEe() + row.getDr() + row.getRa()
-					+ row.getFh() + row.getCa() + row.getLu() + row.getTr()
-					+ row.getFp() + row.getCn() + row.getFc() + row.getRt();
-			listPlan[index] = res;
-			if (res > 23d) {
+
+		for (KpiDaily row : list) {
+			BigDecimal res = (BigDecimal) dao.find(
+					"select sum(o.numHours) from KpiDailyDelay o where o.kpiDaily.id = "
+							+ row.getId()).get(0);
+
+			listPlan[index] = res.doubleValue();
+			if (res.doubleValue() > 23d) {
 				style[index] = "style1";
 			} else {
 				style[index] = "style2";
 			}
 			index++;
-		}*/
+		}
 
 		reportDaily.setListPlan(listPlan);
 		reportDaily.setStyle(style);
@@ -206,136 +207,31 @@ public class ProcessBo implements Serializable {
 	public JSONArray getGraphDaily(BigDecimal idKpiWeek) {
 		JSONArray result = new JSONArray();
 
-		List<KpiDaily> list = dao.find("from KpiDaily o where o.kpiWeek.id = "
-				+ idKpiWeek + " order by o.currentDay");
-		int lastIndex = list.size() - 1;
-		List<GraphDaily> listDelay = new ArrayList<GraphDaily>();
-		if (lastIndex >= 0) {
-			KpiDaily lastRow = list.get(lastIndex);
-			GraphDaily graphDaily;
-			double sum = 0;
+		KpiLastDayWeek lastRow = (KpiLastDayWeek) dao.find(
+				"from KpiLastDayWeek o where o.idWeek = " + idKpiWeek).get(0);
 
-			/*if (lastRow.getS() > 0d) {
-				graphDaily = new GraphDaily();
-				graphDaily.setLabel("Seguridad");
-				graphDaily.setValue(lastRow.getS());
-				listDelay.add(graphDaily);
-				sum = sum + lastRow.getS();
+		List<KpiDailySumHours> listDailyDelay = dao
+				.find("from KpiDailySumHours o where o.idDaily = "
+						+ lastRow.getId());
+
+		double sum = 0;
+		for (KpiDailySumHours row : listDailyDelay) {
+			sum = sum + row.getNumHours().doubleValue();
+		}
+
+		double oldAvg = 0;
+		for (KpiDailySumHours row : listDailyDelay) {
+			JSONObject obj = new JSONObject();
+			try {
+				obj.put("label", row.getNameDaily());
+				obj.put("value", row.getNumHours().doubleValue());
+				double avg = oldAvg + (row.getNumHours().doubleValue() / sum);
+				obj.put("avg", avg);
+				result.put(obj);
+				oldAvg = avg;
+			} catch (JSONException e) {
+				e.printStackTrace();
 			}
-
-			if (lastRow.getEe() > 0d) {
-				graphDaily = new GraphDaily();
-				graphDaily.setLabel("Entrega Equipo");
-				graphDaily.setValue(lastRow.getEe());
-				listDelay.add(graphDaily);
-				sum = sum + lastRow.getEe();
-			}
-
-			if (lastRow.getDr() > 0d) {
-				graphDaily = new GraphDaily();
-				graphDaily.setLabel("Disp. Repuesto");
-				graphDaily.setValue(lastRow.getDr());
-				listDelay.add(graphDaily);
-				sum = sum + lastRow.getDr();
-			}
-
-			if (lastRow.getRa() > 0d) {
-				graphDaily = new GraphDaily();
-				graphDaily.setLabel("Reasig. Trabajo");
-				graphDaily.setValue(lastRow.getRa());
-				listDelay.add(graphDaily);
-				sum = sum + lastRow.getRa();
-			}
-
-			if (lastRow.getFh() > 0d) {
-				graphDaily = new GraphDaily();
-				graphDaily.setLabel("Falta Herram.");
-				graphDaily.setValue(lastRow.getFh());
-				listDelay.add(graphDaily);
-				sum = sum + lastRow.getFh();
-			}
-
-			if (lastRow.getCa() > 0d) {
-				graphDaily = new GraphDaily();
-				graphDaily.setLabel("Cambio Alcace Trab.");
-				graphDaily.setValue(lastRow.getCa());
-				listDelay.add(graphDaily);
-				sum = sum + lastRow.getCa();
-			}
-
-			if (lastRow.getLu() > 0d) {
-				graphDaily = new GraphDaily();
-				graphDaily.setLabel("Camión Lubricador");
-				graphDaily.setValue(lastRow.getLu());
-				listDelay.add(graphDaily);
-				sum = sum + lastRow.getLu();
-			}
-
-			if (lastRow.getTr() > 0d) {
-				graphDaily = new GraphDaily();
-				graphDaily.setLabel("Tronadura");
-				graphDaily.setValue(lastRow.getTr());
-				listDelay.add(graphDaily);
-				sum = sum + lastRow.getTr();
-			}
-
-			if (lastRow.getFp() > 0d) {
-				graphDaily = new GraphDaily();
-				graphDaily.setLabel("Falta de Personal");
-				graphDaily.setValue(lastRow.getFp());
-				listDelay.add(graphDaily);
-				sum = sum + lastRow.getFp();
-			}
-
-			if (lastRow.getCn() > 0d) {
-				graphDaily = new GraphDaily();
-				graphDaily.setLabel("Causas Naturales");
-				graphDaily.setValue(lastRow.getCn());
-				listDelay.add(graphDaily);
-				sum = sum + lastRow.getCn();
-			}
-
-			if (lastRow.getFc() > 0d) {
-				graphDaily = new GraphDaily();
-				graphDaily.setLabel("Falta de Conoc.");
-				graphDaily.setValue(lastRow.getFc());
-				listDelay.add(graphDaily);
-				sum = sum + lastRow.getFc();
-			}
-
-			if (lastRow.getRt() > 0d) {
-				graphDaily = new GraphDaily();
-				graphDaily.setLabel("Retrabajo");
-				graphDaily.setValue(lastRow.getRt());
-				listDelay.add(graphDaily);
-				sum = sum + lastRow.getRt();
-			}
-
-			Collections.sort(listDelay, new Comparator<Object>() {
-				public int compare(Object o1, Object o2) {
-					GraphDaily g1 = (GraphDaily) o1;
-					GraphDaily g2 = (GraphDaily) o2;
-					return g2.getValue().compareTo(g1.getValue());
-				}
-			});
-
-			double oldAvg = 0;
-			for (GraphDaily row : listDelay) {
-				JSONObject obj = new JSONObject();
-				try {
-					obj.put("label", row.getLabel());
-					obj.put("value", row.getValue());
-					double avg = oldAvg + (row.getValue() / sum) ;
-					obj.put("avg", avg);
-					result.put(obj);
-					oldAvg = avg;
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-			}*/
-
-		} else {
-
 		}
 
 		return result;
