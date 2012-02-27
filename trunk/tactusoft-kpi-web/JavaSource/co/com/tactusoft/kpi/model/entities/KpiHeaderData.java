@@ -25,14 +25,16 @@ public class KpiHeaderData implements java.io.Serializable {
 	private BigDecimal id;
 	private KpiData kpiData;
 	private KpiHeader kpiHeader;
+	private Integer korder; 
 
 	public KpiHeaderData() {
 	}
 
-	public KpiHeaderData(BigDecimal id, KpiData kpiData, KpiHeader kpiHeader) {
+	public KpiHeaderData(BigDecimal id, KpiData kpiData, KpiHeader kpiHeader, Integer korder) {
 		this.id = id;
 		this.kpiData = kpiData;
 		this.kpiHeader = kpiHeader;
+		this.korder = korder;
 	}
 
 	@Id
@@ -45,7 +47,7 @@ public class KpiHeaderData implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_data", nullable = false)
 	public KpiData getKpiData() {
 		return this.kpiData;
@@ -63,6 +65,15 @@ public class KpiHeaderData implements java.io.Serializable {
 
 	public void setKpiHeader(KpiHeader kpiHeader) {
 		this.kpiHeader = kpiHeader;
+	}
+	
+	@Column(name = "KORDER")
+	public Integer getKorder() {
+		return this.korder;
+	}
+
+	public void setKorder(Integer korder) {
+		this.korder = korder;
 	}
 
 }
