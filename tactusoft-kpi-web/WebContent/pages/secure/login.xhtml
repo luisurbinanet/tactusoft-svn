@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../layout/mainSimple.xhtml">
+
+	<ui:define name="content">
+
+		<p:spacer height="100" />
+
+		<h:form>
+
+			<center>
+				<p:panelGrid columns="2" style="width:50%">
+
+					<f:facet name="header">
+        			#{msg['title_login']}
+    			</f:facet>
+
+					<h:outputLabel value="#{msg['log_username']}" />
+					<h:inputText id="txtUsuario" value="#{loginBacking.userName}"
+						style="width:100%" />
+					<h:outputLabel value="#{msg['log_password']}" />
+					<h:inputSecret value="#{loginBacking.password}" style="width:100%" />
+
+					<f:facet name="footer">
+						<p:commandButton value="#{msg['btn_ok']}"
+							action="#{loginBacking.doLogin}" />
+						<p:messages showDetail="true" autoUpdate="true" />
+					</f:facet>
+				</p:panelGrid>
+			</center>
+
+			<p:spacer height="100" />
+
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

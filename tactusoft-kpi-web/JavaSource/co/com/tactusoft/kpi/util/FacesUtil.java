@@ -5,7 +5,11 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.security.core.context.SecurityContextHolder;
 
 public class FacesUtil {
 
@@ -22,7 +26,7 @@ public class FacesUtil {
 
 	public static void addInfo(String text) {
 		String title = FacesUtil.getMessage("msg_info");
-		addInfo(title,text);
+		addInfo(title, text);
 	}
 
 	public static void addWarn(String title, String text) {
@@ -32,7 +36,7 @@ public class FacesUtil {
 
 	public static void addWarn(String text) {
 		String title = FacesUtil.getMessage("msg_warn");
-		addWarn(title,text);
+		addWarn(title, text);
 	}
 
 	public static void addError(String title, String text) {
@@ -62,5 +66,14 @@ public class FacesUtil {
 		MessageFormat messageFormat = new MessageFormat(msgValue);
 		Object[] args = { paramValue };
 		return messageFormat.format(args);
+	}
+
+	public static void logout() {
+		SecurityContextHolder.getContext().setAuthentication(null);
+		ExternalContext ectx = FacesContext.getCurrentInstance()
+				.getExternalContext();
+		HttpSession session = (HttpSession) ectx.getSession(false);
+		SecurityContextHolder.clearContext();
+		session.invalidate();
 	}
 }
