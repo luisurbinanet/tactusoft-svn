@@ -31,6 +31,7 @@ public class KpiCompany implements java.io.Serializable {
 	private String email;
 	private int state;
 	private Set<KpiHeader> kpiHeaders = new HashSet<KpiHeader>(0);
+	private Set<KpiUser> KpiUsers = new HashSet<KpiUser>(0);
 
 	public KpiCompany() {
 	}
@@ -127,6 +128,15 @@ public class KpiCompany implements java.io.Serializable {
 
 	public void setKpiHeaders(Set<KpiHeader> kpiHeaders) {
 		this.kpiHeaders = kpiHeaders;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "kpiCompany")
+	public Set<KpiUser> getKpiUsers() {
+		return KpiUsers;
+	}
+
+	public void setKpiUsers(Set<KpiUser> kpiUsers) {
+		KpiUsers = kpiUsers;
 	}
 
 }
