@@ -16,8 +16,10 @@ import org.springframework.stereotype.Service;
 import co.com.tactusoft.kpi.model.dao.CustomHibernateDao;
 import co.com.tactusoft.kpi.model.entities.KpiDaily;
 import co.com.tactusoft.kpi.model.entities.KpiDailySumHours;
+import co.com.tactusoft.kpi.model.entities.KpiHeaderData;
 import co.com.tactusoft.kpi.model.entities.KpiLastDayWeek;
 import co.com.tactusoft.kpi.model.entities.KpiWeek;
+import co.com.tactusoft.kpi.util.Constant;
 import co.com.tactusoft.kpi.view.model.ReportDaily;
 
 @Service
@@ -47,159 +49,105 @@ public class ProcessBo implements Serializable {
 	}
 
 	public List<ReportDaily> getReportDaily(BigDecimal idKpiWeek) {
+		List<ReportDaily> listResult = new ArrayList<ReportDaily>();
+		BigDecimal idCompany = new BigDecimal(1);
+
+		List<KpiHeaderData> listKpi = dao
+				.find("from KpiHeaderData o where o.kpiHeader.kpiCompany.id = "
+						+ idCompany + " order by o.korder");
+
 		List<KpiDaily> list = dao.find("from KpiDaily o where o.kpiWeek.id = "
 				+ idKpiWeek + " order by o.currentDay");
 
-		int id = 0;
-		int index;
-		List<ReportDaily> listResult = new ArrayList<ReportDaily>();
 		ReportDaily reportDaily;
-		Double[] listPlan;
-		String[] style;
+		for (KpiHeaderData row : listKpi) {
+			BigDecimal id = row.getId();
+			String metric = row.getKpiData().getName();
+			Double planAttainment = row.getKpiData().getPlanAttainment()
+					.doubleValue();
 
-		reportDaily = new ReportDaily();
-		reportDaily.setId(new BigDecimal(id));
-		reportDaily.setMetric("Cumplimiento Programa Diario OT");
-		reportDaily.setUm("%");
-		reportDaily.setType("Plan");
+			reportDaily = new ReportDaily();
+			reportDaily.setId(id);
+			reportDaily.setMetric(metric);
+			reportDaily.setUm(row.getKpiData().getUnit());
+			reportDaily.setType("Plan");
 
-		listPlan = new Double[list.size()];
-		index = 0;
-		for (KpiDaily row : list) {
-			// double scheduledOrders = row.getScheduledOrders();
-			// if (scheduledOrders != 0d) {
-			// double finishedOrders = row.getFinishedOrders();
-			// double res = finishedOrders / scheduledOrders;
-			listPlan[index] = 0.8;
-			index++;
-			// }
-		}
+			Double[] listPlan = new Double[list.size()];
+			int index;
+			for (index = 0; index < list.size(); index++) {
+				listPlan[index] = planAttainment;
+			}
 
-		reportDaily.setListPlan(listPlan);
-		listResult.add(reportDaily);
-		id++;
+			reportDaily.setListPlan(listPlan);
+			listResult.add(reportDaily);
 
-		reportDaily = new ReportDaily();
-		reportDaily.setId(new BigDecimal(id));
-		// reportDaily.setMetric("Cumplimiento Programa Semanal HH");
-		reportDaily.setUm("%");
-		reportDaily.setType("Actual");
+			reportDaily = new ReportDaily();
+			reportDaily.setId(id);
+			reportDaily.setMetric("");
+			reportDaily.setUm(row.getKpiData().getUnit());
+			reportDaily.setType("Actual");
 
-		listPlan = new Double[list.size()];
-		style = new String[list.size()];
-		index = 0;
-		for (KpiDaily row : list) {
-			double scheduledOrders = row.getScheduledOrders();
-			if (scheduledOrders != 0d) {
-				double finishedOrders = row.getFinishedOrders();
-				double res = finishedOrders / scheduledOrders;
-				listPlan[index] = res;
-				if (res < 0.8) {
-					style[index] = "style1";
-				} else {
-					style[index] = "style2";
+			index = 0;
+			listPlan = new Double[list.size()];
+			String[] style = new String[list.size()];
+			switch (row.getKpiData().getCalculatioType()) {
+			case Constant.CALCULATION_TYPE_1:
+				for (KpiDaily rowDetail : list) {
+					double scheduledOrders = rowDetail.getScheduledOrders();
+					if (scheduledOrders != 0d) {
+						double finishedOrders = rowDetail.getFinishedOrders();
+						double res = finishedOrders / scheduledOrders;
+						listPlan[index] = res;
+
+						if (res < planAttainment) {
+							style[index] = "style1";
+						} else {
+							style[index] = "style2";
+						}
+
+						index++;
+					}
 				}
-
-				index++;
-			}
-		}
-
-		reportDaily.setListPlan(listPlan);
-		reportDaily.setStyle(style);
-		listResult.add(reportDaily);
-		id++;
-
-		reportDaily = new ReportDaily();
-		reportDaily.setId(new BigDecimal(id));
-		reportDaily.setMetric("Imprevistos");
-		reportDaily.setUm("%");
-		reportDaily.setType("Plan");
-
-		listPlan = new Double[list.size()];
-		index = 0;
-		for (KpiDaily row : list) {
-			listPlan[index] = 0.2;
-			index++;
-		}
-
-		reportDaily.setListPlan(listPlan);
-		listResult.add(reportDaily);
-		id++;
-
-		reportDaily = new ReportDaily();
-		reportDaily.setId(new BigDecimal(id));
-		// reportDaily.setMetric("Imprevistos");
-		reportDaily.setUm("%");
-		reportDaily.setType("Actual");
-
-		listPlan = new Double[list.size()];
-		style = new String[list.size()];
-		index = 0;
-		for (KpiDaily row : list) {
-			double finishedOrders = row.getFinishedOrders();
-			double failuresOrders = row.getFailuresOrders();
-			if ((finishedOrders - failuresOrders) != 0d) {
-				double res = failuresOrders / (failuresOrders + finishedOrders);
-				listPlan[index] = res;
-				if (res < 0.2) {
-					style[index] = "style1";
-				} else {
-					style[index] = "style2";
+				break;
+			case Constant.CALCULATION_TYPE_2:
+				for (KpiDaily rowDetail : list) {
+					double finishedOrders = rowDetail.getFinishedOrders();
+					double failuresOrders = rowDetail.getFailuresOrders();
+					if ((finishedOrders - failuresOrders) != 0d) {
+						double res = failuresOrders
+								/ (failuresOrders + finishedOrders);
+						listPlan[index] = res;
+						if (res > planAttainment) {
+							style[index] = "style1";
+						} else {
+							style[index] = "style2";
+						}
+						index++;
+					}
 				}
-				index++;
+				break;
+			case Constant.CALCULATION_TYPE_3:
+				for (KpiDaily rowDetail : list) {
+					BigDecimal res = (BigDecimal) dao.find(
+							"select sum(o.numHours) from KpiDailyDelay o where o.kpiDaily.id = "
+									+ rowDetail.getId()).get(0);
+
+					listPlan[index] = res.doubleValue();
+					if (res.doubleValue() > planAttainment) {
+						style[index] = "style1";
+					} else {
+						style[index] = "style2";
+					}
+					index++;
+				}
+				break;
 			}
+
+			reportDaily.setListPlan(listPlan);
+			reportDaily.setStyle(style);
+			listResult.add(reportDaily);
+
 		}
-
-		reportDaily.setListPlan(listPlan);
-		reportDaily.setStyle(style);
-		listResult.add(reportDaily);
-		id++;
-
-		reportDaily = new ReportDaily();
-		reportDaily.setId(new BigDecimal(id));
-		reportDaily.setMetric("Demoras");
-		reportDaily.setUm("Hr");
-		reportDaily.setType("Plan");
-
-		listPlan = new Double[list.size()];
-		index = 0;
-		for (KpiDaily row : list) {
-			listPlan[index] = 23d;
-			index++;
-		}
-
-		reportDaily.setListPlan(listPlan);
-		listResult.add(reportDaily);
-		id++;
-
-		reportDaily = new ReportDaily();
-		reportDaily.setId(new BigDecimal(id));
-		// reportDaily.setMetric("Demoras");
-		reportDaily.setUm("Hr");
-		reportDaily.setType("Actual");
-
-		listPlan = new Double[list.size()];
-		style = new String[list.size()];
-		index = 0;
-
-		for (KpiDaily row : list) {
-			BigDecimal res = (BigDecimal) dao.find(
-					"select sum(o.numHours) from KpiDailyDelay o where o.kpiDaily.id = "
-							+ row.getId()).get(0);
-
-			listPlan[index] = res.doubleValue();
-			if (res.doubleValue() > 23d) {
-				style[index] = "style1";
-			} else {
-				style[index] = "style2";
-			}
-			index++;
-		}
-
-		reportDaily.setListPlan(listPlan);
-		reportDaily.setStyle(style);
-		listResult.add(reportDaily);
-		id++;
 
 		return listResult;
 	}

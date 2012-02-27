@@ -60,9 +60,7 @@
 					<p:columns value="#{reportBacking.columns}" var="column"
 						columnIndexVar="colIndex">
 
-						<f:facet name="header">
-                				#{column.header}
-            				</f:facet>
+						<f:facet name="header">#{column.header}</f:facet>
 
 						<h:outputLabel value="#{rec.listPlan[colIndex]}"
 							rendered="#{rec.um eq '%'?true:false}"

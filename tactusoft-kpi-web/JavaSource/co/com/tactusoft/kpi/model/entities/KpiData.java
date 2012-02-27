@@ -32,6 +32,7 @@ public class KpiData implements java.io.Serializable {
 	private Byte weekly;
 	private Byte monthly;
 	private Byte yearly;
+	private Integer calculatioType;
 	private Set<KpiHeaderData> kpiHeaderDatas = new HashSet<KpiHeaderData>(0);
 
 	public KpiData() {
@@ -142,6 +143,15 @@ public class KpiData implements java.io.Serializable {
 
 	public void setYearly(Byte yearly) {
 		this.yearly = yearly;
+	}
+
+	@Column(name = "calculation_type")
+	public Integer getCalculatioType() {
+		return calculatioType;
+	}
+
+	public void setCalculatioType(Integer calculatioType) {
+		this.calculatioType = calculatioType;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "kpiData")
