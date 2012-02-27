@@ -48,6 +48,7 @@ public class KpiDailyBacking implements Serializable {
 
 	private List<SelectItem> listCalendarWeeks;
 	private BigDecimal kpiWeekSelected;
+	private KpiWeek selectedWeek;
 	private List<SelectItem> listDays;
 	private BigDecimal kpiDailySelected;
 	private KpiDailyDelayModel modelDailyDelay;
@@ -182,16 +183,16 @@ public class KpiDailyBacking implements Serializable {
 		this.pageType = pageType;
 	}
 
-	public void searchAction() {
+	public KpiWeek getSelectedWeek() {
+		return selectedWeek;
+	}
 
+	public void setSelectedWeek(KpiWeek selectedWeek) {
+		this.selectedWeek = selectedWeek;
 	}
 
 	public void newAction() {
 		selected = new KpiDaily();
-	}
-
-	public void deleteAction() {
-
 	}
 
 	public void saveAction() {
@@ -271,6 +272,8 @@ public class KpiDailyBacking implements Serializable {
 		if (this.kpiWeekSelected.intValue() != -1) {
 			this.minDate = mapKpiWeek.get(kpiWeekSelected).getStartDate();
 			this.maxDate = mapKpiWeek.get(kpiWeekSelected).getEndDate();
+
+			selectedWeek = mapKpiWeek.get(kpiWeekSelected);
 
 			List<KpiDaily> list = service
 					.getListKpiDailyByWeek(kpiWeekSelected);
