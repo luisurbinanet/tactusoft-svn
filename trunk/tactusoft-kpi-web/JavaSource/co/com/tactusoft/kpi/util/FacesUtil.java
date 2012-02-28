@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.faces.application.FacesMessage;
@@ -17,6 +18,20 @@ import co.com.tactusoft.kpi.model.entities.KpiUser;
 import co.com.tactusoft.kpi.security.UserData;
 
 public class FacesUtil {
+
+	@SuppressWarnings("unchecked")
+	public static <T> T findBean(String beanName) {
+		FacesContext context = FacesContext.getCurrentInstance();
+		return (T) context.getApplication().evaluateExpressionGet(context,
+				"#{" + beanName + "}", Object.class);
+	}
+
+	public static String getParam(String key) {
+		Map<String, String> params = FacesContext.getCurrentInstance()
+				.getExternalContext().getRequestParameterMap();
+		String result = params.get(key);
+		return result;
+	}
 
 	public static void showMessage(String title, String text) {
 		FacesContext context = FacesContext.getCurrentInstance();
@@ -91,7 +106,7 @@ public class FacesUtil {
 	public static BigDecimal getCurrentIdUsuario() {
 		return getCurrentUser().getId();
 	}
-	
+
 	public static List<String> getCurrentRoles() {
 		UserData userData = (UserData) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
