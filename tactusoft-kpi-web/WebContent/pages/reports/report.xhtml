@@ -22,7 +22,7 @@
 
 			<p:panel width="100%">
 				<h:panelGrid id="pnlParameter" columns="2" width="100%">
-					<h:outputText value="#{msg['wos_calendar_week']}"
+					<h:outputText value="#{msg['rep_calendar_week']}"
 						style="width:100%" />
 					<p:selectOneMenu value="#{reportBacking.idKpiWeek}"
 						style="width:430px">
@@ -45,11 +45,11 @@
 				<p:dataTable id="recordTable" var="rec"
 					value="#{reportBacking.model}">
 
-					<p:column headerText="Daily Metrics">
+					<p:column headerText="#{msg['rep_metric']}">
 						<h:outputLabel value="#{rec.metric}" />
 					</p:column>
 
-					<p:column headerText="UM">
+					<p:column headerText="#{msg['rep_metric']}">
 						<h:outputLabel value="#{rec.um}" />
 					</p:column>
 
@@ -92,9 +92,9 @@
 						var size = #{reportBacking.size};
 						chartData = new google.visualization.DataTable();
 						chartData.addRows(size);
-						chartData.addColumn('string', 'codigo');
-						chartData.addColumn('number', 'Horas');
-						chartData.addColumn('number', 'Promedio');
+						chartData.addColumn('string', "#{msg['rep_code']}");
+						chartData.addColumn('number', "#{msg['rep_hr']}");
+						chartData.addColumn('number', "#{msg['rep_avg']}");
 						
 						var rowIndex = 0;
 						var list = jQuery.parseJSON('#{reportBacking.graphData}');
@@ -130,16 +130,16 @@
 				// Create our data table.
 				chartData = new google.visualization.DataTable();
 				
-				chartData.addColumn('string', 'codigo');
-				chartData.addColumn('number', 'Demoras');
-				chartData.addColumn('number', 'Promedio');
+				chartData.addColumn('string', "#{msg['rep_code']}");
+				chartData.addColumn('number', "#{msg['rep_hr']}");
+				chartData.addColumn('number', "#{msg['rep_avg']}");
 
 				chartOptions = {
-	                    title : 'Demoras del Dia Anterior',
-	                    vAxis: {title: "Horas"},
-	                    hAxis: {title: "Demoras"},
+	                    title : "#{msg['rep_delay_last_day']}",
+	                    vAxis: {title: "#{msg['rep_hr']}"},
+	                    hAxis: {title: "#{msg['rep_delay']}"},
 	                    seriesType: "bars",
-	                    series:{1:{type: 'line',targetAxisIndex:1}}, vAxes:{1:{title:'Promedio',textStyle:{color: 'red'}, format:'#,###%'}}
+	                    series:{1:{type: 'line',targetAxisIndex:1}}, vAxes:{1:{title:"#{msg['rep_avg']}",textStyle:{color: 'red'}, format:'#,###%'}}
 	                  };
 	 
 	            chart = new google.visualization.ComboChart(document.getElementById('form:chart_div'));
