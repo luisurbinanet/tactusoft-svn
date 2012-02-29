@@ -7,13 +7,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.primefaces.event.SelectEvent;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Controller;
 
 import co.com.tactusoft.kpi.controller.bo.AdminBo;
 import co.com.tactusoft.kpi.controller.bo.TablesBo;
@@ -26,8 +26,8 @@ import co.com.tactusoft.kpi.util.FacesUtil;
 import co.com.tactusoft.kpi.view.model.KpiHeaderDelayModel;
 import co.com.tactusoft.kpi.view.model.KpiHeaderModel;
 
-@Controller
-@Scope("session")
+@Named
+@Scope("view")
 public class KpiHeaderBacking implements Serializable {
 
 	/**
@@ -35,9 +35,9 @@ public class KpiHeaderBacking implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Resource
+	@Inject
 	private TablesBo tableService;
-	@Resource
+	@Inject
 	private AdminBo adminService;
 
 	private KpiHeaderModel model;
@@ -61,6 +61,7 @@ public class KpiHeaderBacking implements Serializable {
 
 	public KpiHeaderBacking() {
 		selected = new KpiHeader();
+		listItemCompany = null;
 	}
 
 	public KpiHeaderModel getModel() {
