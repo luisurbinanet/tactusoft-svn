@@ -10,12 +10,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
 import javax.faces.model.SelectItem;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.primefaces.context.RequestContext;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Controller;
 
 import co.com.tactusoft.kpi.controller.bo.AdminBo;
 import co.com.tactusoft.kpi.controller.bo.ProcessBo;
@@ -28,8 +28,8 @@ import co.com.tactusoft.kpi.util.FacesUtil;
 import co.com.tactusoft.kpi.view.model.KpiDailyDelayModel;
 import co.com.tactusoft.kpi.view.model.KpiDailyModel;
 
-@Controller
-@Scope("session")
+@Named
+@Scope("view")
 public class KpiDailyBacking implements Serializable {
 
 	/**
@@ -37,10 +37,10 @@ public class KpiDailyBacking implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Resource
+	@Inject
 	private ProcessBo service;
 
-	@Resource
+	@Inject
 	private AdminBo adminService;
 
 	private KpiDailyModel model;
@@ -64,6 +64,7 @@ public class KpiDailyBacking implements Serializable {
 
 	public KpiDailyBacking() {
 		selected = new KpiDaily();
+		listCalendarWeeks = null;
 	}
 
 	public KpiDailyModel getModel() {
