@@ -2,10 +2,10 @@ package co.com.tactusoft.kpi.view.backing;
 
 import java.io.Serializable;
 
-import javax.annotation.Resource;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Controller;
 
 import co.com.tactusoft.kpi.controller.bo.TablesBo;
 import co.com.tactusoft.kpi.model.entities.KpiCompany;
@@ -13,8 +13,8 @@ import co.com.tactusoft.kpi.util.Constant;
 import co.com.tactusoft.kpi.util.FacesUtil;
 import co.com.tactusoft.kpi.view.model.KpiCompanyModel;
 
-@Controller
-@Scope("session")
+@Named
+@Scope("view")
 public class KpiCompanyBacking implements Serializable {
 
 	/**
@@ -22,7 +22,7 @@ public class KpiCompanyBacking implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Resource
+	@Inject
 	private TablesBo service;
 
 	private KpiCompanyModel model;
@@ -30,6 +30,7 @@ public class KpiCompanyBacking implements Serializable {
 
 	public KpiCompanyBacking() {
 		selected = new KpiCompany();
+		model = null;
 	}
 
 	public KpiCompanyModel getModel() {
