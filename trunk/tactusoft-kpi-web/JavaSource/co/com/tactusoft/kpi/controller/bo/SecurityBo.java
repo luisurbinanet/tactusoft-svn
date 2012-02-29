@@ -3,18 +3,17 @@ package co.com.tactusoft.kpi.controller.bo;
 import java.math.BigDecimal;
 import java.util.List;
 
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import co.com.tactusoft.kpi.model.dao.CustomHibernateDao;
 import co.com.tactusoft.kpi.model.entities.KpiRole;
 import co.com.tactusoft.kpi.model.entities.KpiUser;
 
-@Service
+@Named
 public class SecurityBo {
 
-	@Resource
+	@Inject
 	private CustomHibernateDao dao;
 
 	public KpiUser getObject(String userName) {

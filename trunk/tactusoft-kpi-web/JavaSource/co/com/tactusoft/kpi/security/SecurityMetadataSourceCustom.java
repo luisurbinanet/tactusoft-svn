@@ -9,6 +9,7 @@ import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 
 import co.com.tactusoft.kpi.util.FacesUtil;
+import co.com.tactusoft.kpi.view.model.MenuModel;
 
 public class SecurityMetadataSourceCustom implements
 		FilterInvocationSecurityMetadataSource {
@@ -30,9 +31,24 @@ public class SecurityMetadataSourceCustom implements
 				return null;
 			}
 
-			for (String role : FacesUtil.getCurrentRoles()) {
-				if (role.equals("SUPER_ADMIN")) {
-					return null;
+			List<MenuModel> listMenu = FacesUtil.getCurrentUserData()
+					.getListMenu();
+
+			for (MenuModel menu : listMenu) {
+				String page = menu.getPage();
+				if (page != null) {
+					if (url.contains(page)) {
+						return null;
+					}
+				} else {
+					for (MenuModel menu2 : menu.getChilds()) {
+						page = menu2.getPage();
+						if (page != null) {
+							if (url.contains(page)) {
+								return null;
+							}
+						}
+					}
 				}
 			}
 

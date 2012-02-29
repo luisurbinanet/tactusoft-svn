@@ -2,17 +2,17 @@ package co.com.tactusoft.kpi.view.backing;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.inject.Named;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.web.WebAttributes;
-import org.springframework.stereotype.Controller;
 
 import co.com.tactusoft.kpi.util.FacesUtil;
 
-@Controller
-@Scope("session")
+@Named
+@Scope("view")
 public class LoginBacking {
 
 	private String userName;

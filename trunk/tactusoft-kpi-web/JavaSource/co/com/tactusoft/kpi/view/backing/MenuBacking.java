@@ -6,14 +6,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Named;
+
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Controller;
 
 import co.com.tactusoft.kpi.util.Constant;
 import co.com.tactusoft.kpi.util.FacesUtil;
 import co.com.tactusoft.kpi.view.model.MenuModel;
 
-@Controller
+@Named
 @Scope("session")
 public class MenuBacking implements Serializable {
 
@@ -22,18 +23,18 @@ public class MenuBacking implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private List<MenuModel> listParents;
-
+	private List<MenuModel> listMenu;
+	
 	public MenuBacking() {
-		this.init();
+		
 	}
 
-	public void init() {
+	public void init(List<String> roles) {
 		Map<Integer, MenuModel> mapMenu = new HashMap<Integer, MenuModel>();
 
 		MenuModel menuModel;
 
-		for (String role : FacesUtil.getCurrentRoles()) {
+		for (String role : roles) {
 			if (role.equals(Constant.ROLE_SUPER_ADMIN)) {
 				menuModel = getMenuAdministration();
 				mapMenu.put(menuModel.getId(), menuModel);
@@ -56,19 +57,22 @@ public class MenuBacking implements Serializable {
 			}
 		}
 
-		listParents = new LinkedList<MenuModel>();
+		listMenu = new LinkedList<MenuModel>();
 		for (MenuModel row : mapMenu.values()) {
-			listParents.add(row);
+			listMenu.add(row);
 		}
-
 	}
 
-	public List<MenuModel> getListParents() {
-		return listParents;
+	public List<MenuModel> getListMenu() {
+		if(listMenu == null){
+			List<String> roles= FacesUtil.getCurrentRoles();
+			init(roles);
+		}
+		return listMenu;
 	}
 
-	public void setListParents(List<MenuModel> listParents) {
-		this.listParents = listParents;
+	public void setListMenu(List<MenuModel> listMenu) {
+		this.listMenu = listMenu;
 	}
 
 	private MenuModel getMenuAdministration() {
@@ -85,6 +89,7 @@ public class MenuBacking implements Serializable {
 		menuChild = new MenuModel();
 		menuChild.setId(2);
 		menuChild.setName(FacesUtil.getMessage("menu_admin_company"));
+		menuChild.setPage("/pages/admin/company");
 		listChilds.add(menuChild);
 
 		menuChild = new MenuModel();
@@ -100,11 +105,13 @@ public class MenuBacking implements Serializable {
 		menuChild = new MenuModel();
 		menuChild.setId(5);
 		menuChild.setName(FacesUtil.getMessage("menu_admin_delay"));
+		menuChild.setPage("/pages/admin/delay");
 		listChilds.add(menuChild);
 
 		menuChild = new MenuModel();
 		menuChild.setId(6);
 		menuChild.setName(FacesUtil.getMessage("menu_admin_header"));
+		menuChild.setPage("/pages/admin/kpi");
 		listChilds.add(menuChild);
 
 		menuModel.setChilds(listChilds);
@@ -125,16 +132,19 @@ public class MenuBacking implements Serializable {
 		menuChild = new MenuModel();
 		menuChild.setId(8);
 		menuChild.setName(FacesUtil.getMessage("menu_process_week"));
+		menuChild.setPage("/pages/process/week");
 		listChilds.add(menuChild);
 
 		menuChild = new MenuModel();
 		menuChild.setId(9);
 		menuChild.setName(FacesUtil.getMessage("menu_schedule_days"));
+		menuChild.setPage("/pages/process/daily");
 		listChilds.add(menuChild);
 
 		menuChild = new MenuModel();
 		menuChild.setId(10);
 		menuChild.setName(FacesUtil.getMessage("menu_registry_days"));
+		menuChild.setPage("/pages/process/registryDay");
 		listChilds.add(menuChild);
 
 		menuModel.setChilds(listChilds);
@@ -155,11 +165,20 @@ public class MenuBacking implements Serializable {
 		menuChild = new MenuModel();
 		menuChild.setId(12);
 		menuChild.setName(FacesUtil.getMessage("menu_reports_daily"));
+		menuChild.setPage("/pages/reports/reportDaily");
 		listChilds.add(menuChild);
 
 		menuModel.setChilds(listChilds);
 
 		return menuModel;
+	}
+
+	public String actionPage() {
+		String page = FacesUtil.getParam("page");
+		if (page != null) {
+			page = page + "?faces-redirect=true";
+		}
+		return page;
 	}
 
 }

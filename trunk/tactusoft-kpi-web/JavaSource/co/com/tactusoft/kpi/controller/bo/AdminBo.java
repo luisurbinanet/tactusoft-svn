@@ -4,10 +4,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
-import javax.annotation.Resource;
-
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Service;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import co.com.tactusoft.kpi.model.dao.CustomHibernateDao;
 import co.com.tactusoft.kpi.model.entities.KpiDailyDelay;
@@ -15,15 +13,15 @@ import co.com.tactusoft.kpi.model.entities.KpiDelay;
 import co.com.tactusoft.kpi.model.entities.KpiHeader;
 import co.com.tactusoft.kpi.model.entities.KpiHeaderDelay;
 
-@Service
-@Scope("singleton")
+@Named
 public class AdminBo implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@Resource
+	
+	@Inject
 	private CustomHibernateDao dao;
 
 	public AdminBo() {

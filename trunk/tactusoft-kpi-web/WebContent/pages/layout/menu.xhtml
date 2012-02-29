@@ -11,7 +11,7 @@
 		<div class="r"></div>
 		<ul class="rco-menu">
 			
-			<ui:repeat var="menu" value="#{menuBacking.listParents}">
+			<ui:repeat var="menu" value="#{menuBacking.listMenu}">
 				<li>
 					<a href="#">
 						<span class="l"></span>
@@ -22,7 +22,7 @@
 						<ui:repeat var="child" value="#{menu.childs}">
 							<li>
 								<p:commandLink value="#{child.name}" action="#{menuBacking.actionPage}">
-									<f:param name="page" value="#{child.action}"/>
+									<f:param name="page" value="#{child.page}"/>
 								</p:commandLink>
 							</li>
 						</ui:repeat>

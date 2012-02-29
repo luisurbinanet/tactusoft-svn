@@ -97,6 +97,12 @@ public class FacesUtil {
 		session.invalidate();
 	}
 
+	public static UserData getCurrentUserData() {
+		UserData userData = (UserData) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
+		return userData;
+	}
+	
 	public static KpiUser getCurrentUser() {
 		UserData userData = (UserData) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
