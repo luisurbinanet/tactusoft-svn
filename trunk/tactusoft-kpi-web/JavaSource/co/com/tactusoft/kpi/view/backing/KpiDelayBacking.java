@@ -2,18 +2,18 @@ package co.com.tactusoft.kpi.view.backing;
 
 import java.io.Serializable;
 
-import javax.annotation.Resource;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Controller;
 
 import co.com.tactusoft.kpi.controller.bo.TablesBo;
 import co.com.tactusoft.kpi.model.entities.KpiDelay;
 import co.com.tactusoft.kpi.util.FacesUtil;
 import co.com.tactusoft.kpi.view.model.KpiDelayModel;
 
-@Controller
-@Scope("session")
+@Named
+@Scope("view")
 public class KpiDelayBacking implements Serializable {
 
 	/**
@@ -21,7 +21,7 @@ public class KpiDelayBacking implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Resource
+	@Inject
 	private TablesBo service;
 
 	private KpiDelayModel model;
@@ -29,6 +29,7 @@ public class KpiDelayBacking implements Serializable {
 
 	public KpiDelayBacking() {
 		selected = new KpiDelay();
+		model = null;
 	}
 
 	public KpiDelayModel getModel() {
