@@ -8,12 +8,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
 import javax.faces.model.SelectItem;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.primefaces.context.RequestContext;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Controller;
 
 import co.com.tactusoft.kpi.controller.bo.TablesBo;
 import co.com.tactusoft.kpi.model.entities.KpiWeek;
@@ -21,8 +21,8 @@ import co.com.tactusoft.kpi.util.FacesUtil;
 import co.com.tactusoft.kpi.view.model.CalendarWeek;
 import co.com.tactusoft.kpi.view.model.KpiWeekModel;
 
-@Controller
-@Scope("session")
+@Named
+@Scope("view")
 public class KpiWeekBacking implements Serializable {
 
 	/**
@@ -30,7 +30,7 @@ public class KpiWeekBacking implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Resource
+	@Inject
 	private TablesBo service;
 
 	private KpiWeekModel model;
@@ -40,6 +40,7 @@ public class KpiWeekBacking implements Serializable {
 
 	public KpiWeekBacking() {
 		selected = new KpiWeek();
+		model =null;
 	}
 
 	public KpiWeekModel getModel() {
