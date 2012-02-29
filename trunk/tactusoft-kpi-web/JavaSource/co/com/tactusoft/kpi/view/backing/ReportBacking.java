@@ -8,15 +8,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.primefaces.json.JSONArray;
-import org.primefaces.model.chart.CartesianChartModel;
-import org.primefaces.model.chart.ChartSeries;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Controller;
 
 import co.com.tactusoft.kpi.controller.bo.ProcessBo;
 import co.com.tactusoft.kpi.model.entities.KpiDaily;
@@ -25,27 +23,27 @@ import co.com.tactusoft.kpi.view.model.ColumnModel;
 import co.com.tactusoft.kpi.view.model.ReportDaily;
 import co.com.tactusoft.kpi.view.model.ReportDailyModel;
 
-@Controller
-@Scope("session")
+@Named
+@Scope("view")
 public class ReportBacking implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Resource
+	@Inject
 	private ProcessBo service;
 
 	private ReportDailyModel model = new ReportDailyModel();
 	private List<ColumnModel> columns = new ArrayList<ColumnModel>();
 
 	private List<SelectItem> listItemWeeks;
-	private Map<BigDecimal, KpiWeek> mapKpiWeek = new HashMap<BigDecimal, KpiWeek>();
+	private Map<BigDecimal, KpiWeek> mapKpiWeek;
 	private BigDecimal idKpiWeek;
 
-	private CartesianChartModel categoryModel;
 	private JSONArray graphData;
 
 	public ReportBacking() {
-
+		listItemWeeks = null;
+		mapKpiWeek = new HashMap<BigDecimal, KpiWeek>();
 	}
 
 	public ReportDailyModel getModel() {
@@ -107,23 +105,6 @@ public class ReportBacking implements Serializable {
 
 	public void setIdKpiWeek(BigDecimal idKpiWeek) {
 		this.idKpiWeek = idKpiWeek;
-	}
-
-	public CartesianChartModel getCategoryModel() {
-		if (categoryModel == null) {
-			categoryModel = new CartesianChartModel();
-
-			ChartSeries test = new ChartSeries();
-			test.setLabel("-- SIN INFORMACION -- ");
-
-			categoryModel.addSeries(test);
-			test.set("", 0);
-		}
-		return categoryModel;
-	}
-
-	public void setCategoryModel(CartesianChartModel categoryModel) {
-		this.categoryModel = categoryModel;
 	}
 
 	public JSONArray getGraphData() {
