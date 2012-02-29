@@ -12,7 +12,7 @@ public class MenuModel implements Serializable {
 	private Integer id;
 	private String name;
 	private Integer parent;
-	private String action;
+	private String page;
 	private List<MenuModel> childs;
 
 	public MenuModel() {
@@ -43,12 +43,12 @@ public class MenuModel implements Serializable {
 		this.parent = parent;
 	}
 
-	public String getAction() {
-		return action;
+	public String getPage() {
+		return page;
 	}
 
-	public void setAction(String action) {
-		this.action = action;
+	public void setPage(String page) {
+		this.page = page;
 	}
 
 	public List<MenuModel> getChilds() {

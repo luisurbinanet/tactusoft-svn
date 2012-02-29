@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import co.com.tactusoft.kpi.model.entities.KpiUser;
+import co.com.tactusoft.kpi.view.model.MenuModel;
 
 public class UserData implements UserDetails {
 
@@ -21,6 +22,7 @@ public class UserData implements UserDetails {
 	private String password;
 	private List<String> roles;
 	private KpiUser kpiUser;
+	private List<MenuModel> listMenu;
 
 	public void setUsername(String username) {
 		this.username = username;
@@ -68,6 +70,14 @@ public class UserData implements UserDetails {
 
 	public boolean isEnabled() {
 		return true;
+	}
+
+	public List<MenuModel> getListMenu() {
+		return listMenu;
+	}
+
+	public void setListMenu(List<MenuModel> listMenu) {
+		this.listMenu = listMenu;
 	}
 
 	@Override

@@ -5,13 +5,12 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Resource;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.primefaces.json.JSONArray;
 import org.primefaces.json.JSONException;
 import org.primefaces.json.JSONObject;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Service;
 
 import co.com.tactusoft.kpi.model.dao.CustomHibernateDao;
 import co.com.tactusoft.kpi.model.entities.KpiDaily;
@@ -22,13 +21,12 @@ import co.com.tactusoft.kpi.model.entities.KpiWeek;
 import co.com.tactusoft.kpi.util.Constant;
 import co.com.tactusoft.kpi.view.model.ReportDaily;
 
-@Service
-@Scope("singleton")
+@Named
 public class ProcessBo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Resource
+	@Inject
 	private CustomHibernateDao dao;
 
 	public List<KpiWeek> getListKpiKpiWeek40() {

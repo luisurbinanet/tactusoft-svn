@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import co.com.tactusoft.kpi.controller.bo.SecurityBo;
 import co.com.tactusoft.kpi.model.entities.KpiRole;
 import co.com.tactusoft.kpi.model.entities.KpiUser;
+import co.com.tactusoft.kpi.util.FacesUtil;
+import co.com.tactusoft.kpi.view.backing.MenuBacking;
 
 @Service
 public class UserDetailsServiceCustom implements UserDetailsService {
@@ -41,6 +43,10 @@ public class UserDetailsServiceCustom implements UserDetailsService {
 
 				user.setRoles(roles);
 				user.setKpiUser(object);
+				
+				MenuBacking menuBacking = FacesUtil.findBean("menuBacking");
+				menuBacking.init(roles);
+				user.setListMenu(menuBacking.getListMenu());
 			}
 		} catch (HibernateException e) {
 			e.printStackTrace();

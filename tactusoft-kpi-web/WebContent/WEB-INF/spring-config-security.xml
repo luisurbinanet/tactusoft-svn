@@ -16,7 +16,7 @@
 
 	<bean id="logoutFilter"
 		class="org.springframework.security.web.authentication.logout.LogoutFilter">
-		<constructor-arg value="/pages/secure/login.jsf?faces-redirect=true" />
+		<constructor-arg value="/pages/secure/login.jsf" />
 		<!-- URL redirected to after logout -->
 		<constructor-arg>
 			<list>
@@ -52,7 +52,7 @@
 
 	<bean id="successHandler"
 		class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
-		<property name="defaultTargetUrl" value="/pages/reports/report.jsf" />
+		<property name="defaultTargetUrl" value="/pages/reports/reportDaily.jsf" />
 	</bean>
 
 	<bean id="failureHandler"
