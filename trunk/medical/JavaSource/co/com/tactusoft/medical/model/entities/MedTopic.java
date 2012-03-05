@@ -113,9 +113,12 @@ public class MedTopic implements java.io.Serializable {
 
 	@Transient
 	public StreamedContent getCurrentImage() {
-		InputStream in = new ByteArrayInputStream(this.getImage());
-		StreamedContent image = new DefaultStreamedContent(in);
-		return image;
+		StreamedContent currentImage = null;
+		if (this.image != null) {
+			InputStream in = new ByteArrayInputStream(this.image);
+			currentImage = new DefaultStreamedContent(in, "image/jpeg");
+		}
+		return currentImage;
 	}
 
 }

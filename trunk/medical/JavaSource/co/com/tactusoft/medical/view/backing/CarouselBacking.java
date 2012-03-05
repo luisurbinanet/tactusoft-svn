@@ -13,7 +13,7 @@ import co.com.tactusoft.medical.controller.bo.AdminBo;
 import co.com.tactusoft.medical.model.entities.MedTopic;
 
 @Named
-@Scope("view")
+@Scope("session")
 public class CarouselBacking implements Serializable {
 
 	/**

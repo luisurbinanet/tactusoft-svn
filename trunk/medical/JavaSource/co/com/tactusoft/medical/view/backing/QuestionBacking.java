@@ -158,7 +158,7 @@ public class QuestionBacking {
 				if (selected.getImage() != null) {
 					InputStream in = new ByteArrayInputStream(
 							selected.getImage());
-					image = new DefaultStreamedContent(in);
+					image = new DefaultStreamedContent(in, "image/jpeg");
 				} else {
 					image = null;
 				}
