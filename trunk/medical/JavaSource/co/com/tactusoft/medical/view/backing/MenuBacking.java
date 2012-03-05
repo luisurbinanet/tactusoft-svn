@@ -24,37 +24,35 @@ public class MenuBacking implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private List<MenuDataModel> listMenu;
-	
+
 	public MenuBacking() {
-		
+
 	}
 
-	public void init(List<String> roles) {
+	public void init(String role) {
 		Map<Integer, MenuDataModel> mapMenu = new HashMap<Integer, MenuDataModel>();
 
 		MenuDataModel MenuDataModel;
 
-		for (String role : roles) {
-			if (role.equals(Constant.ROLE_SUPER_ADMIN)) {
-				MenuDataModel = getMenuAdministration();
-				mapMenu.put(MenuDataModel.getId(), MenuDataModel);
+		if (role.equals(Constant.ROLE_SUPER_ADMIN)) {
+			MenuDataModel = getMenuAdministration();
+			mapMenu.put(MenuDataModel.getId(), MenuDataModel);
 
-				MenuDataModel = getMenuProcess();
-				mapMenu.put(MenuDataModel.getId(), MenuDataModel);
+			MenuDataModel = getMenuProcess();
+			mapMenu.put(MenuDataModel.getId(), MenuDataModel);
 
-				MenuDataModel = getMenuReports();
-				mapMenu.put(MenuDataModel.getId(), MenuDataModel);
+			MenuDataModel = getMenuReports();
+			mapMenu.put(MenuDataModel.getId(), MenuDataModel);
 
-			} else if (role.equals(Constant.ROLE_ADMIN)) {
-				MenuDataModel = getMenuProcess();
-				mapMenu.put(MenuDataModel.getId(), MenuDataModel);
+		} else if (role.equals(Constant.ROLE_ADMIN)) {
+			MenuDataModel = getMenuProcess();
+			mapMenu.put(MenuDataModel.getId(), MenuDataModel);
 
-				MenuDataModel = getMenuReports();
-				mapMenu.put(MenuDataModel.getId(), MenuDataModel);
-			} else if (role.equals(Constant.ROLE_USER)) {
-				MenuDataModel = getMenuReports();
-				mapMenu.put(MenuDataModel.getId(), MenuDataModel);
-			}
+			MenuDataModel = getMenuReports();
+			mapMenu.put(MenuDataModel.getId(), MenuDataModel);
+		} else if (role.equals(Constant.ROLE_USER)) {
+			MenuDataModel = getMenuReports();
+			mapMenu.put(MenuDataModel.getId(), MenuDataModel);
 		}
 
 		listMenu = new LinkedList<MenuDataModel>();
@@ -64,9 +62,9 @@ public class MenuBacking implements Serializable {
 	}
 
 	public List<MenuDataModel> getListMenu() {
-		if(listMenu == null){
-			List<String> roles= FacesUtil.getCurrentRoles();
-			init(roles);
+		if (listMenu == null) {
+			String role = FacesUtil.getCurrentRole();
+			init(role);
 		}
 		return listMenu;
 	}

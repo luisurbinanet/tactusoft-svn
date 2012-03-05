@@ -2,8 +2,6 @@ package co.com.tactusoft.medical.util;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -15,7 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import co.com.tactusoft.kpi.model.entities.KpiUser;
+import co.com.tactusoft.medical.model.entities.MedUser;
 import co.com.tactusoft.medical.security.UserData;
 
 public class FacesUtil {
@@ -104,10 +102,10 @@ public class FacesUtil {
 		return userData;
 	}
 	
-	public static KpiUser getCurrentUser() {
+	public static MedUser getCurrentUser() {
 		UserData userData = (UserData) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
-		return userData.getKpiUser();
+		return userData.getUser();
 	}
 
 	public static BigDecimal getCurrentIdUsuario() {
@@ -115,11 +113,10 @@ public class FacesUtil {
 		return new BigDecimal(1);
 	}
 
-	public static List<String> getCurrentRoles() {
+	public static String getCurrentRole() {
 		/*UserData userData = (UserData) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		return userData.getRoles();*/
-		List<String> list = new ArrayList<String>();
-		return list;
+		return "";
 	}
 }

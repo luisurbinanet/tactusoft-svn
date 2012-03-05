@@ -51,6 +51,9 @@
 				<p:commandButton id="cmdNew" action="#{topicBacking.newAction}"
 					update=":editForm:dialogPanel" icon="ui-icon-plusthick"
 					value="#{msg['btn_new']}" oncomplete="dialogPanel.show()" />
+				<p:commandButton id="cmdRefresh" action="#{topicBacking.refreshAction}"
+					update="recordTable :detailForm:recordTable2"
+					icon="ui-icon-refresh" value="#{msg['btn_refresh']}" />
 			</h:panelGrid>
 
 			<p:spacer height="10" />
@@ -62,7 +65,7 @@
 				value="#{topicBacking.modelQuestion}" rowKey="#{rec.id}"
 				paginator="true" rows="20">
 
-				<p:column headerText="#{msg['top_order']}">#{rec.orderQuestion}</p:column>
+				<p:column headerText="#{msg['que_order']}">#{rec.orderQuestion}</p:column>
 
 				<p:column headerText="#{msg['que_name']}">#{rec.name}</p:column>
 
@@ -83,6 +86,7 @@
 				<f:facet name="footer">
 					<p:commandButton id="newButton" icon="ui-icon-plusthick"
 						value="#{msg['btn_new']}"
+						disabled="#{topicBacking.selected.id == null?true:false}"
 						action="#{topicBacking.goQuestionAction}">
 						<f:param name="action" value="NEW" />
 					</p:commandButton>

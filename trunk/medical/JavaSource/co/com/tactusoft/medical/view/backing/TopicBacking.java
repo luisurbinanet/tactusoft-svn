@@ -121,6 +121,10 @@ public class TopicBacking implements Serializable {
 	public void newAction() {
 		selected = new MedTopic();
 	}
+	
+	public void refreshAction() {
+		model = new TopicDataModel(service.getListMedTopic());
+	}
 
 	public void deleteAction() {
 		service.remove(selected);
