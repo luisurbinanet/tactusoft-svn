@@ -132,7 +132,6 @@ public class TopicBacking implements Serializable {
 	}
 
 	public void saveAction() {
-
 		String message = null;
 		RequestContext context = RequestContext.getCurrentInstance();
 

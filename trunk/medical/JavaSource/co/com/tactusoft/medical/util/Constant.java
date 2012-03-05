@@ -7,8 +7,8 @@ public class Constant {
 	public static final int STATE_ACTIVE = 1;
 	public static final int STATE_INACTIVE = 0;
 
-	public static BigDecimal defaultValue = new BigDecimal(-1);
-	public static String defaultLabel = "-- SELECCIONE --";
+	public static BigDecimal DEFAULT_VALUE = new BigDecimal(-1);
+	public static String DEFAULT_LABEL = "-- SELECCIONE --";
 
 	public static final int CALCULATION_TYPE_1 = 1;
 	public static final int CALCULATION_TYPE_2 = 2;

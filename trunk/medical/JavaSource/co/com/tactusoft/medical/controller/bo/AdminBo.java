@@ -30,8 +30,13 @@ public class AdminBo implements Serializable {
 		return dao.find("from MedQuestion o where o.medTopic.id = " + idTopic
 				+ " order by o.orderQuestion");
 	}
+	
+	public List<MedQuestion> getListMedQuestionByNoIdQuestion(BigDecimal idQuestion) {
+		return dao.find("from MedQuestion o where o.id <> " + idQuestion
+				+ " order by o.orderQuestion");
+	}
 
-	public MedQuestion getMedQuestionByTopic(BigDecimal idQuestion) {
+	public MedQuestion getMedQuestionByQuestion(BigDecimal idQuestion) {
 		MedQuestion result = new MedQuestion();
 		try {
 			result = (MedQuestion) dao.find(

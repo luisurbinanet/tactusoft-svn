@@ -19,7 +19,7 @@
 		<h:form id="form">
 
 			<p:growl id="growl" showDetail="true" />
-			
+
 			<h:panelGrid id="display" columns="2" width="100%">
 
 				<h:outputText value="#{msg['que_name']}" />
@@ -45,21 +45,26 @@
 				</p:selectOneRadio>
 			</h:panelGrid>
 
-			<p:separator id="separator" style="width:100%" />
-			<p:spacer height="20" />
-
+			<p:separator style="width:100%" />
 
 			<p:outputPanel id="pnlTypes" style="width:100%"
 				rendered="#{questionBacking.selected.id == null?false:true}">
+
+				<p:spacer height="20" />
+
 				<h:panelGrid id="pnlYesNo"
 					rendered="#{questionBacking.selected.typeQuestion == 'ASSERTIVE'?true:false}"
 					columns="2" width="100%">
 					<h:outputText value="#{msg['que_positive']}" />
-					<p:inputTextarea value="#{questionBacking.positiveQuestion}"
-						style="width:100%" rows="5" />
+					<p:selectOneMenu value="#{questionBacking.selected.positive}"
+						style="width:600px">
+						<f:selectItems value="#{questionBacking.listQuestion}" />
+					</p:selectOneMenu>
 					<h:outputText value="#{msg['que_negative']}" />
-					<p:inputTextarea value="#{questionBacking.negativeQuestion}"
-						style="width:100%" rows="5" />
+					<p:selectOneMenu value="#{questionBacking.selected.negative}"
+						style="width:600px">
+						<f:selectItems value="#{questionBacking.listQuestion}" />
+					</p:selectOneMenu>
 				</h:panelGrid>
 
 				<h:panelGrid id="pnlUnique"
@@ -76,16 +81,19 @@
 					rendered="#{questionBacking.selected.typeQuestion == 'FINAL'?true:false}">
 				4
 			</h:panelGrid>
+
+				<p:separator style="width:100%" />
+
 			</p:outputPanel>
 
 			<p:spacer height="20" />
 
 			<h:panelGrid columns="2" style="align='left'">
 				<p:commandButton id="cmdSave" action="#{questionBacking.saveAction}"
-					icon="ui-icon-disk" value="#{msg['btn_ok']}" update="growl"/>
+					icon="ui-icon-disk" value="#{msg['btn_ok']}" update="growl" />
 				<p:commandButton id="cmdReturn" value="#{msg['btn_return']}"
-					action="#{questionBacking.saveAction}"
-					icon="ui-icon-arrowreturnthick-1-w" />
+					action="#{questionBacking.goTopicAction}"
+					icon="ui-icon-arrowreturnthick-1-w" immediate="true" />
 
 			</h:panelGrid>
 
