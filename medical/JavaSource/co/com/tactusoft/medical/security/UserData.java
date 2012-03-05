@@ -8,7 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import co.com.tactusoft.kpi.model.entities.KpiUser;
+import co.com.tactusoft.medical.model.entities.MedUser;
 import co.com.tactusoft.medical.view.datamodel.MenuDataModel;
 
 public class UserData implements UserDetails {
@@ -20,8 +20,8 @@ public class UserData implements UserDetails {
 
 	private String username;
 	private String password;
-	private List<String> roles;
-	private KpiUser kpiUser;
+	private String role;
+	private MedUser user;
 	private List<MenuDataModel> listMenu;
 
 	public void setUsername(String username) {
@@ -40,20 +40,20 @@ public class UserData implements UserDetails {
 		return password;
 	}
 
-	public List<String> getRoles() {
-		return roles;
+	public String getRole() {
+		return role;
 	}
 
-	public void setRoles(List<String> roles) {
-		this.roles = roles;
+	public void setRole(String role) {
+		this.role = role;
 	}
 
-	public KpiUser getKpiUser() {
-		return kpiUser;
+	public MedUser getUser() {
+		return user;
 	}
 
-	public void setKpiUser(KpiUser kpiUser) {
-		this.kpiUser = kpiUser;
+	public void setUser(MedUser user) {
+		this.user = user;
 	}
 
 	public boolean isAccountNonExpired() {
@@ -83,9 +83,7 @@ public class UserData implements UserDetails {
 	@Override
 	public Collection<GrantedAuthority> getAuthorities() {
 		List<GrantedAuthority> list = new ArrayList<GrantedAuthority>();
-		for (String role : roles) {
-			list.add(new GrantedAuthorityImpl(role));
-		}
+		list.add(new GrantedAuthorityImpl(role));
 		return list;
 	}
 }
