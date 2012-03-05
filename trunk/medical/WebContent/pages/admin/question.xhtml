@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../layout/main.xhtml">
+	<ui:define name="content">
+
+		<div class="rco-blockheader">
+			<div class="l"></div>
+			<div class="r"></div>
+			<div class="t">#{msg['title_question']}</div>
+		</div>
+
+		<p:spacer height="20" />
+
+		<h:form id="form">
+
+			<p:growl id="growl" showDetail="true" />
+			
+			<h:panelGrid id="display" columns="2" width="100%">
+
+				<h:outputText value="#{msg['que_name']}" />
+				<p:inputTextarea value="#{questionBacking.selected.name}"
+					style="width:100%" label="#{msg['que_name']}" rows="3"
+					required="true" />
+
+				<h:outputText value="#{msg['que_order']}" />
+				<p:spinner value="#{questionBacking.selected.orderQuestion}" min="1"
+					max="999" stepFactor="1" />
+
+				<h:outputText value="#{msg['que_type']}" />
+				<p:selectOneRadio id="options"
+					value="#{questionBacking.selected.typeQuestion}" style="width:80%">
+
+					<p:ajax event="change" update="pnlTypes"
+						listener="#{questionBacking.searchQuestionAction}" />
+
+					<f:selectItem itemLabel="Sí/No" itemValue="ASSERTIVE" />
+					<f:selectItem itemLabel="Unica Respuesta" itemValue="UNIQUE" />
+					<f:selectItem itemLabel="Multiple Respuesta" itemValue="MULTIPLE" />
+					<f:selectItem itemLabel="Final" itemValue="FINAL" />
+				</p:selectOneRadio>
+			</h:panelGrid>
+
+			<p:separator id="separator" style="width:100%" />
+			<p:spacer height="20" />
+
+
+			<p:outputPanel id="pnlTypes" style="width:100%"
+				rendered="#{questionBacking.selected.id == null?false:true}">
+				<h:panelGrid id="pnlYesNo"
+					rendered="#{questionBacking.selected.typeQuestion == 'ASSERTIVE'?true:false}"
+					columns="2" width="100%">
+					<h:outputText value="#{msg['que_positive']}" />
+					<p:inputTextarea value="#{questionBacking.positiveQuestion}"
+						style="width:100%" rows="5" />
+					<h:outputText value="#{msg['que_negative']}" />
+					<p:inputTextarea value="#{questionBacking.negativeQuestion}"
+						style="width:100%" rows="5" />
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlUnique"
+					rendered="#{questionBacking.selected.typeQuestion == 'UNIQUE'?true:false}">
+				2
+			</h:panelGrid>
+
+				<h:panelGrid id="pnlMultiple"
+					rendered="#{questionBacking.selected.typeQuestion == 'MULTIPLE'?true:false}">
+				3
+			</h:panelGrid>
+
+				<h:panelGrid id="pnlFinal"
+					rendered="#{questionBacking.selected.typeQuestion == 'FINAL'?true:false}">
+				4
+			</h:panelGrid>
+			</p:outputPanel>
+
+			<p:spacer height="20" />
+
+			<h:panelGrid columns="2" style="align='left'">
+				<p:commandButton id="cmdSave" action="#{questionBacking.saveAction}"
+					icon="ui-icon-plusthick" value="#{msg['btn_ok']}" update="growl"/>
+				<p:commandButton id="cmdReturn" value="#{msg['btn_return']}"
+					action="#{questionBacking.saveAction}"
+					icon="ui-icon-arrowreturnthick-1-w" />
+
+			</h:panelGrid>
+
+			<p:spacer height="10" />
+		</h:form>
+
+		<h:panelGroup layout="block" style="height:300px;" />
+
+		<script type="text/javascript">  
+	         function handleSubmitRequest(xhr, status, args) {  
+	             if(args.saved!='true') {  
+	                 jQuery('#dialogPanel').effect("shake", { times:1 }, 50);   
+	             } else {                                      
+	             	dialogPanel.hide();   
+	             }
+	         }
+        </script>
+
+	</ui:define>
+</ui:composition>
+
+</html>
