@@ -1466,3 +1466,24 @@ img.image {
 	border: 0px none !important;
 	padding: 2px !important;
 }
+
+.image-ring .ui-ring-item {
+	font-size: 10px;
+	height: 62px;
+	left: 86.4px;
+	opacity: 1;
+	position: absolute;
+	top: 44.9px;
+	width: 123px;
+	z-index: 400;
+}
+
+.ui-ring {
+	width: 100%;	
+}
+
+.image-ring .ui-ring-item {
+	font-size: 11px;
+	height: 130px;
+	width: 150px;
+}

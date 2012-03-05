@@ -1,6 +1,6 @@
 package co.com.tactusoft.medical.model.entities;
 
-// Generated 2/03/2012 12:25:05 PM by Hibernate Tools 3.4.0.CR1
+// Generated 5/03/2012 02:36:02 PM by Hibernate Tools 3.4.0.CR1
 
 import java.math.BigDecimal;
 import javax.persistence.Column;
@@ -27,13 +27,15 @@ public class MedQuestion implements java.io.Serializable {
 	private MedTopic medTopic;
 	private String name;
 	private String typeQuestion;
-	private String urlImage;
+	private String resourceType;
+	private String urlLink;
+	private byte[] image;
 	private String typeVideo;
 	private String urlVideo;
 	private BigDecimal idParent;
 	private BigDecimal positive;
 	private BigDecimal negative;
-	private int orderQuestion;
+	private Integer orderQuestion;
 
 	public MedQuestion() {
 	}
@@ -47,19 +49,23 @@ public class MedQuestion implements java.io.Serializable {
 	}
 
 	public MedQuestion(BigDecimal id, MedTopic medTopic, String name,
-			String typeQuestion, String urlImage, String typeVideo,
-			String urlVideo, BigDecimal idParent, BigDecimal positive,
-			BigDecimal negative) {
+			String typeQuestion, String resourceType, String urlLink,
+			byte[] image, String typeVideo, String urlVideo,
+			BigDecimal idParent, BigDecimal positive, BigDecimal negative,
+			Integer orderQuestion) {
 		this.id = id;
 		this.medTopic = medTopic;
 		this.name = name;
 		this.typeQuestion = typeQuestion;
-		this.urlImage = urlImage;
+		this.resourceType = resourceType;
+		this.urlLink = urlLink;
+		this.image = image;
 		this.typeVideo = typeVideo;
 		this.urlVideo = urlVideo;
 		this.idParent = idParent;
 		this.positive = positive;
 		this.negative = negative;
+		this.orderQuestion = orderQuestion;
 	}
 
 	@Id
@@ -82,7 +88,7 @@ public class MedQuestion implements java.io.Serializable {
 		this.medTopic = medTopic;
 	}
 
-	@Column(name = "name", nullable = false)
+	@Column(name = "name", nullable = false, length = 65535)
 	public String getName() {
 		return this.name;
 	}
@@ -100,13 +106,31 @@ public class MedQuestion implements java.io.Serializable {
 		this.typeQuestion = typeQuestion;
 	}
 
-	@Column(name = "url_image")
-	public String getUrlImage() {
-		return this.urlImage;
+	@Column(name = "resource_type", length = 15)
+	public String getResourceType() {
+		return this.resourceType;
 	}
 
-	public void setUrlImage(String urlImage) {
-		this.urlImage = urlImage;
+	public void setResourceType(String resourceType) {
+		this.resourceType = resourceType;
+	}
+
+	@Column(name = "url_link")
+	public String getUrlLink() {
+		return this.urlLink;
+	}
+
+	public void setUrlLink(String urlLink) {
+		this.urlLink = urlLink;
+	}
+
+	@Column(name = "image")
+	public byte[] getImage() {
+		return this.image;
+	}
+
+	public void setImage(byte[] image) {
+		this.image = image;
 	}
 
 	@Column(name = "type_video", length = 45)
@@ -153,14 +177,13 @@ public class MedQuestion implements java.io.Serializable {
 	public void setNegative(BigDecimal negative) {
 		this.negative = negative;
 	}
-	
 
-	@Column(name = "order_question", nullable = false)
-	public int getOrderQuestion() {
-		return orderQuestion;
+	@Column(name = "order_question")
+	public Integer getOrderQuestion() {
+		return this.orderQuestion;
 	}
 
-	public void setOrderQuestion(int orderQuestion) {
+	public void setOrderQuestion(Integer orderQuestion) {
 		this.orderQuestion = orderQuestion;
 	}
 
@@ -180,4 +203,5 @@ public class MedQuestion implements java.io.Serializable {
 
 		return detType;
 	}
+
 }
