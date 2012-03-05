@@ -1,23 +1,26 @@
 package co.com.tactusoft.medical.view.backing;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.DragDropEvent;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.NodeCollapseEvent;
 import org.primefaces.event.NodeExpandEvent;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.NodeUnselectEvent;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.StreamedContent;
 import org.primefaces.model.TreeNode;
+import org.primefaces.model.UploadedFile;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.medical.controller.bo.AdminBo;
@@ -52,6 +55,9 @@ public class TopicBacking implements Serializable {
 	private TreeNode selectedNode;
 
 	private TreeNode[] selectedNodes;
+
+	private UploadedFile file;
+	private StreamedContent image;
 
 	public TopicBacking() {
 		selected = new MedTopic();
@@ -118,10 +124,18 @@ public class TopicBacking implements Serializable {
 		this.selectedNode = selectedNode;
 	}
 
+	public StreamedContent getImage() {
+		return image;
+	}
+
+	public void setImage(StreamedContent image) {
+		this.image = image;
+	}
+
 	public void newAction() {
 		selected = new MedTopic();
 	}
-	
+
 	public void refreshAction() {
 		model = new TopicDataModel(service.getListMedTopic());
 	}
@@ -141,12 +155,23 @@ public class TopicBacking implements Serializable {
 			selected.setNumVersion(1);
 		}
 
-		service.save(selected);
-		message = FacesUtil.getMessage("msg_record_ok", selected.getName());
-		model = new TopicDataModel(service.getListMedTopic());
-		FacesUtil.addInfo(message);
+		if (file == null) {
+			String field = FacesUtil.getMessage("top_image");
+			message = FacesUtil.getMessage("msg_field_required", field);
+		} else {
+			selected.setImage(file.getContents());
+		}
 
-		context.addCallbackParam("saved", "true");
+		if (message == null) {
+			service.save(selected);
+			message = FacesUtil.getMessage("msg_record_ok", selected.getName());
+			model = new TopicDataModel(service.getListMedTopic());
+			FacesUtil.addInfo(message);
+			context.addCallbackParam("saved", "true");
+		} else {
+			FacesUtil.addWarn(message);
+			context.addCallbackParam("saved", "false");
+		}
 
 	}
 
@@ -156,23 +181,18 @@ public class TopicBacking implements Serializable {
 		modelQuestion = new QuestionDataModel(listQuestion);
 		selectedQuestion = new MedQuestion();
 
-		/*root = new DefaultTreeNode("Root", null);
-
-		Map<BigDecimal, MedQuestion> mapParents = new HashMap<BigDecimal, MedQuestion>();
-		for (MedQuestion row : listQuestion) {
-			mapParents.put(row.getIdParent(), row);
-		}
-
-		for (MedQuestion row : mapParents.values()) {
-			TreeNode node = null;
-			for (MedQuestion row2 : listQuestion) {
-				if (row.getIdParent().intValue() == row2.getIdParent()
-						.intValue()) {
-					node = new DefaultTreeNode(row, root);
-				}
-			}
-			root = node;
-		}*/
+		/*
+		 * root = new DefaultTreeNode("Root", null);
+		 * 
+		 * Map<BigDecimal, MedQuestion> mapParents = new HashMap<BigDecimal,
+		 * MedQuestion>(); for (MedQuestion row : listQuestion) {
+		 * mapParents.put(row.getIdParent(), row); }
+		 * 
+		 * for (MedQuestion row : mapParents.values()) { TreeNode node = null;
+		 * for (MedQuestion row2 : listQuestion) { if
+		 * (row.getIdParent().intValue() == row2.getIdParent() .intValue()) {
+		 * node = new DefaultTreeNode(row, root); } } root = node; }
+		 */
 
 	}
 
@@ -214,6 +234,15 @@ public class TopicBacking implements Serializable {
 		selectedNode.setParent(null);
 
 		selectedNode = null;
+	}
+
+	public void handleFileUpload(FileUploadEvent event) {
+		try {
+			image = new DefaultStreamedContent(event.getFile().getInputstream());
+			file = event.getFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
