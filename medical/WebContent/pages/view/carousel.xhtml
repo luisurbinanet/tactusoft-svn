@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../layout/main.xhtml">
+	<ui:define name="content">
+
+		<div class="rco-blockheader">
+			<div class="l"></div>
+			<div class="r"></div>
+			<div class="t">#{msg['title_carousel']}</div>
+		</div>
+
+		<p:spacer height="20" />
+
+		<h:form id="form">
+			<p:ring id="basic" value="#{carouselBacking.list}" var="menu"
+				styleClass="image-ring" easing="easeInOutCirc">
+				<p:column style="height:200px">
+					<h:panelGrid style="text-align:center;">
+						<h:outputLabel value="#{menu.name}" />
+						<p:spacer height="1" />
+						
+						<p:spacer height="1" />
+						<p:commandButton icon="ui-icon-search" title="Ver"
+							action="#{carouselBacking.generateQuestions}">
+							<f:setPropertyActionListener value="#{menu}"
+								target="#{carouselBacking.selectedMenu}" />
+						</p:commandButton>
+					</h:panelGrid>
+				</p:column>
+			</p:ring>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+
+</html>

@@ -1,5 +1,8 @@
 package co.com.tactusoft.medical.view.backing;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -10,12 +13,17 @@ import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.medical.controller.bo.AdminBo;
 import co.com.tactusoft.medical.model.entities.MedQuestion;
 import co.com.tactusoft.medical.util.Constant;
 import co.com.tactusoft.medical.util.FacesUtil;
+import co.com.tactusoft.medical.view.datamodel.TopicDataModel;
 
 @Named
 @Scope("session")
@@ -33,16 +41,17 @@ public class QuestionBacking {
 	private List<SelectItem> listQuestion;
 	private Map<BigDecimal, MedQuestion> mapQuestion;
 
+	private int orderQuestion;
+
+	private String typeFinal;
+	private UploadedFile file;
+	private StreamedContent image;
+
 	public QuestionBacking() {
 		selected = new MedQuestion();
 	}
 
 	public void init(BigDecimal parentId, MedQuestion selected) {
-		int orderQuestion = service.getOrderMedQuestion(parentId);
-		selected.setOrderQuestion(orderQuestion);
-		this.selected = selected;
-		this.parentId = parentId;
-		searchQuestionAction();
 
 		listQuestion = new LinkedList<SelectItem>();
 		mapQuestion = new HashMap<BigDecimal, MedQuestion>();
@@ -59,7 +68,14 @@ public class QuestionBacking {
 				listQuestion.add(new SelectItem(row.getId(), question));
 				mapQuestion.put(row.getId(), row);
 			}
+		} else {
+			orderQuestion = service.getOrderMedQuestion(parentId);
+			selected.setOrderQuestion(orderQuestion);
 		}
+
+		this.selected = selected;
+		this.parentId = parentId;
+		searchQuestionAction();
 	}
 
 	public BigDecimal getParentId() {
@@ -102,6 +118,30 @@ public class QuestionBacking {
 		this.listQuestion = listQuestion;
 	}
 
+	public String getTypeFinal() {
+		return typeFinal;
+	}
+
+	public void setTypeFinal(String typeFinal) {
+		this.typeFinal = typeFinal;
+	}
+
+	public UploadedFile getFile() {
+		return file;
+	}
+
+	public void setFile(UploadedFile file) {
+		this.file = file;
+	}
+
+	public StreamedContent getImage() {
+		return image;
+	}
+
+	public void setImage(StreamedContent image) {
+		this.image = image;
+	}
+
 	public void searchQuestionAction() {
 		if (selected.getId() != null) {
 			if (selected.getTypeQuestion().equals(
@@ -115,7 +155,13 @@ public class QuestionBacking {
 
 			} else if (selected.getTypeQuestion().equals(
 					Constant.TYPE_QUESTION_FINAL)) {
-
+				if (selected.getImage() != null) {
+					InputStream in = new ByteArrayInputStream(
+							selected.getImage());
+					image = new DefaultStreamedContent(in);
+				} else {
+					image = null;
+				}
 			}
 		} else {
 			selected.setTypeQuestion(Constant.TYPE_QUESTION_ASSERTIVE);
@@ -133,13 +179,37 @@ public class QuestionBacking {
 			selected.setNegative(Constant.DEFAULT_VALUE);
 		}
 
+		if (selected.getResourceType() != null) {
+			if (selected.getResourceType()
+					.equals(Constant.RESOURCE_TYPE_IMAGEN)) {
+				selected.setImage(file.getContents());
+				selected.setUrlLink(null);
+				selected.setUrlVideo(null);
+			} else {
+				selected.setImage(null);
+			}
+		}
+
 		service.save(selected);
-		message = FacesUtil.getMessage("msg_record_ok", selected.getName());
+		message = FacesUtil.getMessage("msg_record_ok_2");
 		FacesUtil.addInfo(message);
+		
+		TopicBacking topicBacking = FacesUtil.findBean("topicBacking");
+		TopicDataModel model = new TopicDataModel(service.getListMedTopic());
+		topicBacking.setModel(model);
 	}
 
 	public String goTopicAction() {
 		return "/pages/admin/topic?faces-redirect=true";
+	}
+
+	public void handleFileUpload(FileUploadEvent event) {
+		try {
+			image = new DefaultStreamedContent(event.getFile().getInputstream());
+			file = event.getFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
