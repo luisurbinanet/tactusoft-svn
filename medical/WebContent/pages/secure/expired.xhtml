@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../layout/mainSimple.xhtml">
+
+	<ui:define name="content">
+
+		<p:spacer height="100" />
+
+		<h:form>
+
+			<center>
+				<h:panelGrid>
+					<h:outputLabel value="#{msg['log_msg_denied']}" />
+					<p:spacer height="20" />
+					<h:commandButton value="Regresar"
+						action="/pages/secure/login?faces-redirect=true" />
+				</h:panelGrid>
+			</center>
+
+			<p:spacer height="100" />
+
+		</h:form>
+	</ui:define>
+</ui:composition>
+
+</html>
