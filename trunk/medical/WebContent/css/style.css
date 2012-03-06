@@ -1420,6 +1420,10 @@ img.image {
 	padding: 2px !important;
 }
 
+.actions-center{
+	text-align: center;
+}
+
 .ui-ring {
 	width: 80%;	
 }

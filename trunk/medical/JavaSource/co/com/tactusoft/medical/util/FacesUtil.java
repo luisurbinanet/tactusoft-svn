@@ -15,19 +15,16 @@ import java.util.ResourceBundle;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import co.com.tactusoft.medical.controller.bo.ParameterBo;
 import co.com.tactusoft.medical.model.entities.MedUser;
 import co.com.tactusoft.medical.security.UserData;
 
+@Named
 public class FacesUtil {
-
-	@Inject
-	ParameterBo serviceParameter;
 
 	@SuppressWarnings("unchecked")
 	public static <T> T findBean(String beanName) {
@@ -132,10 +129,9 @@ public class FacesUtil {
 		return "";
 	}
 
-	public int createFile(InputStream inputStream, String fileName) {
+	public static int createFile(InputStream inputStream, String fileName) {
 		int result = 0;
-		String directory = serviceParameter.getValueText("DIRECTORY_IMAGES");
-		File f = new File(directory + fileName);
+		File f = new File(fileName);
 		OutputStream out;
 		try {
 			out = new FileOutputStream(f);

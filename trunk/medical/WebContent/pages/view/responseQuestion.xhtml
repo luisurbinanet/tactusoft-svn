@@ -6,8 +6,7 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="../layout/main.xhtml">
-
-	<ui:define name="body">
+	<ui:define name="content">
 
 		<div class="rco-blockheader">
 			<div class="l"></div>
@@ -15,57 +14,65 @@
 			<div class="t">#{msg['title_carousel']}</div>
 		</div>
 
-		<h:form id="form">
+		<p:spacer height="50" />
 
-			<p:panelGrid style="width:100%">
-			
+		<h:form id="form" enctype="multipart/form-data">
+
+			<p:panelGrid id="pnlQuestion" style="width:100%" columns="1" styleClass="actions">
+
 				<f:facet name="header">
-					Pregunta 1
+					<h:outputLabel
+						value="Pregunta 1"
+						style="font-style:normal;font-size:18px;width:100%;font-weight:bold;" />
 				</f:facet>
 
-				<h:panelGrid id="pnlQuestion" columns="1">
+				<p:spacer height="5" />
+
+				<h:panelGrid columns="1" width="100%" style="text-align:center;">
 					<h:outputLabel
-						value="#{responseQuestionBacking.selectedQuestion.typeQuestion!='FINAL'?'¿':''} #{responseQuestionBacking.selectedQuestion.name} #{responseQuestionBacking.selectedQuestion.typeQuestion!='FINAL'?'?':''}" />
+						value="#{responseQuestionBacking.selectedQuestion.typeQuestion!='FINAL'?'¿':''} #{responseQuestionBacking.selectedQuestion.name} #{responseQuestionBacking.selectedQuestion.typeQuestion!='FINAL'?'?':''}"
+						style="color:Blue;font-style:normal;font-size:18px;width:100%;font-weight:bold;" />
 					<p:spacer height="20" />
 				</h:panelGrid>
 
-				<p:outputPanel id="pnlButtons">
-					<h:panelGrid id="pnlAnswers" columns="2"
-						rendered="#{responseQuestionBacking.selectedQuestion.finalQuestion==1?false:true}">
-						<p:commandButton value="Sí"
+				<h:panelGrid id="pnlAnswers" columns="2" rowClasses="actions-center"
+					rendered="#{responseQuestionBacking.selectedQuestion.typeQuestion eq 'ASSERTIVE'?true:false}" width="100%">
+						<p:commandButton value="#{msg['que_ans_yes']}"
 							actionListener="#{responseQuestionBacking.actionSubmit}"
-							update="pnlQuestion pnlButtons">
-							<f:param name="answer" value="SI" />
+							update="pnlQuestion" style="width:120px">
+							<f:param name="answer" value="#{msg['que_ans_yes']}" />
 						</p:commandButton>
-						<p:commandButton value="No"
+						<p:commandButton value="#{msg['que_ans_no']}"
 							actionListener="#{responseQuestionBacking.actionSubmit}"
-							update="pnlQuestion pnlButtons">
-							<f:param name="answer" value="NO" />
+							update="pnlQuestion" style="width:120px">
+							<f:param name="answer" value="#{msg['que_ans_no']}" />
 						</p:commandButton>
-					</h:panelGrid>
+				</h:panelGrid>
 
-					<h:panelGrid id="pnlOk" columns="1"
-						rendered="#{responseQuestionBacking.selectedQuestion.typeQuestion!='FINAL'?false:true}"
-						rowClasses="center-td">
+				<h:panelGrid id="pnlOk" columns="1"
+					rendered="#{responseQuestionBacking.selectedQuestion.typeQuestion!='FINAL'?false:true}"
+					rowClasses="actions-center">
 
-						<h:outputLink
-							onclick="window.open('#{responseQuestionBacking.selectedQuestion.urlLink}'); return false">
-							<h:outputLabel
-								value="Haga clic para ver esta información de interés" />
-						</h:outputLink>
+					<h:outputLink
+						onclick="window.open('#{responseQuestionBacking.selectedQuestion.urlLink}'); return false">
+						<h:outputLabel
+							value="Haga clic para ver esta información de interés" />
+					</h:outputLink>
 
-						<p:spacer height="20" />
+					<p:spacer height="20" />
 
-						<h:outputLabel value="Gracias por su Tiempo" />
+					<h:outputLabel value="Gracias por su Tiempo" />
 
-						<p:spacer height="20" />
+					<p:spacer height="20" />
 
-						<p:commandButton value="Aceptar"
-							action="#{responseQuestionBacking.returnAction}" />
-					</h:panelGrid>
-				</p:outputPanel>
+					<p:commandButton value="Aceptar"
+						action="#{responseQuestionBacking.returnAction}" />
+				</h:panelGrid>
+
 			</p:panelGrid>
 		</h:form>
+		
+		<h:panelGroup layout="block" style="height:200px;" />
 	</ui:define>
 </ui:composition>
 </html>
