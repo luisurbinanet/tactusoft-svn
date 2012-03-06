@@ -40,7 +40,7 @@ public class PhotoStreamer {
 			
 			/*ClassLoader contextClassLoader = Thread.currentThread()
 					.getContextClassLoader();
-			InputStream inputStream = contextClassLoader
+			/*InputStream inputStream = contextClassLoader
 					.getResourceAsStream("resources/images/Photo - " + parsedId
 							+ ".png");
 			fileContent = new DefaultStreamedContent(inputStream, "image/png");*/

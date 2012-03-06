@@ -10,17 +10,31 @@
 		<div class="l"></div>
 		<div class="r"></div>
 		<ul class="rco-menu">
-			
-			
-			
-			<li>
-				<h:commandLink action="#{loginBacking.logout}">
+
+			<li><h:commandLink
+					action="/pages/admin/topic?faces-redirect=true" immediate="true">
 					<span class="l"></span>
 					<span class="r"></span>
-					<span class="t">#{msg['log_close']}</span> 
+					<span class="t">#{msg['tile_config']}</span>
 				</h:commandLink>
 			</li>
-			
+
+			<li><h:commandLink
+					action="/pages/view/carousel?faces-redirect=true" immediate="true">
+					<span class="l"></span>
+					<span class="r"></span>
+					<span class="t">#{msg['title_carousel']}</span>
+				</h:commandLink>
+			</li>
+
+			<li><h:commandLink action="#{loginBacking.logout}"
+					immediate="true">
+					<span class="l"></span>
+					<span class="r"></span>
+					<span class="t">#{msg['log_close']}</span>
+				</h:commandLink>
+			</li>
+
 		</ul>
 	</div>
 </h:form>
