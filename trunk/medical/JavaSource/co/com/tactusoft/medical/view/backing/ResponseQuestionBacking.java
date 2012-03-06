@@ -44,8 +44,9 @@ public class ResponseQuestionBacking {
 		}
 		
 		if(answer.equals("NO")){
-			
+			selectedQuestion = nextQuestion(selectedQuestion.getNegative());
 		}
+		
 		return "";
 	}
 	
