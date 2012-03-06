@@ -1,5 +1,6 @@
 package co.com.tactusoft.medical.view.backing;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.inject.Named;
@@ -7,6 +8,7 @@ import javax.inject.Named;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.medical.model.entities.MedQuestion;
+import co.com.tactusoft.medical.util.FacesUtil;
 
 @Named
 @Scope("session")
@@ -36,11 +38,28 @@ public class ResponseQuestionBacking {
 	}
 	
 	public String actionSubmit(){
+		String answer = FacesUtil.getParam("answer");
+		if(answer.equals("SI")){
+			selectedQuestion = nextQuestion(selectedQuestion.getPositive());
+		}
+		
+		if(answer.equals("NO")){
+			
+		}
 		return "";
 	}
 	
 	public String returnAction(){
 		return "/pages/view/carousel?faces-redirect=true";
+	}
+	
+	private MedQuestion nextQuestion(BigDecimal id){
+		for(MedQuestion row:list){
+			if(row.getId().intValue() == id.intValue()){
+				return row;
+			}
+		}
+		return null;
 	}
 
 }

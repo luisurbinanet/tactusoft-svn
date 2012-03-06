@@ -40,15 +40,16 @@
 				<p:spacer height="5" />
 				<h:outputText value="#{msg['top_image']}" />
 				<p:fileUpload fileUploadListener="#{topicBacking.handleFileUpload}"
-					mode="advanced" update="currentImage" sizeLimit="5000000" auto="true"
-					label="Seleccione"
-					allowTypes="/(\.|\/)(gif|jpe?g|png|GIF|JPE?G|PNG)$/" dragDropSupport="true"/>
+					mode="advanced" update="currentImage" sizeLimit="5000000"
+					auto="true" label="Seleccione"
+					allowTypes="/(\.|\/)(gif|jpe?g|png|GIF|JPE?G|PNG)$/"
+					dragDropSupport="true" />
 				<p:spacer height="5" />
 				<p:spacer height="5" />
-					<h:outputText value="#{msg['top_current_image']}" />
-					<h:graphicImage id="currentImage"
-						value="#{topicBacking.urlImages}#{topicBacking.selected.image}" width="100"
-						height="100" />
+				<h:outputText value="#{msg['top_current_image']}" />
+				<p:graphicImage id="currentImage"
+					value="#{topicBacking.urlImages}#{topicBacking.selected.image}"
+					width="100" height="100" cache="false"/>
 
 			</h:panelGrid>
 
@@ -58,8 +59,8 @@
 
 			<h:panelGrid columns="2" style="align='left'">
 				<p:commandButton id="cmdSave" action="#{topicBacking.saveAction}"
-					update=":editForm:display growl" icon="ui-icon-disk"
-					value="#{msg['btn_save']}" />
+					update=":editForm:display growl editForm:currentImage"
+					icon="ui-icon-disk" value="#{msg['btn_save']}" />
 				<p:commandButton id="cmdReturn" value="#{msg['btn_return']}"
 					action="#{questionBacking.goTopicAction}"
 					icon="ui-icon-arrowreturnthick-1-w" immediate="true" />

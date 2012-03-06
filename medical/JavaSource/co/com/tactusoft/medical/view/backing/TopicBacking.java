@@ -42,6 +42,9 @@ public class TopicBacking implements Serializable {
 	private AdminBo service;
 
 	@Inject
+	private ParameterBo serviceParameter;
+
+	@Inject
 	private ParameterBo parameterService;
 
 	private TopicDataModel model;
@@ -52,7 +55,6 @@ public class TopicBacking implements Serializable {
 	private List<MedQuestion> listQuestion;
 
 	private UploadedFile file;
-
 	private String urlImages;
 
 	public TopicBacking() {
@@ -140,10 +142,11 @@ public class TopicBacking implements Serializable {
 			field = FacesUtil.getMessage("top_image");
 			message = FacesUtil.getMessage("msg_field_required", field);
 		} else {
+			String directory = serviceParameter
+					.getValueText("DIRECTORY_IMAGES");
 			String ext = "." + file.getContentType().split("/")[1];
 			String fileName = "topic" + selected.getId() + ext;
-			FacesUtil facesUtil = new FacesUtil();
-			int result = facesUtil.createFile(file.getInputstream(), fileName);
+			int result = FacesUtil.createFile(file.getInputstream(), directory + fileName);
 
 			if (result == -1) {
 				field = FacesUtil.getMessage("top_image");

@@ -29,7 +29,7 @@ public class MedQuestion implements java.io.Serializable {
 	private String typeQuestion;
 	private String resourceType;
 	private String urlLink;
-	private byte[] image;
+	private String image;
 	private String typeVideo;
 	private String urlVideo;
 	private BigDecimal idParent;
@@ -50,7 +50,7 @@ public class MedQuestion implements java.io.Serializable {
 
 	public MedQuestion(BigDecimal id, MedTopic medTopic, String name,
 			String typeQuestion, String resourceType, String urlLink,
-			byte[] image, String typeVideo, String urlVideo,
+			String image, String typeVideo, String urlVideo,
 			BigDecimal idParent, BigDecimal positive, BigDecimal negative,
 			Integer orderQuestion) {
 		this.id = id;
@@ -125,11 +125,11 @@ public class MedQuestion implements java.io.Serializable {
 	}
 
 	@Column(name = "image")
-	public byte[] getImage() {
+	public String getImage() {
 		return this.image;
 	}
 
-	public void setImage(byte[] image) {
+	public void setImage(String image) {
 		this.image = image;
 	}
 

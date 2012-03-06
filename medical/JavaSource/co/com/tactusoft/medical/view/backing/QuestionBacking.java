@@ -1,8 +1,6 @@
 package co.com.tactusoft.medical.view.backing;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -14,12 +12,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.medical.controller.bo.AdminBo;
+import co.com.tactusoft.medical.controller.bo.ParameterBo;
 import co.com.tactusoft.medical.model.entities.MedQuestion;
 import co.com.tactusoft.medical.util.Constant;
 import co.com.tactusoft.medical.util.FacesUtil;
@@ -31,6 +28,12 @@ public class QuestionBacking {
 
 	@Inject
 	private AdminBo service;
+
+	@Inject
+	private ParameterBo parameterService;
+	
+	@Inject
+	private ParameterBo serviceParameter;
 
 	private BigDecimal parentId;
 	private MedQuestion selected;
@@ -45,7 +48,7 @@ public class QuestionBacking {
 
 	private String typeFinal;
 	private UploadedFile file;
-	private StreamedContent image;
+	private String urlImages;
 
 	public QuestionBacking() {
 		selected = new MedQuestion();
@@ -134,12 +137,15 @@ public class QuestionBacking {
 		this.file = file;
 	}
 
-	public StreamedContent getImage() {
-		return image;
+	public String getUrlImages() {
+		if (urlImages == null) {
+			urlImages = parameterService.getValueText("URL_IMAGES");
+		}
+		return urlImages;
 	}
 
-	public void setImage(StreamedContent image) {
-		this.image = image;
+	public void setUrlImages(String urlImages) {
+		this.urlImages = urlImages;
 	}
 
 	public void searchQuestionAction() {
@@ -155,20 +161,14 @@ public class QuestionBacking {
 
 			} else if (selected.getTypeQuestion().equals(
 					Constant.TYPE_QUESTION_FINAL)) {
-				if (selected.getImage() != null) {
-					InputStream in = new ByteArrayInputStream(
-							selected.getImage());
-					image = new DefaultStreamedContent(in, "image/jpeg");
-				} else {
-					image = null;
-				}
 			}
 		} else {
 			selected.setTypeQuestion(Constant.TYPE_QUESTION_ASSERTIVE);
 		}
 	}
 
-	public void saveAction() {
+	public void saveAction() throws IOException {
+		String field = null;
 		String message = null;
 
 		if (selected.getId() == null) {
@@ -182,7 +182,25 @@ public class QuestionBacking {
 		if (selected.getResourceType() != null) {
 			if (selected.getResourceType()
 					.equals(Constant.RESOURCE_TYPE_IMAGEN)) {
-				selected.setImage(file.getContents());
+
+				if (file == null && selected.getImage() == null) {
+					field = FacesUtil.getMessage("que_type_final_image");
+					message = FacesUtil.getMessage("msg_field_required", field);
+				} else {
+					String directory = serviceParameter.getValueText("DIRECTORY_IMAGES");
+					String ext = "." + file.getContentType().split("/")[1];
+					String fileName = "question" + selected.getId() + ext;
+					int result = FacesUtil.createFile(file.getInputstream(), directory + fileName);
+
+					if (result == -1) {
+						field = FacesUtil.getMessage("que_type_final_image");
+						message = FacesUtil.getMessage("msg_field_required",
+								field);
+					} else {
+						selected.setImage(fileName);
+					}
+				}
+
 				selected.setUrlLink(null);
 				selected.setUrlVideo(null);
 			} else {
@@ -190,13 +208,17 @@ public class QuestionBacking {
 			}
 		}
 
-		service.save(selected);
-		message = FacesUtil.getMessage("msg_record_ok_2");
-		FacesUtil.addInfo(message);
-		
-		TopicBacking topicBacking = FacesUtil.findBean("topicBacking");
-		TopicDataModel model = new TopicDataModel(service.getListMedTopic());
-		topicBacking.setModel(model);
+		if (message == null) {
+			service.save(selected);
+			message = FacesUtil.getMessage("msg_record_ok_2");
+			FacesUtil.addInfo(message);
+
+			TopicBacking topicBacking = FacesUtil.findBean("topicBacking");
+			TopicDataModel model = new TopicDataModel(service.getListMedTopic());
+			topicBacking.setModel(model);
+		} else {
+			FacesUtil.addWarn(message);
+		}
 	}
 
 	public String goTopicAction() {
@@ -204,12 +226,7 @@ public class QuestionBacking {
 	}
 
 	public void handleFileUpload(FileUploadEvent event) {
-		try {
-			image = new DefaultStreamedContent(event.getFile().getInputstream());
-			file = event.getFile();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		file = event.getFile();
 	}
 
 }
