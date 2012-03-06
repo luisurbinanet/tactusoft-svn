@@ -17,47 +17,54 @@
 
 		<h:form id="form">
 
-			<h:panelGrid id="pnlQuestion" columns="1">
-				<h:outputLabel
-					value="#{responseQuestionBacking.selectedQuestion.typeQuestion=='FINAL'?'¿':''} #{responseQuestionBacking.selectedQuestion.name} #{responseQuestionBacking.selectedQuestion.typeQuestion=='FINAL'?'?':''}" />
-				<p:spacer height="20" />
-			</h:panelGrid>
+			<p:panelGrid style="width:100%">
+			
+				<f:facet name="header">
+					Pregunta 1
+				</f:facet>
 
-			<p:outputPanel id="pnlButtons">
-				<h:panelGrid id="pnlAnswers" columns="2"
-					rendered="#{responseQuestionBacking.selectedQuestion.finalQuestion==1?false:true}">
-					<p:commandButton value="Sí"
-						actionListener="#{responseQuestionBacking.actionSubmit}"
-						update="pnlQuestion pnlButtons">
-						<f:param name="answer" value="SI" />
-					</p:commandButton>
-					<p:commandButton value="No"
-						actionListener="#{responseQuestionBacking.actionSubmit}"
-						update="pnlQuestion pnlButtons">
-						<f:param name="answer" value="NO" />
-					</p:commandButton>
+				<h:panelGrid id="pnlQuestion" columns="1">
+					<h:outputLabel
+						value="#{responseQuestionBacking.selectedQuestion.typeQuestion!='FINAL'?'¿':''} #{responseQuestionBacking.selectedQuestion.name} #{responseQuestionBacking.selectedQuestion.typeQuestion!='FINAL'?'?':''}" />
+					<p:spacer height="20" />
 				</h:panelGrid>
 
-				<h:panelGrid id="pnlOk" columns="1"
-					rendered="#{responseQuestionBacking.selectedQuestion.typeQuestion=='FINAL'?false:true}"
-					rowClasses="center-td">
+				<p:outputPanel id="pnlButtons">
+					<h:panelGrid id="pnlAnswers" columns="2"
+						rendered="#{responseQuestionBacking.selectedQuestion.finalQuestion==1?false:true}">
+						<p:commandButton value="Sí"
+							actionListener="#{responseQuestionBacking.actionSubmit}"
+							update="pnlQuestion pnlButtons">
+							<f:param name="answer" value="SI" />
+						</p:commandButton>
+						<p:commandButton value="No"
+							actionListener="#{responseQuestionBacking.actionSubmit}"
+							update="pnlQuestion pnlButtons">
+							<f:param name="answer" value="NO" />
+						</p:commandButton>
+					</h:panelGrid>
 
-					<h:outputLink
-						onclick="window.open('#{responseQuestionBacking.selectedQuestion.urlLink}'); return false">
-						<h:outputLabel
-							value="Haga clic para ver esta información de interés" />
-					</h:outputLink>
+					<h:panelGrid id="pnlOk" columns="1"
+						rendered="#{responseQuestionBacking.selectedQuestion.typeQuestion!='FINAL'?false:true}"
+						rowClasses="center-td">
 
-					<p:spacer height="20" />
+						<h:outputLink
+							onclick="window.open('#{responseQuestionBacking.selectedQuestion.urlLink}'); return false">
+							<h:outputLabel
+								value="Haga clic para ver esta información de interés" />
+						</h:outputLink>
 
-					<h:outputLabel value="Gracias por su Tiempo" />
+						<p:spacer height="20" />
 
-					<p:spacer height="20" />
+						<h:outputLabel value="Gracias por su Tiempo" />
 
-					<p:commandButton value="Aceptar"
-						action="#{responseQuestionBacking.returnAction}" />
-				</h:panelGrid>
-			</p:outputPanel>
+						<p:spacer height="20" />
+
+						<p:commandButton value="Aceptar"
+							action="#{responseQuestionBacking.returnAction}" />
+					</h:panelGrid>
+				</p:outputPanel>
+			</p:panelGrid>
 		</h:form>
 	</ui:define>
 </ui:composition>

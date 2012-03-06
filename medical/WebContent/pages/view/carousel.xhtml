@@ -20,9 +20,10 @@
 
 			<p:carousel id="carousel" value="#{carouselBacking.list}" var="menu"
 				headerText="Seleccione Un Tema">
-				<h:panelGrid cellpadding="5"
-					style="width: 310px; height: 200px; text-align:center;" columns="1">
-					<center>
+				<p:column>
+					<h:panelGrid cellpadding="5"
+						style="width: 310px; height: 200px; text-align:center;"
+						columns="1">
 
 						<h:outputLabel value="#{menu.name}"
 							style="color:Blue;font-style:normal;font-size:medium;font-weight:bold;" />
@@ -34,31 +35,15 @@
 						</p:graphicImage>
 
 						<p:commandButton icon="ui-icon-search" title="#{msg['btn_view']}"
-							action="#{carouselBacking.generateQuestions}"
-							oncomplete="dialog.show()" update=":form:detail">
+							action="#{carouselBacking.generateQuestions}">
 							<f:setPropertyActionListener value="#{menu}"
 								target="#{carouselBacking.selectedMenu}" />
 						</p:commandButton>
 
-					</center>
-				</h:panelGrid>
+					</h:panelGrid>
+				</p:column>
 			</p:carousel>
 
-			<p:dialog header="#{msg['msg_detail']}" showEffect="fade"
-				hideEffect="fade" modal="false" widgetVar="dialog" width="300">
-
-				<p:outputPanel id="detail" style="text-align:center;" layout="block">
-
-					<h:panelGrid columns="2" cellpadding="5">
-						<h:panelGrid id="pnlQuestion" columns="1">
-							<h:outputLabel
-								value="#{responseQuestionBacking.selectedQuestion.typeQuestion=='FINAL'?'¿':''} #{responseQuestionBacking.selectedQuestion.name} #{responseQuestionBacking.selectedQuestion.typeQuestion=='FINAL'?'?':''}" />
-							<p:spacer height="20" />
-						</h:panelGrid>
-					</h:panelGrid>
-				</p:outputPanel>
-
-			</p:dialog>
 		</h:form>
 
 		<h:panelGroup layout="block" style="height:200px;" />
