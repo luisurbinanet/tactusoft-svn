@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../layout/main.xhtml">
+	<ui:define name="content">
+
+		<div class="rco-blockheader">
+			<div class="l"></div>
+			<div class="r"></div>
+			<div class="t">#{msg['title_topic']}</div>
+		</div>
+
+		<p:spacer height="20" />
+
+		<h:form id="editForm" prependId="false" enctype="multipart/form-data">
+
+			<p:growl id="growl" showDetail="true" />
+
+			<h:panelGrid id="display" columns="2" width="100%">
+
+				<h:outputText value="#{msg['top_name']}" />
+				<p:inputText value="#{topicBacking.selected.name}"
+					style="width:100%" required="true" label="#{msg['top_name']}" />
+
+				<h:outputText value="#{msg['glb_state']}"
+					rendered="#{topicBacking.selected.id != null?true:false}" />
+				<p:selectOneMenu value="#{topicBacking.selected.state}"
+					style="width:100%"
+					rendered="#{topicBacking.selected.id != null?true:false}">
+					<f:selectItem itemLabel="#{msg['glb_state_active']}" itemValue="1" />
+					<f:selectItem itemLabel="#{msg['glb_state_inactive']}"
+						itemValue="0" />
+				</p:selectOneMenu>
+
+				<p:spacer height="5" />
+				<p:spacer height="5" />
+				<h:outputText value="#{msg['top_imagen']}" />
+				<p:fileUpload fileUploadListener="#{topicBacking.handleFileUpload}"
+					mode="advanced" update="currentImage" sizeLimit="5000000" auto="true"
+					label="Seleccione"
+					allowTypes="/(\.|\/)(gif|jpe?g|png|GIF|JPE?G|PNG)$/" />
+				<p:spacer height="5" />
+				<p:spacer height="5" />
+					<h:outputText value="#{msg['top_current_image']}" />
+					<p:graphicImage id="currentImage"
+						value="#{topicBacking.selected.currentImage}" width="100"
+						height="100" />
+
+			</h:panelGrid>
+
+			<p:spacer height="10" />
+			<p:separator style="width:100%" />
+			<p:spacer height="10" />
+
+			<h:panelGrid columns="2" style="align='left'">
+				<p:commandButton id="cmdSave" action="#{topicBacking.saveAction}"
+					update=":editForm:display growl" icon="ui-icon-disk"
+					value="#{msg['btn_save']}" />
+				<p:commandButton id="cmdReturn" value="#{msg['btn_return']}"
+					action="#{questionBacking.goTopicAction}"
+					icon="ui-icon-arrowreturnthick-1-w" immediate="true" />
+			</h:panelGrid>
+
+		</h:form>
+
+		<h:panelGroup layout="block" style="height:300px;" />
+
+	</ui:define>
+</ui:composition>
+
+</html>
