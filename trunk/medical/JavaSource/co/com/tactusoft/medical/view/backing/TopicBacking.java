@@ -16,14 +16,12 @@ import org.primefaces.event.NodeExpandEvent;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.NodeUnselectEvent;
 import org.primefaces.event.SelectEvent;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.DefaultTreeNode;
-import org.primefaces.model.StreamedContent;
 import org.primefaces.model.TreeNode;
 import org.primefaces.model.UploadedFile;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.medical.controller.bo.AdminBo;
+import co.com.tactusoft.medical.controller.bo.ParameterBo;
 import co.com.tactusoft.medical.model.entities.MedQuestion;
 import co.com.tactusoft.medical.model.entities.MedTopic;
 import co.com.tactusoft.medical.util.Constant;
@@ -43,6 +41,9 @@ public class TopicBacking implements Serializable {
 	@Inject
 	private AdminBo service;
 
+	@Inject
+	private ParameterBo parameterService;
+
 	private TopicDataModel model;
 	private MedTopic selected;
 
@@ -50,20 +51,15 @@ public class TopicBacking implements Serializable {
 	private MedQuestion selectedQuestion;
 	private List<MedQuestion> listQuestion;
 
-	private TreeNode root;
-
-	private TreeNode selectedNode;
-
-	private TreeNode[] selectedNodes;
-
 	private UploadedFile file;
-	private StreamedContent image;
+
+	private String urlImages;
 
 	public TopicBacking() {
 		selected = new MedTopic();
 		selectedQuestion = new MedQuestion();
 		model = null;
-		root = new DefaultTreeNode("Root", null);
+		urlImages = null;
 	}
 
 	public TopicDataModel getModel() {
@@ -104,32 +100,15 @@ public class TopicBacking implements Serializable {
 		this.selectedQuestion = selectedQuestion;
 	}
 
-	public TreeNode getRoot() {
-		return root;
+	public String getUrlImages() {
+		if (urlImages == null) {
+			urlImages = parameterService.getValueText("URL_IMAGES");
+		}
+		return urlImages;
 	}
 
-	public TreeNode[] getSelectedNodes() {
-		return selectedNodes;
-	}
-
-	public void setSelectedNodes(TreeNode[] selectedNodes) {
-		this.selectedNodes = selectedNodes;
-	}
-
-	public TreeNode getSelectedNode() {
-		return selectedNode;
-	}
-
-	public void setSelectedNode(TreeNode selectedNode) {
-		this.selectedNode = selectedNode;
-	}
-
-	public StreamedContent getImage() {
-		return image;
-	}
-
-	public void setImage(StreamedContent image) {
-		this.image = image;
+	public void setUrlImages(String urlImages) {
+		this.urlImages = urlImages;
 	}
 
 	public String newAction() {
@@ -146,8 +125,9 @@ public class TopicBacking implements Serializable {
 		model = new TopicDataModel(service.getListMedTopic());
 	}
 
-	public void saveAction() {
+	public void saveAction() throws IOException {
 		String message = null;
+		String field = null;
 		RequestContext context = RequestContext.getCurrentInstance();
 
 		if (selected.getId() == null) {
@@ -157,11 +137,19 @@ public class TopicBacking implements Serializable {
 		}
 
 		if (file == null && selected.getImage() == null) {
-			String field = FacesUtil.getMessage("top_image");
+			field = FacesUtil.getMessage("top_image");
 			message = FacesUtil.getMessage("msg_field_required", field);
 		} else {
-			if (file != null) {
-				selected.setImage(file.getContents());
+			String ext = "." + file.getContentType().split("/")[1];
+			String fileName = "topic" + selected.getId() + ext;
+			FacesUtil facesUtil = new FacesUtil();
+			int result = facesUtil.createFile(file.getInputstream(), fileName);
+
+			if (result == -1) {
+				field = FacesUtil.getMessage("top_image");
+				message = FacesUtil.getMessage("msg_field_required", field);
+			} else {
+				selected.setImage(fileName);
 			}
 		}
 
@@ -221,21 +209,8 @@ public class TopicBacking implements Serializable {
 		FacesUtil.addInfo("DragDrop", node + " moved to " + node.getParent());
 	}
 
-	public void deleteNode() {
-		selectedNode.getChildren().clear();
-		selectedNode.getParent().getChildren().remove(selectedNode);
-		selectedNode.setParent(null);
-
-		selectedNode = null;
-	}
-
 	public void handleFileUpload(FileUploadEvent event) {
-		try {
-			image = new DefaultStreamedContent(event.getFile().getInputstream());
-			file = event.getFile();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		file = event.getFile();
 	}
 
 }

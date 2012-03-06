@@ -1,25 +1,22 @@
 package co.com.tactusoft.medical.view.backing;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.primefaces.model.StreamedContent;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.medical.controller.bo.AdminBo;
+import co.com.tactusoft.medical.controller.bo.ParameterBo;
 import co.com.tactusoft.medical.model.entities.MedQuestion;
 import co.com.tactusoft.medical.model.entities.MedTopic;
 import co.com.tactusoft.medical.util.FacesUtil;
 
 @Named
-@Scope("session")
+@Scope("view")
 public class CarouselBacking implements Serializable {
 
 	/**
@@ -29,11 +26,14 @@ public class CarouselBacking implements Serializable {
 
 	@Inject
 	private AdminBo service;
+	
+	@Inject
+	private ParameterBo parameterService;
 
 	private List<MedTopic> list = new ArrayList<MedTopic>();
 	private MedTopic selectedMenu;
-
-	private Map<BigDecimal, StreamedContent> images;
+	
+	private String urlImages;
 
 	public CarouselBacking() {
 		list = new ArrayList<MedTopic>();
@@ -42,10 +42,6 @@ public class CarouselBacking implements Serializable {
 	public List<MedTopic> getList() {
 		if (list.size() == 0) {
 			list = service.getListMedTopic();
-			images = new HashMap<BigDecimal, StreamedContent>();
-			for (MedTopic row : list) {
-				images.put(row.getId(), row.getCurrentImage());
-			}
 		}
 		return list;
 	}
@@ -61,13 +57,12 @@ public class CarouselBacking implements Serializable {
 	public void setSelectedMenu(MedTopic selectedMenu) {
 		this.selectedMenu = selectedMenu;
 	}
-
-	public Map<BigDecimal, StreamedContent> getImages() {
-		return images;
-	}
-
-	public void setImages(Map<BigDecimal, StreamedContent> images) {
-		this.images = images;
+	
+	public String getUrlImages() {
+		if (urlImages == null) {
+			urlImages = parameterService.getValueText("URL_IMAGES");
+		}
+		return urlImages;
 	}
 
 	public String generateQuestions() {
