@@ -1234,53 +1234,6 @@ pre {
 
 /* end PostHeaderIcon */
 
-/* begin PostBullets */
-.rco-post ol,.rco-post ul {
-	color: #424029;
-	margin: 1em 0 1em 2em;
-	padding: 0;
-}
-
-.rco-post li ol,.rco-post li ul {
-	margin: 0.5em 0 0.5em 2em;
-	padding: 0;
-}
-
-.rco-post li {
-	margin: 0.2em 0;
-	padding: 0;
-}
-
-.rco-post ul {
-	list-style-type: none;
-}
-
-.rco-post ol {
-	list-style-position: inside;
-}
-
-.rco-post li {
-	padding: 0 0 0 18px;
-	line-height: 1em;
-}
-
-.rco-post ol li,.rco-post ul ol li {
-	background: none;
-	padding-left: 0;
-	/* overrides overflow for "ul li" and sets the default value */
-	overflow: visible;
-}
-
-.rco-post ul li,.rco-post ol ul li {
-	background-image: url('../images/postbullets.png');
-	background-repeat: no-repeat;
-	padding-left: 18px;
-	/* makes "ul li" not to align behind the image if they are in the same line */
-	overflow: auto;
-}
-
-/* end PostBullets */
-
 /* begin PostQuote */
 blockquote,blockquote p,.rco-postcontent blockquote p {
 	color: #E2E0D0;
@@ -1468,7 +1421,7 @@ img.image {
 }
 
 .ui-ring {
-	width: 100%;	
+	width: 80%;	
 }
 
 .image-ring .ui-ring-item {

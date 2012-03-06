@@ -132,8 +132,9 @@ public class TopicBacking implements Serializable {
 		this.image = image;
 	}
 
-	public void newAction() {
+	public String newAction() {
 		selected = new MedTopic();
+		return goTopicAction();
 	}
 
 	public void refreshAction() {
@@ -150,16 +151,18 @@ public class TopicBacking implements Serializable {
 		RequestContext context = RequestContext.getCurrentInstance();
 
 		if (selected.getId() == null) {
-			selected.setId(service.getId("KpiCompany"));
+			selected.setId(service.getId("MedTopic"));
 			selected.setState(Constant.STATE_ACTIVE);
 			selected.setNumVersion(1);
 		}
 
-		if (file == null) {
+		if (file == null && selected.getImage() == null) {
 			String field = FacesUtil.getMessage("top_image");
 			message = FacesUtil.getMessage("msg_field_required", field);
 		} else {
-			selected.setImage(file.getContents());
+			if (file != null) {
+				selected.setImage(file.getContents());
+			}
 		}
 
 		if (message == null) {
@@ -180,20 +183,10 @@ public class TopicBacking implements Serializable {
 		listQuestion = service.getListMedQuestionByTopic(idTopic);
 		modelQuestion = new QuestionDataModel(listQuestion);
 		selectedQuestion = new MedQuestion();
+	}
 
-		/*
-		 * root = new DefaultTreeNode("Root", null);
-		 * 
-		 * Map<BigDecimal, MedQuestion> mapParents = new HashMap<BigDecimal,
-		 * MedQuestion>(); for (MedQuestion row : listQuestion) {
-		 * mapParents.put(row.getIdParent(), row); }
-		 * 
-		 * for (MedQuestion row : mapParents.values()) { TreeNode node = null;
-		 * for (MedQuestion row2 : listQuestion) { if
-		 * (row.getIdParent().intValue() == row2.getIdParent() .intValue()) {
-		 * node = new DefaultTreeNode(row, root); } } root = node; }
-		 */
-
+	public String goTopicAction() {
+		return "/pages/admin/edit_topic?faces-redirect=true";
 	}
 
 	public String goQuestionAction() {

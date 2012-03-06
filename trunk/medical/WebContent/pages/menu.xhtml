@@ -5,22 +5,19 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="../layout/main.xhtml">
-	<ui:define name="content">
+<ui:composition template="/templates/common.xhtml">
 
-		<div class="rco-blockheader">
-			<div class="l"></div>
-			<div class="r"></div>
-			<div class="t">#{msg['title_carousel']}</div>
-		</div>
+	<ui:define name="pageTitle">Affinity Network</ui:define>
 
-		<p:spacer height="20" />
+	<ui:define name="pageHeader">MENU</ui:define>
 
-		<h:form id="form" enctype="multipart/form-data">
+	<ui:define name="body">
+		<h:form id="form">
+
 			<p:ring id="basic" value="#{carouselBacking.list}" var="menu"
 				styleClass="image-ring" easing="easeInOutCirc">
 				<p:column style="height:200px">
-					<h:panelGrid style="text-align:center;" width="100%">
+					<h:panelGrid style="text-align:center;">
 						<h:outputLabel value="#{menu.name}" />
 						<p:spacer height="1" />
 						<p:graphicImage value="#{photoStreamer.fileContent}" width="55"
@@ -36,11 +33,10 @@
 					</h:panelGrid>
 				</p:column>
 			</p:ring>
+
+			<div style="clear: both" />
+
 		</h:form>
-
-		<h:panelGroup layout="block" style="height:200px;" />
-
 	</ui:define>
 </ui:composition>
-
 </html>
