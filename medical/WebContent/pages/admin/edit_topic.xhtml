@@ -42,12 +42,12 @@
 				<p:fileUpload fileUploadListener="#{topicBacking.handleFileUpload}"
 					mode="advanced" update="currentImage" sizeLimit="5000000" auto="true"
 					label="Seleccione"
-					allowTypes="/(\.|\/)(gif|jpe?g|png|GIF|JPE?G|PNG)$/" />
+					allowTypes="/(\.|\/)(gif|jpe?g|png|GIF|JPE?G|PNG)$/" dragDropSupport="true"/>
 				<p:spacer height="5" />
 				<p:spacer height="5" />
 					<h:outputText value="#{msg['top_current_image']}" />
-					<p:graphicImage id="currentImage"
-						value="#{topicBacking.selected.currentImage}" width="100"
+					<h:graphicImage id="currentImage"
+						value="#{topicBacking.urlImages}#{topicBacking.selected.image}" width="100"
 						height="100" />
 
 			</h:panelGrid>
