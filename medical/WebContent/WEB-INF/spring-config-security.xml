@@ -52,7 +52,7 @@
 
 	<bean id="successHandler"
 		class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
-		<property name="defaultTargetUrl" value="/pages/reports/reportDaily.jsf" />
+		<property name="defaultTargetUrl" value="/pages/admin/topic.jsf" />
 	</bean>
 
 	<bean id="failureHandler"

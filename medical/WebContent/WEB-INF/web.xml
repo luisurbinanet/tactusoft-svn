@@ -10,13 +10,13 @@
 			/WEB-INF/spring-config-security.xml
 		</param-value>
 	</context-param>
-	
+
 	<context-param>
 		<param-name>primefaces.THEME</param-name>
 		<param-value>cupertino</param-value>
 	</context-param>
 
-	<!--  <filter>
+	<filter>
 		<filter-name>filterChainProxy</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
 	</filter>
@@ -27,8 +27,8 @@
 		<dispatcher>REQUEST</dispatcher>
 		<dispatcher>FORWARD</dispatcher>
 		<dispatcher>INCLUDE</dispatcher>
-	</filter-mapping>-->
-	
+	</filter-mapping>
+
 	<filter>
 		<filter-name>PrimeFaces FileUpload Filter</filter-name>
 		<filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
@@ -38,22 +38,22 @@
 		<filter-name>PrimeFaces FileUpload Filter</filter-name>
 		<servlet-name>Faces Servlet</servlet-name>
 	</filter-mapping>
-	
+
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
-	
+
 	<servlet>
 		<servlet-name>Faces Servlet</servlet-name>
 		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
-	
+
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.jsf</url-pattern>
 	</servlet-mapping>
-	
+
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.htm</welcome-file>
