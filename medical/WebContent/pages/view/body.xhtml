@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../layout/main.xhtml">
+	<ui:define name="content">
+
+		<div class="rco-blockheader">
+			<div class="l"></div>
+			<div class="r"></div>
+			<div class="t">#{msg['title_body']}</div>
+		</div>
+
+		<p:spacer height="20" />
+
+		<h:form id="form" enctype="multipart/form-data">
+
+			<!-- Define figure width and height to be identical to the image you are annotating. N.B. If you do not need to support IE7 and below please refer to line 12 in annotate.css -->
+			<figure class="annotated" style="width: 950px; height: 1000px;">
+
+				<img src="../../images/body/image003.jpg" alt="Cuerpo Humano"
+					width="900px" height="1000px" />
+				<figcaption>
+
+					<ul>
+						<!-- Positions of the list-items. These need defining inline. -->
+						<li style="top: 5px; left: 450px;"><a
+							href="http://www.nlm.nih.gov/medlineplus/spanish/ency/article/003024.htm"
+							target="_blank">Problema de la Cabeza</a></li>
+						<li style="top: 110px; left: 450px;"><a
+							href="http://www.arthritis.org/espanol/dolor-cuello.php"
+							target="_blank">Dolor de Cuello</a></li>
+						<li style="top: 500px; left: 50px;"><a
+							href="http://www.prestigedisc.com/es/arm_pain.html"
+							target="_blank">Dolor de los Brazos</a></li>
+						<li style="top: 500px; left: 750px;"><a
+							href="http://www.nlm.nih.gov/medlineplus/spanish/ency/article/003261.htm"
+							target="_blank">Problemas de las Articulaciones</a></li>
+						<li style="top: 350px; left: 450px;"><a
+							href="http://www.nlm.nih.gov/medlineplus/spanish/stomachdisorders.html"
+							target="_blank">Problemas del Estomago</a></li>
+						<li style="top: 900px; left: 500px;"><a
+							href="http://www.noah-health.org/es/bjm/foot/index.html"
+							target="_blank">Problemas en los Pies</a></li>
+					</ul>
+
+				</figcaption>
+			</figure>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+
+</html>
