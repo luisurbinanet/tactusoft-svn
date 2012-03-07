@@ -1,11 +1,10 @@
 package co.com.tactusoft.medical.model.entities;
 
-// Generated 5/03/2012 02:36:02 PM by Hibernate Tools 3.4.0.CR1
+// Generated 7/03/2012 10:49:44 AM by Hibernate Tools 3.4.0.CR1
 
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;

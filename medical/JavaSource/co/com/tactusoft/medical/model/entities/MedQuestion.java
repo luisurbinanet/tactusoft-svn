@@ -1,14 +1,17 @@
 package co.com.tactusoft.medical.model.entities;
 
-// Generated 5/03/2012 02:36:02 PM by Hibernate Tools 3.4.0.CR1
+// Generated 7/03/2012 10:49:44 AM by Hibernate Tools 3.4.0.CR1
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -36,6 +39,7 @@ public class MedQuestion implements java.io.Serializable {
 	private BigDecimal positive;
 	private BigDecimal negative;
 	private Integer orderQuestion;
+	private Set<MedAnswer> medAnswers = new HashSet<MedAnswer>(0);
 
 	public MedQuestion() {
 	}
@@ -52,7 +56,7 @@ public class MedQuestion implements java.io.Serializable {
 			String typeQuestion, String resourceType, String urlLink,
 			String image, String typeVideo, String urlVideo,
 			BigDecimal idParent, BigDecimal positive, BigDecimal negative,
-			Integer orderQuestion) {
+			Integer orderQuestion, Set<MedAnswer> medAnswers) {
 		this.id = id;
 		this.medTopic = medTopic;
 		this.name = name;
@@ -66,6 +70,7 @@ public class MedQuestion implements java.io.Serializable {
 		this.positive = positive;
 		this.negative = negative;
 		this.orderQuestion = orderQuestion;
+		this.medAnswers = medAnswers;
 	}
 
 	@Id
@@ -185,6 +190,15 @@ public class MedQuestion implements java.io.Serializable {
 
 	public void setOrderQuestion(Integer orderQuestion) {
 		this.orderQuestion = orderQuestion;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "medQuestion")
+	public Set<MedAnswer> getMedAnswers() {
+		return this.medAnswers;
+	}
+
+	public void setMedAnswers(Set<MedAnswer> medAnswers) {
+		this.medAnswers = medAnswers;
 	}
 
 	@Transient
