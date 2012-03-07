@@ -37,18 +37,20 @@
 
 					<p:ajax event="change" update="pnlTypes" />
 
+					<f:selectItem itemLabel="#{msg['que_type_message']}"
+						itemValue="MESSAGE" />
 					<f:selectItem itemLabel="Sí/No" itemValue="ASSERTIVE" />
-					<f:selectItem itemLabel="Unica Respuesta" itemValue="UNIQUE"
-						itemDisabled="true" />
+					<f:selectItem itemLabel="Unica Respuesta" itemValue="UNIQUE" itemDisabled="true"/>
 					<f:selectItem itemLabel="Multiple Respuesta" itemValue="MULTIPLE"
 						itemDisabled="true" />
 					<f:selectItem itemLabel="Final" itemValue="FINAL" />
 				</p:selectOneRadio>
 			</h:panelGrid>
 
-			<p:separator style="width:100%" />
-
 			<p:outputPanel id="pnlTypes" style="width:100%" autoUpdate="true">
+
+				<p:separator style="width:100%"
+					rendered="#{questionBacking.selected.typeQuestion != 'MESSAGE'?true:false}" />
 
 				<p:spacer height="20" />
 
@@ -68,7 +70,22 @@
 				</h:panelGrid>
 
 				<h:panelGrid id="pnlUnique"
-					rendered="#{questionBacking.selected.typeQuestion == 'UNIQUE'?true:false}">
+					rendered="#{questionBacking.selected.typeQuestion == 'UNIQUE'?true:false}"
+					columns="2" width="100%">
+					<h:outputText value="#{msg['que_answer']}" />
+					<h:inputText value="#{questionBacking.answerText}"
+						style="width:100%" />
+
+					<p:dataTable id="recordTable" var="rec"
+						value="#{questionBacking.modelAnswer}" rowKey="#{rec.id}"
+						selectionMode="single" selection="#{questionBacking.selectdAnswer}"
+						paginator="true" rows="5">
+
+						<p:column headerText="#{msg['que_answer']}">#{rec.name}</p:column>
+
+						<p:column headerText="#{msg['que_name']}">#{rec.numVersion}</p:column>
+
+					</p:dataTable>
 
 				</h:panelGrid>
 
@@ -87,8 +104,6 @@
 
 						<p:ajax event="change" update="pnlFinal" />
 
-						<f:selectItem itemValue="MESSAGE"
-							itemLabel="#{msg['que_type_final_message']}" />
 						<f:selectItem itemValue="IMAGE"
 							itemLabel="#{msg['que_type_final_image']}" />
 						<f:selectItem itemValue="VIDEO"
