@@ -9,14 +9,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.DragDropEvent;
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.event.NodeCollapseEvent;
-import org.primefaces.event.NodeExpandEvent;
-import org.primefaces.event.NodeSelectEvent;
-import org.primefaces.event.NodeUnselectEvent;
 import org.primefaces.event.SelectEvent;
-import org.primefaces.model.TreeNode;
 import org.primefaces.model.UploadedFile;
 import org.springframework.context.annotation.Scope;
 
@@ -53,6 +47,7 @@ public class TopicBacking implements Serializable {
 	private QuestionDataModel modelQuestion;
 	private MedQuestion selectedQuestion;
 	private List<MedQuestion> listQuestion;
+	private MedQuestion[] selectedQuestionArray;
 
 	private UploadedFile file;
 	private String urlImages;
@@ -113,6 +108,14 @@ public class TopicBacking implements Serializable {
 		this.urlImages = urlImages;
 	}
 
+	public MedQuestion[] getSelectedQuestionArray() {
+		return selectedQuestionArray;
+	}
+
+	public void setSelectedQuestionArray(MedQuestion[] selectedQuestionArray) {
+		this.selectedQuestionArray = selectedQuestionArray;
+	}
+
 	public String newAction() {
 		selected = new MedTopic();
 		return goTopicAction();
@@ -130,12 +133,14 @@ public class TopicBacking implements Serializable {
 	public void saveAction() throws IOException {
 		String message = null;
 		String field = null;
+		boolean newRecord = false;
 		RequestContext context = RequestContext.getCurrentInstance();
 
 		if (selected.getId() == null) {
 			selected.setId(service.getId("MedTopic"));
 			selected.setState(Constant.STATE_ACTIVE);
 			selected.setNumVersion(1);
+			newRecord = true;
 		}
 
 		if (file == null && selected.getImage() == null) {
@@ -146,7 +151,8 @@ public class TopicBacking implements Serializable {
 					.getValueText("DIRECTORY_IMAGES");
 			String ext = "." + file.getContentType().split("/")[1];
 			String fileName = "topic" + selected.getId() + ext;
-			int result = FacesUtil.createFile(file.getInputstream(), directory + fileName);
+			int result = FacesUtil.createFile(file.getInputstream(), directory
+					+ fileName);
 
 			if (result == -1) {
 				field = FacesUtil.getMessage("top_image");
@@ -158,7 +164,11 @@ public class TopicBacking implements Serializable {
 
 		if (message == null) {
 			service.save(selected);
-			message = FacesUtil.getMessage("msg_record_ok", selected.getName());
+			if (newRecord) {
+				message = FacesUtil.getMessage("msg_record_ok_3");
+			} else {
+				message = FacesUtil.getMessage("msg_record_ok_2");
+			}
 			model = new TopicDataModel(service.getListMedTopic());
 			FacesUtil.addInfo(message);
 			context.addCallbackParam("saved", "true");
@@ -191,25 +201,12 @@ public class TopicBacking implements Serializable {
 		return "/pages/admin/question?faces-redirect=true";
 	}
 
-	public void onNodeExpand(NodeExpandEvent event) {
-		FacesUtil.addInfo("Expanded");
-	}
-
-	public void onNodeCollapse(NodeCollapseEvent event) {
-		FacesUtil.addInfo("Collapsed");
-	}
-
-	public void onNodeSelect(NodeSelectEvent event) {
-		FacesUtil.addInfo("Selected");
-	}
-
-	public void onNodeUnselect(NodeUnselectEvent event) {
-		FacesUtil.addInfo("Unselected");
-	}
-
-	public void onDragDrop(DragDropEvent event) {
-		TreeNode node = (TreeNode) event.getData();
-		FacesUtil.addInfo("DragDrop", node + " moved to " + node.getParent());
+	public void removeDetailAction() {
+		for (MedQuestion row : selectedQuestionArray) {
+			service.remove(row);
+			listQuestion = service.getListMedQuestionByTopic(selected.getId());
+			modelQuestion = new QuestionDataModel(listQuestion);
+		}
 	}
 
 	public void handleFileUpload(FileUploadEvent event) {
