@@ -17,9 +17,11 @@ import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.medical.controller.bo.AdminBo;
 import co.com.tactusoft.medical.controller.bo.ParameterBo;
+import co.com.tactusoft.medical.model.entities.MedAnswer;
 import co.com.tactusoft.medical.model.entities.MedQuestion;
 import co.com.tactusoft.medical.util.Constant;
 import co.com.tactusoft.medical.util.FacesUtil;
+import co.com.tactusoft.medical.view.datamodel.AnswerDataModel;
 import co.com.tactusoft.medical.view.datamodel.QuestionDataModel;
 
 @Named
@@ -49,6 +51,11 @@ public class QuestionBacking {
 	private String typeFinal;
 	private UploadedFile file;
 	private String urlImages;
+	
+	private List<MedAnswer> listAnswer;
+	private MedAnswer selectdAnswer;
+	private String answerText;
+	private AnswerDataModel modelAnswer;
 
 	public QuestionBacking() {
 		selected = new MedQuestion();
@@ -59,6 +66,9 @@ public class QuestionBacking {
 		List<MedQuestion> list = null;
 		listQuestion = new LinkedList<SelectItem>();
 		mapQuestion = new HashMap<BigDecimal, MedQuestion>();
+		listAnswer = new LinkedList<MedAnswer>();
+		answerText = null;
+		
 		listQuestion.add(new SelectItem(Constant.DEFAULT_VALUE,
 				Constant.DEFAULT_LABEL));
 
@@ -67,7 +77,11 @@ public class QuestionBacking {
 					parentId);
 		} else {
 			list = service.getListMedQuestionByTopic(parentId);
-			orderQuestion = list.get(list.size() - 1).getOrderQuestion() + 1;
+			if (list.size() > 0) {
+				orderQuestion = list.get(list.size() - 1).getOrderQuestion() + 1;
+			} else {
+				orderQuestion = 1;
+			}
 			selected.setOrderQuestion(orderQuestion);
 		}
 
@@ -173,6 +187,39 @@ public class QuestionBacking {
 			selected.setNegative(Constant.DEFAULT_VALUE);
 		}
 	}
+	
+
+	public List<MedAnswer> getListAnswer() {
+		return listAnswer;
+	}
+
+	public void setListAnswer(List<MedAnswer> listAnswer) {
+		this.listAnswer = listAnswer;
+	}
+
+	public MedAnswer getSelectdAnswer() {
+		return selectdAnswer;
+	}
+
+	public void setSelectdAnswer(MedAnswer selectdAnswer) {
+		this.selectdAnswer = selectdAnswer;
+	}
+
+	public String getAnswerText() {
+		return answerText;
+	}
+
+	public void setAnswerText(String answerText) {
+		this.answerText = answerText;
+	}
+
+	public AnswerDataModel getModelAnswer() {
+		return modelAnswer;
+	}
+
+	public void setModelAnswer(AnswerDataModel modelAnswer) {
+		this.modelAnswer = modelAnswer;
+	}
 
 	public void saveAction() throws IOException {
 		String field = null;
@@ -226,7 +273,8 @@ public class QuestionBacking {
 			FacesUtil.addInfo(message);
 
 			TopicBacking topicBacking = FacesUtil.findBean("topicBacking");
-			QuestionDataModel questionDataModel = new QuestionDataModel(service.getListMedQuestionByTopic(parentId));
+			QuestionDataModel questionDataModel = new QuestionDataModel(
+					service.getListMedQuestionByTopic(parentId));
 			topicBacking.setModelQuestion(questionDataModel);
 		} else {
 			FacesUtil.addWarn(message);
