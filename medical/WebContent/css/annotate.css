@@ -29,8 +29,8 @@
 	display: block;
 	padding: 0 5px;
 	/* Give them a width and a line-height suitable for your kind of images. I chose 50px. */
-	width: 40px; /* 40px + 5px padding-right  + 5px padding-left = 50px */
-	line-height: 50px;
+	width: 18px; /* 40px + 5px padding-right  + 5px padding-left = 50px */
+	line-height: 17px;
 	position: absolute;
 	white-space: nowrap;
 	text-indent: -99999px; /* Hide the text */
