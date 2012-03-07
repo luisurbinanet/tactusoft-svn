@@ -3,7 +3,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/tags">
 
 <h:form id="formMenu">
 	<div class="rco-nav">
@@ -12,13 +13,14 @@
 		<ul class="rco-menu">
 
 			<li><h:commandLink
-					action="/pages/secure/login?faces-redirect=true" immediate="true">
+					action="/pages/secure/login?faces-redirect=true" immediate="true"
+					rendered="#{not loginBacking.authenticated}">
 					<span class="l"></span>
 					<span class="r"></span>
-					<span class="t">#{msg['log_start']}</span>
+					<span class="t">#{msg['title_login']}</span>
 				</h:commandLink>
 			</li>
-			
+
 			<li><p:commandLink
 					action="/pages/view/carousel?faces-redirect=true" immediate="true">
 					<span class="l"></span>
@@ -26,9 +28,18 @@
 					<span class="t">#{msg['title_carousel']}</span>
 				</p:commandLink>
 			</li>
-			
+
+			<li><p:commandLink action="/pages/view/body?faces-redirect=true"
+					immediate="true">
+					<span class="l"></span>
+					<span class="r"></span>
+					<span class="t">#{msg['title_body2']}</span>
+				</p:commandLink>
+			</li>
+
 			<li><p:commandLink
-					action="/pages/admin/topic?faces-redirect=true" immediate="true">
+					action="/pages/admin/topic?faces-redirect=true" immediate="true"
+					rendered="#{loginBacking.role eq 'ADMIN'?true:false}">
 					<span class="l"></span>
 					<span class="r"></span>
 					<span class="t">#{msg['title_config']}</span>
@@ -36,7 +47,8 @@
 			</li>
 
 			<li><h:commandLink action="#{loginBacking.logout}"
-					immediate="true">
+					immediate="true"
+					rendered="#{loginBacking.authenticated}">
 					<span class="l"></span>
 					<span class="r"></span>
 					<span class="t">#{msg['log_close']}</span>

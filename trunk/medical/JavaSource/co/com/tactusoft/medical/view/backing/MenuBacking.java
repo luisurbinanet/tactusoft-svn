@@ -30,7 +30,7 @@ public class MenuBacking implements Serializable {
 	}
 
 	public void init(String role) {
-		Map<Integer, MenuDataModel> mapMenu = new HashMap<Integer, MenuDataModel>();
+		/*Map<Integer, MenuDataModel> mapMenu = new HashMap<Integer, MenuDataModel>();
 
 		MenuDataModel MenuDataModel;
 
@@ -58,7 +58,7 @@ public class MenuBacking implements Serializable {
 		listMenu = new LinkedList<MenuDataModel>();
 		for (MenuDataModel row : mapMenu.values()) {
 			listMenu.add(row);
-		}
+		}*/
 	}
 
 	public List<MenuDataModel> getListMenu() {
@@ -74,13 +74,13 @@ public class MenuBacking implements Serializable {
 	}
 
 	private MenuDataModel getMenuAdministration() {
-		MenuDataModel MenuDataModel;
+		MenuDataModel menuDataModel;
 		MenuDataModel menuChild;
 		List<MenuDataModel> listChilds;
 
-		MenuDataModel = new MenuDataModel();
-		MenuDataModel.setId(1);
-		MenuDataModel.setName(FacesUtil.getMessage("menu_administration"));
+		menuDataModel = new MenuDataModel();
+		menuDataModel.setId(1);
+		menuDataModel.setName(FacesUtil.getMessage("menu_administration"));
 
 		listChilds = new LinkedList<MenuDataModel>();
 
@@ -112,19 +112,19 @@ public class MenuBacking implements Serializable {
 		menuChild.setPage("/pages/admin/kpi");
 		listChilds.add(menuChild);
 
-		MenuDataModel.setChilds(listChilds);
+		menuDataModel.setChilds(listChilds);
 
-		return MenuDataModel;
+		return menuDataModel;
 	}
 
 	private MenuDataModel getMenuProcess() {
-		MenuDataModel MenuDataModel;
+		MenuDataModel menuDataModel;
 		MenuDataModel menuChild;
 		List<MenuDataModel> listChilds;
 
-		MenuDataModel = new MenuDataModel();
-		MenuDataModel.setId(7);
-		MenuDataModel.setName(FacesUtil.getMessage("menu_process"));
+		menuDataModel = new MenuDataModel();
+		menuDataModel.setId(7);
+		menuDataModel.setName(FacesUtil.getMessage("menu_process"));
 
 		listChilds = new LinkedList<MenuDataModel>();
 		menuChild = new MenuDataModel();
@@ -145,19 +145,19 @@ public class MenuBacking implements Serializable {
 		menuChild.setPage("/pages/process/registryDay");
 		listChilds.add(menuChild);
 
-		MenuDataModel.setChilds(listChilds);
+		menuDataModel.setChilds(listChilds);
 
-		return MenuDataModel;
+		return menuDataModel;
 	}
 
 	private MenuDataModel getMenuReports() {
-		MenuDataModel MenuDataModel;
+		MenuDataModel menuDataModel;
 		MenuDataModel menuChild;
 		List<MenuDataModel> listChilds;
 
-		MenuDataModel = new MenuDataModel();
-		MenuDataModel.setId(11);
-		MenuDataModel.setName(FacesUtil.getMessage("menu_reports"));
+		menuDataModel = new MenuDataModel();
+		menuDataModel.setId(11);
+		menuDataModel.setName(FacesUtil.getMessage("menu_reports"));
 
 		listChilds = new LinkedList<MenuDataModel>();
 		menuChild = new MenuDataModel();
@@ -166,9 +166,9 @@ public class MenuBacking implements Serializable {
 		menuChild.setPage("/pages/reports/reportDaily");
 		listChilds.add(menuChild);
 
-		MenuDataModel.setChilds(listChilds);
+		menuDataModel.setChilds(listChilds);
 
-		return MenuDataModel;
+		return menuDataModel;
 	}
 
 	public String actionPage() {

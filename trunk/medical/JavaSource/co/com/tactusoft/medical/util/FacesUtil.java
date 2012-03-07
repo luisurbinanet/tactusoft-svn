@@ -105,28 +105,40 @@ public class FacesUtil {
 	}
 
 	public static UserData getCurrentUserData() {
-		UserData userData = (UserData) SecurityContextHolder.getContext()
-				.getAuthentication().getPrincipal();
+		UserData userData = null;
+		try {
+			userData = (UserData) SecurityContextHolder.getContext()
+					.getAuthentication().getPrincipal();
+		} catch (Exception ex) {
+			userData = new UserData();
+		}
 		return userData;
 	}
 
 	public static MedUser getCurrentUser() {
-		UserData userData = (UserData) SecurityContextHolder.getContext()
-				.getAuthentication().getPrincipal();
+		UserData userData = null;
+		try {
+			userData = (UserData) SecurityContextHolder.getContext()
+					.getAuthentication().getPrincipal();
+		} catch (Exception ex) {
+			userData = new UserData();
+		}
 		return userData.getUser();
 	}
 
 	public static BigDecimal getCurrentIdUsuario() {
-		// return getCurrentUser().getId();
-		return new BigDecimal(1);
+		return getCurrentUser().getId();
 	}
 
 	public static String getCurrentRole() {
-		/*
-		 * UserData userData = (UserData) SecurityContextHolder.getContext()
-		 * .getAuthentication().getPrincipal(); return userData.getRoles();
-		 */
-		return "";
+		UserData userData = null;
+		try {
+			userData = (UserData) SecurityContextHolder.getContext()
+					.getAuthentication().getPrincipal();
+		} catch (Exception ex) {
+			userData = new UserData();
+		}
+		return userData.getRole();
 	}
 
 	public static int createFile(InputStream inputStream, String fileName) {
