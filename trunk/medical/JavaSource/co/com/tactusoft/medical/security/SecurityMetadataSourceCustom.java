@@ -27,7 +27,7 @@ public class SecurityMetadataSourceCustom implements
 					|| url.contains(".jpg") || url.contains(".gif")
 					|| url.contains(".swf") || url.contains("script.js")
 					|| url.contains("/pages/view/carousel") || url.contains("/pages/view/body")
-					|| url.contains("index.jsp")) {
+					|| url.contains("/pages/view/responseQuestion") || url.contains("index.jsp")) {
 				return null;
 			}
 
@@ -58,7 +58,7 @@ public class SecurityMetadataSourceCustom implements
 
 			access.append(url);
 
-		} catch (ClassCastException ex) {
+		} catch (Exception ex) {
 			access.append(url);
 		}
 
