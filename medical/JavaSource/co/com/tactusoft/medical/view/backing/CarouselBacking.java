@@ -1,6 +1,7 @@
 package co.com.tactusoft.medical.view.backing;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import co.com.tactusoft.medical.controller.bo.AdminBo;
 import co.com.tactusoft.medical.controller.bo.ParameterBo;
 import co.com.tactusoft.medical.model.entities.MedQuestion;
 import co.com.tactusoft.medical.model.entities.MedTopic;
+import co.com.tactusoft.medical.util.Constant;
 import co.com.tactusoft.medical.util.FacesUtil;
 
 @Named
@@ -72,8 +74,16 @@ public class CarouselBacking implements Serializable {
 		ResponseQuestionBacking responseQuestionBacking = FacesUtil
 				.findBean("responseQuestionBacking");
 
-		responseQuestionBacking.setList(list);
-		responseQuestionBacking.setSelectedQuestion(list.get(0));
+		if(list.size() > 0){
+			responseQuestionBacking.setList(list);
+			responseQuestionBacking.setSelectedQuestion(list.get(0));
+		} else {
+			MedQuestion defaultQuestion = new MedQuestion(); 
+			defaultQuestion.setId(new BigDecimal(-1));
+			defaultQuestion.setName("No existen preguntas!");
+			defaultQuestion.setTypeQuestion(Constant.TYPE_QUESTION_MESSAGE);
+			responseQuestionBacking.setSelectedQuestion(defaultQuestion);
+		}
 
 		return "/pages/view/responseQuestion?faces-redirect=true";
 	}

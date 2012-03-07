@@ -167,7 +167,7 @@ public class QuestionBacking {
 					Constant.TYPE_QUESTION_FINAL)) {
 			}
 		} else {
-			selected.setTypeQuestion(Constant.TYPE_QUESTION_ASSERTIVE);
+			selected.setTypeQuestion(Constant.TYPE_QUESTION_MESSAGE);
 			selected.setResourceType("IMAGE");
 			selected.setPositive(Constant.DEFAULT_VALUE);
 			selected.setNegative(Constant.DEFAULT_VALUE);

@@ -14,6 +14,7 @@ public class Constant {
 	public static final int CALCULATION_TYPE_2 = 2;
 	public static final int CALCULATION_TYPE_3 = 3;
 	
+	public static final String TYPE_QUESTION_MESSAGE = "MESSAGE";
 	public static final String TYPE_QUESTION_ASSERTIVE = "ASSERTIVE";
 	public static final String TYPE_QUESTION_UNIQUE = "UNIQUE";
 	public static final String TYPE_QUESTION_MULTIPLE = "MULTIPLE";

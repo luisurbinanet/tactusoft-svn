@@ -31,7 +31,7 @@
 
 				<h:panelGrid columns="1" width="100%" style="text-align:center;">
 					<h:outputLabel
-						value="#{responseQuestionBacking.selectedQuestion.typeQuestion!='FINAL'?'¿':''} #{responseQuestionBacking.selectedQuestion.name} #{responseQuestionBacking.selectedQuestion.typeQuestion!='FINAL'?'?':''}"
+						value="#{responseQuestionBacking.selectedQuestion.typeQuestion eq'ASSERTIVE'?'¿':''} #{responseQuestionBacking.selectedQuestion.name} #{responseQuestionBacking.selectedQuestion.typeQuestion eq 'ASSERTIVE'?'?':''}"
 						style="color:Blue;font-style:normal;font-size:18px;width:100%;font-weight:bold;" />
 					<p:spacer height="20" />
 				</h:panelGrid>
@@ -53,7 +53,7 @@
 
 				<h:panelGrid id="pnlOk" columns="1"
 					rendered="#{responseQuestionBacking.selectedQuestion.typeQuestion!='FINAL'?false:true}"
-					rowClasses="actions-center" width="100%">
+					styleClass="actions-center" width="100%">
 
 					<h:outputLink
 						onclick="window.open('#{responseQuestionBacking.selectedQuestion.urlLink}'); return false"
@@ -80,7 +80,22 @@
 
 					<p:spacer height="20" />
 
-					<p:commandButton value="Aceptar"
+					<p:commandButton value="#{msg['btn_ok']}"
+						action="#{responseQuestionBacking.returnAction}" />
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlMessage" columns="1"
+					rendered="#{responseQuestionBacking.selectedQuestion.typeQuestion!='MESSAGE'?false:true}"
+					styleClass="actions-center" width="100%">
+
+					<p:spacer height="20" />
+
+					<h:outputLabel value="Gracias por su Tiempo"
+						style="font-style:normal;font-size:18px;width:100%;font-weight:bold;" />
+
+					<p:spacer height="20" />
+
+					<p:commandButton value="#{msg['btn_ok']}"
 						action="#{responseQuestionBacking.returnAction}" />
 				</h:panelGrid>
 

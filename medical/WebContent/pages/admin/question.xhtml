@@ -35,8 +35,7 @@
 				<p:selectOneRadio id="options"
 					value="#{questionBacking.selected.typeQuestion}" style="width:80%">
 
-					<p:ajax event="change" update="pnlTypes"
-						 />
+					<p:ajax event="change" update="pnlTypes" />
 
 					<f:selectItem itemLabel="Sí/No" itemValue="ASSERTIVE" />
 					<f:selectItem itemLabel="Unica Respuesta" itemValue="UNIQUE"
@@ -88,6 +87,8 @@
 
 						<p:ajax event="change" update="pnlFinal" />
 
+						<f:selectItem itemValue="MESSAGE"
+							itemLabel="#{msg['que_type_final_message']}" />
 						<f:selectItem itemValue="IMAGE"
 							itemLabel="#{msg['que_type_final_image']}" />
 						<f:selectItem itemValue="VIDEO"
@@ -109,7 +110,7 @@
 						<f:selectItem itemValue="flash"
 							itemLabel="#{msg['que_type_video_flash']}" />
 						<f:selectItem itemValue="real"
-							itemLabel="#{msg['que_type_video_real']}" />	
+							itemLabel="#{msg['que_type_video_real']}" />
 					</p:selectOneMenu>
 
 					<h:outputText value="#{msg['que_type_final_url']}"
