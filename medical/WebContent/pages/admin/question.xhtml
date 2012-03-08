@@ -39,11 +39,14 @@
 
 					<f:selectItem itemLabel="#{msg['que_type_message']}"
 						itemValue="MESSAGE" />
-					<f:selectItem itemLabel="Sí/No" itemValue="ASSERTIVE" />
-					<f:selectItem itemLabel="Unica Respuesta" itemValue="UNIQUE" itemDisabled="true"/>
-					<f:selectItem itemLabel="Multiple Respuesta" itemValue="MULTIPLE"
-						itemDisabled="true" />
-					<f:selectItem itemLabel="Final" itemValue="FINAL" />
+					<f:selectItem itemLabel="#{msg['que_type_assertive']}"
+						itemValue="ASSERTIVE" />
+					<f:selectItem itemLabel="#{msg['que_type_unique']}"
+						itemValue="UNIQUE" />
+					<f:selectItem itemLabel="#{msg['que_type_multiple']}"
+						itemValue="MULTIPLE" itemDisabled="true" />
+					<f:selectItem itemLabel="#{msg['que_type_final']}"
+						itemValue="FINAL" />
 				</p:selectOneRadio>
 			</h:panelGrid>
 
@@ -78,8 +81,9 @@
 
 					<p:dataTable id="recordTable" var="rec"
 						value="#{questionBacking.modelAnswer}" rowKey="#{rec.id}"
-						selectionMode="single" selection="#{questionBacking.selectdAnswer}"
-						paginator="true" rows="5">
+						selectionMode="single"
+						selection="#{questionBacking.selectdAnswer}" paginator="true"
+						rows="5">
 
 						<p:column headerText="#{msg['que_answer']}">#{rec.name}</p:column>
 
@@ -98,7 +102,7 @@
 					rendered="#{questionBacking.selected.typeQuestion == 'FINAL'?true:false}"
 					columns="2" width="100%">
 
-					<h:outputText value="#{msg['que_type_final']}" />
+					<h:outputText value="#{msg['que_resource_type']}" />
 					<p:selectOneMenu value="#{questionBacking.selected.resourceType}"
 						style="width:600px">
 
