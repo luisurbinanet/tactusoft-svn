@@ -3,10 +3,13 @@ package co.com.tactusoft.medical.view.backing;
 import java.math.BigDecimal;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.context.annotation.Scope;
 
+import co.com.tactusoft.medical.controller.bo.AdminBo;
+import co.com.tactusoft.medical.model.entities.MedAnswer;
 import co.com.tactusoft.medical.model.entities.MedQuestion;
 import co.com.tactusoft.medical.util.Constant;
 import co.com.tactusoft.medical.util.FacesUtil;
@@ -15,8 +18,13 @@ import co.com.tactusoft.medical.util.FacesUtil;
 @Scope("session")
 public class ResponseQuestionBacking {
 
+	@Inject
+	private AdminBo service;
+
 	private List<MedQuestion> list;
 	private MedQuestion selectedQuestion;
+	private List<MedAnswer> listAnswer;
+	private BigDecimal idAnswer;
 
 	public ResponseQuestionBacking() {
 
@@ -38,6 +46,22 @@ public class ResponseQuestionBacking {
 		this.selectedQuestion = selectedQuestion;
 	}
 
+	public List<MedAnswer> getListAnswer() {
+		return listAnswer;
+	}
+
+	public void setListAnswer(List<MedAnswer> listAnswer) {
+		this.listAnswer = listAnswer;
+	}
+
+	public BigDecimal getIdAnswer() {
+		return idAnswer;
+	}
+
+	public void setIdAnswer(BigDecimal idAnswer) {
+		this.idAnswer = idAnswer;
+	}
+
 	public String actionSubmit() {
 		String answer = FacesUtil.getParam("answer");
 		if (answer.equals("SI")) {
@@ -48,10 +72,24 @@ public class ResponseQuestionBacking {
 			selectedQuestion = nextQuestion(selectedQuestion.getNegative());
 		}
 
+		if (answer.equals("UNIQUE")) {
+			selectedQuestion = nextQuestion(this.idAnswer);
+		}
+
+		if (selectedQuestion.getTypeQuestion().equals(
+				Constant.TYPE_QUESTION_UNIQUE)) {
+			listAnswer = service.getListMedQuestionByQuestion(selectedQuestion
+					.getId());
+			if (listAnswer.size() > 0) {
+				this.idAnswer = listAnswer.get(0).getId();
+			}
+		}
+
 		if (selectedQuestion == null) {
 			selectedQuestion = new MedQuestion();
 			selectedQuestion.setId(new BigDecimal(-1));
-			selectedQuestion.setName("Final de la Encuesta");
+			String message = FacesUtil.getMessage("msg_final");
+			selectedQuestion.setName(message);
 			selectedQuestion.setTypeQuestion(Constant.TYPE_QUESTION_MESSAGE);
 		}
 

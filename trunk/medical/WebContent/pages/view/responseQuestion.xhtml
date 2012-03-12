@@ -51,6 +51,30 @@
 					</p:commandButton>
 				</h:panelGrid>
 
+				<h:panelGrid id="pnlUnique" columns="2" rowClasses="actions-center"
+					rendered="#{responseQuestionBacking.selectedQuestion.typeQuestion eq 'UNIQUE'?true:false}"
+					width="100%">
+
+					<p:selectOneRadio id="options"
+						value="#{responseQuestionBacking.idAnswer}" layout="pageDirection">
+						<f:selectItems value="#{responseQuestionBacking.listAnswer}"
+							var="item" itemLabel="#{item.name}" itemValue="#{item.id}" />
+					</p:selectOneRadio>
+
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlOkUnique" columns="1"
+					rendered="#{responseQuestionBacking.selectedQuestion.typeQuestion!='UNIQUE'?false:true}"
+					styleClass="actions-center" width="100%">
+
+					<p:commandButton value="#{msg['btn_next']}"
+						action="#{responseQuestionBacking.actionSubmit}"
+						update="pnlQuestion" style="width:120px">
+						<f:param name="answer" value="UNIQUE" />
+					</p:commandButton>
+
+				</h:panelGrid>
+
 				<h:panelGrid id="pnlOk" columns="1"
 					rendered="#{responseQuestionBacking.selectedQuestion.typeQuestion!='FINAL'?false:true}"
 					styleClass="actions-center" width="100%">
