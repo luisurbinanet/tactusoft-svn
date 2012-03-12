@@ -17,8 +17,10 @@
 				<h:panelGrid>
 					<h:outputLabel value="#{msg['log_msg_denied']}" />
 					<p:spacer height="20" />
-					<h:commandButton value="Regresar"
-						action="/pages/secure/login?faces-redirect=true" />
+					<p:commandButton value="#{msg['btn_return']}"
+						action="#{menuBacking.actionPage}">
+						<f:param name="page" value="/pages/secure/login" />
+					</p:commandButton>
 				</h:panelGrid>
 			</center>
 

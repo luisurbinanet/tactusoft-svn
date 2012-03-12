@@ -1,16 +1,12 @@
 package co.com.tactusoft.medical.view.backing;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Named;
 
 import org.springframework.context.annotation.Scope;
 
-import co.com.tactusoft.medical.util.Constant;
 import co.com.tactusoft.medical.util.FacesUtil;
 import co.com.tactusoft.medical.view.datamodel.MenuDataModel;
 
@@ -73,7 +69,7 @@ public class MenuBacking implements Serializable {
 		this.listMenu = listMenu;
 	}
 
-	private MenuDataModel getMenuAdministration() {
+	/*private MenuDataModel getMenuAdministration() {
 		MenuDataModel menuDataModel;
 		MenuDataModel menuChild;
 		List<MenuDataModel> listChilds;
@@ -169,7 +165,7 @@ public class MenuBacking implements Serializable {
 		menuDataModel.setChilds(listChilds);
 
 		return menuDataModel;
-	}
+	}*/
 
 	public String actionPage() {
 		String page = FacesUtil.getParam("page");
