@@ -3,8 +3,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:sec="http://www.springframework.org/security/tags">
+	xmlns:p="http://primefaces.org/ui">
 
 <h:form id="formMenu">
 	<div class="rco-nav">
@@ -12,48 +11,45 @@
 		<div class="r"></div>
 		<ul class="rco-menu">
 
-			<li><h:commandLink
-					action="/pages/secure/login?faces-redirect=true" immediate="true"
-					rendered="#{not loginBacking.authenticated}">
+			<li><p:commandLink action="#{menuBacking.actionPage}"
+					immediate="true" rendered="#{not loginBacking.authenticated}">
 					<span class="l"></span>
 					<span class="r"></span>
 					<span class="t">#{msg['title_login']}</span>
-				</h:commandLink>
-			</li>
+					<f:param name="page" value="/pages/secure/login" />
+				</p:commandLink></li>
 
-			<li><p:commandLink
-					action="/pages/view/carousel?faces-redirect=true" immediate="true">
+			<li><p:commandLink action="#{menuBacking.actionPage}"
+					immediate="true">
 					<span class="l"></span>
 					<span class="r"></span>
 					<span class="t">#{msg['title_carousel']}</span>
-				</p:commandLink>
-			</li>
+					<f:param name="page" value="/pages/view/carousel" />
+				</p:commandLink></li>
 
-			<li><p:commandLink action="/pages/view/body?faces-redirect=true"
+			<li><p:commandLink action="#{menuBacking.actionPage}"
 					immediate="true">
 					<span class="l"></span>
 					<span class="r"></span>
 					<span class="t">#{msg['title_body2']}</span>
-				</p:commandLink>
-			</li>
+					<f:param name="page" value="/pages/view/body" />
+				</p:commandLink></li>
 
-			<li><p:commandLink
-					action="/pages/admin/topic?faces-redirect=true" immediate="true"
+			<li><p:commandLink action="#{menuBacking.actionPage}"
+					immediate="true"
 					rendered="#{loginBacking.role eq 'ADMIN'?true:false}">
 					<span class="l"></span>
 					<span class="r"></span>
 					<span class="t">#{msg['title_config']}</span>
-				</p:commandLink>
-			</li>
+					<f:param name="page" value="/pages/admin/topic" />
+				</p:commandLink></li>
 
 			<li><h:commandLink action="#{loginBacking.logout}"
-					immediate="true"
-					rendered="#{loginBacking.authenticated}">
+					immediate="true" rendered="#{loginBacking.authenticated}">
 					<span class="l"></span>
 					<span class="r"></span>
 					<span class="t">#{msg['log_close']}</span>
-				</h:commandLink>
-			</li>
+				</h:commandLink></li>
 
 		</ul>
 	</div>
