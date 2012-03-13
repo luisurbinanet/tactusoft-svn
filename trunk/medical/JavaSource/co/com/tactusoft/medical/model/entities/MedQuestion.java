@@ -34,8 +34,7 @@ public class MedQuestion implements java.io.Serializable {
 	private String urlLink;
 	private String image;
 	private String typeVideo;
-	private String urlVideo;
-	private BigDecimal idParent;
+	private String loadMode;
 	private BigDecimal positive;
 	private BigDecimal negative;
 	private Integer orderQuestion;
@@ -54,9 +53,9 @@ public class MedQuestion implements java.io.Serializable {
 
 	public MedQuestion(BigDecimal id, MedTopic medTopic, String name,
 			String typeQuestion, String resourceType, String urlLink,
-			String image, String typeVideo, String urlVideo,
-			BigDecimal idParent, BigDecimal positive, BigDecimal negative,
-			Integer orderQuestion, Set<MedAnswer> medAnswers) {
+			String image, String typeVideo, String loadMode,
+			BigDecimal positive, BigDecimal negative, Integer orderQuestion,
+			Set<MedAnswer> medAnswers) {
 		this.id = id;
 		this.medTopic = medTopic;
 		this.name = name;
@@ -65,8 +64,7 @@ public class MedQuestion implements java.io.Serializable {
 		this.urlLink = urlLink;
 		this.image = image;
 		this.typeVideo = typeVideo;
-		this.urlVideo = urlVideo;
-		this.idParent = idParent;
+		this.loadMode = loadMode;
 		this.positive = positive;
 		this.negative = negative;
 		this.orderQuestion = orderQuestion;
@@ -147,22 +145,13 @@ public class MedQuestion implements java.io.Serializable {
 		this.typeVideo = typeVideo;
 	}
 
-	@Column(name = "url_video")
-	public String getUrlVideo() {
-		return this.urlVideo;
+	@Column(name = "load_mode", length = 15)
+	public String getLoadMode() {
+		return loadMode;
 	}
 
-	public void setUrlVideo(String urlVideo) {
-		this.urlVideo = urlVideo;
-	}
-
-	@Column(name = "id_parent", scale = 0)
-	public BigDecimal getIdParent() {
-		return this.idParent;
-	}
-
-	public void setIdParent(BigDecimal idParent) {
-		this.idParent = idParent;
+	public void setLoadMode(String loadMode) {
+		this.loadMode = loadMode;
 	}
 
 	@Column(name = "positive", scale = 0)

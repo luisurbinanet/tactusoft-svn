@@ -34,8 +34,8 @@ public class QuestionBacking {
 	@Inject
 	private ParameterBo serviceParameter;
 
-	private BigDecimal parentId;
 	private MedQuestion selected;
+	private BigDecimal idTopic;
 
 	private BigDecimal positiveQuestion;
 	private BigDecimal negativeQuestion;
@@ -50,29 +50,33 @@ public class QuestionBacking {
 	private String urlImages;
 
 	private List<MedAnswer> listAnswer;
-	private MedAnswer selectdAnswer;
+	private MedAnswer[] selectedsAnswer;
+	private List<MedAnswer> selectedDeletesAnswer;
 	private String answerText;
 	private AnswerDataModel modelAnswer;
 
 	public QuestionBacking() {
 	}
 
-	public void init(BigDecimal parentId, MedQuestion selected) {
+	public void init(MedQuestion selected) {
+		idTopic = selected.getMedTopic().getId();
+
 		List<MedQuestion> list = null;
 		listQuestion = new LinkedList<SelectItem>();
 		mapQuestion = new HashMap<BigDecimal, MedQuestion>();
 		listAnswer = new LinkedList<MedAnswer>();
 		modelAnswer = new AnswerDataModel(listAnswer);
 		answerText = null;
+		selectedDeletesAnswer = new LinkedList<MedAnswer>();
 
 		listQuestion.add(new SelectItem(Constant.DEFAULT_VALUE,
 				Constant.DEFAULT_LABEL));
 
 		if (selected.getId() != null) {
 			list = service.getListMedQuestionByNoIdQuestion(selected.getId(),
-					parentId);
+					idTopic);
 		} else {
-			list = service.getListMedQuestionByTopic(parentId);
+			list = service.getListMedQuestionByTopic(idTopic);
 			if (list.size() > 0) {
 				orderQuestion = list.get(list.size() - 1).getOrderQuestion() + 1;
 			} else {
@@ -91,16 +95,7 @@ public class QuestionBacking {
 		}
 
 		this.selected = selected;
-		this.parentId = parentId;
 		searchQuestionAction();
-	}
-
-	public BigDecimal getParentId() {
-		return parentId;
-	}
-
-	public void setParentId(BigDecimal parentId) {
-		this.parentId = parentId;
 	}
 
 	public MedQuestion getSelected() {
@@ -170,12 +165,12 @@ public class QuestionBacking {
 		this.listAnswer = listAnswer;
 	}
 
-	public MedAnswer getSelectdAnswer() {
-		return selectdAnswer;
+	public MedAnswer[] getSelectedsAnswer() {
+		return selectedsAnswer;
 	}
 
-	public void setSelectdAnswer(MedAnswer selectdAnswer) {
-		this.selectdAnswer = selectdAnswer;
+	public void setSelectedsAnswer(MedAnswer[] selectedsAnswer) {
+		this.selectedsAnswer = selectedsAnswer;
 	}
 
 	public String getAnswerText() {
@@ -217,84 +212,87 @@ public class QuestionBacking {
 		}
 	}
 
-	public void saveAction() throws IOException {
-		String field = null;
+	public void saveAction() {
 		String message = null;
-		boolean newRecord = false;
+		try {
+			String field = null;
+			boolean newRecord = false;
 
-		if (selected.getId() == null) {
-			selected.setId(service.getId("MedQuestion"));
-			newRecord = true;
-		}
+			if (selected.getId() == null) {
+				selected.setId(service.getId("MedQuestion"));
+				newRecord = true;
+			}
 
-		if (selected.getTypeQuestion().equals(Constant.TYPE_QUESTION_FINAL)
-				&& selected.getResourceType() != null) {
-			if (selected.getResourceType()
-					.equals(Constant.RESOURCE_TYPE_IMAGEN)) {
+			if (selected.getTypeQuestion().equals(Constant.TYPE_QUESTION_FINAL)
+					&& selected.getResourceType() != null) {
+				if (selected.getResourceType().equals(
+						Constant.RESOURCE_TYPE_IMAGEN)) {
 
-				if (file == null && selected.getImage() == null) {
-					field = FacesUtil.getMessage("que_type_final_image");
-					message = FacesUtil.getMessage("msg_field_required", field);
-				} else {
-					String directory = serviceParameter
-							.getValueText("DIRECTORY_IMAGES");
-					String ext = "." + file.getContentType().split("/")[1];
-					String fileName = "question" + selected.getId() + ext;
-					int result = FacesUtil.createFile(file.getInputstream(),
-							directory + fileName);
-
-					if (result == -1) {
+					if (file == null && selected.getImage() == null) {
 						field = FacesUtil.getMessage("que_type_final_image");
 						message = FacesUtil.getMessage("msg_field_required",
 								field);
 					} else {
+						String directory = serviceParameter
+								.getValueText("DIRECTORY_IMAGES");
+						String ext = "." + file.getContentType().split("/")[1];
+						String fileName = "question" + selected.getId() + ext;
+						FacesUtil.createFile(file.getInputstream(), directory
+								+ fileName);
 						selected.setImage(fileName);
 					}
-				}
 
-				selected.setUrlLink(null);
-				selected.setUrlVideo(null);
-			} else {
-				selected.setImage(null);
-			}
-		} else if (selected.getTypeQuestion().equals(
-				Constant.TYPE_QUESTION_UNIQUE)) {
-			if (listAnswer.size() == 0) {
-				message = FacesUtil.getMessage("que_msg_validate_nextquestion");
-			} else {
-				for (MedAnswer row : listAnswer) {
-					if (row.getNextQuestion().intValue() == -1) {
-						message = FacesUtil
-								.getMessage("que_msg_validate_nextquestion");
-						break;
+					selected.setUrlLink(null);
+				} else {
+					selected.setImage(null);
+				}
+			} else if (selected.getTypeQuestion().equals(
+					Constant.TYPE_QUESTION_UNIQUE)) {
+				if (listAnswer.size() == 0) {
+					message = FacesUtil
+							.getMessage("que_msg_validate_nextquestion");
+				} else {
+					for (MedAnswer row : listAnswer) {
+						if (row.getNextQuestion().intValue() == -1) {
+							message = FacesUtil
+									.getMessage("que_msg_validate_nextquestion");
+							break;
+						}
 					}
 				}
 			}
-		}
 
-		if (message == null) {
-			service.save(selected);
-			if (newRecord) {
-				message = FacesUtil.getMessage("msg_record_ok_3");
-			} else {
-				message = FacesUtil.getMessage("msg_record_ok_2");
-			}
-
-			for (MedAnswer row : listAnswer) {
-				if (row.getId() == null) {
-					row.setId(service.getId("MedAnswer"));
+			if (message == null) {
+				service.save(selected);
+				if (newRecord) {
+					message = FacesUtil.getMessage("msg_record_ok_3");
+				} else {
+					message = FacesUtil.getMessage("msg_record_ok_2");
 				}
-				service.save(row);
+
+				for (MedAnswer row : listAnswer) {
+					if (row.getId() == null) {
+						row.setId(service.getId("MedAnswer"));
+					}
+					service.save(row);
+				}
+
+				for (MedAnswer row : selectedDeletesAnswer) {
+					service.remove(row);
+				}
+
+				FacesUtil.addInfo(message);
+
+				TopicBacking topicBacking = FacesUtil.findBean("topicBacking");
+				QuestionDataModel questionDataModel = new QuestionDataModel(
+						service.getListMedQuestionByTopic(idTopic));
+				topicBacking.setModelQuestion(questionDataModel);
+			} else {
+				FacesUtil.addWarn(message);
 			}
-
-			FacesUtil.addInfo(message);
-
-			TopicBacking topicBacking = FacesUtil.findBean("topicBacking");
-			QuestionDataModel questionDataModel = new QuestionDataModel(
-					service.getListMedQuestionByTopic(parentId));
-			topicBacking.setModelQuestion(questionDataModel);
-		} else {
-			FacesUtil.addWarn(message);
+		} catch (IOException EX) {
+			message = FacesUtil.getMessage("msg_file_error");
+			FacesUtil.addError(message);
 		}
 	}
 
@@ -312,11 +310,11 @@ public class QuestionBacking {
 			String message = FacesUtil.getMessage("msg_field_required", field);
 			FacesUtil.addWarn(message);
 		} else {
-			selectdAnswer = new MedAnswer();
-			selectdAnswer.setMedQuestion(selected);
-			selectdAnswer.setName(answerText);
-			selectdAnswer.setNextQuestion(Constant.DEFAULT_VALUE);
-			listAnswer.add(selectdAnswer);
+			MedAnswer selectedAnswer = new MedAnswer();
+			selectedAnswer.setMedQuestion(selected);
+			selectedAnswer.setName(answerText);
+			selectedAnswer.setNextQuestion(Constant.DEFAULT_VALUE);
+			listAnswer.add(selectedAnswer);
 			modelAnswer = new AnswerDataModel(listAnswer);
 			answerText = "";
 		}
@@ -332,7 +330,19 @@ public class QuestionBacking {
 		} else if (selected.getTypeQuestion().equals(
 				Constant.TYPE_QUESTION_FINAL)) {
 		}
+	}
 
+	public void removeAnswerAction() {
+		selectedDeletesAnswer = new LinkedList<MedAnswer>();
+		for (MedAnswer row : selectedsAnswer) {
+			listAnswer.remove(row);
+			selectedDeletesAnswer.add(row);
+		}
+		modelAnswer = new AnswerDataModel(listAnswer);
+	}
+
+	public int getSize() {
+		return listAnswer.size();
 	}
 
 }

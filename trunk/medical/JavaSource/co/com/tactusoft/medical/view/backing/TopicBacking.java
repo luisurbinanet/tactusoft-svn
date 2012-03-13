@@ -132,49 +132,50 @@ public class TopicBacking implements Serializable {
 
 	public void saveAction() throws IOException {
 		String message = null;
-		String field = null;
-		boolean newRecord = false;
-		RequestContext context = RequestContext.getCurrentInstance();
+		try {
+			String field = null;
+			boolean newRecord = false;
+			RequestContext context = RequestContext.getCurrentInstance();
 
-		if (selected.getId() == null) {
-			selected.setId(service.getId("MedTopic"));
-			selected.setState(Constant.STATE_ACTIVE);
-			selected.setNumVersion(1);
-			newRecord = true;
-		}
+			if (selected.getId() == null) {
+				selected.setId(service.getId("MedTopic"));
+				selected.setState(Constant.STATE_ACTIVE);
+				selected.setNumVersion(1);
+				newRecord = true;
+			}
 
-		if (file == null && selected.getImage() == null) {
-			field = FacesUtil.getMessage("top_image");
-			message = FacesUtil.getMessage("msg_field_required", field);
-		} else {
-			String directory = serviceParameter
-					.getValueText("DIRECTORY_IMAGES");
-			String ext = "." + file.getContentType().split("/")[1];
-			String fileName = "topic" + selected.getId() + ext;
-			int result = FacesUtil.createFile(file.getInputstream(), directory
-					+ fileName);
-
-			if (result == -1) {
+			if (file == null && selected.getImage() == null) {
 				field = FacesUtil.getMessage("top_image");
 				message = FacesUtil.getMessage("msg_field_required", field);
 			} else {
+				String directory = serviceParameter
+						.getValueText("DIRECTORY_IMAGES");
+				String ext = "." + file.getContentType().split("/")[1];
+				String fileName = "topic" + selected.getId() + ext;
+
+				FacesUtil.createFile(file.getInputstream(), directory
+						+ fileName);
+
 				selected.setImage(fileName);
 			}
-		}
 
-		if (message == null) {
-			service.save(selected);
-			if (newRecord) {
-				message = FacesUtil.getMessage("msg_record_ok_3");
+			if (message == null) {
+				service.save(selected);
+				if (newRecord) {
+					message = FacesUtil.getMessage("msg_record_ok_3");
+				} else {
+					message = FacesUtil.getMessage("msg_record_ok_2");
+				}
+				model = new TopicDataModel(service.getListMedTopic());
+				FacesUtil.addInfo(message);
+				context.addCallbackParam("saved", "true");
 			} else {
-				message = FacesUtil.getMessage("msg_record_ok_2");
+				FacesUtil.addWarn(message);
+				context.addCallbackParam("saved", "false");
 			}
-			model = new TopicDataModel(service.getListMedTopic());
-			FacesUtil.addInfo(message);
-			context.addCallbackParam("saved", "true");
-		} else {
-			FacesUtil.addWarn(message);
-			context.addCallbackParam("saved", "false");
+		} catch (IOException EX) {
+			message = FacesUtil.getMessage("msg_file_error");
+			FacesUtil.addError(message);
 		}
 
 	}
@@ -197,7 +198,7 @@ public class TopicBacking implements Serializable {
 			selectedQuestion = new MedQuestion();
 		}
 		selectedQuestion.setMedTopic(selected);
-		questionBacking.init(selected.getId(), selectedQuestion);
+		questionBacking.init(selectedQuestion);
 		return "/pages/admin/question?faces-redirect=true";
 	}
 
