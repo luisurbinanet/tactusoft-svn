@@ -83,20 +83,26 @@
 					</h:panelGrid>
 
 					<p:commandButton value="Agregar" process="@parent"
-						action="#{questionBacking.addAnswerAction}" update="pnlUnique growl"/>
-					<p:spacer/>
+						action="#{questionBacking.addAnswerAction}"
+						update="pnlUnique growl" />
+					<p:spacer />
 
 					<p:dataTable id="recordTable" var="rec"
 						value="#{questionBacking.modelAnswer}" rowKey="#{rec.id}"
-						selectionMode="single" style="width:100%" rows="10"
-						selection="#{questionBacking.selectdAnswer}" paginator="true" rowIndexVar="varIndex">
+						style="width:100%" rows="10"
+						selection="#{questionBacking.selectedsAnswer}" paginator="true"
+						rowIndexVar="varIndex">
 
-						<p:column headerText="#{msg['que_answer']}" style="width:10%">
-							#{varIndex + 1}
+						<p:column selectionMode="multiple" style="width:18px" />
+
+						<p:column headerText="#{msg['que_index']}" style="width:10%">
+							<h:outputLabel value="#{varIndex + 1}" />
 						</p:column>
-						
+
 						<p:column headerText="#{msg['que_answer']}" style="width:35%">
-							<h:inputText value="#{rec.name}" />
+							<p:inplace>
+								<h:inputText value="#{rec.name}" />
+							</p:inplace>
 						</p:column>
 
 						<p:column headerText="#{msg['que_name']}" style="width:55%">
@@ -104,6 +110,16 @@
 								<f:selectItems value="#{questionBacking.listQuestion}" />
 							</p:selectOneMenu>
 						</p:column>
+
+						<f:facet name="footer">
+							<p:commandButton icon="ui-icon-closethick"
+								value="#{msg['btn_delete']}"
+								disabled="#{questionBacking.size == 0?true:false}"
+								update="recordTable"
+								action="#{questionBacking.removeAnswerAction}">
+							</p:commandButton>
+						</f:facet>
+
 					</p:dataTable>
 
 				</h:panelGrid>

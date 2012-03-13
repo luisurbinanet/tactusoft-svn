@@ -1,7 +1,6 @@
 package co.com.tactusoft.medical.util;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -69,6 +68,11 @@ public class FacesUtil {
 	public static void addError(String title, String text) {
 		FacesContext.getCurrentInstance().addMessage(null,
 				new FacesMessage(FacesMessage.SEVERITY_ERROR, title, text));
+	}
+
+	public static void addError(String text) {
+		String title = FacesUtil.getMessage("msg_error");
+		addWarn(title, text);
 	}
 
 	public static void addFatal(String title, String text) {
@@ -141,25 +145,16 @@ public class FacesUtil {
 		return userData.getRole();
 	}
 
-	public static int createFile(InputStream inputStream, String fileName) {
-		int result = 0;
+	public static void createFile(InputStream inputStream, String fileName)
+			throws IOException {
 		File f = new File(fileName);
 		OutputStream out;
-		try {
-			out = new FileOutputStream(f);
-			byte buf[] = new byte[1024];
-			int len;
-			while ((len = inputStream.read(buf)) > 0)
-				out.write(buf, 0, len);
-			out.close();
-			inputStream.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			result = -1;
-		} catch (IOException e) {
-			e.printStackTrace();
-			result = -1;
-		}
-		return result;
+		out = new FileOutputStream(f);
+		byte buf[] = new byte[1024];
+		int len;
+		while ((len = inputStream.read(buf)) > 0)
+			out.write(buf, 0, len);
+		out.close();
+		inputStream.close();
 	}
 }
