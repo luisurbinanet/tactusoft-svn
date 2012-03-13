@@ -147,9 +147,9 @@ public class QuestionBacking {
 	}
 
 	public String getUrlImages() {
-		if (urlImages == null) {
-			urlImages = serviceParameter.getValueText("URL_IMAGES");
-		}
+		ParameterBacking parameterBacking = FacesUtil
+				.findBean("parameterBacking");
+		urlImages = parameterBacking.getUrlImages();
 		return urlImages;
 	}
 
@@ -203,12 +203,20 @@ public class QuestionBacking {
 					Constant.TYPE_QUESTION_MULTIPLE)) {
 			} else if (selected.getTypeQuestion().equals(
 					Constant.TYPE_QUESTION_FINAL)) {
+
+				if (!selected.getResourceType().equals(
+						Constant.RESOURCE_TYPE_VIDEO)
+						&& !selected.getResourceType().equals(
+								Constant.RESOURCE_TYPE_IMAGE)) {
+					selected.setLoadMode(Constant.LOAD_MODE_ON_LINE);
+				}
 			}
 		} else {
 			selected.setTypeQuestion(Constant.TYPE_QUESTION_MESSAGE);
-			selected.setResourceType(Constant.RESOURCE_TYPE_IMAGEN);
 			selected.setPositive(Constant.DEFAULT_VALUE);
 			selected.setNegative(Constant.DEFAULT_VALUE);
+			selected.setResourceType(Constant.RESOURCE_TYPE_IMAGE);
+			selected.setLoadMode(Constant.LOAD_MODE_ON_LINE);
 		}
 	}
 
@@ -225,24 +233,45 @@ public class QuestionBacking {
 
 			if (selected.getTypeQuestion().equals(Constant.TYPE_QUESTION_FINAL)
 					&& selected.getResourceType() != null) {
+				
 				if (selected.getResourceType().equals(
-						Constant.RESOURCE_TYPE_IMAGEN)) {
+						Constant.RESOURCE_TYPE_IMAGE)
+						|| selected.getResourceType().equals(
+								Constant.RESOURCE_TYPE_VIDEO)) {
 
-					if (file == null && selected.getImage() == null) {
-						field = FacesUtil.getMessage("que_type_final_image");
-						message = FacesUtil.getMessage("msg_field_required",
-								field);
+					if (!selected.isImageVideoONLINE()) {
+						if (file == null && selected.getImage() == null) {
+							field = FacesUtil.getMessage("que_type_final_file");
+							message = FacesUtil.getMessage(
+									"msg_field_required", field);
+						} else {
+							try {
+								String directory = serviceParameter
+										.getValueText("DIRECTORY_IMAGES");
+								String ext = "."
+										+ file.getContentType().split("/")[1];
+								String fileName = "question" + selected.getId()
+										+ ext;
+								FacesUtil.createFile(file.getInputstream(),
+										directory + fileName);
+								selected.setImage(fileName);
+							} catch (NullPointerException ex) {
+								field = FacesUtil
+										.getMessage("que_type_final_file");
+								message = FacesUtil.getMessage(
+										"msg_field_required", field);
+							}
+						}
+						selected.setUrlLink(null);
 					} else {
-						String directory = serviceParameter
-								.getValueText("DIRECTORY_IMAGES");
-						String ext = "." + file.getContentType().split("/")[1];
-						String fileName = "question" + selected.getId() + ext;
-						FacesUtil.createFile(file.getInputstream(), directory
-								+ fileName);
-						selected.setImage(fileName);
+						if (selected.getUrlLink() == null || selected.getUrlLink().equals("")) {
+							field = FacesUtil.getMessage("que_type_final_url");
+							message = FacesUtil.getMessage(
+									"msg_field_required", field);
+						}
+						selected.setImage(null);
 					}
 
-					selected.setUrlLink(null);
 				} else {
 					selected.setImage(null);
 				}

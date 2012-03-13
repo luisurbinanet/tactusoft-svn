@@ -1,4 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
@@ -163,34 +162,69 @@
 							itemLabel="#{msg['que_type_video_real']}" />
 					</p:selectOneMenu>
 
+					<h:outputText value="#{msg['que_load_mode']}"
+						rendered="#{questionBacking.selected.resourceType == 'VIDEO'?true:false}" />
+					<p:selectOneMenu value="#{questionBacking.selected.loadMode}"
+						style="width:600px"
+						rendered="#{questionBacking.selected.resourceType == 'VIDEO'?true:false}">
+
+						<p:ajax event="change" update="pnlFinal" />
+
+						<f:selectItem itemValue="ON_LINE"
+							itemLabel="#{msg['que_load_mode_on_line']}" />
+						<f:selectItem itemValue="OFF_LINE"
+							itemLabel="#{msg['que_load_mode_off_line']}" />
+					</p:selectOneMenu>
+
 					<h:outputText value="#{msg['que_type_final_url']}"
-						rendered="#{questionBacking.selected.resourceType == 'LINK' or questionBacking.selected.resourceType == 'VIDEO'?true:false}" />
+						rendered="#{questionBacking.selected.resourceType eq 'LINK' or questionBacking.selected.imageVideoONLINE?true:false}" />
 					<h:inputText value="#{questionBacking.selected.urlLink}"
-						style="width:100%"
-						rendered="#{questionBacking.selected.resourceType == 'LINK' or questionBacking.selected.resourceType == 'VIDEO'?true:false}" />
+						style="width:75%"
+						rendered="#{questionBacking.selected.resourceType eq 'LINK' or questionBacking.selected.imageVideoONLINE?true:false}" />
 
 					<p:spacer height="5"
-						rendered="#{questionBacking.selected.resourceType == 'IMAGE'?true:false}" />
+						rendered="#{questionBacking.selected.imageVideoONLINE}" />
 					<p:spacer height="5"
-						rendered="#{questionBacking.selected.resourceType == 'IMAGE'?true:false}" />
-					<h:outputText value="#{msg['que_type_final_image']}"
-						rendered="#{questionBacking.selected.resourceType == 'IMAGE'?true:false}" />
+						rendered="#{questionBacking.selected.imageVideoONLINE}" />
+
+					<h:outputText value="#{msg['que_type_final_file']}"
+						rendered="#{(questionBacking.selected.resourceType eq 'IMAGE' || questionBacking.selected.resourceType eq 'VIDEO') and not questionBacking.selected.imageVideoONLINE?true:false}" />
+						
+
 					<p:fileUpload
-						rendered="#{questionBacking.selected.resourceType == 'IMAGE'?true:false}"
+						rendered="#{questionBacking.selected.detResourceType eq 'IMAGE_OFF_LINE'?true:false}"
 						fileUploadListener="#{questionBacking.handleFileUpload}"
-						mode="advanced" update="currentImage" sizeLimit="1000000"
-						auto="true" label="Seleccione"
+						mode="advanced" update="currentImage" sizeLimit="104857600"
+						auto="true" label="#{msg['msg_selection']}"
 						allowTypes="/(\.|\/)(gif|jpe?g|png|GIF|JPE?G|PNG)$/" />
+					<p:fileUpload
+						rendered="#{questionBacking.selected.detResourceType eq 'VIDEO_OFF_LINE'?true:false}"
+						fileUploadListener="#{questionBacking.handleFileUpload}"
+						mode="advanced" update="currentVideo" sizeLimit="104857600"
+						auto="true" label="#{msg['msg_selection']}"
+						invalidFileMessage="Archivo no soportado"
+						allowTypes="/(\.|\/)(asx|asf|avi|wma|wmv|aif|aiff|aac|au|bmp|gsm|mov|mid|midi|mpg|mpeg|mp4|m4a|psd|qt|qtif|qif|qti|snd|tif|tiff|wav|3g2|3pg|flv|mp3|swf|ra|ram|rm|rpm|rv|smi|smil)$/" />
+
 					<p:spacer height="5"
-						rendered="#{questionBacking.selected.resourceType == 'IMAGE'?true:false}" />
+						rendered="#{questionBacking.selected.resourceType eq 'IMAGE' || questionBacking.selected.resourceType eq 'VIDEO'?true:false}" />
 					<p:spacer height="5"
-						rendered="#{questionBacking.selected.resourceType == 'IMAGE'?true:false}" />
-					<h:outputText value="#{msg['que_current_image']}"
-						rendered="#{questionBacking.selected.resourceType == 'IMAGE'?true:false}" />
+						rendered="#{questionBacking.selected.resourceType eq 'IMAGE' || questionBacking.selected.resourceType eq 'VIDEO'?true:false}" />
+
+					<h:outputText value="#{msg['que_current_file']}"
+						rendered="#{questionBacking.selected.resourceType eq 'IMAGE' || questionBacking.selected.resourceType eq 'VIDEO'?true:false}" />
+
 					<p:graphicImage id="currentImage"
 						rendered="#{questionBacking.selected.resourceType == 'IMAGE'?true:false}"
 						value="#{questionBacking.urlImages}#{questionBacking.selected.image}"
 						width="100" height="100" cache="false" />
+					<p:media id="currentVideo" width="400" height="300"
+						player="#{questionBacking.selected.typeVideo}"
+						value="#{questionBacking.selected.urlVideo}"
+						rendered="#{questionBacking.selected.resourceType eq 'VIDEO'?true:false}">
+						<f:param name="controller" value="false" />
+						<f:param name="autoplay" value="false" />
+					</p:media>
+					
 				</h:panelGrid>
 
 				<p:separator style="width:100%" />
