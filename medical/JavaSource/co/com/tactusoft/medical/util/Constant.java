@@ -19,11 +19,15 @@ public class Constant {
 	public static final String TYPE_QUESTION_UNIQUE = "UNIQUE";
 	public static final String TYPE_QUESTION_MULTIPLE = "MULTIPLE";
 	public static final String TYPE_QUESTION_FINAL = "FINAL";
+	
+	public static final String RESOURCE_TYPE_IMAGE = "IMAGE";
+	public static final String RESOURCE_TYPE_VIDEO = "VIDEO";
+	
+	public static final String LOAD_MODE_ON_LINE = "ON_LINE";
+	public static final String LOAD_MODE_OFF_LINE = "OFF_LINE";
 
 	public static final String ROLE_SUPER_ADMIN = "SUPER_ADMIN";
 	public static final String ROLE_ADMIN = "ADMIN";
 	public static final String ROLE_USER = "USER";
-	
-	public static final String RESOURCE_TYPE_IMAGEN = "IMAGE";
 
 }
