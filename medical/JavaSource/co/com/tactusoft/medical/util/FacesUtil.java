@@ -157,4 +157,9 @@ public class FacesUtil {
 		out.close();
 		inputStream.close();
 	}
+
+	public static String getExtensionFile(String filename) {
+		int dot = filename.lastIndexOf('.');
+		return filename.substring(dot);
+	}
 }

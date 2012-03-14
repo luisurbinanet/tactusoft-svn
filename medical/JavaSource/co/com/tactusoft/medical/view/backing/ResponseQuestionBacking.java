@@ -25,6 +25,7 @@ public class ResponseQuestionBacking {
 	private MedQuestion selectedQuestion;
 	private List<MedAnswer> listAnswer;
 	private BigDecimal idAnswer;
+	private BigDecimal[] idAnswers;
 
 	public ResponseQuestionBacking() {
 
@@ -60,6 +61,14 @@ public class ResponseQuestionBacking {
 
 	public void setIdAnswer(BigDecimal idAnswer) {
 		this.idAnswer = idAnswer;
+	}
+
+	public BigDecimal[] getIdAnswers() {
+		return idAnswers;
+	}
+
+	public void setIdAnswers(BigDecimal[] idAnswers) {
+		this.idAnswers = idAnswers;
 	}
 
 	public String actionSubmit() {

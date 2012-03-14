@@ -1,4 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
@@ -60,6 +59,18 @@
 						<f:selectItems value="#{responseQuestionBacking.listAnswer}"
 							var="item" itemLabel="#{item.name}" itemValue="#{item.id}" />
 					</p:selectOneRadio>
+
+				</h:panelGrid>
+				
+				<h:panelGrid id="pnlMultiple" columns="2" rowClasses="actions-center"
+					rendered="#{responseQuestionBacking.selectedQuestion.typeQuestion eq 'MULTIPLE'?true:false}"
+					width="100%">
+
+					<p:selectManyCheckbox  id="optionsMultiple"
+						value="#{responseQuestionBacking.idAnswers}" layout="pageDirection">
+						<f:selectItems value="#{responseQuestionBacking.listAnswer}"
+							var="item" itemLabel="#{item.name}" itemValue="#{item.id}" />
+					</p:selectManyCheckbox >
 
 				</h:panelGrid>
 
