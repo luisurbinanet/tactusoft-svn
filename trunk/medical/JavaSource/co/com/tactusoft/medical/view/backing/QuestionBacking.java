@@ -275,7 +275,7 @@ public class QuestionBacking {
 											.isImageVideoONLINE();
 									this.newFile = false;
 								}
-								
+
 							} catch (NullPointerException ex) {
 								field = FacesUtil
 										.getMessage("que_type_final_file");
@@ -283,15 +283,14 @@ public class QuestionBacking {
 										"msg_field_required", field);
 							}
 						}
-						
-						
+
 						selected.setUrlLink(null);
-						
-						if(selected.getResourceType().equals(
-								Constant.RESOURCE_TYPE_IMAGE)){
+
+						if (selected.getResourceType().equals(
+								Constant.RESOURCE_TYPE_IMAGE)) {
 							selected.setTypeVideo(null);
 						}
-						
+
 					} else {
 						if (selected.getUrlLink() == null
 								|| selected.getUrlLink().equals("")) {
@@ -306,7 +305,9 @@ public class QuestionBacking {
 					selected.setImage(null);
 				}
 			} else if (selected.getTypeQuestion().equals(
-					Constant.TYPE_QUESTION_UNIQUE)) {
+					Constant.TYPE_QUESTION_UNIQUE)
+					|| selected.getTypeQuestion().equals(
+							Constant.TYPE_QUESTION_MULTIPLE)) {
 				if (listAnswer.size() == 0) {
 					message = FacesUtil
 							.getMessage("que_msg_validate_nextquestion");
