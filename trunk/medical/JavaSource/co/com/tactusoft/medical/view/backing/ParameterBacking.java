@@ -15,9 +15,11 @@ public class ParameterBacking {
 	private ParameterBo serviceParameter;
 
 	private String urlImages;
+	private String directory;
 
 	public ParameterBacking() {
 		urlImages = null;
+		directory = null;
 	}
 
 	public String getUrlImages() {
@@ -25,6 +27,17 @@ public class ParameterBacking {
 			urlImages = serviceParameter.getValueText("URL_IMAGES");
 		}
 		return urlImages;
+	}
+
+	public String getDirectory() {
+		if (directory == null) {
+			directory = serviceParameter.getValueText("DIRECTORY_IMAGES");
+		}
+		return directory;
+	}
+
+	public void setDirectory(String directory) {
+		this.directory = directory;
 	}
 
 }

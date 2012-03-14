@@ -171,7 +171,7 @@ function artGetStyleUrl() {
 
 function artFixPNG(element) {
 	if (artBrowser.msie && artBrowser.version < 7) {
-		var src;
+		var src = null;
 		if (element.tagName == 'IMG') {
 			if (/\.png$/.test(element.src)) {
 				src = element.src;

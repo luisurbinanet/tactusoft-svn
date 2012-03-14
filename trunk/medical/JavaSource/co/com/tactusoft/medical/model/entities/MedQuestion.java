@@ -216,20 +216,22 @@ public class MedQuestion implements java.io.Serializable {
 	public String getDetResourceType() {
 		String detType = null;
 
-		if (resourceType.equals(Constant.RESOURCE_TYPE_VIDEO)) {
-			if (loadMode.equals(Constant.LOAD_MODE_ON_LINE)) {
-				detType = "VIDEO_ON_LINE";
+		if (typeQuestion.equals(Constant.TYPE_QUESTION_FINAL)) {
+			if (resourceType.equals(Constant.RESOURCE_TYPE_VIDEO)) {
+				if (loadMode.equals(Constant.LOAD_MODE_ON_LINE)) {
+					detType = "VIDEO_ON_LINE";
+				} else {
+					detType = "VIDEO_OFF_LINE";
+				}
+			} else if (resourceType.equals(Constant.RESOURCE_TYPE_IMAGE)) {
+				if (loadMode.equals(Constant.LOAD_MODE_ON_LINE)) {
+					detType = "IMAGE_ON_LINE";
+				} else {
+					detType = "IMAGE_OFF_LINE";
+				}
 			} else {
-				detType = "VIDEO_OFF_LINE";
+				detType = loadMode;
 			}
-		} else if (resourceType.equals(Constant.RESOURCE_TYPE_IMAGE)) {
-			if (loadMode.equals(Constant.LOAD_MODE_ON_LINE)) {
-				detType = "IMAGE_ON_LINE";
-			} else {
-				detType = "IMAGE_OFF_LINE";
-			}
-		} else {
-			detType = loadMode;
 		}
 		return detType;
 	}
@@ -238,13 +240,15 @@ public class MedQuestion implements java.io.Serializable {
 	public boolean isImageVideoONLINE() {
 		boolean detType = false;
 
-		if (resourceType.equals(Constant.RESOURCE_TYPE_VIDEO)) {
-			if (loadMode.equals(Constant.LOAD_MODE_ON_LINE)) {
-				detType = true;
-			}
-		} else if (resourceType.equals(Constant.RESOURCE_TYPE_IMAGE)) {
-			if (loadMode.equals(Constant.LOAD_MODE_ON_LINE)) {
-				detType = true;
+		if (typeQuestion.equals(Constant.TYPE_QUESTION_FINAL)) {
+			if (resourceType.equals(Constant.RESOURCE_TYPE_VIDEO)) {
+				if (loadMode.equals(Constant.LOAD_MODE_ON_LINE)) {
+					detType = true;
+				}
+			} else if (resourceType.equals(Constant.RESOURCE_TYPE_IMAGE)) {
+				if (loadMode.equals(Constant.LOAD_MODE_ON_LINE)) {
+					detType = true;
+				}
 			}
 		}
 		return detType;
@@ -254,15 +258,17 @@ public class MedQuestion implements java.io.Serializable {
 	public String getUrlVideo() {
 		String url = null;
 
-		if (resourceType.equals(Constant.RESOURCE_TYPE_VIDEO)) {
-			if (loadMode.equals(Constant.LOAD_MODE_ON_LINE)) {
-				url = this.urlLink;
-			} else {
-				ParameterBacking parameterBacking = FacesUtil.findBean("parameterBacking");
-				url = parameterBacking.getUrlImages() + this.image;
+		if (typeQuestion.equals(Constant.TYPE_QUESTION_FINAL)) {
+			if (resourceType.equals(Constant.RESOURCE_TYPE_VIDEO)) {
+				if (loadMode.equals(Constant.LOAD_MODE_ON_LINE)) {
+					url = this.urlLink;
+				} else {
+					ParameterBacking parameterBacking = FacesUtil
+							.findBean("parameterBacking");
+					url = parameterBacking.getUrlImages() + this.image;
+				}
 			}
 		}
-
 		return url;
 	}
 

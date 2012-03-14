@@ -15,7 +15,7 @@
 	<bean id="dataSourceDefault" class="com.mchange.v2.c3p0.ComboPooledDataSource"
 		destroy-method="close">
 		<property name="driverClass" value="com.mysql.jdbc.Driver" />
-		<property name="jdbcUrl" value="jdbc:mysql://csarmiento/medical_db" />
+		<property name="jdbcUrl" value="jdbc:mysql://localhost/medical_db" />
 		<property name="user" value="root" />
 		<property name="password" value="admin" />
 		<property name="minPoolSize" value="5" />

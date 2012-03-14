@@ -16,7 +16,6 @@ import org.primefaces.model.UploadedFile;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.medical.controller.bo.AdminBo;
-import co.com.tactusoft.medical.controller.bo.ParameterBo;
 import co.com.tactusoft.medical.model.entities.MedAnswer;
 import co.com.tactusoft.medical.model.entities.MedQuestion;
 import co.com.tactusoft.medical.util.Constant;
@@ -30,9 +29,6 @@ public class QuestionBacking {
 
 	@Inject
 	private AdminBo service;
-
-	@Inject
-	private ParameterBo serviceParameter;
 
 	private MedQuestion selected;
 	private BigDecimal idTopic;
@@ -233,7 +229,7 @@ public class QuestionBacking {
 
 			if (selected.getTypeQuestion().equals(Constant.TYPE_QUESTION_FINAL)
 					&& selected.getResourceType() != null) {
-				
+
 				if (selected.getResourceType().equals(
 						Constant.RESOURCE_TYPE_IMAGE)
 						|| selected.getResourceType().equals(
@@ -246,15 +242,17 @@ public class QuestionBacking {
 									"msg_field_required", field);
 						} else {
 							try {
-								String directory = serviceParameter
-										.getValueText("DIRECTORY_IMAGES");
-								String ext = "."
-										+ file.getContentType().split("/")[1];
+								ParameterBacking parameterBacking = FacesUtil
+										.findBean("parameterBacking");
+								String directory = parameterBacking
+										.getDirectory();
+								String ext = FacesUtil.getExtensionFile(file.getFileName());
 								String fileName = "question" + selected.getId()
 										+ ext;
 								FacesUtil.createFile(file.getInputstream(),
 										directory + fileName);
 								selected.setImage(fileName);
+								selected.setLoadMode(Constant.LOAD_MODE_OFF_LINE);
 							} catch (NullPointerException ex) {
 								field = FacesUtil
 										.getMessage("que_type_final_file");
@@ -264,7 +262,8 @@ public class QuestionBacking {
 						}
 						selected.setUrlLink(null);
 					} else {
-						if (selected.getUrlLink() == null || selected.getUrlLink().equals("")) {
+						if (selected.getUrlLink() == null
+								|| selected.getUrlLink().equals("")) {
 							field = FacesUtil.getMessage("que_type_final_url");
 							message = FacesUtil.getMessage(
 									"msg_field_required", field);
