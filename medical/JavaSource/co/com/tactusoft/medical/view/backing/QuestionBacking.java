@@ -41,6 +41,9 @@ public class QuestionBacking {
 
 	private int orderQuestion;
 
+	private String currentResourceType;
+	private Boolean currnetOnLineResource;
+	private Boolean newFile;
 	private String typeFinal;
 	private UploadedFile file;
 	private String urlImages;
@@ -91,6 +94,9 @@ public class QuestionBacking {
 		}
 
 		this.selected = selected;
+		this.currentResourceType = selected.getResourceType();
+		this.currnetOnLineResource = selected.isImageVideoONLINE();
+		this.newFile = false;
 		searchQuestionAction();
 	}
 
@@ -242,17 +248,34 @@ public class QuestionBacking {
 									"msg_field_required", field);
 						} else {
 							try {
-								ParameterBacking parameterBacking = FacesUtil
-										.findBean("parameterBacking");
-								String directory = parameterBacking
-										.getDirectory();
-								String ext = FacesUtil.getExtensionFile(file.getFileName());
-								String fileName = "question" + selected.getId()
-										+ ext;
-								FacesUtil.createFile(file.getInputstream(),
-										directory + fileName);
-								selected.setImage(fileName);
-								selected.setLoadMode(Constant.LOAD_MODE_OFF_LINE);
+
+								if (!currentResourceType.equals(selected
+										.getResourceType())
+										|| (currnetOnLineResource && (!selected
+												.isImageVideoONLINE()))
+										|| newFile) {
+
+									ParameterBacking parameterBacking = FacesUtil
+											.findBean("parameterBacking");
+									String directory = parameterBacking
+											.getDirectory();
+									String ext = FacesUtil
+											.getExtensionFile(file
+													.getFileName());
+									String fileName = "question"
+											+ selected.getId() + ext;
+									FacesUtil.createFile(file.getInputstream(),
+											directory + fileName);
+
+									selected.setImage(fileName);
+
+									this.currentResourceType = selected
+											.getResourceType();
+									this.currnetOnLineResource = selected
+											.isImageVideoONLINE();
+									this.newFile = false;
+								}
+								
 							} catch (NullPointerException ex) {
 								field = FacesUtil
 										.getMessage("que_type_final_file");
@@ -260,7 +283,15 @@ public class QuestionBacking {
 										"msg_field_required", field);
 							}
 						}
+						
+						
 						selected.setUrlLink(null);
+						
+						if(selected.getResourceType().equals(
+								Constant.RESOURCE_TYPE_IMAGE)){
+							selected.setTypeVideo(null);
+						}
+						
 					} else {
 						if (selected.getUrlLink() == null
 								|| selected.getUrlLink().equals("")) {
@@ -329,6 +360,7 @@ public class QuestionBacking {
 	}
 
 	public void handleFileUpload(FileUploadEvent event) {
+		newFile = true;
 		file = event.getFile();
 	}
 
