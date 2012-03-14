@@ -106,9 +106,20 @@
 					<p:media width="400" height="300"
 						player="#{responseQuestionBacking.selectedQuestion.typeVideo}"
 						value="#{responseQuestionBacking.selectedQuestion.urlVideo}"
-						rendered="#{responseQuestionBacking.selectedQuestion.resourceType eq 'VIDEO'?true:false}">
+						rendered="#{questionBacking.selected.resourceType eq 'VIDEO' and questionBacking.selected.typeVideo ne 'flash'?true:false}">
 						<f:param name="autostart" value="1" />
 					</p:media>
+					
+					<h:panelGrid
+						rendered="#{questionBacking.selected.resourceType eq 'VIDEO' and questionBacking.selected.typeVideo eq 'flash'?true:false}"
+						width="100%" styleClass="actions-center">
+						<object type="application/x-shockwave-flash"
+							data="../../player_flv.swf" width="500" height="300">
+							<param name="movie" value="../../player_flv.swf" />
+							<param name="FlashVars"
+								value='flv=#{responseQuestionBacking.selectedQuestion.urlVideo};' />
+						</object>
+					</h:panelGrid>
 
 					<p:spacer height="20" />
 
