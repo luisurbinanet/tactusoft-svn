@@ -261,13 +261,24 @@
 						rendered="#{questionBacking.selected.resourceType == 'IMAGE'?true:false}"
 						value="#{questionBacking.urlImages}#{questionBacking.selected.image}"
 						width="100" height="100" cache="false" />
+
 					<p:media id="currentVideo" width="400" height="300"
 						player="#{questionBacking.selected.typeVideo}"
 						value="#{questionBacking.selected.urlVideo}"
-						rendered="#{questionBacking.selected.resourceType eq 'VIDEO'?true:false}">
+						rendered="#{questionBacking.selected.resourceType eq 'VIDEO' and questionBacking.selected.typeVideo ne 'flash'?true:false}">
 						<f:param name="controller" value="1" />
 						<f:param name="autostart" value="1" />
 					</p:media>
+
+					<h:panelGrid
+						rendered="#{questionBacking.selected.resourceType eq 'VIDEO' and questionBacking.selected.typeVideo eq 'flash'?true:false}">
+						<object type="application/x-shockwave-flash"
+							data="../../player_flv.swf" width="400" height="300">
+							<param name="movie" value="../../player_flv.swf" />
+							<param name="FlashVars"
+								value='flv=#{questionBacking.selected.urlVideo};' />
+						</object>
+					</h:panelGrid>
 
 				</h:panelGrid>
 
