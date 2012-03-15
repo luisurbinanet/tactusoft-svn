@@ -28,6 +28,11 @@ public class AdminBo implements Serializable {
 		return dao.find("from MedTopic o");
 	}
 
+	public List<MedTopic> getListMedTopic(String gender) {
+		return dao.find("from MedTopic o where o.gender in ('" + gender
+				+ "','A')");
+	}
+
 	public List<MedQuestion> getListMedQuestionByTopic(BigDecimal idTopic) {
 		return dao.find("from MedQuestion o where o.medTopic.id = " + idTopic
 				+ " order by o.orderQuestion");
@@ -69,14 +74,19 @@ public class AdminBo implements Serializable {
 
 	public List<MedCombination> getListMedCombinationByQuestion(
 			BigDecimal idQuestion) {
-		return dao.find("from MedCombination o where o.medAnswer.medQuestion.id = "
-				+ idQuestion + " order by o.medAnswer.medQuestion.id, o.idGroup");
+		return dao
+				.find("from MedCombination o where o.medQuestionByIdQuestion.id = "
+						+ idQuestion);
 	}
-	
+
 	public List<MedCombination> getListMedCombinationByAnswers(
 			BigDecimal idQuestion, String answers) {
-		return dao.find("from MedCombination o where o.medAnswer.medQuestion.id = "
-				+ idQuestion + " and medAnswer.id in (" + answers + ") order by o.idGroup");
+		return dao
+				.find("from MedCombination o where o.medQuestionByIdQuestion.id = "
+						+ idQuestion
+						+ " and answers = '"
+						+ answers
+						+ "' order by id");
 	}
 
 	public void save(Object entity) {

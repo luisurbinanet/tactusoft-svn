@@ -26,6 +26,20 @@
 				<p:inputText value="#{topicBacking.selected.name}"
 					style="width:100%" required="true" label="#{msg['top_name']}" />
 
+				<p:spacer height="5" />
+				<p:spacer height="5" />
+
+				<h:outputText value="#{msg['top_gender']}" />
+				<p:selectOneMenu value="#{topicBacking.selected.gender}"
+					style="width:100%">
+					<f:selectItem itemLabel="#{msg['top_gender_woman']}" itemValue="W" />
+					<f:selectItem itemLabel="#{msg['top_gender_man']}" itemValue="M" />
+					<f:selectItem itemLabel="#{msg['top_gender_all']}" itemValue="A" />
+				</p:selectOneMenu>
+
+				<p:spacer height="5" />
+				<p:spacer height="5" />
+
 				<h:outputText value="#{msg['glb_state']}"
 					rendered="#{topicBacking.selected.id != null?true:false}" />
 				<p:selectOneMenu value="#{topicBacking.selected.state}"
@@ -38,6 +52,7 @@
 
 				<p:spacer height="5" />
 				<p:spacer height="5" />
+
 				<h:outputText value="#{msg['top_image']}" />
 				<p:fileUpload fileUploadListener="#{topicBacking.handleFileUpload}"
 					mode="advanced" update="currentImage" sizeLimit="5000000"
@@ -49,7 +64,7 @@
 				<h:outputText value="#{msg['top_current_image']}" />
 				<p:graphicImage id="currentImage"
 					value="#{topicBacking.urlImages}#{topicBacking.selected.image}"
-					width="100" height="100" cache="false"/>
+					width="100" height="100" cache="false" />
 
 			</h:panelGrid>
 

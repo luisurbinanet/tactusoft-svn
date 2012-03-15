@@ -51,12 +51,14 @@ public class TopicBacking implements Serializable {
 
 	private UploadedFile file;
 	private String urlImages;
+	private boolean newFile;
 
 	public TopicBacking() {
 		selected = new MedTopic();
 		selectedQuestion = new MedQuestion();
 		model = null;
 		urlImages = null;
+		newFile = false;
 	}
 
 	public TopicDataModel getModel() {
@@ -148,15 +150,18 @@ public class TopicBacking implements Serializable {
 				field = FacesUtil.getMessage("top_image");
 				message = FacesUtil.getMessage("msg_field_required", field);
 			} else {
-				String directory = serviceParameter
-						.getValueText("DIRECTORY_IMAGES");
-				String ext = "." + file.getContentType().split("/")[1];
-				String fileName = "topic" + selected.getId() + ext;
+				if (newFile) {
+					String directory = serviceParameter
+							.getValueText("DIRECTORY_IMAGES");
+					String ext = "."
+							+ FacesUtil.getExtensionFile(file.getFileName());
+					String fileName = "topic" + selected.getId() + ext;
 
-				FacesUtil.createFile(file.getInputstream(), directory
-						+ fileName);
+					FacesUtil.createFile(file.getInputstream(), directory
+							+ fileName);
 
-				selected.setImage(fileName);
+					selected.setImage(fileName);
+				}
 			}
 
 			if (message == null) {
@@ -188,6 +193,7 @@ public class TopicBacking implements Serializable {
 	}
 
 	public String goTopicAction() {
+		newFile = false;
 		return "/pages/admin/edit_topic?faces-redirect=true";
 	}
 
@@ -211,6 +217,7 @@ public class TopicBacking implements Serializable {
 	}
 
 	public void handleFileUpload(FileUploadEvent event) {
+		newFile = true;
 		file = event.getFile();
 	}
 

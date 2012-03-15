@@ -62,7 +62,6 @@ public class QuestionBacking {
 	private BigDecimal[] selectedsCombination;
 	private List<MedCombination> listMedCombination;
 	private CombinationDataModel modelCombination;
-	private int idGroup;
 
 	public QuestionBacking() {
 	}
@@ -107,8 +106,6 @@ public class QuestionBacking {
 			listQuestion.add(new SelectItem(row.getId(), question));
 			mapQuestion.put(row.getId(), row);
 		}
-
-		idGroup = 1;
 
 		this.selected = selected;
 		this.currentResourceType = selected.getResourceType() == null ? " "
@@ -539,18 +536,19 @@ public class QuestionBacking {
 			message = FacesUtil.getMessage("msg_field_required", field);
 			FacesUtil.addWarn(message);
 		} else {
-			MedCombination medCombination = null;
 			MedQuestion mqm = mapQuestion.get(nextQuestionMultiple);
+			String answers = "";
+			
 			for (BigDecimal id : selectedsCombination) {
-				medCombination = new MedCombination();
-				MedAnswer mam = mapAnwserMultiple.get(id);
-				medCombination.setIdGroup(idGroup);
-				medCombination.setMedQuestion(mqm);
-				medCombination.setMedAnswer(mam);
-				listMedCombination.add(medCombination);
+				answers = answers + "+" + id;
 			}
+			
+			MedCombination medCombination = new MedCombination();
+			medCombination.setMedQuestionByIdQuestion(selected);
+			medCombination.setAnswers(answers);
+			medCombination.setMedQuestionByNextQuestion(mqm);
+			listMedCombination.add(medCombination);
 
-			idGroup++;
 			modelCombination = new CombinationDataModel(listMedCombination);
 			nextQuestionMultiple = Constant.DEFAULT_VALUE;
 			selectedsCombination = null;

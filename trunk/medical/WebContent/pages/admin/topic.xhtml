@@ -27,6 +27,8 @@
 
 				<p:column headerText="#{msg['top_name']}">#{rec.name}</p:column>
 
+				<p:column headerText="#{msg['top_gender']}">#{rec.gender eq 'M'?msg['top_gender_man']:(rec.gender eq 'W'?msg['top_gender_woman']:msg['top_gender_all'])}</p:column>
+
 				<p:column headerText="#{msg['top_version']}">#{rec.numVersion}</p:column>
 
 				<p:column headerText="#{msg['glb_state']}">#{rec.state==1?msg['glb_state_active']:msg['glb_state_inactive']}</p:column>
@@ -62,7 +64,8 @@
 
 			<p:dataTable id="recordTable2" var="rec"
 				value="#{topicBacking.modelQuestion}" rowKey="#{rec.id}"
-				paginator="true" rows="20" selection="#{topicBacking.selectedQuestionArray}">
+				paginator="true" rows="20"
+				selection="#{topicBacking.selectedQuestionArray}">
 
 				<f:facet name="header">
 					<h:outputLabel value="#{topicBacking.selected.name}" />
