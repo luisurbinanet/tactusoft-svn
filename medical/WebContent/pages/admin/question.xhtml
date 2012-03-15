@@ -207,21 +207,15 @@
 
 					<p:dataTable var="rec" value="#{questionBacking.modelCombination}">
 
-						<p:column headerText="#{msg['que_group']}" style="width:10%">
-							<p:inplace>
-								<h:outputText value="#{rec.idGroup}" />
-							</p:inplace>
-						</p:column>
-
 						<p:column headerText="#{msg['que_answers']}" style="width:45%">
 							<p:inplace>
-								<h:inputText value="#{rec.medAnswer.name}" />
+								<h:inputText value="#{rec.answers}" />
 							</p:inplace>
 						</p:column>
 
 						<p:column headerText="#{msg['que_next']}" style="width:45%">
 							<p:inplace>
-								<h:inputText value="#{rec.medQuestion.name}" />
+								<h:inputText value="#{rec.medQuestionByIdQuestion.name}" />
 							</p:inplace>
 						</p:column>
 					</p:dataTable>

@@ -5,6 +5,8 @@ package co.com.tactusoft.medical.model.entities;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -26,6 +28,7 @@ public class MedTopic implements java.io.Serializable {
 	private BigDecimal id;
 	private String name;
 	private String image;
+	private String gender;
 	private int state;
 	private int numVersion;
 	private Set<MedQuestion> medQuestions = new HashSet<MedQuestion>(0);
@@ -40,11 +43,12 @@ public class MedTopic implements java.io.Serializable {
 		this.numVersion = numVersion;
 	}
 
-	public MedTopic(BigDecimal id, String name, String image, int state,
-			int numVersion, Set<MedQuestion> medQuestions) {
+	public MedTopic(BigDecimal id, String name, String image, String gender,
+			int state, int numVersion, Set<MedQuestion> medQuestions) {
 		this.id = id;
 		this.name = name;
 		this.image = image;
+		this.gender = gender;
 		this.state = state;
 		this.numVersion = numVersion;
 		this.medQuestions = medQuestions;
@@ -78,6 +82,15 @@ public class MedTopic implements java.io.Serializable {
 		this.image = image;
 	}
 
+	@Column(name = "gender", nullable = false)
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
 	@Column(name = "state", nullable = false)
 	public int getState() {
 		return this.state;
@@ -96,7 +109,7 @@ public class MedTopic implements java.io.Serializable {
 		this.numVersion = numVersion;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "medTopic")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "medTopic", cascade = { CascadeType.REMOVE })
 	public Set<MedQuestion> getMedQuestions() {
 		return this.medQuestions;
 	}

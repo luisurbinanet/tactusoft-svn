@@ -1,6 +1,6 @@
 package co.com.tactusoft.medical.model.entities;
 
-// Generated 15/03/2012 05:47:01 AM by Hibernate Tools 3.4.0.CR1
+// Generated 15/03/2012 04:01:48 PM by Hibernate Tools 3.4.0.CR1
 
 import java.math.BigDecimal;
 import javax.persistence.Column;
@@ -23,19 +23,19 @@ public class MedCombination implements java.io.Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
-	private Integer idGroup;
-	private MedQuestion medQuestion;
-	private MedAnswer medAnswer;
+	private MedQuestion medQuestionByIdQuestion;
+	private MedQuestion medQuestionByNextQuestion;
+	private String answers;
 
 	public MedCombination() {
 	}
 
-	public MedCombination(BigDecimal id, Integer idGroup,
-			MedQuestion medQuestion, MedAnswer medAnswer) {
+	public MedCombination(BigDecimal id, MedQuestion medQuestionByIdQuestion,
+			MedQuestion medQuestionByNextQuestion, String answers) {
 		this.id = id;
-		this.idGroup = idGroup;
-		this.medQuestion = medQuestion;
-		this.medAnswer = medAnswer;
+		this.medQuestionByIdQuestion = medQuestionByIdQuestion;
+		this.medQuestionByNextQuestion = medQuestionByNextQuestion;
+		this.answers = answers;
 	}
 
 	@Id
@@ -48,33 +48,34 @@ public class MedCombination implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "id_group", nullable = false)
-	public Integer getIdGroup() {
-		return idGroup;
-	}
-
-	public void setIdGroup(Integer idGroup) {
-		this.idGroup = idGroup;
-	}
-
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_question", nullable = false)
-	public MedQuestion getMedQuestion() {
-		return this.medQuestion;
+	public MedQuestion getMedQuestionByIdQuestion() {
+		return this.medQuestionByIdQuestion;
 	}
 
-	public void setMedQuestion(MedQuestion medQuestion) {
-		this.medQuestion = medQuestion;
+	public void setMedQuestionByIdQuestion(MedQuestion medQuestionByIdQuestion) {
+		this.medQuestionByIdQuestion = medQuestionByIdQuestion;
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_answer", nullable = false)
-	public MedAnswer getMedAnswer() {
-		return this.medAnswer;
+	@JoinColumn(name = "next_question", nullable = false)
+	public MedQuestion getMedQuestionByNextQuestion() {
+		return this.medQuestionByNextQuestion;
 	}
 
-	public void setMedAnswer(MedAnswer medAnswer) {
-		this.medAnswer = medAnswer;
+	public void setMedQuestionByNextQuestion(
+			MedQuestion medQuestionByNextQuestion) {
+		this.medQuestionByNextQuestion = medQuestionByNextQuestion;
+	}
+
+	@Column(name = "answers", nullable = false)
+	public String getAnswers() {
+		return this.answers;
+	}
+
+	public void setAnswers(String answers) {
+		this.answers = answers;
 	}
 
 }

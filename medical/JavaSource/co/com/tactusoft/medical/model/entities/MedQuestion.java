@@ -1,6 +1,6 @@
 package co.com.tactusoft.medical.model.entities;
 
-// Generated 7/03/2012 10:49:44 AM by Hibernate Tools 3.4.0.CR1
+// Generated 15/03/2012 04:01:48 PM by Hibernate Tools 3.4.0.CR1
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -44,7 +44,10 @@ public class MedQuestion implements java.io.Serializable {
 	private BigDecimal positive;
 	private BigDecimal negative;
 	private Integer orderQuestion;
-	private Set<MedCombination> medCombinations = new HashSet<MedCombination>(0);
+	private Set<MedCombination> medCombinationsForIdQuestion = new HashSet<MedCombination>(
+			0);
+	private Set<MedCombination> medCombinationsForNextQuestion = new HashSet<MedCombination>(
+			0);
 	private Set<MedAnswer> medAnswers = new HashSet<MedAnswer>(0);
 
 	public MedQuestion() {
@@ -62,7 +65,9 @@ public class MedQuestion implements java.io.Serializable {
 			String typeQuestion, String resourceType, String urlLink,
 			String image, String typeVideo, String loadMode,
 			BigDecimal positive, BigDecimal negative, Integer orderQuestion,
-			Set<MedCombination> medCombinations, Set<MedAnswer> medAnswers) {
+			Set<MedCombination> medCombinationsForIdQuestion,
+			Set<MedCombination> medCombinationsForNextQuestion,
+			Set<MedAnswer> medAnswers) {
 		this.id = id;
 		this.medTopic = medTopic;
 		this.name = name;
@@ -75,7 +80,8 @@ public class MedQuestion implements java.io.Serializable {
 		this.positive = positive;
 		this.negative = negative;
 		this.orderQuestion = orderQuestion;
-		this.medCombinations = medCombinations;
+		this.medCombinationsForIdQuestion = medCombinationsForIdQuestion;
+		this.medCombinationsForNextQuestion = medCombinationsForNextQuestion;
 		this.medAnswers = medAnswers;
 	}
 
@@ -155,7 +161,7 @@ public class MedQuestion implements java.io.Serializable {
 
 	@Column(name = "load_mode", length = 15)
 	public String getLoadMode() {
-		return loadMode;
+		return this.loadMode;
 	}
 
 	public void setLoadMode(String loadMode) {
@@ -189,16 +195,27 @@ public class MedQuestion implements java.io.Serializable {
 		this.orderQuestion = orderQuestion;
 	}
 
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "medQuestionByIdQuestion", cascade = { CascadeType.REMOVE })
+	public Set<MedCombination> getMedCombinationsForIdQuestion() {
+		return this.medCombinationsForIdQuestion;
+	}
+
+	public void setMedCombinationsForIdQuestion(
+			Set<MedCombination> medCombinationsForIdQuestion) {
+		this.medCombinationsForIdQuestion = medCombinationsForIdQuestion;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "medQuestionByNextQuestion")
+	public Set<MedCombination> getMedCombinationsForNextQuestion() {
+		return this.medCombinationsForNextQuestion;
+	}
+
+	public void setMedCombinationsForNextQuestion(
+			Set<MedCombination> medCombinationsForNextQuestion) {
+		this.medCombinationsForNextQuestion = medCombinationsForNextQuestion;
+	}
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "medQuestion")
-	public Set<MedCombination> getMedCombinations() {
-		return this.medCombinations;
-	}
-
-	public void setMedCombinations(Set<MedCombination> medCombinations) {
-		this.medCombinations = medCombinations;
-	}
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "medQuestion", cascade = { CascadeType.REMOVE })
 	public Set<MedAnswer> getMedAnswers() {
 		return this.medAnswers;
 	}
@@ -212,15 +229,15 @@ public class MedQuestion implements java.io.Serializable {
 		String detType = null;
 
 		if (typeQuestion.equals(Constant.QUESTION_TYPE_MESSAGE)) {
-			detType = "Mensaje";
+			detType = FacesUtil.getMessage("que_type_message");
 		} else if (typeQuestion.equals(Constant.QUESTION_TYPE_ASSERTIVE)) {
-			detType = "Sí/No";
+			detType = FacesUtil.getMessage("que_type_assertive");
 		} else if (typeQuestion.equals(Constant.QUESTION_TYPE_UNIQUE)) {
-			detType = "Única Respuesta";
+			detType = FacesUtil.getMessage("que_type_unique");
 		} else if (typeQuestion.equals(Constant.QUESTION_TYPE_MULTIPLE)) {
-			detType = "Múltiple Respuesta";
+			detType = FacesUtil.getMessage("que_type_multiple");
 		} else if (typeQuestion.equals(Constant.QUESTION_TYPE_FINAL)) {
-			detType = "Final";
+			detType = FacesUtil.getMessage("que_type_final");
 		}
 
 		return detType;
@@ -266,6 +283,8 @@ public class MedQuestion implements java.io.Serializable {
 					detType = true;
 				}
 			}
+		} else {
+			detType = true;
 		}
 		return detType;
 	}

@@ -31,6 +31,15 @@ public class ResponseQuestionBacking {
 	public ResponseQuestionBacking() {
 
 	}
+	
+	public void init(MedQuestion selectedQuestion, List<MedQuestion> list, List<MedAnswer> listAnswer){
+		idAnswer = null;
+		idAnswers = null;
+		
+		this.selectedQuestion = selectedQuestion;
+		this.list = list;
+		this.listAnswer =  listAnswer;
+	}
 
 	public List<MedQuestion> getList() {
 		return list;
@@ -90,14 +99,14 @@ public class ResponseQuestionBacking {
 				Constant.QUESTION_TYPE_MULTIPLE)) {
 			String answers = "";
 			for (BigDecimal id : idAnswers) {
-				answers = answers + id + ",";
+				answers = answers + "+" + id;
 			}
-			answers = answers.substring(0, answers.length() - 1);
+
 			List<MedCombination> listAnswers = service
 					.getListMedCombinationByAnswers(selectedQuestion.getId(),
 							answers);
-			for (MedCombination row : listAnswers) {
-
+			if (listAnswers.size() > 0) {
+				selectedQuestion = listAnswers.get(0).getMedQuestionByNextQuestion();
 			}
 		}
 
