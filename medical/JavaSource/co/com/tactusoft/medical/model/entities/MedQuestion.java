@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -43,6 +44,7 @@ public class MedQuestion implements java.io.Serializable {
 	private BigDecimal positive;
 	private BigDecimal negative;
 	private Integer orderQuestion;
+	private Set<MedCombination> medCombinations = new HashSet<MedCombination>(0);
 	private Set<MedAnswer> medAnswers = new HashSet<MedAnswer>(0);
 
 	public MedQuestion() {
@@ -60,7 +62,7 @@ public class MedQuestion implements java.io.Serializable {
 			String typeQuestion, String resourceType, String urlLink,
 			String image, String typeVideo, String loadMode,
 			BigDecimal positive, BigDecimal negative, Integer orderQuestion,
-			Set<MedAnswer> medAnswers) {
+			Set<MedCombination> medCombinations, Set<MedAnswer> medAnswers) {
 		this.id = id;
 		this.medTopic = medTopic;
 		this.name = name;
@@ -73,6 +75,7 @@ public class MedQuestion implements java.io.Serializable {
 		this.positive = positive;
 		this.negative = negative;
 		this.orderQuestion = orderQuestion;
+		this.medCombinations = medCombinations;
 		this.medAnswers = medAnswers;
 	}
 
@@ -187,6 +190,15 @@ public class MedQuestion implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "medQuestion")
+	public Set<MedCombination> getMedCombinations() {
+		return this.medCombinations;
+	}
+
+	public void setMedCombinations(Set<MedCombination> medCombinations) {
+		this.medCombinations = medCombinations;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "medQuestion", cascade = { CascadeType.REMOVE })
 	public Set<MedAnswer> getMedAnswers() {
 		return this.medAnswers;
 	}
@@ -199,13 +211,15 @@ public class MedQuestion implements java.io.Serializable {
 	public String getDetType() {
 		String detType = null;
 
-		if (typeQuestion.equals("ASSERTIVE")) {
+		if (typeQuestion.equals(Constant.QUESTION_TYPE_MESSAGE)) {
+			detType = "Mensaje";
+		} else if (typeQuestion.equals(Constant.QUESTION_TYPE_ASSERTIVE)) {
 			detType = "Sí/No";
-		} else if (typeQuestion.equals("UNIQUE")) {
+		} else if (typeQuestion.equals(Constant.QUESTION_TYPE_UNIQUE)) {
 			detType = "Única Respuesta";
-		} else if (typeQuestion.equals("MULTIPLE")) {
+		} else if (typeQuestion.equals(Constant.QUESTION_TYPE_MULTIPLE)) {
 			detType = "Múltiple Respuesta";
-		} else if (typeQuestion.equals("FINAL")) {
+		} else if (typeQuestion.equals(Constant.QUESTION_TYPE_FINAL)) {
 			detType = "Final";
 		}
 
@@ -216,7 +230,8 @@ public class MedQuestion implements java.io.Serializable {
 	public String getDetResourceType() {
 		String detType = null;
 
-		if (typeQuestion.equals(Constant.TYPE_QUESTION_FINAL)) {
+		if (typeQuestion != null
+				&& typeQuestion.equals(Constant.QUESTION_TYPE_FINAL)) {
 			if (resourceType.equals(Constant.RESOURCE_TYPE_VIDEO)) {
 				if (loadMode.equals(Constant.LOAD_MODE_ON_LINE)) {
 					detType = "VIDEO_ON_LINE";
@@ -240,7 +255,8 @@ public class MedQuestion implements java.io.Serializable {
 	public boolean isImageVideoONLINE() {
 		boolean detType = false;
 
-		if (typeQuestion.equals(Constant.TYPE_QUESTION_FINAL)) {
+		if (typeQuestion != null
+				&& typeQuestion.equals(Constant.QUESTION_TYPE_FINAL)) {
 			if (resourceType.equals(Constant.RESOURCE_TYPE_VIDEO)) {
 				if (loadMode.equals(Constant.LOAD_MODE_ON_LINE)) {
 					detType = true;
@@ -258,7 +274,8 @@ public class MedQuestion implements java.io.Serializable {
 	public String getUrlVideo() {
 		String url = null;
 
-		if (typeQuestion.equals(Constant.TYPE_QUESTION_FINAL)) {
+		if (typeQuestion != null
+				&& typeQuestion.equals(Constant.QUESTION_TYPE_FINAL)) {
 			if (resourceType.equals(Constant.RESOURCE_TYPE_VIDEO)) {
 				if (loadMode.equals(Constant.LOAD_MODE_ON_LINE)) {
 					url = this.urlLink;
