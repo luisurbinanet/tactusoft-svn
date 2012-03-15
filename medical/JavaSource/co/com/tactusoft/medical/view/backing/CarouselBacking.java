@@ -28,13 +28,13 @@ public class CarouselBacking implements Serializable {
 
 	@Inject
 	private AdminBo service;
-	
+
 	@Inject
 	private ParameterBo parameterService;
 
 	private List<MedTopic> list = new ArrayList<MedTopic>();
 	private MedTopic selectedMenu;
-	
+
 	private String urlImages;
 
 	public CarouselBacking() {
@@ -59,7 +59,7 @@ public class CarouselBacking implements Serializable {
 	public void setSelectedMenu(MedTopic selectedMenu) {
 		this.selectedMenu = selectedMenu;
 	}
-	
+
 	public String getUrlImages() {
 		if (urlImages == null) {
 			urlImages = parameterService.getValueText("URL_IMAGES");
@@ -70,15 +70,17 @@ public class CarouselBacking implements Serializable {
 	public String generateQuestions() {
 		List<MedQuestion> list = service.getListMedQuestionByTopic(selectedMenu
 				.getId());
-		
+
 		ResponseQuestionBacking responseQuestionBacking = FacesUtil
 				.findBean("responseQuestionBacking");
 
-		if(list.size() > 0){
+		if (list.size() > 0) {
 			responseQuestionBacking.setList(list);
 			responseQuestionBacking.setSelectedQuestion(list.get(0));
+			responseQuestionBacking.setListAnswer(service
+					.getListMedQuestionByQuestion(list.get(0).getId()));
 		} else {
-			MedQuestion defaultQuestion = new MedQuestion(); 
+			MedQuestion defaultQuestion = new MedQuestion();
 			defaultQuestion.setId(new BigDecimal(-1));
 			defaultQuestion.setName("No existen preguntas!");
 			defaultQuestion.setTypeQuestion(Constant.QUESTION_TYPE_MESSAGE);

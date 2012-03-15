@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
@@ -110,7 +111,8 @@ public class QuestionBacking {
 		idGroup = 1;
 
 		this.selected = selected;
-		this.currentResourceType = selected.getResourceType();
+		this.currentResourceType = selected.getResourceType() == null ? " "
+				: selected.getResourceType();
 		this.currnetOnLineResource = selected.isImageVideoONLINE();
 		this.newFile = false;
 		searchQuestionAction();
@@ -259,7 +261,7 @@ public class QuestionBacking {
 				modelAnswer = new AnswerDataModel(listAnswer);
 			} else if (selected.getTypeQuestion().equals(
 					Constant.QUESTION_TYPE_MULTIPLE)) {
-				
+
 				listAnswer = service.getListMedQuestionByQuestion(selected
 						.getId());
 				modelAnswer = new AnswerDataModel(listAnswer);
@@ -272,8 +274,9 @@ public class QuestionBacking {
 					listAnswerMultiple.add(new SelectItem(row.getId(), substr));
 					mapAnwserMultiple.put(row.getId(), row);
 				}
-				
-				listMedCombination = service.getListMedCombinationByQuestion(selected.getId());
+
+				listMedCombination = service
+						.getListMedCombinationByQuestion(selected.getId());
 				modelCombination = new CombinationDataModel(listMedCombination);
 
 			} else if (selected.getTypeQuestion().equals(
@@ -347,6 +350,32 @@ public class QuestionBacking {
 									this.currnetOnLineResource = selected
 											.isImageVideoONLINE();
 									this.newFile = false;
+
+									Pattern patternWindows = Pattern
+											.compile("([^\\s]+(\\.(?i)(asx|asf|avi|wma|wmv))$)");
+									Pattern patternQuicktime = Pattern
+											.compile("([^\\s]+(\\.(?i)(aif|aiff|aac|au|bmp|gsm|mov|mid|midi|mpg|mpeg|mp4|m4a|psd|qt|qtif|qif|qti|snd|tif|tiff|wav|3g2|3pg))$)");
+									Pattern patternFlash = Pattern
+											.compile("([^\\s]+(\\.(?i)(flv|mp3|swf))$)");
+									Pattern patternReal = Pattern
+											.compile("([^\\s]+(\\.(?i)(ra|ram|rm|rpm|rv|smi|smil))$)");
+
+									if (patternWindows.matcher(fileName).matches()) {
+										this.selected
+												.setTypeVideo(Constant.VIDEO_TYPE_WINDOWS);
+									} else if (patternQuicktime.matcher(fileName)
+											.matches()) {
+										this.selected
+												.setTypeVideo(Constant.VIDEO_TYPE_QUICKTIME);
+									} else if (patternFlash.matcher(fileName)
+											.matches()) {
+										this.selected
+												.setTypeVideo(Constant.VIDEO_TYPE_FLASH);
+									} else if (patternReal.matcher(fileName)
+											.matches()) {
+										this.selected
+												.setTypeVideo(Constant.VIDEO_TYPE_REAL);
+									}
 								}
 
 							} catch (NullPointerException ex) {
@@ -399,7 +428,17 @@ public class QuestionBacking {
 			}
 
 			if (message == null) {
+
+				if (!selected.getTypeQuestion().equals(
+						Constant.QUESTION_TYPE_FINAL)) {
+					this.selected.setImage(null);
+					this.selected.setLoadMode(null);
+					this.selected.setTypeVideo(null);
+					this.selected.setResourceType(null);
+				}
+
 				service.save(selected);
+
 				if (newRecord) {
 					message = FacesUtil.getMessage("msg_record_ok_3");
 				} else {
@@ -410,17 +449,18 @@ public class QuestionBacking {
 						Constant.QUESTION_TYPE_UNIQUE)
 						&& !selected.getTypeQuestion().equals(
 								Constant.QUESTION_TYPE_MULTIPLE)) {
-					
+
 					for (MedAnswer row : listAnswer) {
 						service.remove(row);
 					}
-					
+
 					listAnswer = new LinkedList<MedAnswer>();
 					modelAnswer = new AnswerDataModel(listAnswer);
-					
+
 					listMedCombination = new LinkedList<MedCombination>();
-					modelCombination = new CombinationDataModel(listMedCombination);
-					
+					modelCombination = new CombinationDataModel(
+							listMedCombination);
+
 				} else {
 					for (MedAnswer row : listAnswer) {
 						if (row.getId() == null) {
@@ -432,7 +472,7 @@ public class QuestionBacking {
 					for (MedAnswer row : selectedDeletesAnswer) {
 						service.remove(row);
 					}
-					
+
 					for (MedCombination row : listMedCombination) {
 						if (row.getId() == null) {
 							row.setId(service.getId("MedCombination"));

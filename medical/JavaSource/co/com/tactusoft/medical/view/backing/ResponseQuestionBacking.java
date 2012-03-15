@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.medical.controller.bo.AdminBo;
 import co.com.tactusoft.medical.model.entities.MedAnswer;
+import co.com.tactusoft.medical.model.entities.MedCombination;
 import co.com.tactusoft.medical.model.entities.MedQuestion;
 import co.com.tactusoft.medical.util.Constant;
 import co.com.tactusoft.medical.util.FacesUtil;
@@ -86,7 +87,24 @@ public class ResponseQuestionBacking {
 		}
 
 		if (selectedQuestion.getTypeQuestion().equals(
-				Constant.QUESTION_TYPE_UNIQUE)) {
+				Constant.QUESTION_TYPE_MULTIPLE)) {
+			String answers = "";
+			for (BigDecimal id : idAnswers) {
+				answers = answers + id + ",";
+			}
+			answers = answers.substring(0, answers.length() - 1);
+			List<MedCombination> listAnswers = service
+					.getListMedCombinationByAnswers(selectedQuestion.getId(),
+							answers);
+			for (MedCombination row : listAnswers) {
+
+			}
+		}
+
+		if (selectedQuestion.getTypeQuestion().equals(
+				Constant.QUESTION_TYPE_UNIQUE)
+				|| selectedQuestion.getTypeQuestion().equals(
+						Constant.QUESTION_TYPE_MULTIPLE)) {
 			listAnswer = service.getListMedQuestionByQuestion(selectedQuestion
 					.getId());
 			if (listAnswer.size() > 0) {
