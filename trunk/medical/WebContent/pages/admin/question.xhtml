@@ -246,22 +246,6 @@
 							itemLabel="#{msg['que_type_final_url']}" />
 					</p:selectOneMenu>
 
-					<h:outputText value="#{msg['que_type_video']}"
-						rendered="#{questionBacking.selected.resourceType == 'VIDEO'?true:false}" />
-					<p:selectOneMenu value="#{questionBacking.selected.typeVideo}"
-						style="width:600px"
-						rendered="#{questionBacking.selected.resourceType == 'VIDEO'?true:false}">
-
-						<f:selectItem itemValue="windows"
-							itemLabel="#{msg['que_type_video_windows']}" />
-						<f:selectItem itemValue="quicktime"
-							itemLabel="#{msg['que_type_video_quicktime']}" />
-						<f:selectItem itemValue="flash"
-							itemLabel="#{msg['que_type_video_flash']}" />
-						<f:selectItem itemValue="real"
-							itemLabel="#{msg['que_type_video_real']}" />
-					</p:selectOneMenu>
-
 					<h:outputText value="#{msg['que_load_mode']}"
 						rendered="#{questionBacking.selected.resourceType == 'VIDEO'?true:false}" />
 					<p:selectOneMenu value="#{questionBacking.selected.loadMode}"

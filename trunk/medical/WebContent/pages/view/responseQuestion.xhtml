@@ -85,6 +85,18 @@
 					</p:commandButton>
 
 				</h:panelGrid>
+				
+				<h:panelGrid id="pnlOkMultiple" columns="1"
+					rendered="#{responseQuestionBacking.selectedQuestion.typeQuestion!='MULTIPLE'?false:true}"
+					styleClass="actions-center" width="100%">
+
+					<p:commandButton value="#{msg['btn_next']}"
+						action="#{responseQuestionBacking.actionSubmit}"
+						update="pnlQuestion" style="width:120px">
+						<f:param name="answer" value="MULTIPLE" />
+					</p:commandButton>
+
+				</h:panelGrid>
 
 				<h:panelGrid id="pnlOk" columns="1"
 					rendered="#{responseQuestionBacking.selectedQuestion.typeQuestion!='FINAL'?false:true}"

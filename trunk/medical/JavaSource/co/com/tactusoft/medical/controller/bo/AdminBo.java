@@ -72,6 +72,12 @@ public class AdminBo implements Serializable {
 		return dao.find("from MedCombination o where o.medAnswer.medQuestion.id = "
 				+ idQuestion + " order by o.medAnswer.medQuestion.id, o.idGroup");
 	}
+	
+	public List<MedCombination> getListMedCombinationByAnswers(
+			BigDecimal idQuestion, String answers) {
+		return dao.find("from MedCombination o where o.medAnswer.medQuestion.id = "
+				+ idQuestion + " and medAnswer.id in (" + answers + ") order by o.idGroup");
+	}
 
 	public void save(Object entity) {
 		dao.persist(entity);
