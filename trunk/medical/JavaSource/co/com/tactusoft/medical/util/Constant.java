@@ -14,11 +14,11 @@ public class Constant {
 	public static final int CALCULATION_TYPE_2 = 2;
 	public static final int CALCULATION_TYPE_3 = 3;
 	
-	public static final String TYPE_QUESTION_MESSAGE = "MESSAGE";
-	public static final String TYPE_QUESTION_ASSERTIVE = "ASSERTIVE";
-	public static final String TYPE_QUESTION_UNIQUE = "UNIQUE";
-	public static final String TYPE_QUESTION_MULTIPLE = "MULTIPLE";
-	public static final String TYPE_QUESTION_FINAL = "FINAL";
+	public static final String QUESTION_TYPE_MESSAGE = "MESSAGE";
+	public static final String QUESTION_TYPE_ASSERTIVE = "ASSERTIVE";
+	public static final String QUESTION_TYPE_UNIQUE = "UNIQUE";
+	public static final String QUESTION_TYPE_MULTIPLE = "MULTIPLE";
+	public static final String QUESTION_TYPE_FINAL = "FINAL";
 	
 	public static final String RESOURCE_TYPE_IMAGE = "IMAGE";
 	public static final String RESOURCE_TYPE_VIDEO = "VIDEO";

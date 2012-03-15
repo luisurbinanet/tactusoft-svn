@@ -81,7 +81,7 @@ public class CarouselBacking implements Serializable {
 			MedQuestion defaultQuestion = new MedQuestion(); 
 			defaultQuestion.setId(new BigDecimal(-1));
 			defaultQuestion.setName("No existen preguntas!");
-			defaultQuestion.setTypeQuestion(Constant.TYPE_QUESTION_MESSAGE);
+			defaultQuestion.setTypeQuestion(Constant.QUESTION_TYPE_MESSAGE);
 			responseQuestionBacking.setSelectedQuestion(defaultQuestion);
 		}
 

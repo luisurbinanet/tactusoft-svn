@@ -52,13 +52,14 @@
 			<p:outputPanel id="pnlTypes" style="width:100%" autoUpdate="true">
 
 				<p:separator style="width:100%"
-					rendered="#{questionBacking.selected.typeQuestion != 'MESSAGE'?true:false}" />
+					rendered="#{questionBacking.selected.typeQuestion ne 'MESSAGE' and questionBacking.selected.typeQuestion ne 'UNIQUE' and questionBacking.selected.typeQuestion ne 'MULTIPLE' ?true:false}" />
 
 				<p:spacer height="20" />
 
 				<h:panelGrid id="pnlYesNo"
 					rendered="#{questionBacking.selected.typeQuestion == 'ASSERTIVE'?true:false}"
 					columns="2" width="100%">
+					
 					<h:outputText value="#{msg['que_positive']}" />
 					<p:selectOneMenu value="#{questionBacking.selected.positive}"
 						style="width:600px">
@@ -75,13 +76,18 @@
 					rendered="#{questionBacking.selected.typeQuestion == 'UNIQUE'?true:false}"
 					width="100%">
 
+					<h:outputFormat value="#{msg['que_answers']}"
+						style="font-size:medium;font-weight:bold;" />
+					<p:separator style="width:100%" />
+					<p:spacer height="5" />
+
 					<h:panelGrid columns="2" width="100%">
 						<h:outputText value="#{msg['que_answer']}" style="width:20%" />
 						<h:inputText value="#{questionBacking.answerText}"
 							style="width:100%" />
 					</h:panelGrid>
 
-					<p:commandButton value="Agregar" process="@parent"
+					<p:commandButton value="#{msg['btn_add']}" process="@parent"
 						action="#{questionBacking.addAnswerAction}"
 						update="pnlUnique growl" />
 					<p:spacer />
@@ -127,15 +133,20 @@
 					rendered="#{questionBacking.selected.typeQuestion == 'MULTIPLE'?true:false}"
 					width="100%">
 
+					<h:outputFormat value="#{msg['que_answers']}"
+						style="font-size:medium;font-weight:bold;" />
+					<p:separator style="width:100%" />
+					<p:spacer height="5" />
+
 					<h:panelGrid columns="2" width="100%">
 						<h:outputText value="#{msg['que_answer']}" style="width:20%" />
 						<h:inputText value="#{questionBacking.answerText}"
 							style="width:100%" />
 					</h:panelGrid>
 
-					<p:commandButton value="Agregar" process="@parent"
+					<p:commandButton value="#{msg['btn_add']}" process="@parent"
 						action="#{questionBacking.addAnswerAction}"
-						update="pnlUnique growl" />
+						update="pnlMultiple growl pnlCombinations" />
 					<p:spacer />
 
 					<p:dataTable id="recordTableMultiple" var="rec"
@@ -160,11 +171,59 @@
 							<p:commandButton icon="ui-icon-closethick"
 								value="#{msg['btn_delete']}"
 								disabled="#{questionBacking.size == 0?true:false}"
-								update="recordTableMultiple"
+								update="recordTableMultiple :form:pnlCombinations"
 								action="#{questionBacking.removeAnswerAction}">
 							</p:commandButton>
 						</f:facet>
 
+					</p:dataTable>
+
+					<p:spacer height="10" />
+					<h:outputFormat value="#{msg['msg_combinations']}"
+						style="font-size:medium;font-weight:bold;" />
+					<p:separator style="width:100%" />
+					<p:spacer height="5" />
+
+					<h:panelGrid id="pnlCombinations" columns="2" width="100%">
+						<h:outputText value="#{msg['que_answers']}" style="width:40%" />
+						<p:selectCheckboxMenu
+							value="#{questionBacking.selectedsCombination}"
+							label="#{msg['msg_selection']}" style="width:600px">
+							<f:selectItems value="#{questionBacking.listAnswerMultiple}" />
+						</p:selectCheckboxMenu>
+
+						<h:outputText value="#{msg['que_next']}" style="width:40%" />
+						<p:selectOneMenu value="#{questionBacking.nextQuestionMultiple}"
+							style="width:600px">
+							<f:selectItems value="#{questionBacking.listQuestion}" />
+						</p:selectOneMenu>
+
+					</h:panelGrid>
+
+					<p:commandButton value="#{msg['btn_add']}" process="@parent"
+						action="#{questionBacking.addCombinationAction}"
+						update="growl pnlCombinations" />
+					<p:spacer />
+
+					<p:dataTable var="rec" value="#{questionBacking.modelCombination}">
+
+						<p:column headerText="#{msg['que_group']}" style="width:10%">
+							<p:inplace>
+								<h:outputText value="#{rec.idGroup}" />
+							</p:inplace>
+						</p:column>
+
+						<p:column headerText="#{msg['que_answers']}" style="width:45%">
+							<p:inplace>
+								<h:inputText value="#{rec.medAnswer.name}" />
+							</p:inplace>
+						</p:column>
+
+						<p:column headerText="#{msg['que_next']}" style="width:45%">
+							<p:inplace>
+								<h:inputText value="#{rec.medQuestion.name}" />
+							</p:inplace>
+						</p:column>
 					</p:dataTable>
 
 				</h:panelGrid>
@@ -230,7 +289,6 @@
 
 					<h:outputText value="#{msg['que_type_final_file']}"
 						rendered="#{(questionBacking.selected.resourceType eq 'IMAGE' || questionBacking.selected.resourceType eq 'VIDEO') and not questionBacking.selected.imageVideoONLINE?true:false}" />
-
 
 					<p:fileUpload
 						rendered="#{questionBacking.selected.detResourceType eq 'IMAGE_OFF_LINE'?true:false}"

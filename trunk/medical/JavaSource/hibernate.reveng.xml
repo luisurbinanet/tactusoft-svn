@@ -2,7 +2,9 @@
 <!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
 
 <hibernate-reverse-engineering>
-	<table-filter match-name="med_topic"></table-filter>
-	<table-filter match-name="med_question"></table-filter>
 	<table-filter match-name="med_answer"></table-filter>
+	<table-filter match-name="med_combination"></table-filter>
+	<table-filter match-name="med_parameter"></table-filter>
+	<table-filter match-name="med_question"></table-filter>
+	<table-filter match-name="med_topic"></table-filter>
 </hibernate-reverse-engineering>

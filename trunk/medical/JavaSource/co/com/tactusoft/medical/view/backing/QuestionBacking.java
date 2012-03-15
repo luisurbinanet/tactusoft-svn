@@ -17,10 +17,12 @@ import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.medical.controller.bo.AdminBo;
 import co.com.tactusoft.medical.model.entities.MedAnswer;
+import co.com.tactusoft.medical.model.entities.MedCombination;
 import co.com.tactusoft.medical.model.entities.MedQuestion;
 import co.com.tactusoft.medical.util.Constant;
 import co.com.tactusoft.medical.util.FacesUtil;
 import co.com.tactusoft.medical.view.datamodel.AnswerDataModel;
+import co.com.tactusoft.medical.view.datamodel.CombinationDataModel;
 import co.com.tactusoft.medical.view.datamodel.QuestionDataModel;
 
 @Named
@@ -53,6 +55,13 @@ public class QuestionBacking {
 	private List<MedAnswer> selectedDeletesAnswer;
 	private String answerText;
 	private AnswerDataModel modelAnswer;
+	private List<SelectItem> listAnswerMultiple;
+	private Map<BigDecimal, MedAnswer> mapAnwserMultiple;
+	private BigDecimal nextQuestionMultiple;
+	private BigDecimal[] selectedsCombination;
+	private List<MedCombination> listMedCombination;
+	private CombinationDataModel modelCombination;
+	private int idGroup;
 
 	public QuestionBacking() {
 	}
@@ -67,6 +76,11 @@ public class QuestionBacking {
 		modelAnswer = new AnswerDataModel(listAnswer);
 		answerText = null;
 		selectedDeletesAnswer = new LinkedList<MedAnswer>();
+		listAnswerMultiple = new LinkedList<SelectItem>();
+		mapAnwserMultiple = new HashMap<BigDecimal, MedAnswer>();
+
+		listMedCombination = new LinkedList<MedCombination>();
+		modelCombination = new CombinationDataModel(listMedCombination);
 
 		listQuestion.add(new SelectItem(Constant.DEFAULT_VALUE,
 				Constant.DEFAULT_LABEL));
@@ -92,6 +106,8 @@ public class QuestionBacking {
 			listQuestion.add(new SelectItem(row.getId(), question));
 			mapQuestion.put(row.getId(), row);
 		}
+
+		idGroup = 1;
 
 		this.selected = selected;
 		this.currentResourceType = selected.getResourceType();
@@ -191,20 +207,77 @@ public class QuestionBacking {
 		this.modelAnswer = modelAnswer;
 	}
 
+	public List<SelectItem> getListAnswerMultiple() {
+		return listAnswerMultiple;
+	}
+
+	public void setListAnswerMultiple(List<SelectItem> listAnswerMultiple) {
+		this.listAnswerMultiple = listAnswerMultiple;
+	}
+
+	public BigDecimal getNextQuestionMultiple() {
+		return nextQuestionMultiple;
+	}
+
+	public void setNextQuestionMultiple(BigDecimal nextQuestionMultiple) {
+		this.nextQuestionMultiple = nextQuestionMultiple;
+	}
+
+	public BigDecimal[] getSelectedsCombination() {
+		return selectedsCombination;
+	}
+
+	public void setSelectedsCombination(BigDecimal[] selectedsCombination) {
+		this.selectedsCombination = selectedsCombination;
+	}
+
+	public List<MedCombination> getListMedCombination() {
+		return listMedCombination;
+	}
+
+	public void setListMedCombination(List<MedCombination> listMedCombination) {
+		this.listMedCombination = listMedCombination;
+	}
+
+	public CombinationDataModel getModelCombination() {
+		return modelCombination;
+	}
+
+	public void setModelCombination(CombinationDataModel modelCombination) {
+		this.modelCombination = modelCombination;
+	}
+
 	public void searchQuestionAction() {
 		if (selected.getId() != null) {
 			if (selected.getTypeQuestion().equals(
-					Constant.TYPE_QUESTION_ASSERTIVE)) {
+					Constant.QUESTION_TYPE_ASSERTIVE)) {
 
 			} else if (selected.getTypeQuestion().equals(
-					Constant.TYPE_QUESTION_UNIQUE)) {
+					Constant.QUESTION_TYPE_UNIQUE)) {
 				listAnswer = service.getListMedQuestionByQuestion(selected
 						.getId());
 				modelAnswer = new AnswerDataModel(listAnswer);
 			} else if (selected.getTypeQuestion().equals(
-					Constant.TYPE_QUESTION_MULTIPLE)) {
+					Constant.QUESTION_TYPE_MULTIPLE)) {
+				
+				listAnswer = service.getListMedQuestionByQuestion(selected
+						.getId());
+				modelAnswer = new AnswerDataModel(listAnswer);
+
+				for (MedAnswer row : listAnswer) {
+					String substr = row.getName();
+					if (substr.length() > 60) {
+						substr = substr.substring(0, 60) + "...";
+					}
+					listAnswerMultiple.add(new SelectItem(row.getId(), substr));
+					mapAnwserMultiple.put(row.getId(), row);
+				}
+				
+				listMedCombination = service.getListMedCombinationByQuestion(selected.getId());
+				modelCombination = new CombinationDataModel(listMedCombination);
+
 			} else if (selected.getTypeQuestion().equals(
-					Constant.TYPE_QUESTION_FINAL)) {
+					Constant.QUESTION_TYPE_FINAL)) {
 
 				if (!selected.getResourceType().equals(
 						Constant.RESOURCE_TYPE_VIDEO)
@@ -214,7 +287,7 @@ public class QuestionBacking {
 				}
 			}
 		} else {
-			selected.setTypeQuestion(Constant.TYPE_QUESTION_MESSAGE);
+			selected.setTypeQuestion(Constant.QUESTION_TYPE_MESSAGE);
 			selected.setPositive(Constant.DEFAULT_VALUE);
 			selected.setNegative(Constant.DEFAULT_VALUE);
 			selected.setResourceType(Constant.RESOURCE_TYPE_IMAGE);
@@ -233,7 +306,7 @@ public class QuestionBacking {
 				newRecord = true;
 			}
 
-			if (selected.getTypeQuestion().equals(Constant.TYPE_QUESTION_FINAL)
+			if (selected.getTypeQuestion().equals(Constant.QUESTION_TYPE_FINAL)
 					&& selected.getResourceType() != null) {
 
 				if (selected.getResourceType().equals(
@@ -305,18 +378,21 @@ public class QuestionBacking {
 					selected.setImage(null);
 				}
 			} else if (selected.getTypeQuestion().equals(
-					Constant.TYPE_QUESTION_UNIQUE)
+					Constant.QUESTION_TYPE_UNIQUE)
 					|| selected.getTypeQuestion().equals(
-							Constant.TYPE_QUESTION_MULTIPLE)) {
+							Constant.QUESTION_TYPE_MULTIPLE)) {
 				if (listAnswer.size() == 0) {
 					message = FacesUtil
 							.getMessage("que_msg_validate_nextquestion");
 				} else {
-					for (MedAnswer row : listAnswer) {
-						if (row.getNextQuestion().intValue() == -1) {
-							message = FacesUtil
-									.getMessage("que_msg_validate_nextquestion");
-							break;
+					if (selected.getTypeQuestion().equals(
+							Constant.QUESTION_TYPE_UNIQUE)) {
+						for (MedAnswer row : listAnswer) {
+							if (row.getNextQuestion().intValue() == -1) {
+								message = FacesUtil
+										.getMessage("que_msg_validate_nextquestion");
+								break;
+							}
 						}
 					}
 				}
@@ -330,15 +406,39 @@ public class QuestionBacking {
 					message = FacesUtil.getMessage("msg_record_ok_2");
 				}
 
-				for (MedAnswer row : listAnswer) {
-					if (row.getId() == null) {
-						row.setId(service.getId("MedAnswer"));
+				if (!selected.getTypeQuestion().equals(
+						Constant.QUESTION_TYPE_UNIQUE)
+						&& !selected.getTypeQuestion().equals(
+								Constant.QUESTION_TYPE_MULTIPLE)) {
+					
+					for (MedAnswer row : listAnswer) {
+						service.remove(row);
 					}
-					service.save(row);
-				}
+					
+					listAnswer = new LinkedList<MedAnswer>();
+					modelAnswer = new AnswerDataModel(listAnswer);
+					
+					listMedCombination = new LinkedList<MedCombination>();
+					modelCombination = new CombinationDataModel(listMedCombination);
+					
+				} else {
+					for (MedAnswer row : listAnswer) {
+						if (row.getId() == null) {
+							row.setId(service.getId("MedAnswer"));
+						}
+						service.save(row);
+					}
 
-				for (MedAnswer row : selectedDeletesAnswer) {
-					service.remove(row);
+					for (MedAnswer row : selectedDeletesAnswer) {
+						service.remove(row);
+					}
+					
+					for (MedCombination row : listMedCombination) {
+						if (row.getId() == null) {
+							row.setId(service.getId("MedCombination"));
+						}
+						service.save(row);
+					}
 				}
 
 				FacesUtil.addInfo(message);
@@ -377,19 +477,55 @@ public class QuestionBacking {
 			selectedAnswer.setNextQuestion(Constant.DEFAULT_VALUE);
 			listAnswer.add(selectedAnswer);
 			modelAnswer = new AnswerDataModel(listAnswer);
+
+			listAnswerMultiple.add(new SelectItem(selectedAnswer.getId(),
+					selectedAnswer.getName()));
+			mapAnwserMultiple.put(selectedAnswer.getId(), selectedAnswer);
+
 			answerText = "";
+			selectedsCombination = null;
+		}
+	}
+
+	public void addCombinationAction() {
+		String field = null;
+		String message = null;
+		if (selectedsCombination == null) {
+			field = FacesUtil.getMessage("que_answers");
+			message = FacesUtil.getMessage("msg_field_required", field);
+			FacesUtil.addWarn(message);
+		} else if (nextQuestionMultiple.intValue() == -1) {
+			field = FacesUtil.getMessage("que_answer");
+			message = FacesUtil.getMessage("msg_field_required", field);
+			FacesUtil.addWarn(message);
+		} else {
+			MedCombination medCombination = null;
+			MedQuestion mqm = mapQuestion.get(nextQuestionMultiple);
+			for (BigDecimal id : selectedsCombination) {
+				medCombination = new MedCombination();
+				MedAnswer mam = mapAnwserMultiple.get(id);
+				medCombination.setIdGroup(idGroup);
+				medCombination.setMedQuestion(mqm);
+				medCombination.setMedAnswer(mam);
+				listMedCombination.add(medCombination);
+			}
+
+			idGroup++;
+			modelCombination = new CombinationDataModel(listMedCombination);
+			nextQuestionMultiple = Constant.DEFAULT_VALUE;
+			selectedsCombination = null;
 		}
 	}
 
 	public void changeAnswerTypeAction() {
-		if (selected.getTypeQuestion().equals(Constant.TYPE_QUESTION_ASSERTIVE)) {
+		if (selected.getTypeQuestion().equals(Constant.QUESTION_TYPE_ASSERTIVE)) {
 
 		} else if (selected.getTypeQuestion().equals(
-				Constant.TYPE_QUESTION_UNIQUE)) {
+				Constant.QUESTION_TYPE_UNIQUE)) {
 		} else if (selected.getTypeQuestion().equals(
-				Constant.TYPE_QUESTION_MULTIPLE)) {
+				Constant.QUESTION_TYPE_MULTIPLE)) {
 		} else if (selected.getTypeQuestion().equals(
-				Constant.TYPE_QUESTION_FINAL)) {
+				Constant.QUESTION_TYPE_FINAL)) {
 		}
 	}
 

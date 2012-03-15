@@ -3,12 +3,17 @@ package co.com.tactusoft.medical.model.entities;
 // Generated 7/03/2012 10:49:44 AM by Hibernate Tools 3.4.0.CR1
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -26,6 +31,7 @@ public class MedAnswer implements java.io.Serializable {
 	private MedQuestion medQuestion;
 	private String name;
 	private BigDecimal nextQuestion;
+	private Set<MedCombination> medCombinations = new HashSet<MedCombination>(0);
 
 	public MedAnswer() {
 	}
@@ -37,11 +43,12 @@ public class MedAnswer implements java.io.Serializable {
 	}
 
 	public MedAnswer(BigDecimal id, MedQuestion medQuestion, String name,
-			BigDecimal nextQuestion) {
+			BigDecimal nextQuestion, Set<MedCombination> medCombinations) {
 		this.id = id;
 		this.medQuestion = medQuestion;
 		this.name = name;
 		this.nextQuestion = nextQuestion;
+		this.medCombinations = medCombinations;
 	}
 
 	@Id
@@ -54,7 +61,7 @@ public class MedAnswer implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_question", nullable = false)
 	public MedQuestion getMedQuestion() {
 		return this.medQuestion;
@@ -80,6 +87,15 @@ public class MedAnswer implements java.io.Serializable {
 
 	public void setNextQuestion(BigDecimal nextQuestion) {
 		this.nextQuestion = nextQuestion;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "medAnswer", cascade = { CascadeType.REMOVE })
+	public Set<MedCombination> getMedCombinations() {
+		return this.medCombinations;
+	}
+
+	public void setMedCombinations(Set<MedCombination> medCombinations) {
+		this.medCombinations = medCombinations;
 	}
 
 }

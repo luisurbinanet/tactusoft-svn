@@ -86,7 +86,7 @@ public class ResponseQuestionBacking {
 		}
 
 		if (selectedQuestion.getTypeQuestion().equals(
-				Constant.TYPE_QUESTION_UNIQUE)) {
+				Constant.QUESTION_TYPE_UNIQUE)) {
 			listAnswer = service.getListMedQuestionByQuestion(selectedQuestion
 					.getId());
 			if (listAnswer.size() > 0) {
@@ -99,7 +99,7 @@ public class ResponseQuestionBacking {
 			selectedQuestion.setId(new BigDecimal(-1));
 			String message = FacesUtil.getMessage("msg_final");
 			selectedQuestion.setName(message);
-			selectedQuestion.setTypeQuestion(Constant.TYPE_QUESTION_MESSAGE);
+			selectedQuestion.setTypeQuestion(Constant.QUESTION_TYPE_MESSAGE);
 		}
 
 		return "";
