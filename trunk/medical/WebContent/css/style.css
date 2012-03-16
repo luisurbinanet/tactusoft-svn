@@ -1433,3 +1433,19 @@ img.image {
 	height: 130px;
 	width: 150px;
 }
+
+.ui-datatable-data-empty {
+    border-style: none;
+}
+
+.columnClasses_left{
+	text-align: left;
+	border-style: none;
+	width: 70%;
+}
+
+.columnClasses_right{
+	text-align: right;
+	border-style: none;
+	width: 30%;
+}

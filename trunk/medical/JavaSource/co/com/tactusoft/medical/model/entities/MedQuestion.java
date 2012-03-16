@@ -236,7 +236,7 @@ public class MedQuestion implements java.io.Serializable {
 			detType = FacesUtil.getMessage("que_type_unique");
 		} else if (typeQuestion.equals(Constant.QUESTION_TYPE_MULTIPLE)) {
 			detType = FacesUtil.getMessage("que_type_multiple");
-		} else if (typeQuestion.equals(Constant.QUESTION_TYPE_FINAL)) {
+		} else if (typeQuestion.equals(Constant.QUESTION_TYPE_MEDIA)) {
 			detType = FacesUtil.getMessage("que_type_final");
 		}
 
@@ -248,7 +248,7 @@ public class MedQuestion implements java.io.Serializable {
 		String detType = null;
 
 		if (typeQuestion != null
-				&& typeQuestion.equals(Constant.QUESTION_TYPE_FINAL)) {
+				&& typeQuestion.equals(Constant.QUESTION_TYPE_MEDIA)) {
 			if (resourceType.equals(Constant.RESOURCE_TYPE_VIDEO)) {
 				if (loadMode.equals(Constant.LOAD_MODE_ON_LINE)) {
 					detType = "VIDEO_ON_LINE";
@@ -269,11 +269,30 @@ public class MedQuestion implements java.io.Serializable {
 	}
 
 	@Transient
+	public String getDetMedia() {
+		String detType = null;
+		if (typeQuestion != null
+				&& typeQuestion.equals(Constant.QUESTION_TYPE_MEDIA)) {
+
+			if (resourceType.equals(Constant.RESOURCE_TYPE_VIDEO)) {
+				detType = FacesUtil.getMessage("que_type_final_video");
+			} else if (resourceType.equals(Constant.RESOURCE_TYPE_IMAGE)) {
+				detType = FacesUtil.getMessage("que_type_final_image");
+			} else if (resourceType.equals(Constant.RESOURCE_TYPE_LINK)) {
+				detType = FacesUtil.getMessage("que_type_final_url");
+			} 
+		} else {
+			detType = "";
+		}
+		return detType;
+	}
+
+	@Transient
 	public boolean isImageVideoONLINE() {
 		boolean detType = false;
 
 		if (typeQuestion != null
-				&& typeQuestion.equals(Constant.QUESTION_TYPE_FINAL)) {
+				&& typeQuestion.equals(Constant.QUESTION_TYPE_MEDIA)) {
 			if (resourceType.equals(Constant.RESOURCE_TYPE_VIDEO)) {
 				if (loadMode.equals(Constant.LOAD_MODE_ON_LINE)) {
 					detType = true;
@@ -294,8 +313,9 @@ public class MedQuestion implements java.io.Serializable {
 		String url = null;
 
 		if (typeQuestion != null
-				&& typeQuestion.equals(Constant.QUESTION_TYPE_FINAL)) {
-			if (resourceType.equals(Constant.RESOURCE_TYPE_VIDEO)) {
+				&& typeQuestion.equals(Constant.QUESTION_TYPE_MEDIA)) {
+			if (resourceType.equals(Constant.RESOURCE_TYPE_VIDEO)
+					|| resourceType.equals(Constant.RESOURCE_TYPE_IMAGE)) {
 				if (loadMode.equals(Constant.LOAD_MODE_ON_LINE)) {
 					url = this.urlLink;
 				} else {

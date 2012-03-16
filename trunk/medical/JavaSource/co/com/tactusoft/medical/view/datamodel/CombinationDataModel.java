@@ -7,10 +7,8 @@ import javax.faces.model.ListDataModel;
 
 import org.primefaces.model.SelectableDataModel;
 
-import co.com.tactusoft.medical.model.entities.MedCombination;
-
-public class CombinationDataModel extends ListDataModel<MedCombination> implements
-		SelectableDataModel<MedCombination>,Serializable {
+public class CombinationDataModel extends ListDataModel<Combination> implements
+		SelectableDataModel<Combination>,Serializable {
 
 	/**
 	 * 
@@ -20,19 +18,19 @@ public class CombinationDataModel extends ListDataModel<MedCombination> implemen
 	public CombinationDataModel() {
 	}
 
-	public CombinationDataModel(List<MedCombination> data) {
+	public CombinationDataModel(List<Combination> data) {
 		super(data);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public MedCombination getRowData(String rowKey) {
+	public Combination getRowData(String rowKey) {
 		// In a real app, a more efficient way like a query by rowKey should be
 		// implemented to deal with huge data
 
-		List<MedCombination> list = (List<MedCombination>) getWrappedData();
+		List<Combination> list = (List<Combination>) getWrappedData();
 
-		for (MedCombination row : list) {
+		for (Combination row : list) {
 			if (row.getId().equals(rowKey))
 				return row;
 		}
@@ -41,7 +39,7 @@ public class CombinationDataModel extends ListDataModel<MedCombination> implemen
 	}
 
 	@Override
-	public Object getRowKey(MedCombination car) {
+	public Object getRowKey(Combination car) {
 		return car.getId();
 	}
 }
