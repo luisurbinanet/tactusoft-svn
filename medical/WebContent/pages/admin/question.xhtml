@@ -59,7 +59,7 @@
 				<h:panelGrid id="pnlYesNo"
 					rendered="#{questionBacking.selected.typeQuestion == 'ASSERTIVE'?true:false}"
 					columns="2" width="100%">
-					
+
 					<h:outputText value="#{msg['que_positive']}" />
 					<p:selectOneMenu value="#{questionBacking.selected.positive}"
 						style="width:600px">
@@ -207,17 +207,35 @@
 
 					<p:dataTable var="rec" value="#{questionBacking.modelCombination}">
 
-						<p:column headerText="#{msg['que_answers']}" style="width:45%">
-							<p:inplace>
-								<h:inputText value="#{rec.answers}" />
-							</p:inplace>
-						</p:column>
+						<p:columnGroup type="header">
+							<p:row>
+								<p:column headerText="#{msg['que_next']}" style="width:20%" />
+								<p:column headerText="#{msg['que_answers']}" style="width:70%" />
+							</p:row>
+						</p:columnGroup>
 
-						<p:column headerText="#{msg['que_next']}" style="width:45%">
-							<p:inplace>
-								<h:inputText value="#{rec.medQuestionByIdQuestion.name}" />
-							</p:inplace>
-						</p:column>
+						<p:subTable var="ans" value="#{rec.listAnswers}">
+							<f:facet name="header">
+								<p:panelGrid columns="2" styleClass="ui-datatable-data-empty"
+									columnClasses="columnClasses_left, columnClasses_right">
+									<h:outputLabel value="#{rec.nextQuestion.name}" />
+									<p:commandButton value="#{msg['btn_delete']}"
+										action="#{questionBacking.deleteCombination}">
+										<f:param name="COMBINATION_ID" value="#{rec.id}" />
+									</p:commandButton>
+								</p:panelGrid>
+							</f:facet>
+
+							<p:column>
+								<p:spacer />
+							</p:column>
+
+							<p:column>
+                            	#{ans.name}
+                        	</p:column>
+
+						</p:subTable>
+
 					</p:dataTable>
 
 				</h:panelGrid>
@@ -241,10 +259,10 @@
 					</p:selectOneMenu>
 
 					<h:outputText value="#{msg['que_load_mode']}"
-						rendered="#{questionBacking.selected.resourceType == 'VIDEO'?true:false}" />
+						rendered="#{questionBacking.selected.resourceType eq 'IMAGE' || questionBacking.selected.resourceType == 'VIDEO'?true:false}" />
 					<p:selectOneMenu value="#{questionBacking.selected.loadMode}"
 						style="width:600px"
-						rendered="#{questionBacking.selected.resourceType == 'VIDEO'?true:false}">
+						rendered="#{questionBacking.selected.resourceType eq 'IMAGE' || questionBacking.selected.resourceType == 'VIDEO'?true:false}">
 
 						<p:ajax event="change" update="pnlFinal" />
 
@@ -295,8 +313,8 @@
 
 					<p:graphicImage id="currentImage"
 						rendered="#{questionBacking.selected.resourceType == 'IMAGE'?true:false}"
-						value="#{questionBacking.urlImages}#{questionBacking.selected.image}"
-						width="100" height="100" cache="false" />
+						value="#{questionBacking.selected.urlVideo}" width="100"
+						height="100" cache="false" />
 
 					<p:media id="currentVideo" width="400" height="300"
 						player="#{questionBacking.selected.typeVideo}"
@@ -337,16 +355,6 @@
 		</h:form>
 
 		<h:panelGroup layout="block" style="height:300px;" />
-
-		<script type="text/javascript">  
-	         function handleSubmitRequest(xhr, status, args) {  
-	             if(args.saved!='true') {  
-	                 jQuery('#dialogPanel').effect("shake", { times:1 }, 50);   
-	             } else {                                      
-	             	dialogPanel.hide();   
-	             }
-	         }
-        </script>
 
 	</ui:define>
 </ui:composition>

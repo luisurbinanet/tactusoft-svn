@@ -99,8 +99,10 @@ public class ResponseQuestionBacking {
 				Constant.QUESTION_TYPE_MULTIPLE)) {
 			String answers = "";
 			for (BigDecimal id : idAnswers) {
-				answers = answers + "+" + id;
+				answers = answers + id + "+";
 			}
+			
+			answers = answers.substring(0, answers.length() - 1);
 
 			List<MedCombination> listAnswers = service
 					.getListMedCombinationByAnswers(selectedQuestion.getId(),

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
 import javax.faces.model.SelectItem;
@@ -23,6 +24,7 @@ import co.com.tactusoft.medical.model.entities.MedQuestion;
 import co.com.tactusoft.medical.util.Constant;
 import co.com.tactusoft.medical.util.FacesUtil;
 import co.com.tactusoft.medical.view.datamodel.AnswerDataModel;
+import co.com.tactusoft.medical.view.datamodel.Combination;
 import co.com.tactusoft.medical.view.datamodel.CombinationDataModel;
 import co.com.tactusoft.medical.view.datamodel.QuestionDataModel;
 
@@ -61,7 +63,9 @@ public class QuestionBacking {
 	private BigDecimal nextQuestionMultiple;
 	private BigDecimal[] selectedsCombination;
 	private List<MedCombination> listMedCombination;
+	private List<Combination> listCombination;
 	private CombinationDataModel modelCombination;
+	private Combination selectedCombination;
 
 	public QuestionBacking() {
 	}
@@ -80,7 +84,8 @@ public class QuestionBacking {
 		mapAnwserMultiple = new HashMap<BigDecimal, MedAnswer>();
 
 		listMedCombination = new LinkedList<MedCombination>();
-		modelCombination = new CombinationDataModel(listMedCombination);
+		listCombination = new LinkedList<Combination>();
+		modelCombination = new CombinationDataModel(listCombination);
 
 		listQuestion.add(new SelectItem(Constant.DEFAULT_VALUE,
 				Constant.DEFAULT_LABEL));
@@ -246,6 +251,14 @@ public class QuestionBacking {
 		this.modelCombination = modelCombination;
 	}
 
+	public Combination getSelectedCombination() {
+		return selectedCombination;
+	}
+
+	public void setSelectedCombination(Combination selectedCombination) {
+		this.selectedCombination = selectedCombination;
+	}
+
 	public void searchQuestionAction() {
 		if (selected.getId() != null) {
 			if (selected.getTypeQuestion().equals(
@@ -274,10 +287,11 @@ public class QuestionBacking {
 
 				listMedCombination = service
 						.getListMedCombinationByQuestion(selected.getId());
-				modelCombination = new CombinationDataModel(listMedCombination);
+				listCombination = getLisCombination(listMedCombination);
+				modelCombination = new CombinationDataModel(listCombination);
 
 			} else if (selected.getTypeQuestion().equals(
-					Constant.QUESTION_TYPE_FINAL)) {
+					Constant.QUESTION_TYPE_MEDIA)) {
 
 				if (!selected.getResourceType().equals(
 						Constant.RESOURCE_TYPE_VIDEO)
@@ -306,7 +320,7 @@ public class QuestionBacking {
 				newRecord = true;
 			}
 
-			if (selected.getTypeQuestion().equals(Constant.QUESTION_TYPE_FINAL)
+			if (selected.getTypeQuestion().equals(Constant.QUESTION_TYPE_MEDIA)
 					&& selected.getResourceType() != null) {
 
 				if (selected.getResourceType().equals(
@@ -357,11 +371,12 @@ public class QuestionBacking {
 									Pattern patternReal = Pattern
 											.compile("([^\\s]+(\\.(?i)(ra|ram|rm|rpm|rv|smi|smil))$)");
 
-									if (patternWindows.matcher(fileName).matches()) {
+									if (patternWindows.matcher(fileName)
+											.matches()) {
 										this.selected
 												.setTypeVideo(Constant.VIDEO_TYPE_WINDOWS);
-									} else if (patternQuicktime.matcher(fileName)
-											.matches()) {
+									} else if (patternQuicktime.matcher(
+											fileName).matches()) {
 										this.selected
 												.setTypeVideo(Constant.VIDEO_TYPE_QUICKTIME);
 									} else if (patternFlash.matcher(fileName)
@@ -427,7 +442,7 @@ public class QuestionBacking {
 			if (message == null) {
 
 				if (!selected.getTypeQuestion().equals(
-						Constant.QUESTION_TYPE_FINAL)) {
+						Constant.QUESTION_TYPE_MEDIA)) {
 					this.selected.setImage(null);
 					this.selected.setLoadMode(null);
 					this.selected.setTypeVideo(null);
@@ -455,8 +470,10 @@ public class QuestionBacking {
 					modelAnswer = new AnswerDataModel(listAnswer);
 
 					listMedCombination = new LinkedList<MedCombination>();
-					modelCombination = new CombinationDataModel(
-							listMedCombination);
+					/*
+					 * modelCombination = new CombinationDataModel(
+					 * listMedCombination);
+					 */
 
 				} else {
 					for (MedAnswer row : listAnswer) {
@@ -515,9 +532,11 @@ public class QuestionBacking {
 			listAnswer.add(selectedAnswer);
 			modelAnswer = new AnswerDataModel(listAnswer);
 
-			listAnswerMultiple.add(new SelectItem(selectedAnswer.getId(),
-					selectedAnswer.getName()));
-			mapAnwserMultiple.put(selectedAnswer.getId(), selectedAnswer);
+			/*
+			 * listAnswerMultiple.add(new SelectItem(selectedAnswer.getId(),
+			 * selectedAnswer.getName()));
+			 * mapAnwserMultiple.put(selectedAnswer.getId(), selectedAnswer);
+			 */
 
 			answerText = "";
 			selectedsCombination = null;
@@ -538,18 +557,21 @@ public class QuestionBacking {
 		} else {
 			MedQuestion mqm = mapQuestion.get(nextQuestionMultiple);
 			String answers = "";
-			
+
 			for (BigDecimal id : selectedsCombination) {
-				answers = answers + "+" + id;
+				answers = answers + id + "+";
 			}
 			
+			answers = answers.substring(0, answers.length() - 1);
+
 			MedCombination medCombination = new MedCombination();
 			medCombination.setMedQuestionByIdQuestion(selected);
 			medCombination.setAnswers(answers);
 			medCombination.setMedQuestionByNextQuestion(mqm);
 			listMedCombination.add(medCombination);
-
-			modelCombination = new CombinationDataModel(listMedCombination);
+			
+			listCombination = getLisCombination(listMedCombination);
+			modelCombination = new CombinationDataModel(listCombination);
 			nextQuestionMultiple = Constant.DEFAULT_VALUE;
 			selectedsCombination = null;
 		}
@@ -563,7 +585,7 @@ public class QuestionBacking {
 		} else if (selected.getTypeQuestion().equals(
 				Constant.QUESTION_TYPE_MULTIPLE)) {
 		} else if (selected.getTypeQuestion().equals(
-				Constant.QUESTION_TYPE_FINAL)) {
+				Constant.QUESTION_TYPE_MEDIA)) {
 		}
 	}
 
@@ -578,6 +600,30 @@ public class QuestionBacking {
 
 	public int getSize() {
 		return listAnswer.size();
+	}
+
+	private List<Combination> getLisCombination(List<MedCombination> list) {
+		List<Combination> result = new LinkedList<Combination>();
+		for (MedCombination row : list) {
+			Combination obj = new Combination();
+			obj.setId(row.getId());
+			obj.setNextQuestion(row.getMedQuestionByNextQuestion());
+			List<MedAnswer> listAnswers = new LinkedList<MedAnswer>();
+			StringTokenizer answers = new StringTokenizer(row.getAnswers(),"+");
+			while (answers.hasMoreTokens()) {
+				String answer = answers.nextToken();
+				BigDecimal id = new BigDecimal(answer);
+				MedAnswer medAnswer = mapAnwserMultiple.get(id);
+				listAnswers.add(medAnswer);
+			}
+			obj.setListAnswers(listAnswers);
+			result.add(obj);
+		}
+		return result;
+	}
+	
+	public void deleteCombination(){
+		BigDecimal id = new BigDecimal(FacesUtil.getParam("COMBINATION_ID"));
 	}
 
 }
