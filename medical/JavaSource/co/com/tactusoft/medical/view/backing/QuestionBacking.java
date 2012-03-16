@@ -624,6 +624,7 @@ public class QuestionBacking {
 	
 	public void deleteCombination(){
 		BigDecimal id = new BigDecimal(FacesUtil.getParam("COMBINATION_ID"));
+		System.out.println(id);
 	}
 
 }
