@@ -205,38 +205,37 @@
 						update="growl pnlCombinations" />
 					<p:spacer />
 
-					<p:dataTable var="rec" value="#{questionBacking.modelCombination}">
+					<p:dataGrid var="rec" value="#{questionBacking.modelCombination}"
+						columns="3" rows="12" paginator="true" rowIndexVar="ind"
+						paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} ">
 
-						<p:columnGroup type="header">
-							<p:row>
-								<p:column headerText="#{msg['que_next']}" style="width:20%" />
-								<p:column headerText="#{msg['que_answers']}" style="width:70%" />
-							</p:row>
-						</p:columnGroup>
+						<p:column>
+							<p:panel style="text-align:center">
 
-						<p:subTable var="ans" value="#{rec.listAnswers}">
-							<f:facet name="header">
-								<p:panelGrid columns="2" styleClass="ui-datatable-data-empty"
-									columnClasses="columnClasses_left, columnClasses_right">
-									<h:outputLabel value="#{rec.nextQuestion.name}" />
-									<p:commandButton value="#{msg['btn_delete']}"
-										action="#{questionBacking.deleteCombination}">
-										<f:param name="COMBINATION_ID" value="#{rec.id}" />
-									</p:commandButton>
-								</p:panelGrid>
-							</f:facet>
+								<h:panelGrid columns="2" style="width:100%">
+									<h:outputLabel value="#{msg['que_next']}" />
+									<h:inputTextarea value="#{rec.nextQuestion.name}"
+										readonly="true" />
+								</h:panelGrid>
 
-							<p:column>
-								<p:spacer />
-							</p:column>
+								<h:outputText value="#{msg['que_answers']}"
+									style="width:100%;font-weight:bold;" />
 
-							<p:column>
-                            	#{ans.name}
-                        	</p:column>
+								<h:panelGrid columns="1" style="width:100%;text-align:left">
+									<p:dataList var="ans" value="#{rec.listAnswers}">
+										<h:outputLabel value="#{ans.name}" />
+									</p:dataList>
+								</h:panelGrid>
 
-						</p:subTable>
+								<p:commandButton value="#{msg['btn_delete']}"
+									action="#{questionBacking.deleteCombination}"
+									update=":form:pnlMultiple">
+									<f:param name="COMBINATION_ID" value="#{rec.id}" />
+								</p:commandButton>
+							</p:panel>
+						</p:column>
 
-					</p:dataTable>
+					</p:dataGrid>
 
 				</h:panelGrid>
 

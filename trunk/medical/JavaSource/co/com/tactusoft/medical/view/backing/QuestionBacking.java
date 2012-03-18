@@ -66,6 +66,7 @@ public class QuestionBacking {
 	private List<Combination> listCombination;
 	private CombinationDataModel modelCombination;
 	private Combination selectedCombination;
+	private List<MedCombination> selectedDeleteCombination;
 
 	public QuestionBacking() {
 	}
@@ -83,6 +84,7 @@ public class QuestionBacking {
 		listAnswerMultiple = new LinkedList<SelectItem>();
 		mapAnwserMultiple = new HashMap<BigDecimal, MedAnswer>();
 
+		selectedDeleteCombination = new LinkedList<MedCombination>();
 		listMedCombination = new LinkedList<MedCombination>();
 		listCombination = new LinkedList<Combination>();
 		modelCombination = new CombinationDataModel(listCombination);
@@ -470,10 +472,9 @@ public class QuestionBacking {
 					modelAnswer = new AnswerDataModel(listAnswer);
 
 					listMedCombination = new LinkedList<MedCombination>();
-					/*
-					 * modelCombination = new CombinationDataModel(
-					 * listMedCombination);
-					 */
+					listCombination = getLisCombination(listMedCombination);
+
+					modelCombination = new CombinationDataModel(listCombination);
 
 				} else {
 					for (MedAnswer row : listAnswer) {
@@ -492,6 +493,10 @@ public class QuestionBacking {
 							row.setId(service.getId("MedCombination"));
 						}
 						service.save(row);
+					}
+					
+					for (MedCombination row : selectedDeleteCombination) {
+						service.remove(row);
 					}
 				}
 
@@ -561,7 +566,7 @@ public class QuestionBacking {
 			for (BigDecimal id : selectedsCombination) {
 				answers = answers + id + "+";
 			}
-			
+
 			answers = answers.substring(0, answers.length() - 1);
 
 			MedCombination medCombination = new MedCombination();
@@ -569,7 +574,7 @@ public class QuestionBacking {
 			medCombination.setAnswers(answers);
 			medCombination.setMedQuestionByNextQuestion(mqm);
 			listMedCombination.add(medCombination);
-			
+
 			listCombination = getLisCombination(listMedCombination);
 			modelCombination = new CombinationDataModel(listCombination);
 			nextQuestionMultiple = Constant.DEFAULT_VALUE;
@@ -609,7 +614,7 @@ public class QuestionBacking {
 			obj.setId(row.getId());
 			obj.setNextQuestion(row.getMedQuestionByNextQuestion());
 			List<MedAnswer> listAnswers = new LinkedList<MedAnswer>();
-			StringTokenizer answers = new StringTokenizer(row.getAnswers(),"+");
+			StringTokenizer answers = new StringTokenizer(row.getAnswers(), "+");
 			while (answers.hasMoreTokens()) {
 				String answer = answers.nextToken();
 				BigDecimal id = new BigDecimal(answer);
@@ -621,10 +626,23 @@ public class QuestionBacking {
 		}
 		return result;
 	}
-	
-	public void deleteCombination(){
+
+	public void deleteCombination() {
 		BigDecimal id = new BigDecimal(FacesUtil.getParam("COMBINATION_ID"));
-		System.out.println(id);
+		selectedDeleteCombination = new LinkedList<MedCombination>();
+
+		for (MedCombination row : listMedCombination) {
+			if (id.intValue() == row.getId().intValue()) {
+				selectedDeleteCombination.add(row);
+			}
+		}
+
+		for (MedCombination row : selectedDeleteCombination) {
+			listMedCombination.remove(row);
+		}
+
+		listCombination = getLisCombination(listMedCombination);
+		modelCombination = new CombinationDataModel(listCombination);
 	}
 
 }
