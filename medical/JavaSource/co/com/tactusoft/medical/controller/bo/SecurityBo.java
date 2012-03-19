@@ -20,7 +20,7 @@ public class SecurityBo {
 		MedUser object = null;
 		try {
 			object = (MedUser) dao.find(
-					"from MedUser o where o.username = '" + userName + "'")
+					"from MedUser o where o.username = '" + userName + "' and o.state = 1")
 					.get(0);
 		} catch (IndexOutOfBoundsException ex) {
 			object = null;
@@ -32,6 +32,26 @@ public class SecurityBo {
 		List<MedRole> list = dao
 				.find("select MedRole from MedUserRole o where o.MedUser.id = " + idUser);
 		return list;
+	}
+	
+	public List<MedUser> getListMedUser() {
+		return dao.find("from MedUser o");
+	}
+	
+	public List<MedRole> getListMedRole() {
+		return dao.find("from MedRole o where o.state = 1");
+	}
+	
+	public void save(Object entity) {
+		dao.persist(entity);
+	}
+
+	public void remove(Object entity) {
+		dao.delete(entity);
+	}
+
+	public BigDecimal getId(String clasz) {
+		return dao.getId(clasz);
 	}
 
 }

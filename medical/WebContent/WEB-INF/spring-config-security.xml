@@ -26,14 +26,15 @@
 			</list>
 		</constructor-arg>
 	</bean>
-	
-	<bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl" />
-	
+
+	<bean id="sessionRegistry"
+		class="org.springframework.security.core.session.SessionRegistryImpl" />
+
 	<bean id="concurrencyFilter"
-	class="org.springframework.security.web.session.ConcurrentSessionFilter">
-    	<property name="sessionRegistry" ref="sessionRegistry" />
-    	<property name="expiredUrl" value="/pages/secure/expired.jsf" />
-  	</bean>
+		class="org.springframework.security.web.session.ConcurrentSessionFilter">
+		<property name="sessionRegistry" ref="sessionRegistry" />
+		<property name="expiredUrl" value="/pages/secure/expired.jsf" />
+	</bean>
 
 	<bean id="usernamePasswordAuthenticationFilter"
 		class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
@@ -43,11 +44,11 @@
 		<property name="authenticationFailureHandler" ref="failureHandler" />
 		<property name="authenticationSuccessHandler" ref="successHandler" />
 	</bean>
-	
+
 	<bean id="sas"
-      class="org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy">
-    	<constructor-arg name="sessionRegistry" ref="sessionRegistry" />
-    	<property name="maximumSessions" value="1" />
+		class="org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy">
+		<constructor-arg name="sessionRegistry" ref="sessionRegistry" />
+		<property name="maximumSessions" value="1" />
 	</bean>
 
 	<bean id="successHandler"
@@ -105,14 +106,15 @@
 			</list>
 		</property>
 	</bean>
-	
-	<bean id="securityMetadataSourceCustom" class="co.com.tactusoft.medical.security.SecurityMetadataSourceCustom"/>
+
+	<bean id="securityMetadataSourceCustom"
+		class="co.com.tactusoft.medical.security.SecurityMetadataSourceCustom" />
 
 	<bean id="filterSecurityInterceptor"
 		class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
 		<property name="authenticationManager" ref="authenticationManager" />
 		<property name="accessDecisionManager" ref="affirmativeBased" />
-		<property name="securityMetadataSource" ref="securityMetadataSourceCustom"/>
+		<property name="securityMetadataSource" ref="securityMetadataSourceCustom" />
 	</bean>
 
 	<bean id="rememberMeServices"
@@ -120,6 +122,10 @@
 		<property name="userDetailsService" ref="userDetailsService" />
 		<property name="key" value="medical123" />
 		<property name="tokenValiditySeconds" value="0" />
+	</bean>
+
+	<bean id="passwordEncoder"
+		class="org.springframework.security.authentication.encoding.Md5PasswordEncoder">
 	</bean>
 
 	<bean id="authenticationManager"
@@ -156,9 +162,11 @@
 				</property>
 			</bean>
 		</property>
+		<property name="passwordEncoder" ref="passwordEncoder"/>
 	</bean>
 
-	<bean id="userDetailsService" class="co.com.tactusoft.medical.security.UserDetailsServiceCustom"/>
+	<bean id="userDetailsService"
+		class="co.com.tactusoft.medical.security.UserDetailsServiceCustom" />
 
 	<bean id="loggerListener"
 		class="org.springframework.security.access.event.LoggerListener" />

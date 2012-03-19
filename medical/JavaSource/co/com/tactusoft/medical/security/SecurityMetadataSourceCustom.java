@@ -9,6 +9,7 @@ import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 
 import co.com.tactusoft.medical.util.FacesUtil;
+import co.com.tactusoft.medical.view.datamodel.MenuDataModel;
 
 public class SecurityMetadataSourceCustom implements
 		FilterInvocationSecurityMetadataSource {
@@ -26,12 +27,16 @@ public class SecurityMetadataSourceCustom implements
 					|| url.contains(".css") || url.contains(".png")
 					|| url.contains(".jpg") || url.contains(".gif")
 					|| url.contains(".swf") || url.contains("script.js")
-					|| url.contains("/pages/view/carousel") || url.contains("/pages/view/body")
-					|| url.contains("/pages/view/responseQuestion") || url.contains("index.jsp")) {
+					|| url.contains("/pages/view/carousel")
+					|| url.contains("/pages/view/body")
+					|| url.contains("/pages/view/responseQuestion")
+					|| url.contains("/pages/secure/accessDenied")
+					|| url.contains("/pages/secure/expired")
+					|| url.contains("index.jsp")) {
 				return null;
 			}
 
-			/*List<MenuDataModel> listMenu = FacesUtil.getCurrentUserData()
+			List<MenuDataModel> listMenu = FacesUtil.getCurrentUserData()
 					.getListMenu();
 
 			for (MenuDataModel menu : listMenu) {
@@ -50,10 +55,6 @@ public class SecurityMetadataSourceCustom implements
 						}
 					}
 				}
-			}*/
-			
-			if (FacesUtil.getCurrentRole().equals("ADMIN")){
-				return null;
 			}
 
 			access.append(url);

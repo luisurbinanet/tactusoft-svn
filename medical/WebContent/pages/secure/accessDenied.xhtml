@@ -9,12 +9,14 @@
 
 	<ui:define name="content">
 
-		<p:spacer height="100" />
+		<p:spacer height="80" />
 
 		<h:form>
 
 			<center>
-				<h:outputLabel value="#{msg['log_msg_denied']}" />
+				<h:outputLabel value="#{msg['log_msg_denied']}" style="text-align:center;color:Red;font-size:large;font-style:normal;font-weight:bold;"/>
+				<p/>
+				<p:commandButton value="#{msg['btn_return']}" action="/pages/secure/login?faces-redirect=true"/>
 			</center>
 
 			<p:spacer height="100" />

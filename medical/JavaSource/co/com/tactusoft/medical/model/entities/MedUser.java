@@ -29,7 +29,9 @@ public class MedUser implements java.io.Serializable {
 	private String firstName;
 	private String middleName;
 	private String lastName;
+	private String email;
 	private String phone;
+	private int state;
 
 	public MedUser() {
 	}
@@ -46,7 +48,7 @@ public class MedUser implements java.io.Serializable {
 
 	public MedUser(BigDecimal id, MedRole medRole, String username,
 			String password, String firstName, String middleName,
-			String lastName, String phone) {
+			String lastName, String email, String phone, int state) {
 		this.id = id;
 		this.medRole = medRole;
 		this.username = username;
@@ -54,7 +56,9 @@ public class MedUser implements java.io.Serializable {
 		this.firstName = firstName;
 		this.middleName = middleName;
 		this.lastName = lastName;
+		this.email = email;
 		this.phone = phone;
+		this.state = state;
 	}
 
 	@Id
@@ -122,6 +126,15 @@ public class MedUser implements java.io.Serializable {
 		this.lastName = lastName;
 	}
 
+	@Column(name = "email")
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	@Column(name = "phone")
 	public String getPhone() {
 		return this.phone;
@@ -129,6 +142,15 @@ public class MedUser implements java.io.Serializable {
 
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+	@Column(name = "state", nullable = false)
+	public int getState() {
+		return this.state;
+	}
+
+	public void setState(int state) {
+		this.state = state;
 	}
 
 }

@@ -3,12 +3,12 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 	<display-name>medical</display-name>
-	
+
 	<context-param>
-        <param-name>javax.faces.PROJECT_STAGE</param-name>
-        <param-value>Production</param-value>
-    </context-param>
-	
+		<param-name>javax.faces.PROJECT_STAGE</param-name>
+		<param-value>Production</param-value>
+	</context-param>
+
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
@@ -22,7 +22,7 @@
 		<param-value>cupertino</param-value>
 	</context-param>
 
-	<!--  <filter>
+	<filter>
 		<filter-name>filterChainProxy</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
 	</filter>
@@ -34,7 +34,6 @@
 		<dispatcher>FORWARD</dispatcher>
 		<dispatcher>INCLUDE</dispatcher>
 	</filter-mapping>
-	-->
 
 	<filter>
 		<filter-name>PrimeFaces FileUpload Filter</filter-name>
@@ -60,11 +59,11 @@
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.jsf</url-pattern>
 	</servlet-mapping>
-	
-	 <!-- Session timeout -->
-    <session-config>
-        <session-timeout>60</session-timeout>
-    </session-config>
+
+	<!-- Session timeout -->
+	<session-config>
+		<session-timeout>60</session-timeout>
+	</session-config>
 
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>

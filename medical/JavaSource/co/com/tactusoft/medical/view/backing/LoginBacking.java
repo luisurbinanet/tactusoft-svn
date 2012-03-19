@@ -72,7 +72,7 @@ public class LoginBacking {
 		this.authenticated = false;
 
 		externalContext.dispatch("/j_spring_security_check?j_username="
-				+ this.userName + "&j_password=" + this.password);
+				+ this.userName.toLowerCase() + "&j_password=" + this.password);
 
 		if (externalContext.getRemoteUser() == null) {
 			Exception loginError = (Exception) externalContext.getSessionMap()
@@ -100,7 +100,7 @@ public class LoginBacking {
 
 	public String logout() {
 		FacesUtil.logout();
-		return "GO_LOGIN";
+		return "/pages/secure/login?faces-redirect=true";
 	}
 
 	public String getRole() {
