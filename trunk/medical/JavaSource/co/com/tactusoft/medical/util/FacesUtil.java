@@ -5,7 +5,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.Map;
@@ -161,5 +165,21 @@ public class FacesUtil {
 	public static String getExtensionFile(String filename) {
 		int dot = filename.lastIndexOf('.');
 		return filename.substring(dot);
+	}
+
+	public static String getMD5(String text) {
+		String md5 = null;
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			md.update(text.getBytes("UTF-8"), 0, text.length());
+			byte[] bt = md.digest();
+			BigInteger bi = new BigInteger(1, bt);
+			md5 = bi.toString(16);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return md5;
 	}
 }

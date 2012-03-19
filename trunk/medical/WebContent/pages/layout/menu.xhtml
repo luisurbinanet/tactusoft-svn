@@ -16,39 +16,33 @@
 					<span class="r"></span>
 					<span class="t">#{msg['title_login']}</span>
 					<f:param name="page" value="/pages/secure/login" />
-				</p:commandLink></li>
+				</p:commandLink>
+			</li>
 
-			<li><p:commandLink action="#{menuBacking.actionPage}"
-					immediate="true">
-					<span class="l"></span>
-					<span class="r"></span>
-					<span class="t">#{msg['title_carousel']}</span>
-					<f:param name="page" value="/pages/view/carousel" />
-				</p:commandLink></li>
-
-			<li><p:commandLink action="#{menuBacking.actionPage}"
-					immediate="true">
-					<span class="l"></span>
-					<span class="r"></span>
-					<span class="t">#{msg['title_body2']}</span>
-					<f:param name="page" value="/pages/view/body" />
-				</p:commandLink></li>
-
-			<li><p:commandLink action="#{menuBacking.actionPage}"
-					immediate="true"
-					rendered="#{loginBacking.role eq 'ADMIN'?true:false}">
-					<span class="l"></span>
-					<span class="r"></span>
-					<span class="t">#{msg['title_config']}</span>
-					<f:param name="page" value="/pages/admin/topic" />
-				</p:commandLink></li>
+			<ui:repeat var="menu" value="#{menuBacking.listMenu}">
+				<li><h:commandLink action="#{menuBacking.actionPage}">
+						<span class="l"></span>
+						<span class="r"></span>
+						<span class="t"> <h:outputLabel value="#{menu.name}" /> </span>
+						<f:param name="page" value="#{menu.page}" />
+					</h:commandLink>
+					<ul>
+						<ui:repeat var="child" value="#{menu.childs}">
+							<li><p:commandLink value="#{child.name}"
+									action="#{menuBacking.actionPage}">
+									<f:param name="page" value="#{child.page}" />
+								</p:commandLink></li>
+						</ui:repeat>
+					</ul></li>
+			</ui:repeat>
 
 			<li><h:commandLink action="#{loginBacking.logout}"
 					immediate="true" rendered="#{loginBacking.authenticated}">
 					<span class="l"></span>
 					<span class="r"></span>
 					<span class="t">#{msg['log_close']}</span>
-				</h:commandLink></li>
+				</h:commandLink>
+			</li>
 
 		</ul>
 	</div>
