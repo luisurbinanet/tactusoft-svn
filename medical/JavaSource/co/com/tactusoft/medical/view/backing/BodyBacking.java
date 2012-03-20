@@ -36,6 +36,7 @@ public class BodyBacking {
 	public BodyBacking() {
 		model = null;
 		selected = new MedBody();
+		selectedDetail = new MedBodyDetail();
 	}
 
 	public void init() {
@@ -106,6 +107,10 @@ public class BodyBacking {
 	public void newAction() {
 		selected = new MedBody();
 	}
+	
+	public void newDetailAction() {
+		selectedDetail = new MedBodyDetail();
+	}
 
 	public void refreshAction() {
 
@@ -132,17 +137,18 @@ public class BodyBacking {
 	public void saveDetailAction() {
 		String message = null;
 
-		if (selected.getId() == null) {
-			selected.setId(service.getId("MedBody"));
-			selected.setState(Constant.STATE_ACTIVE);
+		if (selectedDetail.getId() == null) {
+			selectedDetail.setId(service.getId("MedBodyDetail"));
+			selectedDetail.setState(Constant.STATE_ACTIVE);
+			selectedDetail.setMedBody(selected);
 			message = FacesUtil.getMessage("msg_record_ok_3");
 		} else {
 			message = FacesUtil.getMessage("msg_record_ok_2");
 		}
 
-		service.save(selected);
-		list = service.getListMedBody();
-		model = new BodyDataModel(list);
+		service.save(selectedDetail);
+		listDetail = service.getListMedBodyDetailByBody(selected.getId());
+		modelDetail = new BodyDetailDataModel(listDetail);
 
 		FacesUtil.addInfo(message);
 	}
