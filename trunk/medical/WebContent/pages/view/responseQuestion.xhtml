@@ -55,22 +55,25 @@
 					width="100%">
 
 					<p:selectOneRadio id="options"
-						value="#{responseQuestionBacking.idAnswer}" layout="pageDirection">
+						value="#{responseQuestionBacking.idAnswer}" layout="pageDirection"
+						style="font-style:normal;font-size:18px;">
 						<f:selectItems value="#{responseQuestionBacking.listAnswer}"
 							var="item" itemLabel="#{item.name}" itemValue="#{item.id}" />
 					</p:selectOneRadio>
 
 				</h:panelGrid>
-				
-				<h:panelGrid id="pnlMultiple" columns="2" rowClasses="actions-center"
+
+				<h:panelGrid id="pnlMultiple" columns="2"
+					rowClasses="actions-center"
 					rendered="#{responseQuestionBacking.selectedQuestion.typeQuestion eq 'MULTIPLE'?true:false}"
 					width="100%">
 
-					<p:selectManyCheckbox  id="optionsMultiple"
-						value="#{responseQuestionBacking.idAnswers}" layout="pageDirection">
+					<p:selectManyCheckbox id="optionsMultiple"
+						value="#{responseQuestionBacking.idAnswers}"
+						layout="pageDirection" style="font-style:normal;font-size:18px;">
 						<f:selectItems value="#{responseQuestionBacking.listAnswer}"
 							var="item" itemLabel="#{item.name}" itemValue="#{item.id}" />
-					</p:selectManyCheckbox >
+					</p:selectManyCheckbox>
 
 				</h:panelGrid>
 
@@ -85,7 +88,7 @@
 					</p:commandButton>
 
 				</h:panelGrid>
-				
+
 				<h:panelGrid id="pnlOkMultiple" columns="1"
 					rendered="#{responseQuestionBacking.selectedQuestion.typeQuestion!='MULTIPLE'?false:true}"
 					styleClass="actions-center" width="100%">
@@ -121,7 +124,7 @@
 						rendered="#{questionBacking.selected.resourceType eq 'VIDEO' and questionBacking.selected.typeVideo ne 'flash'?true:false}">
 						<f:param name="autostart" value="1" />
 					</p:media>
-					
+
 					<h:panelGrid
 						rendered="#{questionBacking.selected.resourceType eq 'VIDEO' and questionBacking.selected.typeVideo eq 'flash'?true:false}"
 						width="100%" styleClass="actions-center">
