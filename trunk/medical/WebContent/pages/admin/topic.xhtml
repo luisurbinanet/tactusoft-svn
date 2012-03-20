@@ -56,58 +56,66 @@
 
 			</p:dataTable>
 
-			<p:spacer height="30" />
+			<p:spacer height="20" />
 
 		</h:form>
 
 		<h:form id="detailForm">
 
-			<p:dataTable id="recordTable2" var="rec"
-				value="#{topicBacking.modelQuestion}" rowKey="#{rec.id}"
-				paginator="true" rows="20"
-				selection="#{topicBacking.selectedQuestionArray}">
+			<h:panelGrid width="100%">
+				<h:outputLabel value="#{msg['top_configure_question']}"
+					style="font-size:large;font-weight:bold;" />
 
-				<f:facet name="header">
-					<h:outputLabel value="#{topicBacking.selected.name}" />
-				</f:facet>
+				<p:spacer height="20" />
 
-				<p:column selectionMode="multiple" style="width:18px" />
+				<p:dataTable id="recordTable2" var="rec"
+					value="#{topicBacking.modelQuestion}" rowKey="#{rec.id}"
+					paginator="true" rows="20"
+					selection="#{topicBacking.selectedQuestionArray}">
 
-				<p:column headerText="#{msg['que_order']}">#{rec.orderQuestion}</p:column>
+					<f:facet name="header">
+						<h:outputLabel value="#{topicBacking.selected.name}" />
+					</f:facet>
 
-				<p:column headerText="#{msg['que_name']}">#{rec.name}</p:column>
+					<p:column selectionMode="multiple" style="width:18px" />
 
-				<p:column headerText="#{msg['que_type']}">#{rec.detType}</p:column>
-				
-				<p:column headerText="#{msg['que_type_final']}">#{rec.detMedia}</p:column>
+					<p:column headerText="#{msg['que_order']}">#{rec.orderQuestion}</p:column>
 
-				<p:column style="width:30px">
-					<h:panelGrid columns="3" styleClass="actions" cellpadding="2">
-						<p:commandButton id="selectButton" icon="ui-icon-search"
-							title="#{msg['btn_edit']}"
+					<p:column headerText="#{msg['que_name']}">#{rec.name}</p:column>
+
+					<p:column headerText="#{msg['que_type']}">#{rec.detType}</p:column>
+
+					<p:column headerText="#{msg['que_type_final']}">#{rec.detMedia}</p:column>
+
+					<p:column style="width:30px">
+						<h:panelGrid columns="3" styleClass="actions" cellpadding="2">
+							<p:commandButton id="selectButton" icon="ui-icon-search"
+								title="#{msg['btn_edit']}"
+								action="#{topicBacking.goQuestionAction}">
+								<f:setPropertyActionListener value="#{rec}"
+									target="#{topicBacking.selectedQuestion}" />
+								<f:param name="action" value="EDIT" />
+							</p:commandButton>
+						</h:panelGrid>
+					</p:column>
+
+					<f:facet name="footer">
+						<p:commandButton id="newButton" icon="ui-icon-plusthick"
+							value="#{msg['btn_new']}"
+							disabled="#{topicBacking.selected.id == null?true:false}"
 							action="#{topicBacking.goQuestionAction}">
-							<f:setPropertyActionListener value="#{rec}"
-								target="#{topicBacking.selectedQuestion}" />
-							<f:param name="action" value="EDIT" />
+							<f:param name="action" value="NEW" />
 						</p:commandButton>
-					</h:panelGrid>
-				</p:column>
+						<p:commandButton id="cmdDeleteDetail" icon="ui-icon-closethick"
+							value="#{msg['btn_delete']}"
+							disabled="#{topicBacking.selected.id == null?true:false}"
+							update="recordTable2" action="#{topicBacking.removeDetailAction}">
+						</p:commandButton>
+					</f:facet>
 
-				<f:facet name="footer">
-					<p:commandButton id="newButton" icon="ui-icon-plusthick"
-						value="#{msg['btn_new']}"
-						disabled="#{topicBacking.selected.id == null?true:false}"
-						action="#{topicBacking.goQuestionAction}">
-						<f:param name="action" value="NEW" />
-					</p:commandButton>
-					<p:commandButton id="cmdDeleteDetail" icon="ui-icon-closethick"
-						value="#{msg['btn_delete']}"
-						disabled="#{topicBacking.selected.id == null?true:false}"
-						update="recordTable2" action="#{topicBacking.removeDetailAction}">
-					</p:commandButton>
-				</f:facet>
+				</p:dataTable>
 
-			</p:dataTable>
+			</h:panelGrid>
 
 		</h:form>
 
