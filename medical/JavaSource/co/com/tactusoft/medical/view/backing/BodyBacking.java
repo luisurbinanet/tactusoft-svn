@@ -1,11 +1,12 @@
 package co.com.tactusoft.medical.view.backing;
 
+import java.math.BigDecimal;
 import java.util.List;
 
-import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.primefaces.event.SelectEvent;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.medical.controller.bo.AdminBo;
@@ -27,9 +28,10 @@ public class BodyBacking {
 	private MedBody selected;
 	private BodyDataModel model;
 
-	private List<SelectItem> listDetail;
+	private List<MedBodyDetail> listDetail;
 	private MedBodyDetail selectedDetail;
 	private BodyDetailDataModel modelDetail;
+	private MedBodyDetail[] selectedDetailArray;
 
 	public BodyBacking() {
 		model = null;
@@ -65,18 +67,17 @@ public class BodyBacking {
 		return model;
 	}
 
-	public List<SelectItem> getListDetail() {
+	public List<MedBodyDetail> getListDetail() {
 		return listDetail;
 	}
 
-	public void setListDetail(List<SelectItem> listDetail) {
+	public void setListDetail(List<MedBodyDetail> listDetail) {
 		this.listDetail = listDetail;
 	}
 
 	public void setModel(BodyDataModel model) {
 		this.model = model;
 	}
-	
 
 	public MedBodyDetail getSelectedDetail() {
 		return selectedDetail;
@@ -92,6 +93,14 @@ public class BodyBacking {
 
 	public void setModelDetail(BodyDetailDataModel modelDetail) {
 		this.modelDetail = modelDetail;
+	}
+
+	public MedBodyDetail[] getSelectedDetailArray() {
+		return selectedDetailArray;
+	}
+
+	public void setSelectedDetailArray(MedBodyDetail[] selectedDetailArray) {
+		this.selectedDetailArray = selectedDetailArray;
 	}
 
 	public void newAction() {
@@ -119,7 +128,7 @@ public class BodyBacking {
 
 		FacesUtil.addInfo(message);
 	}
-	
+
 	public void saveDetailAction() {
 		String message = null;
 
@@ -136,6 +145,12 @@ public class BodyBacking {
 		model = new BodyDataModel(list);
 
 		FacesUtil.addInfo(message);
+	}
+
+	public void onRowSelect(SelectEvent event) {
+		BigDecimal idBody = ((MedBody) event.getObject()).getId();
+		listDetail = service.getListMedBodyDetailByBody(idBody);
+		modelDetail = new BodyDetailDataModel(listDetail);
 	}
 
 }
