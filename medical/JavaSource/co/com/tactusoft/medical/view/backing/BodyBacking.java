@@ -1,0 +1,141 @@
+package co.com.tactusoft.medical.view.backing;
+
+import java.util.List;
+
+import javax.faces.model.SelectItem;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.springframework.context.annotation.Scope;
+
+import co.com.tactusoft.medical.controller.bo.AdminBo;
+import co.com.tactusoft.medical.model.entities.MedBody;
+import co.com.tactusoft.medical.model.entities.MedBodyDetail;
+import co.com.tactusoft.medical.util.Constant;
+import co.com.tactusoft.medical.util.FacesUtil;
+import co.com.tactusoft.medical.view.datamodel.BodyDataModel;
+import co.com.tactusoft.medical.view.datamodel.BodyDetailDataModel;
+
+@Named
+@Scope("view")
+public class BodyBacking {
+
+	@Inject
+	private AdminBo service;
+
+	private List<MedBody> list;
+	private MedBody selected;
+	private BodyDataModel model;
+
+	private List<SelectItem> listDetail;
+	private MedBodyDetail selectedDetail;
+	private BodyDetailDataModel modelDetail;
+
+	public BodyBacking() {
+		model = null;
+		selected = new MedBody();
+	}
+
+	public void init() {
+		list = service.getListMedBodyActive();
+		model = new BodyDataModel(list);
+	}
+
+	public List<MedBody> getList() {
+		return list;
+	}
+
+	public void setList(List<MedBody> list) {
+		this.list = list;
+	}
+
+	public MedBody getSelected() {
+		return selected;
+	}
+
+	public void setSelected(MedBody selected) {
+		this.selected = selected;
+	}
+
+	public BodyDataModel getModel() {
+		if (model == null) {
+			list = service.getListMedBody();
+			model = new BodyDataModel(list);
+		}
+		return model;
+	}
+
+	public List<SelectItem> getListDetail() {
+		return listDetail;
+	}
+
+	public void setListDetail(List<SelectItem> listDetail) {
+		this.listDetail = listDetail;
+	}
+
+	public void setModel(BodyDataModel model) {
+		this.model = model;
+	}
+	
+
+	public MedBodyDetail getSelectedDetail() {
+		return selectedDetail;
+	}
+
+	public void setSelectedDetail(MedBodyDetail selectedDetail) {
+		this.selectedDetail = selectedDetail;
+	}
+
+	public BodyDetailDataModel getModelDetail() {
+		return modelDetail;
+	}
+
+	public void setModelDetail(BodyDetailDataModel modelDetail) {
+		this.modelDetail = modelDetail;
+	}
+
+	public void newAction() {
+		selected = new MedBody();
+	}
+
+	public void refreshAction() {
+
+	}
+
+	public void saveAction() {
+		String message = null;
+
+		if (selected.getId() == null) {
+			selected.setId(service.getId("MedBody"));
+			selected.setState(Constant.STATE_ACTIVE);
+			message = FacesUtil.getMessage("msg_record_ok_3");
+		} else {
+			message = FacesUtil.getMessage("msg_record_ok_2");
+		}
+
+		service.save(selected);
+		list = service.getListMedBody();
+		model = new BodyDataModel(list);
+
+		FacesUtil.addInfo(message);
+	}
+	
+	public void saveDetailAction() {
+		String message = null;
+
+		if (selected.getId() == null) {
+			selected.setId(service.getId("MedBody"));
+			selected.setState(Constant.STATE_ACTIVE);
+			message = FacesUtil.getMessage("msg_record_ok_3");
+		} else {
+			message = FacesUtil.getMessage("msg_record_ok_2");
+		}
+
+		service.save(selected);
+		list = service.getListMedBody();
+		model = new BodyDataModel(list);
+
+		FacesUtil.addInfo(message);
+	}
+
+}

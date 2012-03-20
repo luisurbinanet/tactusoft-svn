@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../layout/main.xhtml">
+	<ui:define name="content">
+
+		<div class="rco-blockheader">
+			<div class="l"></div>
+			<div class="r"></div>
+			<div class="t">#{msg['title_config_body']}</div>
+		</div>
+
+		<p:spacer height="20" />
+
+		<h:form id="form">
+
+			<p:dataTable id="recordTable" var="rec" value="#{bodyBacking.model}"
+				rowKey="#{rec.id}" selectionMode="single"
+				selection="#{bodyBacking.selected}" paginator="true" rows="20">
+
+				<p:ajax event="rowSelect" update=":editForm:pnlDetail" />
+
+				<p:column headerText="#{msg['bdy_name']}">#{rec.name}</p:column>
+
+				<p:column headerText="#{msg['glb_state']}">#{rec.state eq 1?msg['glb_state_active']:msg['glb_state_inactive']}</p:column>
+
+				<p:column style="width:30px">
+					<h:panelGrid columns="3" styleClass="actions" cellpadding="2">
+						<p:commandButton id="selectButton" update=":editForm:pnlDetail"
+							icon="ui-icon-search" title="#{msg['btn_edit']}"
+							oncomplete="detailDialog.show()">
+							<f:setPropertyActionListener value="#{rec}"
+								target="#{bodyBacking.selected}" />
+						</p:commandButton>
+					</h:panelGrid>
+				</p:column>
+
+			</p:dataTable>
+
+		</h:form>
+		
+		<h:form id="detailForm">
+		</h:form>
+
+		<h:form id="editForm">
+
+			<p:growl id="growl" showDetail="true" />
+
+			<p:dialog header="#{msg['msg_detail']}" widgetVar="detailDialog"
+				resizable="false" id="detailDialog" showEffect="fade"
+				hideEffect="explode" modal="false" width="500">
+
+				<h:panelGrid id="pnlDetail" columns="2" cellpadding="4"
+					style="margin:0 auto;" width="100%">
+
+					<h:outputLabel value="#{msg['bdy_name']}" />
+					<h:outputText value="#{bodyBacking.selected.name}"
+						style="font-weight:bold;" />
+
+					<h:outputLabel value="#{msg['glb_state']}"
+						rendered="#{bodyBacking.selected.id!=null?true:false}" />
+					<p:selectOneMenu value="#{bodyBacking.selected.state}"
+						style="width:100%"
+						rendered="#{bodyBacking.selected.id!=null?true:false}">
+						<f:selectItem itemValue="1" itemLabel="#{msg['glb_state_active']}" />
+						<f:selectItem itemValue="0"
+							itemLabel="#{msg['glb_state_inactive']}" />
+					</p:selectOneMenu>
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="1">
+					<p:commandButton id="cmdSave" action="#{bodyBacking.saveAction}"
+						icon="ui-icon-disk" value="#{msg['btn_save']}"
+						update="growl :form:recordTable">
+						<f:param name="action" value="SAVE" />
+					</p:commandButton>
+				</h:panelGrid>
+
+			</p:dialog>
+
+		</h:form>
+
+		<h:panelGroup layout="block" style="height:300px;" />
+
+	</ui:define>
+</ui:composition>
+
+</html>
