@@ -22,7 +22,8 @@
 				rowKey="#{rec.id}" selectionMode="single"
 				selection="#{bodyBacking.selected}" paginator="true" rows="20">
 
-				<p:ajax event="rowSelect" update=":editForm:pnlDetail" />
+				<p:ajax event="rowSelect" listener="#{bodyBacking.onRowSelect}"
+					update=":detailForm:recordTable2" />
 
 				<p:column headerText="#{msg['bdy_name']}">#{rec.name}</p:column>
 
@@ -42,8 +43,41 @@
 			</p:dataTable>
 
 		</h:form>
-		
+
 		<h:form id="detailForm">
+
+			<h:panelGrid width="100%">
+
+				<p:spacer height="40" />
+
+				<h:outputLabel value="#{msg['bdy_detail']}"
+					style="font-size:large;font-weight:bold;" />
+
+				<p:spacer height="40" />
+
+				<p:dataTable id="recordTable2" var="rec"
+					value="#{bodyBacking.modelDetail}" rowKey="#{rec.id}"
+					paginator="true" rows="20"
+					selection="#{bodyBacking.selectedDetailArray}">
+
+					<f:facet name="header">
+						<h:outputLabel value="#{bodyBacking.selected.name}" />
+					</f:facet>
+
+					<p:column selectionMode="multiple" style="width:18px" />
+
+					<p:column headerText="#{msg['bdy_title']}">#{rec.title}</p:column>
+
+					<p:column headerText="#{msg['bdy_url']}">#{rec.url}</p:column>
+
+					<p:column headerText="#{msg['bdy_gender']}">#{rec.gender eq 'M'?msg['top_gender_man']:(rec.gender eq 'W'?msg['top_gender_woman']:msg['top_gender_all'])}</p:column>
+
+					<p:column headerText="#{msg['glb_state']}">#{rec.state==1?msg['glb_state_active']:msg['glb_state_inactive']}</p:column>
+
+				</p:dataTable>
+
+			</h:panelGrid>
+
 		</h:form>
 
 		<h:form id="editForm">

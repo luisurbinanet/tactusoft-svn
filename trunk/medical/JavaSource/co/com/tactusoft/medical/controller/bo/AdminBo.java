@@ -10,6 +10,7 @@ import javax.inject.Named;
 import co.com.tactusoft.medical.model.dao.CustomHibernateDao;
 import co.com.tactusoft.medical.model.entities.MedAnswer;
 import co.com.tactusoft.medical.model.entities.MedBody;
+import co.com.tactusoft.medical.model.entities.MedBodyDetail;
 import co.com.tactusoft.medical.model.entities.MedCombination;
 import co.com.tactusoft.medical.model.entities.MedQuestion;
 import co.com.tactusoft.medical.model.entities.MedTopic;
@@ -98,9 +99,9 @@ public class AdminBo implements Serializable {
 		return dao.find("from MedBody o where o.state = 1");
 	}
 
-	public List<MedBody> getListMedBodyDetailByBody(BigDecimal idBody) {
-		return dao.find("from MedBodyDetail o where o.medBody.id = " + idBody
-				+ " o.state = 1");
+	public List<MedBodyDetail> getListMedBodyDetailByBody(BigDecimal idBody) {
+		return dao.find("FROM MedBodyDetail o WHERE o.medBody.id = " + idBody
+				+ " AND o.state = 1");
 	}
 
 	public void save(Object entity) {
