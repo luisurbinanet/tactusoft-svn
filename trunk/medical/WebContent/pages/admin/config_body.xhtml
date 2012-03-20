@@ -20,7 +20,7 @@
 
 			<p:dataTable id="recordTable" var="rec" value="#{bodyBacking.model}"
 				rowKey="#{rec.id}" selectionMode="single"
-				selection="#{bodyBacking.selected}" paginator="true" rows="20">
+				selection="#{bodyBacking.selected}" paginator="true" rows="10">
 
 				<p:ajax event="rowSelect" listener="#{bodyBacking.onRowSelect}"
 					update=":detailForm:recordTable2" />
@@ -31,9 +31,9 @@
 
 				<p:column style="width:30px">
 					<h:panelGrid columns="3" styleClass="actions" cellpadding="2">
-						<p:commandButton id="selectButton" update=":editForm:pnlDetail"
+						<p:commandButton id="selectButton" update=":editForm:pnlBody"
 							icon="ui-icon-search" title="#{msg['btn_edit']}"
-							oncomplete="detailDialog.show()">
+							oncomplete="bodyDialog.show()">
 							<f:setPropertyActionListener value="#{rec}"
 								target="#{bodyBacking.selected}" />
 						</p:commandButton>
@@ -74,6 +74,24 @@
 
 					<p:column headerText="#{msg['glb_state']}">#{rec.state==1?msg['glb_state_active']:msg['glb_state_inactive']}</p:column>
 
+					<p:column style="width:30px">
+						<h:panelGrid columns="3" styleClass="actions" cellpadding="2">
+							<p:commandButton id="selectButtonDetail"
+								update=":editForm:pnlDetail" icon="ui-icon-search"
+								title="#{msg['btn_edit']}" oncomplete="detailDialog.show()">
+								<f:setPropertyActionListener value="#{rec}"
+									target="#{bodyBacking.selectedDetail}" />
+							</p:commandButton>
+						</h:panelGrid>
+					</p:column>
+
+					<f:facet name="footer">
+						<p:commandButton id="cmdNew"
+							action="#{bodyBacking.newDetailAction}" icon="ui-icon-plusthick"
+							value="#{msg['btn_new']}" oncomplete="detailDialog.show()"
+							update=":editForm:pnlDetail" />
+					</f:facet>
+
 				</p:dataTable>
 
 			</h:panelGrid>
@@ -84,11 +102,11 @@
 
 			<p:growl id="growl" showDetail="true" />
 
-			<p:dialog header="#{msg['msg_detail']}" widgetVar="detailDialog"
-				resizable="false" id="detailDialog" showEffect="fade"
+			<p:dialog header="#{msg['msg_detail']}" widgetVar="bodyDialog"
+				resizable="false" id="bodyDialog" showEffect="fade"
 				hideEffect="explode" modal="false" width="500">
 
-				<h:panelGrid id="pnlDetail" columns="2" cellpadding="4"
+				<h:panelGrid id="pnlBody" columns="2" cellpadding="4"
 					style="margin:0 auto;" width="100%">
 
 					<h:outputLabel value="#{msg['bdy_name']}" />
@@ -113,6 +131,49 @@
 						update="growl :form:recordTable">
 						<f:param name="action" value="SAVE" />
 					</p:commandButton>
+				</h:panelGrid>
+
+			</p:dialog>
+
+			<p:dialog header="#{msg['msg_detail']}" widgetVar="detailDialog"
+				resizable="false" id="detailDialog" showEffect="fade"
+				hideEffect="explode" modal="false" width="600">
+
+				<h:panelGrid id="pnlDetail" columns="2" cellpadding="4"
+					style="margin:0 auto;" width="100%">
+
+					<h:outputLabel value="#{msg['bdy_title']}" />
+					<h:inputText value="#{bodyBacking.selectedDetail.title}"
+						style="width:100%" label="#{msg['bdy_title']}" required="true" />
+
+					<h:outputLabel value="#{msg['bdy_url']}" style="width:10%" />
+					<h:inputText value="#{bodyBacking.selectedDetail.url}"
+						style="width:100%" label="#{msg['bdy_url']}" required="true" />
+
+					<h:outputText value="#{msg['top_gender']}" />
+					<p:selectOneMenu value="#{bodyBacking.selectedDetail.gender}"
+						style="width:100%">
+						<f:selectItem itemLabel="#{msg['top_gender_woman']}" itemValue="W" />
+						<f:selectItem itemLabel="#{msg['top_gender_man']}" itemValue="M" />
+						<f:selectItem itemLabel="#{msg['top_gender_all']}" itemValue="A" />
+					</p:selectOneMenu>
+
+					<h:outputLabel value="#{msg['glb_state']}" style="width:10%"
+						rendered="#{bodyBacking.selectedDetail.id!=null?true:false}" />
+					<p:selectOneMenu value="#{bodyBacking.selectedDetail.state}"
+						style="width:100%" 
+						rendered="#{bodyBacking.selectedDetail.id!=null?true:false}">
+						<f:selectItem itemValue="1" itemLabel="#{msg['glb_state_active']}" />
+						<f:selectItem itemValue="0"
+							itemLabel="#{msg['glb_state_inactive']}" />
+					</p:selectOneMenu>
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="1">
+					<p:commandButton id="cmdSaveDetail"
+						action="#{bodyBacking.saveDetailAction}" icon="ui-icon-disk"
+						value="#{msg['btn_save']}" update="growl :detailForm:recordTable2" />
 				</h:panelGrid>
 
 			</p:dialog>
