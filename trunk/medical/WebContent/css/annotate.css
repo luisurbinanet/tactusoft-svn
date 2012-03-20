@@ -36,6 +36,7 @@
 	text-indent: -99999px; /* Hide the text */
 	cursor: pointer;
 	border-style: none;
+	background-image: url('../images/circle.png');
 }
 
 .annotated:hover li {
