@@ -1,3 +1,32 @@
+CREATE DATABASE  IF NOT EXISTS `kpi` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `kpi`;
+-- MySQL dump 10.13  Distrib 5.5.16, for Win32 (x86)
+--
+-- Host: localhost    Database: kpi
+-- ------------------------------------------------------
+-- Server version	5.5.20
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2012-03-20  6:57:18
 CREATE DATABASE  IF NOT EXISTS `medical_db` /*!40100 DEFAULT CHARACTER SET latin1 COLLATE latin1_spanish_ci */;
 USE `medical_db`;
 -- MySQL dump 10.13  Distrib 5.5.16, for Win32 (x86)
@@ -135,7 +164,7 @@ CREATE TABLE `med_body_detail` (
 
 LOCK TABLES `med_body_detail` WRITE;
 /*!40000 ALTER TABLE `med_body_detail` DISABLE KEYS */;
-INSERT INTO `med_body_detail` VALUES (1,1,'Mareos y Desmayos','http://www.ferato.com/wiki/index.php/Desmayos_y_Mareos','W',1),(2,1,'Dolor de Cabeza','http://www.nlm.nih.gov/medlineplus/spanish/ency/article/003024.htm','M',1);
+INSERT INTO `med_body_detail` VALUES (1,1,'Mareos y Desmayos','http://www.ferato.com/wiki/index.php/Desmayos_y_Mareos','M',1),(2,1,'Dolor de Cabeza','http://www.nlm.nih.gov/medlineplus/spanish/ency/article/003024.htm','M',1),(3,1,'Vertigo','http://es.wikipedia.org/wiki/V%C3%A9rtigo','M',1),(4,2,'Dolor de Oido','http://www.nlm.nih.gov/medlineplus/spanish/ency/article/003046.htm','W',1);
 /*!40000 ALTER TABLE `med_body_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -202,7 +231,7 @@ CREATE TABLE `med_body` (
   `name` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
   `x` decimal(19,5) DEFAULT NULL,
   `y` decimal(19,5) DEFAULT NULL,
-  `state` int(5) NOT NULL,
+  `state` int(5) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -213,7 +242,7 @@ CREATE TABLE `med_body` (
 
 LOCK TABLES `med_body` WRITE;
 /*!40000 ALTER TABLE `med_body` DISABLE KEYS */;
-INSERT INTO `med_body` VALUES (1,'Cabeza',NULL,NULL,0),(2,'Oido',NULL,NULL,1);
+INSERT INTO `med_body` VALUES (1,'Cabeza',NULL,NULL,1),(2,'Ojos',NULL,NULL,1),(3,'Oidos',NULL,NULL,1),(4,'Nariz',NULL,NULL,1),(5,'Boca',NULL,NULL,1),(6,'Cuello',NULL,NULL,1),(7,'Pulmones',NULL,NULL,1),(8,'Corazon',NULL,NULL,1),(9,'Pecho',NULL,NULL,1),(10,'Espalda',NULL,NULL,1),(11,'Brazos',NULL,NULL,1),(12,'Barriga',NULL,NULL,1),(13,'Manos',NULL,NULL,1),(14,'Genitales',NULL,NULL,1),(15,'Piernas',NULL,NULL,1),(16,'Rodillas',NULL,NULL,1),(17,'Pies',NULL,NULL,1),(18,'Senos',NULL,NULL,1),(19,'Tobillos',NULL,NULL,1);
 /*!40000 ALTER TABLE `med_body` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -290,4 +319,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-03-19 20:32:11
+-- Dump completed on 2012-03-20  6:57:18
