@@ -33,10 +33,13 @@ public class BodyBacking {
 	private BodyDetailDataModel modelDetail;
 	private MedBodyDetail[] selectedDetailArray;
 
+	private String gender;
+
 	public BodyBacking() {
 		model = null;
 		selected = new MedBody();
 		selectedDetail = new MedBodyDetail();
+		gender = "M";
 	}
 
 	public void init() {
@@ -104,10 +107,18 @@ public class BodyBacking {
 		this.selectedDetailArray = selectedDetailArray;
 	}
 
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
 	public void newAction() {
 		selected = new MedBody();
 	}
-	
+
 	public void newDetailAction() {
 		selectedDetail = new MedBodyDetail();
 	}

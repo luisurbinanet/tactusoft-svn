@@ -18,37 +18,83 @@
 
 		<h:form id="form" enctype="multipart/form-data">
 
-			<!-- Define figure width and height to be identical to the image you are annotating. N.B. If you do not need to support IE7 and below please refer to line 12 in annotate.css -->
-			<figure class="annotated" style="width: 950px; height: 1000px;">
+			<h:panelGrid columns="2">
+				<h:outputText value="#{msg['bdy_gender']}"
+					style="font-size:medium;width:100%;" />
+				<p:selectOneMenu value="#{bodyBacking.gender}"
+					style="font-size:medium;width:100%;">
+					<p:ajax event="change" update="form" />
+					<f:selectItem itemLabel="#{msg['top_gender_woman']}" itemValue="W" />
+					<f:selectItem itemLabel="#{msg['top_gender_man']}" itemValue="M" />
+				</p:selectOneMenu>
+			</h:panelGrid>
 
-				<img src="../../images/body/image003.jpg" alt="Cuerpo Humano"
-					width="900px" height="1000px" />
-				<figcaption>
+			<h:panelGrid id="pnlMan" columns="2"
+				rendered="#{bodyBacking.gender eq 'M'?true:false}" width="100%">
 
-					<ul>
-						<!-- Positions of the list-items. These need defining inline. -->
-						<li style="top: 7px; left: 460px;"><a
-							href="http://www.nlm.nih.gov/medlineplus/spanish/ency/article/003024.htm"
-							target="_blank">Problema de la Cabeza</a></li>
-						<li style="top: 132px; left: 430px;"><a
-							href="http://www.arthritis.org/espanol/dolor-cuello.php"
-							target="_blank">Dolor de Cuello</a></li>
-						<li style="top: 270px; left: 250px;"><a
-							href="http://www.prestigedisc.com/es/arm_pain.html"
-							target="_blank">Dolor de los Brazos</a></li>
-						<li style="top: 478px; left: 787px;"><a
-							href="http://www.nlm.nih.gov/medlineplus/spanish/ency/article/003261.htm"
-							target="_blank">Problemas de las Articulaciones</a></li>
-						<li style="top: 378px; left: 431px;"><a
-							href="http://www.nlm.nih.gov/medlineplus/spanish/stomachdisorders.html"
-							target="_blank">Problemas del Estomago</a></li>
-						<li style="top: 925px; left: 560px;"><a
-							href="http://www.noah-health.org/es/bjm/foot/index.html"
-							target="_blank">Problemas en los Pies</a></li>
-					</ul>
+				<center>
 
-				</figcaption>
-			</figure>
+					<img class="map" src="../../images/body/image_man.jpg" width="501"
+						height="1000" usemap="#bodyManMap" />
+
+					<map name="bodyManMap">
+
+						<area id="CABEZA" shape="circle" coords="279,26,20"
+							onclick="dialogMessage.show()" title="Cabeza"
+							data-maphilight='{"stroke":false,"fillColor":"ff0000","fillOpacity":0.6}' />
+
+						<area id="NARIZ" shape="circle" coords="289,66,20"
+							onclick="dialogMessage.show()" title="Nariz"
+							data-maphilight='{"stroke":false,"fillColor":"ff0000","fillOpacity":0.6}' />
+
+						<area id="CUELLO" shape="circle" coords="260,142,20"
+							onclick="dialogMessage.show()" title="Cuello"
+							data-maphilight='{"stroke":false,"fillColor":"ff0000","fillOpacity":0.6}' />
+
+						<area id="MANOS" shape="circle" coords="459,526,20"
+							onclick="dialogMessage.show()" title="Manos"
+							data-maphilight='{"stroke":false,"fillColor":"ff0000","fillOpacity":0.6}' />
+					</map>
+
+				</center>
+
+			</h:panelGrid>
+
+			<h:panelGrid id="pnlWoman"
+				rendered="#{bodyBacking.gender eq 'W'?true:false}" width="100%">
+
+				<center>
+
+					<img class="map" src="../../images/body/image_woman.jpg" width="501"
+						height="1000" usemap="#bodyWomanMap" />
+
+					<map name="bodyWomanMap">
+
+						<area id="cabeza" shape="circle" coords="279,26,20"
+							onclick="dialogMessage.show()" title="Cabeza"
+							data-maphilight='{"stroke":false,"fillColor":"ff0000","fillOpacity":0.6}' />
+
+						<area shape="circle" coords="289,66,20"
+							onclick="dialogMessage.show()" title="Nariz"
+							data-maphilight='{"stroke":false,"fillColor":"ff0000","fillOpacity":0.6}' />
+
+						<area shape="circle" coords="260,142,20"
+							onclick="dialogMessage.show()" title="Cuello"
+							data-maphilight='{"stroke":false,"fillColor":"ff0000","fillOpacity":0.6}' />
+
+						<area shape="circle" coords="459,526,20"
+							onclick="dialogMessage.show()" title="Manos"
+							data-maphilight='{"stroke":false,"fillColor":"ff0000","fillOpacity":0.6}' />
+					</map>
+
+				</center>
+
+			</h:panelGrid>
+
+			<p:dialog id="dialogMessage" widgetVar="dialogMessage" modal="false"
+				width="200" header="Cabeza">
+			</p:dialog>
+
 		</h:form>
 
 	</ui:define>
