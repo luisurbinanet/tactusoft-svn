@@ -32,14 +32,13 @@ public class BodyBacking {
 	private MedBodyDetail selectedDetail;
 	private BodyDetailDataModel modelDetail;
 	private MedBodyDetail[] selectedDetailArray;
-
-	private String gender;
+	
+	private String codeBodyPart;
 
 	public BodyBacking() {
 		model = null;
 		selected = new MedBody();
 		selectedDetail = new MedBodyDetail();
-		gender = "M";
 	}
 
 	public void init() {
@@ -107,12 +106,12 @@ public class BodyBacking {
 		this.selectedDetailArray = selectedDetailArray;
 	}
 
-	public String getGender() {
-		return gender;
+	public String getCodeBodyPart() {
+		return codeBodyPart;
 	}
 
-	public void setGender(String gender) {
-		this.gender = gender;
+	public void setCodeBodyPart(String codeBodyPart) {
+		this.codeBodyPart = codeBodyPart;
 	}
 
 	public void newAction() {
@@ -168,6 +167,10 @@ public class BodyBacking {
 		BigDecimal idBody = ((MedBody) event.getObject()).getId();
 		listDetail = service.getListMedBodyDetailByBody(idBody);
 		modelDetail = new BodyDetailDataModel(listDetail);
+	}
+	
+	public void prueba(){
+		System.out.println(codeBodyPart);
 	}
 
 }
