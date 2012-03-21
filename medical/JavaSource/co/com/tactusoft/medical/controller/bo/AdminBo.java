@@ -94,7 +94,7 @@ public class AdminBo implements Serializable {
 	public List<MedBody> getListMedBody() {
 		return dao.find("from MedBody o");
 	}
-	
+
 	public List<MedBody> getListMedBodyActive() {
 		return dao.find("from MedBody o where o.state = 1");
 	}
@@ -102,6 +102,12 @@ public class AdminBo implements Serializable {
 	public List<MedBodyDetail> getListMedBodyDetailByBody(BigDecimal idBody) {
 		return dao.find("FROM MedBodyDetail o WHERE o.medBody.id = " + idBody
 				+ " AND o.state = 1");
+	}
+
+	public List<MedBodyDetail> getListMedBodyDetailByName(String name,
+			String gender) {
+		return dao.find("from MedBodyDetail o where o.medBody.name = '" + name
+				+ "' and o.gender = '" + gender + "'");
 	}
 
 	public void save(Object entity) {

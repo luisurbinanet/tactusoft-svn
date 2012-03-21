@@ -32,8 +32,9 @@ public class BodyBacking {
 	private MedBodyDetail selectedDetail;
 	private BodyDetailDataModel modelDetail;
 	private MedBodyDetail[] selectedDetailArray;
-	
+
 	private String codeBodyPart;
+	private String gender;
 
 	public BodyBacking() {
 		model = null;
@@ -114,6 +115,14 @@ public class BodyBacking {
 		this.codeBodyPart = codeBodyPart;
 	}
 
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
 	public void newAction() {
 		selected = new MedBody();
 	}
@@ -168,9 +177,10 @@ public class BodyBacking {
 		listDetail = service.getListMedBodyDetailByBody(idBody);
 		modelDetail = new BodyDetailDataModel(listDetail);
 	}
-	
-	public void prueba(){
-		System.out.println(codeBodyPart);
+
+	public void prueba() {
+		listDetail = service
+				.getListMedBodyDetailByName(codeBodyPart, gender);
 	}
 
 }
