@@ -1,6 +1,6 @@
 package co.com.tactusoft.medical.model.entities;
 
-// Generated 19/03/2012 05:54:55 PM by Hibernate Tools 3.4.0.CR1
+// Generated 22/03/2012 07:29:58 AM by Hibernate Tools 3.4.0.CR1
 
 import java.math.BigDecimal;
 import javax.persistence.Column;
@@ -25,7 +25,9 @@ public class MedBodyDetail implements java.io.Serializable {
 	private BigDecimal id;
 	private MedBody medBody;
 	private String title;
-	private String url;
+	private String resourceType;
+	private String urlLink;
+	private BigDecimal idTopic;
 	private String gender;
 	private int state;
 
@@ -33,11 +35,25 @@ public class MedBodyDetail implements java.io.Serializable {
 	}
 
 	public MedBodyDetail(BigDecimal id, MedBody medBody, String title,
-			String url, String gender, int state) {
+			String resourceType, String urlLink, String gender, int state) {
 		this.id = id;
 		this.medBody = medBody;
 		this.title = title;
-		this.url = url;
+		this.resourceType = resourceType;
+		this.urlLink = urlLink;
+		this.gender = gender;
+		this.state = state;
+	}
+
+	public MedBodyDetail(BigDecimal id, MedBody medBody, String title,
+			String resourceType, String urlLink, BigDecimal idTopic,
+			String gender, int state) {
+		this.id = id;
+		this.medBody = medBody;
+		this.title = title;
+		this.resourceType = resourceType;
+		this.urlLink = urlLink;
+		this.idTopic = idTopic;
 		this.gender = gender;
 		this.state = state;
 	}
@@ -52,7 +68,7 @@ public class MedBodyDetail implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_body", nullable = false)
 	public MedBody getMedBody() {
 		return this.medBody;
@@ -71,13 +87,31 @@ public class MedBodyDetail implements java.io.Serializable {
 		this.title = title;
 	}
 
-	@Column(name = "url", nullable = false, length = 4000)
-	public String getUrl() {
-		return this.url;
+	@Column(name = "resource_type", nullable = false, length = 15)
+	public String getResourceType() {
+		return this.resourceType;
 	}
 
-	public void setUrl(String url) {
-		this.url = url;
+	public void setResourceType(String resourceType) {
+		this.resourceType = resourceType;
+	}
+
+	@Column(name = "url_link", nullable = false, length = 4000)
+	public String getUrlLink() {
+		return this.urlLink;
+	}
+
+	public void setUrlLink(String urlLink) {
+		this.urlLink = urlLink;
+	}
+
+	@Column(name = "id_topic", scale = 0)
+	public BigDecimal getIdTopic() {
+		return this.idTopic;
+	}
+
+	public void setIdTopic(BigDecimal idTopic) {
+		this.idTopic = idTopic;
 	}
 
 	@Column(name = "gender", nullable = false, length = 1)
