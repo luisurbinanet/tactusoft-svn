@@ -22,6 +22,7 @@ public class ResponseQuestionBacking {
 	@Inject
 	private AdminBo service;
 
+	private String topicName;
 	private List<MedQuestion> list;
 	private MedQuestion selectedQuestion;
 	private List<MedAnswer> listAnswer;
@@ -31,14 +32,24 @@ public class ResponseQuestionBacking {
 	public ResponseQuestionBacking() {
 
 	}
-	
-	public void init(MedQuestion selectedQuestion, List<MedQuestion> list, List<MedAnswer> listAnswer){
+
+	public void init(String topicName, MedQuestion selectedQuestion,
+			List<MedQuestion> list, List<MedAnswer> listAnswer) {
 		idAnswer = null;
 		idAnswers = null;
-		
+
+		this.topicName = topicName;
 		this.selectedQuestion = selectedQuestion;
 		this.list = list;
-		this.listAnswer =  listAnswer;
+		this.listAnswer = listAnswer;
+	}
+
+	public String getTopicName() {
+		return topicName;
+	}
+
+	public void setTopicName(String topicName) {
+		this.topicName = topicName;
 	}
 
 	public List<MedQuestion> getList() {
@@ -95,42 +106,43 @@ public class ResponseQuestionBacking {
 			selectedQuestion = nextQuestion(this.idAnswer);
 		}
 
-		if (selectedQuestion.getTypeQuestion().equals(
-				Constant.QUESTION_TYPE_MULTIPLE)) {
-			String answers = "";
-			for (BigDecimal id : idAnswers) {
-				answers = answers + id + "+";
-			}
-			
-			answers = answers.substring(0, answers.length() - 1);
-
-			List<MedCombination> listAnswers = service
-					.getListMedCombinationByAnswers(selectedQuestion.getId(),
-							answers);
-			if (listAnswers.size() > 0) {
-				selectedQuestion = listAnswers.get(0).getMedQuestionByNextQuestion();
-			}
-		}
-
-		if (selectedQuestion.getTypeQuestion().equals(
-				Constant.QUESTION_TYPE_UNIQUE)
-				|| selectedQuestion.getTypeQuestion().equals(
-						Constant.QUESTION_TYPE_MULTIPLE)) {
-			listAnswer = service.getListMedQuestionByQuestion(selectedQuestion
-					.getId());
-			if (listAnswer.size() > 0) {
-				this.idAnswer = listAnswer.get(0).getId();
-			}
-		}
-
 		if (selectedQuestion == null) {
 			selectedQuestion = new MedQuestion();
 			selectedQuestion.setId(new BigDecimal(-1));
 			String message = FacesUtil.getMessage("msg_final");
 			selectedQuestion.setName(message);
 			selectedQuestion.setTypeQuestion(Constant.QUESTION_TYPE_MESSAGE);
-		}
+		} else {
 
+			if (selectedQuestion.getTypeQuestion().equals(
+					Constant.QUESTION_TYPE_MULTIPLE)) {
+				String answers = "";
+				for (BigDecimal id : idAnswers) {
+					answers = answers + id + "+";
+				}
+
+				answers = answers.substring(0, answers.length() - 1);
+
+				List<MedCombination> listAnswers = service
+						.getListMedCombinationByAnswers(
+								selectedQuestion.getId(), answers);
+				if (listAnswers.size() > 0) {
+					selectedQuestion = listAnswers.get(0)
+							.getMedQuestionByNextQuestion();
+				}
+			}
+
+			if (selectedQuestion.getTypeQuestion().equals(
+					Constant.QUESTION_TYPE_UNIQUE)
+					|| selectedQuestion.getTypeQuestion().equals(
+							Constant.QUESTION_TYPE_MULTIPLE)) {
+				listAnswer = service
+						.getListMedQuestionByQuestion(selectedQuestion.getId());
+				if (listAnswer.size() > 0) {
+					this.idAnswer = listAnswer.get(0).getId();
+				}
+			}
+		}
 		return "";
 	}
 

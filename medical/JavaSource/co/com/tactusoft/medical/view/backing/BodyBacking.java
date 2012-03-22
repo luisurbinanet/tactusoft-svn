@@ -1,6 +1,7 @@
 package co.com.tactusoft.medical.view.backing;
 
 import java.math.BigDecimal;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -10,8 +11,11 @@ import org.primefaces.event.SelectEvent;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.medical.controller.bo.AdminBo;
+import co.com.tactusoft.medical.model.entities.MedAnswer;
 import co.com.tactusoft.medical.model.entities.MedBody;
 import co.com.tactusoft.medical.model.entities.MedBodyDetail;
+import co.com.tactusoft.medical.model.entities.MedQuestion;
+import co.com.tactusoft.medical.model.entities.MedTopic;
 import co.com.tactusoft.medical.util.Constant;
 import co.com.tactusoft.medical.util.FacesUtil;
 import co.com.tactusoft.medical.view.datamodel.BodyDataModel;
@@ -33,8 +37,11 @@ public class BodyBacking {
 	private BodyDetailDataModel modelDetail;
 	private MedBodyDetail[] selectedDetailArray;
 
+	private List<MedTopic> listTopic;
+
 	private String codeBodyPart;
 	private String gender;
+	private String idBodyPart;
 
 	public BodyBacking() {
 		model = null;
@@ -107,6 +114,17 @@ public class BodyBacking {
 		this.selectedDetailArray = selectedDetailArray;
 	}
 
+	public List<MedTopic> getListTopic() {
+		if (listTopic == null) {
+			listTopic = service.getListMedTopicActive();
+		}
+		return listTopic;
+	}
+
+	public void setListTopic(List<MedTopic> listTopic) {
+		this.listTopic = listTopic;
+	}
+
 	public String getCodeBodyPart() {
 		return codeBodyPart;
 	}
@@ -121,6 +139,14 @@ public class BodyBacking {
 
 	public void setGender(String gender) {
 		this.gender = gender;
+	}
+
+	public String getIdBodyPart() {
+		return idBodyPart;
+	}
+
+	public void setIdBodyPart(String idBodyPart) {
+		this.idBodyPart = idBodyPart;
 	}
 
 	public void newAction() {
@@ -165,6 +191,13 @@ public class BodyBacking {
 			message = FacesUtil.getMessage("msg_record_ok_2");
 		}
 
+		if (selectedDetail.getResourceType().equals(
+				Constant.RESOURCE_TYPE_TOPIC)) {
+			selectedDetail.setUrlLink(null);
+		} else {
+			selectedDetail.setIdTopic(null);
+		}
+
 		service.save(selectedDetail);
 		listDetail = service.getListMedBodyDetailByBody(selected.getId());
 		modelDetail = new BodyDetailDataModel(listDetail);
@@ -178,9 +211,38 @@ public class BodyBacking {
 		modelDetail = new BodyDetailDataModel(listDetail);
 	}
 
-	public void prueba() {
-		listDetail = service
-				.getListMedBodyDetailByName(codeBodyPart, gender);
+	public void generateLinksAction() {
+		listDetail = service.getListMedBodyDetailByName(codeBodyPart, gender);
+	}
+
+	public String generateQuestionsAction() {
+		BigDecimal id = new BigDecimal(idBodyPart);
+		String topicName = null;
+
+		List<MedQuestion> list = service.getListMedQuestionByTopic(id);
+
+		ResponseQuestionBacking responseQuestionBacking = FacesUtil
+				.findBean("responseQuestionBacking");
+
+		MedQuestion medQuestion = new MedQuestion();
+		List<MedAnswer> listAnswer = new LinkedList<MedAnswer>();
+
+		if (list.size() > 0) {
+			medQuestion = list.get(0);
+			listAnswer = service.getListMedQuestionByQuestion(medQuestion
+					.getId());
+			responseQuestionBacking.setList(list);
+			topicName = medQuestion.getMedTopic().getName();
+		} else {
+			topicName = "Sin Información";
+			medQuestion.setId(new BigDecimal(-1));
+			medQuestion.setName(FacesUtil.getMessage("msg_no_questions"));
+			medQuestion.setTypeQuestion(Constant.QUESTION_TYPE_MESSAGE);
+		}
+
+		responseQuestionBacking.init(topicName,medQuestion, list, listAnswer);
+
+		return "/pages/view/responseQuestion?faces-redirect=true";
 	}
 
 }

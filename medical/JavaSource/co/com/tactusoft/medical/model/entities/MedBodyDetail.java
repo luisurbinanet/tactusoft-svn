@@ -96,7 +96,7 @@ public class MedBodyDetail implements java.io.Serializable {
 		this.resourceType = resourceType;
 	}
 
-	@Column(name = "url_link", nullable = false, length = 4000)
+	@Column(name = "url_link", length = 4000)
 	public String getUrlLink() {
 		return this.urlLink;
 	}

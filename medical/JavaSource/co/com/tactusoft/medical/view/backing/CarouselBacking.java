@@ -94,11 +94,12 @@ public class CarouselBacking implements Serializable {
 			responseQuestionBacking.setList(list);
 		} else {
 			medQuestion.setId(new BigDecimal(-1));
-			medQuestion.setName("No existen preguntas!");
+			medQuestion.setName(FacesUtil.getMessage("msg_no_questions"));
 			medQuestion.setTypeQuestion(Constant.QUESTION_TYPE_MESSAGE);
 		}
 
-		responseQuestionBacking.init(medQuestion, list, listAnswer);
+		responseQuestionBacking.init(selectedMenu.getName(), medQuestion, list,
+				listAnswer);
 
 		return "/pages/view/responseQuestion?faces-redirect=true";
 	}
