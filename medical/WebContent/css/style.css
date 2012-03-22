@@ -1449,3 +1449,8 @@ img.image {
 	border-style: none;
 	width: 30%;
 }
+
+
+.ui-dialog{
+	left: 1000px !important;
+}
