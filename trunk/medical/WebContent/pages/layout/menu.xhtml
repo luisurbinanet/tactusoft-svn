@@ -10,15 +10,6 @@
 		<div class="r"></div>
 		<ul class="rco-menu">
 
-			<li><p:commandLink action="#{menuBacking.actionPage}"
-					immediate="true" rendered="#{not loginBacking.authenticated}">
-					<span class="l"></span>
-					<span class="r"></span>
-					<span class="t">#{msg['title_login']}</span>
-					<f:param name="page" value="/pages/secure/login" />
-				</p:commandLink>
-			</li>
-
 			<ui:repeat var="menu" value="#{menuBacking.listMenu}">
 				<li><h:commandLink action="#{menuBacking.actionPage}">
 						<span class="l"></span>
@@ -35,6 +26,15 @@
 						</ui:repeat>
 					</ul></li>
 			</ui:repeat>
+			
+			<li><p:commandLink action="#{menuBacking.actionPage}"
+					immediate="true" rendered="#{not loginBacking.authenticated}">
+					<span class="l"></span>
+					<span class="r"></span>
+					<span class="t">#{msg['title_login']}</span>
+					<f:param name="page" value="/pages/secure/login" />
+				</p:commandLink>
+			</li>
 
 			<li><h:commandLink action="#{loginBacking.logout}"
 					immediate="true" rendered="#{loginBacking.authenticated}">

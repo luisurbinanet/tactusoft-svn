@@ -67,8 +67,10 @@
 					<p:column selectionMode="multiple" style="width:18px" />
 
 					<p:column headerText="#{msg['bdy_title']}">#{rec.title}</p:column>
+					
+					<p:column headerText="#{msg['bdy_resource_type']}">#{rec.resourceType eq 'TOPIC'?msg['bdy_resource_type_topic']:msg['bdy_resource_type_link']}</p:column>
 
-					<p:column headerText="#{msg['bdy_url']}">#{rec.url}</p:column>
+					<p:column headerText="#{msg['bdy_resource_type_link']}">#{rec.urlLink}</p:column>
 
 					<p:column headerText="#{msg['bdy_gender']}">#{rec.gender eq 'M'?msg['top_gender_man']:(rec.gender eq 'W'?msg['top_gender_woman']:msg['top_gender_all'])}</p:column>
 
@@ -137,7 +139,7 @@
 
 			<p:dialog header="#{msg['msg_detail']}" widgetVar="detailDialog"
 				resizable="false" id="detailDialog" showEffect="fade"
-				hideEffect="explode" modal="false" width="600">
+				hideEffect="explode" modal="false" width="700">
 
 				<h:panelGrid id="pnlDetail" columns="2" cellpadding="4"
 					style="margin:0 auto;" width="100%">
@@ -146,9 +148,37 @@
 					<h:inputText value="#{bodyBacking.selectedDetail.title}"
 						style="width:100%" label="#{msg['bdy_title']}" required="true" />
 
-					<h:outputLabel value="#{msg['bdy_url']}" style="width:10%" />
-					<h:inputText value="#{bodyBacking.selectedDetail.url}"
-						style="width:100%" label="#{msg['bdy_url']}" required="true" />
+					<h:outputText value="#{msg['bdy_resource_type']}" />
+					<p:selectOneMenu value="#{bodyBacking.selectedDetail.resourceType}"
+						style="width:100%">
+
+						<p:ajax event="change" update="pnlDetail" />
+
+						<f:selectItem itemValue="TOPIC"
+							itemLabel="#{msg['bdy_resource_type_topic']}" />
+						<f:selectItem itemValue="LINK"
+							itemLabel="#{msg['bdy_resource_type_link']}" />
+					</p:selectOneMenu>
+
+					<h:outputLabel value="#{msg['bdy_resource_type_topic']}"
+						style="width:10%"
+						rendered="#{bodyBacking.selectedDetail.resourceType eq 'TOPIC'?true:false}" />
+					<p:selectOneMenu value="#{bodyBacking.selectedDetail.idTopic}"
+						style="width:100%"
+						rendered="#{bodyBacking.selectedDetail.resourceType eq 'TOPIC'?true:false}"
+						required="true" label="#{msg['bdy_resource_type_topic']}">
+
+						<f:selectItems value="#{bodyBacking.listTopic}" var="item"
+							itemValue="#{item.id}" itemLabel="#{item.name}" />
+					</p:selectOneMenu>
+
+					<h:outputLabel value="#{msg['bdy_resource_type_link']}"
+						style="width:10%"
+						rendered="#{bodyBacking.selectedDetail.resourceType eq 'LINK'?true:false}" />
+					<h:inputText value="#{bodyBacking.selectedDetail.urlLink}"
+						style="width:100%" label="#{msg['bdy_resource_type_link']}"
+						required="true"
+						rendered="#{bodyBacking.selectedDetail.resourceType eq 'LINK'?true:false}" />
 
 					<h:outputText value="#{msg['top_gender']}" />
 					<p:selectOneMenu value="#{bodyBacking.selectedDetail.gender}"
@@ -161,7 +191,7 @@
 					<h:outputLabel value="#{msg['glb_state']}" style="width:10%"
 						rendered="#{bodyBacking.selectedDetail.id!=null?true:false}" />
 					<p:selectOneMenu value="#{bodyBacking.selectedDetail.state}"
-						style="width:100%" 
+						style="width:100%"
 						rendered="#{bodyBacking.selectedDetail.id!=null?true:false}">
 						<f:selectItem itemValue="1" itemLabel="#{msg['glb_state_active']}" />
 						<f:selectItem itemValue="0"

@@ -20,6 +20,10 @@
 		<h:form id="form" enctype="multipart/form-data">
 
 			<p:tabView id="tabView">
+
+				<p:ajax event="tabChange" onstart="dialogMessage.hide()"
+					update=":form:dialogMessage" />
+
 				<p:tab id="tab1" title="#{msg['top_gender_man']}">
 
 					<center>
@@ -123,83 +127,83 @@
 							<map name="bodyWomanMap">
 
 								<area shape="circle" coords="264,42,15"
-									onmouseover="remoteComand('Cabeza','M');" title="Cabeza"
+									onmouseover="remoteComand('Cabeza','W');" title="Cabeza"
 									data-maphilight='{"stroke":false,"fillColor":"ff0000","fillOpacity":0.6}' />
 
 								<area shape="circle" coords="302,83,15"
-									onmouseover="remoteComand('Ojos','M');" title="Ojos"
+									onmouseover="remoteComand('Ojos','W');" title="Ojos"
 									data-maphilight='{"stroke":false,"fillColor":"ff0000","fillOpacity":0.6}' />
 
 								<area shape="circle" coords="254,85,15"
-									onmouseover="remoteComand('Oidos','M');" title="Oidos"
+									onmouseover="remoteComand('Oidos','W');" title="Oidos"
 									data-maphilight='{"stroke":false,"fillColor":"ff0000","fillOpacity":0.6}' />
 
 								<area shape="circle" coords="317,108,15"
-									onmouseover="remoteComand('Nariz','M');" title="Nariz"
+									onmouseover="remoteComand('Nariz','W');" title="Nariz"
 									data-maphilight='{"stroke":false,"fillColor":"ff0000","fillOpacity":0.6}' />
 
 								<area shape="circle" coords="291,118,15"
-									onmouseover="remoteComand('Boca','M');" title="Boca"
+									onmouseover="remoteComand('Boca','W');" title="Boca"
 									data-maphilight='{"stroke":false,"fillColor":"ff0000","fillOpacity":0.6}' />
 
 								<area shape="circle" coords="235,152,15"
-									onmouseover="remoteComand('Cuello','M');" title="Cuello"
+									onmouseover="remoteComand('Cuello','W');" title="Cuello"
 									data-maphilight='{"stroke":false,"fillColor":"ff0000","fillOpacity":0.6}' />
 
 								<area shape="circle" coords="258,196,15"
-									onmouseover="remoteComand('Pulmones','M');" title="Pulmones"
+									onmouseover="remoteComand('Pulmones','W');" title="Pulmones"
 									data-maphilight='{"stroke":false,"fillColor":"ff0000","fillOpacity":0.6}' />
 
 								<area shape="circle" coords="296,227,15"
-									onmouseover="remoteComand('Corazon','M');" title="Corazon"
+									onmouseover="remoteComand('Corazon','W');" title="Corazon"
 									data-maphilight='{"stroke":false,"fillColor":"ff0000","fillOpacity":0.6}' />
 
 								<area shape="circle" coords="267,268,15"
-									onmouseover="remoteComand('Pecho','M');" title="Pecho"
+									onmouseover="remoteComand('Pecho','W');" title="Pecho"
 									data-maphilight='{"stroke":false,"fillColor":"ff0000","fillOpacity":0.6}' />
 
 								<area shape="circle" coords="315,275,15"
-									onmouseover="remoteComand('Senos','M');" title="Senos"
+									onmouseover="remoteComand('Senos','W');" title="Senos"
 									data-maphilight='{"stroke":false,"fillColor":"ff0000","fillOpacity":0.6}' />
 
 								<area shape="circle" coords="180,264,15"
-									onmouseover="remoteComand('Espalda','M');" title="Espalda"
+									onmouseover="remoteComand('Espalda','W');" title="Espalda"
 									data-maphilight='{"stroke":false,"fillColor":"ff0000","fillOpacity":0.6}' />
 
 								<area shape="circle" coords="135,244,15"
-									onmouseover="remoteComand('Brazos','M');" title="Brazos"
+									onmouseover="remoteComand('Brazos','W');" title="Brazos"
 									data-maphilight='{"stroke":false,"fillColor":"ff0000","fillOpacity":0.6}' />
 
 								<area shape="circle" coords="252,390,15"
-									onmouseover="remoteComand('Estómago','M');" title="Estómago"
+									onmouseover="remoteComand('Estómago','W');" title="Estómago"
 									data-maphilight='{"stroke":false,"fillColor":"ff0000","fillOpacity":0.6}' />
 
 								<area shape="circle" coords="399,485,15"
-									onmouseover="remoteComand('Manos','M');" title="Manos"
+									onmouseover="remoteComand('Manos','W');" title="Manos"
 									data-maphilight='{"stroke":false,"fillColor":"ff0000","fillOpacity":0.6}' />
 
 								<area shape="circle" coords="263,487,15"
-									onmouseover="remoteComand('Genitales','M');" title="Genitales"
+									onmouseover="remoteComand('Genitales','W');" title="Genitales"
 									data-maphilight='{"stroke":false,"fillColor":"ff0000","fillOpacity":0.6}' />
 
 								<area shape="circle" coords="160,574,15"
-									onmouseover="remoteComand('Piernas','M');" title="Piernas"
+									onmouseover="remoteComand('Piernas','W');" title="Piernas"
 									data-maphilight='{"stroke":false,"fillColor":"ff0000","fillOpacity":0.6}' />
 
 								<area shape="circle" coords="131,683,15"
-									onmouseover="remoteComand('Rodillas','M');" title="Rodillas"
+									onmouseover="remoteComand('Rodillas','W');" title="Rodillas"
 									data-maphilight='{"stroke":false,"fillColor":"ff0000","fillOpacity":0.6}' />
 
 								<area shape="circle" coords="315,932,15"
-									onmouseover="remoteComand('Pies','M');" title="Pies"
+									onmouseover="remoteComand('Pies','W');" title="Pies"
 									data-maphilight='{"stroke":false,"fillColor":"ff0000","fillOpacity":0.6}' />
 
 								<area shape="circle" coords="50,911,15"
-									onmouseover="remoteComand('Pies','M');" title="Pies"
+									onmouseover="remoteComand('Pies','W');" title="Pies"
 									data-maphilight='{"stroke":false,"fillColor":"ff0000","fillOpacity":0.6}' />
 
 								<area shape="circle" coords="290,885,15"
-									onmouseover="remoteComand('Tobillos','M');" title="Tobillos"
+									onmouseover="remoteComand('Tobillos','W');" title="Tobillos"
 									data-maphilight='{"stroke":false,"fillColor":"ff0000","fillOpacity":0.6}' />
 							</map>
 
@@ -212,31 +216,46 @@
 
 			<p:dialog id="dialogMessage" widgetVar="dialogMessage" modal="false"
 				width="270" header="#{bodyBacking.codeBodyPart}" resizable="false"
-				draggable="true">
+				draggable="true" style="left: 1000px !important;">
 
-				<h:panelGrid id="dialogDetail" width="100%">
+				<h:form>
+					<h:panelGrid id="dialogDetail" width="100%">
 
-					<h:outputLabel value="#{msg['msg_selection_topic_2']}" />
+						<h:outputLabel value="#{msg['msg_selection_topic_2']}" />
 
-					<p:dataList var="row" value="#{bodyBacking.listDetail}"
-						style="width:100%">
-						<h:outputLink
-							onclick="window.open('#{row.urlLink}'); return false"
-							rendered="#{row.resourceType eq 'LINK'?true:false}">
-							<h:outputLabel value="#{row.title}" />
-						</h:outputLink>
-					</p:dataList>
-
-				</h:panelGrid>
+						<p:dataList var="row" value="#{bodyBacking.listDetail}"
+							style="width:100%">
+							<p:column>
+								<h:outputLink
+									onclick="window.open('#{row.urlLink}'); return false"
+									rendered="#{row.resourceType eq 'LINK'?true:false}">
+									<h:outputLabel value="#{row.title}" />
+								</h:outputLink>
+								<p:commandLink onclick="remoteComandTopic('#{row.id}');"
+									rendered="#{row.resourceType eq 'TOPIC'?true:false}"
+									action="/pages/view/carousel">
+									<h:outputLabel value="#{row.title}" />
+								</p:commandLink>
+							</p:column>
+						</p:dataList>
+					</h:panelGrid>
+				</h:form>
 
 			</p:dialog>
 
 			<pe:remoteCommand name="remoteComand" update="dialogMessage"
-				action="#{bodyBacking.prueba}" oncomplete="dialogMessage.show()">
+				action="#{bodyBacking.generateLinksAction}"
+				oncomplete="dialogMessage.show()">
 				<pe:remoteCommandParameter name="CODE_BODY_PART"
 					applyTo="#{bodyBacking.codeBodyPart}" />
 				<pe:remoteCommandParameter name="GENDER"
 					applyTo="#{bodyBacking.gender}" />
+			</pe:remoteCommand>
+
+			<pe:remoteCommand name="remoteComandTopic"
+				action="#{bodyBacking.generateQuestionsAction}">
+				<pe:remoteCommandParameter name="ID_BODY_PART"
+					applyTo="#{bodyBacking.idBodyPart}" />
 			</pe:remoteCommand>
 
 		</h:form>

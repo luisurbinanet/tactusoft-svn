@@ -26,13 +26,21 @@ public class AdminBo implements Serializable {
 	@Inject
 	private CustomHibernateDao dao;
 
+	public MedTopic getMedTopic(BigDecimal id) {
+		return (MedTopic) dao.find("from MedTopic o where o.id = " + id).get(0);
+	}
+
 	public List<MedTopic> getListMedTopic() {
 		return dao.find("from MedTopic o");
 	}
 
+	public List<MedTopic> getListMedTopicActive() {
+		return dao.find("from MedTopic o where o.state = 1");
+	}
+
 	public List<MedTopic> getListMedTopic(String gender) {
 		return dao.find("from MedTopic o where o.gender in ('" + gender
-				+ "','A')");
+				+ "','A') and o.state = 1");
 	}
 
 	public List<MedQuestion> getListMedQuestionByTopic(BigDecimal idTopic) {
@@ -107,7 +115,7 @@ public class AdminBo implements Serializable {
 	public List<MedBodyDetail> getListMedBodyDetailByName(String name,
 			String gender) {
 		return dao.find("from MedBodyDetail o where o.medBody.name = '" + name
-				+ "' and o.gender = '" + gender + "'");
+				+ "' and (o.gender = '" + gender + "' or o.gender = 'A')");
 	}
 
 	public void save(Object entity) {

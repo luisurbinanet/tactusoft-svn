@@ -95,7 +95,7 @@ public class MedQuestion implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_topic", nullable = false)
 	public MedTopic getMedTopic() {
 		return this.medTopic;
