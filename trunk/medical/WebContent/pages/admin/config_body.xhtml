@@ -67,10 +67,10 @@
 					<p:column selectionMode="multiple" style="width:18px" />
 
 					<p:column headerText="#{msg['bdy_title']}">#{rec.title}</p:column>
-					
+
 					<p:column headerText="#{msg['bdy_resource_type']}">#{rec.resourceType eq 'TOPIC'?msg['bdy_resource_type_topic']:msg['bdy_resource_type_link']}</p:column>
 
-					<p:column headerText="#{msg['bdy_resource_type_link']}">#{rec.urlLink}</p:column>
+					<p:column headerText="#{msg['bdy_resource']}">#{rec.resourceType eq 'TOPIC'?rec.idTopic:rec.urlLink}</p:column>
 
 					<p:column headerText="#{msg['bdy_gender']}">#{rec.gender eq 'M'?msg['top_gender_man']:(rec.gender eq 'W'?msg['top_gender_woman']:msg['top_gender_all'])}</p:column>
 
@@ -92,6 +92,10 @@
 							action="#{bodyBacking.newDetailAction}" icon="ui-icon-plusthick"
 							value="#{msg['btn_new']}" oncomplete="detailDialog.show()"
 							update=":editForm:pnlDetail" />
+						<p:commandButton id="cmdDeleteDetail" icon="ui-icon-closethick"
+							value="#{msg['btn_delete']}"
+							disabled="#{bodyBacking.selected.id == null?true:false}"
+							update="recordTable2" action="#{bodyBacking.removeDetailAction}" />
 					</f:facet>
 
 				</p:dataTable>
@@ -160,11 +164,11 @@
 							itemLabel="#{msg['bdy_resource_type_link']}" />
 					</p:selectOneMenu>
 
-					<h:outputLabel value="#{msg['bdy_resource_type_topic']}"
-						style="width:10%"
+					<h:outputLabel id="lblRTT"
+						value="#{msg['bdy_resource_type_topic']}" style="width:10%"
 						rendered="#{bodyBacking.selectedDetail.resourceType eq 'TOPIC'?true:false}" />
-					<p:selectOneMenu value="#{bodyBacking.selectedDetail.idTopic}"
-						style="width:100%"
+					<p:selectOneMenu id="slcRTT"
+						value="#{bodyBacking.selectedDetail.idTopic}" style="width:100%"
 						rendered="#{bodyBacking.selectedDetail.resourceType eq 'TOPIC'?true:false}"
 						required="true" label="#{msg['bdy_resource_type_topic']}">
 

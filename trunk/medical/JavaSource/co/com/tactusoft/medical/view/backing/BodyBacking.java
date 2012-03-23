@@ -155,10 +155,20 @@ public class BodyBacking {
 
 	public void newDetailAction() {
 		selectedDetail = new MedBodyDetail();
+		selectedDetail.setResourceType(Constant.RESOURCE_TYPE_TOPIC);
 	}
 
 	public void refreshAction() {
 
+	}
+
+	public void removeDetailAction() {
+		for(MedBodyDetail row:selectedDetailArray){
+			service.remove(row);
+			listDetail.remove(row);
+		}
+		
+		model = new BodyDataModel(list);
 	}
 
 	public void saveAction() {
@@ -174,7 +184,7 @@ public class BodyBacking {
 
 		service.save(selected);
 		list = service.getListMedBody();
-		model = new BodyDataModel(list);
+		modelDetail = new BodyDetailDataModel(listDetail);
 
 		FacesUtil.addInfo(message);
 	}
@@ -220,8 +230,7 @@ public class BodyBacking {
 		String topicName = null;
 
 		for (MedBodyDetail row : listDetail) {
-			if (row.getResourceType().equals(
-					Constant.RESOURCE_TYPE_TOPIC)) {
+			if (row.getResourceType().equals(Constant.RESOURCE_TYPE_TOPIC)) {
 				if (id.intValue() == row.getId().intValue()) {
 					id = row.getIdTopic();
 					break;
