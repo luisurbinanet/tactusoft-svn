@@ -219,6 +219,16 @@ public class BodyBacking {
 		BigDecimal id = new BigDecimal(idBodyPart);
 		String topicName = null;
 
+		for (MedBodyDetail row : listDetail) {
+			if (row.getResourceType().equals(
+					Constant.RESOURCE_TYPE_TOPIC)) {
+				if (id.intValue() == row.getId().intValue()) {
+					id = row.getIdTopic();
+					break;
+				}
+			}
+		}
+
 		List<MedQuestion> list = service.getListMedQuestionByTopic(id);
 
 		ResponseQuestionBacking responseQuestionBacking = FacesUtil
@@ -240,7 +250,7 @@ public class BodyBacking {
 			medQuestion.setTypeQuestion(Constant.QUESTION_TYPE_MESSAGE);
 		}
 
-		responseQuestionBacking.init(topicName,medQuestion, list, listAnswer);
+		responseQuestionBacking.init(topicName, medQuestion, list, listAnswer);
 
 		return "/pages/view/responseQuestion?faces-redirect=true";
 	}
