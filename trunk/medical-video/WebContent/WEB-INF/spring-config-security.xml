@@ -146,7 +146,7 @@
 	</bean>
 
 	<bean id="daoAuthenticationProvider"
-		class="co.com.tactusoft.medical-video.security.DaoAuthenticationProviderCustom">
+		class="co.com.tactusoft.video.security.DaoAuthenticationProviderCustom">
 		<property name="userDetailsService" ref="userDetailsService" />
 		<property name="userCache">
 			<bean
