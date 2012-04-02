@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<f:view contentType="text/html">
+	<h:head>
+		<meta http-equiv="X-UA-Compatible" content="IE=9" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>#{msg['title_app']}</title>
+		<link rel="stylesheet" href="../../css/style.css" type="text/css"
+			media="screen" />
+		<link rel="stylesheet" href="../../css/annotate.css" type="text/css"
+			media="screen" />
+
+		<!--[if IE 6]><link rel="stylesheet" href="../../css/style.ie6.css" type="text/css" media="screen" /><![endif]-->
+		<!--[if IE 7]><link rel="stylesheet" href="../../css/style.ie7.css" type="text/css" media="screen" /><![endif]-->
+		<script type="text/javascript" src="../../js/script.js"></script>
+		<script type="text/javascript" src="../../js/jquery.maphilight.js"></script>
+		
+		<script type="text/javascript">
+			$(function() {
+				$('.map').maphilight({fade: false});
+			});
+		</script>
+	</h:head>
+	<h:body>
+		<div id="rco-page-background-gradient"></div>
+		<div id="rco-page-background-glare">
+			<div id="rco-page-background-glare-image"></div>
+		</div>
+
+		<div id="rco-main">
+			<div class="rco-sheet">
+				<div class="rco-sheet-tl"></div>
+				<div class="rco-sheet-tr"></div>
+				<div class="rco-sheet-bl"></div>
+				<div class="rco-sheet-br"></div>
+				<div class="rco-sheet-tc"></div>
+				<div class="rco-sheet-bc"></div>
+				<div class="rco-sheet-cl"></div>
+				<div class="rco-sheet-cr"></div>
+				<div class="rco-sheet-cc"></div>
+				<div class="rco-sheet-body">
+					<ui:insert name="menu">
+						<ui:include src="../layout/menu.xhtml" />
+					</ui:insert>
+
+					<ui:insert name="header">
+						<ui:include src="../layout/header.xhtml" />
+					</ui:insert>
+
+					<div class="rco-content-layout">
+						<div class="rco-content-layout-row">
+							<div class="rco-layout-cell rco-content">
+								<div class="rco-post">
+									<div class="rco-post-body">
+										<div class="rco-post-inner">
+											<!-- <h2 class="rco-postheader">Welcome</h2> -->
+											<div class="rco-postcontent">
+
+												<p:ajaxStatus onstart="statusDialog.show();"
+													onsuccess="statusDialog.hide();" />
+
+												<p:dialog modal="false" widgetVar="statusDialog"
+													header="#{msg['msg_wait']}" draggable="false"
+													closable="false" resizable="false">
+													<p:graphicImage value="../../images/ajaxloadingbar.gif" />
+												</p:dialog>
+
+												<div id="content">
+													<ui:insert name="content" />
+												</div>
+											</div>
+											<div class="cleared"></div>
+										</div>
+
+										<div class="cleared"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<ui:insert name="footer">
+						<ui:include src="../layout/footer.xhtml" />
+					</ui:insert>
+				</div>
+			</div>
+			<div class="cleared"></div>
+			<p class="rco-page-footer">
+				<a href="http://www.google.com/">Web Template</a> created with
+				Artisteer.
+			</p>
+		</div>
+	</h:body>
+</f:view>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../layout/main.xhtml">
+
+	<ui:define name="content">
+
+		<h:form>
+
+			<center>
+
+				<div class="rco-blockheader" style="width:50%">
+					<div class="l"></div>
+					<div class="r"></div>
+					<div class="t">#{msg['title_login']}</div>
+				</div>
+
+				<h:panelGrid columns="2" style="width:50%">
+
+					<h:outputLabel value="#{msg['log_username']}" />
+					<h:inputText id="txtUsuario" value="#{loginBacking.userName}"
+						style="width:100%" />
+					<h:outputLabel value="#{msg['log_password']}" />
+					<h:inputSecret value="#{loginBacking.password}" style="width:100%" />
+
+					<f:facet name="footer">
+						<h:commandButton value="#{msg['btn_ok']}"
+							action="#{loginBacking.doLogin}" >
+						</h:commandButton>
+					</f:facet>
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlMessages"
+					rendered="#{loginBacking.visibleBadCredentials}"
+					style="align:center">
+					<h:outputLabel value="#{msg['log_msg_validate_credentials']}"
+						style="color:Red;font-weight:bold;"/>
+				</h:panelGrid>
+			</center>
+
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

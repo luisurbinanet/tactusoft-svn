@@ -1,0 +1,171 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../layout/main.xhtml">
+	<ui:define name="content">
+
+		<div class="rco-blockheader">
+			<div class="l"></div>
+			<div class="r"></div>
+			<div class="t">#{msg['title_carousel']}</div>
+		</div>
+
+		<p:spacer height="50" />
+
+		<h:form id="form" enctype="multipart/form-data">
+
+			<p:panelGrid id="pnlQuestion" style="width:100%" columns="1"
+				styleClass="actions">
+
+				<f:facet name="header">
+					<h:outputLabel
+						value="#{responseQuestionBacking.selectedQuestion.typeQuestion!='FINAL'?msg['msg_questions']:msg['msg_final']}"
+						style="font-style:normal;font-size:18px;width:100%;font-weight:bold;" />
+				</f:facet>
+
+				<p:spacer height="5" />
+
+				<h:panelGrid columns="1" width="100%" style="text-align:center;">
+					<h:outputLabel
+						value="#{responseQuestionBacking.selectedQuestion.typeQuestion eq'ASSERTIVE'?'¿':''} #{responseQuestionBacking.selectedQuestion.name} #{responseQuestionBacking.selectedQuestion.typeQuestion eq 'ASSERTIVE'?'?':''}"
+						style="color:Blue;font-style:normal;font-size:18px;width:100%;font-weight:bold;" />
+					<p:spacer height="20" />
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlAnswers" columns="2" rowClasses="actions-center"
+					rendered="#{responseQuestionBacking.selectedQuestion.typeQuestion eq 'ASSERTIVE'?true:false}"
+					width="100%">
+					<p:commandButton value="#{msg['que_ans_yes']}"
+						actionListener="#{responseQuestionBacking.actionSubmit}"
+						update="pnlQuestion" style="width:120px">
+						<f:param name="answer" value="#{msg['que_ans_yes']}" />
+					</p:commandButton>
+					<p:commandButton value="#{msg['que_ans_no']}"
+						actionListener="#{responseQuestionBacking.actionSubmit}"
+						update="pnlQuestion" style="width:120px">
+						<f:param name="answer" value="#{msg['que_ans_no']}" />
+					</p:commandButton>
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlUnique" columns="2" rowClasses="actions-center"
+					rendered="#{responseQuestionBacking.selectedQuestion.typeQuestion eq 'UNIQUE'?true:false}"
+					width="100%">
+
+					<p:selectOneRadio id="options"
+						value="#{responseQuestionBacking.idAnswer}" layout="pageDirection"
+						style="font-style:normal;font-size:18px;">
+						<f:selectItems value="#{responseQuestionBacking.listAnswer}"
+							var="item" itemLabel="#{item.name}" itemValue="#{item.id}" />
+					</p:selectOneRadio>
+
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlMultiple" columns="2"
+					rowClasses="actions-center"
+					rendered="#{responseQuestionBacking.selectedQuestion.typeQuestion eq 'MULTIPLE'?true:false}"
+					width="100%">
+
+					<p:selectManyCheckbox id="optionsMultiple"
+						value="#{responseQuestionBacking.idAnswers}"
+						layout="pageDirection" style="font-style:normal;font-size:18px;">
+						<f:selectItems value="#{responseQuestionBacking.listAnswer}"
+							var="item" itemLabel="#{item.name}" itemValue="#{item.id}" />
+					</p:selectManyCheckbox>
+
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlOkUnique" columns="1"
+					rendered="#{responseQuestionBacking.selectedQuestion.typeQuestion!='UNIQUE'?false:true}"
+					styleClass="actions-center" width="100%">
+
+					<p:commandButton value="#{msg['btn_next']}"
+						action="#{responseQuestionBacking.actionSubmit}"
+						update="pnlQuestion" style="width:120px">
+						<f:param name="answer" value="UNIQUE" />
+					</p:commandButton>
+
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlOkMultiple" columns="1"
+					rendered="#{responseQuestionBacking.selectedQuestion.typeQuestion!='MULTIPLE'?false:true}"
+					styleClass="actions-center" width="100%">
+
+					<p:commandButton value="#{msg['btn_next']}"
+						action="#{responseQuestionBacking.actionSubmit}"
+						update="pnlQuestion" style="width:120px">
+						<f:param name="answer" value="MULTIPLE" />
+					</p:commandButton>
+
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlOk" columns="1"
+					rendered="#{responseQuestionBacking.selectedQuestion.typeQuestion!='FINAL'?false:true}"
+					styleClass="actions-center" width="100%">
+
+					<h:outputLink
+						onclick="window.open('#{responseQuestionBacking.selectedQuestion.urlLink}'); return false"
+						rendered="#{responseQuestionBacking.selectedQuestion.resourceType eq 'LINK'?true:false}">
+						<h:outputLabel
+							value="Haga clic AQUÍ para ver información de su interés"
+							style="font-size:30px" />
+					</h:outputLink>
+
+					<h:graphicImage
+						value="#{responseQuestionBacking.selectedQuestion.urlVideo}"
+						rendered="#{responseQuestionBacking.selectedQuestion.resourceType eq 'IMAGE'?true:false}"
+						width="300" height="300" />
+
+					<p:media width="400" height="300"
+						player="#{responseQuestionBacking.selectedQuestion.typeVideo}"
+						value="#{responseQuestionBacking.selectedQuestion.urlVideo}"
+						rendered="#{questionBacking.selected.resourceType eq 'VIDEO' and questionBacking.selected.typeVideo ne 'flash'?true:false}">
+						<f:param name="autostart" value="1" />
+					</p:media>
+
+					<h:panelGrid
+						rendered="#{questionBacking.selected.resourceType eq 'VIDEO' and questionBacking.selected.typeVideo eq 'flash'?true:false}"
+						width="100%" styleClass="actions-center">
+						<object type="application/x-shockwave-flash"
+							data="../../player_flv.swf" width="500" height="300">
+							<param name="movie" value="../../player_flv.swf" />
+							<param name="FlashVars"
+								value='flv=#{responseQuestionBacking.selectedQuestion.urlVideo};' />
+						</object>
+					</h:panelGrid>
+
+					<p:spacer height="20" />
+
+					<h:outputLabel value="Gracias por su Tiempo"
+						style="font-style:normal;font-size:18px;width:100%;font-weight:bold;" />
+
+					<p:spacer height="20" />
+
+					<p:commandButton value="#{msg['btn_ok']}"
+						action="#{responseQuestionBacking.returnAction}" />
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlMessage" columns="1"
+					rendered="#{responseQuestionBacking.selectedQuestion.typeQuestion!='MESSAGE'?false:true}"
+					styleClass="actions-center" width="100%">
+
+					<p:spacer height="20" />
+
+					<h:outputLabel value="Gracias por su Tiempo"
+						style="font-style:normal;font-size:18px;width:100%;font-weight:bold;" />
+
+					<p:spacer height="20" />
+
+					<p:commandButton value="#{msg['btn_ok']}"
+						action="#{responseQuestionBacking.returnAction}" />
+				</h:panelGrid>
+
+			</p:panelGrid>
+		</h:form>
+
+		<h:panelGroup layout="block" style="height:200px;" />
+	</ui:define>
+</ui:composition>
+</html>
