@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.video.controller.bo.AdminBo;
 import co.com.tactusoft.video.controller.bo.ParameterBo;
-import co.com.tactusoft.video.model.entities.MedQuestion;
+import co.com.tactusoft.video.model.entities.VidQuestion;
 import co.com.tactusoft.video.model.entities.VidTopic;
 import co.com.tactusoft.video.util.Constant;
 import co.com.tactusoft.video.util.FacesUtil;
@@ -45,9 +45,9 @@ public class TopicBacking implements Serializable {
 	private VidTopic selected;
 
 	private QuestionDataModel modelQuestion;
-	private MedQuestion selectedQuestion;
-	private List<MedQuestion> listQuestion;
-	private MedQuestion[] selectedQuestionArray;
+	private VidQuestion selectedQuestion;
+	private List<VidQuestion> listQuestion;
+	private VidQuestion[] selectedQuestionArray;
 
 	private UploadedFile file;
 	private String urlImages;
@@ -55,7 +55,7 @@ public class TopicBacking implements Serializable {
 
 	public TopicBacking() {
 		selected = new VidTopic();
-		selectedQuestion = new MedQuestion();
+		selectedQuestion = new VidQuestion();
 		model = null;
 		urlImages = null;
 		newFile = false;
@@ -91,11 +91,11 @@ public class TopicBacking implements Serializable {
 		this.modelQuestion = modelQuestion;
 	}
 
-	public MedQuestion getSelectedQuestion() {
+	public VidQuestion getSelectedQuestion() {
 		return selectedQuestion;
 	}
 
-	public void setSelectedQuestion(MedQuestion selectedQuestion) {
+	public void setSelectedQuestion(VidQuestion selectedQuestion) {
 		this.selectedQuestion = selectedQuestion;
 	}
 
@@ -110,11 +110,11 @@ public class TopicBacking implements Serializable {
 		this.urlImages = urlImages;
 	}
 
-	public MedQuestion[] getSelectedQuestionArray() {
+	public VidQuestion[] getSelectedQuestionArray() {
 		return selectedQuestionArray;
 	}
 
-	public void setSelectedQuestionArray(MedQuestion[] selectedQuestionArray) {
+	public void setSelectedQuestionArray(VidQuestion[] selectedQuestionArray) {
 		this.selectedQuestionArray = selectedQuestionArray;
 	}
 
@@ -140,7 +140,7 @@ public class TopicBacking implements Serializable {
 			RequestContext context = RequestContext.getCurrentInstance();
 
 			if (selected.getId() == null) {
-				selected.setId(service.getId("MedTopic"));
+				selected.setId(service.getId("VidTopic"));
 				selected.setState(Constant.STATE_ACTIVE);
 				newRecord = true;
 			}
@@ -186,9 +186,9 @@ public class TopicBacking implements Serializable {
 
 	public void onRowSelect(SelectEvent event) {
 		BigDecimal idTopic = ((VidTopic) event.getObject()).getId();
-		listQuestion = service.getListMedQuestionByTopic(idTopic);
+		listQuestion = service.getListVidQuestionByTopic(idTopic);
 		modelQuestion = new QuestionDataModel(listQuestion);
-		selectedQuestion = new MedQuestion();
+		selectedQuestion = new VidQuestion();
 	}
 
 	public String goTopicAction() {
@@ -200,17 +200,17 @@ public class TopicBacking implements Serializable {
 		QuestionBacking questionBacking = FacesUtil.findBean("questionBacking");
 		String action = FacesUtil.getParam("action");
 		if (action.equals("NEW")) {
-			selectedQuestion = new MedQuestion();
+			selectedQuestion = new VidQuestion();
 		}
-		selectedQuestion.setMedTopic(selected);
+		selectedQuestion.setVidTopic(selected);
 		questionBacking.init(selectedQuestion);
 		return "/pages/admin/question?faces-redirect=true";
 	}
 
 	public void removeDetailAction() {
-		for (MedQuestion row : selectedQuestionArray) {
+		for (VidQuestion row : selectedQuestionArray) {
 			service.remove(row);
-			listQuestion = service.getListMedQuestionByTopic(selected.getId());
+			listQuestion = service.getListVidQuestionByTopic(selected.getId());
 			modelQuestion = new QuestionDataModel(listQuestion);
 		}
 	}

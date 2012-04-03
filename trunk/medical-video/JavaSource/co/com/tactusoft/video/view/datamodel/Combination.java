@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
-import co.com.tactusoft.video.model.entities.MedAnswer;
-import co.com.tactusoft.video.model.entities.MedQuestion;
+import co.com.tactusoft.video.model.entities.VidAnswer;
+import co.com.tactusoft.video.model.entities.VidQuestion;
 
 public class Combination implements Serializable {
 
@@ -14,15 +14,15 @@ public class Combination implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
-	private MedQuestion nextQuestion;
-	private List<MedAnswer> listAnswers;
+	private VidQuestion nextQuestion;
+	private List<VidAnswer> listAnswers;
 
 	public Combination() {
 
 	}
 
-	public Combination(BigDecimal id, MedQuestion nextQuestion,
-			List<MedAnswer> listAnswers) {
+	public Combination(BigDecimal id, VidQuestion nextQuestion,
+			List<VidAnswer> listAnswers) {
 		this.id = id;
 		this.nextQuestion = nextQuestion;
 		this.listAnswers = listAnswers;
@@ -36,19 +36,19 @@ public class Combination implements Serializable {
 		this.id = id;
 	}
 
-	public MedQuestion getNextQuestion() {
+	public VidQuestion getNextQuestion() {
 		return nextQuestion;
 	}
 
-	public void setNextQuestion(MedQuestion nextQuestion) {
+	public void setNextQuestion(VidQuestion nextQuestion) {
 		this.nextQuestion = nextQuestion;
 	}
 
-	public List<MedAnswer> getListAnswers() {
+	public List<VidAnswer> getListAnswers() {
 		return listAnswers;
 	}
 
-	public void setListAnswers(List<MedAnswer> listAnswers) {
+	public void setListAnswers(List<VidAnswer> listAnswers) {
 		this.listAnswers = listAnswers;
 	}
 

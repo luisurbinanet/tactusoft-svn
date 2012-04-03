@@ -8,9 +8,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import co.com.tactusoft.video.model.dao.CustomHibernateDao;
-import co.com.tactusoft.video.model.entities.MedAnswer;
-import co.com.tactusoft.video.model.entities.MedCombination;
-import co.com.tactusoft.video.model.entities.MedQuestion;
+import co.com.tactusoft.video.model.entities.VidAnswer;
+import co.com.tactusoft.video.model.entities.VidCombination;
+import co.com.tactusoft.video.model.entities.VidQuestion;
 import co.com.tactusoft.video.model.entities.VidTopic;
 
 @Named
@@ -28,33 +28,33 @@ public class AdminBo implements Serializable {
 		return dao.find("from VidTopic o where o.state = 1");
 	}
 
-	public List<MedQuestion> getListMedQuestionByTopic(BigDecimal idTopic) {
-		return dao.find("from MedQuestion o where o.VidTopic.id = " + idTopic
+	public List<VidQuestion> getListVidQuestionByTopic(BigDecimal idTopic) {
+		return dao.find("from VidQuestion o where o.vidTopic.id = " + idTopic
 				+ " order by o.orderQuestion");
 	}
 
-	public List<MedQuestion> getListMedQuestionByNoIdQuestion(
+	public List<VidQuestion> getListVidQuestionByNoIdQuestion(
 			BigDecimal idQuestion, BigDecimal idTopic) {
-		return dao.find("from MedQuestion o where o.id <> " + idQuestion
+		return dao.find("from VidQuestion o where o.id <> " + idQuestion
 				+ " and o.VidTopic = " + idTopic + " order by o.orderQuestion");
 	}
 
-	public MedQuestion getMedQuestionByQuestion(BigDecimal idQuestion) {
-		MedQuestion result = new MedQuestion();
+	public VidQuestion getVidQuestionByQuestion(BigDecimal idQuestion) {
+		VidQuestion result = new VidQuestion();
 		try {
-			result = (MedQuestion) dao.find(
-					"from MedQuestion o where o.id = " + idQuestion).get(0);
+			result = (VidQuestion) dao.find(
+					"from VidQuestion o where o.id = " + idQuestion).get(0);
 		} catch (IndexOutOfBoundsException ex) {
 
 		}
 		return result;
 	}
 
-	public int getOrderMedQuestion(BigDecimal idTopic) {
+	public int getOrderVidQuestion(BigDecimal idTopic) {
 		int order = 0;
 		try {
 			order = (Integer) dao.find(
-					"select max(o.orderQuestion) + 1 from MedQuestion o where o.VidTopic.id = "
+					"select max(o.orderQuestion) + 1 from VidQuestion o where o.VidTopic.id = "
 							+ idTopic).get(0);
 		} catch (Exception ex) {
 			order = 1;
@@ -62,22 +62,22 @@ public class AdminBo implements Serializable {
 		return order;
 	}
 
-	public List<MedAnswer> getListMedQuestionByQuestion(BigDecimal idQuestion) {
-		return dao.find("from MedAnswer o where o.medQuestion.id = "
+	public List<VidAnswer> getListVidQuestionByQuestion(BigDecimal idQuestion) {
+		return dao.find("from VidAnswer o where o.VidQuestion.id = "
 				+ idQuestion);
 	}
 
-	public List<MedCombination> getListMedCombinationByQuestion(
+	public List<VidCombination> getListVidCombinationByQuestion(
 			BigDecimal idQuestion) {
 		return dao
-				.find("from MedCombination o where o.medQuestionByIdQuestion.id = "
+				.find("from VidCombination o where o.VidQuestionByIdQuestion.id = "
 						+ idQuestion);
 	}
 
-	public List<MedCombination> getListMedCombinationByAnswers(
+	public List<VidCombination> getListVidCombinationByAnswers(
 			BigDecimal idQuestion, String answers) {
 		return dao
-				.find("from MedCombination o where o.medQuestionByIdQuestion.id = "
+				.find("from VidCombination o where o.VidQuestionByIdQuestion.id = "
 						+ idQuestion
 						+ " and answers = '"
 						+ answers

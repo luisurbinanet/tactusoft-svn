@@ -16,22 +16,22 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "vid_combination", catalog = "medical_video_db")
-public class MedCombination implements java.io.Serializable {
+public class VidCombination implements java.io.Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
-	private MedQuestion medQuestionByIdQuestion;
-	private MedQuestion medQuestionByNextQuestion;
+	private VidQuestion medQuestionByIdQuestion;
+	private VidQuestion medQuestionByNextQuestion;
 	private String answers;
 
-	public MedCombination() {
+	public VidCombination() {
 	}
 
-	public MedCombination(BigDecimal id, MedQuestion medQuestionByIdQuestion,
-			MedQuestion medQuestionByNextQuestion, String answers) {
+	public VidCombination(BigDecimal id, VidQuestion medQuestionByIdQuestion,
+			VidQuestion medQuestionByNextQuestion, String answers) {
 		this.id = id;
 		this.medQuestionByIdQuestion = medQuestionByIdQuestion;
 		this.medQuestionByNextQuestion = medQuestionByNextQuestion;
@@ -50,22 +50,22 @@ public class MedCombination implements java.io.Serializable {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_question", nullable = false)
-	public MedQuestion getMedQuestionByIdQuestion() {
+	public VidQuestion getMedQuestionByIdQuestion() {
 		return this.medQuestionByIdQuestion;
 	}
 
-	public void setMedQuestionByIdQuestion(MedQuestion medQuestionByIdQuestion) {
+	public void setMedQuestionByIdQuestion(VidQuestion medQuestionByIdQuestion) {
 		this.medQuestionByIdQuestion = medQuestionByIdQuestion;
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "next_question", nullable = false)
-	public MedQuestion getMedQuestionByNextQuestion() {
+	public VidQuestion getMedQuestionByNextQuestion() {
 		return this.medQuestionByNextQuestion;
 	}
 
 	public void setMedQuestionByNextQuestion(
-			MedQuestion medQuestionByNextQuestion) {
+			VidQuestion medQuestionByNextQuestion) {
 		this.medQuestionByNextQuestion = medQuestionByNextQuestion;
 	}
 
