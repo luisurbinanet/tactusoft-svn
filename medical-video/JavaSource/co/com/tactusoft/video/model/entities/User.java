@@ -16,14 +16,14 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "user", catalog = "medical_video_db")
-public class MedUser implements java.io.Serializable {
+public class User implements java.io.Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
-	private MedRole medRole;
+	private Role role;
 	private String username;
 	private String password;
 	private String firstName;
@@ -33,24 +33,24 @@ public class MedUser implements java.io.Serializable {
 	private String phone;
 	private int state;
 
-	public MedUser() {
+	public User() {
 	}
 
-	public MedUser(BigDecimal id, MedRole medRole, String username,
+	public User(BigDecimal id, Role medRole, String username,
 			String password, String firstName, String lastName) {
 		this.id = id;
-		this.medRole = medRole;
+		this.role = medRole;
 		this.username = username;
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
 	}
 
-	public MedUser(BigDecimal id, MedRole medRole, String username,
+	public User(BigDecimal id, Role medRole, String username,
 			String password, String firstName, String middleName,
 			String lastName, String email, String phone, int state) {
 		this.id = id;
-		this.medRole = medRole;
+		this.role = medRole;
 		this.username = username;
 		this.password = password;
 		this.firstName = firstName;
@@ -73,12 +73,12 @@ public class MedUser implements java.io.Serializable {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_role", nullable = false)
-	public MedRole getMedRole() {
-		return this.medRole;
+	public Role getRole() {
+		return this.role;
 	}
 
-	public void setMedRole(MedRole medRole) {
-		this.medRole = medRole;
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 	@Column(name = "username", nullable = false)

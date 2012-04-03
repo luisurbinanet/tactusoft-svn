@@ -25,12 +25,7 @@ public class AdminBo implements Serializable {
 	private CustomHibernateDao dao;
 
 	public List<VidTopic> getListVidTopic() {
-		return dao.find("from VidTopic o");
-	}
-
-	public List<VidTopic> getListVidTopic(String gender) {
-		return dao.find("from VidTopic o where o.gender in ('" + gender
-				+ "','A')");
+		return dao.find("from VidTopic o where o.state = 1");
 	}
 
 	public List<MedQuestion> getListMedQuestionByTopic(BigDecimal idTopic) {

@@ -17,7 +17,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "role", catalog = "medical_video_db")
-public class MedRole implements java.io.Serializable {
+public class Role implements java.io.Serializable {
 
 	/**
 	 * 
@@ -26,22 +26,22 @@ public class MedRole implements java.io.Serializable {
 	private BigDecimal id;
 	private String name;
 	private int state;
-	private Set<MedUser> medUsers = new HashSet<MedUser>(0);
+	private Set<User> users = new HashSet<User>(0);
 
-	public MedRole() {
+	public Role() {
 	}
 
-	public MedRole(BigDecimal id, String name, int state) {
+	public Role(BigDecimal id, String name, int state) {
 		this.id = id;
 		this.name = name;
 		this.state = state;
 	}
 
-	public MedRole(BigDecimal id, String name, int state, Set<MedUser> medUsers) {
+	public Role(BigDecimal id, String name, int state, Set<User> users) {
 		this.id = id;
 		this.name = name;
 		this.state = state;
-		this.medUsers = medUsers;
+		this.users = users;
 	}
 
 	@Id
@@ -72,13 +72,13 @@ public class MedRole implements java.io.Serializable {
 		this.state = state;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "medRole")
-	public Set<MedUser> getMedUsers() {
-		return this.medUsers;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "role")
+	public Set<User> getUsers() {
+		return this.users;
 	}
 
-	public void setMedUsers(Set<MedUser> medUsers) {
-		this.medUsers = medUsers;
+	public void setUsers(Set<User> users) {
+		this.users = users;
 	}
 
 }

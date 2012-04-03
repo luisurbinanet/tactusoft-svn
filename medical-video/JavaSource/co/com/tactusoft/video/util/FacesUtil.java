@@ -23,7 +23,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import co.com.tactusoft.video.model.entities.MedUser;
+import co.com.tactusoft.video.model.entities.User;
 import co.com.tactusoft.video.security.UserData;
 
 @Named
@@ -123,7 +123,7 @@ public class FacesUtil {
 		return userData;
 	}
 
-	public static MedUser getCurrentUser() {
+	public static User getCurrentUser() {
 		UserData userData = null;
 		try {
 			userData = (UserData) SecurityContextHolder.getContext()

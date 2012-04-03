@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import co.com.tactusoft.video.model.dao.CustomHibernateDao;
-import co.com.tactusoft.video.model.entities.MedParameter;
+import co.com.tactusoft.video.model.entities.Parameter;
 
 @Named
 public class ParameterBo implements Serializable {
@@ -21,14 +21,14 @@ public class ParameterBo implements Serializable {
 	private CustomHibernateDao dao;
 
 	public String getValueText(String code) {
-		return ((MedParameter) dao.find(
-				"from MedParameter o where code = '" + code + "'").get(0))
+		return ((Parameter) dao.find(
+				"from Parameter o where code = '" + code + "'").get(0))
 				.getValueText();
 	}
 
 	public BigDecimal getValueNumber(String code) {
-		return ((MedParameter) dao.find(
-				"from MedParameter o where code = '" + code + "'").get(0))
+		return ((Parameter) dao.find(
+				"from Parameter o where code = '" + code + "'").get(0))
 				.getValueNumber();
 	}
 

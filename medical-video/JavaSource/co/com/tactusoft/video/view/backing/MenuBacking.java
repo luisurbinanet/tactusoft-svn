@@ -51,14 +51,8 @@ public class MenuBacking implements Serializable {
 
 		menuDataModel = new MenuDataModel();
 		menuDataModel.setId(1);
-		menuDataModel.setName(FacesUtil.getMessage("title_carousel"));
-		menuDataModel.setPage("/pages/view/carousel");
-		listMenu.add(menuDataModel);
-
-		menuDataModel = new MenuDataModel();
-		menuDataModel.setId(2);
-		menuDataModel.setName(FacesUtil.getMessage("title_body"));
-		menuDataModel.setPage("/pages/view/body");
+		menuDataModel.setName(FacesUtil.getMessage("title_video"));
+		menuDataModel.setPage("/pages/view/video");
 		listMenu.add(menuDataModel);
 
 		if (role != null) {
@@ -72,12 +66,6 @@ public class MenuBacking implements Serializable {
 			menuChild.setId(4);
 			menuChild.setName(FacesUtil.getMessage("title_config_carousel"));
 			menuChild.setPage("/pages/admin/topic");
-			listChilds.add(menuChild);
-
-			menuChild = new MenuDataModel();
-			menuChild.setId(5);
-			menuChild.setName(FacesUtil.getMessage("title_config_body"));
-			menuChild.setPage("/pages/admin/config_body");
 			listChilds.add(menuChild);
 
 			if (role.equals(Constant.ROLE_SUPER_ADMIN)) {

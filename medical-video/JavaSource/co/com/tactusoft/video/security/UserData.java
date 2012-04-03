@@ -8,7 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import co.com.tactusoft.video.model.entities.MedUser;
+import co.com.tactusoft.video.model.entities.User;
 import co.com.tactusoft.video.view.datamodel.MenuDataModel;
 
 public class UserData implements UserDetails {
@@ -21,7 +21,7 @@ public class UserData implements UserDetails {
 	private String username;
 	private String password;
 	private String role;
-	private MedUser user;
+	private User user;
 	private List<MenuDataModel> listMenu;
 
 	public void setUsername(String username) {
@@ -48,11 +48,11 @@ public class UserData implements UserDetails {
 		this.role = role;
 	}
 
-	public MedUser getUser() {
+	public User getUser() {
 		return user;
 	}
 
-	public void setUser(MedUser user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 

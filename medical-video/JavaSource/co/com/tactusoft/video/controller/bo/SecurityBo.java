@@ -7,8 +7,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import co.com.tactusoft.video.model.dao.CustomHibernateDao;
-import co.com.tactusoft.video.model.entities.MedRole;
-import co.com.tactusoft.video.model.entities.MedUser;
+import co.com.tactusoft.video.model.entities.Role;
+import co.com.tactusoft.video.model.entities.User;
 
 @Named
 public class SecurityBo {
@@ -16,30 +16,24 @@ public class SecurityBo {
 	@Inject
 	private CustomHibernateDao dao;
 
-	public MedUser getObject(String userName) {
-		MedUser object = null;
+	public User getObject(String userName) {
+		User object = null;
 		try {
-			object = (MedUser) dao.find(
-					"from MedUser o where o.username = '" + userName + "' and o.state = 1")
+			object = (User) dao.find(
+					"from User o where o.username = '" + userName + "' and o.state = 1")
 					.get(0);
 		} catch (IndexOutOfBoundsException ex) {
 			object = null;
 		}
 		return object;
 	}
-
-	public List<MedRole> getRoles(BigDecimal idUser) {
-		List<MedRole> list = dao
-				.find("select MedRole from MedUserRole o where o.MedUser.id = " + idUser);
-		return list;
+	
+	public List<User> getListMedUser() {
+		return dao.find("from User o");
 	}
 	
-	public List<MedUser> getListMedUser() {
-		return dao.find("from MedUser o");
-	}
-	
-	public List<MedRole> getListMedRole() {
-		return dao.find("from MedRole o where o.state = 1");
+	public List<Role> getListMedRole() {
+		return dao.find("from Role o where o.state = 1");
 	}
 	
 	public void save(Object entity) {
