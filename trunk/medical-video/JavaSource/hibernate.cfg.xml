@@ -6,9 +6,9 @@
     <session-factory>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="hibernate.connection.password">admin</property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost/medical-video_db</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost/mysql</property>
         <property name="hibernate.connection.username">root</property>
-        <property name="hibernate.default_schema">medical-video_db</property>
+        <property name="hibernate.default_schema">medical_video_db</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
     </session-factory>
 </hibernate-configuration>

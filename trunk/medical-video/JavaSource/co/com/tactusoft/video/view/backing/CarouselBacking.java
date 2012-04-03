@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Scope;
 import co.com.tactusoft.video.controller.bo.AdminBo;
 import co.com.tactusoft.video.model.entities.MedAnswer;
 import co.com.tactusoft.video.model.entities.MedQuestion;
-import co.com.tactusoft.video.model.entities.MedTopic;
+import co.com.tactusoft.video.model.entities.VidTopic;
 import co.com.tactusoft.video.util.Constant;
 import co.com.tactusoft.video.util.FacesUtil;
 
@@ -30,43 +30,43 @@ public class CarouselBacking implements Serializable {
 	@Inject
 	private AdminBo service;
 
-	private List<MedTopic> listWoman = new LinkedList<MedTopic>();
-	private List<MedTopic> listMan = new LinkedList<MedTopic>();
-	private MedTopic selectedMenu;
+	private List<VidTopic> listWoman = new LinkedList<VidTopic>();
+	private List<VidTopic> listMan = new LinkedList<VidTopic>();
+	private VidTopic selectedMenu;
 
 	private String urlImages;
 
 	public CarouselBacking() {
-		listWoman = new ArrayList<MedTopic>();
+		listWoman = new ArrayList<VidTopic>();
 	}
 
-	public List<MedTopic> getListWoman() {
+	public List<VidTopic> getListWoman() {
 		if (listWoman.size() == 0) {
-			listWoman = service.getListMedTopic("W");
+			listWoman = service.getListVidTopic("W");
 		}
 		return listWoman;
 	}
 
-	public void setListWoman(List<MedTopic> listWoman) {
+	public void setListWoman(List<VidTopic> listWoman) {
 		this.listWoman = listWoman;
 	}
 
-	public List<MedTopic> getListMan() {
+	public List<VidTopic> getListMan() {
 		if (listMan.size() == 0) {
-			listMan = service.getListMedTopic("M");
+			listMan = service.getListVidTopic("M");
 		}
 		return listMan;
 	}
 
-	public void setListMan(List<MedTopic> listMan) {
+	public void setListMan(List<VidTopic> listMan) {
 		this.listMan = listMan;
 	}
 
-	public MedTopic getSelectedMenu() {
+	public VidTopic getSelectedMenu() {
 		return selectedMenu;
 	}
 
-	public void setSelectedMenu(MedTopic selectedMenu) {
+	public void setSelectedMenu(VidTopic selectedMenu) {
 		this.selectedMenu = selectedMenu;
 	}
 

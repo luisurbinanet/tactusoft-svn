@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Scope;
 import co.com.tactusoft.video.controller.bo.AdminBo;
 import co.com.tactusoft.video.controller.bo.ParameterBo;
 import co.com.tactusoft.video.model.entities.MedQuestion;
-import co.com.tactusoft.video.model.entities.MedTopic;
+import co.com.tactusoft.video.model.entities.VidTopic;
 import co.com.tactusoft.video.util.Constant;
 import co.com.tactusoft.video.util.FacesUtil;
 import co.com.tactusoft.video.view.datamodel.QuestionDataModel;
@@ -42,7 +42,7 @@ public class TopicBacking implements Serializable {
 	private ParameterBo parameterService;
 
 	private TopicDataModel model;
-	private MedTopic selected;
+	private VidTopic selected;
 
 	private QuestionDataModel modelQuestion;
 	private MedQuestion selectedQuestion;
@@ -54,7 +54,7 @@ public class TopicBacking implements Serializable {
 	private boolean newFile;
 
 	public TopicBacking() {
-		selected = new MedTopic();
+		selected = new VidTopic();
 		selectedQuestion = new MedQuestion();
 		model = null;
 		urlImages = null;
@@ -63,7 +63,7 @@ public class TopicBacking implements Serializable {
 
 	public TopicDataModel getModel() {
 		if (model == null) {
-			model = new TopicDataModel(service.getListMedTopic());
+			model = new TopicDataModel(service.getListVidTopic());
 		}
 		return model;
 	}
@@ -72,13 +72,13 @@ public class TopicBacking implements Serializable {
 		this.model = model;
 	}
 
-	public MedTopic getSelected() {
+	public VidTopic getSelected() {
 		return selected;
 	}
 
-	public void setSelected(MedTopic selected) {
+	public void setSelected(VidTopic selected) {
 		if (selected == null) {
-			selected = new MedTopic();
+			selected = new VidTopic();
 		}
 		this.selected = selected;
 	}
@@ -119,17 +119,17 @@ public class TopicBacking implements Serializable {
 	}
 
 	public String newAction() {
-		selected = new MedTopic();
+		selected = new VidTopic();
 		return goTopicAction();
 	}
 
 	public void refreshAction() {
-		model = new TopicDataModel(service.getListMedTopic());
+		model = new TopicDataModel(service.getListVidTopic());
 	}
 
 	public void deleteAction() {
 		service.remove(selected);
-		model = new TopicDataModel(service.getListMedTopic());
+		model = new TopicDataModel(service.getListVidTopic());
 	}
 
 	public void saveAction() throws IOException {
@@ -142,7 +142,6 @@ public class TopicBacking implements Serializable {
 			if (selected.getId() == null) {
 				selected.setId(service.getId("MedTopic"));
 				selected.setState(Constant.STATE_ACTIVE);
-				selected.setNumVersion(1);
 				newRecord = true;
 			}
 
@@ -171,7 +170,7 @@ public class TopicBacking implements Serializable {
 				} else {
 					message = FacesUtil.getMessage("msg_record_ok_2");
 				}
-				model = new TopicDataModel(service.getListMedTopic());
+				model = new TopicDataModel(service.getListVidTopic());
 				FacesUtil.addInfo(message);
 				context.addCallbackParam("saved", "true");
 			} else {
@@ -186,7 +185,7 @@ public class TopicBacking implements Serializable {
 	}
 
 	public void onRowSelect(SelectEvent event) {
-		BigDecimal idTopic = ((MedTopic) event.getObject()).getId();
+		BigDecimal idTopic = ((VidTopic) event.getObject()).getId();
 		listQuestion = service.getListMedQuestionByTopic(idTopic);
 		modelQuestion = new QuestionDataModel(listQuestion);
 		selectedQuestion = new MedQuestion();

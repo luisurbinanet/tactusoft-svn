@@ -7,10 +7,10 @@ import javax.faces.model.ListDataModel;
 
 import org.primefaces.model.SelectableDataModel;
 
-import co.com.tactusoft.video.model.entities.MedTopic;
+import co.com.tactusoft.video.model.entities.VidTopic;
 
-public class TopicDataModel extends ListDataModel<MedTopic> implements
-		SelectableDataModel<MedTopic>,Serializable {
+public class TopicDataModel extends ListDataModel<VidTopic> implements
+		SelectableDataModel<VidTopic>,Serializable {
 
 	/**
 	 * 
@@ -20,19 +20,19 @@ public class TopicDataModel extends ListDataModel<MedTopic> implements
 	public TopicDataModel() {
 	}
 
-	public TopicDataModel(List<MedTopic> data) {
+	public TopicDataModel(List<VidTopic> data) {
 		super(data);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public MedTopic getRowData(String rowKey) {
+	public VidTopic getRowData(String rowKey) {
 		// In a real app, a more efficient way like a query by rowKey should be
 		// implemented to deal with huge data
 
-		List<MedTopic> list = (List<MedTopic>) getWrappedData();
+		List<VidTopic> list = (List<VidTopic>) getWrappedData();
 
-		for (MedTopic row : list) {
+		for (VidTopic row : list) {
 			if (row.getId().equals(rowKey))
 				return row;
 		}
@@ -41,7 +41,7 @@ public class TopicDataModel extends ListDataModel<MedTopic> implements
 	}
 
 	@Override
-	public Object getRowKey(MedTopic car) {
+	public Object getRowKey(VidTopic car) {
 		return car.getId();
 	}
 }
