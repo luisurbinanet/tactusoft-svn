@@ -72,7 +72,7 @@
 
 	<bean id="anonymousAuthFilter"
 		class="org.springframework.security.web.authentication.AnonymousAuthenticationFilter">
-		<property name="key" value="medical-video123" />
+		<property name="key" value="video123" />
 		<property name="userAttribute" value="anonymousUser,ROL_ANONYMOUS" />
 	</bean>
 
@@ -108,7 +108,7 @@
 	</bean>
 
 	<bean id="securityMetadataSourceCustom"
-		class="co.com.tactusoft.medical-video.security.SecurityMetadataSourceCustom" />
+		class="co.com.tactusoft.video.security.SecurityMetadataSourceCustom" />
 
 	<bean id="filterSecurityInterceptor"
 		class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
@@ -120,7 +120,7 @@
 	<bean id="rememberMeServices"
 		class="org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices">
 		<property name="userDetailsService" ref="userDetailsService" />
-		<property name="key" value="medical-video123" />
+		<property name="key" value="video123" />
 		<property name="tokenValiditySeconds" value="0" />
 	</bean>
 
@@ -135,11 +135,11 @@
 				<ref local="daoAuthenticationProvider" />
 				<bean
 					class="org.springframework.security.authentication.AnonymousAuthenticationProvider">
-					<property name="key" value="medical-video123" />
+					<property name="key" value="video123" />
 				</bean>
 				<bean
 					class="org.springframework.security.authentication.RememberMeAuthenticationProvider">
-					<property name="key" value="medical-video123" />
+					<property name="key" value="video123" />
 				</bean>
 			</list>
 		</property>
@@ -166,7 +166,7 @@
 	</bean>
 
 	<bean id="userDetailsService"
-		class="co.com.tactusoft.medical-video.security.UserDetailsServiceCustom" />
+		class="co.com.tactusoft.video.security.UserDetailsServiceCustom" />
 
 	<bean id="loggerListener"
 		class="org.springframework.security.access.event.LoggerListener" />

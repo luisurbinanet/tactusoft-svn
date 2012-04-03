@@ -10,9 +10,9 @@
 			<supported-locale>en</supported-locale>
 		</locale-config>
 		<resource-bundle>
-			<base-name>co.com.tactusoft.medical-video.view.resources.resources</base-name>
+			<base-name>co.com.tactusoft.video.view.resources.resources</base-name>
 			<var>msg</var>
 		</resource-bundle>
-		<message-bundle>co.com.tactusoft.medical-video.view.messages.messages</message-bundle>
+		<message-bundle>co.com.tactusoft.video.view.messages.messages</message-bundle>
 	</application>
 </faces-config>

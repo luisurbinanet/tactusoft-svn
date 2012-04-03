@@ -7,7 +7,7 @@
 
 	<!-- Configure annotated beans -->
 	<context:annotation-config />
-	<context:component-scan base-package="co.com.tactusoft.medical-video" />
+	<context:component-scan base-package="co.com.tactusoft.video" />
 
 	<tx:annotation-driven transaction-manager="transactionManager" />
 
@@ -15,7 +15,7 @@
 	 <!--<bean id="dataSourceDefault" class="com.mchange.v2.c3p0.ComboPooledDataSource"
 		destroy-method="close">
 		<property name="driverClass" value="com.mysql.jdbc.Driver" />
-		<property name="jdbcUrl" value="jdbc:mysql://192.168.1.29/medical-video_db" />
+		<property name="jdbcUrl" value="jdbc:mysql://192.168.1.29/medical_video_db" />
 		<property name="user" value="root" />
 		<property name="password" value="lukro9753" />
 		<property name="minPoolSize" value="5" />
@@ -29,7 +29,7 @@
 	<bean id="dataSourceDefault" class="com.mchange.v2.c3p0.ComboPooledDataSource"
 		destroy-method="close">
 		<property name="driverClass" value="com.mysql.jdbc.Driver" />
-		<property name="jdbcUrl" value="jdbc:mysql://localhost/medical-video_db" />
+		<property name="jdbcUrl" value="jdbc:mysql://localhost/medical_video_db" />
 		<property name="user" value="root" />
 		<property name="password" value="admin" />
 		<property name="minPoolSize" value="5" />
