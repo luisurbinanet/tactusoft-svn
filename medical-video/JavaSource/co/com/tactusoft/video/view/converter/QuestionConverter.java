@@ -11,7 +11,7 @@ import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 import javax.faces.model.SelectItem;
 
-import co.com.tactusoft.video.model.entities.MedQuestion;
+import co.com.tactusoft.video.model.entities.VidQuestion;
 import co.com.tactusoft.video.util.FacesUtil;
 import co.com.tactusoft.video.view.backing.QuestionBacking;
 
@@ -31,7 +31,7 @@ public class QuestionConverter implements Converter {
 				List<SelectItem> list = questionBacking.getListQuestion();
 
 				for (SelectItem item : list) {
-					MedQuestion q = (MedQuestion)item.getValue();
+					VidQuestion q = (VidQuestion)item.getValue();
 					if (q. getId().intValue() == id) {
 						return q;
 					}
@@ -52,7 +52,7 @@ public class QuestionConverter implements Converter {
 		if (value == null || value.equals("")) {
 			return "";
 		} else {
-			return String.valueOf(((MedQuestion) value).getId());
+			return String.valueOf(((VidQuestion) value).getId());
 		}
 	}
 

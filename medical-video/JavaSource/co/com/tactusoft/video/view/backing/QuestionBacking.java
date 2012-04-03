@@ -18,9 +18,9 @@ import org.primefaces.model.UploadedFile;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.video.controller.bo.AdminBo;
-import co.com.tactusoft.video.model.entities.MedAnswer;
-import co.com.tactusoft.video.model.entities.MedCombination;
-import co.com.tactusoft.video.model.entities.MedQuestion;
+import co.com.tactusoft.video.model.entities.VidAnswer;
+import co.com.tactusoft.video.model.entities.VidCombination;
+import co.com.tactusoft.video.model.entities.VidQuestion;
 import co.com.tactusoft.video.util.Constant;
 import co.com.tactusoft.video.util.FacesUtil;
 import co.com.tactusoft.video.view.datamodel.AnswerDataModel;
@@ -35,14 +35,14 @@ public class QuestionBacking {
 	@Inject
 	private AdminBo service;
 
-	private MedQuestion selected;
+	private VidQuestion selected;
 	private BigDecimal idTopic;
 
 	private BigDecimal positiveQuestion;
 	private BigDecimal negativeQuestion;
 
 	private List<SelectItem> listQuestion;
-	private Map<BigDecimal, MedQuestion> mapQuestion;
+	private Map<BigDecimal, VidQuestion> mapQuestion;
 
 	private int orderQuestion;
 
@@ -53,39 +53,39 @@ public class QuestionBacking {
 	private UploadedFile file;
 	private String urlImages;
 
-	private List<MedAnswer> listAnswer;
-	private MedAnswer[] selectedsAnswer;
-	private List<MedAnswer> selectedDeletesAnswer;
+	private List<VidAnswer> listAnswer;
+	private VidAnswer[] selectedsAnswer;
+	private List<VidAnswer> selectedDeletesAnswer;
 	private String answerText;
 	private AnswerDataModel modelAnswer;
 	private List<SelectItem> listAnswerMultiple;
-	private Map<BigDecimal, MedAnswer> mapAnwserMultiple;
+	private Map<BigDecimal, VidAnswer> mapAnwserMultiple;
 	private BigDecimal nextQuestionMultiple;
 	private BigDecimal[] selectedsCombination;
-	private List<MedCombination> listMedCombination;
+	private List<VidCombination> listMedCombination;
 	private List<Combination> listCombination;
 	private CombinationDataModel modelCombination;
 	private Combination selectedCombination;
-	private List<MedCombination> selectedDeleteCombination;
+	private List<VidCombination> selectedDeleteCombination;
 
 	public QuestionBacking() {
 	}
 
-	public void init(MedQuestion selected) {
-		idTopic = selected.getMedTopic().getId();
+	public void init(VidQuestion selected) {
+		idTopic = selected.getVidTopic().getId();
 
-		List<MedQuestion> list = null;
+		List<VidQuestion> list = null;
 		listQuestion = new LinkedList<SelectItem>();
-		mapQuestion = new HashMap<BigDecimal, MedQuestion>();
-		listAnswer = new LinkedList<MedAnswer>();
+		mapQuestion = new HashMap<BigDecimal, VidQuestion>();
+		listAnswer = new LinkedList<VidAnswer>();
 		modelAnswer = new AnswerDataModel(listAnswer);
 		answerText = null;
-		selectedDeletesAnswer = new LinkedList<MedAnswer>();
+		selectedDeletesAnswer = new LinkedList<VidAnswer>();
 		listAnswerMultiple = new LinkedList<SelectItem>();
-		mapAnwserMultiple = new HashMap<BigDecimal, MedAnswer>();
+		mapAnwserMultiple = new HashMap<BigDecimal, VidAnswer>();
 
-		selectedDeleteCombination = new LinkedList<MedCombination>();
-		listMedCombination = new LinkedList<MedCombination>();
+		selectedDeleteCombination = new LinkedList<VidCombination>();
+		listMedCombination = new LinkedList<VidCombination>();
 		listCombination = new LinkedList<Combination>();
 		modelCombination = new CombinationDataModel(listCombination);
 
@@ -93,10 +93,10 @@ public class QuestionBacking {
 				Constant.DEFAULT_LABEL));
 
 		if (selected.getId() != null) {
-			list = service.getListMedQuestionByNoIdQuestion(selected.getId(),
+			list = service.getListVidQuestionByNoIdQuestion(selected.getId(),
 					idTopic);
 		} else {
-			list = service.getListMedQuestionByTopic(idTopic);
+			list = service.getListVidQuestionByTopic(idTopic);
 			if (list.size() > 0) {
 				orderQuestion = list.get(list.size() - 1).getOrderQuestion() + 1;
 			} else {
@@ -105,7 +105,7 @@ public class QuestionBacking {
 			selected.setOrderQuestion(orderQuestion);
 		}
 
-		for (MedQuestion row : list) {
+		for (VidQuestion row : list) {
 			String question = row.getName();
 			if (question.length() > 60) {
 				question = question.substring(0, 60) + "...";
@@ -122,11 +122,11 @@ public class QuestionBacking {
 		searchQuestionAction();
 	}
 
-	public MedQuestion getSelected() {
+	public VidQuestion getSelected() {
 		return selected;
 	}
 
-	public void setSelected(MedQuestion selected) {
+	public void setSelected(VidQuestion selected) {
 		this.selected = selected;
 	}
 
@@ -181,19 +181,19 @@ public class QuestionBacking {
 		this.urlImages = urlImages;
 	}
 
-	public List<MedAnswer> getListAnswer() {
+	public List<VidAnswer> getListAnswer() {
 		return listAnswer;
 	}
 
-	public void setListAnswer(List<MedAnswer> listAnswer) {
+	public void setListAnswer(List<VidAnswer> listAnswer) {
 		this.listAnswer = listAnswer;
 	}
 
-	public MedAnswer[] getSelectedsAnswer() {
+	public VidAnswer[] getSelectedsAnswer() {
 		return selectedsAnswer;
 	}
 
-	public void setSelectedsAnswer(MedAnswer[] selectedsAnswer) {
+	public void setSelectedsAnswer(VidAnswer[] selectedsAnswer) {
 		this.selectedsAnswer = selectedsAnswer;
 	}
 
@@ -237,11 +237,11 @@ public class QuestionBacking {
 		this.selectedsCombination = selectedsCombination;
 	}
 
-	public List<MedCombination> getListMedCombination() {
+	public List<VidCombination> getListMedCombination() {
 		return listMedCombination;
 	}
 
-	public void setListMedCombination(List<MedCombination> listMedCombination) {
+	public void setListMedCombination(List<VidCombination> listMedCombination) {
 		this.listMedCombination = listMedCombination;
 	}
 
@@ -268,17 +268,17 @@ public class QuestionBacking {
 
 			} else if (selected.getTypeQuestion().equals(
 					Constant.QUESTION_TYPE_UNIQUE)) {
-				listAnswer = service.getListMedQuestionByQuestion(selected
+				listAnswer = service.getListVidQuestionByQuestion(selected
 						.getId());
 				modelAnswer = new AnswerDataModel(listAnswer);
 			} else if (selected.getTypeQuestion().equals(
 					Constant.QUESTION_TYPE_MULTIPLE)) {
 
-				listAnswer = service.getListMedQuestionByQuestion(selected
+				listAnswer = service.getListVidQuestionByQuestion(selected
 						.getId());
 				modelAnswer = new AnswerDataModel(listAnswer);
 
-				for (MedAnswer row : listAnswer) {
+				for (VidAnswer row : listAnswer) {
 					String substr = row.getName();
 					if (substr.length() > 60) {
 						substr = substr.substring(0, 60) + "...";
@@ -288,7 +288,7 @@ public class QuestionBacking {
 				}
 
 				listMedCombination = service
-						.getListMedCombinationByQuestion(selected.getId());
+						.getListVidCombinationByQuestion(selected.getId());
 				listCombination = getLisCombination(listMedCombination);
 				modelCombination = new CombinationDataModel(listCombination);
 
@@ -430,7 +430,7 @@ public class QuestionBacking {
 				} else {
 					if (selected.getTypeQuestion().equals(
 							Constant.QUESTION_TYPE_UNIQUE)) {
-						for (MedAnswer row : listAnswer) {
+						for (VidAnswer row : listAnswer) {
 							if (row.getNextQuestion().intValue() == -1) {
 								message = FacesUtil
 										.getMessage("que_msg_validate_nextquestion");
@@ -464,38 +464,38 @@ public class QuestionBacking {
 						&& !selected.getTypeQuestion().equals(
 								Constant.QUESTION_TYPE_MULTIPLE)) {
 
-					for (MedAnswer row : listAnswer) {
+					for (VidAnswer row : listAnswer) {
 						service.remove(row);
 					}
 
-					listAnswer = new LinkedList<MedAnswer>();
+					listAnswer = new LinkedList<VidAnswer>();
 					modelAnswer = new AnswerDataModel(listAnswer);
 
-					listMedCombination = new LinkedList<MedCombination>();
+					listMedCombination = new LinkedList<VidCombination>();
 					listCombination = getLisCombination(listMedCombination);
 
 					modelCombination = new CombinationDataModel(listCombination);
 
 				} else {
-					for (MedAnswer row : listAnswer) {
+					for (VidAnswer row : listAnswer) {
 						if (row.getId() == null) {
 							row.setId(service.getId("MedAnswer"));
 						}
 						service.save(row);
 					}
 
-					for (MedAnswer row : selectedDeletesAnswer) {
+					for (VidAnswer row : selectedDeletesAnswer) {
 						service.remove(row);
 					}
 
-					for (MedCombination row : listMedCombination) {
+					for (VidCombination row : listMedCombination) {
 						if (row.getId() == null) {
 							row.setId(service.getId("MedCombination"));
 						}
 						service.save(row);
 					}
 					
-					for (MedCombination row : selectedDeleteCombination) {
+					for (VidCombination row : selectedDeleteCombination) {
 						service.remove(row);
 					}
 				}
@@ -504,7 +504,7 @@ public class QuestionBacking {
 
 				TopicBacking topicBacking = FacesUtil.findBean("topicBacking");
 				QuestionDataModel questionDataModel = new QuestionDataModel(
-						service.getListMedQuestionByTopic(idTopic));
+						service.getListVidQuestionByTopic(idTopic));
 				topicBacking.setModelQuestion(questionDataModel);
 			} else {
 				FacesUtil.addWarn(message);
@@ -530,8 +530,8 @@ public class QuestionBacking {
 			String message = FacesUtil.getMessage("msg_field_required", field);
 			FacesUtil.addWarn(message);
 		} else {
-			MedAnswer selectedAnswer = new MedAnswer();
-			selectedAnswer.setMedQuestion(selected);
+			VidAnswer selectedAnswer = new VidAnswer();
+			selectedAnswer.setVidQuestion(selected);
 			selectedAnswer.setName(answerText);
 			selectedAnswer.setNextQuestion(Constant.DEFAULT_VALUE);
 			listAnswer.add(selectedAnswer);
@@ -560,7 +560,7 @@ public class QuestionBacking {
 			message = FacesUtil.getMessage("msg_field_required", field);
 			FacesUtil.addWarn(message);
 		} else {
-			MedQuestion mqm = mapQuestion.get(nextQuestionMultiple);
+			VidQuestion mqm = mapQuestion.get(nextQuestionMultiple);
 			String answers = "";
 
 			for (BigDecimal id : selectedsCombination) {
@@ -569,7 +569,7 @@ public class QuestionBacking {
 
 			answers = answers.substring(0, answers.length() - 1);
 
-			MedCombination medCombination = new MedCombination();
+			VidCombination medCombination = new VidCombination();
 			medCombination.setMedQuestionByIdQuestion(selected);
 			medCombination.setAnswers(answers);
 			medCombination.setMedQuestionByNextQuestion(mqm);
@@ -595,8 +595,8 @@ public class QuestionBacking {
 	}
 
 	public void removeAnswerAction() {
-		selectedDeletesAnswer = new LinkedList<MedAnswer>();
-		for (MedAnswer row : selectedsAnswer) {
+		selectedDeletesAnswer = new LinkedList<VidAnswer>();
+		for (VidAnswer row : selectedsAnswer) {
 			listAnswer.remove(row);
 			selectedDeletesAnswer.add(row);
 		}
@@ -607,18 +607,18 @@ public class QuestionBacking {
 		return listAnswer.size();
 	}
 
-	private List<Combination> getLisCombination(List<MedCombination> list) {
+	private List<Combination> getLisCombination(List<VidCombination> list) {
 		List<Combination> result = new LinkedList<Combination>();
-		for (MedCombination row : list) {
+		for (VidCombination row : list) {
 			Combination obj = new Combination();
 			obj.setId(row.getId());
 			obj.setNextQuestion(row.getMedQuestionByNextQuestion());
-			List<MedAnswer> listAnswers = new LinkedList<MedAnswer>();
+			List<VidAnswer> listAnswers = new LinkedList<VidAnswer>();
 			StringTokenizer answers = new StringTokenizer(row.getAnswers(), "+");
 			while (answers.hasMoreTokens()) {
 				String answer = answers.nextToken();
 				BigDecimal id = new BigDecimal(answer);
-				MedAnswer medAnswer = mapAnwserMultiple.get(id);
+				VidAnswer medAnswer = mapAnwserMultiple.get(id);
 				listAnswers.add(medAnswer);
 			}
 			obj.setListAnswers(listAnswers);
@@ -629,15 +629,15 @@ public class QuestionBacking {
 
 	public void deleteCombination() {
 		BigDecimal id = new BigDecimal(FacesUtil.getParam("COMBINATION_ID"));
-		selectedDeleteCombination = new LinkedList<MedCombination>();
+		selectedDeleteCombination = new LinkedList<VidCombination>();
 
-		for (MedCombination row : listMedCombination) {
+		for (VidCombination row : listMedCombination) {
 			if (id.intValue() == row.getId().intValue()) {
 				selectedDeleteCombination.add(row);
 			}
 		}
 
-		for (MedCombination row : selectedDeleteCombination) {
+		for (VidCombination row : selectedDeleteCombination) {
 			listMedCombination.remove(row);
 		}
 

@@ -12,15 +12,15 @@ import javax.inject.Named;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.video.controller.bo.AdminBo;
-import co.com.tactusoft.video.model.entities.MedAnswer;
-import co.com.tactusoft.video.model.entities.MedQuestion;
+import co.com.tactusoft.video.model.entities.VidAnswer;
+import co.com.tactusoft.video.model.entities.VidQuestion;
 import co.com.tactusoft.video.model.entities.VidTopic;
 import co.com.tactusoft.video.util.Constant;
 import co.com.tactusoft.video.util.FacesUtil;
 
 @Named
 @Scope("view")
-public class CarouselBacking implements Serializable {
+public class VideoBacking implements Serializable {
 
 	/**
 	 * 
@@ -35,7 +35,7 @@ public class CarouselBacking implements Serializable {
 
 	private String urlImages;
 
-	public CarouselBacking() {
+	public VideoBacking() {
 		list = new ArrayList<VidTopic>();
 	}
 
@@ -66,18 +66,18 @@ public class CarouselBacking implements Serializable {
 	}
 
 	public String generateQuestions() {
-		List<MedQuestion> list = service.getListMedQuestionByTopic(selectedMenu
+		List<VidQuestion> list = service.getListVidQuestionByTopic(selectedMenu
 				.getId());
 
 		ResponseQuestionBacking responseQuestionBacking = FacesUtil
 				.findBean("responseQuestionBacking");
 
-		MedQuestion medQuestion = new MedQuestion();
-		List<MedAnswer> listAnswer = new LinkedList<MedAnswer>();
+		VidQuestion medQuestion = new VidQuestion();
+		List<VidAnswer> listAnswer = new LinkedList<VidAnswer>();
 
 		if (list.size() > 0) {
 			medQuestion = list.get(0);
-			listAnswer = service.getListMedQuestionByQuestion(medQuestion
+			listAnswer = service.getListVidQuestionByQuestion(medQuestion
 					.getId());
 			responseQuestionBacking.setList(list);
 		} else {

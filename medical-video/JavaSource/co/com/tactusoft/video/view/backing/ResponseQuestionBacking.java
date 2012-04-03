@@ -9,9 +9,9 @@ import javax.inject.Named;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.video.controller.bo.AdminBo;
-import co.com.tactusoft.video.model.entities.MedAnswer;
-import co.com.tactusoft.video.model.entities.MedCombination;
-import co.com.tactusoft.video.model.entities.MedQuestion;
+import co.com.tactusoft.video.model.entities.VidAnswer;
+import co.com.tactusoft.video.model.entities.VidCombination;
+import co.com.tactusoft.video.model.entities.VidQuestion;
 import co.com.tactusoft.video.util.Constant;
 import co.com.tactusoft.video.util.FacesUtil;
 
@@ -22,9 +22,9 @@ public class ResponseQuestionBacking {
 	@Inject
 	private AdminBo service;
 
-	private List<MedQuestion> list;
-	private MedQuestion selectedQuestion;
-	private List<MedAnswer> listAnswer;
+	private List<VidQuestion> list;
+	private VidQuestion selectedQuestion;
+	private List<VidAnswer> listAnswer;
 	private BigDecimal idAnswer;
 	private BigDecimal[] idAnswers;
 
@@ -32,7 +32,7 @@ public class ResponseQuestionBacking {
 
 	}
 	
-	public void init(MedQuestion selectedQuestion, List<MedQuestion> list, List<MedAnswer> listAnswer){
+	public void init(VidQuestion selectedQuestion, List<VidQuestion> list, List<VidAnswer> listAnswer){
 		idAnswer = null;
 		idAnswers = null;
 		
@@ -41,27 +41,27 @@ public class ResponseQuestionBacking {
 		this.listAnswer =  listAnswer;
 	}
 
-	public List<MedQuestion> getList() {
+	public List<VidQuestion> getList() {
 		return list;
 	}
 
-	public void setList(List<MedQuestion> list) {
+	public void setList(List<VidQuestion> list) {
 		this.list = list;
 	}
 
-	public MedQuestion getSelectedQuestion() {
+	public VidQuestion getSelectedQuestion() {
 		return selectedQuestion;
 	}
 
-	public void setSelectedQuestion(MedQuestion selectedQuestion) {
+	public void setSelectedQuestion(VidQuestion selectedQuestion) {
 		this.selectedQuestion = selectedQuestion;
 	}
 
-	public List<MedAnswer> getListAnswer() {
+	public List<VidAnswer> getListAnswer() {
 		return listAnswer;
 	}
 
-	public void setListAnswer(List<MedAnswer> listAnswer) {
+	public void setListAnswer(List<VidAnswer> listAnswer) {
 		this.listAnswer = listAnswer;
 	}
 
@@ -104,8 +104,8 @@ public class ResponseQuestionBacking {
 			
 			answers = answers.substring(0, answers.length() - 1);
 
-			List<MedCombination> listAnswers = service
-					.getListMedCombinationByAnswers(selectedQuestion.getId(),
+			List<VidCombination> listAnswers = service
+					.getListVidCombinationByAnswers(selectedQuestion.getId(),
 							answers);
 			if (listAnswers.size() > 0) {
 				selectedQuestion = listAnswers.get(0).getMedQuestionByNextQuestion();
@@ -116,7 +116,7 @@ public class ResponseQuestionBacking {
 				Constant.QUESTION_TYPE_UNIQUE)
 				|| selectedQuestion.getTypeQuestion().equals(
 						Constant.QUESTION_TYPE_MULTIPLE)) {
-			listAnswer = service.getListMedQuestionByQuestion(selectedQuestion
+			listAnswer = service.getListVidQuestionByQuestion(selectedQuestion
 					.getId());
 			if (listAnswer.size() > 0) {
 				this.idAnswer = listAnswer.get(0).getId();
@@ -124,7 +124,7 @@ public class ResponseQuestionBacking {
 		}
 
 		if (selectedQuestion == null) {
-			selectedQuestion = new MedQuestion();
+			selectedQuestion = new VidQuestion();
 			selectedQuestion.setId(new BigDecimal(-1));
 			String message = FacesUtil.getMessage("msg_final");
 			selectedQuestion.setName(message);
@@ -138,8 +138,8 @@ public class ResponseQuestionBacking {
 		return "/pages/view/carousel?faces-redirect=true";
 	}
 
-	private MedQuestion nextQuestion(BigDecimal id) {
-		for (MedQuestion row : list) {
+	private VidQuestion nextQuestion(BigDecimal id) {
+		for (VidQuestion row : list) {
 			if (row.getId().intValue() == id.intValue()) {
 				return row;
 			}
