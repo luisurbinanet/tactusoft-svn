@@ -13,8 +13,8 @@ import javax.inject.Named;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.video.controller.bo.SecurityBo;
-import co.com.tactusoft.video.model.entities.MedRole;
-import co.com.tactusoft.video.model.entities.MedUser;
+import co.com.tactusoft.video.model.entities.Role;
+import co.com.tactusoft.video.model.entities.User;
 import co.com.tactusoft.video.util.Constant;
 import co.com.tactusoft.video.util.FacesUtil;
 import co.com.tactusoft.video.view.datamodel.UserDataModel;
@@ -26,22 +26,22 @@ public class UserBacking {
 	@Inject
 	private SecurityBo service;
 
-	private List<MedUser> list;
-	private MedUser selected;
+	private List<User> list;
+	private User selected;
 	private UserDataModel model;
 
 	private List<SelectItem> listRole;
-	private Map<BigDecimal, MedRole> mapRole;
+	private Map<BigDecimal, Role> mapRole;
 
-	private MedUser currentUser;
+	private User currentUser;
 	private String password;
 
 	public UserBacking() {
 		model = null;
 		listRole = new LinkedList<SelectItem>();
-		mapRole = new HashMap<BigDecimal, MedRole>();
-		selected = new MedUser();
-		selected.setMedRole(new MedRole());
+		mapRole = new HashMap<BigDecimal, Role>();
+		selected = new User();
+		selected.setRole(new Role());
 	}
 
 	public void init() {
@@ -49,19 +49,19 @@ public class UserBacking {
 		model = new UserDataModel(list);
 	}
 
-	public List<MedUser> getList() {
+	public List<User> getList() {
 		return list;
 	}
 
-	public void setList(List<MedUser> list) {
+	public void setList(List<User> list) {
 		this.list = list;
 	}
 
-	public MedUser getSelected() {
+	public User getSelected() {
 		return selected;
 	}
 
-	public void setSelected(MedUser selected) {
+	public void setSelected(User selected) {
 		this.selected = selected;
 	}
 
@@ -79,8 +79,8 @@ public class UserBacking {
 
 	public List<SelectItem> getListRole() {
 		if (listRole.size() == 0) {
-			List<MedRole> list = service.getListMedRole();
-			for (MedRole row : list) {
+			List<Role> list = service.getListMedRole();
+			for (Role row : list) {
 				SelectItem item = new SelectItem(row.getId(), row.getName());
 				listRole.add(item);
 
@@ -94,12 +94,12 @@ public class UserBacking {
 		this.listRole = listRole;
 	}
 
-	public MedUser getCurrentUser() {
+	public User getCurrentUser() {
 		currentUser = FacesUtil.getCurrentUser();
 		return currentUser;
 	}
 
-	public void setCurrentUser(MedUser currentUser) {
+	public void setCurrentUser(User currentUser) {
 		this.currentUser = currentUser;
 	}
 
@@ -112,8 +112,8 @@ public class UserBacking {
 	}
 
 	public void newAction() {
-		selected = new MedUser();
-		selected.setMedRole(new MedRole());
+		selected = new User();
+		selected.setRole(new Role());
 	}
 
 	public void refreshAction() {
@@ -129,7 +129,7 @@ public class UserBacking {
 			selected = currentUser;
 		} else {
 			selected.setUsername(selected.getUsername().toLowerCase());
-			selected.setMedRole(mapRole.get(selected.getMedRole().getId()));
+			selected.setRole(mapRole.get(selected.getRole().getId()));
 		}
 
 		if (selected.getId() == null) {

@@ -1,4 +1,4 @@
 <%
-	String redirectURL = "pages/view/carousel.jsf";
+	String redirectURL = "pages/view/video.jsf";
     response.sendRedirect(redirectURL);
 %>

@@ -10,15 +10,15 @@
 		<div class="rco-blockheader">
 			<div class="l"></div>
 			<div class="r"></div>
-			<div class="t">#{msg['title_carousel']}</div>
+			<div class="t">#{msg['title_video']}</div>
 		</div>
 
-		<p:spacer height="100" />
+		<p:spacer height="50" />
 
 		<h:form id="form" enctype="multipart/form-data">
 
-			<p:carousel id="carouselWomen" value="#{carouselBacking.listWoman}" var="menu"
-				headerText="#{msg['msg_selection_topic']}">
+			<p:dataGrid id="carouselMan" value="#{carouselBacking.list}"
+				var="menu" columns="3" rows="12" paginator="true">
 				<p:column>
 					<h:panelGrid cellpadding="5"
 						style="width: 310px; height: 200px; text-align:center;"
@@ -39,33 +39,7 @@
 
 					</h:panelGrid>
 				</p:column>
-			</p:carousel>
-			
-			<p:spacer height="50"/>
-			
-			<p:carousel id="carouselMan" value="#{carouselBacking.listMan}" var="menu"
-				headerText="#{msg['msg_selection_topic']}">
-				<p:column>
-					<h:panelGrid cellpadding="5"
-						style="width: 310px; height: 200px; text-align:center;"
-						columns="1">
-
-						<h:outputLabel value="#{menu.name}"
-							style="color:Blue;font-style:normal;font-size:medium;font-weight:bold;" />
-						<p:spacer height="1" />
-
-						<h:graphicImage value="#{carouselBacking.urlImages}#{menu.image}"
-							width="100" height="100" />
-
-						<p:commandButton icon="ui-icon-search" title="#{msg['btn_view']}"
-							action="#{carouselBacking.generateQuestions}">
-							<f:setPropertyActionListener value="#{menu}"
-								target="#{carouselBacking.selectedMenu}" />
-						</p:commandButton>
-
-					</h:panelGrid>
-				</p:column>
-			</p:carousel>
+			</p:dataGrid>
 
 		</h:form>
 

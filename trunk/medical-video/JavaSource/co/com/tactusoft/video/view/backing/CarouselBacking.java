@@ -30,36 +30,24 @@ public class CarouselBacking implements Serializable {
 	@Inject
 	private AdminBo service;
 
-	private List<VidTopic> listWoman = new LinkedList<VidTopic>();
-	private List<VidTopic> listMan = new LinkedList<VidTopic>();
+	private List<VidTopic> list = new LinkedList<VidTopic>();
 	private VidTopic selectedMenu;
 
 	private String urlImages;
 
 	public CarouselBacking() {
-		listWoman = new ArrayList<VidTopic>();
+		list = new ArrayList<VidTopic>();
 	}
 
-	public List<VidTopic> getListWoman() {
-		if (listWoman.size() == 0) {
-			listWoman = service.getListVidTopic("W");
+	public List<VidTopic> getList() {
+		if (list.size() == 0) {
+			list = service.getListVidTopic();
 		}
-		return listWoman;
+		return list;
 	}
 
-	public void setListWoman(List<VidTopic> listWoman) {
-		this.listWoman = listWoman;
-	}
-
-	public List<VidTopic> getListMan() {
-		if (listMan.size() == 0) {
-			listMan = service.getListVidTopic("M");
-		}
-		return listMan;
-	}
-
-	public void setListMan(List<VidTopic> listMan) {
-		this.listMan = listMan;
+	public void setList(List<VidTopic> list) {
+		this.list = list;
 	}
 
 	public VidTopic getSelectedMenu() {

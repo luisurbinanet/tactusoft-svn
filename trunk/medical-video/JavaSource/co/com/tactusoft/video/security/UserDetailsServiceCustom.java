@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import co.com.tactusoft.video.controller.bo.SecurityBo;
-import co.com.tactusoft.video.model.entities.MedUser;
+import co.com.tactusoft.video.model.entities.User;
 import co.com.tactusoft.video.util.FacesUtil;
 import co.com.tactusoft.video.view.backing.MenuBacking;
 
@@ -24,18 +24,18 @@ public class UserDetailsServiceCustom implements UserDetailsService {
 			throws UsernameNotFoundException, DataAccessException {
 		UserData user = null;
 		try {
-			MedUser object = service.getObject(userName.toLowerCase());
+			User object = service.getObject(userName.toLowerCase());
 
 			if (object != null) {
 				user = new UserData();
 				user.setUsername(object.getUsername());
 				user.setPassword(object.getPassword());
 
-				user.setRole(object.getMedRole().getName());
+				user.setRole(object.getRole().getName());
 				user.setUser(object);
 				
 				MenuBacking menuBacking = FacesUtil.findBean("menuBacking");
-				menuBacking.init(object.getMedRole().getName());
+				menuBacking.init(object.getRole().getName());
 				user.setListMenu(menuBacking.getListMenu());
 			}
 		} catch (HibernateException e) {

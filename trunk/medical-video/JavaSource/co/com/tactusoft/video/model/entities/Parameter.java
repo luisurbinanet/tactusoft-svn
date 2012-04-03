@@ -13,7 +13,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "parameter", catalog = "medical_video_db")
-public class MedParameter implements java.io.Serializable {
+public class Parameter implements java.io.Serializable {
 
 	/**
 	 * 
@@ -24,15 +24,15 @@ public class MedParameter implements java.io.Serializable {
 	private String valueText;
 	private BigDecimal valueNumber;
 
-	public MedParameter() {
+	public Parameter() {
 	}
 
-	public MedParameter(BigDecimal id, String code) {
+	public Parameter(BigDecimal id, String code) {
 		this.id = id;
 		this.code = code;
 	}
 
-	public MedParameter(BigDecimal id, String code, String valueText,
+	public Parameter(BigDecimal id, String code, String valueText,
 			BigDecimal valueNumber) {
 		this.id = id;
 		this.code = code;
