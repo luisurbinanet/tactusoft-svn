@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 
 import javax.faces.model.SelectItem;
@@ -19,13 +18,10 @@ import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.video.controller.bo.AdminBo;
 import co.com.tactusoft.video.model.entities.VidAnswer;
-import co.com.tactusoft.video.model.entities.VidCombination;
 import co.com.tactusoft.video.model.entities.VidQuestion;
 import co.com.tactusoft.video.util.Constant;
 import co.com.tactusoft.video.util.FacesUtil;
 import co.com.tactusoft.video.view.datamodel.AnswerDataModel;
-import co.com.tactusoft.video.view.datamodel.Combination;
-import co.com.tactusoft.video.view.datamodel.CombinationDataModel;
 import co.com.tactusoft.video.view.datamodel.QuestionDataModel;
 
 @Named
@@ -61,12 +57,6 @@ public class QuestionBacking {
 	private List<SelectItem> listAnswerMultiple;
 	private Map<BigDecimal, VidAnswer> mapAnwserMultiple;
 	private BigDecimal nextQuestionMultiple;
-	private BigDecimal[] selectedsCombination;
-	private List<VidCombination> listMedCombination;
-	private List<Combination> listCombination;
-	private CombinationDataModel modelCombination;
-	private Combination selectedCombination;
-	private List<VidCombination> selectedDeleteCombination;
 
 	public QuestionBacking() {
 	}
@@ -83,11 +73,6 @@ public class QuestionBacking {
 		selectedDeletesAnswer = new LinkedList<VidAnswer>();
 		listAnswerMultiple = new LinkedList<SelectItem>();
 		mapAnwserMultiple = new HashMap<BigDecimal, VidAnswer>();
-
-		selectedDeleteCombination = new LinkedList<VidCombination>();
-		listMedCombination = new LinkedList<VidCombination>();
-		listCombination = new LinkedList<Combination>();
-		modelCombination = new CombinationDataModel(listCombination);
 
 		listQuestion.add(new SelectItem(Constant.DEFAULT_VALUE,
 				Constant.DEFAULT_LABEL));
@@ -117,7 +102,6 @@ public class QuestionBacking {
 		this.selected = selected;
 		this.currentResourceType = selected.getResourceType() == null ? " "
 				: selected.getResourceType();
-		this.currnetOnLineResource = selected.isImageVideoONLINE();
 		this.newFile = false;
 		searchQuestionAction();
 	}
@@ -229,38 +213,6 @@ public class QuestionBacking {
 		this.nextQuestionMultiple = nextQuestionMultiple;
 	}
 
-	public BigDecimal[] getSelectedsCombination() {
-		return selectedsCombination;
-	}
-
-	public void setSelectedsCombination(BigDecimal[] selectedsCombination) {
-		this.selectedsCombination = selectedsCombination;
-	}
-
-	public List<VidCombination> getListMedCombination() {
-		return listMedCombination;
-	}
-
-	public void setListMedCombination(List<VidCombination> listMedCombination) {
-		this.listMedCombination = listMedCombination;
-	}
-
-	public CombinationDataModel getModelCombination() {
-		return modelCombination;
-	}
-
-	public void setModelCombination(CombinationDataModel modelCombination) {
-		this.modelCombination = modelCombination;
-	}
-
-	public Combination getSelectedCombination() {
-		return selectedCombination;
-	}
-
-	public void setSelectedCombination(Combination selectedCombination) {
-		this.selectedCombination = selectedCombination;
-	}
-
 	public void searchQuestionAction() {
 		if (selected.getId() != null) {
 			if (selected.getTypeQuestion().equals(
@@ -287,11 +239,6 @@ public class QuestionBacking {
 					mapAnwserMultiple.put(row.getId(), row);
 				}
 
-				listMedCombination = service
-						.getListVidCombinationByQuestion(selected.getId());
-				listCombination = getLisCombination(listMedCombination);
-				modelCombination = new CombinationDataModel(listCombination);
-
 			} else if (selected.getTypeQuestion().equals(
 					Constant.QUESTION_TYPE_MEDIA)) {
 
@@ -299,7 +246,6 @@ public class QuestionBacking {
 						Constant.RESOURCE_TYPE_VIDEO)
 						&& !selected.getResourceType().equals(
 								Constant.RESOURCE_TYPE_IMAGE)) {
-					selected.setLoadMode(Constant.LOAD_MODE_ON_LINE);
 				}
 			}
 		} else {
@@ -307,7 +253,6 @@ public class QuestionBacking {
 			selected.setPositive(Constant.DEFAULT_VALUE);
 			selected.setNegative(Constant.DEFAULT_VALUE);
 			selected.setResourceType(Constant.RESOURCE_TYPE_IMAGE);
-			selected.setLoadMode(Constant.LOAD_MODE_ON_LINE);
 		}
 	}
 
@@ -330,96 +275,58 @@ public class QuestionBacking {
 						|| selected.getResourceType().equals(
 								Constant.RESOURCE_TYPE_VIDEO)) {
 
-					if (!selected.isImageVideoONLINE()) {
-						if (file == null && selected.getImage() == null) {
-							field = FacesUtil.getMessage("que_type_final_file");
-							message = FacesUtil.getMessage(
-									"msg_field_required", field);
-						} else {
-							try {
+					try {
 
-								if (!currentResourceType.equals(selected
-										.getResourceType())
-										|| (currnetOnLineResource && (!selected
-												.isImageVideoONLINE()))
-										|| newFile) {
+						if (!currentResourceType.equals(selected
+								.getResourceType())
+								|| (currnetOnLineResource && newFile)) {
 
-									ParameterBacking parameterBacking = FacesUtil
-											.findBean("parameterBacking");
-									String directory = parameterBacking
-											.getDirectory();
-									String ext = FacesUtil
-											.getExtensionFile(file
-													.getFileName());
-									String fileName = "question"
-											+ selected.getId() + ext;
-									FacesUtil.createFile(file.getInputstream(),
-											directory + fileName);
+							ParameterBacking parameterBacking = FacesUtil
+									.findBean("parameterBacking");
+							String directory = parameterBacking.getDirectory();
+							String ext = FacesUtil.getExtensionFile(file
+									.getFileName());
+							String fileName = "question" + selected.getId()
+									+ ext;
+							FacesUtil.createFile(file.getInputstream(),
+									directory + fileName);
 
-									selected.setImage(fileName);
+							this.currentResourceType = selected
+									.getResourceType();
+							this.newFile = false;
 
-									this.currentResourceType = selected
-											.getResourceType();
-									this.currnetOnLineResource = selected
-											.isImageVideoONLINE();
-									this.newFile = false;
+							Pattern patternWindows = Pattern
+									.compile("([^\\s]+(\\.(?i)(asx|asf|avi|wma|wmv))$)");
+							Pattern patternQuicktime = Pattern
+									.compile("([^\\s]+(\\.(?i)(aif|aiff|aac|au|bmp|gsm|mov|mid|midi|mpg|mpeg|mp4|m4a|psd|qt|qtif|qif|qti|snd|tif|tiff|wav|3g2|3pg))$)");
+							Pattern patternFlash = Pattern
+									.compile("([^\\s]+(\\.(?i)(flv|mp3|swf))$)");
+							Pattern patternReal = Pattern
+									.compile("([^\\s]+(\\.(?i)(ra|ram|rm|rpm|rv|smi|smil))$)");
 
-									Pattern patternWindows = Pattern
-											.compile("([^\\s]+(\\.(?i)(asx|asf|avi|wma|wmv))$)");
-									Pattern patternQuicktime = Pattern
-											.compile("([^\\s]+(\\.(?i)(aif|aiff|aac|au|bmp|gsm|mov|mid|midi|mpg|mpeg|mp4|m4a|psd|qt|qtif|qif|qti|snd|tif|tiff|wav|3g2|3pg))$)");
-									Pattern patternFlash = Pattern
-											.compile("([^\\s]+(\\.(?i)(flv|mp3|swf))$)");
-									Pattern patternReal = Pattern
-											.compile("([^\\s]+(\\.(?i)(ra|ram|rm|rpm|rv|smi|smil))$)");
-
-									if (patternWindows.matcher(fileName)
-											.matches()) {
-										this.selected
-												.setTypeVideo(Constant.VIDEO_TYPE_WINDOWS);
-									} else if (patternQuicktime.matcher(
-											fileName).matches()) {
-										this.selected
-												.setTypeVideo(Constant.VIDEO_TYPE_QUICKTIME);
-									} else if (patternFlash.matcher(fileName)
-											.matches()) {
-										this.selected
-												.setTypeVideo(Constant.VIDEO_TYPE_FLASH);
-									} else if (patternReal.matcher(fileName)
-											.matches()) {
-										this.selected
-												.setTypeVideo(Constant.VIDEO_TYPE_REAL);
-									}
-								}
-
-							} catch (NullPointerException ex) {
-								field = FacesUtil
-										.getMessage("que_type_final_file");
-								message = FacesUtil.getMessage(
-										"msg_field_required", field);
+							if (patternWindows.matcher(fileName).matches()) {
+								this.selected
+										.setTypeVideo(Constant.VIDEO_TYPE_WINDOWS);
+							} else if (patternQuicktime.matcher(fileName)
+									.matches()) {
+								this.selected
+										.setTypeVideo(Constant.VIDEO_TYPE_QUICKTIME);
+							} else if (patternFlash.matcher(fileName).matches()) {
+								this.selected
+										.setTypeVideo(Constant.VIDEO_TYPE_FLASH);
+							} else if (patternReal.matcher(fileName).matches()) {
+								this.selected
+										.setTypeVideo(Constant.VIDEO_TYPE_REAL);
 							}
 						}
 
-						selected.setUrlLink(null);
-
-						if (selected.getResourceType().equals(
-								Constant.RESOURCE_TYPE_IMAGE)) {
-							selected.setTypeVideo(null);
-						}
-
-					} else {
-						if (selected.getUrlLink() == null
-								|| selected.getUrlLink().equals("")) {
-							field = FacesUtil.getMessage("que_type_final_url");
-							message = FacesUtil.getMessage(
-									"msg_field_required", field);
-						}
-						selected.setImage(null);
+					} catch (NullPointerException ex) {
+						field = FacesUtil.getMessage("que_type_final_file");
+						message = FacesUtil.getMessage("msg_field_required",
+								field);
 					}
-
-				} else {
-					selected.setImage(null);
 				}
+
 			} else if (selected.getTypeQuestion().equals(
 					Constant.QUESTION_TYPE_UNIQUE)
 					|| selected.getTypeQuestion().equals(
@@ -445,8 +352,6 @@ public class QuestionBacking {
 
 				if (!selected.getTypeQuestion().equals(
 						Constant.QUESTION_TYPE_MEDIA)) {
-					this.selected.setImage(null);
-					this.selected.setLoadMode(null);
 					this.selected.setTypeVideo(null);
 					this.selected.setResourceType(null);
 				}
@@ -470,12 +375,6 @@ public class QuestionBacking {
 
 					listAnswer = new LinkedList<VidAnswer>();
 					modelAnswer = new AnswerDataModel(listAnswer);
-
-					listMedCombination = new LinkedList<VidCombination>();
-					listCombination = getLisCombination(listMedCombination);
-
-					modelCombination = new CombinationDataModel(listCombination);
-
 				} else {
 					for (VidAnswer row : listAnswer) {
 						if (row.getId() == null) {
@@ -485,17 +384,6 @@ public class QuestionBacking {
 					}
 
 					for (VidAnswer row : selectedDeletesAnswer) {
-						service.remove(row);
-					}
-
-					for (VidCombination row : listMedCombination) {
-						if (row.getId() == null) {
-							row.setId(service.getId("MedCombination"));
-						}
-						service.save(row);
-					}
-					
-					for (VidCombination row : selectedDeleteCombination) {
 						service.remove(row);
 					}
 				}
@@ -536,49 +424,7 @@ public class QuestionBacking {
 			selectedAnswer.setNextQuestion(Constant.DEFAULT_VALUE);
 			listAnswer.add(selectedAnswer);
 			modelAnswer = new AnswerDataModel(listAnswer);
-
-			/*
-			 * listAnswerMultiple.add(new SelectItem(selectedAnswer.getId(),
-			 * selectedAnswer.getName()));
-			 * mapAnwserMultiple.put(selectedAnswer.getId(), selectedAnswer);
-			 */
-
 			answerText = "";
-			selectedsCombination = null;
-		}
-	}
-
-	public void addCombinationAction() {
-		String field = null;
-		String message = null;
-		if (selectedsCombination == null) {
-			field = FacesUtil.getMessage("que_answers");
-			message = FacesUtil.getMessage("msg_field_required", field);
-			FacesUtil.addWarn(message);
-		} else if (nextQuestionMultiple.intValue() == -1) {
-			field = FacesUtil.getMessage("que_answer");
-			message = FacesUtil.getMessage("msg_field_required", field);
-			FacesUtil.addWarn(message);
-		} else {
-			VidQuestion mqm = mapQuestion.get(nextQuestionMultiple);
-			String answers = "";
-
-			for (BigDecimal id : selectedsCombination) {
-				answers = answers + id + "+";
-			}
-
-			answers = answers.substring(0, answers.length() - 1);
-
-			VidCombination medCombination = new VidCombination();
-			medCombination.setMedQuestionByIdQuestion(selected);
-			medCombination.setAnswers(answers);
-			medCombination.setMedQuestionByNextQuestion(mqm);
-			listMedCombination.add(medCombination);
-
-			listCombination = getLisCombination(listMedCombination);
-			modelCombination = new CombinationDataModel(listCombination);
-			nextQuestionMultiple = Constant.DEFAULT_VALUE;
-			selectedsCombination = null;
 		}
 	}
 
@@ -605,44 +451,6 @@ public class QuestionBacking {
 
 	public int getSize() {
 		return listAnswer.size();
-	}
-
-	private List<Combination> getLisCombination(List<VidCombination> list) {
-		List<Combination> result = new LinkedList<Combination>();
-		for (VidCombination row : list) {
-			Combination obj = new Combination();
-			obj.setId(row.getId());
-			obj.setNextQuestion(row.getMedQuestionByNextQuestion());
-			List<VidAnswer> listAnswers = new LinkedList<VidAnswer>();
-			StringTokenizer answers = new StringTokenizer(row.getAnswers(), "+");
-			while (answers.hasMoreTokens()) {
-				String answer = answers.nextToken();
-				BigDecimal id = new BigDecimal(answer);
-				VidAnswer medAnswer = mapAnwserMultiple.get(id);
-				listAnswers.add(medAnswer);
-			}
-			obj.setListAnswers(listAnswers);
-			result.add(obj);
-		}
-		return result;
-	}
-
-	public void deleteCombination() {
-		BigDecimal id = new BigDecimal(FacesUtil.getParam("COMBINATION_ID"));
-		selectedDeleteCombination = new LinkedList<VidCombination>();
-
-		for (VidCombination row : listMedCombination) {
-			if (id.intValue() == row.getId().intValue()) {
-				selectedDeleteCombination.add(row);
-			}
-		}
-
-		for (VidCombination row : selectedDeleteCombination) {
-			listMedCombination.remove(row);
-		}
-
-		listCombination = getLisCombination(listMedCombination);
-		modelCombination = new CombinationDataModel(listCombination);
 	}
 
 }

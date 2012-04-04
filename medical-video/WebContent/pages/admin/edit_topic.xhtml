@@ -29,17 +29,6 @@
 				<p:spacer height="5" />
 				<p:spacer height="5" />
 
-				<h:outputText value="#{msg['top_gender']}" />
-				<p:selectOneMenu value="#{topicBacking.selected.gender}"
-					style="width:100%">
-					<f:selectItem itemLabel="#{msg['top_gender_woman']}" itemValue="W" />
-					<f:selectItem itemLabel="#{msg['top_gender_man']}" itemValue="M" />
-					<f:selectItem itemLabel="#{msg['top_gender_all']}" itemValue="A" />
-				</p:selectOneMenu>
-
-				<p:spacer height="5" />
-				<p:spacer height="5" />
-
 				<h:outputText value="#{msg['glb_state']}"
 					rendered="#{topicBacking.selected.id != null?true:false}" />
 				<p:selectOneMenu value="#{topicBacking.selected.state}"
