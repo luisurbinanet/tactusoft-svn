@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.video.controller.bo.AdminBo;
 import co.com.tactusoft.video.model.entities.VidAnswer;
-import co.com.tactusoft.video.model.entities.VidCombination;
 import co.com.tactusoft.video.model.entities.VidQuestion;
 import co.com.tactusoft.video.util.Constant;
 import co.com.tactusoft.video.util.FacesUtil;
@@ -93,23 +92,6 @@ public class ResponseQuestionBacking {
 
 		if (answer.equals("UNIQUE")) {
 			selectedQuestion = nextQuestion(this.idAnswer);
-		}
-
-		if (selectedQuestion.getTypeQuestion().equals(
-				Constant.QUESTION_TYPE_MULTIPLE)) {
-			String answers = "";
-			for (BigDecimal id : idAnswers) {
-				answers = answers + id + "+";
-			}
-			
-			answers = answers.substring(0, answers.length() - 1);
-
-			List<VidCombination> listAnswers = service
-					.getListVidCombinationByAnswers(selectedQuestion.getId(),
-							answers);
-			if (listAnswers.size() > 0) {
-				selectedQuestion = listAnswers.get(0).getMedQuestionByNextQuestion();
-			}
 		}
 
 		if (selectedQuestion.getTypeQuestion().equals(

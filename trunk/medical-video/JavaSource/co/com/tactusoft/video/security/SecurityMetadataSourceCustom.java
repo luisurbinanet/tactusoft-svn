@@ -38,7 +38,8 @@ public class SecurityMetadataSourceCustom implements
 			List<MenuDataModel> listMenu = FacesUtil.getCurrentUserData()
 					.getListMenu();
 
-			if (url.contains("/pages/admin/edit_topic")) {
+			if (url.contains("/pages/admin/edit_topic")
+					|| url.contains("/pages/admin/edit_video")) {
 				return null;
 			}
 

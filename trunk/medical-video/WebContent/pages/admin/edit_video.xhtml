@@ -10,7 +10,7 @@
 		<div class="rco-blockheader">
 			<div class="l"></div>
 			<div class="r"></div>
-			<div class="t">#{msg['title_question']}</div>
+			<div class="t">#{msg['title_config_video']}</div>
 		</div>
 
 		<p:spacer height="20" />
@@ -21,32 +21,26 @@
 
 			<h:panelGrid id="display" columns="2" width="100%">
 
+				<h:outputText value="#{msg['que_order']}" />
+				<p:spinner value="#{questionBacking.selected.orderQuestion}" min="1"
+					max="999" stepFactor="1" />
+				
 				<h:outputText value="#{msg['que_name']}" />
 				<p:inputTextarea value="#{questionBacking.selected.name}"
 					style="width:100%" label="#{msg['que_name']}" rows="5"
 					required="true" />
 
-				<h:outputText value="#{msg['que_order']}" />
-				<p:spinner value="#{questionBacking.selected.orderQuestion}" min="1"
-					max="999" stepFactor="1" />
-
 				<h:outputText value="#{msg['que_type']}" />
-				<p:selectOneRadio id="options"
-					value="#{questionBacking.selected.typeQuestion}" style="width:80%">
+				<p:selectOneMenu id="options"
+					value="#{questionBacking.selected.typeQuestion}" style="width:300px">
 
 					<p:ajax event="change" update="pnlTypes" />
 
-					<f:selectItem itemLabel="#{msg['que_type_message']}"
-						itemValue="MESSAGE" />
 					<f:selectItem itemLabel="#{msg['que_type_assertive']}"
 						itemValue="ASSERTIVE" />
 					<f:selectItem itemLabel="#{msg['que_type_unique']}"
 						itemValue="UNIQUE" />
-					<f:selectItem itemLabel="#{msg['que_type_multiple']}"
-						itemValue="MULTIPLE" />
-					<f:selectItem itemLabel="#{msg['que_type_final']}"
-						itemValue="FINAL" />
-				</p:selectOneRadio>
+				</p:selectOneMenu>
 			</h:panelGrid>
 
 			<p:outputPanel id="pnlTypes" style="width:100%" autoUpdate="true">

@@ -9,7 +9,6 @@ import javax.inject.Named;
 
 import co.com.tactusoft.video.model.dao.CustomHibernateDao;
 import co.com.tactusoft.video.model.entities.VidAnswer;
-import co.com.tactusoft.video.model.entities.VidCombination;
 import co.com.tactusoft.video.model.entities.VidQuestion;
 import co.com.tactusoft.video.model.entities.VidTopic;
 
@@ -66,24 +65,7 @@ public class AdminBo implements Serializable {
 		return dao.find("from VidAnswer o where o.VidQuestion.id = "
 				+ idQuestion);
 	}
-
-	public List<VidCombination> getListVidCombinationByQuestion(
-			BigDecimal idQuestion) {
-		return dao
-				.find("from VidCombination o where o.VidQuestionByIdQuestion.id = "
-						+ idQuestion);
-	}
-
-	public List<VidCombination> getListVidCombinationByAnswers(
-			BigDecimal idQuestion, String answers) {
-		return dao
-				.find("from VidCombination o where o.VidQuestionByIdQuestion.id = "
-						+ idQuestion
-						+ " and answers = '"
-						+ answers
-						+ "' order by id");
-	}
-
+	
 	public void save(Object entity) {
 		dao.persist(entity);
 	}

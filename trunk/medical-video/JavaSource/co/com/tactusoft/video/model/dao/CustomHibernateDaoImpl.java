@@ -15,7 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class CustomHibernateDaoImpl extends HibernateDaoSupport implements
-		CustomHibernateDao {
+		CustomHibernateDao, Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Autowired
 	public CustomHibernateDaoImpl(SessionFactory sessionFactory) {

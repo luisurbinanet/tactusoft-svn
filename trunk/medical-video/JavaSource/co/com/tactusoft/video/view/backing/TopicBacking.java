@@ -142,6 +142,7 @@ public class TopicBacking implements Serializable {
 			if (selected.getId() == null) {
 				selected.setId(service.getId("VidTopic"));
 				selected.setState(Constant.STATE_ACTIVE);
+				selected.setGender("A");
 				newRecord = true;
 			}
 
@@ -204,7 +205,7 @@ public class TopicBacking implements Serializable {
 		}
 		selectedQuestion.setVidTopic(selected);
 		questionBacking.init(selectedQuestion);
-		return "/pages/admin/question?faces-redirect=true";
+		return "/pages/admin/edit_video?faces-redirect=true";
 	}
 
 	public void removeDetailAction() {

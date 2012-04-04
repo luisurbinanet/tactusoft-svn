@@ -64,7 +64,7 @@ public class MenuBacking implements Serializable {
 
 			menuChild = new MenuDataModel();
 			menuChild.setId(4);
-			menuChild.setName(FacesUtil.getMessage("title_config_carousel"));
+			menuChild.setName(FacesUtil.getMessage("title_config_video"));
 			menuChild.setPage("/pages/admin/topic");
 			listChilds.add(menuChild);
 
