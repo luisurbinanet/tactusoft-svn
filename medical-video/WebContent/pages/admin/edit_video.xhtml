@@ -46,24 +46,21 @@
 				</p:selectOneMenu>
 
 				<h:outputText value="#{msg['vid_video']}"
-					rendered="#{questionBacking.selected.questionType ne 'MESSAGE' and questionBacking.selected.videoType eq 'flash'?true:false}" />
+					rendered="#{questionBacking.selected.questionType ne 'MESSAGE'?true:false}" />
 				<p:fileUpload
-					rendered="#{questionBacking.selected.questionType ne 'MESSAGE' and questionBacking.selected.videoType eq 'flash'?true:false}"
+					rendered="#{questionBacking.selected.questionType ne 'MESSAGE'?true:false}"
 					fileUploadListener="#{questionBacking.handleFileUploadVideo}"
-					mode="advanced" update="currentVideo" sizeLimit="104857600"
-					auto="true" label="#{msg['msg_selection']}"
+					mode="advanced" update="player" sizeLimit="104857600" auto="true"
+					label="#{msg['msg_selection']}"
 					invalidFileMessage="#{msg['msg_file_invalid_ext']}"
 					invalidSizeMessage="#{msg['msg_file_ivalid_size']}"
 					allowTypes="/(\.|\/)(asx|asf|avi|wmv|aif|aiff|aac|au|bmp|gsm|mov|mid|midi|mpg|mpeg|mp4|m4a|psd|qt|qtif|qif|qti|snd|tif|tiff|3g2|3pg|flv|swf|ra|ram|rm|rpm|rv|smi|smil)$/" />
 
 				<h:outputText />
-				<p:media id="currentVideo" width="600" height="300"
-					player="#{questionBacking.selected.videoType}"
-					value="#{questionBacking.urlImages}#{questionBacking.selected.video}"
-					rendered="#{questionBacking.selected.questionType ne 'MESSAGE' and questionBacking.selected.videoType ne 'flash' and questionBacking.selected.video != null?true:false}">
-					<f:param name="controller" value="1" />
-					<f:param name="autostart" value="1" />
-				</p:media>
+				<h:outputLink style="display: block; width: 600px; height: 300px"
+					id="player"
+					rendered="#{questionBacking.selected.video != null?true:false}"
+					value="#{questionBacking.urlImages}#{questionBacking.selected.video}" />
 
 				<h:panelGrid
 					rendered="#{questionBacking.selected.questionType ne 'MESSAGE' and questionBacking.selected.videoType eq 'flash'?true:false}"
@@ -129,20 +126,22 @@
 
 						<p:column selectionMode="multiple" style="width:18px" />
 
-						<p:column headerText="#{msg['que_index']}" style="width:10%">
-							<h:outputLabel value="#{varIndex + 1}" />
-						</p:column>
-
 						<p:column headerText="#{msg['que_answer']}" style="width:35%">
 							<p:inplace>
 								<h:inputText value="#{rec.name}" />
 							</p:inplace>
 						</p:column>
 
-						<p:column headerText="#{msg['que_name']}" style="width:55%">
+						<p:column headerText="#{msg['que_name']}" style="width:40%">
 							<p:selectOneMenu value="#{rec.nextQuestion}" style="width:600px">
 								<f:selectItems value="#{questionBacking.listQuestion}" />
 							</p:selectOneMenu>
+						</p:column>
+
+						<p:column headerText="#{msg['vid_key']}" style="width:25%">
+							<p:inplace>
+								<h:inputText value="#{rec.enterKey}" />
+							</p:inplace>
 						</p:column>
 
 						<f:facet name="footer">
@@ -176,6 +175,10 @@
 		</h:form>
 
 		<h:panelGroup layout="block" style="height:300px;" />
+
+		<script type="text/javascript">
+      		flowplayer("form:player", "../../flowplayer/flowplayer-3.2.8.swf");
+    	</script>
 
 	</ui:define>
 </ui:composition>

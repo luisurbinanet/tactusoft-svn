@@ -153,9 +153,8 @@ public class TopicBacking implements Serializable {
 				if (newFile) {
 					String directory = serviceParameter
 							.getValueText("DIRECTORY_IMAGES");
-					String ext = "."
-							+ FacesUtil.getExtensionFile(file.getFileName());
-					String fileName = "topic" + selected.getId() + ext;
+					String ext = FacesUtil.getExtensionFile(file.getFileName());
+					String fileName = "topic_vid" + selected.getId() + ext;
 
 					FacesUtil.createFile(file.getInputstream(), directory
 							+ fileName);

@@ -26,6 +26,7 @@ public class VidAnswer implements java.io.Serializable {
 	private VidQuestion vidQuestion;
 	private String name;
 	private BigDecimal nextQuestion;
+	private String enterKey;
 
 	public VidAnswer() {
 	}
@@ -82,4 +83,13 @@ public class VidAnswer implements java.io.Serializable {
 		this.nextQuestion = nextQuestion;
 	}
 
+	@Column(name = "enter_key")
+	public String getEnterKey() {
+		return enterKey;
+	}
+
+	public void setEnterKey(String enterKey) {
+		this.enterKey = enterKey;
+	}
+	
 }
