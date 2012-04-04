@@ -31,7 +31,7 @@ public class SecurityMetadataSourceCustom implements
 					|| url.contains("/pages/view/responseQuestion")
 					|| url.contains("/pages/secure/accessDenied")
 					|| url.contains("/pages/secure/expired")
-					|| url.contains("index.jsp")) {
+					|| url.contains("index.jsp") || url.contains("flowplayer")) {
 				return null;
 			}
 

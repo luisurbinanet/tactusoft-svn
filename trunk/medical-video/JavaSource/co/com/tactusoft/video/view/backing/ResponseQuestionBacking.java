@@ -27,17 +27,20 @@ public class ResponseQuestionBacking {
 	private BigDecimal idAnswer;
 	private BigDecimal[] idAnswers;
 
+	private String urlImages;
+
 	public ResponseQuestionBacking() {
 
 	}
-	
-	public void init(VidQuestion selectedQuestion, List<VidQuestion> list, List<VidAnswer> listAnswer){
+
+	public void init(VidQuestion selectedQuestion, List<VidQuestion> list,
+			List<VidAnswer> listAnswer) {
 		idAnswer = null;
 		idAnswers = null;
-		
+
 		this.selectedQuestion = selectedQuestion;
 		this.list = list;
-		this.listAnswer =  listAnswer;
+		this.listAnswer = listAnswer;
 	}
 
 	public List<VidQuestion> getList() {
@@ -80,6 +83,26 @@ public class ResponseQuestionBacking {
 		this.idAnswers = idAnswers;
 	}
 
+	public String getUrlImages() {
+		ParameterBacking parameterBacking = FacesUtil
+				.findBean("parameterBacking");
+		urlImages = parameterBacking.getUrlImages();
+		return urlImages;
+	}
+
+	public void setUrlImages(String urlImages) {
+		this.urlImages = urlImages;
+	}
+
+	private VidQuestion nextQuestion(BigDecimal id) {
+		for (VidQuestion row : list) {
+			if (row.getId().intValue() == id.intValue()) {
+				return row;
+			}
+		}
+		return null;
+	}
+
 	public String actionSubmit() {
 		String answer = FacesUtil.getParam("answer");
 		if (answer.equals("SI")) {
@@ -94,39 +117,48 @@ public class ResponseQuestionBacking {
 			selectedQuestion = nextQuestion(this.idAnswer);
 		}
 
-		if (selectedQuestion.getQuestionType().equals(
-				Constant.QUESTION_TYPE_UNIQUE)
-				|| selectedQuestion.getQuestionType().equals(
-						Constant.QUESTION_TYPE_MULTIPLE)) {
-			listAnswer = service.getListVidQuestionByQuestion(selectedQuestion
-					.getId());
-			if (listAnswer.size() > 0) {
-				this.idAnswer = listAnswer.get(0).getId();
-			}
-		}
+		processAnswers();
 
+		return "";
+	}
+
+	public String actionSubmitKeyS() {
+		selectedQuestion = nextQuestion(selectedQuestion.getPositive());
+		processAnswers();
+		
+		return "";
+	}
+	
+	public String actionSubmitKeyN() {
+		selectedQuestion = nextQuestion(selectedQuestion.getNegative());
+		processAnswers();
+		
+		return "";
+	}
+
+	public void processAnswers() {
 		if (selectedQuestion == null) {
 			selectedQuestion = new VidQuestion();
 			selectedQuestion.setId(new BigDecimal(-1));
 			String message = FacesUtil.getMessage("msg_final");
 			selectedQuestion.setName(message);
 			selectedQuestion.setQuestionType(Constant.QUESTION_TYPE_MESSAGE);
+		} else {
+			if (selectedQuestion.getQuestionType().equals(
+					Constant.QUESTION_TYPE_UNIQUE)
+					|| selectedQuestion.getQuestionType().equals(
+							Constant.QUESTION_TYPE_MULTIPLE)) {
+				listAnswer = service
+						.getListVidQuestionByQuestion(selectedQuestion.getId());
+				if (listAnswer.size() > 0) {
+					this.idAnswer = listAnswer.get(0).getId();
+				}
+			}
 		}
-
-		return "";
 	}
 
 	public String returnAction() {
-		return "/pages/view/carousel?faces-redirect=true";
-	}
-
-	private VidQuestion nextQuestion(BigDecimal id) {
-		for (VidQuestion row : list) {
-			if (row.getId().intValue() == id.intValue()) {
-				return row;
-			}
-		}
-		return null;
+		return "/pages/view/video?faces-redirect=true";
 	}
 
 }
