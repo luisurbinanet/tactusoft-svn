@@ -35,7 +35,7 @@ public class AdminBo implements Serializable {
 	public List<VidQuestion> getListVidQuestionByNoIdQuestion(
 			BigDecimal idQuestion, BigDecimal idTopic) {
 		return dao.find("from VidQuestion o where o.id <> " + idQuestion
-				+ " and o.VidTopic = " + idTopic + " order by o.orderQuestion");
+				+ " and o.vidTopic = " + idTopic + " order by o.orderQuestion");
 	}
 
 	public VidQuestion getVidQuestionByQuestion(BigDecimal idQuestion) {
@@ -53,7 +53,7 @@ public class AdminBo implements Serializable {
 		int order = 0;
 		try {
 			order = (Integer) dao.find(
-					"select max(o.orderQuestion) + 1 from VidQuestion o where o.VidTopic.id = "
+					"select max(o.orderQuestion) + 1 from VidQuestion o where o.vidTopic.id = "
 							+ idTopic).get(0);
 		} catch (Exception ex) {
 			order = 1;
@@ -62,7 +62,7 @@ public class AdminBo implements Serializable {
 	}
 
 	public List<VidAnswer> getListVidQuestionByQuestion(BigDecimal idQuestion) {
-		return dao.find("from VidAnswer o where o.VidQuestion.id = "
+		return dao.find("from VidAnswer o where o.vidQuestion.id = "
 				+ idQuestion);
 	}
 	
