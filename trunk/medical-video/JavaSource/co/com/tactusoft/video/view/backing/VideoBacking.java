@@ -83,7 +83,7 @@ public class VideoBacking implements Serializable {
 		} else {
 			medQuestion.setId(new BigDecimal(-1));
 			medQuestion.setName("No existen preguntas!");
-			medQuestion.setTypeQuestion(Constant.QUESTION_TYPE_MESSAGE);
+			medQuestion.setQuestionType(Constant.QUESTION_TYPE_MESSAGE);
 		}
 
 		responseQuestionBacking.init(medQuestion, list, listAnswer);

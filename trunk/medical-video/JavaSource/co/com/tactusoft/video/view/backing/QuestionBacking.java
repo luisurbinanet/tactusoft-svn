@@ -41,12 +41,10 @@ public class QuestionBacking {
 	private Map<BigDecimal, VidQuestion> mapQuestion;
 
 	private int orderQuestion;
-
-	private String currentResourceType;
-	private Boolean currnetOnLineResource;
-	private Boolean newFile;
-	private String typeFinal;
-	private UploadedFile file;
+	private Boolean newFileVideo;
+	private Boolean newFileAudio;
+	private UploadedFile fileVideo;
+	private UploadedFile fileAudio;
 	private String urlImages;
 
 	private List<VidAnswer> listAnswer;
@@ -100,9 +98,8 @@ public class QuestionBacking {
 		}
 
 		this.selected = selected;
-		this.currentResourceType = selected.getResourceType() == null ? " "
-				: selected.getResourceType();
-		this.newFile = false;
+		this.newFileVideo = false;
+		this.newFileAudio = false;
 		searchQuestionAction();
 	}
 
@@ -138,20 +135,20 @@ public class QuestionBacking {
 		this.listQuestion = listQuestion;
 	}
 
-	public String getTypeFinal() {
-		return typeFinal;
+	public UploadedFile getFileVideo() {
+		return fileVideo;
 	}
 
-	public void setTypeFinal(String typeFinal) {
-		this.typeFinal = typeFinal;
+	public void setFileVideo(UploadedFile fileVideo) {
+		this.fileVideo = fileVideo;
 	}
 
-	public UploadedFile getFile() {
-		return file;
+	public UploadedFile getFileAudio() {
+		return fileAudio;
 	}
 
-	public void setFile(UploadedFile file) {
-		this.file = file;
+	public void setFileAudio(UploadedFile fileAudio) {
+		this.fileAudio = fileAudio;
 	}
 
 	public String getUrlImages() {
@@ -215,15 +212,15 @@ public class QuestionBacking {
 
 	public void searchQuestionAction() {
 		if (selected.getId() != null) {
-			if (selected.getTypeQuestion().equals(
+			if (selected.getQuestionType().equals(
 					Constant.QUESTION_TYPE_ASSERTIVE)) {
 
-			} else if (selected.getTypeQuestion().equals(
+			} else if (selected.getQuestionType().equals(
 					Constant.QUESTION_TYPE_UNIQUE)) {
 				listAnswer = service.getListVidQuestionByQuestion(selected
 						.getId());
 				modelAnswer = new AnswerDataModel(listAnswer);
-			} else if (selected.getTypeQuestion().equals(
+			} else if (selected.getQuestionType().equals(
 					Constant.QUESTION_TYPE_MULTIPLE)) {
 
 				listAnswer = service.getListVidQuestionByQuestion(selected
@@ -239,20 +236,11 @@ public class QuestionBacking {
 					mapAnwserMultiple.put(row.getId(), row);
 				}
 
-			} else if (selected.getTypeQuestion().equals(
-					Constant.QUESTION_TYPE_MEDIA)) {
-
-				if (!selected.getResourceType().equals(
-						Constant.RESOURCE_TYPE_VIDEO)
-						&& !selected.getResourceType().equals(
-								Constant.RESOURCE_TYPE_IMAGE)) {
-				}
 			}
 		} else {
-			selected.setTypeQuestion(Constant.QUESTION_TYPE_MESSAGE);
+			selected.setQuestionType(Constant.QUESTION_TYPE_ASSERTIVE);
 			selected.setPositive(Constant.DEFAULT_VALUE);
 			selected.setNegative(Constant.DEFAULT_VALUE);
-			selected.setResourceType(Constant.RESOURCE_TYPE_IMAGE);
 		}
 	}
 
@@ -263,98 +251,119 @@ public class QuestionBacking {
 			boolean newRecord = false;
 
 			if (selected.getId() == null) {
-				selected.setId(service.getId("MedQuestion"));
+				selected.setId(service.getId("VidQuestion"));
 				newRecord = true;
 			}
 
-			if (selected.getTypeQuestion().equals(Constant.QUESTION_TYPE_MEDIA)
-					&& selected.getResourceType() != null) {
+			if (selected.getQuestionType().equals(
+					Constant.QUESTION_TYPE_ASSERTIVE)
+					|| selected.getQuestionType().equals(
+							Constant.QUESTION_TYPE_UNIQUE)) {
 
-				if (selected.getResourceType().equals(
-						Constant.RESOURCE_TYPE_IMAGE)
-						|| selected.getResourceType().equals(
-								Constant.RESOURCE_TYPE_VIDEO)) {
-
-					try {
-
-						if (!currentResourceType.equals(selected
-								.getResourceType())
-								|| (currnetOnLineResource && newFile)) {
-
-							ParameterBacking parameterBacking = FacesUtil
-									.findBean("parameterBacking");
-							String directory = parameterBacking.getDirectory();
-							String ext = FacesUtil.getExtensionFile(file
-									.getFileName());
-							String fileName = "question" + selected.getId()
-									+ ext;
-							FacesUtil.createFile(file.getInputstream(),
-									directory + fileName);
-
-							this.currentResourceType = selected
-									.getResourceType();
-							this.newFile = false;
-
-							Pattern patternWindows = Pattern
-									.compile("([^\\s]+(\\.(?i)(asx|asf|avi|wma|wmv))$)");
-							Pattern patternQuicktime = Pattern
-									.compile("([^\\s]+(\\.(?i)(aif|aiff|aac|au|bmp|gsm|mov|mid|midi|mpg|mpeg|mp4|m4a|psd|qt|qtif|qif|qti|snd|tif|tiff|wav|3g2|3pg))$)");
-							Pattern patternFlash = Pattern
-									.compile("([^\\s]+(\\.(?i)(flv|mp3|swf))$)");
-							Pattern patternReal = Pattern
-									.compile("([^\\s]+(\\.(?i)(ra|ram|rm|rpm|rv|smi|smil))$)");
-
-							if (patternWindows.matcher(fileName).matches()) {
-								this.selected
-										.setTypeVideo(Constant.VIDEO_TYPE_WINDOWS);
-							} else if (patternQuicktime.matcher(fileName)
-									.matches()) {
-								this.selected
-										.setTypeVideo(Constant.VIDEO_TYPE_QUICKTIME);
-							} else if (patternFlash.matcher(fileName).matches()) {
-								this.selected
-										.setTypeVideo(Constant.VIDEO_TYPE_FLASH);
-							} else if (patternReal.matcher(fileName).matches()) {
-								this.selected
-										.setTypeVideo(Constant.VIDEO_TYPE_REAL);
+				if (selected.getQuestionType().equals(
+						Constant.QUESTION_TYPE_UNIQUE)) {
+					if (listAnswer.size() == 0) {
+						message = FacesUtil
+								.getMessage("que_msg_validate_nextquestion");
+					} /*else {
+						if (selected.getQuestionType().equals(
+								Constant.QUESTION_TYPE_UNIQUE)) {
+							for (VidAnswer row : listAnswer) {
+								if (row.getNextQuestion().intValue() == -1) {
+									message = FacesUtil
+											.getMessage("que_msg_validate_nextquestion");
+									break;
+								}
 							}
 						}
-
-					} catch (NullPointerException ex) {
-						field = FacesUtil.getMessage("que_type_final_file");
-						message = FacesUtil.getMessage("msg_field_required",
-								field);
-					}
+					}*/
 				}
 
-			} else if (selected.getTypeQuestion().equals(
-					Constant.QUESTION_TYPE_UNIQUE)
-					|| selected.getTypeQuestion().equals(
-							Constant.QUESTION_TYPE_MULTIPLE)) {
-				if (listAnswer.size() == 0) {
-					message = FacesUtil
-							.getMessage("que_msg_validate_nextquestion");
-				} else {
-					if (selected.getTypeQuestion().equals(
-							Constant.QUESTION_TYPE_UNIQUE)) {
-						for (VidAnswer row : listAnswer) {
-							if (row.getNextQuestion().intValue() == -1) {
-								message = FacesUtil
-										.getMessage("que_msg_validate_nextquestion");
-								break;
-							}
+				try {
+
+					if (newFileVideo) {
+						ParameterBacking parameterBacking = FacesUtil
+								.findBean("parameterBacking");
+						String directory = parameterBacking.getDirectory();
+						String ext = FacesUtil.getExtensionFile(fileVideo
+								.getFileName());
+						String fileName = "video" + selected.getId() + ext;
+						FacesUtil.createFile(fileVideo.getInputstream(),
+								directory + fileName);
+
+						this.newFileVideo = false;
+
+						Pattern patternWindows = Pattern
+								.compile("([^\\s]+(\\.(?i)(asx|asf|avi|wma|wmv))$)");
+						Pattern patternQuicktime = Pattern
+								.compile("([^\\s]+(\\.(?i)(aif|aiff|aac|au|bmp|gsm|mov|mid|midi|mpg|mpeg|mp4|m4a|psd|qt|qtif|qif|qti|snd|tif|tiff|wav|3g2|3pg))$)");
+						Pattern patternFlash = Pattern
+								.compile("([^\\s]+(\\.(?i)(flv|mp3|swf))$)");
+						Pattern patternReal = Pattern
+								.compile("([^\\s]+(\\.(?i)(ra|ram|rm|rpm|rv|smi|smil))$)");
+
+						this.selected.setVideo(fileName);
+
+						if (patternWindows.matcher(fileName).matches()) {
+							this.selected
+									.setVideoType(Constant.VIDEO_TYPE_WINDOWS);
+						} else if (patternQuicktime.matcher(fileName).matches()) {
+							this.selected
+									.setVideoType(Constant.VIDEO_TYPE_QUICKTIME);
+						} else if (patternFlash.matcher(fileName).matches()) {
+							this.selected
+									.setVideoType(Constant.VIDEO_TYPE_FLASH);
+						} else if (patternReal.matcher(fileName).matches()) {
+							this.selected
+									.setVideoType(Constant.VIDEO_TYPE_REAL);
 						}
 					}
+
+					if (newFileAudio) {
+						ParameterBacking parameterBacking = FacesUtil
+								.findBean("parameterBacking");
+						String directory = parameterBacking.getDirectory();
+						String ext = FacesUtil.getExtensionFile(fileAudio
+								.getFileName());
+						String fileName = "audio" + selected.getId() + ext;
+						FacesUtil.createFile(fileAudio.getInputstream(),
+								directory + fileName);
+
+						this.newFileAudio = false;
+
+						Pattern patternWindows = Pattern
+								.compile("([^\\s]+(\\.(?i)(asx|asf|avi|wma|wmv))$)");
+						Pattern patternQuicktime = Pattern
+								.compile("([^\\s]+(\\.(?i)(aif|aiff|aac|au|bmp|gsm|mov|mid|midi|mpg|mpeg|mp4|m4a|psd|qt|qtif|qif|qti|snd|tif|tiff|wav|3g2|3pg))$)");
+						Pattern patternFlash = Pattern
+								.compile("([^\\s]+(\\.(?i)(flv|mp3|swf))$)");
+						Pattern patternReal = Pattern
+								.compile("([^\\s]+(\\.(?i)(ra|ram|rm|rpm|rv|smi|smil))$)");
+
+						this.selected.setAudio(fileName);
+
+						if (patternWindows.matcher(fileName).matches()) {
+							this.selected
+									.setAudioType(Constant.VIDEO_TYPE_WINDOWS);
+						} else if (patternQuicktime.matcher(fileName).matches()) {
+							this.selected
+									.setAudioType(Constant.VIDEO_TYPE_QUICKTIME);
+						} else if (patternFlash.matcher(fileName).matches()) {
+							this.selected
+									.setAudioType(Constant.VIDEO_TYPE_FLASH);
+						} else if (patternReal.matcher(fileName).matches()) {
+							this.selected
+									.setAudioType(Constant.VIDEO_TYPE_REAL);
+						}
+					}
+
+				} catch (NullPointerException ex) {
+					field = FacesUtil.getMessage("que_type_final_file");
+					message = FacesUtil.getMessage("msg_field_required", field);
 				}
 			}
 
 			if (message == null) {
-
-				if (!selected.getTypeQuestion().equals(
-						Constant.QUESTION_TYPE_MEDIA)) {
-					this.selected.setTypeVideo(null);
-					this.selected.setResourceType(null);
-				}
 
 				service.save(selected);
 
@@ -364,9 +373,9 @@ public class QuestionBacking {
 					message = FacesUtil.getMessage("msg_record_ok_2");
 				}
 
-				if (!selected.getTypeQuestion().equals(
+				if (!selected.getQuestionType().equals(
 						Constant.QUESTION_TYPE_UNIQUE)
-						&& !selected.getTypeQuestion().equals(
+						&& !selected.getQuestionType().equals(
 								Constant.QUESTION_TYPE_MULTIPLE)) {
 
 					for (VidAnswer row : listAnswer) {
@@ -378,7 +387,7 @@ public class QuestionBacking {
 				} else {
 					for (VidAnswer row : listAnswer) {
 						if (row.getId() == null) {
-							row.setId(service.getId("MedAnswer"));
+							row.setId(service.getId("VidAnswer"));
 						}
 						service.save(row);
 					}
@@ -407,11 +416,6 @@ public class QuestionBacking {
 		return "/pages/admin/topic?faces-redirect=true";
 	}
 
-	public void handleFileUpload(FileUploadEvent event) {
-		newFile = true;
-		file = event.getFile();
-	}
-
 	public void addAnswerAction() {
 		if (answerText.length() == 0) {
 			String field = FacesUtil.getMessage("que_answer");
@@ -428,18 +432,6 @@ public class QuestionBacking {
 		}
 	}
 
-	public void changeAnswerTypeAction() {
-		if (selected.getTypeQuestion().equals(Constant.QUESTION_TYPE_ASSERTIVE)) {
-
-		} else if (selected.getTypeQuestion().equals(
-				Constant.QUESTION_TYPE_UNIQUE)) {
-		} else if (selected.getTypeQuestion().equals(
-				Constant.QUESTION_TYPE_MULTIPLE)) {
-		} else if (selected.getTypeQuestion().equals(
-				Constant.QUESTION_TYPE_MEDIA)) {
-		}
-	}
-
 	public void removeAnswerAction() {
 		selectedDeletesAnswer = new LinkedList<VidAnswer>();
 		for (VidAnswer row : selectedsAnswer) {
@@ -451,6 +443,16 @@ public class QuestionBacking {
 
 	public int getSize() {
 		return listAnswer.size();
+	}
+
+	public void handleFileUploadVideo(FileUploadEvent event) {
+		newFileVideo = true;
+		fileVideo = event.getFile();
+	}
+
+	public void handleFileUploadAudio(FileUploadEvent event) {
+		newFileAudio = true;
+		fileAudio = event.getFile();
 	}
 
 }

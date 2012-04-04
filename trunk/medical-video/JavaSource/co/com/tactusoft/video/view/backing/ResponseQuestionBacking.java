@@ -94,9 +94,9 @@ public class ResponseQuestionBacking {
 			selectedQuestion = nextQuestion(this.idAnswer);
 		}
 
-		if (selectedQuestion.getTypeQuestion().equals(
+		if (selectedQuestion.getQuestionType().equals(
 				Constant.QUESTION_TYPE_UNIQUE)
-				|| selectedQuestion.getTypeQuestion().equals(
+				|| selectedQuestion.getQuestionType().equals(
 						Constant.QUESTION_TYPE_MULTIPLE)) {
 			listAnswer = service.getListVidQuestionByQuestion(selectedQuestion
 					.getId());
@@ -110,7 +110,7 @@ public class ResponseQuestionBacking {
 			selectedQuestion.setId(new BigDecimal(-1));
 			String message = FacesUtil.getMessage("msg_final");
 			selectedQuestion.setName(message);
-			selectedQuestion.setTypeQuestion(Constant.QUESTION_TYPE_MESSAGE);
+			selectedQuestion.setQuestionType(Constant.QUESTION_TYPE_MESSAGE);
 		}
 
 		return "";

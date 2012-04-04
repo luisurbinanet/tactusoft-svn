@@ -41,6 +41,7 @@ CREATE TABLE `vid_answer` (
 
 LOCK TABLES `vid_answer` WRITE;
 /*!40000 ALTER TABLE `vid_answer` DISABLE KEYS */;
+INSERT INTO `vid_answer` VALUES (1,'R1',2,-1),(2,'R2',2,-1),(3,'r5',3,-1),(4,'r6',3,-1);
 /*!40000 ALTER TABLE `vid_answer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -89,15 +90,14 @@ CREATE TABLE `vid_question` (
   `id` decimal(19,0) NOT NULL,
   `name` text COLLATE latin1_spanish_ci NOT NULL,
   `id_topic` decimal(19,0) NOT NULL,
-  `type_question` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
-  `resource_type` varchar(15) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `url_link` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `image` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `type_video` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `load_mode` varchar(15) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `question_type` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `audio_type` varchar(15) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `audio` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `video_type` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `video` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
   `positive` decimal(19,0) DEFAULT NULL,
   `negative` decimal(19,0) DEFAULT NULL,
-  `order_question` int(5) DEFAULT NULL,
+  `order_question` int(5) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_vid_question_1` (`id_topic`),
   CONSTRAINT `fk_vid_question_1` FOREIGN KEY (`id_topic`) REFERENCES `vid_topic` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -110,6 +110,7 @@ CREATE TABLE `vid_question` (
 
 LOCK TABLES `vid_question` WRITE;
 /*!40000 ALTER TABLE `vid_question` DISABLE KEYS */;
+INSERT INTO `vid_question` VALUES (1,'Prueba',1,'ASSERTIVE',NULL,NULL,'quicktime','video1.mp4',-1,-1,1),(2,'Mensaje',1,'UNIQUE',NULL,NULL,NULL,NULL,-1,-1,2),(3,'mensaje',1,'UNIQUE',NULL,NULL,NULL,NULL,-1,-1,3);
 /*!40000 ALTER TABLE `vid_question` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -165,31 +166,6 @@ INSERT INTO `parameter` VALUES (1,'URL_IMAGES','http://localhost:8080/images/',N
 UNLOCK TABLES;
 
 --
--- Table structure for table `vid_question_detail`
---
-
-DROP TABLE IF EXISTS `vid_question_detail`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `vid_question_detail` (
-  `id` decimal(19,0) NOT NULL,
-  `id_question` decimal(19,0) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_vid_question_detail_1` (`id_question`),
-  CONSTRAINT `fk_vid_question_detail_1` FOREIGN KEY (`id_question`) REFERENCES `vid_question` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `vid_question_detail`
---
-
-LOCK TABLES `vid_question_detail` WRITE;
-/*!40000 ALTER TABLE `vid_question_detail` DISABLE KEYS */;
-/*!40000 ALTER TABLE `vid_question_detail` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `vid_topic`
 --
 
@@ -212,7 +188,7 @@ CREATE TABLE `vid_topic` (
 
 LOCK TABLES `vid_topic` WRITE;
 /*!40000 ALTER TABLE `vid_topic` DISABLE KEYS */;
-INSERT INTO `vid_topic` VALUES (1,'LACTANCIA',NULL,'M',1),(2,'PRUEBA','topic2..jpg','W',1);
+INSERT INTO `vid_topic` VALUES (1,'LACTANCIA','topic1..jpeg','M',1),(2,'PRUEBA','topic2..jpg','W',1);
 /*!40000 ALTER TABLE `vid_topic` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -225,4 +201,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-04-03 17:46:35
+-- Dump completed on 2012-04-04 12:25:05
