@@ -1,6 +1,6 @@
 package co.com.tactusoft.video.model.entities;
 
-// Generated 3/04/2012 09:31:54 PM by Hibernate Tools 3.4.0.CR1
+// Generated 5/04/2012 10:45:54 AM by Hibernate Tools 3.4.0.CR1
 
 import java.math.BigDecimal;
 import javax.persistence.Column;
@@ -38,11 +38,12 @@ public class VidAnswer implements java.io.Serializable {
 	}
 
 	public VidAnswer(BigDecimal id, VidQuestion vidQuestion, String name,
-			BigDecimal nextQuestion) {
+			BigDecimal nextQuestion, String enterKey) {
 		this.id = id;
 		this.vidQuestion = vidQuestion;
 		this.name = name;
 		this.nextQuestion = nextQuestion;
+		this.enterKey = enterKey;
 	}
 
 	@Id
@@ -83,13 +84,13 @@ public class VidAnswer implements java.io.Serializable {
 		this.nextQuestion = nextQuestion;
 	}
 
-	@Column(name = "enter_key")
+	@Column(name = "enter_key", length = 15)
 	public String getEnterKey() {
-		return enterKey;
+		return this.enterKey;
 	}
 
 	public void setEnterKey(String enterKey) {
 		this.enterKey = enterKey;
 	}
-	
+
 }

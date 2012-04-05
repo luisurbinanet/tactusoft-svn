@@ -1,14 +1,17 @@
 package co.com.tactusoft.video.model.entities;
 
-// Generated 3/04/2012 09:31:54 PM by Hibernate Tools 3.4.0.CR1
+// Generated 5/04/2012 10:49:28 AM by Hibernate Tools 3.4.0.CR1
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -32,6 +35,8 @@ public class User implements java.io.Serializable {
 	private String email;
 	private String phone;
 	private int state;
+	private Set<VidUserTopic> vidUserTopics = new HashSet<VidUserTopic>(0);
+	private Set<VidUserPackage> vidUserPackages = new HashSet<VidUserPackage>(0);
 
 	public User() {
 	}
@@ -49,7 +54,8 @@ public class User implements java.io.Serializable {
 
 	public User(BigDecimal id, Role role, String username, String password,
 			String firstName, String middleName, String lastName, String email,
-			String phone, int state) {
+			String phone, int state, Set<VidUserTopic> vidUserTopics,
+			Set<VidUserPackage> vidUserPackages) {
 		this.id = id;
 		this.role = role;
 		this.username = username;
@@ -60,6 +66,8 @@ public class User implements java.io.Serializable {
 		this.email = email;
 		this.phone = phone;
 		this.state = state;
+		this.vidUserTopics = vidUserTopics;
+		this.vidUserPackages = vidUserPackages;
 	}
 
 	@Id
@@ -72,7 +80,7 @@ public class User implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_role", nullable = false)
 	public Role getRole() {
 		return this.role;
@@ -152,6 +160,24 @@ public class User implements java.io.Serializable {
 
 	public void setState(int state) {
 		this.state = state;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+	public Set<VidUserTopic> getVidUserTopics() {
+		return this.vidUserTopics;
+	}
+
+	public void setVidUserTopics(Set<VidUserTopic> vidUserTopics) {
+		this.vidUserTopics = vidUserTopics;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+	public Set<VidUserPackage> getVidUserPackages() {
+		return this.vidUserPackages;
+	}
+
+	public void setVidUserPackages(Set<VidUserPackage> vidUserPackages) {
+		this.vidUserPackages = vidUserPackages;
 	}
 
 }
