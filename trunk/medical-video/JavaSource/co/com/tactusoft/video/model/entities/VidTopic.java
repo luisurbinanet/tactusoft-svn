@@ -1,6 +1,6 @@
 package co.com.tactusoft.video.model.entities;
 
-// Generated 3/04/2012 09:31:54 PM by Hibernate Tools 3.4.0.CR1
+// Generated 5/04/2012 10:45:54 AM by Hibernate Tools 3.4.0.CR1
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -28,6 +28,9 @@ public class VidTopic implements java.io.Serializable {
 	private String image;
 	private String gender;
 	private int state;
+	private Set<VidUserTopic> vidUserTopics = new HashSet<VidUserTopic>(0);
+	private Set<VidPackageTopic> vidPackageTopics = new HashSet<VidPackageTopic>(
+			0);
 	private Set<VidQuestion> vidQuestions = new HashSet<VidQuestion>(0);
 
 	public VidTopic() {
@@ -41,12 +44,15 @@ public class VidTopic implements java.io.Serializable {
 	}
 
 	public VidTopic(BigDecimal id, String name, String image, String gender,
-			int state, Set<VidQuestion> vidQuestions) {
+			int state, Set<VidUserTopic> vidUserTopics,
+			Set<VidPackageTopic> vidPackageTopics, Set<VidQuestion> vidQuestions) {
 		this.id = id;
 		this.name = name;
 		this.image = image;
 		this.gender = gender;
 		this.state = state;
+		this.vidUserTopics = vidUserTopics;
+		this.vidPackageTopics = vidPackageTopics;
 		this.vidQuestions = vidQuestions;
 	}
 
@@ -94,6 +100,24 @@ public class VidTopic implements java.io.Serializable {
 
 	public void setState(int state) {
 		this.state = state;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "vidTopic")
+	public Set<VidUserTopic> getVidUserTopics() {
+		return this.vidUserTopics;
+	}
+
+	public void setVidUserTopics(Set<VidUserTopic> vidUserTopics) {
+		this.vidUserTopics = vidUserTopics;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "vidTopic")
+	public Set<VidPackageTopic> getVidPackageTopics() {
+		return this.vidPackageTopics;
+	}
+
+	public void setVidPackageTopics(Set<VidPackageTopic> vidPackageTopics) {
+		this.vidPackageTopics = vidPackageTopics;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "vidTopic")
