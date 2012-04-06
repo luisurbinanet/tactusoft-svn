@@ -1,6 +1,6 @@
 package co.com.tactusoft.video.model.entities;
 
-// Generated 5/04/2012 10:45:54 AM by Hibernate Tools 3.4.0.CR1
+// Generated 5/04/2012 12:13:50 PM by Hibernate Tools 3.4.0.CR1
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -26,6 +26,8 @@ public class VidPackage implements java.io.Serializable {
 	private BigDecimal id;
 	private String name;
 	private int state;
+	private Set<VidPackageTopic> vidPackageTopics = new HashSet<VidPackageTopic>(
+			0);
 	private Set<VidUserPackage> vidUserPackages = new HashSet<VidUserPackage>(0);
 
 	public VidPackage() {
@@ -38,10 +40,12 @@ public class VidPackage implements java.io.Serializable {
 	}
 
 	public VidPackage(BigDecimal id, String name, int state,
+			Set<VidPackageTopic> vidPackageTopics,
 			Set<VidUserPackage> vidUserPackages) {
 		this.id = id;
 		this.name = name;
 		this.state = state;
+		this.vidPackageTopics = vidPackageTopics;
 		this.vidUserPackages = vidUserPackages;
 	}
 
@@ -71,6 +75,15 @@ public class VidPackage implements java.io.Serializable {
 
 	public void setState(int state) {
 		this.state = state;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "vidPackage")
+	public Set<VidPackageTopic> getVidPackageTopics() {
+		return this.vidPackageTopics;
+	}
+
+	public void setVidPackageTopics(Set<VidPackageTopic> vidPackageTopics) {
+		this.vidPackageTopics = vidPackageTopics;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "vidPackage")

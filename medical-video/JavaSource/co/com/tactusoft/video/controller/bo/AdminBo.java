@@ -9,6 +9,8 @@ import javax.inject.Named;
 
 import co.com.tactusoft.video.model.dao.CustomHibernateDao;
 import co.com.tactusoft.video.model.entities.VidAnswer;
+import co.com.tactusoft.video.model.entities.VidPackage;
+import co.com.tactusoft.video.model.entities.VidPackageTopic;
 import co.com.tactusoft.video.model.entities.VidQuestion;
 import co.com.tactusoft.video.model.entities.VidTopic;
 
@@ -24,8 +26,13 @@ public class AdminBo implements Serializable {
 	private CustomHibernateDao dao;
 
 	public List<VidTopic> getListVidTopic() {
+		return dao.find("from VidTopic o");
+	}
+	
+	public List<VidTopic> getListVidTopicActive() {
 		return dao.find("from VidTopic o where o.state = 1");
 	}
+
 
 	public List<VidQuestion> getListVidQuestionByTopic(BigDecimal idTopic) {
 		return dao.find("from VidQuestion o where o.vidTopic.id = " + idTopic
@@ -64,6 +71,18 @@ public class AdminBo implements Serializable {
 	public List<VidAnswer> getListVidQuestionByQuestion(BigDecimal idQuestion) {
 		return dao.find("from VidAnswer o where o.vidQuestion.id = "
 				+ idQuestion);
+	}
+	
+	public List<VidPackage> getListVidPackage() {
+		return dao.find("from VidPackage o");
+	}
+	
+	public List<VidPackage> getListVidPackageActive() {
+		return dao.find("from VidPackage o where o.state = 1");
+	}
+	
+	public List<VidPackageTopic> getListVidPackageTopicByPackage(BigDecimal id) {
+		return dao.find("from VidPackageTopic o where o.vidPackage.id = " + id);
 	}
 	
 	public void save(Object entity) {

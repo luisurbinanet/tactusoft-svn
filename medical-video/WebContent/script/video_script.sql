@@ -29,6 +29,7 @@ CREATE TABLE `vid_answer` (
   `name` text COLLATE latin1_spanish_ci NOT NULL,
   `id_question` decimal(19,0) NOT NULL,
   `next_question` decimal(19,0) DEFAULT NULL,
+  `enter_key` varchar(15) COLLATE latin1_spanish_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_vid_answer_1` (`id_question`),
   CONSTRAINT `fk_vid_answer_1` FOREIGN KEY (`id_question`) REFERENCES `vid_question` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
@@ -41,7 +42,7 @@ CREATE TABLE `vid_answer` (
 
 LOCK TABLES `vid_answer` WRITE;
 /*!40000 ALTER TABLE `vid_answer` DISABLE KEYS */;
-INSERT INTO `vid_answer` VALUES (1,'R1',2,-1),(2,'R2',2,-1),(3,'r5',3,-1),(4,'r6',3,-1);
+INSERT INTO `vid_answer` VALUES (1,'R1',2,-1,'A'),(2,'R2',2,-1,'B'),(3,'r5',3,-1,'C'),(4,'r6',3,-1,'D');
 /*!40000 ALTER TABLE `vid_answer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -188,7 +189,7 @@ CREATE TABLE `vid_topic` (
 
 LOCK TABLES `vid_topic` WRITE;
 /*!40000 ALTER TABLE `vid_topic` DISABLE KEYS */;
-INSERT INTO `vid_topic` VALUES (1,'LACTANCIA','topic1..jpeg','M',1),(2,'PRUEBA','topic2..jpg','W',1);
+INSERT INTO `vid_topic` VALUES (1,'LACTANCIA','topic_vid1.jpeg','M',1),(2,'PRUEBA','topic_vid2.jpeg','W',1);
 /*!40000 ALTER TABLE `vid_topic` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -201,4 +202,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-04-04 12:25:05
+-- Dump completed on 2012-04-04 16:21:35

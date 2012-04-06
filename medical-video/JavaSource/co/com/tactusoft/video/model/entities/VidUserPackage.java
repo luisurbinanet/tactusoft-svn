@@ -1,6 +1,6 @@
 package co.com.tactusoft.video.model.entities;
 
-// Generated 5/04/2012 11:08:28 AM by Hibernate Tools 3.4.0.CR1
+// Generated 5/04/2012 12:13:50 PM by Hibernate Tools 3.4.0.CR1
 
 import java.math.BigDecimal;
 import java.util.Date;

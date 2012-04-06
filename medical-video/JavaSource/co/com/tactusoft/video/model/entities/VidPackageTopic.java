@@ -1,6 +1,6 @@
 package co.com.tactusoft.video.model.entities;
 
-// Generated 5/04/2012 10:45:54 AM by Hibernate Tools 3.4.0.CR1
+// Generated 5/04/2012 12:13:50 PM by Hibernate Tools 3.4.0.CR1
 
 import java.math.BigDecimal;
 import javax.persistence.Column;
@@ -23,13 +23,16 @@ public class VidPackageTopic implements java.io.Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
+	private VidPackage vidPackage;
 	private VidTopic vidTopic;
 
 	public VidPackageTopic() {
 	}
 
-	public VidPackageTopic(BigDecimal id, VidTopic vidTopic) {
+	public VidPackageTopic(BigDecimal id, VidPackage vidPackage,
+			VidTopic vidTopic) {
 		this.id = id;
+		this.vidPackage = vidPackage;
 		this.vidTopic = vidTopic;
 	}
 
@@ -44,6 +47,16 @@ public class VidPackageTopic implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_package", nullable = false)
+	public VidPackage getVidPackage() {
+		return this.vidPackage;
+	}
+
+	public void setVidPackage(VidPackage vidPackage) {
+		this.vidPackage = vidPackage;
+	}
+
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_topic", nullable = false)
 	public VidTopic getVidTopic() {
 		return this.vidTopic;
