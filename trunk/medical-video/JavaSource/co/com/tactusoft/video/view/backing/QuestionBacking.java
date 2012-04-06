@@ -52,9 +52,6 @@ public class QuestionBacking {
 	private List<VidAnswer> selectedDeletesAnswer;
 	private String answerText;
 	private AnswerDataModel modelAnswer;
-	private List<SelectItem> listAnswerMultiple;
-	private Map<BigDecimal, VidAnswer> mapAnwserMultiple;
-	private BigDecimal nextQuestionMultiple;
 
 	public QuestionBacking() {
 	}
@@ -69,8 +66,6 @@ public class QuestionBacking {
 		modelAnswer = new AnswerDataModel(listAnswer);
 		answerText = null;
 		selectedDeletesAnswer = new LinkedList<VidAnswer>();
-		listAnswerMultiple = new LinkedList<SelectItem>();
-		mapAnwserMultiple = new HashMap<BigDecimal, VidAnswer>();
 
 		listQuestion.add(new SelectItem(Constant.DEFAULT_VALUE,
 				Constant.DEFAULT_LABEL));
@@ -194,22 +189,6 @@ public class QuestionBacking {
 		this.modelAnswer = modelAnswer;
 	}
 
-	public List<SelectItem> getListAnswerMultiple() {
-		return listAnswerMultiple;
-	}
-
-	public void setListAnswerMultiple(List<SelectItem> listAnswerMultiple) {
-		this.listAnswerMultiple = listAnswerMultiple;
-	}
-
-	public BigDecimal getNextQuestionMultiple() {
-		return nextQuestionMultiple;
-	}
-
-	public void setNextQuestionMultiple(BigDecimal nextQuestionMultiple) {
-		this.nextQuestionMultiple = nextQuestionMultiple;
-	}
-
 	public void searchQuestionAction() {
 		if (selected.getId() != null) {
 			if (selected.getQuestionType().equals(
@@ -220,22 +199,6 @@ public class QuestionBacking {
 				listAnswer = service.getListVidQuestionByQuestion(selected
 						.getId());
 				modelAnswer = new AnswerDataModel(listAnswer);
-			} else if (selected.getQuestionType().equals(
-					Constant.QUESTION_TYPE_MULTIPLE)) {
-
-				listAnswer = service.getListVidQuestionByQuestion(selected
-						.getId());
-				modelAnswer = new AnswerDataModel(listAnswer);
-
-				for (VidAnswer row : listAnswer) {
-					String substr = row.getName();
-					if (substr.length() > 60) {
-						substr = substr.substring(0, 60) + "...";
-					}
-					listAnswerMultiple.add(new SelectItem(row.getId(), substr));
-					mapAnwserMultiple.put(row.getId(), row);
-				}
-
 			}
 		} else {
 			selected.setQuestionType(Constant.QUESTION_TYPE_ASSERTIVE);
@@ -265,18 +228,14 @@ public class QuestionBacking {
 					if (listAnswer.size() == 0) {
 						message = FacesUtil
 								.getMessage("que_msg_validate_nextquestion");
-					} /*else {
-						if (selected.getQuestionType().equals(
-								Constant.QUESTION_TYPE_UNIQUE)) {
-							for (VidAnswer row : listAnswer) {
-								if (row.getNextQuestion().intValue() == -1) {
-									message = FacesUtil
-											.getMessage("que_msg_validate_nextquestion");
-									break;
-								}
-							}
-						}
-					}*/
+					} /*
+					 * else { if (selected.getQuestionType().equals(
+					 * Constant.QUESTION_TYPE_UNIQUE)) { for (VidAnswer row :
+					 * listAnswer) { if (row.getNextQuestion().intValue() == -1)
+					 * { message = FacesUtil
+					 * .getMessage("que_msg_validate_nextquestion"); break; } }
+					 * } }
+					 */
 				}
 
 				try {
