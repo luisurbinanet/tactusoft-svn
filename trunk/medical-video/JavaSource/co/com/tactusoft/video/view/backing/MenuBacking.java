@@ -74,7 +74,7 @@ public class MenuBacking implements Serializable {
 			menuChild.setPage("/pages/admin/package");
 			listChilds.add(menuChild);
 
-			if (role.equals(Constant.ROLE_SUPER_ADMIN)) {
+			if (role.equals(Constant.ROLE_ADMIN)) {
 				menuChild = new MenuDataModel();
 				menuChild.setId(6);
 				menuChild.setName(FacesUtil.getMessage("title_config_user"));

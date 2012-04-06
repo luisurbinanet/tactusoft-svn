@@ -333,9 +333,7 @@ public class QuestionBacking {
 				}
 
 				if (!selected.getQuestionType().equals(
-						Constant.QUESTION_TYPE_UNIQUE)
-						&& !selected.getQuestionType().equals(
-								Constant.QUESTION_TYPE_MULTIPLE)) {
+						Constant.QUESTION_TYPE_UNIQUE)) {
 
 					for (VidAnswer row : listAnswer) {
 						service.remove(row);

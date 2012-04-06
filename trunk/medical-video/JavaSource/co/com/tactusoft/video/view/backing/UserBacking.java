@@ -10,14 +10,20 @@ import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.primefaces.event.SelectEvent;
 import org.springframework.context.annotation.Scope;
 
+import co.com.tactusoft.video.controller.bo.AdminBo;
 import co.com.tactusoft.video.controller.bo.SecurityBo;
 import co.com.tactusoft.video.model.entities.Role;
 import co.com.tactusoft.video.model.entities.User;
+import co.com.tactusoft.video.model.entities.VidUserPackage;
+import co.com.tactusoft.video.model.entities.VidUserTopic;
 import co.com.tactusoft.video.util.Constant;
 import co.com.tactusoft.video.util.FacesUtil;
 import co.com.tactusoft.video.view.datamodel.UserDataModel;
+import co.com.tactusoft.video.view.datamodel.UserPackageDataModel;
+import co.com.tactusoft.video.view.datamodel.UserTopicDataModel;
 
 @Named
 @Scope("view")
@@ -25,6 +31,9 @@ public class UserBacking {
 
 	@Inject
 	private SecurityBo service;
+
+	@Inject
+	private AdminBo serviceAdmin;
 
 	private List<User> list;
 	private User selected;
@@ -35,6 +44,12 @@ public class UserBacking {
 
 	private User currentUser;
 	private String password;
+
+	private List<VidUserPackage> listPackage;
+	private List<VidUserTopic> listTopic;
+
+	private UserPackageDataModel modelPackage;
+	private UserTopicDataModel modelTopic;
 
 	public UserBacking() {
 		model = null;
@@ -111,6 +126,38 @@ public class UserBacking {
 		this.password = password;
 	}
 
+	public List<VidUserPackage> getListPackage() {
+		return listPackage;
+	}
+
+	public void setListPackage(List<VidUserPackage> listPackage) {
+		this.listPackage = listPackage;
+	}
+
+	public List<VidUserTopic> getListTopic() {
+		return listTopic;
+	}
+
+	public void setListTopic(List<VidUserTopic> listTopic) {
+		this.listTopic = listTopic;
+	}
+
+	public UserPackageDataModel getModelPackage() {
+		return modelPackage;
+	}
+
+	public void setModelPackage(UserPackageDataModel modelPackage) {
+		this.modelPackage = modelPackage;
+	}
+
+	public UserTopicDataModel getModelTopic() {
+		return modelTopic;
+	}
+
+	public void setModelTopic(UserTopicDataModel modelTopic) {
+		this.modelTopic = modelTopic;
+	}
+
 	public void newAction() {
 		selected = new User();
 		selected.setRole(new Role());
@@ -146,6 +193,14 @@ public class UserBacking {
 		model = new UserDataModel(list);
 
 		FacesUtil.addInfo(message);
+	}
+
+	public void onRowSelect(SelectEvent event) {
+		BigDecimal idUser = ((User) event.getObject()).getId();
+		listPackage = serviceAdmin.getListVidUserPackageByUser(idUser);
+		modelPackage = new UserPackageDataModel(listPackage);
+		listTopic = serviceAdmin.getListVidUserTopicByUser(idUser);
+		modelTopic = new UserTopicDataModel(listTopic);
 	}
 
 }
