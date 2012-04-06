@@ -125,14 +125,14 @@ public class ResponseQuestionBacking {
 	public String actionSubmitKeyS() {
 		selectedQuestion = nextQuestion(selectedQuestion.getPositive());
 		processAnswers();
-		
+
 		return "";
 	}
-	
+
 	public String actionSubmitKeyN() {
 		selectedQuestion = nextQuestion(selectedQuestion.getNegative());
 		processAnswers();
-		
+
 		return "";
 	}
 
@@ -145,9 +145,7 @@ public class ResponseQuestionBacking {
 			selectedQuestion.setQuestionType(Constant.QUESTION_TYPE_MESSAGE);
 		} else {
 			if (selectedQuestion.getQuestionType().equals(
-					Constant.QUESTION_TYPE_UNIQUE)
-					|| selectedQuestion.getQuestionType().equals(
-							Constant.QUESTION_TYPE_MULTIPLE)) {
+					Constant.QUESTION_TYPE_UNIQUE)) {
 				listAnswer = service
 						.getListVidQuestionByQuestion(selectedQuestion.getId());
 				if (listAnswer.size() > 0) {

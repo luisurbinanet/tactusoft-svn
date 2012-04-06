@@ -193,10 +193,6 @@ public class VidQuestion implements java.io.Serializable {
 			detType = FacesUtil.getMessage("que_type_assertive");
 		} else if (questionType.equals(Constant.QUESTION_TYPE_UNIQUE)) {
 			detType = FacesUtil.getMessage("que_type_unique");
-		} else if (questionType.equals(Constant.QUESTION_TYPE_MULTIPLE)) {
-			detType = FacesUtil.getMessage("que_type_multiple");
-		} else if (questionType.equals(Constant.QUESTION_TYPE_MEDIA)) {
-			detType = FacesUtil.getMessage("que_type_final");
 		}
 
 		return detType;

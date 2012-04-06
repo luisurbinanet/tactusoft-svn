@@ -191,8 +191,8 @@ public class PackageBacking {
 	}
 
 	public void onRowSelect(SelectEvent event) {
-		BigDecimal idBody = ((VidPackage) event.getObject()).getId();
-		listDetail = service.getListVidPackageTopicByPackage(idBody);
+		BigDecimal idPackage = ((VidPackage) event.getObject()).getId();
+		listDetail = service.getListVidPackageTopicByPackage(idPackage);
 		modelDetail = new PackageTopicDataModel(listDetail);
 	}
 

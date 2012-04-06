@@ -13,6 +13,8 @@ import co.com.tactusoft.video.model.entities.VidPackage;
 import co.com.tactusoft.video.model.entities.VidPackageTopic;
 import co.com.tactusoft.video.model.entities.VidQuestion;
 import co.com.tactusoft.video.model.entities.VidTopic;
+import co.com.tactusoft.video.model.entities.VidUserPackage;
+import co.com.tactusoft.video.model.entities.VidUserTopic;
 
 @Named
 public class AdminBo implements Serializable {
@@ -83,6 +85,14 @@ public class AdminBo implements Serializable {
 	
 	public List<VidPackageTopic> getListVidPackageTopicByPackage(BigDecimal id) {
 		return dao.find("from VidPackageTopic o where o.vidPackage.id = " + id);
+	}
+	
+	public List<VidUserPackage> getListVidUserPackageByUser(BigDecimal id) {
+		return dao.find("from VidUserPackage o where o.user.id = " + id);
+	}
+	
+	public List<VidUserTopic> getListVidUserTopicByUser(BigDecimal id) {
+		return dao.find("from VidUserTopic o where o.user.id = " + id);
 	}
 	
 	public void save(Object entity) {

@@ -22,7 +22,8 @@
 				rowKey="#{rec.id}" selectionMode="single"
 				selection="#{userBacking.selected}" paginator="true" rows="20">
 
-				<p:ajax event="rowSelect" update=":detailForm:pnlDetail" />
+				<p:ajax event="rowSelect" update=":detailForm:pnlDetail"
+					listener="#{userBacking.onRowSelect}" />
 
 				<p:column headerText="#{msg['usr_username']}">#{rec.username}</p:column>
 
@@ -30,7 +31,7 @@
 
 				<p:column headerText="#{msg['usr_lastname']}">#{rec.lastName}</p:column>
 
-				<p:column headerText="#{msg['usr_role']}">#{rec.medRole.name}</p:column>
+				<p:column headerText="#{msg['usr_role']}">#{rec.role.name}</p:column>
 
 				<p:column headerText="#{msg['glb_state']}">#{rec.state eq 1?msg['glb_state_active']:msg['glb_state_inactive']}</p:column>
 
@@ -61,7 +62,7 @@
 
 		<h:form id="detailForm">
 
-			<p:growl id="growl" showDetail="true"/>
+			<p:growl id="growl" showDetail="true" />
 
 			<p:dialog header="#{msg['msg_detail']}" widgetVar="detailDialog"
 				resizable="false" id="detailDialog" showEffect="fade"
@@ -72,7 +73,7 @@
 
 					<h:outputLabel value="#{msg['usr_username']}" />
 					<h:inputText value="#{userBacking.selected.username}"
-						style="font-weight:bold;"
+						style="font-weight:bold; width:100%"
 						disabled="#{userBacking.selected.id!=null?true:false}"
 						required="true" label="#{msg['usr_username']}" />
 
@@ -97,7 +98,7 @@
 						style="width:100%" />
 
 					<h:outputLabel value="#{msg['usr_role']}" />
-					<p:selectOneMenu value="#{userBacking.selected.medRole.id}"
+					<p:selectOneMenu value="#{userBacking.selected.role.id}"
 						style="width:100%">
 						<f:selectItems value="#{userBacking.listRole}" />
 					</p:selectOneMenu>
@@ -117,8 +118,8 @@
 				<h:panelGrid columns="1">
 					<p:commandButton id="cmdSave" action="#{userBacking.saveAction}"
 						icon="ui-icon-disk" value="#{msg['btn_save']}"
-						update="growl :form:recordTable" >
-						<f:param name="action" value="SAVE"/>
+						update="growl :form:recordTable">
+						<f:param name="action" value="SAVE" />
 					</p:commandButton>
 				</h:panelGrid>
 
