@@ -51,6 +51,12 @@ public class UserBacking {
 	private UserPackageDataModel modelPackage;
 	private UserTopicDataModel modelTopic;
 
+	private VidUserPackage[] selectedsPackage;
+	private VidUserTopic[] selectedsTopic;
+	
+	private VidUserPackage selectedPackage;
+	private VidUserTopic selectedTopic;
+
 	public UserBacking() {
 		model = null;
 		listRole = new LinkedList<SelectItem>();
@@ -158,6 +164,38 @@ public class UserBacking {
 		this.modelTopic = modelTopic;
 	}
 
+	public VidUserPackage[] getSelectedsPackage() {
+		return selectedsPackage;
+	}
+
+	public void setSelectedsPackage(VidUserPackage[] selectedsPackage) {
+		this.selectedsPackage = selectedsPackage;
+	}
+
+	public VidUserTopic[] getSelectedsTopic() {
+		return selectedsTopic;
+	}
+
+	public void setSelectedsTopic(VidUserTopic[] selectedsTopic) {
+		this.selectedsTopic = selectedsTopic;
+	}
+
+	public VidUserPackage getSelectedPackage() {
+		return selectedPackage;
+	}
+
+	public void setSelectedPackage(VidUserPackage selectedPackage) {
+		this.selectedPackage = selectedPackage;
+	}
+
+	public VidUserTopic getSelectedTopic() {
+		return selectedTopic;
+	}
+
+	public void setSelectedTopic(VidUserTopic selectedTopic) {
+		this.selectedTopic = selectedTopic;
+	}
+
 	public void newAction() {
 		selected = new User();
 		selected.setRole(new Role());
@@ -180,7 +218,7 @@ public class UserBacking {
 		}
 
 		if (selected.getId() == null) {
-			selected.setId(service.getId("MedUser"));
+			selected.setId(service.getId("User"));
 			selected.setPassword(FacesUtil.getMD5("123"));
 			selected.setState(Constant.STATE_ACTIVE);
 			message = FacesUtil.getMessage("msg_record_ok_3");

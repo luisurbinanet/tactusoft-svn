@@ -69,7 +69,7 @@ public class VidUserPackage implements java.io.Serializable {
 		this.user = user;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_package", nullable = false)
 	public VidPackage getVidPackage() {
 		return this.vidPackage;

@@ -22,7 +22,7 @@
 				rowKey="#{rec.id}" selectionMode="single"
 				selection="#{userBacking.selected}" paginator="true" rows="20">
 
-				<p:ajax event="rowSelect" update=":detailForm:pnlDetail"
+				<p:ajax event="rowSelect" update=":detailForm"
 					listener="#{userBacking.onRowSelect}" />
 
 				<p:column headerText="#{msg['usr_username']}">#{rec.username}</p:column>
@@ -63,6 +63,115 @@
 		<h:form id="detailForm">
 
 			<p:growl id="growl" showDetail="true" />
+
+			<p:spacer height="30" />
+
+			<h:outputLabel value="#{msg['title_package']}"
+				style="font-size:large;font-weight:bold;" />
+
+			<p:separator style="width:100%" />
+
+			<p:spacer height="10" />
+
+			<p:dataTable id="recordTablePackage" var="rec"
+				value="#{userBacking.modelPackage}" rowKey="#{rec.id}"
+				selectionMode="single" selection="#{userBacking.selectedPackage}"
+				paginator="true" rows="20">
+
+				<p:column headerText="#{msg['usr_pck_name']}">
+					<h:outputLabel value="#{rec.vidPackage.name}" />
+				</p:column>
+
+				<p:column headerText="#{msg['usr_pck_init_date']}">
+					<h:outputLabel value="#{rec.initDate}">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputLabel>
+				</p:column>
+
+				<p:column headerText="#{msg['usr_pck_end_date']}">
+					<h:outputLabel value="#{rec.endDate}">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputLabel>
+				</p:column>
+
+				<p:column style="width:30px">
+					<h:panelGrid columns="3" styleClass="actions" cellpadding="2">
+						<p:commandButton id="selectButton"
+							update=":detailForm:pnlDetailPackage" icon="ui-icon-search"
+							title="#{msg['btn_edit']}" oncomplete="packageDialog.show()">
+							<f:setPropertyActionListener value="#{rec}"
+								target="#{userBacking.selectedPackage}" />
+						</p:commandButton>
+					</h:panelGrid>
+				</p:column>
+
+				<f:facet name="footer">
+					<p:commandButton id="cmdNewPackage"
+						action="#{userBacking.newAction}" icon="ui-icon-plusthick"
+						value="#{msg['btn_new']}" oncomplete="packageDialog.show()"
+						update="recordTablePackage" />
+					<p:commandButton id="cmdDeletePackage"
+						action="#{userBacking.refreshAction}" update="recordTablePackage"
+						icon="ui-icon-closethick" value="#{msg['btn_delete']}" />
+				</f:facet>
+
+			</p:dataTable>
+
+			<p:spacer height="30" />
+
+			<h:outputLabel value="#{msg['title_config_video']}"
+				style="font-size:large;font-weight:bold;" />
+
+			<p:separator style="width:100%" />
+
+			<p:spacer height="10" />
+
+			<p:dataTable id="recordTableTopic" var="rec"
+				value="#{userBacking.modelTopic}" rowKey="#{rec.id}"
+				selection="#{userBacking.selectedTopic}" paginator="true" rows="20"
+				selectionMode="single">
+
+				<p:column headerText="#{msg['usr_pck_name']}">
+					<h:outputLabel value="#{rec.vidTopic.name}" />
+				</p:column>
+
+				<p:column headerText="#{msg['usr_pck_init_date']}">
+					<h:outputLabel value="#{rec.initDate}">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputLabel>
+				</p:column>
+
+				<p:column headerText="#{msg['usr_pck_end_date']}">
+					<h:outputLabel value="#{rec.endDate}">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputLabel>
+				</p:column>
+
+				<p:column headerText="#{msg['usr_pck_transactions']}">
+					<h:outputLabel value="#{rec.transactionsNumber}" />
+				</p:column>
+
+				<p:column style="width:30px">
+					<h:panelGrid columns="3" styleClass="actions" cellpadding="2">
+						<p:commandButton id="selectButton" update=":detailForm:pnlDetail"
+							icon="ui-icon-search" title="#{msg['btn_edit']}"
+							oncomplete="packageDialog.show()">
+							<f:setPropertyActionListener value="#{rec}"
+								target="#{userBacking.selectedTopic}" />
+						</p:commandButton>
+					</h:panelGrid>
+				</p:column>
+
+				<f:facet name="footer">
+					<p:commandButton id="cmdNewTopic" action="#{userBacking.newAction}"
+						icon="ui-icon-plusthick" value="#{msg['btn_new']}"
+						oncomplete="packageDialog.show()" update="recordTableTopic" />
+					<p:commandButton id="cmdDeleteTopic"
+						action="#{userBacking.refreshAction}" update="recordTableTopic"
+						icon="ui-icon-closethick" value="#{msg['btn_delete']}" />
+				</f:facet>
+
+			</p:dataTable>
 
 			<p:dialog header="#{msg['msg_detail']}" widgetVar="detailDialog"
 				resizable="false" id="detailDialog" showEffect="fade"
@@ -119,6 +228,40 @@
 					<p:commandButton id="cmdSave" action="#{userBacking.saveAction}"
 						icon="ui-icon-disk" value="#{msg['btn_save']}"
 						update="growl :form:recordTable">
+						<f:param name="action" value="SAVE" />
+					</p:commandButton>
+				</h:panelGrid>
+
+			</p:dialog>
+
+			<p:dialog header="#{msg['msg_detail']}" widgetVar="packageDialog"
+				resizable="false" id="packageDialog" showEffect="fade"
+				hideEffect="explode" modal="false" width="500">
+
+				<h:panelGrid id="pnlDetailPackage" columns="2" cellpadding="4"
+					style="margin:0 auto;" width="100%">
+
+					<h:outputLabel value="#{msg['usr_pck_name']}" />
+					<h:inputText value="#{userBacking.selectedPackage.vidTopic.name}"
+						style="font-weight:bold; width:100%"
+						disabled="#{userBacking.selected.id!=null?true:false}"
+						required="true" label="#{msg['usr_username']}" />
+
+					<h:outputLabel value="#{msg['usr_pck_init_date']}" />
+					<h:inputText value="#{userBacking.selectedPackage.initDate}"
+						required="true" style="width:100%" label="#{msg['usr_firstname']}" />
+
+					<h:outputLabel value="#{msg['usr_pck_end_date']}" />
+					<h:inputText value="#{userBacking.selectedPackage.endDate}"
+						style="width:100%" />
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="1">
+					<p:commandButton id="cmdSavePackage"
+						action="#{userBacking.saveAction}" icon="ui-icon-disk"
+						value="#{msg['btn_save']}"
+						update="growl :detailForm:recordTablePackage">
 						<f:param name="action" value="SAVE" />
 					</p:commandButton>
 				</h:panelGrid>
