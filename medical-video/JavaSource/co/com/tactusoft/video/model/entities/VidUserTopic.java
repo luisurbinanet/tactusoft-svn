@@ -71,7 +71,7 @@ public class VidUserTopic implements java.io.Serializable {
 		this.user = user;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_topic", nullable = false)
 	public VidTopic getVidTopic() {
 		return this.vidTopic;
