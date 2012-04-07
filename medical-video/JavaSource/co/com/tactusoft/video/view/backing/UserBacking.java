@@ -17,6 +17,8 @@ import co.com.tactusoft.video.controller.bo.AdminBo;
 import co.com.tactusoft.video.controller.bo.SecurityBo;
 import co.com.tactusoft.video.model.entities.Role;
 import co.com.tactusoft.video.model.entities.User;
+import co.com.tactusoft.video.model.entities.VidPackage;
+import co.com.tactusoft.video.model.entities.VidTopic;
 import co.com.tactusoft.video.model.entities.VidUserPackage;
 import co.com.tactusoft.video.model.entities.VidUserTopic;
 import co.com.tactusoft.video.util.Constant;
@@ -53,16 +55,24 @@ public class UserBacking {
 
 	private VidUserPackage[] selectedsPackage;
 	private VidUserTopic[] selectedsTopic;
-	
+
 	private VidUserPackage selectedPackage;
 	private VidUserTopic selectedTopic;
+
+	private List<SelectItem> listPackageItem;
+	private List<SelectItem> listTopicItem;
+
+	private Map<BigDecimal, VidPackage> mapPackage;
+	private Map<BigDecimal, VidTopic> mapTopic;
 
 	public UserBacking() {
 		model = null;
 		listRole = new LinkedList<SelectItem>();
 		mapRole = new HashMap<BigDecimal, Role>();
-		selected = new User();
-		selected.setRole(new Role());
+
+		newAction();
+		newPackageAction();
+		newTopicAction();
 	}
 
 	public void init() {
@@ -196,13 +206,74 @@ public class UserBacking {
 		this.selectedTopic = selectedTopic;
 	}
 
+	public List<SelectItem> getListPackageItem() {
+		if (listPackageItem == null) {
+			listPackageItem = new LinkedList<SelectItem>();
+			mapPackage = new HashMap<BigDecimal, VidPackage>();
+			for (VidPackage row : serviceAdmin.getListVidPackageActive()) {
+				SelectItem item = new SelectItem(row.getId(), row.getName());
+				listPackageItem.add(item);
+				mapPackage.put(row.getId(), row);
+			}
+		}
+		return listPackageItem;
+	}
+
+	public void setListPackageItem(List<SelectItem> listPackageItem) {
+		this.listPackageItem = listPackageItem;
+	}
+
+	public List<SelectItem> getListTopicItem() {
+		if (listTopicItem == null) {
+			listTopicItem = new LinkedList<SelectItem>();
+			mapTopic = new HashMap<BigDecimal, VidTopic>();
+			for (VidTopic row : serviceAdmin.getListVidTopicActive()) {
+				SelectItem item = new SelectItem(row.getId(), row.getName());
+				listTopicItem.add(item);
+				mapTopic.put(row.getId(), row);
+			}
+		}
+		return listTopicItem;
+	}
+
+	public void setListTopicItem(List<SelectItem> listTopicItem) {
+		this.listTopicItem = listTopicItem;
+	}
+
 	public void newAction() {
 		selected = new User();
 		selected.setRole(new Role());
 	}
 
-	public void refreshAction() {
+	public void newPackageAction() {
+		selectedPackage = new VidUserPackage();
+		selectedPackage.setUser(selected);
+		selectedPackage.setVidPackage(new VidPackage());
+	}
 
+	public void newTopicAction() {
+		selectedTopic = new VidUserTopic();
+		selectedTopic.setUser(selected);
+		selectedTopic.setVidTopic(new VidTopic());
+	}
+
+	public void refreshAction() {
+		list = service.getListMedUser();
+		model = new UserDataModel(list);
+		newAction();
+		newPackageAction();
+		newTopicAction();
+	}
+
+	public void onRowSelect(SelectEvent event) {
+		BigDecimal idUser = ((User) event.getObject()).getId();
+		listPackage = serviceAdmin.getListVidUserPackageByUser(idUser);
+		modelPackage = new UserPackageDataModel(listPackage);
+		listTopic = serviceAdmin.getListVidUserTopicByUser(idUser);
+		modelTopic = new UserTopicDataModel(listTopic);
+
+		newPackageAction();
+		newTopicAction();
 	}
 
 	public void saveAction() {
@@ -233,11 +304,62 @@ public class UserBacking {
 		FacesUtil.addInfo(message);
 	}
 
-	public void onRowSelect(SelectEvent event) {
-		BigDecimal idUser = ((User) event.getObject()).getId();
-		listPackage = serviceAdmin.getListVidUserPackageByUser(idUser);
+	public void savePackageAction() {
+		String message = null;
+
+		if (selectedPackage.getId() == null) {
+			selectedPackage.setId(service.getId("VidUserPackage"));
+			selectedPackage.setVidPackage(mapPackage.get(selectedPackage
+					.getVidPackage().getId()));
+			message = FacesUtil.getMessage("msg_record_ok_3");
+		} else {
+			message = FacesUtil.getMessage("msg_record_ok_2");
+		}
+
+		service.save(selectedPackage);
+		listPackage = serviceAdmin
+				.getListVidUserPackageByUser(selected.getId());
 		modelPackage = new UserPackageDataModel(listPackage);
-		listTopic = serviceAdmin.getListVidUserTopicByUser(idUser);
+
+		FacesUtil.addInfo(message);
+	}
+
+	public void saveTopiAction() {
+		String message = null;
+
+		if (selectedTopic.getId() == null) {
+			selectedTopic.setId(service.getId("VidUserTopic"));
+			selectedTopic.setVidTopic(mapTopic.get(selectedTopic.getVidTopic()
+					.getId()));
+			message = FacesUtil.getMessage("msg_record_ok_3");
+		} else {
+			message = FacesUtil.getMessage("msg_record_ok_2");
+		}
+
+		service.save(selectedTopic);
+		listTopic = serviceAdmin.getListVidUserTopicByUser(selected.getId());
+		modelTopic = new UserTopicDataModel(listTopic);
+
+		FacesUtil.addInfo(message);
+	}
+
+	public void deletePackageAction() {
+
+		for (VidUserPackage row : selectedsPackage) {
+			listPackage.remove(row);
+			serviceAdmin.remove(row);
+		}
+
+		modelPackage = new UserPackageDataModel(listPackage);
+	}
+
+	public void deleteTopicAction() {
+
+		for (VidUserTopic row : selectedsTopic) {
+			listTopic.remove(row);
+			serviceAdmin.remove(row);
+		}
+
 		modelTopic = new UserTopicDataModel(listTopic);
 	}
 
