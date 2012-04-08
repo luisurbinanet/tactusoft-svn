@@ -41,7 +41,7 @@ public class VideoBacking implements Serializable {
 
 	public List<VidTopic> getList() {
 		if (list.size() == 0) {
-			list = service.getListVidTopic();
+			list = service.getListVidTopicByCurrentUser();
 		}
 		return list;
 	}

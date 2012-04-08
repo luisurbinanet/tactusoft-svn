@@ -53,7 +53,7 @@
 
 	<bean id="successHandler"
 		class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
-		<property name="defaultTargetUrl" value="/pages/admin/topic.jsf" />
+		<property name="defaultTargetUrl" value="/pages/view/video.jsf" />
 	</bean>
 
 	<bean id="failureHandler"

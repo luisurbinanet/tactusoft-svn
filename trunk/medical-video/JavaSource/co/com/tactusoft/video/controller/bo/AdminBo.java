@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import co.com.tactusoft.video.model.dao.CustomHibernateDao;
+import co.com.tactusoft.video.model.entities.User;
 import co.com.tactusoft.video.model.entities.VidAnswer;
 import co.com.tactusoft.video.model.entities.VidPackage;
 import co.com.tactusoft.video.model.entities.VidPackageTopic;
@@ -15,6 +16,8 @@ import co.com.tactusoft.video.model.entities.VidQuestion;
 import co.com.tactusoft.video.model.entities.VidTopic;
 import co.com.tactusoft.video.model.entities.VidUserPackage;
 import co.com.tactusoft.video.model.entities.VidUserTopic;
+import co.com.tactusoft.video.util.Constant;
+import co.com.tactusoft.video.util.FacesUtil;
 
 @Named
 public class AdminBo implements Serializable {
@@ -30,11 +33,23 @@ public class AdminBo implements Serializable {
 	public List<VidTopic> getListVidTopic() {
 		return dao.find("from VidTopic o");
 	}
-	
+
+	public List<VidTopic> getListVidTopicByUser(User user) {
+		return dao
+				.find("select o.vidTopic from VidUserTopic o where o.user.id = "
+						+ user.getId()
+						+ " or o.user.role.name = '"
+						+ Constant.ROLE_ADMIN + "'");
+	}
+
+	public List<VidTopic> getListVidTopicByCurrentUser() {
+		User user = FacesUtil.getCurrentUser();
+		return getListVidTopicByUser(user);
+	}
+
 	public List<VidTopic> getListVidTopicActive() {
 		return dao.find("from VidTopic o where o.state = 1");
 	}
-
 
 	public List<VidQuestion> getListVidQuestionByTopic(BigDecimal idTopic) {
 		return dao.find("from VidQuestion o where o.vidTopic.id = " + idTopic
@@ -74,27 +89,27 @@ public class AdminBo implements Serializable {
 		return dao.find("from VidAnswer o where o.vidQuestion.id = "
 				+ idQuestion);
 	}
-	
+
 	public List<VidPackage> getListVidPackage() {
 		return dao.find("from VidPackage o");
 	}
-	
+
 	public List<VidPackage> getListVidPackageActive() {
 		return dao.find("from VidPackage o where o.state = 1");
 	}
-	
+
 	public List<VidPackageTopic> getListVidPackageTopicByPackage(BigDecimal id) {
 		return dao.find("from VidPackageTopic o where o.vidPackage.id = " + id);
 	}
-	
+
 	public List<VidUserPackage> getListVidUserPackageByUser(BigDecimal id) {
 		return dao.find("from VidUserPackage o where o.user.id = " + id);
 	}
-	
+
 	public List<VidUserTopic> getListVidUserTopicByUser(BigDecimal id) {
 		return dao.find("from VidUserTopic o where o.user.id = " + id);
 	}
-	
+
 	public void save(Object entity) {
 		dao.persist(entity);
 	}

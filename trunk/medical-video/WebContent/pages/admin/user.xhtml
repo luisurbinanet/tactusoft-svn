@@ -39,7 +39,7 @@
 					<h:panelGrid columns="3" styleClass="actions" cellpadding="2">
 						<p:commandButton id="selectButton" update=":detailForm:pnlDetail"
 							icon="ui-icon-search" title="#{msg['btn_edit']}"
-							oncomplete="detailDialog.show()">
+							oncomplete="userDialog.show()">
 							<f:setPropertyActionListener value="#{rec}"
 								target="#{userBacking.selected}" />
 						</p:commandButton>
@@ -49,7 +49,7 @@
 				<f:facet name="footer">
 					<p:commandButton id="cmdNew" action="#{userBacking.newAction}"
 						icon="ui-icon-plusthick" value="#{msg['btn_new']}"
-						oncomplete="detailDialog.show()" update=":detailForm:pnlDetail" />
+						oncomplete="userDialog.show()" update=":detailForm:pnlDetail" />
 					<p:commandButton id="cmdRefresh"
 						action="#{userBacking.refreshAction}"
 						update="recordTable :detailForm:pnlDetail" icon="ui-icon-refresh"
@@ -183,8 +183,8 @@
 
 			<p:growl id="growl" showDetail="true" />
 
-			<p:dialog header="#{msg['msg_detail']}" widgetVar="detailDialog"
-				resizable="false" id="detailDialog" showEffect="fade"
+			<p:dialog header="#{msg['msg_detail']}" widgetVar="userDialog"
+				resizable="false" id="userDialog" showEffect="fade"
 				hideEffect="explode" modal="false" width="500">
 
 				<h:panelGrid id="pnlDetail" columns="2" cellpadding="4"
@@ -235,9 +235,12 @@
 				</h:panelGrid>
 
 				<h:panelGrid columns="1">
-					<p:commandButton id="cmdSave" action="#{userBacking.saveAction}"
-						icon="ui-icon-disk" value="#{msg['btn_save']}"
-						update=":detailForm:growl :detailForm:pnlDetail :form:recordTable" />
+					<p:commandButton id="cmdSaveUser"
+						action="#{userBacking.saveAction}" icon="ui-icon-disk"
+						value="#{msg['btn_save']}" process="userDialog"
+						update=":detailForm:growl :detailForm:pnlDetail :form:recordTable">
+						<f:param name="action" value="ACTION" />
+					</p:commandButton>
 				</h:panelGrid>
 
 			</p:dialog>
@@ -264,13 +267,13 @@
 
 					<h:outputLabel value="#{msg['usr_pck_init_date']}" />
 					<p:calendar value="#{userBacking.selectedPackage.initDate}"
-						showOn="button" required="true"
+						showOn="button" required="true" navigator="true"
 						label="#{msg['usr_pck_init_date']}" pattern="yyyy-MM-dd" />
 
 					<h:outputLabel value="#{msg['usr_pck_end_date']}" />
 					<p:calendar value="#{userBacking.selectedPackage.endDate}"
 						showOn="button" required="true" label="#{msg['usr_pck_end_date']}"
-						pattern="yyyy-MM-dd" />
+						pattern="yyyy-MM-dd" navigator="true" />
 
 				</h:panelGrid>
 
@@ -279,7 +282,8 @@
 						action="#{userBacking.savePackageAction}" icon="ui-icon-disk"
 						value="#{msg['btn_save']}"
 						update=":detailForm:growl :detailForm:pnlDetailPackage :form:recordTablePackage"
-						process="packageDialog" />
+						process="packageDialog"
+						oncomplete="handleValidRequest(this.source,xhr, status, args)" />
 				</h:panelGrid>
 
 			</p:dialog>
@@ -305,13 +309,13 @@
 
 					<h:outputLabel value="#{msg['usr_pck_init_date']}" />
 					<p:calendar value="#{userBacking.selectedTopic.initDate}"
-						showOn="button" required="true"
+						showOn="button" required="true" navigator="true"
 						label="#{msg['usr_pck_init_date']}" pattern="yyyy-MM-dd" />
 
 					<h:outputLabel value="#{msg['usr_pck_end_date']}" />
 					<p:calendar value="#{userBacking.selectedTopic.endDate}"
 						showOn="button" required="true" label="#{msg['usr_pck_end_date']}"
-						pattern="yyyy-MM-dd" />
+						pattern="yyyy-MM-dd" navigator="true" />
 
 					<h:outputLabel value="#{msg['usr_pck_transactions']}" />
 					<p:spinner min="0" max="9999" stepFactor="1"
@@ -324,7 +328,8 @@
 					<p:commandButton id="cmdSaveTopic"
 						action="#{userBacking.saveTopiAction}" icon="ui-icon-disk"
 						value="#{msg['btn_save']}" process="topicDialog"
-						update=":detailForm:growl :detailForm:pnlDetailTopic :form:recordTableTopic" />
+						update=":detailForm:growl :detailForm:pnlDetailTopic :form:recordTableTopic"
+						oncomplete="handleValidRequest(this.source,xhr, status, args)" />
 				</h:panelGrid>
 
 			</p:dialog>
@@ -332,6 +337,22 @@
 		</h:form>
 
 		<h:panelGroup layout="block" style="height:300px;" />
+
+		<script type="text/javascript">
+			function handleValidRequest(source, xhr, status, args) {
+				if(args.validationFailed || !args.validate) {
+					jQuery('#packageDialog').effect("shake", { times:3 }, 100);
+				} else {
+					if (source.indexOf("cmdSaveUser")!=-1) {
+						userDialog.hide();
+					} else if (source.indexOf("cmdSavePackage")!=-1) {
+						packageDialog.hide();
+					} else if (source.indexOf("cmdSaveTopic")!=-1) {
+						topicDialog.hide();
+					}
+				}
+			}
+		</script>
 
 	</ui:define>
 </ui:composition>
