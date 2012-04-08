@@ -10,6 +10,7 @@ import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 import org.springframework.context.annotation.Scope;
 
@@ -279,6 +280,8 @@ public class UserBacking {
 	public void saveAction() {
 		String message = null;
 		String action = FacesUtil.getParam("action");
+		RequestContext context = RequestContext.getCurrentInstance();
+		boolean validate = true;
 
 		if (action.equals("CHANGE_PASSWORD")) {
 			currentUser.setPassword(FacesUtil.getMD5(password));
@@ -302,10 +305,13 @@ public class UserBacking {
 		model = new UserDataModel(list);
 
 		FacesUtil.addInfo(message);
+		context.addCallbackParam("validate", validate); 
 	}
 
 	public void savePackageAction() {
 		String message = null;
+		RequestContext context = RequestContext.getCurrentInstance();
+		boolean validate = true;
 
 		if (selectedPackage.getId() == null) {
 			selectedPackage.setId(service.getId("VidUserPackage"));
@@ -322,10 +328,13 @@ public class UserBacking {
 		modelPackage = new UserPackageDataModel(listPackage);
 
 		FacesUtil.addInfo(message);
+		context.addCallbackParam("validate", validate);
 	}
 
 	public void saveTopiAction() {
 		String message = null;
+		RequestContext context = RequestContext.getCurrentInstance();
+		boolean validate = true;
 
 		if (selectedTopic.getId() == null) {
 			selectedTopic.setId(service.getId("VidUserTopic"));
@@ -341,6 +350,7 @@ public class UserBacking {
 		modelTopic = new UserTopicDataModel(listTopic);
 
 		FacesUtil.addInfo(message);
+		context.addCallbackParam("validate", validate);
 	}
 
 	public void deletePackageAction() {
