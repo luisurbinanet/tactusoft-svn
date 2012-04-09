@@ -38,13 +38,17 @@ public class AdminBo implements Serializable {
 		return dao
 				.find("select o.vidTopic from VidUserTopic o where o.user.id = "
 						+ user.getId()
-						+ " or o.user.role.name = '"
-						+ Constant.ROLE_ADMIN + "'");
+						+ " and current_date() between o.initDate and o.endDate");
 	}
 
 	public List<VidTopic> getListVidTopicByCurrentUser() {
-		User user = FacesUtil.getCurrentUser();
-		return getListVidTopicByUser(user);
+		String role = FacesUtil.getCurrentRole();
+		if (role.equals(Constant.ROLE_ADMIN)) {
+			return getListVidTopic();
+		} else {
+			User user = FacesUtil.getCurrentUser();
+			return getListVidTopicByUser(user);
+		}
 	}
 
 	public List<VidTopic> getListVidTopicActive() {
