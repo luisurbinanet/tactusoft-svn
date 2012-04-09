@@ -322,6 +322,11 @@ public class QuestionBacking {
 				}
 			}
 
+			if ((this.selected.getVideo() == null)
+					&& (this.selected.getAudio() == null)) {
+				message = FacesUtil.getMessage("vid_msg_validate_video_audio");
+			}
+
 			if (message == null) {
 
 				service.save(selected);
