@@ -45,23 +45,6 @@
 						itemValue="MESSAGE" />
 				</p:selectOneMenu>
 
-				<h:outputText value="#{msg['vid_video']}"
-					rendered="#{questionBacking.selected.questionType ne 'MESSAGE'?true:false}" />
-				<p:fileUpload
-					rendered="#{questionBacking.selected.questionType ne 'MESSAGE'?true:false}"
-					fileUploadListener="#{questionBacking.handleFileUploadVideo}"
-					mode="advanced" update="player" sizeLimit="104857600" auto="true"
-					label="#{msg['msg_selection']}"
-					invalidFileMessage="#{msg['msg_file_invalid_ext']}"
-					invalidSizeMessage="#{msg['msg_file_ivalid_size']}"
-					allowTypes="/(\.|\/)(asx|asf|avi|wmv|aif|aiff|aac|au|bmp|gsm|mov|mid|midi|mpg|mpeg|mp4|m4a|psd|qt|qtif|qif|qti|snd|tif|tiff|3g2|3pg|flv|swf|ra|ram|rm|rpm|rv|smi|smil)$/" />
-
-				<h:outputText />
-				<h:outputLink style="display: block; width: 600px; height: 300px"
-					id="player"
-					rendered="#{questionBacking.selected.video != null?true:false}"
-					value="#{questionBacking.urlImages}#{questionBacking.selected.video}" />
-
 				<h:panelGrid
 					rendered="#{questionBacking.selected.questionType ne 'MESSAGE' and questionBacking.selected.videoType eq 'flash'?true:false}"
 					width="100%" styleClass="actions-center">
@@ -174,10 +157,84 @@
 			<p:spacer height="10" />
 		</h:form>
 
+		<h:form id="formVideo" enctype="multipart/form-data">
+			<h:outputText value="#{msg['vid_video']}"
+				rendered="#{questionBacking.selected.questionType ne 'MESSAGE'?true:false}" />
+			<p:fileUpload
+				rendered="#{questionBacking.selected.questionType ne 'MESSAGE'?true:false}"
+				fileUploadListener="#{questionBacking.handleFileUploadVideo}"
+				mode="advanced" update="player" sizeLimit="104857600" auto="true"
+				label="#{msg['msg_selection']}"
+				invalidFileMessage="#{msg['msg_file_invalid_ext']}"
+				invalidSizeMessage="#{msg['msg_file_ivalid_size']}"
+				allowTypes="/(\.|\/)(asx|asf|avi|wmv|aif|aiff|aac|au|bmp|gsm|mov|mid|midi|mpg|mpeg|mp4|m4a|psd|qt|qtif|qif|qti|snd|tif|tiff|3g2|3pg|flv|swf|ra|ram|rm|rpm|rv|smi|smil)$/" />
+
+			<p:spacer height="30"/>
+			<p:spacer height="30"/>
+			
+			<h:outputText />
+			<h:outputLink style="display: block; width: 600px; height: 300px"
+				id="player"
+				rendered="#{questionBacking.selected.video != null?true:false}"
+				value="#{questionBacking.urlImages}#{questionBacking.selected.video}" />
+		</h:form>
+		
+		<h:form id="formAudio" enctype="multipart/form-data">
+			<h:outputText value="#{msg['vid_video']}"
+				rendered="#{questionBacking.selected.questionType ne 'MESSAGE'?true:false}" />
+			<p:fileUpload
+				rendered="#{questionBacking.selected.questionType ne 'MESSAGE'?true:false}"
+				fileUploadListener="#{questionBacking.handleFileUploadAudio}"
+				mode="advanced" update="player" sizeLimit="104857600" auto="true"
+				label="#{msg['msg_selection']}"
+				invalidFileMessage="#{msg['msg_file_invalid_ext']}"
+				invalidSizeMessage="#{msg['msg_file_ivalid_size']}"
+				allowTypes="/(\.|\/)(mp3|wma)$/" />
+
+			<p:spacer height="30"/>
+			<p:spacer height="30"/>
+			
+			<h:outputText />
+			<h:outputLink style="display: block; width: 600px; height: 30px"
+				id="player"
+				rendered="#{questionBacking.selected.audio != null?true:false}"
+				value="#{questionBacking.urlImages}#{questionBacking.selected.audio}" />
+		</h:form>
+
 		<h:panelGroup layout="block" style="height:300px;" />
 
 		<script type="text/javascript">
-      		flowplayer("form:player", "../../flowplayer/flowplayer-3.2.8.swf");
+
+      		$f("formVideo:player", "../../flowplayer/flowplayer-3.2.8.swf", {
+      			clip: {
+      		        autoPlay: false,
+      		        // optional: when playback starts close the first audio playback
+      		        onBeforeBegin: function() {
+      		            $f("player").close();
+      		        }      	
+      		    }
+      		});
+
+      		$f("formAudio:player", "../../flowplayer/flowplayer-3.2.8.swf", {
+      			 
+      		    // fullscreen button not needed here
+      		    plugins: {
+      		        controls: {
+      		            fullscreen: false,
+      		            height: 30,
+      		            autoHide: false
+      		        }
+      		    },
+      		 
+      		    clip: {
+      		        autoPlay: false,
+      		        // optional: when playback starts close the first audio playback
+      		        onBeforeBegin: function() {
+      		            $f("player").close();
+      		        }      	
+      		    }
+      		 
+      		});
     	</script>
 
 	</ui:define>

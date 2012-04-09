@@ -11,6 +11,8 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -181,5 +183,12 @@ public class FacesUtil {
 			e.printStackTrace();
 		}
 		return md5;
+	}
+
+	public static String currentDateString() {
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String currentDate = sdf.format(date);
+		return currentDate;
 	}
 }
