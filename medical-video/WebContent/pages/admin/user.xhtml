@@ -105,12 +105,12 @@
 					<p:commandButton id="cmdNewPackage"
 						action="#{userBacking.newPackageAction}" icon="ui-icon-plusthick"
 						value="#{msg['btn_new']}" oncomplete="packageDialog.show()"
-						disabled="#{userBacking.selected.id == null?true:false}"
+						disabled="#{userBacking.selected.id == null or userBacking.selected.role.name eq 'ADMINISTRADOR'?true:false}"
 						update=":detailForm:pnlDetailPackage" />
 					<p:commandButton id="cmdDeletePackage"
 						action="#{userBacking.deletePackageAction}"
-						update="recordTablePackage"
-						disabled="#{userBacking.selected.id == null?true:false}"
+						update="recordTablePackage :detailForm:growl"
+						disabled="#{userBacking.selected.id == null or userBacking.selected.role.name eq 'ADMINISTRADOR'?true:false}"
 						icon="ui-icon-closethick" value="#{msg['btn_delete']}" />
 				</f:facet>
 
@@ -166,12 +166,12 @@
 					<p:commandButton id="cmdNewTopic"
 						action="#{userBacking.newTopicAction}" icon="ui-icon-plusthick"
 						value="#{msg['btn_new']}" oncomplete="topicDialog.show()"
-						disabled="#{userBacking.selected.id == null?true:false}"
+						disabled="#{userBacking.selected.id == null or userBacking.selected.role.name eq 'ADMINISTRADOR'?true:false}"
 						update=":detailForm:pnlDetailTopic" />
 					<p:commandButton id="cmdDeleteTopic"
 						action="#{userBacking.deleteTopicAction}"
-						update="recordTableTopic"
-						disabled="#{userBacking.selected.id == null?true:false}"
+						update="recordTableTopic :detailForm:growl"
+						disabled="#{userBacking.selected.id == null or userBacking.selected.role.name eq 'ADMINISTRADOR'?true:false}"
 						icon="ui-icon-closethick" value="#{msg['btn_delete']}" />
 				</f:facet>
 

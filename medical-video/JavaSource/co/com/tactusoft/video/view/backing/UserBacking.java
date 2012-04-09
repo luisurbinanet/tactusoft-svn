@@ -361,6 +361,9 @@ public class UserBacking {
 		}
 
 		modelPackage = new UserPackageDataModel(listPackage);
+		
+		String message = FacesUtil.getMessage("msg_delete_ok");
+		FacesUtil.addInfo(message);
 	}
 
 	public void deleteTopicAction() {
@@ -371,6 +374,9 @@ public class UserBacking {
 		}
 
 		modelTopic = new UserTopicDataModel(listTopic);
+		
+		String message = FacesUtil.getMessage("msg_delete_ok");
+		FacesUtil.addInfo(message);
 	}
 
 }

@@ -61,20 +61,21 @@ public class MenuBacking implements Serializable {
 			menuDataModel.setName(FacesUtil.getMessage("title_config"));
 
 			listChilds = new LinkedList<MenuDataModel>();
-
-			menuChild = new MenuDataModel();
-			menuChild.setId(4);
-			menuChild.setName(FacesUtil.getMessage("title_config_video"));
-			menuChild.setPage("/pages/admin/topic");
-			listChilds.add(menuChild);
 			
-			menuChild = new MenuDataModel();
-			menuChild.setId(5);
-			menuChild.setName(FacesUtil.getMessage("title_package"));
-			menuChild.setPage("/pages/admin/package");
-			listChilds.add(menuChild);
-
 			if (role.equals(Constant.ROLE_ADMIN)) {
+				menuChild = new MenuDataModel();
+				menuChild.setId(4);
+				menuChild.setName(FacesUtil.getMessage("title_config_video"));
+				menuChild.setPage("/pages/admin/topic");
+				listChilds.add(menuChild);
+				
+				menuChild = new MenuDataModel();
+				menuChild.setId(5);
+				menuChild.setName(FacesUtil.getMessage("title_package"));
+				menuChild.setPage("/pages/admin/package");
+				listChilds.add(menuChild);
+
+				
 				menuChild = new MenuDataModel();
 				menuChild.setId(6);
 				menuChild.setName(FacesUtil.getMessage("title_config_user"));
