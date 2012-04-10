@@ -71,7 +71,7 @@
 
 			<script type="text/javascript">
 
-	      		$f("formVideo:player", "../../flowplayer/flowplayer-3.2.8.swf", {
+	      		$f("formVideo:player", "../../flowplayer/flowplayer-3.2.9.swf", {
 	      			clip: {
 	      		        autoPlay: false,
 	      		        // optional: when playback starts close the first audio playback
@@ -79,6 +79,10 @@
 	      		            $f("player").close();
 	      		        }      	
 	      		    }
+
+		      		onError : {
+			      		  
+		      		}
 	      		});
 	      		
 	    	</script>
@@ -112,7 +116,7 @@
 
 			<script type="text/javascript">
 
-	      		$f("formAudio:player", "../../flowplayer/flowplayer-3.2.8.swf", {
+	      		$f("formAudio:player", "../../flowplayer/flowplayer-3.2.9.swf", {
 	      			 
 	      		    // fullscreen button not needed here
 	      		    plugins: {
@@ -130,6 +134,10 @@
 	      		            $f("player").close();
 	      		        }      	
 	      		    }
+
+	      		  	onError : {
+		      		  
+		      		}
 	      		 
 	      		});
 	      		
@@ -244,40 +252,6 @@
 		<h:form>
 
 		</h:form>
-
-		<script type="text/javascript">
-
-      		$f("formVideo:player", "../../flowplayer/flowplayer-3.2.8.swf", {
-      			clip: {
-      		        autoPlay: false,
-      		        // optional: when playback starts close the first audio playback
-      		        onBeforeBegin: function() {
-      		            $f("player").close();
-      		        }      	
-      		    }
-      		});
-
-      		$f("formAudio:player", "../../flowplayer/flowplayer-3.2.8.swf", {
-      			 
-      		    // fullscreen button not needed here
-      		    plugins: {
-      		        controls: {
-      		            fullscreen: false,
-      		            height: 30,
-      		            autoHide: false
-      		        }
-      		    },
-      		 
-      		    clip: {
-      		        autoPlay: false,
-      		        // optional: when playback starts close the first audio playback
-      		        onBeforeBegin: function() {
-      		            $f("player").close();
-      		        }      	
-      		    }
-      		 
-      		});
-    	</script>
 
 	</ui:define>
 </ui:composition>

@@ -1,5 +1,9 @@
 Version history:
 
+3.2.9
+-----
+- Fixed #490, controlbar background, buffer bar and progress bar colors were all reset to white
+
 3.2.8
 -----
 - Added new property clip.backBufferLength, to be used with FMS 3.5
@@ -64,6 +68,7 @@ this.loadPlugin("content","../flowplayer.content.swf", { html: "test"  }, functi
 - #442 fix for code error in the javascript api.
 - #461 when we have a clip base url set, we need the complete clip url sent to play2 for http streams.
 - #470 check for a playlist when replacing the playlist with an rss feed.
+- #494 regression issued caused by #412, enable base url correctly.
 
 3.2.7
 -----
