@@ -28,11 +28,7 @@ public class SecurityBo {
 		return object;
 	}
 
-	public List<MedRole> getRoles(BigDecimal idUser) {
-		List<MedRole> list = dao
-				.find("select MedRole from MedUserRole o where o.MedUser.id = " + idUser);
-		return list;
-	}
+	
 	
 	public List<MedUser> getListMedUser() {
 		return dao.find("from MedUser o");
