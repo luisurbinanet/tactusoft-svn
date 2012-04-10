@@ -27,8 +27,6 @@ public class SecurityBo {
 		}
 		return object;
 	}
-
-	
 	
 	public List<MedUser> getListMedUser() {
 		return dao.find("from MedUser o");
