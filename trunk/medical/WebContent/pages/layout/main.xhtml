@@ -10,13 +10,10 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=9" />
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>#{msg['title_app']}</title>
+
 		<link rel="stylesheet" href="../../css/style.css" type="text/css"
 			media="screen" />
-		<link rel="stylesheet" href="../../css/annotate.css" type="text/css"
-			media="screen" />
 
-		<!--[if IE 6]><link rel="stylesheet" href="../../css/style.ie6.css" type="text/css" media="screen" /><![endif]-->
-		<!--[if IE 7]><link rel="stylesheet" href="../../css/style.ie7.css" type="text/css" media="screen" /><![endif]-->
 		<script type="text/javascript" src="../../js/script.js"></script>
 	</h:head>
 	<h:body>
@@ -46,8 +43,10 @@
 							<div class="rco-layout-cell rco-content">
 								<div class="rco-post">
 									<div class="rco-post-body">
-										<div class="rco-post-inner">
-											<!-- <h2 class="rco-postheader">Welcome</h2> -->
+										<div class="rco-post-inner rco-article">
+											<div class="rco-postmetadataheader">
+												<ui:insert name="title" />
+											</div>
 											<div class="rco-postcontent">
 
 												<p:ajaxStatus onstart="statusDialog.show();"

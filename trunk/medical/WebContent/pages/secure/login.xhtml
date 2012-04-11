@@ -9,40 +9,74 @@
 
 	<ui:define name="content">
 
-		<h:form>
+		<h:panelGroup layout="block" style="height:300px;" />
 
-			<center>
+		<center>
 
-				<div class="rco-blockheader" style="width:50%">
+			<div class="rco-block" style="width: 50%">
+				<div class="rco-blockcontent-tl"></div>
+				<div class="rco-blockcontent-tr"></div>
+				<div class="rco-blockcontent-bl"></div>
+				<div class="rco-blockcontent-br"></div>
+				<div class="rco-blockcontent-tc"></div>
+				<div class="rco-blockcontent-bc"></div>
+				<div class="rco-blockcontent-cl"></div>
+				<div class="rco-blockcontent-cr"></div>
+				<div class="rco-blockcontent-cc"></div>
+
+
+				<div class="rco-blockheader">
 					<div class="l"></div>
 					<div class="r"></div>
-					<div class="t">#{msg['title_login']}</div>
+					<h3 class="t" align="left">#{msg['title_login']}</h3>
 				</div>
 
-				<h:panelGrid columns="2" style="width:50%">
+				<div class="rco-blockcontent">
+					<div class="rco-blockcontent-tl"></div>
+					<div class="rco-blockcontent-tr"></div>
+					<div class="rco-blockcontent-bl"></div>
+					<div class="rco-blockcontent-br"></div>
+					<div class="rco-blockcontent-tc"></div>
+					<div class="rco-blockcontent-bc"></div>
+					<div class="rco-blockcontent-cl"></div>
+					<div class="rco-blockcontent-cr"></div>
+					<div class="rco-blockcontent-cc"></div>
+					<div class="rco-blockcontent-body">
+						<h:form prependId="false">
+							<h:panelGrid columns="2" width="90%">
 
-					<h:outputLabel value="#{msg['log_username']}" />
-					<h:inputText id="txtUsuario" value="#{loginBacking.userName}"
-						style="width:100%" />
-					<h:outputLabel value="#{msg['log_password']}" />
-					<h:inputSecret value="#{loginBacking.password}" style="width:100%" />
+								<h:outputLabel value="#{msg['log_username']}" />
+								<h:inputText id="txtUsuario" value="#{loginBacking.userName}"
+									style="width:100%" />
+								<h:outputLabel value="#{msg['log_password']}" />
+								<h:inputSecret value="#{loginBacking.password}"
+									style="width:100%" />
 
-					<f:facet name="footer">
-						<h:commandButton value="#{msg['btn_ok']}"
-							action="#{loginBacking.doLogin}" >
-						</h:commandButton>
-					</f:facet>
-				</h:panelGrid>
+								<f:facet name="footer">
+									<p>
+										<span class="rco-button-wrapper"> <span
+											class="rco-button-l"> </span> <span class="rco-button-r">
+										</span> <h:commandLink styleClass="rco-button"
+												action="#{loginBacking.doLogin}" value="#{msg['btn_ok']}" />
+										</span>
+									</p>
+								</f:facet>
+							</h:panelGrid>
 
-				<h:panelGrid id="pnlMessages"
-					rendered="#{loginBacking.visibleBadCredentials}"
-					style="align:center">
-					<h:outputLabel value="#{msg['log_msg_validate_credentials']}"
-						style="color:Red;font-weight:bold;"/>
-				</h:panelGrid>
-			</center>
+							<h:panelGrid id="pnlMessages"
+								rendered="#{loginBacking.visibleBadCredentials}"
+								style="align:center">
+								<h:outputLabel value="#{msg['log_msg_validate_credentials']}"
+									style="color:Red;font-weight:bold;" />
+							</h:panelGrid>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</center>
 
-		</h:form>
+		<h:panelGroup layout="block" style="height:200px;" />
+
 	</ui:define>
 </ui:composition>
 </html>

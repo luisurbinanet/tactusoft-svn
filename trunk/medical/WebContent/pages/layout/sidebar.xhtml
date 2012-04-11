@@ -4,18 +4,58 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 
-<h:form id="formSideBar">
-	<div id="sidebar">
-		<h2>
-			<span>SubMenu</span>
-		</h2>
-		<ul>
-			<li><a href="#">SubMenu 1</a></li>
-			<li><a href="#">SubMenu 2</a></li>
-			<li><a href="#">SubMenu 3</a></li>
-		</ul>
+<div class="rco-layout-cell rco-sidebar1">
+	<div class="rco-layout-bg"></div>
+	<div class="rco-block">
+		<div class="rco-block-tl"></div>
+		<div class="rco-block-tr"></div>
+		<div class="rco-block-bl"></div>
+		<div class="rco-block-br"></div>
+		<div class="rco-block-tc"></div>
+		<div class="rco-block-bc"></div>
+		<div class="rco-block-cl"></div>
+		<div class="rco-block-cr"></div>
+		<div class="rco-block-cc"></div>
+		<div class="rco-block-body">
+			<div class="rco-blockheader">
+				<div class="l"></div>
+				<div class="r"></div>
+				<h3 class="t">#{msg['title_body']}</h3>
+			</div>
+			<div class="rco-blockcontent">
+				<div class="rco-blockcontent-tl"></div>
+				<div class="rco-blockcontent-tr"></div>
+				<div class="rco-blockcontent-bl"></div>
+				<div class="rco-blockcontent-br"></div>
+				<div class="rco-blockcontent-tc"></div>
+				<div class="rco-blockcontent-bc"></div>
+				<div class="rco-blockcontent-cl"></div>
+				<div class="rco-blockcontent-cr"></div>
+				<div class="rco-blockcontent-cc"></div>
+				<div class="rco-blockcontent-body">
+					<div align="center">
+						<h:form>
+							<h:commandLink>
+								<img src="../../images/cuerpo_woman.jpg" alt="an image"
+									style="margin: 0 auto; display: block; width: 95%" id="img1"
+									onmouseout="FP_swapImgRestore()"
+									onmouseover="FP_swapImg(1,1,/*id*/'img1',/*url*/'../../images/cuerpo_man.jpg')" />
+							</h:commandLink>
+							
+							<br />
+							<h:outputLabel value="Haga Clic en la imágen"
+								style="text-align:center" />
+						</h:form>
+					</div>
+
+					<div class="cleared"></div>
+				</div>
+			</div>
+			<div class="cleared"></div>
+		</div>
 	</div>
-	<!-- sidebar -->
-</h:form>
+	<div class="cleared"></div>
+</div>
+
 
 </html>

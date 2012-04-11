@@ -4,21 +4,24 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="../layout/main.xhtml">
+<ui:composition template="../layout/mainwithsidebar.xhtml">
+
+	<div class="rco-blockheader">
+		<div class="l"></div>
+		<div class="r"></div>
+		<h3 class="t">#{msg['title_carousel']}</h3>
+	</div>
+
+	<p:spacer height="20" />
+
 	<ui:define name="content">
-
-		<div class="rco-blockheader">
-			<div class="l"></div>
-			<div class="r"></div>
-			<div class="t">#{msg['title_carousel']}</div>
-		</div>
-
-		<p:spacer height="100" />
 
 		<h:form id="form" enctype="multipart/form-data">
 
-			<p:carousel id="carouselWomen" value="#{carouselBacking.listWoman}" var="menu"
-				headerText="#{msg['msg_selection_topic']}">
+			<h:panelGroup layout="block" style="height:20px;" />
+
+			<p:carousel id="carouselWomen" value="#{carouselBacking.listWoman}"
+				var="menu" headerText="#{msg['msg_selection_topic']}">
 				<p:column>
 					<h:panelGrid cellpadding="5"
 						style="width: 310px; height: 200px; text-align:center;"
@@ -40,11 +43,11 @@
 					</h:panelGrid>
 				</p:column>
 			</p:carousel>
-			
-			<p:spacer height="50"/>
-			
-			<p:carousel id="carouselMan" value="#{carouselBacking.listMan}" var="menu"
-				headerText="#{msg['msg_selection_topic']}">
+
+			<h:panelGroup layout="block" style="height:50px;" />
+
+			<p:carousel id="carouselMan" value="#{carouselBacking.listMan}"
+				var="menu" headerText="#{msg['msg_selection_topic']}">
 				<p:column>
 					<h:panelGrid cellpadding="5"
 						style="width: 310px; height: 200px; text-align:center;"
