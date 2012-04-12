@@ -27,7 +27,6 @@ public class SecurityMetadataSourceCustom implements
 					|| url.contains(".css") || url.contains(".png")
 					|| url.contains(".jpg") || url.contains(".gif")
 					|| url.contains(".swf") || url.contains("script.js")
-					|| url.contains("/pages/view/responseQuestion")
 					|| url.contains("/pages/secure/accessDenied")
 					|| url.contains("/pages/secure/expired")
 					|| url.contains("index.jsp") || url.contains("flowplayer")) {
@@ -37,30 +36,34 @@ public class SecurityMetadataSourceCustom implements
 			List<MenuDataModel> listMenu = FacesUtil.getCurrentUserData()
 					.getListMenu();
 
-			if (url.contains("/pages/admin/edit_topic")
-					|| url.contains("/pages/admin/edit_video")) {
-				return null;
-			}
+			if (listMenu != null) {
+				if (url.contains("/pages/admin/edit_topic")
+						|| url.contains("/pages/admin/edit_video")
+						|| url.contains("/pages/view/responseVideo")
+						|| url.contains("/media/default.m4a")) {
+					return null;
+				}
 
-			for (MenuDataModel menu : listMenu) {
-				String page = menu.getPage();
-				if (page != null) {
-					if (url.contains(page)) {
-						return null;
-					}
-				} else {
-					for (MenuDataModel menu2 : menu.getChilds()) {
-						page = menu2.getPage();
-						if (page != null) {
-							if (url.contains(page)) {
-								return null;
+				for (MenuDataModel menu : listMenu) {
+					String page = menu.getPage();
+					if (page != null) {
+						if (url.contains(page)) {
+							return null;
+						}
+					} else {
+						for (MenuDataModel menu2 : menu.getChilds()) {
+							page = menu2.getPage();
+							if (page != null) {
+								if (url.contains(page)) {
+									return null;
+								}
 							}
 						}
 					}
 				}
+			} else {
+				access.append(url);
 			}
-
-			access.append(url);
 
 		} catch (Exception ex) {
 			access.append(url);

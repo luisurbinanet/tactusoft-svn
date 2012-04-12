@@ -63,7 +63,7 @@
 				<h:outputText />
 				<h:outputLink style="display: block; width: 300px; height: 150px"
 					id="player"
-					value="#{questionBacking.urlImages}#{questionBacking.selected.video}" />
+					value="#{questionBacking.selected.video}" />
 
 				<p:spacer height="20" />
 				<p:spacer height="20" />
@@ -78,11 +78,12 @@
 	      		        onBeforeBegin: function() {
 	      		            $f("player").close();
 	      		        }      	
-	      		    }
+	      		    },
 
-		      		onError : {
-			      		  
-		      		}
+	      		  	onError : 
+	      		  		function(errorCode, errorMessage) {
+	      		  			
+	      		  		}
 	      		});
 	      		
 	    	</script>
@@ -133,11 +134,12 @@
 	      		        onBeforeBegin: function() {
 	      		            $f("player").close();
 	      		        }      	
-	      		    }
+	      		    },
 
-	      		  	onError : {
-		      		  
-		      		}
+	      		  	onError : 
+	      		  		function(errorCode, errorMessage) {
+	      		  			
+	      		  		}
 	      		 
 	      		});
 	      		

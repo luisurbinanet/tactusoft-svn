@@ -37,13 +37,69 @@
 					rendered="#{responseQuestionBacking.selectedQuestion.questionType ne 'MESSAGE'?true:false}"
 					styleClass="actions-center" width="100%">
 
-					<h:outputLink id="player"
+					<h:outputLink id="playerVideo"
 						style="display: block; width: 940px; height: 500px; text-align:center;"
-						value="#{responseQuestionBacking.urlImages}#{responseQuestionBacking.selectedQuestion.video}" />
-						
+						value="#{responseQuestionBacking.selectedQuestion.video}" />
+
+					<h:outputLink id="playerAudio"
+						style="display: block; width: 940px; height: 30px; text-align:center;"
+						value="#{responseQuestionBacking.selectedQuestion.audio}" />
+
 					<script type="text/javascript">
-      					flowplayer("form:player", "../../flowplayer/flowplayer-3.2.9.swf");
-    				</script>	
+
+						var pVideo = document.getElementById("form:playerVideo");
+						var pAudio = document.getElementById("form:playerAudio");
+
+  						$f("form:playerVideo", "../../flowplayer/flowplayer-3.2.9.swf", {
+      		      			 
+      		      		    plugins: {
+      		      		        controls: null
+      		      		    },
+      		      		 
+      		      		    clip: {
+      		      		        onBeforeBegin: function() {
+      		      		        	var obj = arguments[0];
+  		      		        		var url = obj.url;
+  		      		        		if (url.indexOf('default.m4a') >= 0){
+  		      		        			pVideo.style.display = 'none';
+      		      		        	} else {
+      		      		        		autoPlay: true;
+          		      		    	}      		      		          
+      		      		        }      	
+      		      		    },
+
+      		      			onLoad: function() {
+      		              		
+      		          		} 
+      		      		 
+      		      		});
+
+      					$f("form:playerAudio", "../../flowplayer/flowplayer-3.2.9.swf", {
+     		      			 
+      		      		    plugins: {
+      		      		        controls: {
+      		      		            fullscreen: false,
+      		      		            height: 30,
+      		      		            autoHide: false
+      		      		        }
+      		      		    },
+      		      		 
+      		      		    clip: {
+      		      		        // optional: when playback starts close the first audio playback
+      		      		        onBeforeBegin: function() {
+      		      		        	var obj = arguments[0];
+      		      		        	var url = obj.url;
+      		      		        	if (url.indexOf('default.m4a') >= 0){
+      		      		        		pAudio.style.display = 'none';
+          		      		        } else {
+          		      		        	autoPlay: true;
+              		      		    }
+      		      		        }
+      		      		    }
+      		      		});
+      		      		
+      					
+    				</script>
 
 				</h:panelGrid>
 
@@ -70,7 +126,8 @@
 						value="#{responseQuestionBacking.idAnswer}" layout="pageDirection"
 						style="font-style:normal;font-size:18px;">
 						<f:selectItems value="#{responseQuestionBacking.listAnswer}"
-							var="item" itemLabel="#{item.name} (Tecla #{item.enterKey})" itemValue="#{item.id}" />
+							var="item" itemLabel="#{item.name} (Tecla #{item.enterKey})"
+							itemValue="#{item.id}" />
 					</p:selectOneRadio>
 
 				</h:panelGrid>

@@ -88,7 +88,7 @@ public class VideoBacking implements Serializable {
 
 		responseQuestionBacking.init(medQuestion, list, listAnswer);
 
-		return "/pages/view/responseQuestion?faces-redirect=true";
+		return "/pages/view/responseVideo?faces-redirect=true";
 	}
 
 }
