@@ -35,13 +35,14 @@
 				<div class="rco-blockcontent-body">
 					<div align="center">
 						<h:form>
-							<h:commandLink>
+							<h:commandLink action="#{menuBacking.actionPage}">
+								<f:param name="page" value="/pages/view/body" />
 								<img src="../../images/cuerpo_woman.jpg" alt="an image"
 									style="margin: 0 auto; display: block; width: 95%" id="img1"
 									onmouseout="FP_swapImgRestore()"
 									onmouseover="FP_swapImg(1,1,/*id*/'img1',/*url*/'../../images/cuerpo_man.jpg')" />
 							</h:commandLink>
-							
+
 							<br />
 							<h:outputLabel value="Haga Clic en la imágen"
 								style="text-align:center" />
