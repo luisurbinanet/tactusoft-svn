@@ -53,6 +53,11 @@ public class QuestionBacking {
 	private String answerText;
 	private AnswerDataModel modelAnswer;
 
+	private double timeText;
+
+	private boolean deleteVideo;
+	private boolean deleteAudio;
+
 	public QuestionBacking() {
 	}
 
@@ -189,6 +194,30 @@ public class QuestionBacking {
 		this.modelAnswer = modelAnswer;
 	}
 
+	public double getTimeText() {
+		return timeText;
+	}
+
+	public void setTimeText(double timeText) {
+		this.timeText = timeText;
+	}
+
+	public boolean isDeleteVideo() {
+		return deleteVideo;
+	}
+
+	public void setDeleteVideo(boolean deleteVideo) {
+		this.deleteVideo = deleteVideo;
+	}
+
+	public boolean isDeleteAudio() {
+		return deleteAudio;
+	}
+
+	public void setDeleteAudio(boolean deleteAudio) {
+		this.deleteAudio = deleteAudio;
+	}
+
 	public void searchQuestionAction() {
 		if (selected.getId() != null) {
 			if (selected.getQuestionType().equals(
@@ -221,104 +250,118 @@ public class QuestionBacking {
 			if (selected.getQuestionType().equals(
 					Constant.QUESTION_TYPE_ASSERTIVE)
 					|| selected.getQuestionType().equals(
-							Constant.QUESTION_TYPE_UNIQUE)) {
+							Constant.QUESTION_TYPE_UNIQUE)
+					|| selected.getQuestionType().equals(
+							Constant.QUESTION_TYPE_TIME)) {
 
 				if (selected.getQuestionType().equals(
 						Constant.QUESTION_TYPE_UNIQUE)) {
 					if (listAnswer.size() == 0) {
 						message = FacesUtil
 								.getMessage("que_msg_validate_nextquestion");
-					} /*
-					 * else { if (selected.getQuestionType().equals(
-					 * Constant.QUESTION_TYPE_UNIQUE)) { for (VidAnswer row :
-					 * listAnswer) { if (row.getNextQuestion().intValue() == -1)
-					 * { message = FacesUtil
-					 * .getMessage("que_msg_validate_nextquestion"); break; } }
-					 * } }
-					 */
+					}
 				}
 
-				try {
+				if (deleteAudio && deleteVideo) {
+					message = FacesUtil
+							.getMessage("que_msg_validate_nextquestion");
+				} else {
 
-					if (newFileVideo) {
-						ParameterBacking parameterBacking = FacesUtil
-								.findBean("parameterBacking");
-						String directory = parameterBacking.getDirectory();
-						String ext = FacesUtil.getExtensionFile(fileVideo
-								.getFileName());
-						String fileName = "video" + selected.getId() + ext;
-						FacesUtil.createFile(fileVideo.getInputstream(),
-								directory + fileName);
+					try {
 
-						this.newFileVideo = false;
+						if (newFileVideo && !deleteVideo) {
+							ParameterBacking parameterBacking = FacesUtil
+									.findBean("parameterBacking");
+							String directory = parameterBacking.getDirectory();
+							String ext = FacesUtil.getExtensionFile(fileVideo
+									.getFileName());
+							String fileName = "video" + selected.getId() + ext;
+							FacesUtil.createFile(fileVideo.getInputstream(),
+									directory + fileName);
 
-						Pattern patternWindows = Pattern
-								.compile("([^\\s]+(\\.(?i)(asx|asf|avi|wma|wmv))$)");
-						Pattern patternQuicktime = Pattern
-								.compile("([^\\s]+(\\.(?i)(aif|aiff|aac|au|bmp|gsm|mov|mid|midi|mpg|mpeg|mp4|m4a|psd|qt|qtif|qif|qti|snd|tif|tiff|wav|3g2|3pg))$)");
-						Pattern patternFlash = Pattern
-								.compile("([^\\s]+(\\.(?i)(flv|mp3|swf))$)");
-						Pattern patternReal = Pattern
-								.compile("([^\\s]+(\\.(?i)(ra|ram|rm|rpm|rv|smi|smil))$)");
+							this.newFileVideo = false;
 
-						this.selected.setVideo(fileName);
+							Pattern patternWindows = Pattern
+									.compile("([^\\s]+(\\.(?i)(asx|asf|avi|wma|wmv))$)");
+							Pattern patternQuicktime = Pattern
+									.compile("([^\\s]+(\\.(?i)(aif|aiff|aac|au|bmp|gsm|mov|mid|midi|mpg|mpeg|mp4|m4a|psd|qt|qtif|qif|qti|snd|tif|tiff|wav|3g2|3pg))$)");
+							Pattern patternFlash = Pattern
+									.compile("([^\\s]+(\\.(?i)(flv|mp3|swf))$)");
+							Pattern patternReal = Pattern
+									.compile("([^\\s]+(\\.(?i)(ra|ram|rm|rpm|rv|smi|smil))$)");
 
-						if (patternWindows.matcher(fileName).matches()) {
-							this.selected
-									.setVideoType(Constant.VIDEO_TYPE_WINDOWS);
-						} else if (patternQuicktime.matcher(fileName).matches()) {
-							this.selected
-									.setVideoType(Constant.VIDEO_TYPE_QUICKTIME);
-						} else if (patternFlash.matcher(fileName).matches()) {
-							this.selected
-									.setVideoType(Constant.VIDEO_TYPE_FLASH);
-						} else if (patternReal.matcher(fileName).matches()) {
-							this.selected
-									.setVideoType(Constant.VIDEO_TYPE_REAL);
+							this.selected.setVideo(fileName);
+
+							if (patternWindows.matcher(fileName).matches()) {
+								this.selected
+										.setVideoType(Constant.VIDEO_TYPE_WINDOWS);
+							} else if (patternQuicktime.matcher(fileName)
+									.matches()) {
+								this.selected
+										.setVideoType(Constant.VIDEO_TYPE_QUICKTIME);
+							} else if (patternFlash.matcher(fileName).matches()) {
+								this.selected
+										.setVideoType(Constant.VIDEO_TYPE_FLASH);
+							} else if (patternReal.matcher(fileName).matches()) {
+								this.selected
+										.setVideoType(Constant.VIDEO_TYPE_REAL);
+							}
 						}
-					}
 
-					if (newFileAudio) {
-						ParameterBacking parameterBacking = FacesUtil
-								.findBean("parameterBacking");
-						String directory = parameterBacking.getDirectory();
-						String ext = FacesUtil.getExtensionFile(fileAudio
-								.getFileName());
-						String fileName = "audio" + selected.getId() + ext;
-						FacesUtil.createFile(fileAudio.getInputstream(),
-								directory + fileName);
-
-						this.newFileAudio = false;
-
-						Pattern patternWindows = Pattern
-								.compile("([^\\s]+(\\.(?i)(asx|asf|avi|wma|wmv))$)");
-						Pattern patternQuicktime = Pattern
-								.compile("([^\\s]+(\\.(?i)(aif|aiff|aac|au|bmp|gsm|mov|mid|midi|mpg|mpeg|mp4|m4a|psd|qt|qtif|qif|qti|snd|tif|tiff|wav|3g2|3pg))$)");
-						Pattern patternFlash = Pattern
-								.compile("([^\\s]+(\\.(?i)(flv|mp3|swf))$)");
-						Pattern patternReal = Pattern
-								.compile("([^\\s]+(\\.(?i)(ra|ram|rm|rpm|rv|smi|smil))$)");
-
-						this.selected.setAudio(fileName);
-
-						if (patternWindows.matcher(fileName).matches()) {
-							this.selected
-									.setAudioType(Constant.VIDEO_TYPE_WINDOWS);
-						} else if (patternQuicktime.matcher(fileName).matches()) {
-							this.selected
-									.setAudioType(Constant.VIDEO_TYPE_QUICKTIME);
-						} else if (patternFlash.matcher(fileName).matches()) {
-							this.selected
-									.setAudioType(Constant.VIDEO_TYPE_FLASH);
-						} else if (patternReal.matcher(fileName).matches()) {
-							this.selected
-									.setAudioType(Constant.VIDEO_TYPE_REAL);
+						if (deleteVideo) {
+							this.selected.setVideoType(null);
+							this.selected.setVideo(null);
 						}
-					}
 
-				} catch (NullPointerException ex) {
-					field = FacesUtil.getMessage("que_type_final_file");
-					message = FacesUtil.getMessage("msg_field_required", field);
+						if (newFileAudio && !deleteAudio) {
+							ParameterBacking parameterBacking = FacesUtil
+									.findBean("parameterBacking");
+							String directory = parameterBacking.getDirectory();
+							String ext = FacesUtil.getExtensionFile(fileAudio
+									.getFileName());
+							String fileName = "audio" + selected.getId() + ext;
+							FacesUtil.createFile(fileAudio.getInputstream(),
+									directory + fileName);
+
+							this.newFileAudio = false;
+
+							Pattern patternWindows = Pattern
+									.compile("([^\\s]+(\\.(?i)(asx|asf|avi|wma|wmv))$)");
+							Pattern patternQuicktime = Pattern
+									.compile("([^\\s]+(\\.(?i)(aif|aiff|aac|au|bmp|gsm|mov|mid|midi|mpg|mpeg|mp4|m4a|psd|qt|qtif|qif|qti|snd|tif|tiff|wav|3g2|3pg))$)");
+							Pattern patternFlash = Pattern
+									.compile("([^\\s]+(\\.(?i)(flv|mp3|swf))$)");
+							Pattern patternReal = Pattern
+									.compile("([^\\s]+(\\.(?i)(ra|ram|rm|rpm|rv|smi|smil))$)");
+
+							this.selected.setAudio(fileName);
+
+							if (patternWindows.matcher(fileName).matches()) {
+								this.selected
+										.setAudioType(Constant.VIDEO_TYPE_WINDOWS);
+							} else if (patternQuicktime.matcher(fileName)
+									.matches()) {
+								this.selected
+										.setAudioType(Constant.VIDEO_TYPE_QUICKTIME);
+							} else if (patternFlash.matcher(fileName).matches()) {
+								this.selected
+										.setAudioType(Constant.VIDEO_TYPE_FLASH);
+							} else if (patternReal.matcher(fileName).matches()) {
+								this.selected
+										.setAudioType(Constant.VIDEO_TYPE_REAL);
+							}
+						}
+
+						if (deleteAudio) {
+							this.selected.setAudioType(null);
+							this.selected.setAudio(null);
+						}
+
+					} catch (NullPointerException ex) {
+						field = FacesUtil.getMessage("que_type_final_file");
+						message = FacesUtil.getMessage("msg_field_required",
+								field);
+					}
 				}
 			}
 
@@ -392,6 +435,10 @@ public class QuestionBacking {
 			modelAnswer = new AnswerDataModel(listAnswer);
 			answerText = "";
 		}
+	}
+
+	public void addTimeAnswerAction() {
+
 	}
 
 	public void removeAnswerAction() {

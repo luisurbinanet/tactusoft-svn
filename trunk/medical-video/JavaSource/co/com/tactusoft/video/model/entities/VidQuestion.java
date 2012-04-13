@@ -123,14 +123,7 @@ public class VidQuestion implements java.io.Serializable {
 
 	@Column(name = "audio")
 	public String getAudio() {
-		if (this.audio == null) {
-			return "../../media/default.m4a";
-		} else {
-			ParameterBacking parameterBacking = FacesUtil
-					.findBean("parameterBacking");
-			String urlImages = parameterBacking.getUrlImages();
-			return urlImages + this.audio;
-		}
+		return this.audio;
 	}
 
 	public void setAudio(String audio) {
@@ -148,14 +141,7 @@ public class VidQuestion implements java.io.Serializable {
 
 	@Column(name = "video")
 	public String getVideo() {
-		if (this.video == null) {
-			return "../../media/default.m4a";
-		} else {
-			ParameterBacking parameterBacking = FacesUtil
-					.findBean("parameterBacking");
-			String urlImages = parameterBacking.getUrlImages();
-			return urlImages + this.video;
-		}
+		return this.video;
 	}
 
 	public void setVideo(String video) {
@@ -208,9 +194,35 @@ public class VidQuestion implements java.io.Serializable {
 			detType = FacesUtil.getMessage("que_type_assertive");
 		} else if (questionType.equals(Constant.QUESTION_TYPE_UNIQUE)) {
 			detType = FacesUtil.getMessage("que_type_unique");
+		} else if (questionType.equals(Constant.QUESTION_TYPE_TIME)) {
+			detType = FacesUtil.getMessage("que_type_time");
 		}
 
 		return detType;
+	}
+
+	@Transient
+	public String getUrlVideo() {
+		if (this.video == null) {
+			return "../../media/default.m4a";
+		} else {
+			ParameterBacking parameterBacking = FacesUtil
+					.findBean("parameterBacking");
+			String urlImages = parameterBacking.getUrlImages();
+			return urlImages + this.video;
+		}
+	}
+
+	@Transient
+	public String getUrlAudio() {
+		if (this.audio == null) {
+			return "../../media/default.m4a";
+		} else {
+			ParameterBacking parameterBacking = FacesUtil
+					.findBean("parameterBacking");
+			String urlImages = parameterBacking.getUrlImages();
+			return urlImages + this.audio;
+		}
 	}
 
 }
