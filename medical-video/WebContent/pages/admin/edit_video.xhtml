@@ -30,6 +30,16 @@
 					style="width:100%" label="#{msg['que_type_message']}" rows="5"
 					required="true" />
 
+				<h:outputText value="#{msg['vid_delete_video']}"
+					rendered="#{questionBacking.selected.id == null or questionBacking.selected.video == null?false:true}" />
+				<p:selectBooleanCheckbox value="#{questionBacking.deleteVideo}"
+					rendered="#{questionBacking.selected.id == null or questionBacking.selected.video == null?false:true}" />
+
+				<h:outputText value="#{msg['vid_delete_audio']}"
+					rendered="#{questionBacking.selected.id == null or questionBacking.selected.audio == null?false:true}" />
+				<p:selectBooleanCheckbox value="#{questionBacking.deleteAudio}"
+					rendered="#{questionBacking.selected.id == null or questionBacking.selected.audio == null?false:true}" />
+
 			</h:panelGrid>
 
 			<h:panelGrid columns="2" style="align='left'">
@@ -51,8 +61,8 @@
 				<p:fileUpload
 					rendered="#{questionBacking.selected.questionType ne 'MESSAGE'?true:false}"
 					fileUploadListener="#{questionBacking.handleFileUploadVideo}"
-					mode="advanced" update="player" sizeLimit="104857600" auto="true"
-					label="#{msg['msg_selection']}"
+					mode="advanced" update="playerVideo" sizeLimit="104857600"
+					auto="true" label="#{msg['msg_selection']}"
 					invalidFileMessage="#{msg['msg_file_invalid_ext']}"
 					invalidSizeMessage="#{msg['msg_file_ivalid_size']}"
 					allowTypes="/(\.|\/)(asx|asf|avi|wmv|aif|aiff|aac|au|bmp|gsm|mov|mid|midi|mpg|mpeg|mp4|m4a|psd|qt|qtif|qif|qti|snd|tif|tiff|3g2|3pg|flv|swf|ra|ram|rm|rpm|rv|smi|smil)$/" />
@@ -60,10 +70,9 @@
 				<p:spacer height="20" />
 				<p:spacer height="20" />
 
-				<h:outputText />
+				<h:outputText value="#{msg['que_current_file']}" />
 				<h:outputLink style="display: block; width: 300px; height: 150px"
-					id="player"
-					value="#{questionBacking.selected.video}" />
+					id="playerVideo" value="#{questionBacking.selected.urlVideo}" />
 
 				<p:spacer height="20" />
 				<p:spacer height="20" />
@@ -71,12 +80,12 @@
 
 			<script type="text/javascript">
 
-	      		$f("formVideo:player", "../../flowplayer/flowplayer-3.2.9.swf", {
+	      		$f("formVideo:playerVideo", "../../flowplayer/flowplayer-3.2.9.swf", {
 	      			clip: {
 	      		        autoPlay: false,
 	      		        // optional: when playback starts close the first audio playback
 	      		        onBeforeBegin: function() {
-	      		            $f("player").close();
+	      		            $f("formVideo:playerVideo").close();
 	      		        }      	
 	      		    },
 
@@ -97,8 +106,8 @@
 				<p:fileUpload
 					rendered="#{questionBacking.selected.questionType ne 'MESSAGE'?true:false}"
 					fileUploadListener="#{questionBacking.handleFileUploadAudio}"
-					mode="advanced" update="player" sizeLimit="104857600" auto="true"
-					label="#{msg['msg_selection']}"
+					mode="advanced" update="playerAudio" sizeLimit="104857600"
+					auto="true" label="#{msg['msg_selection']}"
 					invalidFileMessage="#{msg['msg_file_invalid_ext']}"
 					invalidSizeMessage="#{msg['msg_file_ivalid_size']}"
 					allowTypes="/(\.|\/)(mp3|wma)$/" />
@@ -106,10 +115,9 @@
 				<p:spacer height="20" />
 				<p:spacer height="20" />
 
-				<h:outputText />
+				<h:outputText value="#{msg['que_current_file']}" />
 				<h:outputLink style="display: block; width: 300px; height: 30px"
-					id="player"
-					value="#{questionBacking.urlImages}#{questionBacking.selected.audio}" />
+					id="playerAudio" value="#{questionBacking.selected.urlAudio}" />
 
 				<p:spacer height="20" />
 				<p:spacer height="20" />
@@ -117,7 +125,7 @@
 
 			<script type="text/javascript">
 
-	      		$f("formAudio:player", "../../flowplayer/flowplayer-3.2.9.swf", {
+	      		$f("formAudio:playerAudio", "../../flowplayer/flowplayer-3.2.9.swf", {
 	      			 
 	      		    // fullscreen button not needed here
 	      		    plugins: {
@@ -132,7 +140,7 @@
 	      		        autoPlay: false,
 	      		        // optional: when playback starts close the first audio playback
 	      		        onBeforeBegin: function() {
-	      		            $f("player").close();
+	      		            $f("formAudio:playerAudio").close();
 	      		        }      	
 	      		    },
 
@@ -144,6 +152,9 @@
 	      		});
 	      		
     		</script>
+
+			<p:separator style="width:100%" />
+			<p:spacer height="20" />
 		</h:form>
 
 		<h:form id="formTypes">
@@ -163,6 +174,7 @@
 							itemValue="UNIQUE" />
 						<f:selectItem itemLabel="#{msg['que_type_message']}"
 							itemValue="MESSAGE" />
+						<f:selectItem itemLabel="#{msg['que_type_time']}" itemValue="TIME" />
 					</p:selectOneMenu>
 				</h:panelGrid>
 
@@ -240,6 +252,27 @@
 						</f:facet>
 
 					</p:dataTable>
+
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlTime"
+					rendered="#{questionBacking.selected.questionType eq 'TIME'?true:false}"
+					width="100%">
+
+					<h:outputFormat value="#{msg['vid_times']}"
+						style="font-size:medium;font-weight:bold;" />
+					<p:separator style="width:100%" />
+					<p:spacer height="5" />
+
+					<h:panelGrid columns="2" width="100%">
+						<h:outputText value="#{msg['vid_time']}" style="width:20%" />
+						<p:spinner min="0.0" value="#{questionBacking.timeText}" />
+					</h:panelGrid>
+
+					<p:commandButton value="#{msg['btn_add']}" process="@parent"
+						action="#{questionBacking.addTimeAnswerAction}"
+						update="pnlUnique :form:growl" />
+					<p:spacer />
 
 				</h:panelGrid>
 

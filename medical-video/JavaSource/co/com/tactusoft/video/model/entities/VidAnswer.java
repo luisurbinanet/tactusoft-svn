@@ -27,6 +27,7 @@ public class VidAnswer implements java.io.Serializable {
 	private String name;
 	private BigDecimal nextQuestion;
 	private String enterKey;
+	private BigDecimal byTime;
 
 	public VidAnswer() {
 	}
@@ -38,12 +39,13 @@ public class VidAnswer implements java.io.Serializable {
 	}
 
 	public VidAnswer(BigDecimal id, VidQuestion vidQuestion, String name,
-			BigDecimal nextQuestion, String enterKey) {
+			BigDecimal nextQuestion, String enterKey, BigDecimal byTime) {
 		this.id = id;
 		this.vidQuestion = vidQuestion;
 		this.name = name;
 		this.nextQuestion = nextQuestion;
 		this.enterKey = enterKey;
+		this.byTime = byTime;
 	}
 
 	@Id
@@ -91,6 +93,15 @@ public class VidAnswer implements java.io.Serializable {
 
 	public void setEnterKey(String enterKey) {
 		this.enterKey = enterKey;
+	}
+
+	@Column(name = "by_time", precision = 6, scale = 3)
+	public BigDecimal getByTime() {
+		return this.byTime;
+	}
+
+	public void setByTime(BigDecimal byTime) {
+		this.byTime = byTime;
 	}
 
 }
