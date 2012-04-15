@@ -189,13 +189,13 @@ public class VidQuestion implements java.io.Serializable {
 		String detType = null;
 
 		if (questionType.equals(Constant.QUESTION_TYPE_MESSAGE)) {
-			detType = FacesUtil.getMessage("que_type_message");
+			detType = FacesUtil.getMessage("vid_type_message");
 		} else if (questionType.equals(Constant.QUESTION_TYPE_ASSERTIVE)) {
-			detType = FacesUtil.getMessage("que_type_assertive");
+			detType = FacesUtil.getMessage("vid_type_assertive");
 		} else if (questionType.equals(Constant.QUESTION_TYPE_UNIQUE)) {
-			detType = FacesUtil.getMessage("que_type_unique");
+			detType = FacesUtil.getMessage("vid_type_unique");
 		} else if (questionType.equals(Constant.QUESTION_TYPE_TIME)) {
-			detType = FacesUtil.getMessage("que_type_time");
+			detType = FacesUtil.getMessage("vid_type_time");
 		}
 
 		return detType;
