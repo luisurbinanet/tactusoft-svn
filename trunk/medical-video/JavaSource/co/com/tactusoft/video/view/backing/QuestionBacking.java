@@ -54,6 +54,10 @@ public class QuestionBacking {
 	private AnswerDataModel modelAnswer;
 
 	private double timeText;
+	private AnswerDataModel modelAnswerTime;
+	private VidAnswer[] selectedsAnswerTime;
+	private List<VidAnswer> listAnswerTime;
+	private List<VidAnswer> selectedDeletesAnswerTime;
 
 	private boolean deleteVideo;
 	private boolean deleteAudio;
@@ -71,6 +75,11 @@ public class QuestionBacking {
 		modelAnswer = new AnswerDataModel(listAnswer);
 		answerText = null;
 		selectedDeletesAnswer = new LinkedList<VidAnswer>();
+
+		listAnswerTime = new LinkedList<VidAnswer>();
+		modelAnswerTime = new AnswerDataModel(listAnswer);
+		selectedDeletesAnswerTime = new LinkedList<VidAnswer>();
+		timeText = 1.0;
 
 		listQuestion.add(new SelectItem(Constant.DEFAULT_VALUE,
 				Constant.DEFAULT_LABEL));
@@ -202,6 +211,30 @@ public class QuestionBacking {
 		this.timeText = timeText;
 	}
 
+	public AnswerDataModel getModelAnswerTime() {
+		return modelAnswerTime;
+	}
+
+	public void setModelAnswerTime(AnswerDataModel modelAnswerTime) {
+		this.modelAnswerTime = modelAnswerTime;
+	}
+
+	public VidAnswer[] getSelectedsAnswerTime() {
+		return selectedsAnswerTime;
+	}
+
+	public void setSelectedsAnswerTime(VidAnswer[] selectedsAnswerTime) {
+		this.selectedsAnswerTime = selectedsAnswerTime;
+	}
+
+	public List<VidAnswer> getListAnswerTime() {
+		return listAnswerTime;
+	}
+
+	public void setListAnswerTime(List<VidAnswer> listAnswerTime) {
+		this.listAnswerTime = listAnswerTime;
+	}
+
 	public boolean isDeleteVideo() {
 		return deleteVideo;
 	}
@@ -228,6 +261,11 @@ public class QuestionBacking {
 				listAnswer = service.getListVidQuestionByQuestion(selected
 						.getId());
 				modelAnswer = new AnswerDataModel(listAnswer);
+			} else if (selected.getQuestionType().equals(
+					Constant.QUESTION_TYPE_TIME)) {
+				listAnswerTime = service.getListVidQuestionByQuestion(selected
+						.getId());
+				modelAnswerTime = new AnswerDataModel(listAnswerTime);
 			}
 		} else {
 			selected.setQuestionType(Constant.QUESTION_TYPE_ASSERTIVE);
@@ -257,6 +295,14 @@ public class QuestionBacking {
 				if (selected.getQuestionType().equals(
 						Constant.QUESTION_TYPE_UNIQUE)) {
 					if (listAnswer.size() == 0) {
+						message = FacesUtil
+								.getMessage("que_msg_validate_nextquestion");
+					}
+				}
+
+				if (selected.getQuestionType().equals(
+						Constant.QUESTION_TYPE_TIME)) {
+					if (listAnswerTime.size() == 0) {
 						message = FacesUtil
 								.getMessage("que_msg_validate_nextquestion");
 					}
@@ -358,7 +404,8 @@ public class QuestionBacking {
 						}
 
 					} catch (NullPointerException ex) {
-						field = FacesUtil.getMessage("que_type_final_file");
+						field = FacesUtil
+								.getMessage("vid_msg_validate_video_audio");
 						message = FacesUtil.getMessage("msg_field_required",
 								field);
 					}
@@ -380,16 +427,9 @@ public class QuestionBacking {
 					message = FacesUtil.getMessage("msg_record_ok_2");
 				}
 
-				if (!selected.getQuestionType().equals(
+				if (selected.getQuestionType().equals(
 						Constant.QUESTION_TYPE_UNIQUE)) {
 
-					for (VidAnswer row : listAnswer) {
-						service.remove(row);
-					}
-
-					listAnswer = new LinkedList<VidAnswer>();
-					modelAnswer = new AnswerDataModel(listAnswer);
-				} else {
 					for (VidAnswer row : listAnswer) {
 						if (row.getId() == null) {
 							row.setId(service.getId("VidAnswer"));
@@ -400,6 +440,52 @@ public class QuestionBacking {
 					for (VidAnswer row : selectedDeletesAnswer) {
 						service.remove(row);
 					}
+
+					// Delete List Time
+					for (VidAnswer row : listAnswerTime) {
+						service.remove(row);
+					}
+
+					listAnswerTime = new LinkedList<VidAnswer>();
+					modelAnswerTime = new AnswerDataModel(listAnswerTime);
+
+				} else if (selected.getQuestionType().equals(
+						Constant.QUESTION_TYPE_TIME)) {
+
+					for (VidAnswer row : listAnswerTime) {
+						if (row.getId() == null) {
+							row.setId(service.getId("VidAnswer"));
+							row.setName("TIME");
+						}
+						service.save(row);
+					}
+
+					for (VidAnswer row : selectedDeletesAnswerTime) {
+						service.remove(row);
+					}
+
+					// Delete List Unique
+					for (VidAnswer row : listAnswer) {
+						service.remove(row);
+					}
+
+					listAnswer = new LinkedList<VidAnswer>();
+					modelAnswer = new AnswerDataModel(listAnswer);
+
+				} else {
+					for (VidAnswer row : listAnswer) {
+						service.remove(row);
+					}
+
+					listAnswer = new LinkedList<VidAnswer>();
+					modelAnswer = new AnswerDataModel(listAnswer);
+
+					for (VidAnswer row : listAnswerTime) {
+						service.remove(row);
+					}
+
+					listAnswerTime = new LinkedList<VidAnswer>();
+					modelAnswerTime = new AnswerDataModel(listAnswerTime);
 				}
 
 				FacesUtil.addInfo(message);
@@ -423,7 +509,7 @@ public class QuestionBacking {
 
 	public void addAnswerAction() {
 		if (answerText.length() == 0) {
-			String field = FacesUtil.getMessage("que_answer");
+			String field = FacesUtil.getMessage("vid_answer");
 			String message = FacesUtil.getMessage("msg_field_required", field);
 			FacesUtil.addWarn(message);
 		} else {
@@ -438,7 +524,19 @@ public class QuestionBacking {
 	}
 
 	public void addTimeAnswerAction() {
-
+		if (timeText <= 0) {
+			String field = FacesUtil.getMessage("vid_time");
+			String message = FacesUtil.getMessage("msg_field_required", field);
+			FacesUtil.addWarn(message);
+		} else {
+			VidAnswer selectedAnswer = new VidAnswer();
+			selectedAnswer.setVidQuestion(selected);
+			selectedAnswer.setByTime(new BigDecimal(timeText));
+			selectedAnswer.setNextQuestion(Constant.DEFAULT_VALUE);
+			listAnswerTime.add(selectedAnswer);
+			modelAnswerTime = new AnswerDataModel(listAnswerTime);
+			timeText = 1.0;
+		}
 	}
 
 	public void removeAnswerAction() {
@@ -450,8 +548,21 @@ public class QuestionBacking {
 		modelAnswer = new AnswerDataModel(listAnswer);
 	}
 
-	public int getSize() {
+	public void removeAnswerTimeAction() {
+		selectedDeletesAnswerTime = new LinkedList<VidAnswer>();
+		for (VidAnswer row : selectedsAnswerTime) {
+			listAnswerTime.remove(row);
+			selectedDeletesAnswerTime.add(row);
+		}
+		modelAnswerTime = new AnswerDataModel(listAnswerTime);
+	}
+
+	public int getListAnswerSize() {
 		return listAnswer.size();
+	}
+
+	public int getListAnswerTimeSize() {
+		return listAnswerTime.size();
 	}
 
 	public void handleFileUploadVideo(FileUploadEvent event) {
