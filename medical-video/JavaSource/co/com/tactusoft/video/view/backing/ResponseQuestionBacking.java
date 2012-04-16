@@ -27,7 +27,10 @@ public class ResponseQuestionBacking {
 	private BigDecimal idAnswer;
 	private BigDecimal[] idAnswers;
 
-	private String urlImages;
+	private String cuePoints;
+	private String[] videos;
+	private String urlVideo;
+	private int index;
 
 	public ResponseQuestionBacking() {
 
@@ -41,6 +44,10 @@ public class ResponseQuestionBacking {
 		this.selectedQuestion = selectedQuestion;
 		this.list = list;
 		this.listAnswer = listAnswer;
+		this.urlVideo = selectedQuestion.getUrlVideo();
+
+		index = 0;
+		this.generateCuetimes();
 	}
 
 	public List<VidQuestion> getList() {
@@ -83,15 +90,20 @@ public class ResponseQuestionBacking {
 		this.idAnswers = idAnswers;
 	}
 
-	public String getUrlImages() {
-		ParameterBacking parameterBacking = FacesUtil
-				.findBean("parameterBacking");
-		urlImages = parameterBacking.getUrlImages();
-		return urlImages;
+	public void setCuePoints(String cuePoints) {
+		this.cuePoints = cuePoints;
 	}
 
-	public void setUrlImages(String urlImages) {
-		this.urlImages = urlImages;
+	public String getCuePoints() {
+		return this.cuePoints;
+	}
+
+	public String getUrlVideo() {
+		return urlVideo;
+	}
+
+	public void setUrlVideo(String urlVideo) {
+		this.urlVideo = urlVideo;
 	}
 
 	private VidQuestion nextQuestion(BigDecimal id) {
@@ -101,6 +113,22 @@ public class ResponseQuestionBacking {
 			}
 		}
 		return null;
+	}
+
+	public void generateCuetimes() {
+		if (selectedQuestion.getQuestionType().equals(
+				Constant.QUESTION_TYPE_TIME)) {
+
+			this.cuePoints = "";
+			videos = new String[listAnswer.size()];
+			int i = 0;
+			for (VidAnswer row : listAnswer) {
+				cuePoints = row.getByTime().doubleValue() * 1000 + ",";
+				videos[i] = nextQuestion(row.getNextQuestion()).getUrlVideo();
+				i++;
+			}
+			cuePoints = cuePoints.substring(0, cuePoints.length() - 1);
+		}
 	}
 
 	public String actionSubmit() {
@@ -150,6 +178,8 @@ public class ResponseQuestionBacking {
 						.getListVidQuestionByQuestion(selectedQuestion.getId());
 				if (listAnswer.size() > 0) {
 					this.idAnswer = listAnswer.get(0).getId();
+
+					this.generateCuetimes();
 				}
 			}
 		}
@@ -157,6 +187,11 @@ public class ResponseQuestionBacking {
 
 	public String returnAction() {
 		return "/pages/view/video?faces-redirect=true";
+	}
+
+	public int getOnCuepoint() {
+		this.urlVideo = videos[index];
+		return index++;
 	}
 
 }

@@ -45,127 +45,15 @@
 			<h:panelGrid columns="2" style="align='left'">
 				<p:commandButton id="cmdSave" action="#{questionBacking.saveAction}"
 					icon="ui-icon-disk" value="#{msg['btn_ok']}"
-					update=":form:display :form:growl :formVideo :formAudio"
-					process="@this, :formTypes" />
+					update=":form:display :form:growl :formVideo :formAudio" />
 				<p:commandButton id="cmdReturn" value="#{msg['btn_return']}"
 					action="#{questionBacking.goTopicAction}"
 					icon="ui-icon-arrowreturnthick-1-w" immediate="true" />
 			</h:panelGrid>
 
-			<p:spacer height="10" />
-		</h:form>
+			<p:separator style="width:100%" />
+			<p:spacer height="20" />
 
-		<p:separator style="width:100%" />
-		<p:spacer height="20" />
-
-		<h:panelGrid width="100%" columns="2">
-			<h:form id="formVideo" enctype="multipart/form-data">
-				<h:panelGrid columns="2" width="100%">
-					<h:outputText value="#{msg['vid_video']}"
-						rendered="#{questionBacking.selected.questionType ne 'MESSAGE'?true:false}" />
-					<p:fileUpload
-						rendered="#{questionBacking.selected.questionType ne 'MESSAGE'?true:false}"
-						fileUploadListener="#{questionBacking.handleFileUploadVideo}"
-						mode="advanced" update="playerVideo" sizeLimit="104857600"
-						auto="true" label="#{msg['msg_selection']}"
-						invalidFileMessage="#{msg['msg_file_invalid_ext']}"
-						invalidSizeMessage="#{msg['msg_file_ivalid_size']}"
-						allowTypes="/(\.|\/)(asx|asf|avi|wmv|aif|aiff|aac|au|bmp|gsm|mov|mid|midi|mpg|mpeg|mp4|m4a|psd|qt|qtif|qif|qti|snd|tif|tiff|3g2|3pg|flv|swf|ra|ram|rm|rpm|rv|smi|smil)$/"
-						style="width:300px" />
-
-					<p:spacer height="20" />
-					<p:spacer height="20" />
-
-					<h:outputText value="#{msg['vid_current_video']}" />
-					<h:outputLink style="display: block; width: 300px; height: 150px"
-						id="playerVideo" value="#{questionBacking.selected.urlVideo}" />
-
-					<p:spacer height="20" />
-					<p:spacer height="20" />
-				</h:panelGrid>
-
-				<script type="text/javascript">
-
-	      		$f("formVideo:playerVideo", "../../flowplayer/flowplayer-3.2.9.swf", {
-	      			clip: {
-	      		        autoPlay: false,
-	      		        // optional: when playback starts close the first audio playback
-	      		        onBeforeBegin: function() {
-	      		            $f("formVideo:playerVideo").close();
-	      		        }      	
-	      		    },
-
-	      		  	onError : 
-	      		  		function(errorCode, errorMessage) {
-	      		  			
-	      		  		}
-	      		});
-	      		
-	    	</script>
-
-			</h:form>
-
-			<h:form id="formAudio" enctype="multipart/form-data">
-				<h:panelGrid columns="2" width="100%">
-					<h:outputText value="#{msg['vid_audio']}"
-						rendered="#{questionBacking.selected.questionType ne 'MESSAGE'?true:false}" />
-					<p:fileUpload
-						rendered="#{questionBacking.selected.questionType ne 'MESSAGE'?true:false}"
-						fileUploadListener="#{questionBacking.handleFileUploadAudio}"
-						mode="advanced" update="playerAudio" sizeLimit="104857600"
-						auto="true" label="#{msg['msg_selection']}"
-						invalidFileMessage="#{msg['msg_file_invalid_ext']}"
-						invalidSizeMessage="#{msg['msg_file_ivalid_size']}"
-						allowTypes="/(\.|\/)(mp3|wma)$/" style="width:300px" />
-
-					<p:spacer height="20" />
-					<p:spacer height="20" />
-
-					<h:outputText value="#{msg['vid_current_audio']}" />
-					<h:outputLink style="display: block; width: 300px; height: 150px"
-						id="playerAudio" value="#{questionBacking.selected.urlAudio}" />
-
-					<p:spacer height="20" />
-					<p:spacer height="20" />
-				</h:panelGrid>
-
-				<script type="text/javascript">
-
-	      		$f("formAudio:playerAudio", "../../flowplayer/flowplayer-3.2.9.swf", {
-	      			 
-	      		    // fullscreen button not needed here
-	      		    plugins: {
-	      		        controls: {
-	      		            fullscreen: false,
-	      		            height: 30,
-	      		            autoHide: false
-	      		        }
-	      		    },
-	      		 
-	      		    clip: {
-	      		        autoPlay: false,
-	      		        // optional: when playback starts close the first audio playback
-	      		        onBeforeBegin: function() {
-	      		            $f("formAudio:playerAudio").close();
-	      		        }      	
-	      		    },
-
-	      		  	onError : 
-	      		  		function(errorCode, errorMessage) {
-	      		  			
-	      		  		}
-	      		 
-	      		});
-	      		
-    		</script>
-
-			</h:form>
-		</h:panelGrid>
-
-		<p:separator style="width:100%" />
-		<p:spacer height="20" />
-
-		<h:form id="formTypes">
 			<p:outputPanel id="pnlTypes" style="width:100%" autoUpdate="true">
 
 				<h:panelGrid columns="2" width="100%">
@@ -174,7 +62,7 @@
 						value="#{questionBacking.selected.questionType}"
 						style="width:600px">
 
-						<p:ajax event="change" update=":formTypes:pnlTypes" />
+						<p:ajax event="change" update="pnlTypes" />
 
 						<f:selectItem itemLabel="#{msg['vid_type_assertive']}"
 							itemValue="ASSERTIVE" />
@@ -321,17 +209,117 @@
 
 				</h:panelGrid>
 
-				<p:separator style="width:100%" />
-
 			</p:outputPanel>
 
-			<p:spacer height="20" />
-
 		</h:form>
 
-		<h:form>
+		<p:spacer height="10" />
+		<p:separator style="width:100%" />
+		<p:spacer height="20" />
 
-		</h:form>
+		<h:panelGrid width="100%" columns="2">
+			<h:form id="formVideo" enctype="multipart/form-data">
+				<h:panelGrid columns="2" width="100%">
+					<h:outputText value="#{msg['vid_video']}"
+						rendered="#{questionBacking.selected.questionType ne 'MESSAGE'?true:false}" />
+					<p:fileUpload
+						rendered="#{questionBacking.selected.questionType ne 'MESSAGE'?true:false}"
+						fileUploadListener="#{questionBacking.handleFileUploadVideo}"
+						mode="advanced" update="playerVideo" sizeLimit="104857600"
+						auto="true" label="#{msg['msg_selection']}"
+						invalidFileMessage="#{msg['msg_file_invalid_ext']}"
+						invalidSizeMessage="#{msg['msg_file_ivalid_size']}"
+						allowTypes="/(\.|\/)(avi|wmv|aac|mov|mid|midi|mpg|mpeg|mp4|m4a|3pg|flv|swf|ra|ram|rm|rpm)$/"
+						style="width:300px" />
+
+					<p:spacer height="20" />
+					<p:spacer height="20" />
+
+					<h:outputText value="#{msg['vid_current_video']}" />
+					<h:outputLink style="display: block; width: 300px; height: 150px"
+						id="playerVideo" value="#{questionBacking.selected.urlVideo}" />
+
+					<p:spacer height="20" />
+					<p:spacer height="20" />
+				</h:panelGrid>
+
+				<script type="text/javascript">
+
+	      		$f("formVideo:playerVideo", "../../flowplayer/flowplayer-3.2.9.swf", {
+	      			clip: {
+	      		        autoPlay: false,
+	      		        // optional: when playback starts close the first audio playback
+	      		        onBeforeBegin: function() {
+	      		            $f("formVideo:playerVideo").close();
+	      		        }      	
+	      		    },
+
+	      		  	onError : 
+	      		  		function(errorCode, errorMessage) {
+	      		  			
+	      		  		}
+	      		});
+	      		
+	    	</script>
+
+			</h:form>
+
+			<h:form id="formAudio" enctype="multipart/form-data">
+				<h:panelGrid columns="2" width="100%">
+					<h:outputText value="#{msg['vid_audio']}"
+						rendered="#{questionBacking.selected.questionType ne 'MESSAGE'?true:false}" />
+					<p:fileUpload
+						rendered="#{questionBacking.selected.questionType ne 'MESSAGE'?true:false}"
+						fileUploadListener="#{questionBacking.handleFileUploadAudio}"
+						mode="advanced" update="playerAudio" sizeLimit="104857600"
+						auto="true" label="#{msg['msg_selection']}"
+						invalidFileMessage="#{msg['msg_file_invalid_ext']}"
+						invalidSizeMessage="#{msg['msg_file_ivalid_size']}"
+						allowTypes="/(\.|\/)(mp3|wma)$/" style="width:300px" />
+
+					<p:spacer height="20" />
+					<p:spacer height="20" />
+
+					<h:outputText value="#{msg['vid_current_audio']}" />
+					<h:outputLink style="display: block; width: 300px; height: 150px"
+						id="playerAudio" value="#{questionBacking.selected.urlAudio}" />
+
+					<p:spacer height="20" />
+					<p:spacer height="20" />
+				</h:panelGrid>
+
+				<script type="text/javascript">
+
+	      		$f("formAudio:playerAudio", "../../flowplayer/flowplayer-3.2.9.swf", {
+	      			 
+	      		    // fullscreen button not needed here
+	      		    plugins: {
+	      		        controls: {
+	      		            fullscreen: false,
+	      		            height: 30,
+	      		            autoHide: false
+	      		        }
+	      		    },
+	      		 
+	      		    clip: {
+	      		        autoPlay: false,
+	      		        // optional: when playback starts close the first audio playback
+	      		        onBeforeBegin: function() {
+	      		            $f("formAudio:playerAudio").close();
+	      		        }      	
+	      		    },
+
+	      		  	onError : 
+	      		  		function(errorCode, errorMessage) {
+	      		  			
+	      		  		}
+	      		 
+	      		});
+	      		
+    		</script>
+
+			</h:form>
+		</h:panelGrid>
 
 	</ui:define>
 </ui:composition>
