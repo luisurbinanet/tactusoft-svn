@@ -62,7 +62,7 @@
 						value="#{questionBacking.selected.questionType}"
 						style="width:600px">
 
-						<p:ajax event="change" update="pnlTypes" />
+						<p:ajax event="change" update="pnlTypes :formVideo :formAudio" />
 
 						<f:selectItem itemLabel="#{msg['vid_type_assertive']}"
 							itemValue="ASSERTIVE" />
@@ -232,15 +232,20 @@
 						allowTypes="/(\.|\/)(avi|wmv|aac|mov|mid|midi|mpg|mpeg|mp4|m4a|3pg|flv|swf|ra|ram|rm|rpm)$/"
 						style="width:300px" />
 
-					<p:spacer height="20" />
-					<p:spacer height="20" />
+					<p:spacer height="20"
+						rendered="#{questionBacking.selected.questionType ne 'MESSAGE'?true:false}" />
+					<p:spacer height="20"
+						rendered="#{questionBacking.selected.questionType ne 'MESSAGE'?true:false}" />
 
-					<h:outputText value="#{msg['vid_current_video']}" />
+					<h:outputText value="#{msg['vid_current_video']}"
+						rendered="#{questionBacking.selected.questionType ne 'MESSAGE'?true:false}" />
 					<h:outputLink style="display: block; width: 300px; height: 150px"
 						id="playerVideo" value="#{questionBacking.selected.urlVideo}" />
 
-					<p:spacer height="20" />
-					<p:spacer height="20" />
+					<p:spacer height="20"
+						rendered="#{questionBacking.selected.questionType ne 'MESSAGE'?true:false}" />
+					<p:spacer height="20"
+						rendered="#{questionBacking.selected.questionType ne 'MESSAGE'?true:false}" />
 				</h:panelGrid>
 
 				<script type="text/javascript">
@@ -250,9 +255,22 @@
 	      		        autoPlay: false,
 	      		        // optional: when playback starts close the first audio playback
 	      		        onBeforeBegin: function() {
-	      		            $f("formVideo:playerVideo").close();
+	      		        	var obj = arguments[0];
+	      		        	var url = obj.url;
+	      		        	if (url.indexOf('#{questionBacking.selected.urlVideo}') >= 0){
+	      		        			pVideo.style.display = 'none';
+		      		        } 
 	      		        }      	
 	      		    },
+
+	      		  onLoad : 
+	      		  		function(errorCode, errorMessage) {
+	      					var pVideo = document.getElementById("formVideo:playerVideo");
+	      					var url = pVideo.href;
+		      		        if (url.indexOf('default.m4a') >= 0) {
+		      		        	pVideo.style.display = 'none';
+  		      		        }
+	      		  		},
 
 	      		  	onError : 
 	      		  		function(errorCode, errorMessage) {
@@ -277,18 +295,25 @@
 						invalidSizeMessage="#{msg['msg_file_ivalid_size']}"
 						allowTypes="/(\.|\/)(mp3|wma)$/" style="width:300px" />
 
-					<p:spacer height="20" />
-					<p:spacer height="20" />
+					<p:spacer height="20"
+						rendered="#{questionBacking.selected.questionType ne 'MESSAGE'?true:false}" />
+					<p:spacer height="20"
+						rendered="#{questionBacking.selected.questionType ne 'MESSAGE'?true:false}" />
 
-					<h:outputText value="#{msg['vid_current_audio']}" />
+					<h:outputText value="#{msg['vid_current_audio']}"
+						rendered="#{questionBacking.selected.questionType ne 'MESSAGE'?true:false}" />
 					<h:outputLink style="display: block; width: 300px; height: 150px"
 						id="playerAudio" value="#{questionBacking.selected.urlAudio}" />
 
-					<p:spacer height="20" />
-					<p:spacer height="20" />
+					<p:spacer height="20"
+						rendered="#{questionBacking.selected.questionType ne 'MESSAGE'?true:false}" />
+					<p:spacer height="20"
+						rendered="#{questionBacking.selected.questionType ne 'MESSAGE'?true:false}" />
 				</h:panelGrid>
 
 				<script type="text/javascript">
+
+				var pVideo = document.getElementById("formVideo:playerAudio");
 
 	      		$f("formAudio:playerAudio", "../../flowplayer/flowplayer-3.2.9.swf", {
 	      			 
@@ -308,6 +333,15 @@
 	      		            $f("formAudio:playerAudio").close();
 	      		        }      	
 	      		    },
+
+	      		  onLoad : 
+	      		  		function(errorCode, errorMessage) {
+	      					var pAudio = document.getElementById("formAudio:playerAudio");
+  							var url = pAudio.href;
+      		        		if (url.indexOf('default.m4a') >= 0) {
+      		        			pAudio.style.display = 'none';
+	      		        	}
+	      		  		},
 
 	      		  	onError : 
 	      		  		function(errorCode, errorMessage) {
