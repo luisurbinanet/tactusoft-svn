@@ -2,7 +2,8 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
 
 <ui:composition template="../layout/main.xhtml">
 	<ui:define name="content">
@@ -37,6 +38,10 @@
 					rendered="#{responseQuestionBacking.selectedQuestion.questionType ne 'MESSAGE'?true:false}"
 					styleClass="actions-center" width="100%">
 
+					<h:commandButton id="btnOncuepoint"
+						action="#{responseQuestionBacking.onCuepoint}"
+						style="display: none" />
+
 					<h:outputLink id="playerVideo"
 						style="display: block; width: 940px; height: 500px; text-align:center;" />
 
@@ -48,6 +53,8 @@
 
 						var pVideo = document.getElementById("form:playerVideo");
 						var pAudio = document.getElementById("form:playerAudio");
+
+						var pBtnOncuepoint = document.getElementById("form:btnOncuepoint");
 
   						$f("form:playerVideo", "../../flowplayer/flowplayer-3.2.9.swf", {
       		      			 
@@ -66,15 +73,13 @@
       		      		        	} else {
       		      		        		autoPlay: true;
           		      		    	}      		      		          
-      		      		        }     	
-      		      		    },
+      		      		        },
 
-      		      			onLoad: function() {
-	      		      			this.onCuepoint([#{responseQuestionBacking.cuePoints}], function(clip, cuepoint) {
-	      		      					#{responseQuestionBacking.onCuepoint}
-	      		      	        		console.log('#{responseQuestionBacking.urlVideo}');
-	      		      	    		});
-      		          		} 
+      		      		    	onCuepoint: [[#{responseQuestionBacking.cuePoints}], function(clip, point) {
+      		      		    		console.log('#{responseQuestionBacking.urlVideo}');
+      		      		    		pBtnOncuepoint.click();
+      		              		}]
+      		      		    }
       		      		 
       		      		});
 
@@ -112,14 +117,28 @@
 					width="100%">
 					<p:commandButton value="#{msg['que_ans_yes']}"
 						actionListener="#{responseQuestionBacking.actionSubmit}"
-						update="pnlQuestion" style="width:120px">
+						update="pnlQuestion" style="width:120px" accesskey="n">
 						<f:param name="answer" value="#{msg['que_ans_yes']}" />
 					</p:commandButton>
 					<p:commandButton value="#{msg['que_ans_no']}"
 						actionListener="#{responseQuestionBacking.actionSubmit}"
-						update="pnlQuestion" style="width:120px">
+						update="pnlQuestion" style="width:120px" accesskey="s">
 						<f:param name="answer" value="#{msg['que_ans_no']}" />
 					</p:commandButton>
+
+					<p:hotkey bind="s" update="pnlQuestion"
+						onsuccess="keyPressRemoteAssertive('s');" />
+
+					<p:hotkey bind="n" update="pnlQuestion"
+						onsuccess="keyPressRemoteAssertive('n');" />
+
+					<pe:remoteCommand name="keyPressRemoteAssertive"
+						update=":form:pnlQuestion"
+						action="#{responseQuestionBacking.actionSubmitKeyAssertive}">
+						<pe:remoteCommandParameter name="KEY"
+							applyTo="#{responseQuestionBacking.enterKey}" />
+					</pe:remoteCommand>
+
 				</h:panelGrid>
 
 				<h:panelGrid id="pnlUnique" columns="2" rowClasses="actions-center"
@@ -133,6 +152,17 @@
 							var="item" itemLabel="#{item.name} (Tecla #{item.enterKey})"
 							itemValue="#{item.id}" />
 					</p:selectOneRadio>
+
+					<ui:repeat var="row" value="#{responseQuestionBacking.listAnswer}">
+						<p:hotkey bind="#{row.enterKey}"
+							onsuccess="keyPressRemote('#{row.enterKey}');" />
+					</ui:repeat>
+
+					<pe:remoteCommand name="keyPressRemote" update=":form:pnlQuestion"
+						action="#{responseQuestionBacking.actionSubmitKeyUnique}">
+						<pe:remoteCommandParameter name="KEY"
+							applyTo="#{responseQuestionBacking.enterKey}" />
+					</pe:remoteCommand>
 
 				</h:panelGrid>
 
@@ -159,12 +189,6 @@
 				</h:panelGrid>
 
 			</p:panelGrid>
-
-			<p:hotkey bind="s" update="pnlQuestion"
-				actionListener="#{responseQuestionBacking.actionSubmitKeyS}" />
-
-			<p:hotkey bind="n" update="pnlQuestion"
-				actionListener="#{responseQuestionBacking.actionSubmitKeyN}" />
 
 		</h:form>
 

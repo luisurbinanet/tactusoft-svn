@@ -268,7 +268,7 @@ public class QuestionBacking {
 				modelAnswerTime = new AnswerDataModel(listAnswerTime);
 			}
 		} else {
-			selected.setQuestionType(Constant.QUESTION_TYPE_ASSERTIVE);
+			selected.setQuestionType(Constant.QUESTION_TYPE_MESSAGE);
 			selected.setPositive(Constant.DEFAULT_VALUE);
 			selected.setNegative(Constant.DEFAULT_VALUE);
 		}
@@ -412,7 +412,8 @@ public class QuestionBacking {
 				}
 			}
 
-			if ((this.selected.getVideo() == null)
+			if (selected.getQuestionType().equals(Constant.QUESTION_TYPE_TIME)
+					&& (this.selected.getVideo() == null)
 					&& (this.selected.getAudio() == null)) {
 				message = FacesUtil.getMessage("vid_msg_validate_video_audio");
 			}

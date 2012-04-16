@@ -32,6 +32,8 @@ public class ResponseQuestionBacking {
 	private String urlVideo;
 	private int index;
 
+	private String enterKey;
+
 	public ResponseQuestionBacking() {
 
 	}
@@ -106,6 +108,14 @@ public class ResponseQuestionBacking {
 		this.urlVideo = urlVideo;
 	}
 
+	public String getEnterKey() {
+		return enterKey;
+	}
+
+	public void setEnterKey(String enterKey) {
+		this.enterKey = enterKey;
+	}
+
 	private VidQuestion nextQuestion(BigDecimal id) {
 		for (VidQuestion row : list) {
 			if (row.getId().intValue() == id.intValue()) {
@@ -150,15 +160,28 @@ public class ResponseQuestionBacking {
 		return "";
 	}
 
-	public String actionSubmitKeyS() {
-		selectedQuestion = nextQuestion(selectedQuestion.getPositive());
+	public String actionSubmitKeyAssertive() {
+
+		if (this.enterKey.toUpperCase().equals("S")) {
+			selectedQuestion = nextQuestion(selectedQuestion.getPositive());
+		} else {
+			selectedQuestion = nextQuestion(selectedQuestion.getNegative());
+		}
 		processAnswers();
 
 		return "";
 	}
 
-	public String actionSubmitKeyN() {
-		selectedQuestion = nextQuestion(selectedQuestion.getNegative());
+	public String actionSubmitKeyUnique() {
+
+		for (VidAnswer row : listAnswer) {
+			if (row.getEnterKey().toUpperCase()
+					.equals(this.enterKey.toUpperCase())) {
+				selectedQuestion = nextQuestion(row.getNextQuestion());
+				break;
+			}
+		}
+
 		processAnswers();
 
 		return "";
@@ -189,9 +212,9 @@ public class ResponseQuestionBacking {
 		return "/pages/view/video?faces-redirect=true";
 	}
 
-	public int getOnCuepoint() {
+	public void onCuepoint() {
 		this.urlVideo = videos[index];
-		return index++;
+		index++;
 	}
 
 }
