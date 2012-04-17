@@ -28,9 +28,7 @@ public class ResponseQuestionBacking {
 	private BigDecimal[] idAnswers;
 
 	private String cuePoints;
-	private String[] videos;
 	private String urlVideo;
-	private int index;
 
 	private String enterKey;
 
@@ -48,7 +46,6 @@ public class ResponseQuestionBacking {
 		this.listAnswer = listAnswer;
 		this.urlVideo = selectedQuestion.getUrlVideo();
 
-		index = 0;
 		this.generateCuetimes();
 	}
 
@@ -128,16 +125,10 @@ public class ResponseQuestionBacking {
 	public void generateCuetimes() {
 		if (selectedQuestion.getQuestionType().equals(
 				Constant.QUESTION_TYPE_TIME)) {
-
-			this.cuePoints = "";
-			videos = new String[listAnswer.size()];
-			int i = 0;
-			for (VidAnswer row : listAnswer) {
-				cuePoints = row.getByTime().doubleValue() * 1000 + ",";
-				videos[i] = nextQuestion(row.getNextQuestion()).getUrlVideo();
-				i++;
-			}
-			cuePoints = cuePoints.substring(0, cuePoints.length() - 1);
+			cuePoints = String.valueOf(selectedQuestion.getByTime()
+					.doubleValue() * 1000);
+		} else {
+			cuePoints = "9999999999";
 		}
 	}
 
@@ -195,14 +186,13 @@ public class ResponseQuestionBacking {
 			selectedQuestion.setName(message);
 			selectedQuestion.setQuestionType(Constant.QUESTION_TYPE_MESSAGE);
 		} else {
+			this.generateCuetimes();
 			if (selectedQuestion.getQuestionType().equals(
 					Constant.QUESTION_TYPE_UNIQUE)) {
 				listAnswer = service
 						.getListVidQuestionByQuestion(selectedQuestion.getId());
 				if (listAnswer.size() > 0) {
 					this.idAnswer = listAnswer.get(0).getId();
-
-					this.generateCuetimes();
 				}
 			}
 		}
@@ -213,8 +203,7 @@ public class ResponseQuestionBacking {
 	}
 
 	public void onCuepoint() {
-		this.urlVideo = videos[index];
-		index++;
+		selectedQuestion = nextQuestion(selectedQuestion.getNextQuestion());
 	}
 
 }

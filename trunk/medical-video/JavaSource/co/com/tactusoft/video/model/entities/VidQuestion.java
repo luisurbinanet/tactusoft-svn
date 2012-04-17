@@ -41,6 +41,8 @@ public class VidQuestion implements java.io.Serializable {
 	private String video;
 	private BigDecimal positive;
 	private BigDecimal negative;
+	private BigDecimal byTime;
+	private BigDecimal nextQuestion;
 	private int orderQuestion;
 	private Set<VidAnswer> vidAnswers = new HashSet<VidAnswer>(0);
 
@@ -59,7 +61,8 @@ public class VidQuestion implements java.io.Serializable {
 	public VidQuestion(BigDecimal id, VidTopic vidTopic, String name,
 			String questionType, String audioType, String audio,
 			String videoType, String video, BigDecimal positive,
-			BigDecimal negative, int orderQuestion, Set<VidAnswer> vidAnswers) {
+			BigDecimal negative, BigDecimal byTime, BigDecimal nextQuestion,
+			int orderQuestion, Set<VidAnswer> vidAnswers) {
 		this.id = id;
 		this.vidTopic = vidTopic;
 		this.name = name;
@@ -70,6 +73,8 @@ public class VidQuestion implements java.io.Serializable {
 		this.video = video;
 		this.positive = positive;
 		this.negative = negative;
+		this.byTime = byTime;
+		this.nextQuestion = nextQuestion;
 		this.orderQuestion = orderQuestion;
 		this.vidAnswers = vidAnswers;
 	}
@@ -164,6 +169,24 @@ public class VidQuestion implements java.io.Serializable {
 
 	public void setNegative(BigDecimal negative) {
 		this.negative = negative;
+	}
+
+	@Column(name = "by_time", precision = 6, scale = 3)
+	public BigDecimal getByTime() {
+		return this.byTime;
+	}
+
+	public void setByTime(BigDecimal byTime) {
+		this.byTime = byTime;
+	}
+
+	@Column(name = "next_question", scale = 0)
+	public BigDecimal getNextQuestion() {
+		return this.nextQuestion;
+	}
+
+	public void setNextQuestion(BigDecimal nextQuestion) {
+		this.nextQuestion = nextQuestion;
 	}
 
 	@Column(name = "order_question", nullable = false)

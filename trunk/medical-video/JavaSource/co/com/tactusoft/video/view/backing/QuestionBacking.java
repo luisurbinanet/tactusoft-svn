@@ -300,13 +300,13 @@ public class QuestionBacking {
 					}
 				}
 
-				if (selected.getQuestionType().equals(
+				/*if (selected.getQuestionType().equals(
 						Constant.QUESTION_TYPE_TIME)) {
 					if (listAnswerTime.size() == 0) {
 						message = FacesUtil
 								.getMessage("que_msg_validate_nextquestion");
 					}
-				}
+				}*/
 
 				if (deleteAudio && deleteVideo) {
 					message = FacesUtil
