@@ -153,59 +153,19 @@
 
 				<h:panelGrid id="pnlTime"
 					rendered="#{questionBacking.selected.questionType eq 'TIME'?true:false}"
-					width="100%">
+					width="100%" columns="2">
 
-					<h:outputFormat value="#{msg['vid_times']}"
-						style="font-size:medium;font-weight:bold;" />
-					<p:separator style="width:100%" />
-					<p:spacer height="5" />
+					<h:outputText value="#{msg['vid_time']}" style="width:20%" />
+					<h:inputText id="txt3" value="#{questionBacking.selected.byTime}"
+						label="#{msg['vid_time']}" required="true">
+						<f:validateDoubleRange minimum="1.0" maximum="999.99" />
+					</h:inputText>
 
-					<h:panelGrid columns="2" width="100%">
-						<h:outputText value="#{msg['vid_time']}" style="width:20%" />
-						<h:inputText id="txt3" value="#{questionBacking.timeText}"
-							label="#{msg['vid_time']}">
-							<f:validateDoubleRange minimum="1.0" maximum="999.99" />
-						</h:inputText>
-					</h:panelGrid>
-
-					<p:commandButton value="#{msg['btn_add']}" process="@parent"
-						action="#{questionBacking.addTimeAnswerAction}"
-						update="pnlTime :form:growl" />
-					<p:spacer />
-
-					<p:dataTable id="recordTable2" var="rec"
-						value="#{questionBacking.modelAnswerTime}" rowKey="#{rec.id}"
-						style="width:100%" rows="10"
-						selection="#{questionBacking.selectedsAnswerTime}"
-						paginator="true" rowIndexVar="varIndex">
-
-						<p:column selectionMode="multiple" style="width:18px" />
-
-						<p:column headerText="#{msg['vid_time']}" style="width:35%">
-							<p:inplace>
-								<h:inputText value="#{rec.byTime}">
-									<f:convertNumber pattern="###.##" />
-									<f:validateDoubleRange minimum="1.0" maximum="999.99" />
-								</h:inputText>
-							</p:inplace>
-						</p:column>
-
-						<p:column headerText="#{msg['vid_name']}" style="width:40%">
-							<p:selectOneMenu value="#{rec.nextQuestion}" style="width:600px">
-								<f:selectItems value="#{questionBacking.listQuestion}" />
-							</p:selectOneMenu>
-						</p:column>
-
-						<f:facet name="footer">
-							<p:commandButton icon="ui-icon-closethick"
-								value="#{msg['btn_delete']}"
-								disabled="#{questionBacking.listAnswerTimeSize == 0?true:false}"
-								update="recordTable2"
-								action="#{questionBacking.removeAnswerTimeAction}">
-							</p:commandButton>
-						</f:facet>
-
-					</p:dataTable>
+					<h:outputText value="#{msg['vid_name']}" style="width:20%" />
+					<p:selectOneMenu value="#{questionBacking.selected.nextQuestion}"
+						style="width:600px">
+						<f:selectItems value="#{questionBacking.listQuestion}" />
+					</p:selectOneMenu>
 
 				</h:panelGrid>
 
