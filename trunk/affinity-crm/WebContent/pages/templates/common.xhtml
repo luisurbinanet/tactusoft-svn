@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<f:view contentType="text/html">
+	<h:head>
+		<title><ui:insert name="pageTitle">Page Title</ui:insert></title>
+		<link rel="stylesheet" href="../../css/style.css" type="text/css"
+			media="screen" />
+	</h:head>
+
+	<h:body>
+		<div id="content">
+			<div id="mainContent">
+				<ui:insert name="body">Page Body</ui:insert>
+			</div>
+		</div>
+	</h:body>
+	
+</f:view>
+</html>
