@@ -70,14 +70,15 @@ public class CustomHibernateDaoImpl extends HibernateDaoSupport implements
 		return query.executeUpdate();
 	}
 
-	public BigDecimal getId(String clasz) {
+	public <T> BigDecimal getId(Class<T> clasz) {
 		BigDecimal id = null;
 		try {
 			Session session = getHibernateTemplate().getSessionFactory()
 					.getCurrentSession();
 			Transaction transaction = session.beginTransaction();
 			id = (BigDecimal) session.createQuery(
-					"select MAX(o.id) from " + clasz + " o").uniqueResult();
+					"select MAX(o.id) from " + clasz.getName() + " o")
+					.uniqueResult();
 			if (id != null) {
 				id = new BigDecimal(id.intValue() + 1);
 			} else {
