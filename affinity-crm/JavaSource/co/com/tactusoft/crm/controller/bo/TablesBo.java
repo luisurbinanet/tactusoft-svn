@@ -9,6 +9,7 @@ import javax.inject.Named;
 
 import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
+import co.com.tactusoft.crm.model.entities.CrmSpecialty;
 
 @Named
 public class TablesBo implements Serializable {
@@ -25,7 +26,12 @@ public class TablesBo implements Serializable {
 		return dao.find(CrmDoctor.class);
 	}
 
-	public <T> void save(Class<T> entity) {
+	public List<CrmSpecialty> getListSpecialityActive() {
+		return dao.find("from CrmSpecialty o where o.state = 1");
+	}
+
+	public void saveDoctor(CrmDoctor entity) {
+		entity.setId(getId(CrmDoctor.class));
 		dao.persist(entity);
 	}
 
