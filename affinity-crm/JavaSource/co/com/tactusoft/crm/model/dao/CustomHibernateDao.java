@@ -18,6 +18,6 @@ public interface CustomHibernateDao {
 
 	public <T> List<T> find(String hql);
 	
-	public BigDecimal getId(String clasz);
+	public <T> BigDecimal getId(Class<T> clasz);
 
 }
