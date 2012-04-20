@@ -1,7 +1,5 @@
 package co.com.tactusoft.crm.model.entities;
 
-// Generated 19/04/2012 10:54:42 PM by Hibernate Tools 3.4.0.CR1
-
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,13 +18,11 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "crm_specialty", catalog = "crm_db", uniqueConstraints = @UniqueConstraint(columnNames = "code"))
 public class CrmSpecialty implements java.io.Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
 	private String code;
 	private String description;
+	private Integer state;
 	private Set<CrmDoctor> crmDoctors = new HashSet<CrmDoctor>(0);
 
 	public CrmSpecialty() {
@@ -38,10 +34,11 @@ public class CrmSpecialty implements java.io.Serializable {
 	}
 
 	public CrmSpecialty(BigDecimal id, String code, String description,
-			Set<CrmDoctor> crmDoctors) {
+			Integer state, Set<CrmDoctor> crmDoctors) {
 		this.id = id;
 		this.code = code;
 		this.description = description;
+		this.state = state;
 		this.crmDoctors = crmDoctors;
 	}
 
@@ -80,6 +77,15 @@ public class CrmSpecialty implements java.io.Serializable {
 
 	public void setCrmDoctors(Set<CrmDoctor> crmDoctors) {
 		this.crmDoctors = crmDoctors;
+	}
+
+	@Column(name = "state")
+	public Integer getState() {
+		return state;
+	}
+
+	public void setState(Integer state) {
+		this.state = state;
 	}
 
 }
