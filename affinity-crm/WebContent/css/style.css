@@ -9,7 +9,7 @@ body {
 	padding: 22px 0;
 	width: 1200px;
 	font: 13px/22px Helvetica, Arial, sans-serif;
-	background: #F0F0F0;
+	background: white;
 }
 
 #content {
@@ -21,4 +21,10 @@ body {
 	display: table-cell;
 	width: 1200px;
 	padding-right: 22px;
+}
+
+.ui-panel-titlebar{
+	font-size: 18px;
+	color: blue;
+	font-weight: bold;
 }
