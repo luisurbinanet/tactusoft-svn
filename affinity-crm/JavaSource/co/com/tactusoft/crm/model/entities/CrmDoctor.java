@@ -1,11 +1,14 @@
 package co.com.tactusoft.crm.model.entities;
 
-// Generated 19/04/2012 07:45:37 PM by Hibernate Tools 3.4.0.CR1
+// Generated 19/04/2012 10:54:42 PM by Hibernate Tools 3.4.0.CR1
 
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -21,6 +24,7 @@ public class CrmDoctor implements java.io.Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
+	private CrmSpecialty crmSpecialty;
 	private String code;
 	private String firstName;
 	private String secondName;
@@ -29,25 +33,24 @@ public class CrmDoctor implements java.io.Serializable {
 	private String gender;
 	private Integer onSite;
 	private Integer virtual;
-	private BigDecimal idSpecialty;
 
 	public CrmDoctor() {
 	}
 
-	public CrmDoctor(BigDecimal id, String code, String firstName,
-			String firstSurname, BigDecimal idSpecialty) {
+	public CrmDoctor(BigDecimal id, CrmSpecialty crmSpecialty, String code,
+			String firstName, String firstSurname) {
 		this.id = id;
+		this.crmSpecialty = crmSpecialty;
 		this.code = code;
 		this.firstName = firstName;
 		this.firstSurname = firstSurname;
-		this.idSpecialty = idSpecialty;
 	}
 
-	public CrmDoctor(BigDecimal id, String code, String firstName,
-			String secondName, String firstSurname, String secondSurname,
-			String gender, Integer onSite, Integer virtual,
-			BigDecimal idSpecialty) {
+	public CrmDoctor(BigDecimal id, CrmSpecialty crmSpecialty, String code,
+			String firstName, String secondName, String firstSurname,
+			String secondSurname, String gender, Integer onSite, Integer virtual) {
 		this.id = id;
+		this.crmSpecialty = crmSpecialty;
 		this.code = code;
 		this.firstName = firstName;
 		this.secondName = secondName;
@@ -56,7 +59,6 @@ public class CrmDoctor implements java.io.Serializable {
 		this.gender = gender;
 		this.onSite = onSite;
 		this.virtual = virtual;
-		this.idSpecialty = idSpecialty;
 	}
 
 	@Id
@@ -67,6 +69,16 @@ public class CrmDoctor implements java.io.Serializable {
 
 	public void setId(BigDecimal id) {
 		this.id = id;
+	}
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "id_specialty", nullable = false)
+	public CrmSpecialty getCrmSpecialty() {
+		return this.crmSpecialty;
+	}
+
+	public void setCrmSpecialty(CrmSpecialty crmSpecialty) {
+		this.crmSpecialty = crmSpecialty;
 	}
 
 	@Column(name = "code", unique = true, nullable = false, length = 45)
@@ -139,15 +151,6 @@ public class CrmDoctor implements java.io.Serializable {
 
 	public void setVirtual(Integer virtual) {
 		this.virtual = virtual;
-	}
-
-	@Column(name = "id_specialty", nullable = false, scale = 0)
-	public BigDecimal getIdSpecialty() {
-		return this.idSpecialty;
-	}
-
-	public void setIdSpecialty(BigDecimal idSpecialty) {
-		this.idSpecialty = idSpecialty;
 	}
 
 }
