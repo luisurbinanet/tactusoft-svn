@@ -1,7 +1,5 @@
 package co.com.tactusoft.crm.model.entities;
 
-// Generated 19/04/2012 10:54:42 PM by Hibernate Tools 3.4.0.CR1
-
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,9 +17,6 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "crm_doctor", catalog = "crm_db", uniqueConstraints = @UniqueConstraint(columnNames = "code"))
 public class CrmDoctor implements java.io.Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
 	private CrmSpecialty crmSpecialty;
@@ -31,8 +26,9 @@ public class CrmDoctor implements java.io.Serializable {
 	private String firstSurname;
 	private String secondSurname;
 	private String gender;
-	private Integer onSite;
-	private Integer virtual;
+	private Boolean onSite;
+	private Boolean virtual;
+	private Integer state;
 
 	public CrmDoctor() {
 	}
@@ -48,7 +44,8 @@ public class CrmDoctor implements java.io.Serializable {
 
 	public CrmDoctor(BigDecimal id, CrmSpecialty crmSpecialty, String code,
 			String firstName, String secondName, String firstSurname,
-			String secondSurname, String gender, Integer onSite, Integer virtual) {
+			String secondSurname, String gender, Boolean onSite,
+			Boolean virtual, Integer state) {
 		this.id = id;
 		this.crmSpecialty = crmSpecialty;
 		this.code = code;
@@ -59,6 +56,7 @@ public class CrmDoctor implements java.io.Serializable {
 		this.gender = gender;
 		this.onSite = onSite;
 		this.virtual = virtual;
+		this.state = state;
 	}
 
 	@Id
@@ -136,21 +134,30 @@ public class CrmDoctor implements java.io.Serializable {
 	}
 
 	@Column(name = "on_site")
-	public Integer getOnSite() {
+	public Boolean getOnSite() {
 		return this.onSite;
 	}
 
-	public void setOnSite(Integer onSite) {
+	public void setOnSite(Boolean onSite) {
 		this.onSite = onSite;
 	}
 
 	@Column(name = "virtual")
-	public Integer getVirtual() {
+	public Boolean getVirtual() {
 		return this.virtual;
 	}
 
-	public void setVirtual(Integer virtual) {
+	public void setVirtual(Boolean virtual) {
 		this.virtual = virtual;
+	}
+
+	@Column(name = "state")
+	public Integer getState() {
+		return state;
+	}
+
+	public void setState(Integer state) {
+		this.state = state;
 	}
 
 }
