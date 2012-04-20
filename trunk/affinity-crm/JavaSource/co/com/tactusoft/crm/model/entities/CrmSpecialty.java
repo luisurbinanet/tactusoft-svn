@@ -1,11 +1,15 @@
 package co.com.tactusoft.crm.model.entities;
 
-// Generated 19/04/2012 07:45:37 PM by Hibernate Tools 3.4.0.CR1
+// Generated 19/04/2012 10:54:42 PM by Hibernate Tools 3.4.0.CR1
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -23,6 +27,7 @@ public class CrmSpecialty implements java.io.Serializable {
 	private BigDecimal id;
 	private String code;
 	private String description;
+	private Set<CrmDoctor> crmDoctors = new HashSet<CrmDoctor>(0);
 
 	public CrmSpecialty() {
 	}
@@ -32,10 +37,12 @@ public class CrmSpecialty implements java.io.Serializable {
 		this.description = description;
 	}
 
-	public CrmSpecialty(BigDecimal id, String code, String description) {
+	public CrmSpecialty(BigDecimal id, String code, String description,
+			Set<CrmDoctor> crmDoctors) {
 		this.id = id;
 		this.code = code;
 		this.description = description;
+		this.crmDoctors = crmDoctors;
 	}
 
 	@Id
@@ -64,6 +71,15 @@ public class CrmSpecialty implements java.io.Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmSpecialty")
+	public Set<CrmDoctor> getCrmDoctors() {
+		return this.crmDoctors;
+	}
+
+	public void setCrmDoctors(Set<CrmDoctor> crmDoctors) {
+		this.crmDoctors = crmDoctors;
 	}
 
 }

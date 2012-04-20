@@ -20,6 +20,9 @@
 					value="#{doctorBacking.model}" rowKey="#{rec.id}"
 					selectionMode="single" selection="#{doctorBacking.selected}"
 					paginator="true" rows="10">
+					
+					<p:column headerText="Nombres">#{rec.firstName}</p:column>
+					
 				</p:dataTable>
 
 			</p:panel>
