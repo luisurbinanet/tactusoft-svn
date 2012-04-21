@@ -9,6 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,8 +29,15 @@ public class CustomHibernateDaoImpl extends HibernateDaoSupport implements
 	}
 
 	@Transactional
-	public void persist(Object entity) {
-		getHibernateTemplate().saveOrUpdate(entity);
+	public Integer persist(Object entity) {
+		int result = 0;
+		try {
+			getHibernateTemplate().saveOrUpdate(entity);
+			getHibernateTemplate().flush();
+		} catch (DataIntegrityViolationException ex) {
+			result = -1;
+		}
+		return result;
 	}
 
 	@Transactional

@@ -47,8 +47,13 @@
 						<h:outputLabel value="#{rec.virtual?'SI':'NO'}" />
 					</p:column>
 
-					<p:column headerText="#{msg['doc_specialty']}">
-						<h:outputLabel value="#{rec.crmSpecialty.description}" />
+					<p:column headerText="#{msg['doc_speciality']}">
+						<h:outputLabel value="#{rec.crmSpeciality.description}" />
+					</p:column>
+
+					<p:column headerText="#{msg['glb_state']}">
+						<h:outputLabel
+							value="#{rec.state==1?msg['glb_state_active']:msg['glb_state_inactive']}" />
 					</p:column>
 
 				</p:dataTable>
@@ -59,7 +64,7 @@
 
 		<h:form id="editForm">
 
-			<p:growl id="growl" />
+			<p:growl id="growl" showDetail="true" />
 
 			<p:dialog header="#{msg['msg_detail']}" widgetVar="dlg"
 				resizable="false" id="dlg" showEffect="fade" hideEffect="explode"
@@ -115,10 +120,10 @@
 					<h:outputText value="#{msg['doc_virtual']}" />
 					<p:selectBooleanCheckbox value="#{doctorBacking.selected.virtual}" />
 
-					<h:outputLabel value="#{msg['doc_specialty']}" />
-					<p:selectOneMenu value="#{doctorBacking.selected.crmSpecialty.id}"
+					<h:outputLabel value="#{msg['doc_speciality']}" />
+					<p:selectOneMenu value="#{doctorBacking.selected.crmSpeciality.id}"
 						style="width:250px">
-						<f:selectItems value="#{doctorBacking.listCrmSpecialty}" />
+						<f:selectItems value="#{doctorBacking.listCrmSpeciality}" />
 					</p:selectOneMenu>
 
 					<h:outputLabel value="#{msg['glb_state']}"

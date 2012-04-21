@@ -31,15 +31,15 @@ CREATE TABLE `crm_doctor` (
   `second_name` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
   `first_surname` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
   `second_surname` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `id_specialty` decimal(19,0) NOT NULL,
+  `id_speciality` decimal(19,0) NOT NULL,
   `gender` varchar(1) COLLATE latin1_spanish_ci DEFAULT NULL,
   `on_site` tinyint(1) DEFAULT NULL,
   `virtual` tinyint(1) DEFAULT NULL,
   `state` int(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`),
-  KEY `fk_crm_doctor_1` (`id_specialty`),
-  CONSTRAINT `fk_crm_doctor_1` FOREIGN KEY (`id_specialty`) REFERENCES `crm_specialty` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `fk_crm_doctor_1` (`id_speciality`),
+  CONSTRAINT `fk_crm_doctor_1` FOREIGN KEY (`id_speciality`) REFERENCES `crm_speciality` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -49,18 +49,18 @@ CREATE TABLE `crm_doctor` (
 
 LOCK TABLES `crm_doctor` WRITE;
 /*!40000 ALTER TABLE `crm_doctor` DISABLE KEYS */;
-INSERT INTO `crm_doctor` VALUES (1,'8647362','JUAN',NULL,'PEREZ',NULL,1,'M',1,1,1),(2,'123','Pedro','','Perez','',1,'W',1,0,1);
+INSERT INTO `crm_doctor` VALUES (1,'8647362','JUAN','','PEREZ','',1,'M',1,0,1),(2,'123','Pedro','','Perez','',1,'W',1,0,1);
 /*!40000 ALTER TABLE `crm_doctor` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `crm_specialty`
+-- Table structure for table `crm_speciality`
 --
 
-DROP TABLE IF EXISTS `crm_specialty`;
+DROP TABLE IF EXISTS `crm_speciality`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `crm_specialty` (
+CREATE TABLE `crm_speciality` (
   `id` decimal(19,0) NOT NULL,
   `code` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
   `description` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
@@ -71,13 +71,13 @@ CREATE TABLE `crm_specialty` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `crm_specialty`
+-- Dumping data for table `crm_speciality`
 --
 
-LOCK TABLES `crm_specialty` WRITE;
-/*!40000 ALTER TABLE `crm_specialty` DISABLE KEYS */;
-INSERT INTO `crm_specialty` VALUES (1,'MED_GENERAL','Médico General',1);
-/*!40000 ALTER TABLE `crm_specialty` ENABLE KEYS */;
+LOCK TABLES `crm_speciality` WRITE;
+/*!40000 ALTER TABLE `crm_speciality` DISABLE KEYS */;
+INSERT INTO `crm_speciality` VALUES (1,'MED_GENERAL','Médico General',1);
+/*!40000 ALTER TABLE `crm_speciality` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -89,4 +89,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-04-20 17:20:23
+-- Dump completed on 2012-04-21 17:37:11
