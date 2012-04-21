@@ -19,7 +19,7 @@ public class CrmDoctor implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
-	private CrmSpecialty crmSpecialty;
+	private CrmSpeciality crmSpeciality;
 	private String code;
 	private String firstName;
 	private String secondName;
@@ -33,21 +33,21 @@ public class CrmDoctor implements java.io.Serializable {
 	public CrmDoctor() {
 	}
 
-	public CrmDoctor(BigDecimal id, CrmSpecialty crmSpecialty, String code,
+	public CrmDoctor(BigDecimal id, CrmSpeciality crmSpeciality, String code,
 			String firstName, String firstSurname) {
 		this.id = id;
-		this.crmSpecialty = crmSpecialty;
+		this.crmSpeciality = crmSpeciality;
 		this.code = code;
 		this.firstName = firstName;
 		this.firstSurname = firstSurname;
 	}
 
-	public CrmDoctor(BigDecimal id, CrmSpecialty crmSpecialty, String code,
+	public CrmDoctor(BigDecimal id, CrmSpeciality crmSpeciality, String code,
 			String firstName, String secondName, String firstSurname,
 			String secondSurname, String gender, Boolean onSite,
 			Boolean virtual, Integer state) {
 		this.id = id;
-		this.crmSpecialty = crmSpecialty;
+		this.crmSpeciality = crmSpeciality;
 		this.code = code;
 		this.firstName = firstName;
 		this.secondName = secondName;
@@ -70,13 +70,13 @@ public class CrmDoctor implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_specialty", nullable = false)
-	public CrmSpecialty getCrmSpecialty() {
-		return this.crmSpecialty;
+	@JoinColumn(name = "id_speciality", nullable = false)
+	public CrmSpeciality getCrmSpeciality() {
+		return this.crmSpeciality;
 	}
 
-	public void setCrmSpecialty(CrmSpecialty crmSpecialty) {
-		this.crmSpecialty = crmSpecialty;
+	public void setCrmSpeciality(CrmSpeciality crmSpeciality) {
+		this.crmSpeciality = crmSpeciality;
 	}
 
 	@Column(name = "code", unique = true, nullable = false, length = 45)

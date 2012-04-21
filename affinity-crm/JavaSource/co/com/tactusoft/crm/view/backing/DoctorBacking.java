@@ -15,7 +15,8 @@ import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.controller.bo.TablesBo;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
-import co.com.tactusoft.crm.model.entities.CrmSpecialty;
+import co.com.tactusoft.crm.model.entities.CrmSpeciality;
+import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.datamodel.DoctorDataModel;
 
 @Named
@@ -31,8 +32,8 @@ public class DoctorBacking implements Serializable {
 	private DoctorDataModel model;
 	private CrmDoctor selected;
 
-	private List<SelectItem> listCrmSpecialty;
-	private Map<BigDecimal, CrmSpecialty> mapCrmSpecialty;
+	private List<SelectItem> listCrmSpeciality;
+	private Map<BigDecimal, CrmSpeciality> mapCrmSpeciality;
 
 	public DoctorBacking() {
 		newAction();
@@ -66,21 +67,21 @@ public class DoctorBacking implements Serializable {
 		this.selected = selected;
 	}
 
-	public List<SelectItem> getListCrmSpecialty() {
-		if (listCrmSpecialty == null) {
-			listCrmSpecialty = new LinkedList<SelectItem>();
-			mapCrmSpecialty = new HashMap<BigDecimal, CrmSpecialty>();
-			for (CrmSpecialty row : tableService.getListSpecialityActive()) {
-				mapCrmSpecialty.put(row.getId(), row);
-				listCrmSpecialty.add(new SelectItem(row.getId(), row
+	public List<SelectItem> getListCrmSpeciality() {
+		if (listCrmSpeciality == null) {
+			listCrmSpeciality = new LinkedList<SelectItem>();
+			mapCrmSpeciality = new HashMap<BigDecimal, CrmSpeciality>();
+			for (CrmSpeciality row : tableService.getListSpecialityActive()) {
+				mapCrmSpeciality.put(row.getId(), row);
+				listCrmSpeciality.add(new SelectItem(row.getId(), row
 						.getDescription()));
 			}
 		}
-		return listCrmSpecialty;
+		return listCrmSpeciality;
 	}
 
-	public void setListCrmSpecialty(List<SelectItem> listCrmSpecialty) {
-		this.listCrmSpecialty = listCrmSpecialty;
+	public void setListCrmSpeciality(List<SelectItem> listCrmSpeciality) {
+		this.listCrmSpeciality = listCrmSpeciality;
 	}
 
 	public void newAction() {
@@ -88,16 +89,27 @@ public class DoctorBacking implements Serializable {
 		selected.setOnSite(false);
 		selected.setVirtual(false);
 		selected.setState(1);
-		selected.setCrmSpecialty(new CrmSpecialty());
+		selected.setCrmSpeciality(new CrmSpeciality());
 	}
 
 	public void saveAction() {
-		selected.setCrmSpecialty(mapCrmSpecialty.get(selected.getCrmSpecialty()
-				.getId()));
-		tableService.saveDoctor(selected);
+		String message = null;
 
-		list = tableService.getListDoctor();
-		model = new DoctorDataModel(list);
+		selected.setCrmSpeciality(mapCrmSpeciality.get(selected.getCrmSpeciality()
+				.getId()));
+
+		int result = tableService.saveDoctor(selected);
+		if (result == 0) {
+			list = tableService.getListDoctor();
+			model = new DoctorDataModel(list);
+			message = FacesUtil.getMessage("msg_record_ok");
+			FacesUtil.addInfo(message);
+		} else if (result == -1) {
+			String paramValue = FacesUtil.getMessage("doc_code");
+			message = FacesUtil.getMessage("msg_record_unique_exception", paramValue);
+			FacesUtil.addError(message);
+
+		}
 	}
 
 }

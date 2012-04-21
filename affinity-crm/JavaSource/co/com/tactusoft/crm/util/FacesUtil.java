@@ -75,7 +75,7 @@ public class FacesUtil {
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		Locale locale = facesContext.getViewRoot().getLocale();
 		ResourceBundle bundle = ResourceBundle.getBundle(
-				"co.com.tactusoft.video.view.resources.resources", locale);
+				"co.com.tactusoft.crm.view.resources.resources", locale);
 		return bundle.getString(resourceBundleKey);
 	}
 
@@ -83,7 +83,7 @@ public class FacesUtil {
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		Locale locale = facesContext.getViewRoot().getLocale();
 		ResourceBundle bundle = ResourceBundle.getBundle(
-				"co.com.tactusoft.video.view.resources.resources", locale);
+				"co.com.tactusoft.crm.view.resources.resources", locale);
 		String msgValue = bundle.getString(resourceBundleKey);
 		MessageFormat messageFormat = new MessageFormat(msgValue);
 		Object[] args = { paramValue };

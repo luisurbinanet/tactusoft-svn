@@ -9,7 +9,7 @@ import javax.inject.Named;
 
 import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
-import co.com.tactusoft.crm.model.entities.CrmSpecialty;
+import co.com.tactusoft.crm.model.entities.CrmSpeciality;
 
 @Named
 public class TablesBo implements Serializable {
@@ -26,13 +26,30 @@ public class TablesBo implements Serializable {
 		return dao.find(CrmDoctor.class);
 	}
 
-	public List<CrmSpecialty> getListSpecialityActive() {
-		return dao.find("from CrmSpecialty o where o.state = 1");
+	public List<CrmDoctor> getListDoctorActive() {
+		return dao.find("CrmDoctor o where o.state = 1");
 	}
 
-	public void saveDoctor(CrmDoctor entity) {
-		entity.setId(getId(CrmDoctor.class));
-		dao.persist(entity);
+	public List<CrmSpeciality> getListSpeciality() {
+		return dao.find("from CrmSpeciality o");
+	}
+
+	public List<CrmSpeciality> getListSpecialityActive() {
+		return dao.find("from CrmSpeciality o where o.state = 1");
+	}
+
+	public Integer saveDoctor(CrmDoctor entity) {
+		if (entity.getId() == null) {
+			entity.setId(getId(CrmDoctor.class));
+		}
+		return dao.persist(entity);
+	}
+	
+	public Integer saveSpeciality(CrmSpeciality entity) {
+		if (entity.getId() == null) {
+			entity.setId(getId(CrmSpeciality.class));
+		}
+		return dao.persist(entity);
 	}
 
 	public <T> void remove(Class<T> entity) {

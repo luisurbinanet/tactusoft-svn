@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface CustomHibernateDao {
 
-	public void persist(Object entity);
+	public Integer persist(Object entity);
 	
 	public void delete(Object entity);
 
