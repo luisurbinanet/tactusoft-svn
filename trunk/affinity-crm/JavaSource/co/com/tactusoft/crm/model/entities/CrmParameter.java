@@ -17,6 +17,7 @@ public class CrmParameter implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
 	private String code;
+	private String description;
 	private String textValue;
 	private BigDecimal numberValue;
 
@@ -27,10 +28,11 @@ public class CrmParameter implements java.io.Serializable {
 		this.id = id;
 	}
 
-	public CrmParameter(BigDecimal id, String code, String textValue,
-			BigDecimal numberValue) {
+	public CrmParameter(BigDecimal id, String code, String description,
+			String textValue, BigDecimal numberValue) {
 		this.id = id;
 		this.code = code;
+		this.description = description;
 		this.textValue = textValue;
 		this.numberValue = numberValue;
 	}
@@ -52,6 +54,15 @@ public class CrmParameter implements java.io.Serializable {
 
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	@Column(name = "description", length = 255)
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	@Column(name = "text_value", length = 45)
