@@ -9,7 +9,6 @@ import javax.inject.Named;
 
 import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmParameter;
-import co.com.tactusoft.crm.model.entities.CrmSpeciality;
 
 @Named
 public class ParameterBo implements Serializable {
@@ -24,18 +23,18 @@ public class ParameterBo implements Serializable {
 
 	public String getTextValue(String param) {
 		return ((CrmParameter) dao.find(
-				"CrmDoctor o where o.code = '" + param + "'").get(0))
+				"CrmParameter o where o.code = '" + param + "'").get(0))
 				.getTextValue();
 	}
 
 	public BigDecimal getNumberValue(String param) {
 		return ((CrmParameter) dao.find(
-				"CrmDoctor o where o.code = '" + param + "'").get(0))
+				"CrmParameter o where o.code = '" + param + "'").get(0))
 				.getNumberValue();
 	}
 	
-	public List<CrmSpeciality> getListSpeciality() {
-		return dao.find("from CrmSpeciality o");
+	public List<CrmParameter> getListParameter() {
+		return dao.find("from CrmParameter o");
 	}
 
 	public Integer saveParameter(CrmParameter entity) {
