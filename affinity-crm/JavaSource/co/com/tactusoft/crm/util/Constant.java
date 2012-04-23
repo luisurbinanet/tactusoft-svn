@@ -9,11 +9,11 @@ public class Constant {
 
 	public static BigDecimal DEFAULT_VALUE = new BigDecimal(-1);
 	public static String DEFAULT_LABEL = "-- SELECCIONE --";
-	
-	public static final String QUESTION_TYPE_MESSAGE = "MESSAGE";
-	public static final String QUESTION_TYPE_ASSERTIVE = "ASSERTIVE";
-	public static final String QUESTION_TYPE_UNIQUE = "UNIQUE";
-	public static final String QUESTION_TYPE_TIME = "TIME";
+
+	public static final Integer SEND_PHONE = 1;
+	public static final Integer SEND_EMAIL = 2;
+	public static final Integer SEND_POSTAL = 3;
+	public static final Integer SEND_SMS = 4;
 
 	public static final String VIDEO_TYPE_WINDOWS = "windows";
 	public static final String VIDEO_TYPE_QUICKTIME = "quicktime";

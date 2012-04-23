@@ -28,24 +28,25 @@ public class CrmDoctor implements java.io.Serializable {
 	private String gender;
 	private Boolean onSite;
 	private Boolean virtual;
-	private Integer state;
+	private int state;
 
 	public CrmDoctor() {
 	}
 
 	public CrmDoctor(BigDecimal id, CrmSpeciality crmSpeciality, String code,
-			String firstName, String firstSurname) {
+			String firstName, String firstSurname, int state) {
 		this.id = id;
 		this.crmSpeciality = crmSpeciality;
 		this.code = code;
 		this.firstName = firstName;
 		this.firstSurname = firstSurname;
+		this.state = state;
 	}
 
 	public CrmDoctor(BigDecimal id, CrmSpeciality crmSpeciality, String code,
 			String firstName, String secondName, String firstSurname,
 			String secondSurname, String gender, Boolean onSite,
-			Boolean virtual, Integer state) {
+			Boolean virtual, int state) {
 		this.id = id;
 		this.crmSpeciality = crmSpeciality;
 		this.code = code;
@@ -151,12 +152,12 @@ public class CrmDoctor implements java.io.Serializable {
 		this.virtual = virtual;
 	}
 
-	@Column(name = "state")
-	public Integer getState() {
-		return state;
+	@Column(name = "state", nullable = false)
+	public int getState() {
+		return this.state;
 	}
 
-	public void setState(Integer state) {
+	public void setState(int state) {
 		this.state = state;
 	}
 

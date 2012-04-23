@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Scope;
 import co.com.tactusoft.crm.controller.bo.TablesBo;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmSpeciality;
+import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.datamodel.DoctorDataModel;
 
@@ -88,7 +89,7 @@ public class DoctorBacking implements Serializable {
 		selected = new CrmDoctor();
 		selected.setOnSite(false);
 		selected.setVirtual(false);
-		selected.setState(1);
+		selected.setState(Constant.STATE_ACTIVE);
 		selected.setCrmSpeciality(new CrmSpeciality());
 	}
 

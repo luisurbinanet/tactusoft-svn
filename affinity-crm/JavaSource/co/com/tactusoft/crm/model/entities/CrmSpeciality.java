@@ -22,19 +22,20 @@ public class CrmSpeciality implements java.io.Serializable {
 	private BigDecimal id;
 	private String code;
 	private String description;
-	private Integer state;
+	private int state;
 	private Set<CrmDoctor> crmDoctors = new HashSet<CrmDoctor>(0);
 
 	public CrmSpeciality() {
 	}
 
-	public CrmSpeciality(BigDecimal id, String description) {
+	public CrmSpeciality(BigDecimal id, String description, int state) {
 		this.id = id;
 		this.description = description;
+		this.state = state;
 	}
 
 	public CrmSpeciality(BigDecimal id, String code, String description,
-			Integer state, Set<CrmDoctor> crmDoctors) {
+			int state, Set<CrmDoctor> crmDoctors) {
 		this.id = id;
 		this.code = code;
 		this.description = description;
@@ -70,6 +71,15 @@ public class CrmSpeciality implements java.io.Serializable {
 		this.description = description;
 	}
 
+	@Column(name = "state", nullable = false)
+	public int getState() {
+		return this.state;
+	}
+
+	public void setState(int state) {
+		this.state = state;
+	}
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmSpeciality")
 	public Set<CrmDoctor> getCrmDoctors() {
 		return this.crmDoctors;
@@ -77,15 +87,6 @@ public class CrmSpeciality implements java.io.Serializable {
 
 	public void setCrmDoctors(Set<CrmDoctor> crmDoctors) {
 		this.crmDoctors = crmDoctors;
-	}
-
-	@Column(name = "state")
-	public Integer getState() {
-		return state;
-	}
-
-	public void setState(Integer state) {
-		this.state = state;
 	}
 
 }
