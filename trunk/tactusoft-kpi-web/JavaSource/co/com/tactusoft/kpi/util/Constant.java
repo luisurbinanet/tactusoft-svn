@@ -17,5 +17,8 @@ public class Constant {
 	public static final String ROLE_SUPER_ADMIN = "SUPER_ADMIN";
 	public static final String ROLE_ADMIN = "ADMIN";
 	public static final String ROLE_USER = "USER";
+	
+	public static final int FIRST_DAY_OF_WEEK = 1;
+	public static final int NUMBER_DAYS = 6;
 
 }

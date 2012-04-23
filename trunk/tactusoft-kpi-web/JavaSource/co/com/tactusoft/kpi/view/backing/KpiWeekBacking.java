@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.kpi.controller.bo.TablesBo;
 import co.com.tactusoft.kpi.model.entities.KpiWeek;
+import co.com.tactusoft.kpi.util.Constant;
 import co.com.tactusoft.kpi.util.FacesUtil;
 import co.com.tactusoft.kpi.view.model.CalendarWeek;
 import co.com.tactusoft.kpi.view.model.KpiWeekModel;
@@ -40,7 +41,7 @@ public class KpiWeekBacking implements Serializable {
 
 	public KpiWeekBacking() {
 		selected = new KpiWeek();
-		model =null;
+		model = null;
 	}
 
 	public KpiWeekModel getModel() {
@@ -106,16 +107,6 @@ public class KpiWeekBacking implements Serializable {
 			field = FacesUtil.getMessage("wek_star_date");
 			message = FacesUtil.getMessage("msg_field_required", field);
 			FacesUtil.addWarn(message);
-		} else {
-			validate++;
-		}
-
-		if (selected.getEndDate() == null) {
-			field = FacesUtil.getMessage("wek_end_date");
-			message = FacesUtil.getMessage("msg_field_required", field);
-			FacesUtil.addWarn(message);
-		} else {
-			validate++;
 		}
 
 		if (validate == 2) {
@@ -129,15 +120,18 @@ public class KpiWeekBacking implements Serializable {
 		if (message == null) {
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(selected.getStartDate());
+			calendar.setFirstDayOfWeek(Constant.FIRST_DAY_OF_WEEK);
 
-			String seq = FacesUtil.getMessage("wek_seq");
-
-			String name = seq + calendar.get(Calendar.YEAR)
-					+ calendar.get(Calendar.WEEK_OF_MONTH);
+			String name = String.valueOf(calendar.get(Calendar.WEEK_OF_YEAR));
 
 			if (selected.getId() == null) {
 				selected.setId(service.getId("KpiWeek"));
 			}
+
+			// Calculate END date
+			calendar.add(Calendar.DATE, Constant.NUMBER_DAYS);
+			Date endDate = calendar.getTime();
+			selected.setEndDate(endDate);
 
 			selected.setName(name);
 			// selected.setDescription(selected.getDescription().toUpperCase());

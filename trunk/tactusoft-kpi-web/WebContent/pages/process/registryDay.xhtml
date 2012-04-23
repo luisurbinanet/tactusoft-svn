@@ -69,12 +69,6 @@
 						disabled="#{kpiDailyBacking.selected.state == 1?false:true}">
 					</p:spinner>
 
-					<h:outputLabel value="#{msg['day_wo_failures']}" />
-					<p:spinner id="failuresOrders"
-						value="#{kpiDailyBacking.selected.failuresOrders}" min="0"
-						max="999" maxlength="3"
-						disabled="#{kpiDailyBacking.selected.state == 1?false:true}" />
-
 				</h:panelGrid>
 
 			</p:panel>
@@ -94,7 +88,7 @@
 							</f:facet>
 							<f:facet name="input">
 								<p:spinner value="#{rec.numHours}" style="width:100%" min="0.0"
-									max="999.9" maxlength="4" stepFactor="0.5"/>
+									max="999.9" maxlength="4" stepFactor="0.15"/>
 							</f:facet>
 						</p:cellEditor>
 					</p:column>
