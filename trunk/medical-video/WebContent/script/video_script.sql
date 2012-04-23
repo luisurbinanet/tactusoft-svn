@@ -30,6 +30,7 @@ CREATE TABLE `vid_answer` (
   `id_question` decimal(19,0) NOT NULL,
   `next_question` decimal(19,0) DEFAULT NULL,
   `enter_key` varchar(15) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `by_time` decimal(6,3) DEFAULT '0.000',
   PRIMARY KEY (`id`),
   KEY `fk_vid_answer_1` (`id_question`),
   CONSTRAINT `fk_vid_answer_1` FOREIGN KEY (`id_question`) REFERENCES `vid_question` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
@@ -42,7 +43,7 @@ CREATE TABLE `vid_answer` (
 
 LOCK TABLES `vid_answer` WRITE;
 /*!40000 ALTER TABLE `vid_answer` DISABLE KEYS */;
-INSERT INTO `vid_answer` VALUES (1,'R1',2,-1,'A'),(2,'R2',2,-1,'B'),(3,'r5',3,-1,'C'),(4,'r6',3,-1,'D');
+INSERT INTO `vid_answer` VALUES (1,'R1',2,-1,'A',0.000),(2,'R2',2,-1,'B',0.000),(3,'r5',3,-1,'C',0.000),(4,'r6',3,-1,'D',0.000);
 /*!40000 ALTER TABLE `vid_answer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -211,6 +212,8 @@ CREATE TABLE `vid_question` (
   `video` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
   `positive` decimal(19,0) DEFAULT NULL,
   `negative` decimal(19,0) DEFAULT NULL,
+  `by_time` decimal(6,3) DEFAULT NULL,
+  `next_question` decimal(19,0) DEFAULT NULL,
   `order_question` int(5) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_vid_question_1` (`id_topic`),
@@ -224,7 +227,7 @@ CREATE TABLE `vid_question` (
 
 LOCK TABLES `vid_question` WRITE;
 /*!40000 ALTER TABLE `vid_question` DISABLE KEYS */;
-INSERT INTO `vid_question` VALUES (1,'Prueba',1,'ASSERTIVE','flash','audio1.mp3','quicktime','video1.mp4',-1,-1,1),(2,'Mensaje',1,'UNIQUE',NULL,NULL,NULL,NULL,-1,-1,2),(3,'mensaje',1,'UNIQUE',NULL,NULL,NULL,NULL,-1,-1,3),(4,'Prueba',1,'ASSERTIVE',NULL,NULL,'quicktime','video4.mp4',-1,-1,4);
+INSERT INTO `vid_question` VALUES (1,'Prueba',1,'ASSERTIVE',NULL,NULL,'quicktime','video1.mp4',-1,-1,NULL,NULL,1),(2,'Mensaje',1,'UNIQUE',NULL,NULL,NULL,NULL,-1,-1,NULL,NULL,2),(3,'mensaje',1,'UNIQUE',NULL,NULL,NULL,NULL,-1,-1,NULL,NULL,3),(4,'Prueba',1,'ASSERTIVE',NULL,NULL,'quicktime','video4.mp4',-1,-1,NULL,NULL,4),(5,'999',1,'ASSERTIVE','flash','audio5.mp3',NULL,NULL,-1,-1,NULL,NULL,5),(6,'Video 1',2,'TIME',NULL,NULL,'quicktime','video6.mp4',-1,-1,10.000,7,1),(7,'Video 2',2,'TIME',NULL,NULL,'quicktime','video7.mp4',-1,-1,5.000,6,2);
 /*!40000 ALTER TABLE `vid_question` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -319,4 +322,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-04-09  7:09:09
+-- Dump completed on 2012-04-17  7:54:47
