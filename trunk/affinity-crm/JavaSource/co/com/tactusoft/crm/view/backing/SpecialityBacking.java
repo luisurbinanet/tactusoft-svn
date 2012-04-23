@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.controller.bo.TablesBo;
 import co.com.tactusoft.crm.model.entities.CrmSpeciality;
+import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.datamodel.SpecialityDataModel;
 
@@ -60,7 +61,7 @@ public class SpecialityBacking implements Serializable {
 
 	public void newAction() {
 		selected = new CrmSpeciality();
-		selected.setState(1);
+		selected.setState(Constant.STATE_ACTIVE);
 	}
 
 	public void saveAction() {
