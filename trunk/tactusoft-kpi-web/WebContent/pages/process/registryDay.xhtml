@@ -1,4 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
@@ -69,6 +68,12 @@
 						disabled="#{kpiDailyBacking.selected.state == 1?false:true}">
 					</p:spinner>
 
+					<h:outputLabel value="#{msg['day_wo_failures']}" />
+					<p:spinner id="failuresOrders"
+						value="#{kpiDailyBacking.selected.failuresOrders}" min="0"
+						max="999" maxlength="3"
+						disabled="#{kpiDailyBacking.selected.state == 1?false:true}" />
+
 				</h:panelGrid>
 
 			</p:panel>
@@ -88,7 +93,7 @@
 							</f:facet>
 							<f:facet name="input">
 								<p:spinner value="#{rec.numHours}" style="width:100%" min="0.0"
-									max="999.9" maxlength="4" stepFactor="0.15"/>
+									max="999.9" maxlength="4" stepFactor="0.15" />
 							</f:facet>
 						</p:cellEditor>
 					</p:column>

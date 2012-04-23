@@ -109,15 +109,11 @@ public class ProcessBo implements Serializable {
 				break;
 			case Constant.CALCULATION_TYPE_2:
 				for (KpiDaily rowDetail : list) {
-					//double finishedOrders = rowDetail.getFinishedOrders();
-					//double failuresOrders = rowDetail.getFailuresOrders();
-					double scheduledOrders = rowDetail.getScheduledOrders();
-					double failuresOrders = ((BigDecimal) dao.find(
-							"select sum(o.numHours) from KpiDailyDelay o where o.kpiDaily.id = "
-									+ rowDetail.getId()).get(0)).doubleValue();
-					if ((scheduledOrders - failuresOrders) != 0d) {
+					double finishedOrders = rowDetail.getFinishedOrders();
+					double failuresOrders = rowDetail.getFailuresOrders();
+					if ((finishedOrders - failuresOrders) != 0d) {
 						double res = failuresOrders
-								/ (scheduledOrders);
+								/ (failuresOrders + finishedOrders);
 						listPlan[index] = res;
 						if (res > planAttainment) {
 							style[index] = "style1";
