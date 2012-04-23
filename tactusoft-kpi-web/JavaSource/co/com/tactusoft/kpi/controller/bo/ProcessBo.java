@@ -109,11 +109,15 @@ public class ProcessBo implements Serializable {
 				break;
 			case Constant.CALCULATION_TYPE_2:
 				for (KpiDaily rowDetail : list) {
-					double finishedOrders = rowDetail.getFinishedOrders();
-					double failuresOrders = rowDetail.getFailuresOrders();
-					if ((finishedOrders - failuresOrders) != 0d) {
+					//double finishedOrders = rowDetail.getFinishedOrders();
+					//double failuresOrders = rowDetail.getFailuresOrders();
+					double scheduledOrders = rowDetail.getScheduledOrders();
+					double failuresOrders = ((BigDecimal) dao.find(
+							"select sum(o.numHours) from KpiDailyDelay o where o.kpiDaily.id = "
+									+ rowDetail.getId()).get(0)).doubleValue();
+					if ((scheduledOrders - failuresOrders) != 0d) {
 						double res = failuresOrders
-								/ (failuresOrders + finishedOrders);
+								/ (scheduledOrders);
 						listPlan[index] = res;
 						if (res > planAttainment) {
 							style[index] = "style1";
@@ -153,31 +157,38 @@ public class ProcessBo implements Serializable {
 	public JSONArray getGraphDaily(BigDecimal idKpiWeek) {
 		JSONArray result = new JSONArray();
 
-		KpiLastDayWeek lastRow = (KpiLastDayWeek) dao.find(
-				"from KpiLastDayWeek o where o.idWeek = " + idKpiWeek).get(0);
+		try {
 
-		List<KpiDailySumHours> listDailyDelay = dao
-				.find("from KpiDailySumHours o where o.idDaily = "
-						+ lastRow.getId());
+			KpiLastDayWeek lastRow = (KpiLastDayWeek) dao.find(
+					"from KpiLastDayWeek o where o.idWeek = " + idKpiWeek).get(
+					0);
 
-		double sum = 0;
-		for (KpiDailySumHours row : listDailyDelay) {
-			sum = sum + row.getNumHours().doubleValue();
-		}
+			List<KpiDailySumHours> listDailyDelay = dao
+					.find("from KpiDailySumHours o where o.idDaily = "
+							+ lastRow.getId());
 
-		double oldAvg = 0;
-		for (KpiDailySumHours row : listDailyDelay) {
-			JSONObject obj = new JSONObject();
-			try {
-				obj.put("label", row.getNameDaily());
-				obj.put("value", row.getNumHours().doubleValue());
-				double avg = oldAvg + (row.getNumHours().doubleValue() / sum);
-				obj.put("avg", avg);
-				result.put(obj);
-				oldAvg = avg;
-			} catch (JSONException e) {
-				e.printStackTrace();
+			double sum = 0;
+			for (KpiDailySumHours row : listDailyDelay) {
+				sum = sum + row.getNumHours().doubleValue();
 			}
+
+			double oldAvg = 0;
+			for (KpiDailySumHours row : listDailyDelay) {
+				JSONObject obj = new JSONObject();
+				try {
+					obj.put("label", row.getNameDaily());
+					obj.put("value", row.getNumHours().doubleValue());
+					double avg = oldAvg
+							+ (row.getNumHours().doubleValue() / sum);
+					obj.put("avg", avg);
+					result.put(obj);
+					oldAvg = avg;
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			}
+		} catch (Exception ex) {
+
 		}
 
 		return result;

@@ -49,7 +49,7 @@
 						<h:outputLabel value="#{rec.metric}" />
 					</p:column>
 
-					<p:column headerText="#{msg['rep_metric']}">
+					<p:column headerText="#{msg['rep_unit']}">
 						<h:outputLabel value="#{rec.um}" />
 					</p:column>
 
@@ -136,16 +136,20 @@
 
 				chartOptions = {
 	                    title : "#{msg['rep_delay_last_day']}",
-	                    vAxis: {title: "#{msg['rep_hr']}"},
-	                    hAxis: {title: "#{msg['rep_delay']}"},
+	                    vAxis: {title: "#{msg['rep_hr']}", titleTextStyle:{fontName:'Arial', fontSize:15}, textPosition: 'out'},
 	                    seriesType: "bars",
-	                    series:{1:{type: 'line',targetAxisIndex:1}}, vAxes:{1:{title:"#{msg['rep_avg']}",textStyle:{color: 'red'}, format:'#,###%'}}
+	                    series:{1:{type: 'line',targetAxisIndex:1, visibleInLegend :false}}, vAxes:{1:{minValue: 0, title:"#{msg['rep_avg']}",textStyle:{color: 'red'}, format:'#,###%'}}
 	                  };
 	 
 	            chart = new google.visualization.ComboChart(document.getElementById('form:chart_div'));
 	
 				//first arg to draw is an instance of chartData, the second are options 
 				chart.draw(chartData, chartOptions);
+
+				google.visualization.events.addListener(chart, 'select', 
+					function() {
+						  alert(chart.getSelection());
+					});
 			}
 		</script>
 
