@@ -36,7 +36,7 @@ public class TablesBo implements Serializable{
 	}
 	
 	public List<KpiWeek> getListKpiKpiWeek() {
-		return dao.find("from KpiWeek o");
+		return dao.find("from KpiWeek o order by o.startDate");
 	}
 	
 	public void save(Object entity){

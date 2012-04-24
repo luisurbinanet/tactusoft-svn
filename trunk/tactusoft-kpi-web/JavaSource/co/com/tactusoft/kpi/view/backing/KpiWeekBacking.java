@@ -101,17 +101,17 @@ public class KpiWeekBacking implements Serializable {
 	public void saveAction() {
 		String message = null;
 		String field = null;
-		int validate = 0;
 
 		if (selected.getStartDate() == null) {
 			field = FacesUtil.getMessage("wek_star_date");
 			message = FacesUtil.getMessage("msg_field_required", field);
 			FacesUtil.addWarn(message);
-		}
-
-		if (validate == 2) {
-			if (selected.getEndDate().compareTo(selected.getStartDate()) < 0) {
-				message = FacesUtil.getMessage("msg_wek_validate_dates");
+		} else {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(selected.getStartDate());
+			int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+			if (dayOfWeek != Constant.FIRST_DAY_OF_WEEK) {
+				message = FacesUtil.getMessage("msg_wek_first_day");
 				FacesUtil.addWarn(message);
 			}
 		}

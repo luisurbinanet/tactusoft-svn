@@ -30,7 +30,7 @@ public class ProcessBo implements Serializable {
 	private CustomHibernateDao dao;
 
 	public List<KpiWeek> getListKpiKpiWeek40() {
-		return dao.find("from KpiWeek o where state = 40");
+		return dao.find("from KpiWeek o where state = 40 order by o.startDate");
 	}
 
 	public List<KpiDaily> getListKpiDailyByWeek(BigDecimal kpiWeek) {

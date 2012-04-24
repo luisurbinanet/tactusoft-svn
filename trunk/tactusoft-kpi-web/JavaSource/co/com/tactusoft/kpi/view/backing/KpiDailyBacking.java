@@ -53,6 +53,7 @@ public class KpiDailyBacking implements Serializable {
 	private BigDecimal kpiDailySelected;
 	private KpiDailyDelayModel modelDailyDelay;
 	private List<KpiDailyDelay> listDailyDelay;
+	private KpiDailyDelay selectedDetail;
 
 	private Date minDate;
 	private Date maxDate;
@@ -64,6 +65,7 @@ public class KpiDailyBacking implements Serializable {
 
 	public KpiDailyBacking() {
 		selected = new KpiDaily();
+		selectedDetail = new KpiDailyDelay();
 		listCalendarWeeks = null;
 	}
 
@@ -166,6 +168,14 @@ public class KpiDailyBacking implements Serializable {
 
 	public void setListDailyDelay(List<KpiDailyDelay> listDailyDelay) {
 		this.listDailyDelay = listDailyDelay;
+	}
+
+	public KpiDailyDelay getSelectedDetail() {
+		return selectedDetail;
+	}
+
+	public void setSelectedDetail(KpiDailyDelay selectedDetail) {
+		this.selectedDetail = selectedDetail;
 	}
 
 	public KpiDailyDelayModel getModelDailyDelay() {
@@ -306,6 +316,7 @@ public class KpiDailyBacking implements Serializable {
 			model = new KpiDailyModel();
 			modelDailyDelay = new KpiDailyDelayModel();
 			listDays = new ArrayList<SelectItem>();
+			selectedDetail = new KpiDailyDelay();
 		}
 	}
 
@@ -314,6 +325,11 @@ public class KpiDailyBacking implements Serializable {
 		listDailyDelay = adminService.getListKpiDailyDelayByDay(selected
 				.getId());
 		modelDailyDelay = new KpiDailyDelayModel(listDailyDelay);
+		selectedDetail = new KpiDailyDelay();
+	}
+
+	public void saveDetailAction() {
+		service.save(selectedDetail);
 	}
 
 }

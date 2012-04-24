@@ -2,7 +2,8 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
 
 <ui:composition template="../layout/main.xhtml">
 	<ui:define name="content">
@@ -82,7 +83,8 @@
 
 				<p:dataTable id="recordTable" var="rec"
 					value="#{kpiDailyBacking.modelDailyDelay}" rowKey="#{rec.id}"
-					paginator="true" rows="20">
+					paginator="true" rows="20"
+					selected="#{kpiDailyBacking.selectedDetail}">
 
 					<p:column headerText="#{msg['day_wo_delays']}" style="width:75%">#{rec.kpiDelay.name}</p:column>
 
@@ -98,8 +100,15 @@
 						</p:cellEditor>
 					</p:column>
 
-					<p:column headerText="Options" style="width:5%">
-						<p:rowEditor />
+					<p:column style="width:40px">
+						<h:panelGrid columns="3" styleClass="actions" cellpadding="2">
+							<p:commandButton id="selectButton" update=":editForm:dlgEdit"
+								oncomplete="dlgEdit.show()" icon="ui-icon-search"
+								title="#{msg['btn_edit']}">
+								<f:setPropertyActionListener value="#{rec}"
+									target="#{kpiDailyBacking.selectedDetail}" />
+							</p:commandButton>
+						</h:panelGrid>
 					</p:column>
 
 				</p:dataTable>
@@ -116,6 +125,31 @@
 				</f:facet>
 
 			</p:panel>
+
+			<p:dialog header="#{msg['day_reg_wo_num_hours']}" widgetVar="dlgEdit"
+				resizable="false" id="dlgEdit" showEffect="fade"
+				hideEffect="explode" modal="false">
+
+				<h:panelGrid id="dlgDisplay" columns="2" cellpadding="4"
+					style="margin:0 auto;">
+
+					<h:outputText value="#{msg['day_wo_num_hours']}" />
+					<pe:inputNumber value="#{kpiDailyBacking.selectedDetail.numHours}"
+						symbol="hrs " />
+						
+					<h:outputText value="#{msg['day_wo_OT']}" />
+					<h:inputText />	
+
+				</h:panelGrid>
+
+				<f:facet name="footer">
+					<p:commandButton id="cmdSaveDetail"
+						action="#{kpiDailyBacking.saveDetailAction}"
+						update=":editForm:recordTable" oncomplete="dlgEdit.hide()"
+						icon="ui-icon-disk" value="#{msg['btn_save']}" />
+				</f:facet>
+
+			</p:dialog>
 
 		</h:form>
 	</ui:define>
