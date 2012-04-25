@@ -139,6 +139,22 @@ public class ProcessBo implements Serializable {
 					index++;
 				}
 				break;
+			case Constant.CALCULATION_TYPE_4:
+				for (KpiDaily rowDetail : list) {
+					double identifiedWork = rowDetail.getIdentifiedWork();
+					listPlan[index] = identifiedWork;
+					style[index] = "none";
+					index++;
+				}
+				break;
+			case Constant.CALCULATION_TYPE_5:
+				for (KpiDaily rowDetail : list) {
+					double foundWork = rowDetail.getFoundWork();
+					listPlan[index] = foundWork;
+					style[index] = "none";
+					index++;
+				}
+				break;
 			}
 
 			reportDaily.setListPlan(listPlan);
@@ -156,8 +172,8 @@ public class ProcessBo implements Serializable {
 		try {
 
 			KpiGraphDaily lastRow = (KpiGraphDaily) dao.find(
-					"from KpiGraphDaily o where o.idWeek = " + idKpiWeek).get(
-					0);
+					"from KpiGraphDaily o where o.idWeek = " + idKpiWeek)
+					.get(0);
 
 			List<KpiDailySumHours> listDailyDelay = dao
 					.find("from KpiDailySumHours o where o.idDaily = "
