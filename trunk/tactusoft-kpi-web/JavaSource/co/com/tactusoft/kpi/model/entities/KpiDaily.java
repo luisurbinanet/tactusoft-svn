@@ -35,6 +35,8 @@ public class KpiDaily implements java.io.Serializable {
 	private Integer scheduledOrders;
 	private Integer finishedOrders;
 	private Integer failuresOrders;
+	private Integer identifiedWork;
+	private Integer foundWork;
 	private int state;
 	private Set<KpiDailyDelay> kpiDailyDelaies = new HashSet<KpiDailyDelay>(0);
 
@@ -50,7 +52,8 @@ public class KpiDaily implements java.io.Serializable {
 
 	public KpiDaily(BigDecimal id, KpiWeek kpiWeek, Date currentDay,
 			String description, Integer scheduledOrders,
-			Integer finishedOrders, Integer failuresOrders, int state,
+			Integer finishedOrders, Integer identifiedWork,
+			Integer foundWork,Integer failuresOrders, int state,
 			Set<KpiDailyDelay> kpiDailyDelaies) {
 		this.id = id;
 		this.kpiWeek = kpiWeek;
@@ -59,6 +62,8 @@ public class KpiDaily implements java.io.Serializable {
 		this.scheduledOrders = scheduledOrders;
 		this.finishedOrders = finishedOrders;
 		this.failuresOrders = failuresOrders;
+		this.identifiedWork = identifiedWork;
+		this.foundWork = foundWork;
 		this.state = state;
 		this.kpiDailyDelaies = kpiDailyDelaies;
 	}
@@ -127,6 +132,24 @@ public class KpiDaily implements java.io.Serializable {
 
 	public void setFailuresOrders(Integer failuresOrders) {
 		this.failuresOrders = failuresOrders;
+	}
+
+	@Column(name = "identified_work")
+	public Integer getIdentifiedWork() {
+		return identifiedWork;
+	}
+
+	public void setIdentifiedWork(Integer identifiedWork) {
+		this.identifiedWork = identifiedWork;
+	}
+
+	@Column(name = "found_work")
+	public Integer getFoundWork() {
+		return foundWork;
+	}
+
+	public void setFoundWork(Integer foundWork) {
+		this.foundWork = foundWork;
 	}
 
 	@Column(name = "state", nullable = false)

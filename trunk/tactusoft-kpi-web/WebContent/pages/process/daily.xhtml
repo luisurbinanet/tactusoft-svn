@@ -38,7 +38,7 @@
 				paginator="true" rows="20">
 
 				<p:ajax event="rowSelect" update=":editForm:display"
-					oncomplete="dialogPanel.show()" />
+					oncomplete="dlgPanel.show()" />
 
 				<p:column headerText="#{msg['day_day']}">
 					<h:outputLabel value="#{rec.currentDay}">
@@ -51,6 +51,10 @@
 				<p:column headerText="#{msg['day_wo_finished']}">#{rec.finishedOrders}</p:column>
 
 				<p:column headerText="#{msg['day_wo_failures']}">#{rec.failuresOrders}</p:column>
+				
+				<p:column headerText="#{msg['day_wo_indentified_work']}">#{rec.identifiedWork}</p:column>
+
+				<p:column headerText="#{msg['day_wo_founded_work']}">#{rec.foundWork}</p:column>
 
 				<p:column headerText="#{msg['glb_state']}">#{rec.state == 1?msg['glb_state_open']:msg['glb_state_close']}</p:column>
 
@@ -61,7 +65,7 @@
 			<h:panelGrid columns="2" style="align='left'">
 				<p:commandButton id="cmdNew" action="#{kpiDailyBacking.newAction}"
 					icon="ui-icon-plusthick" value="#{msg['btn_new']}"
-					update=":editForm:dialogPanel" oncomplete="dialogPanel.show()" />
+					update=":editForm:dialogPanel" oncomplete="dlgPanel.show()" />
 			</h:panelGrid>
 
 			<p:spacer height="10" />
@@ -71,7 +75,7 @@
 		<h:form id="editForm" prependId="false">
 			<p:dialog id="dialogPanel"
 				header="#{msg['msg_record_selected']} #{kpiWeekBacking.selected.name}"
-				widgetVar="dialogPanel" resizable="false" modal="false" width="500">
+				widgetVar="dlgPanel" resizable="false" modal="false" width="500">
 
 				<p:growl id="growl" showDetail="true" />
 
@@ -122,7 +126,7 @@
 	             if(args.saved!='true') {  
 	                 jQuery('#dialogPanel').effect("shake", { times:1 }, 50);   
 	             } else {                                      
-	             	dialogPanel.hide();   
+	            	 dlgPanel.hide();   
 	             }
 	         }
         </script>

@@ -23,7 +23,7 @@
 				paginator="true" rows="20">
 
 				<p:ajax event="rowSelect" update=":editForm:dialogPanel"
-					oncomplete="dialogPanel.show()" />
+					oncomplete="dlgPanel.show()" />
 
 				<p:column headerText="#{msg['cmp_code']}">#{rec.code}</p:column>
 
@@ -42,7 +42,7 @@
 			<h:panelGrid columns="2" style="align='left'">
 				<p:commandButton id="cmdNew" action="#{kpiCompanyBacking.newAction}"
 					update=":editForm:dialogPanel" icon="ui-icon-plusthick"
-					value="#{msg['btn_new']}" oncomplete="dialogPanel.show()" />
+					value="#{msg['btn_new']}" oncomplete="dlgPanel.show()" />
 			</h:panelGrid>
 
 			<p:spacer height="10" />
@@ -54,7 +54,7 @@
 
 			<p:dialog id="dialogPanel"
 				header="#{msg['msg_record_selected']} #{kpiCompanyBacking.selected.name}"
-				widgetVar="dialogPanel" resizable="false" modal="false" width="500">
+				widgetVar="dlgPanel" resizable="false" modal="false" width="500">
 
 				<h:panelGrid id="display" columns="2" width="100%">
 
