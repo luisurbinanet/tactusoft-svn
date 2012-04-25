@@ -2,7 +2,7 @@ CREATE DATABASE  IF NOT EXISTS `kpi_db` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `kpi_db`;
 -- MySQL dump 10.13  Distrib 5.5.16, for Win32 (x86)
 --
--- Host: localhost    Database: kpi
+-- Host: localhost    Database: kpi_db
 -- ------------------------------------------------------
 -- Server version	5.5.20
 
@@ -143,36 +143,6 @@ INSERT INTO `kpi_daily` VALUES (8,'2012-02-12 00:00:00',NULL,7,4,3,2,1),(9,'2012
 UNLOCK TABLES;
 
 --
--- Table structure for table `kpi_header_data`
---
-
-DROP TABLE IF EXISTS `kpi_header_data`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `kpi_header_data` (
-  `id` decimal(19,0) NOT NULL,
-  `id_header` decimal(19,0) NOT NULL,
-  `id_data` decimal(19,0) NOT NULL,
-  `korder` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_kpi_header_data_1` (`id_header`),
-  KEY `fk_kpi_header_data_2` (`id_data`),
-  CONSTRAINT `fk_kpi_header_data_1` FOREIGN KEY (`id_header`) REFERENCES `kpi_header` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_kpi_header_data_2` FOREIGN KEY (`id_data`) REFERENCES `kpi_data` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `kpi_header_data`
---
-
-LOCK TABLES `kpi_header_data` WRITE;
-/*!40000 ALTER TABLE `kpi_header_data` DISABLE KEYS */;
-INSERT INTO `kpi_header_data` VALUES (1,1,1,1),(2,1,2,2),(3,1,3,3);
-/*!40000 ALTER TABLE `kpi_header_data` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `kpi_header`
 --
 
@@ -200,26 +170,6 @@ LOCK TABLES `kpi_header` WRITE;
 INSERT INTO `kpi_header` VALUES (1,'Mantención Mina','Mantención Mina',1,1),(2,'MANTENIMIENTO','MANTENIMIENTO',1,1),(3,'Prueba','Prueba',1,1),(4,'Prueba 2','Prueba 2',1,1);
 /*!40000 ALTER TABLE `kpi_header` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Temporary table structure for view `kpi_last_day_week`
---
-
-DROP TABLE IF EXISTS `kpi_last_day_week`;
-/*!50001 DROP VIEW IF EXISTS `kpi_last_day_week`*/;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-/*!50001 CREATE TABLE `kpi_last_day_week` (
-  `id` decimal(19,0),
-  `current_day` datetime,
-  `description` varchar(255),
-  `scheduled_orders` int(11),
-  `finished_orders` int(11),
-  `failures_orders` int(11),
-  `id_week` decimal(19,0),
-  `state` int(11)
-) ENGINE=MyISAM */;
-SET character_set_client = @saved_cs_client;
 
 --
 -- Table structure for table `kpi_role`
@@ -274,22 +224,6 @@ LOCK TABLES `kpi_user_role` WRITE;
 INSERT INTO `kpi_user_role` VALUES (1,1,1),(2,2,2);
 /*!40000 ALTER TABLE `kpi_user_role` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Temporary table structure for view `kpi_daily_sum_hours`
---
-
-DROP TABLE IF EXISTS `kpi_daily_sum_hours`;
-/*!50001 DROP VIEW IF EXISTS `kpi_daily_sum_hours`*/;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-/*!50001 CREATE TABLE `kpi_daily_sum_hours` (
-  `id_daily` decimal(19,0),
-  `id_delay` decimal(19,0),
-  `name_daily` varchar(255),
-  `num_hours` decimal(41,2)
-) ENGINE=MyISAM */;
-SET character_set_client = @saved_cs_client;
 
 --
 -- Table structure for table `kpi_week`
@@ -351,6 +285,36 @@ INSERT INTO `kpi_daily_delay` VALUES (1,8,1,30.00),(2,8,2,0.00),(3,8,3,8.00),(4,
 UNLOCK TABLES;
 
 --
+-- Table structure for table `kpi_header_data`
+--
+
+DROP TABLE IF EXISTS `kpi_header_data`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `kpi_header_data` (
+  `id` decimal(19,0) NOT NULL,
+  `id_header` decimal(19,0) NOT NULL,
+  `id_data` decimal(19,0) NOT NULL,
+  `korder` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_kpi_header_data_1` (`id_header`),
+  KEY `fk_kpi_header_data_2` (`id_data`),
+  CONSTRAINT `fk_kpi_header_data_1` FOREIGN KEY (`id_header`) REFERENCES `kpi_header` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_kpi_header_data_2` FOREIGN KEY (`id_data`) REFERENCES `kpi_data` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `kpi_header_data`
+--
+
+LOCK TABLES `kpi_header_data` WRITE;
+/*!40000 ALTER TABLE `kpi_header_data` DISABLE KEYS */;
+INSERT INTO `kpi_header_data` VALUES (1,1,1,1),(2,1,2,2),(3,1,3,3);
+/*!40000 ALTER TABLE `kpi_header_data` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `kpi_delay`
 --
 
@@ -405,44 +369,6 @@ LOCK TABLES `kpi_company` WRITE;
 INSERT INTO `kpi_company` VALUES (0,'NIT1','KPI','','KPI','carlossarmientor@gmail.com',1),(1,'NIT2','EMPRESA 1','123','PERSONA 1','correo@empresa1.com',1),(2,NULL,'EMPRESA 2','888','PERSONA 2','correo@empresa2.com',1),(3,NULL,'EMPRESA 3',NULL,'PERSONA 3','correo@empresa3.com',1),(4,NULL,'EMPRESA 4','12348','PERSONA 4','correo@empresa4.com',1),(5,'NIT5','EMPRESA 5','','PERSONA 5','correo5@persona5.com',1);
 /*!40000 ALTER TABLE `kpi_company` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Final view structure for view `kpi_last_day_week`
---
-
-/*!50001 DROP TABLE IF EXISTS `kpi_last_day_week`*/;
-/*!50001 DROP VIEW IF EXISTS `kpi_last_day_week`*/;
-/*!50001 SET @saved_cs_client          = @@character_set_client */;
-/*!50001 SET @saved_cs_results         = @@character_set_results */;
-/*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8 */;
-/*!50001 SET character_set_results     = utf8 */;
-/*!50001 SET collation_connection      = utf8_general_ci */;
-/*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `kpi_last_day_week` AS select `d`.`id` AS `id`,`d`.`current_day` AS `current_day`,`d`.`description` AS `description`,`d`.`scheduled_orders` AS `scheduled_orders`,`d`.`finished_orders` AS `finished_orders`,`d`.`failures_orders` AS `failures_orders`,`d`.`id_week` AS `id_week`,`d`.`state` AS `state` from `kpi_daily` `d` where (`d`.`current_day` = (select max(`e`.`current_day`) from `kpi_daily` `e` where (`e`.`id_week` = `d`.`id_week`))) */;
-/*!50001 SET character_set_client      = @saved_cs_client */;
-/*!50001 SET character_set_results     = @saved_cs_results */;
-/*!50001 SET collation_connection      = @saved_col_connection */;
-
---
--- Final view structure for view `kpi_daily_sum_hours`
---
-
-/*!50001 DROP TABLE IF EXISTS `kpi_daily_sum_hours`*/;
-/*!50001 DROP VIEW IF EXISTS `kpi_daily_sum_hours`*/;
-/*!50001 SET @saved_cs_client          = @@character_set_client */;
-/*!50001 SET @saved_cs_results         = @@character_set_results */;
-/*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8 */;
-/*!50001 SET character_set_results     = utf8 */;
-/*!50001 SET collation_connection      = utf8_general_ci */;
-/*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `kpi_daily_sum_hours` AS select `a`.`id_daily` AS `id_daily`,`b`.`ID` AS `id_delay`,`b`.`NAME` AS `name_daily`,sum(`a`.`num_hours`) AS `num_hours` from (`kpi_daily_delay` `a` join `kpi_delay` `b`) where ((`b`.`ID` = `a`.`id_delay`) and (`a`.`num_hours` > 0)) group by `a`.`id_daily`,`b`.`ID`,`b`.`NAME` order by sum(`a`.`num_hours`) desc */;
-/*!50001 SET character_set_client      = @saved_cs_client */;
-/*!50001 SET character_set_results     = @saved_cs_results */;
-/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -452,5 +378,3 @@ UNLOCK TABLES;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2012-04-24  6:37:34

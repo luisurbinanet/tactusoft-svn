@@ -16,7 +16,7 @@ import co.com.tactusoft.kpi.model.dao.CustomHibernateDao;
 import co.com.tactusoft.kpi.model.entities.KpiDaily;
 import co.com.tactusoft.kpi.model.entities.KpiDailySumHours;
 import co.com.tactusoft.kpi.model.entities.KpiHeaderData;
-import co.com.tactusoft.kpi.model.entities.KpiLastDayWeek;
+import co.com.tactusoft.kpi.model.entities.KpiGraphDaily;
 import co.com.tactusoft.kpi.model.entities.KpiWeek;
 import co.com.tactusoft.kpi.util.Constant;
 import co.com.tactusoft.kpi.view.model.ReportDaily;
@@ -155,8 +155,8 @@ public class ProcessBo implements Serializable {
 
 		try {
 
-			KpiLastDayWeek lastRow = (KpiLastDayWeek) dao.find(
-					"from KpiLastDayWeek o where o.idWeek = " + idKpiWeek).get(
+			KpiGraphDaily lastRow = (KpiGraphDaily) dao.find(
+					"from KpiGraphDaily o where o.idWeek = " + idKpiWeek).get(
 					0);
 
 			List<KpiDailySumHours> listDailyDelay = dao
