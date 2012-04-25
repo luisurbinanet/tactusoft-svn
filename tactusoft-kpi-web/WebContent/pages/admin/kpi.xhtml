@@ -49,7 +49,7 @@
 				<p:column style="width:30px">
 					<h:panelGrid columns="3" styleClass="actions" cellpadding="2">
 						<p:commandButton id="selectButton" update=":editForm:dialogPanel"
-							oncomplete="dialogPanel.show()" icon="ui-icon-search"
+							oncomplete="dlgPanel.show()" icon="ui-icon-search"
 							title="#{msg['btn_edit']}">
 							<f:setPropertyActionListener value="#{rec}"
 								target="#{kpiHeaderBacking.selected}" />
@@ -65,7 +65,7 @@
 				<p:commandButton id="cmdAdd"
 					actionListener="#{kpiHeaderBacking.newAction}"
 					update=":editForm:dialogPanel" icon="ui-icon-plusthick"
-					value="#{msg['btn_new']}" oncomplete="dialogPanel.show()"
+					value="#{msg['btn_new']}" oncomplete="dlgPanel.show()"
 					disabled="#{kpiHeaderBacking.idSelectedCompany == -1?true:false}" />
 				<p:commandButton id="cmdOK"
 					actionListener="#{kpiHeaderBacking.saveAllAction}"
@@ -88,7 +88,7 @@
 					<p:commandButton id="cmdAdd"
 						actionListener="#{kpiHeaderBacking.addAction}"
 						update=":editForm:display2" icon="ui-icon-plusthick"
-						value="#{msg['btn_new']}" oncomplete="dialogPanel2.show()" 
+						value="#{msg['btn_new']}" oncomplete="dlgPanel2.show()" 
 						disabled="#{kpiHeaderBacking.selected.id == null?true:false}"/>
 					<p:commandButton id="cmdDelete"
 						actionListener="#{kpiHeaderBacking.deleteAction}"
@@ -108,7 +108,7 @@
 			<p:growl id="growl" showDetail="true" />
 
 			<p:dialog id="dialogPanel" header="#{msg['msg_detail']}"
-				widgetVar="dialogPanel" resizable="false" modal="false" width="500">
+				widgetVar="dlgPanel" resizable="false" modal="false" width="500">
 
 				<h:panelGrid id="display" columns="2" width="100%">
 
@@ -142,7 +142,7 @@
 			</p:dialog>
 
 			<p:dialog id="dialogPanel2" header="#{msg['msg_detail']}"
-				resizable="false" modal="false" width="500" widgetVar="dialogPanel2">
+				resizable="false" modal="false" width="500" widgetVar="dlgPanel2">
 
 				<h:panelGrid id="display2" columns="2" width="100%">
 
@@ -158,7 +158,7 @@
 					<p:commandButton id="cmdSave2"
 						actionListener="#{kpiHeaderBacking.addSaveAction}"
 						update=":form:recordTable2" icon="ui-icon-disk"
-						value="#{msg['btn_save']}" oncomplete="dialogPanel2.hide()" 
+						value="#{msg['btn_save']}" oncomplete="dlgPanel2.hide()" 
 						process="@parent">
 					</p:commandButton>	
 				</f:facet>

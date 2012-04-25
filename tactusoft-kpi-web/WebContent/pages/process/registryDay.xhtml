@@ -74,6 +74,18 @@
 						value="#{kpiDailyBacking.selected.failuresOrders}" min="0"
 						max="999" maxlength="3"
 						disabled="#{kpiDailyBacking.selected.state == 1?false:true}" />
+						
+					<h:outputLabel value="#{msg['day_wo_indentified_work']}" />
+					<p:spinner id="identifiedWork"
+						value="#{kpiDailyBacking.selected.identifiedWork}" min="0"
+						max="999" maxlength="3"
+						disabled="#{kpiDailyBacking.selected.state == 1?false:true}" />
+						
+					<h:outputLabel value="#{msg['day_wo_founded_work']}" />
+					<p:spinner id="foundWork"
+						value="#{kpiDailyBacking.selected.foundWork}" min="0"
+						max="999" maxlength="3"
+						disabled="#{kpiDailyBacking.selected.state == 1?false:true}" />		
 
 				</h:panelGrid>
 
@@ -102,7 +114,7 @@
 
 					<p:column style="width:40px">
 						<h:panelGrid columns="3" styleClass="actions" cellpadding="2">
-							<p:commandButton id="selectButton" update=":editForm:dlgEdit"
+							<p:commandButton id="selectButton" update=":editForm:dialogEdit"
 								oncomplete="dlgEdit.show()" icon="ui-icon-search"
 								title="#{msg['btn_edit']}">
 								<f:setPropertyActionListener value="#{rec}"
@@ -116,7 +128,7 @@
 				<f:facet name="footer">
 					<p:commandButton id="cmdSave"
 						action="#{kpiDailyBacking.saveAction}"
-						update=":editForm:display :editForm:recordTable growl"
+						update="growl"
 						icon="ui-icon-disk" value="#{msg['btn_save']}" process="@form"
 						disabled="#{kpiDailyBacking.selected.state == 0?true:false || kpiDailyBacking.selected.id == null}">
 						<f:setPropertyActionListener target="#{kpiDailyBacking.pageType}"
@@ -127,7 +139,7 @@
 			</p:panel>
 
 			<p:dialog header="#{msg['day_reg_wo_num_hours']}" widgetVar="dlgEdit"
-				resizable="false" id="dlgEdit" showEffect="fade"
+				resizable="false" id="dialogEdit" showEffect="fade"
 				hideEffect="explode" modal="false">
 
 				<h:panelGrid id="dlgDisplay" columns="2" cellpadding="4"

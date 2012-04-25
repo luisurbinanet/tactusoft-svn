@@ -2,7 +2,6 @@
 <!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
 
 <hibernate-reverse-engineering>
-	<table-filter match-name="kpi_role"></table-filter>
-	<table-filter match-name="kpi_user"></table-filter>
-	<table-filter match-name="kpi_user_role"></table-filter>
+	<table-filter match-name="med_role"></table-filter>
+	<table-filter match-name="med_user"></table-filter>
 </hibernate-reverse-engineering>

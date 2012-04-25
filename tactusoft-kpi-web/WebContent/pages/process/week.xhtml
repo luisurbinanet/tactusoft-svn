@@ -23,7 +23,7 @@
 				paginator="true" rows="20">
 
 				<p:ajax event="rowSelect" update=":editForm:dialogPanel"
-					oncomplete="dialogPanel.show()" />
+					oncomplete="dlgPanel.show()" />
 
 				<p:column headerText="#{msg['wek_name']}">#{rec.name}</p:column>
 
@@ -50,7 +50,7 @@
 			<h:panelGrid columns="2" style="align='left'">
 				<p:commandButton id="cmdNew" action="#{kpiWeekBacking.newAction}"
 					update=":editForm:dialogPanel" icon="ui-icon-plusthick"
-					value="#{msg['btn_new']}" oncomplete="dialogPanel.show()" />
+					value="#{msg['btn_new']}" oncomplete="dlgPanel.show()" />
 			</h:panelGrid>
 
 			<p:spacer height="10" />
@@ -60,7 +60,7 @@
 
 			<p:dialog id="dialogPanel"
 				header="#{msg['msg_record_selected']} #{kpiWeekBacking.selected.name}"
-				widgetVar="dialogPanel" resizable="false" modal="false" width="400">
+				widgetVar="dlgPanel" resizable="false" modal="false" width="400">
 
 				<p:growl id="growl" showDetail="true" />
 
@@ -103,7 +103,7 @@
 	             if(args.saved!='true') {  
 	                 jQuery('#dialogPanel').effect("shake", { times:1 }, 50);   
 	             } else {                                      
-	             	dialogPanel.hide();   
+	            	 dlgPanel.hide();   
 	             }
 	         }
         </script>
