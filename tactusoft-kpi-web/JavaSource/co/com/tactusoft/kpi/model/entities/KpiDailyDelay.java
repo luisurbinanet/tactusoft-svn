@@ -1,14 +1,17 @@
 package co.com.tactusoft.kpi.model.entities;
 
-// Generated 20/02/2012 11:10:42 AM by Hibernate Tools 3.4.0.CR1
+// Generated 26/04/2012 09:35:42 AM by Hibernate Tools 3.4.0.CR1
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -26,6 +29,8 @@ public class KpiDailyDelay implements java.io.Serializable {
 	private KpiDelay kpiDelay;
 	private KpiDaily kpiDaily;
 	private BigDecimal numHours;
+	private Set<KpiDailyDelayWo> kpiDailyDelayWos = new HashSet<KpiDailyDelayWo>(
+			0);
 
 	public KpiDailyDelay() {
 	}
@@ -38,6 +43,15 @@ public class KpiDailyDelay implements java.io.Serializable {
 		this.numHours = numHours;
 	}
 
+	public KpiDailyDelay(BigDecimal id, KpiDelay kpiDelay, KpiDaily kpiDaily,
+			BigDecimal numHours, Set<KpiDailyDelayWo> kpiDailyDelayWos) {
+		this.id = id;
+		this.kpiDelay = kpiDelay;
+		this.kpiDaily = kpiDaily;
+		this.numHours = numHours;
+		this.kpiDailyDelayWos = kpiDailyDelayWos;
+	}
+
 	@Id
 	@Column(name = "id", unique = true, nullable = false, scale = 0)
 	public BigDecimal getId() {
@@ -48,7 +62,7 @@ public class KpiDailyDelay implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_delay", nullable = false)
 	public KpiDelay getKpiDelay() {
 		return this.kpiDelay;
@@ -68,13 +82,22 @@ public class KpiDailyDelay implements java.io.Serializable {
 		this.kpiDaily = kpiDaily;
 	}
 
-	@Column(name = "num_hours", nullable = false, scale = 0)
+	@Column(name = "num_hours", nullable = false)
 	public BigDecimal getNumHours() {
 		return this.numHours;
 	}
 
 	public void setNumHours(BigDecimal numHours) {
 		this.numHours = numHours;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "kpiDailyDelay")
+	public Set<KpiDailyDelayWo> getKpiDailyDelayWos() {
+		return this.kpiDailyDelayWos;
+	}
+
+	public void setKpiDailyDelayWos(Set<KpiDailyDelayWo> kpiDailyDelayWos) {
+		this.kpiDailyDelayWos = kpiDailyDelayWos;
 	}
 
 }
