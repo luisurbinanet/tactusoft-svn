@@ -215,7 +215,7 @@ public class ProcessBo implements Serializable {
 		Parameter paramater1 = new Parameter("P_ID_DAILY_DELAY", idDailyDelay,
 				BigDecimalType.INSTANCE);
 		Parameter paramater2 = new Parameter("P_WO", wo, StringType.INSTANCE);
-		Parameter paramater3 = new Parameter("P_ID_DAILY_DELAY", numHours,
+		Parameter paramater3 = new Parameter("P_NUM_HOURS", numHours,
 				BigDecimalType.INSTANCE);
 
 		dao.findByNameQuery("callKpiRtDailyDelayWo", paramater1, paramater2,

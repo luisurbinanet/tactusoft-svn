@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +27,7 @@ import co.com.tactusoft.kpi.model.entities.KpiWeek;
 import co.com.tactusoft.kpi.util.Constant;
 import co.com.tactusoft.kpi.util.FacesUtil;
 import co.com.tactusoft.kpi.view.model.KpiDailyDelayModel;
+import co.com.tactusoft.kpi.view.model.KpiDailyDelayWOModel;
 import co.com.tactusoft.kpi.view.model.KpiDailyModel;
 
 @Named
@@ -62,7 +64,10 @@ public class KpiDailyBacking implements Serializable {
 	private Map<BigDecimal, KpiDaily> mapKpiDaily = new HashMap<BigDecimal, KpiDaily>();
 
 	private String pageType;
+
 	private String wo;
+	private BigDecimal numHours;
+	private KpiDailyDelayWOModel modelHours;
 
 	public KpiDailyBacking() {
 		selected = new KpiDaily();
@@ -211,6 +216,22 @@ public class KpiDailyBacking implements Serializable {
 		this.wo = wo;
 	}
 
+	public BigDecimal getNumHours() {
+		return numHours;
+	}
+
+	public void setNumHours(BigDecimal numHours) {
+		this.numHours = numHours;
+	}
+
+	public KpiDailyDelayWOModel getModelHours() {
+		return modelHours;
+	}
+
+	public void setModelHours(KpiDailyDelayWOModel modelHours) {
+		this.modelHours = modelHours;
+	}
+
 	public void newAction() {
 		selected = new KpiDaily();
 	}
@@ -319,11 +340,14 @@ public class KpiDailyBacking implements Serializable {
 				handleDayChange();
 			} else {
 				selected = new KpiDaily();
+				listDailyDelay = new LinkedList<KpiDailyDelay>();
+				modelDailyDelay = new KpiDailyDelayModel(listDailyDelay);
 			}
 		} else {
 			selected = new KpiDaily();
 			model = new KpiDailyModel();
-			modelDailyDelay = new KpiDailyDelayModel();
+			listDailyDelay = new LinkedList<KpiDailyDelay>();
+			modelDailyDelay = new KpiDailyDelayModel(listDailyDelay);
 			listDays = new ArrayList<SelectItem>();
 			selectedDetail = new KpiDailyDelay();
 		}
@@ -337,9 +361,21 @@ public class KpiDailyBacking implements Serializable {
 		selectedDetail = new KpiDailyDelay();
 	}
 
+	public void newDetailAction() {
+		this.wo = "";
+		this.numHours = new BigDecimal(0);
+	}
+
 	public void saveDetailAction() {
-		service.save(selectedDetail);
-		service.saveKpiDailyDelayWo(selectedDetail.getId(), wo, selectedDetail.getNumHours());
+		service.saveKpiDailyDelayWo(selectedDetail.getId(), this.wo,
+				this.numHours);
+		listDailyDelay = adminService.getListKpiDailyDelayByDay(selected
+				.getId());
+		modelDailyDelay = new KpiDailyDelayModel(listDailyDelay);
+	}
+
+	public void searchDetailAction() {
+
 	}
 
 }
