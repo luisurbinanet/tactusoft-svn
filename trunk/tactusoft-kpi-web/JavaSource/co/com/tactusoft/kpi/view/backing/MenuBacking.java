@@ -146,6 +146,12 @@ public class MenuBacking implements Serializable {
 		menuChild.setName(FacesUtil.getMessage("menu_registry_days"));
 		menuChild.setPage("/pages/process/registryDay");
 		listChilds.add(menuChild);
+		
+		menuChild = new MenuModel();
+		menuChild.setId(11);
+		menuChild.setName(FacesUtil.getMessage("title_registry_hours"));
+		menuChild.setPage("/pages/process/registryHours");
+		listChilds.add(menuChild);
 
 		menuModel.setChilds(listChilds);
 
@@ -158,12 +164,12 @@ public class MenuBacking implements Serializable {
 		List<MenuModel> listChilds;
 
 		menuModel = new MenuModel();
-		menuModel.setId(11);
+		menuModel.setId(12);
 		menuModel.setName(FacesUtil.getMessage("menu_reports"));
 
 		listChilds = new LinkedList<MenuModel>();
 		menuChild = new MenuModel();
-		menuChild.setId(12);
+		menuChild.setId(13);
 		menuChild.setName(FacesUtil.getMessage("menu_reports_daily"));
 		menuChild.setPage("/pages/reports/reportDaily");
 		listChilds.add(menuChild);

@@ -13,6 +13,8 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import co.com.tactusoft.kpi.util.Parameter;
+
 @Repository
 public class CustomHibernateDaoImpl extends HibernateDaoSupport implements
 		CustomHibernateDao {
@@ -84,6 +86,23 @@ public class CustomHibernateDaoImpl extends HibernateDaoSupport implements
 		}
 		return id;
 
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T> List<T> findByNameQuery(String namedQuery,
+			Parameter... parameters) {
+		Session session = getHibernateTemplate().getSessionFactory()
+				.getCurrentSession();
+		Transaction transaction = session.beginTransaction();
+		Query query = session.getNamedQuery(namedQuery);
+		for (int i = 0; i < parameters.length; i++) {
+			Parameter param = parameters[i];
+			query.setParameter(param.getNameParameter(),
+					param.getValueParameter(), param.getType());
+		}
+		final List<T> entities = query.list();
+		transaction.commit();
+		return entities;
 	}
 
 }
