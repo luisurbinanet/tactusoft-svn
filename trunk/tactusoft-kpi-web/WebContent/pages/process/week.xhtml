@@ -5,15 +5,13 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="../layout/main.xhtml">
+	<ui:define name="title">
+		#{msg['title_week']}
+	</ui:define>
+
 	<ui:define name="content">
 
-		<div class="rco-blockheader">
-			<div class="l"></div>
-			<div class="r"></div>
-			<div class="t">#{msg['title_week']}</div>
-		</div>
-
-		<p:spacer height="20" />
+		<p:spacer height="10" />
 
 		<h:form id="form">
 
