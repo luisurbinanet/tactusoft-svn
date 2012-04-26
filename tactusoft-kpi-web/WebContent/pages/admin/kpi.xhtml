@@ -5,15 +5,14 @@
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="../layout/main.xhtml">
+
+	<ui:define name="title">
+		#{msg['title_header']}
+	</ui:define>
+
 	<ui:define name="content">
 
-		<div class="rco-blockheader">
-			<div class="l"></div>
-			<div class="r"></div>
-			<div class="t">#{msg['title_header']}</div>
-		</div>
-
-		<p:spacer height="20" />
+		<p:spacer height="10" />
 
 		<h:form id="form">
 
@@ -70,8 +69,8 @@
 				<p:commandButton id="cmdOK"
 					actionListener="#{kpiHeaderBacking.saveAllAction}"
 					update=":form:recordTable :editForm:display :editForm:growl"
-					icon="ui-icon-check" value="#{msg['btn_save_all']}" 
-					disabled="#{kpiHeaderBacking.idSelectedCompany == -1?true:false}"/>
+					icon="ui-icon-check" value="#{msg['btn_save_all']}"
+					disabled="#{kpiHeaderBacking.idSelectedCompany == -1?true:false}" />
 			</h:panelGrid>
 
 			<p:spacer height="10" />
@@ -88,13 +87,13 @@
 					<p:commandButton id="cmdAdd"
 						actionListener="#{kpiHeaderBacking.addAction}"
 						update=":editForm:display2" icon="ui-icon-plusthick"
-						value="#{msg['btn_new']}" oncomplete="dlgPanel2.show()" 
-						disabled="#{kpiHeaderBacking.selected.id == null?true:false}"/>
+						value="#{msg['btn_new']}" oncomplete="dlgPanel2.show()"
+						disabled="#{kpiHeaderBacking.selected.id == null?true:false}" />
 					<p:commandButton id="cmdDelete"
 						actionListener="#{kpiHeaderBacking.deleteAction}"
 						update=":form:recordTable2 :editForm:display2"
-						icon="ui-icon-check" value="#{msg['btn_delete']}" 
-						disabled="#{kpiHeaderBacking.selected.id == null?true:false}"/>
+						icon="ui-icon-check" value="#{msg['btn_delete']}"
+						disabled="#{kpiHeaderBacking.selected.id == null?true:false}" />
 				</f:facet>
 
 			</p:dataTable>
@@ -115,7 +114,7 @@
 					<h:outputText value="#{msg['hdr_name']}" />
 					<p:inputText value="#{kpiHeaderBacking.selected.name}"
 						style="width:100%" />
-						
+
 					<h:outputText value="#{msg['hdr_description']}" />
 					<p:inputTextarea value="#{kpiHeaderBacking.selected.description}"
 						style="width:100%" maxlength="255" rows="3" />
@@ -158,9 +157,9 @@
 					<p:commandButton id="cmdSave2"
 						actionListener="#{kpiHeaderBacking.addSaveAction}"
 						update=":form:recordTable2" icon="ui-icon-disk"
-						value="#{msg['btn_save']}" oncomplete="dlgPanel2.hide()" 
+						value="#{msg['btn_save']}" oncomplete="dlgPanel2.hide()"
 						process="@parent">
-					</p:commandButton>	
+					</p:commandButton>
 				</f:facet>
 
 			</p:dialog>

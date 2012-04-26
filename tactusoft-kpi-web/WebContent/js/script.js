@@ -1,167 +1,44 @@
 /* begin Page */
 
-// required for IE7, #150675
-if (window.addEvent) window.addEvent('domready', function() { });
-
-var artEventHelper = {
-	'bind': function(obj, evt, fn) {
-		if (obj.addEventListener)
-			obj.addEventListener(evt, fn, false);
-		else if (obj.attachEvent)
-			obj.attachEvent('on' + evt, fn);
-		else
-			obj['on' + evt] = fn;
-	}
-};
-
-var artUserAgent = navigator.userAgent.toLowerCase();
-
-var artBrowser = {
-	version: (artUserAgent.match(/.+(?:rv|it|ra|ie)[\/: ]([\d.]+)/) || [])[1],
-	safari: /webkit/.test(artUserAgent) && !/chrome/.test(artUserAgent),
-	chrome: /chrome/.test(artUserAgent),
-	opera: /opera/.test(artUserAgent),
-	msie: /msie/.test(artUserAgent) && !/opera/.test(artUserAgent),
-	mozilla: /mozilla/.test(artUserAgent) && !/(compatible|webkit)/.test(artUserAgent)
-};
- 
-artCssHelper = function() {
-    var is = function(t) { return (artUserAgent.indexOf(t) != -1) };
-    var el = document.getElementsByTagName('html')[0];
-    var val = [(!(/opera|webtv/i.test(artUserAgent)) && /msie (\d)/.test(artUserAgent)) ? ('ie ie' + RegExp.$1)
-    : is('firefox/2') ? 'gecko firefox2'
-    : is('firefox/3') ? 'gecko firefox3'
-    : is('gecko/') ? 'gecko'
-    : is('chrome/') ? 'chrome'
-    : is('opera/9') ? 'opera opera9' : /opera (\d)/.test(artUserAgent) ? 'opera opera' + RegExp.$1
-    : is('konqueror') ? 'konqueror'
-    : is('applewebkit/') ? 'webkit safari'
-    : is('mozilla/') ? 'gecko' : '',
-    (is('x11') || is('linux')) ? ' linux'
-    : is('mac') ? ' mac'
-    : is('win') ? ' win' : ''
-    ].join(' ');
-    if (!el.className) {
-     el.className = val;
-    } else {
-     var newCl = el.className;
-     newCl += (' ' + val);
-     el.className = newCl;
-    }
-} ();
+/* Created by Artisteer v3.0.0.32906 */
 
 (function() {
     // fix ie blinking
     var m = document.uniqueID && document.compatMode && !window.XMLHttpRequest && document.execCommand;
     try { if (!!m) { m('BackgroundImageCache', false, true); } }
     catch (oh) { };
+    // css helper
+    var u = navigator.userAgent.toLowerCase();
+    var is = function(t) { return (u.indexOf(t) != -1) };
+    jQuery('html').addClass([(!(/opera|webtv/i.test(u)) && /msie (\d)/.test(u)) ? ('ie ie' + RegExp.$1)
+    : is('firefox/2') ? 'gecko firefox2'
+    : is('firefox/3') ? 'gecko firefox3'
+    : is('gecko/') ? 'gecko'
+    : is('chrome/') ? 'chrome'
+    : is('opera/9') ? 'opera opera9' : /opera (\d)/.test(u) ? 'opera opera' + RegExp.$1
+    : is('konqueror') ? 'konqueror'
+    : is('applewebkit/') ? 'webkit safari'
+    : is('mozilla/') ? 'gecko' : '',
+    (is('x11') || is('linux')) ? ' linux'
+    : is('mac') ? ' mac'
+    : is('win') ? ' win' : ''
+    ].join(' '));
 })();
-
-var artLoadEvent = (function() {
-    var list = [];
-
-    var done = false;
-    var ready = function() {
-        if (done) return;
-        done = true;
-        for (var i = 0; i < list.length; i++)
-            list[i]();
-    };
-
-    if (document.addEventListener && !artBrowser.opera)
-        document.addEventListener('DOMContentLoaded', ready, false);
-
-    if (artBrowser.msie && window == top) {
-        (function() {
-            try {
-                document.documentElement.doScroll('left');
-            } catch (e) {
-                setTimeout(arguments.callee, 10);
-                return;
-            }
-            ready();
-        })();
-    }
-
-    if (artBrowser.opera) {
-        document.addEventListener('DOMContentLoaded', function() {
-            for (var i = 0; i < document.styleSheets.length; i++) {
-                if (document.styleSheets[i].disabled) {
-                    setTimeout(arguments.callee, 10);
-                    return;
-                }
-            }
-            ready();
-        }, false);
-    }
-
-    if (artBrowser.safari || artBrowser.chrome) {
-        var numStyles;
-        (function() {
-            if (document.readyState != 'loaded' && document.readyState != 'complete') {
-                setTimeout(arguments.callee, 10);
-                return;
-            }
-            if ('undefined' == typeof numStyles) {
-                numStyles = document.getElementsByTagName('style').length;
-                var links = document.getElementsByTagName('link');
-                for (var i = 0; i < links.length; i++) {
-                    numStyles += (links[i].getAttribute('rel') == 'stylesheet') ? 1 : 0;
-                }
-                if (document.styleSheets.length != numStyles) {
-                    setTimeout(arguments.callee, 0);
-                    return;
-                }
-            }
-            ready();
-        })();
-    }
-
-    if (!(artBrowser.msie && window != top)) { // required for Blogger Page Elements in IE, #154540
-        artEventHelper.bind(window, 'load', ready);
-    }
-    return ({
-        add: function(f) {
-            list.push(f);
-        }
-    })
-})();
-
-
-function artGetElementsByClassName(clsName, parentEle, tagName) {
-	var elements = null;
-	var found = [];
-	var s = String.fromCharCode(92);
-	var re = new RegExp('(?:^|' + s + 's+)' + clsName + '(?:$|' + s + 's+)');
-	if (!parentEle) parentEle = document;
-	if (!tagName) tagName = '*';
-	elements = parentEle.getElementsByTagName(tagName);
-	if (elements) {
-		for (var i = 0; i < elements.length; ++i) {
-			if (elements[i].className.search(re) != -1) {
-				found[found.length] = elements[i];
-			}
-		}
-	}
-	return found;
-}
 
 var _artStyleUrlCached = null;
 function artGetStyleUrl() {
     if (null == _artStyleUrlCached) {
         var ns;
         _artStyleUrlCached = '';
-        ns = document.getElementsByTagName('link');
+        ns = jQuery('link');
         for (var i = 0; i < ns.length; i++) {
-            var l = ns[i];
-            if (l.href && /style\.ie6\.css(\?.*)?$/.test(l.href)) {
-                return _artStyleUrlCached = l.href.replace(/style\.ie6\.css(\?.*)?$/, '');
-            }
+            var l = ns[i].href;
+            if (l && /style\.ie6\.css(\?.*)?$/.test(l))
+                return _artStyleUrlCached = l.replace(/style\.ie6\.css(\?.*)?$/, '');
         }
-
-        ns = document.getElementsByTagName('style');
+        ns = jQuery('style');
         for (var i = 0; i < ns.length; i++) {
-            var matches = new RegExp('import\\s+"([^"]+\\/)style\\.ie6\\.css"').exec(ns[i].innerHTML);
+            var matches = new RegExp('import\\s+"([^"]+\\/)style\\.ie6\\.css"').exec(ns[i].html());
             if (null != matches && matches.length > 0)
                 return _artStyleUrlCached = matches[1];
         }
@@ -170,7 +47,7 @@ function artGetStyleUrl() {
 }
 
 function artFixPNG(element) {
-	if (artBrowser.msie && artBrowser.version < 7) {
+    if (jQuery.browser.msie && parseInt(jQuery.browser.version) < 7) {
 		var src;
 		if (element.tagName == 'IMG') {
 			if (/\.png$/.test(element.src)) {
@@ -189,286 +66,107 @@ function artFixPNG(element) {
 	}
 }
 
-function artHasClass(el, cls) {
-	return (el && el.className && (' ' + el.className + ' ').indexOf(' ' + cls + ' ') != -1);
-}
-/* end Page */
+jQuery(function() {
+    jQuery.each(jQuery('ul.rco-menu>li,ul.rco-vmenu>li'), function(i, val) {
+        var l = jQuery(val); var s = l.children('span'); if (s.length == 0) return;
+        var t = l.find('span.t').last(); l.children('a').append(t.html(t.text()));
+        s.remove();
+    });
+});/* end Page */
 
 /* begin Menu */
-function artGTranslateFix() {
-	var menus = artGetElementsByClassName("rco-menu", document, "ul");
-	for (var i = 0; i < menus.length; i++) {
-		var menu = menus[i];
-		var childs = menu.childNodes;
-		var listItems = [];
-		for (var j = 0; j < childs.length; j++) {
-			var el = childs[j];
-			if (String(el.tagName).toLowerCase() == "li") listItems.push(el);
-		}
-		for (var j = 0; j < listItems.length; j++) {
-			var item = listItems[j];
-			var a = null;
-			var gspan = null;
-			for (var p = 0; p < item.childNodes.length; p++) {
-				var l = item.childNodes[p];
-				if (!(l && l.tagName)) continue;
-				if (String(l.tagName).toLowerCase() == "a") a = l;
-				if (String(l.tagName).toLowerCase() == "span") gspan = l;
-			}
-			if (gspan && a) {
-				var t = null;
-				for (var k = 0; k < gspan.childNodes.length; k++) {
-					var e = gspan.childNodes[k];
-					if (!(e && e.tagName)) continue;
-					if (String(e.tagName).toLowerCase() == "a" && e.firstChild) e = e.firstChild;
-					if (e && e.className && e.className == 't') {
-						t = e;
-						if (t.firstChild && t.firstChild.tagName && String(t.firstChild.tagName).toLowerCase() == "a") {
-							while (t.firstChild.firstChild) t.appendChild(t.firstChild.firstChild);
-							t.removeChild(t.firstChild);
-						}
-						a.appendChild(t);
-						break;
-					}
-				}
-				gspan.parentNode.removeChild(gspan);
-			}
-		}
-	}
-}
-artLoadEvent.add(artGTranslateFix);
+jQuery(function() {
+    jQuery.each(jQuery('ul.rco-menu>li:not(:last-child)'), function(i, val) {
+        jQuery('<li class="rco-menu-li-separator"><span class="rco-menu-separator"> </span></li>').insertAfter(val);
+    });
+    if (!jQuery.browser.msie || parseInt(jQuery.browser.version) > 6) return;
+    jQuery.each(jQuery('ul.rco-menu li'), function(i, val) {
+        val.j = jQuery(val);
+        val.UL = val.j.children('ul:first');
+        if (val.UL.length == 0) return;
+        val.A = val.j.children('a:first');
+        this.onmouseenter = function() {
+            this.j.addClass('rco-menuhover');
+            this.UL.addClass('rco-menuhoverUL');
+            this.A.addClass('rco-menuhoverA');
+        };
+        this.onmouseleave = function() {
+            this.j.removeClass('rco-menuhover');
+            this.UL.removeClass('rco-menuhoverUL');
+            this.A.removeClass('rco-menuhoverA');
+        };
 
-function artAddMenuSeparators() {
-	var menus = artGetElementsByClassName("rco-menu", document, "ul");
-	for (var i = 0; i < menus.length; i++) {
-		var menu = menus[i];
-		var childs = menu.childNodes;
-		var listItems = [];
-		for (var j = 0; j < childs.length; j++) {
-			var el = childs[j];
-			if (String(el.tagName).toLowerCase() == "li") listItems.push(el);
-		}
-		for (var j = 0; j < listItems.length - 1; j++) {
-			var item = listItems[j];
-			var span = document.createElement('span');
-			span.className = 'rco-menu-separator';
-			var li = document.createElement('li');
-			li.className = 'rco-menu-li-separator';
-			li.appendChild(span);
-			item.parentNode.insertBefore(li, item.nextSibling);
-		}
-	}
-}
-artLoadEvent.add(artAddMenuSeparators);
+    });
+});
 
-function artMenuIE6Setup() {
-	var isIE6 = navigator.userAgent.toLowerCase().indexOf("msie") != -1
-    && navigator.userAgent.toLowerCase().indexOf("msie 7") == -1;
-	if (!isIE6) return;
-	var aTmp2, i, j, oLI, aUL, aA;
-	var aTmp = artGetElementsByClassName("rco-menu", document, "ul");
-	for (i = 0; i < aTmp.length; i++) {
-		aTmp2 = aTmp[i].getElementsByTagName("li");
-		for (j = 0; j < aTmp2.length; j++) {
-			oLI = aTmp2[j];
-			aUL = oLI.getElementsByTagName("ul");
-			if (aUL && aUL.length) {
-				oLI.UL = aUL[0];
-				aA = oLI.getElementsByTagName("a");
-				if (aA && aA.length)
-					oLI.A = aA[0];
-				oLI.onmouseenter = function() {
-					this.className += " rco-menuhover";
-					this.UL.className += " rco-menuhoverUL";
-					if (this.A) this.A.className += " rco-menuhoverA";
-				};
-				oLI.onmouseleave = function() {
-					this.className = this.className.replace(/rco-menuhover/, "");
-					this.UL.className = this.UL.className.replace(/rco-menuhoverUL/, "");
-					if (this.A) this.A.className = this.A.className.replace(/rco-menuhoverA/, "");
-				};
-			}
-		}
-	}
-}
-artLoadEvent.add(artMenuIE6Setup);
 /* end Menu */
 
 /* begin Layout */
-function artLayoutIESetup() {
-    var isIE = navigator.userAgent.toLowerCase().indexOf("msie") != -1;
-    if (!isIE) return;
-    var q = artGetElementsByClassName("rco-content-layout", document, "div");
-    if (!q || !q.length) return;
-    for (var i = 0; i < q.length; i++) {
-        var l = q[i];
-        var l_childs = l.childNodes;
-        var r = null;
-        for (var p = 0; p < l_childs.length; p++) {
-            var l_ch = l_childs[p];
-            if ((String(l_ch.tagName).toLowerCase() == "div") && artHasClass(l_ch, "rco-content-layout-row")) {
-                r = l_ch;
-                break;
-            }
-        }
-        if (!r) continue;
-        var c = [];
-        var r_childs = r.childNodes;
-        for (var o = 0; o < r_childs.length; o++) {
-            var r_ch = r_childs[o];
-            if ((String(r_ch.tagName).toLowerCase() == "div") && artHasClass(r_ch, "rco-layout-cell")) {
-                c.push(r_ch);
-            }
-        }
-        if (!c || !c.length) continue;
-        var table = document.createElement("table");
-        table.className = l.className;
-        var row = table.insertRow(-1);
-        table.className = l.className;
-        for (var j = 0; j < c.length; j++) {
-            var cell = row.insertCell(-1);
-            var s = c[j];
-            cell.className = s.className;
-            while (s.firstChild) {
-                cell.appendChild(s.firstChild);
-            }
-        }
-        l.parentNode.insertBefore(table, l);
-        l.parentNode.removeChild(l);
-    }
-}
-artLoadEvent.add(artLayoutIESetup);
+jQuery(function () {
+    if (!jQuery.browser.msie || parseInt(jQuery.browser.version) > 7) return;
+    var c = jQuery('div.rco-content');
+    if (c.length !== 1) return;
+    var s = c.parent().children('.rco-layout-cell:not(.rco-content)');
+    jQuery(window).bind('resize', function () {
+        if (c.w == c.parent().width()) return;
+        var w = 0; c.css('width', "0");
+        s.each(function () { w += this.clientWidth; });
+        c.w = c.parent().width();c.css('width', c.w - w);
+    }).trigger('resize');
+    jQuery('div.rco-content-layout-row').each(function () {
+        this.c = jQuery(this).children('.rco-layout-cell');
+    }).bind('resize', function () {
+        if (this.h == this.clientHeight) return;
+        this.c.css('height', 'auto');
+        this.h = this.clientHeight;
+        this.c.css('height', this.h + 'px');
+    }).trigger('resize');
+});
 /* end Layout */
 
 /* begin Button */
-
-function artButtonsSetupJsHover(className) {
-	var tags = ["input", "a", "button"];
-	for (var j = 0; j < tags.length; j++){
-		var buttons = artGetElementsByClassName(className, document, tags[j]);
-		for (var i = 0; i < buttons.length; i++) {
-			var button = buttons[i];
-			if (!button.tagName || !button.parentNode) return;
-			if (!artHasClass(button.parentNode, 'rco-button-wrapper')) {
-				if (!artHasClass(button, 'rco-button')) button.className += ' rco-button';
-				var wrapper = document.createElement('span');
-				wrapper.className = "rco-button-wrapper";
-				if (artHasClass(button, 'active')) wrapper.className += ' active';
-				var spanL = document.createElement('span');
-				spanL.className = "l";
-				spanL.innerHTML = " ";
-				wrapper.appendChild(spanL);
-				var spanR = document.createElement('span');
-				spanR.className = "r";
-				spanR.innerHTML = " ";
-				wrapper.appendChild(spanR);
-				button.parentNode.insertBefore(wrapper, button);
-				wrapper.appendChild(button);
-			}
-			artEventHelper.bind(button, 'mouseover', function(e) {
-				e = e || window.event;
-				wrapper = (e.target || e.srcElement).parentNode;
-				wrapper.className += " hover";
-			});
-			artEventHelper.bind(button, 'mouseout', function(e) {
-				e = e || window.event;
-				button = e.target || e.srcElement;
-				wrapper = button.parentNode;
-				wrapper.className = wrapper.className.replace(/hover/, "");
-				if (!artHasClass(button, 'active')) wrapper.className = wrapper.className.replace(/active/, "");
-			});
-			artEventHelper.bind(button, 'mousedown', function(e) {
-				e = e || window.event;
-				button = e.target || e.srcElement;
-				wrapper = button.parentNode;
-				if (!artHasClass(button, 'active')) wrapper.className += " active";
-			});
-			artEventHelper.bind(button, 'mouseup', function(e) {
-				e = e || window.event;
-				button = e.target || e.srcElement;
-				wrapper = button.parentNode;
-				if (!artHasClass(button, 'active')) wrapper.className = wrapper.className.replace(/active/, "");
-			});
-		}
-	}
+function artButtonSetup(className) {
+    jQuery.each(jQuery("a." + className + ", button." + className + ", input." + className), function(i, val) {
+        var b = jQuery(val);
+        if (!b.parent().hasClass('rco-button-wrapper')) {
+            if (!b.hasClass('rco-button')) b.addClass('rco-button');
+            jQuery("<span class='rco-button-wrapper'><span class='rco-button-l'> </span><span class='rco-button-r'> </span></span>").insertBefore(b).append(b);
+            if (b.hasClass('active')) b.parent().addClass('active');
+        }
+        b.mouseover(function() { jQuery(this).parent().addClass("hover"); });
+        b.mouseout(function() { var b = jQuery(this); b.parent().removeClass("hover"); if (!b.hasClass('active')) b.parent().removeClass('active'); });
+        b.mousedown(function() { var b = jQuery(this); b.parent().removeClass("hover"); if (!b.hasClass('active')) b.parent().addClass('active'); });
+        b.mouseup(function() { var b = jQuery(this); if (!b.hasClass('active')) b.parent().removeClass('active'); });
+    });
 }
+jQuery(function() { artButtonSetup("rco-button"); });
 
-artLoadEvent.add(function() { artButtonsSetupJsHover("rco-button"); });
 /* end Button */
 
 /* begin VMenu */
-function artAddVMenuSeparators() {
-    var create_VSeparator = function(sub, first) {
-        var cls = 'rco-v' + (sub ? "sub" : "") + 'menu-separator';
-        var li = document.createElement('li');
-        li.className = (first ? (cls + " " + cls + " rco-vmenu-separator-first") : cls);
-        var span = document.createElement('span');
-        span.className = cls+'-span';
-        li.appendChild(span);
-        return li;
-    };
-	var menus = artGetElementsByClassName("rco-vmenublock", document, "div");
-	for (var k = 0; k < menus.length; k++) {
-		var uls = menus[k].getElementsByTagName("ul");
-		for (var i = 0; i < uls.length; i++) {
-			var ul = uls[i];
-			var childs = ul.childNodes;
-			var listItems = [];
-			for (var y = 0; y < childs.length; y++) {
-				var el = childs[y];
-				if (String(el.tagName).toLowerCase() == "li") listItems.push(el);
-            }
-    		for (var j = 0; j < listItems.length; j++) {
-			    var item = listItems[j];
-			    if ((item.parentNode.getElementsByTagName("li")[0] == item) && (item.parentNode != uls[0]))
-			        item.parentNode.insertBefore(create_VSeparator(item.parentNode.parentNode.parentNode != uls[0], true), item);
-			    if (j < listItems.length - 1)
-			        item.parentNode.insertBefore(create_VSeparator(item.parentNode != uls[0], false), item.nextSibling);
-			}
-		}
-	}
-}
-artLoadEvent.add(artAddVMenuSeparators);
-
-/* end VMenu */
+jQuery(function() {
+    jQuery('ul.rco-vmenu li').not(':first').before('<li class="rco-vsubmenu-separator"><span class="rco-vsubmenu-separator-span"> </span></li>');
+    jQuery('ul.rco-vmenu > li.rco-vsubmenu-separator').removeClass('rco-vsubmenu-separator').addClass('rco-vmenu-separator').children('span').removeClass('rco-vsubmenu-separator-span').addClass('rco-vmenu-separator-span');
+    jQuery('ul.rco-vmenu > li > ul > li.rco-vsubmenu-separator:first-child').removeClass('rco-vsubmenu-separator').addClass('rco-vmenu-separator').addClass('rco-vmenu-separator-first').children('span').removeClass('rco-vsubmenu-separator-span').addClass('rco-vmenu-separator-span');
+});  /* end VMenu */
 
 /* begin VMenuItem */
-function artVMenu() {
-    var menus = artGetElementsByClassName("rco-vmenu", document, "ul");
-    for (var k = 0; k < menus.length; k++) {
-        var vmenu = menus[k];
-        vmenu.uls = vmenu.getElementsByTagName("ul");
-        vmenu.items = vmenu.getElementsByTagName("li");
-        vmenu.alinks = vmenu.getElementsByTagName("a");
-        
-        for (var x = 0; x < vmenu.items.length; x++) {
-            var li = vmenu.items[x];
-            li.className = li.className.replace(/active/, "").replace("  ", " ");
-            for (var s = 0; s < li.childNodes.length; s++) {
-                var ch = li.childNodes[s];
-                if (!(ch && ch.tagName)) continue;
-                if (String(ch.tagName).toLowerCase() == "a") {
-                    if (ch.href == window.location.href)
-                       vmenu.active = li;
-                    li.a = ch;
-                }
-                if (String(ch.tagName).toLowerCase() == "ul") 
-                    li.ul = ch;
-                ch.className = ch.className.replace(/active/, "").replace("  ", " ");
-            }
+jQuery(function() {
+    jQuery.each(jQuery('ul.rco-vmenu'), function(i, val) {
+        var m = jQuery(val);
+        m.find("ul, a").removeClass('active');
+        var links = m.find('a');
+        for (var i = 0; i < links.length; i++){
+            if (links[i].href == window.location.href) {
+                var a = jQuery(links[i]);
+                a.parent().children('ul').addClass('active');
+                a.parents('ul.rco-vmenu ul').addClass('active');
+                a.parents('ul.rco-vmenu li').children('a').addClass('active');
+                break; 
+            } 
         }
-        if (!vmenu.active) return;
-        if (vmenu.active.ul) vmenu.active.ul.className += " active";
-        var parent = vmenu.active;
-        while (parent && parent != vmenu) {
-            parent.className += " active";
-            if (parent.a) parent.a.className += " active";
-            parent = parent.parentNode;
-        }
-    }
-}
-
-artLoadEvent.add(artVMenu);
+    });
+});
 /* end VMenuItem */
 
 
