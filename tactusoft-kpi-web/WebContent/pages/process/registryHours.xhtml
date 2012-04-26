@@ -74,13 +74,16 @@
 					<p:column style="width:40px">
 						<h:panelGrid columns="2" styleClass="actions" cellpadding="2">
 							<p:commandButton id="addButton" update=":editForm:dlgDisplay"
+								action="#{kpiDailyBacking.searchDetailAction}"
 								oncomplete="dlgEdit.show()" icon="ui-icon-plusthick"
 								title="#{msg['btn_new']}">
 								<f:setPropertyActionListener value="#{rec}"
 									target="#{kpiDailyBacking.selectedDetail}" />
 							</p:commandButton>
-							<p:commandButton id="editButton" update=":editForm:dlgDisplay"
-								oncomplete="dlgEdit.show()" icon="ui-icon-search"
+							<p:commandButton id="viewButton"
+								update=":editForm:recordTableHours"
+								action="#{kpiDailyBacking.searchDetailAction}"
+								oncomplete="dlgView.show()" icon="ui-icon-search"
 								title="#{msg['btn_view']}">
 								<f:setPropertyActionListener value="#{rec}"
 									target="#{kpiDailyBacking.selectedDetail}" />
@@ -110,12 +113,14 @@
 					style="margin:0 auto;">
 
 					<h:outputText value="#{msg['day_wo_num_hours']}" />
-					<pe:inputNumber value="#{kpiDailyBacking.selectedDetail.numHours}"
-						symbol="hrs " />
+					<pe:inputNumber value="#{kpiDailyBacking.numHours}" symbol="hrs "
+						label="#{msg['day_wo_num_hours']}">
+
+					</pe:inputNumber>
 
 					<h:outputText value="#{msg['day_wo_OT']}" />
 					<h:inputText value="#{kpiDailyBacking.wo}"
-						label="#{msg['day_wo_OT']}" />
+						label="#{msg['day_wo_OT']}" required="true" />
 
 				</h:panelGrid>
 
@@ -124,6 +129,32 @@
 						action="#{kpiDailyBacking.saveDetailAction}"
 						update=":editForm:recordTable" oncomplete="dlgEdit.hide()"
 						icon="ui-icon-disk" value="#{msg['btn_save']}" />
+				</f:facet>
+
+			</p:dialog>
+
+			<p:dialog header="#{msg['day_reg_wo_num_hours']}" widgetVar="dlgView"
+				resizable="false" id="dialogView" showEffect="fade"
+				hideEffect="explode" modal="true">
+
+				<p:dataTable id="recordTableHours" var="rec"
+					value="#{kpiDailyBacking.modelHours}" rowKey="#{rec.id}"
+					paginator="true" rows="10">
+
+					<p:column headerText="#{msg['day_wo_delays']}">#{rec.wo}</p:column>
+
+					<p:column headerText="#{msg['day_wo_num_hours']}">
+						<h:outputText value="#{rec.numHours}">
+							<f:convertNumber pattern="###.##" />
+						</h:outputText>
+					</p:column>
+
+				</p:dataTable>
+
+				<f:facet name="footer">
+					<p:commandButton id="cmdReturnDetail" onclick="dlgView.hide()"
+						process="@none" icon="ui-icon-arrowreturnthick-1-w"
+						value="#{msg['btn_return']}" />
 				</f:facet>
 
 			</p:dialog>

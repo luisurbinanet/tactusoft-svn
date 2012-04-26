@@ -6,18 +6,22 @@
 
 <ui:composition template="../layout/mainSimple.xhtml">
 
+	<ui:define name="title">
+		#{msg['log_msg_denied']}
+	</ui:define>
+
 	<ui:define name="content">
 
-		<p:spacer height="100" />
-
 		<h:form>
-
 			<center>
-				<h:outputLabel value="#{msg['log_msg_denied']}" />
+				<h:outputLabel value="#{msg['log_msg_denied_2']}" />
+				<br /> <br /> <br /> <span class="rco-button-wrapper"> <span
+					class="rco-button-l"> </span> <span class="rco-button-r"> </span> <h:commandButton
+						value="#{msg['btn_return']}" action="#{menuBacking.actionPage}"
+						style="left: 0px; top: 0" styleClass="rco-button">
+						<f:param name="page" value="/pages/secure/login" />
+					</h:commandButton> </span>
 			</center>
-
-			<p:spacer height="100" />
-
 		</h:form>
 	</ui:define>
 </ui:composition>
