@@ -1,0 +1,135 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="../layout/main.xhtml">
+
+	<ui:define name="title">
+		#{msg['title_registry_hours']}
+	</ui:define>
+
+	<ui:define name="content">
+
+		<p:spacer height="10" />
+
+		<h:form id="form">
+
+			<p:panel width="100%">
+				<h:panelGrid id="pnlParameter" columns="2" width="100%">
+					<h:outputText value="#{msg['day_calendar_week']}"
+						style="width:100%" />
+					<p:selectOneMenu value="#{kpiDailyBacking.kpiWeekSelected}"
+						style="width:430px">
+						<f:selectItems value="#{kpiDailyBacking.listCalendarWeeks}" />
+						<p:ajax
+							update="selDay weekState :editForm:recordTable :editForm:cmdSave"
+							listener="#{kpiDailyBacking.handleWeekChange}" />
+					</p:selectOneMenu>
+
+					<h:outputText value="#{msg['day_day']}" style="width:100%" />
+					<p:selectOneMenu id="selDay"
+						value="#{kpiDailyBacking.kpiDailySelected}" style="width:430px">
+						<f:selectItems value="#{kpiDailyBacking.listDays}" />
+						<p:ajax update=":editForm:recordTable :editForm:cmdSave"
+							listener="#{kpiDailyBacking.handleDayChange}" />
+					</p:selectOneMenu>
+
+					<h:outputLabel value="#{msg['day_week_state']}" />
+					<h:outputText id="weekState"
+						value="#{kpiDailyBacking.selectedWeek.state == 40?msg['wek_state_40']:msg['wek_state_60']}" />
+				</h:panelGrid>
+			</p:panel>
+
+			<p:spacer height="10" />
+
+		</h:form>
+		<h:form id="editForm" prependId="false">
+
+			<p:growl id="growl" />
+
+			<p:panel style="widht:100%" header="#{msg['day_wo_delays']}">
+
+				<p:dataTable id="recordTable" var="rec"
+					value="#{kpiDailyBacking.modelDailyDelay}" rowKey="#{rec.id}"
+					paginator="true" rows="20"
+					selected="#{kpiDailyBacking.selectedDetail}">
+
+					<p:column headerText="#{msg['day_wo_delays']}" style="width:75%">#{rec.kpiDelay.name}</p:column>
+
+					<p:column headerText="#{msg['day_wo_num_hours']}" style="width:20%">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{rec.numHours}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:spinner value="#{rec.numHours}" style="width:100%" min="0.0"
+									max="999.9" maxlength="4" stepFactor="0.15" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column style="width:40px">
+						<h:panelGrid columns="2" styleClass="actions" cellpadding="2">
+							<p:commandButton id="addButton" update=":editForm:dlgDisplay"
+								oncomplete="dlgEdit.show()" icon="ui-icon-plusthick"
+								title="#{msg['btn_new']}">
+								<f:setPropertyActionListener value="#{rec}"
+									target="#{kpiDailyBacking.selectedDetail}" />
+							</p:commandButton>
+							<p:commandButton id="editButton" update=":editForm:dlgDisplay"
+								oncomplete="dlgEdit.show()" icon="ui-icon-search"
+								title="#{msg['btn_view']}">
+								<f:setPropertyActionListener value="#{rec}"
+									target="#{kpiDailyBacking.selectedDetail}" />
+							</p:commandButton>
+						</h:panelGrid>
+					</p:column>
+
+				</p:dataTable>
+
+				<f:facet name="footer">
+					<p:commandButton id="cmdSave"
+						action="#{kpiDailyBacking.saveAction}" update="growl"
+						icon="ui-icon-disk" value="#{msg['btn_save']}" process="@form"
+						disabled="#{kpiDailyBacking.selected.state == 0?true:false || kpiDailyBacking.selected.id == null}">
+						<f:setPropertyActionListener target="#{kpiDailyBacking.pageType}"
+							value="registryDay" />
+					</p:commandButton>
+				</f:facet>
+
+			</p:panel>
+
+			<p:dialog header="#{msg['day_reg_wo_num_hours']}" widgetVar="dlgEdit"
+				resizable="false" id="dialogEdit" showEffect="fade"
+				hideEffect="explode" modal="true">
+
+				<h:panelGrid id="dlgDisplay" columns="2" cellpadding="4"
+					style="margin:0 auto;">
+
+					<h:outputText value="#{msg['day_wo_num_hours']}" />
+					<pe:inputNumber value="#{kpiDailyBacking.selectedDetail.numHours}"
+						symbol="hrs " />
+
+					<h:outputText value="#{msg['day_wo_OT']}" />
+					<h:inputText value="#{kpiDailyBacking.wo}"
+						label="#{msg['day_wo_OT']}" />
+
+				</h:panelGrid>
+
+				<f:facet name="footer">
+					<p:commandButton id="cmdSaveDetail"
+						action="#{kpiDailyBacking.saveDetailAction}"
+						update=":editForm:recordTable" oncomplete="dlgEdit.hide()"
+						icon="ui-icon-disk" value="#{msg['btn_save']}" />
+				</f:facet>
+
+			</p:dialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>
+
+</html>

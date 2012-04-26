@@ -62,7 +62,7 @@ public class KpiDailyDelay implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_delay", nullable = false)
 	public KpiDelay getKpiDelay() {
 		return this.kpiDelay;

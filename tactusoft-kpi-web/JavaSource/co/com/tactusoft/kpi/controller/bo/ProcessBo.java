@@ -8,6 +8,8 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.hibernate.type.BigDecimalType;
+import org.hibernate.type.StringType;
 import org.primefaces.json.JSONArray;
 import org.primefaces.json.JSONException;
 import org.primefaces.json.JSONObject;
@@ -15,10 +17,11 @@ import org.primefaces.json.JSONObject;
 import co.com.tactusoft.kpi.model.dao.CustomHibernateDao;
 import co.com.tactusoft.kpi.model.entities.KpiDaily;
 import co.com.tactusoft.kpi.model.entities.KpiDailySumHours;
-import co.com.tactusoft.kpi.model.entities.KpiHeaderData;
 import co.com.tactusoft.kpi.model.entities.KpiGraphDaily;
+import co.com.tactusoft.kpi.model.entities.KpiHeaderData;
 import co.com.tactusoft.kpi.model.entities.KpiWeek;
 import co.com.tactusoft.kpi.util.Constant;
+import co.com.tactusoft.kpi.util.Parameter;
 import co.com.tactusoft.kpi.view.model.ReportDaily;
 
 @Named
@@ -204,5 +207,18 @@ public class ProcessBo implements Serializable {
 		}
 
 		return result;
+	}
+
+	public void saveKpiDailyDelayWo(BigDecimal idDailyDelay, String wo,
+			BigDecimal numHours) {
+
+		Parameter paramater1 = new Parameter("P_ID_DAILY_DELAY", idDailyDelay,
+				BigDecimalType.INSTANCE);
+		Parameter paramater2 = new Parameter("P_WO", wo, StringType.INSTANCE);
+		Parameter paramater3 = new Parameter("P_ID_DAILY_DELAY", numHours,
+				BigDecimalType.INSTANCE);
+
+		dao.findByNameQuery("callKpiRtDailyDelayWo", paramater1, paramater2,
+				paramater3);
 	}
 }

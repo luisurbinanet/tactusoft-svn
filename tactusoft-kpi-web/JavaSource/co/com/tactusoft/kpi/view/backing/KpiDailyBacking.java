@@ -62,11 +62,13 @@ public class KpiDailyBacking implements Serializable {
 	private Map<BigDecimal, KpiDaily> mapKpiDaily = new HashMap<BigDecimal, KpiDaily>();
 
 	private String pageType;
+	private String wo;
 
 	public KpiDailyBacking() {
 		selected = new KpiDaily();
 		selectedDetail = new KpiDailyDelay();
 		listCalendarWeeks = null;
+		this.kpiWeekSelected = Constant.defaultValue;
 	}
 
 	public KpiDailyModel getModel() {
@@ -111,7 +113,6 @@ public class KpiDailyBacking implements Serializable {
 			item.setValue(Constant.defaultValue);
 			item.setLabel(Constant.defaultLabel);
 			listCalendarWeeks.add(item);
-			this.kpiWeekSelected = new BigDecimal(-1);
 
 			for (KpiWeek row : list) {
 				item = new SelectItem();
@@ -200,6 +201,14 @@ public class KpiDailyBacking implements Serializable {
 
 	public void setSelectedWeek(KpiWeek selectedWeek) {
 		this.selectedWeek = selectedWeek;
+	}
+
+	public String getWo() {
+		return wo;
+	}
+
+	public void setWo(String wo) {
+		this.wo = wo;
 	}
 
 	public void newAction() {
@@ -330,6 +339,7 @@ public class KpiDailyBacking implements Serializable {
 
 	public void saveDetailAction() {
 		service.save(selectedDetail);
+		service.saveKpiDailyDelayWo(selectedDetail.getId(), wo, selectedDetail.getNumHours());
 	}
 
 }
