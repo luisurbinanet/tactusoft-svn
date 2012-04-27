@@ -14,12 +14,16 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.primefaces.json.JSONArray;
+import org.primefaces.json.JSONException;
+import org.primefaces.json.JSONObject;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.kpi.controller.bo.ProcessBo;
 import co.com.tactusoft.kpi.model.entities.KpiDaily;
+import co.com.tactusoft.kpi.model.entities.KpiDailyDelayWo;
 import co.com.tactusoft.kpi.model.entities.KpiWeek;
 import co.com.tactusoft.kpi.view.model.ColumnModel;
+import co.com.tactusoft.kpi.view.model.KpiDailyDelayWOModel;
 import co.com.tactusoft.kpi.view.model.ReportDaily;
 import co.com.tactusoft.kpi.view.model.ReportDailyModel;
 
@@ -39,7 +43,11 @@ public class ReportBacking implements Serializable {
 	private Map<BigDecimal, KpiWeek> mapKpiWeek;
 	private BigDecimal idKpiWeek;
 
+	private int rowReport;
+	private int columnReport;
+
 	private JSONArray graphData;
+	private KpiDailyDelayWOModel modelHours;
 
 	public ReportBacking() {
 		listItemWeeks = null;
@@ -115,6 +123,30 @@ public class ReportBacking implements Serializable {
 		this.graphData = graphData;
 	}
 
+	public int getRowReport() {
+		return rowReport;
+	}
+
+	public void setRowReport(int rowReport) {
+		this.rowReport = rowReport;
+	}
+
+	public int getColumnReport() {
+		return columnReport;
+	}
+
+	public void setColumnReport(int columnReport) {
+		this.columnReport = columnReport;
+	}
+
+	public KpiDailyDelayWOModel getModelHours() {
+		return modelHours;
+	}
+
+	public void setModelHours(KpiDailyDelayWOModel modelHours) {
+		this.modelHours = modelHours;
+	}
+
 	public void generateAction(ActionEvent actionEvent) {
 		List<KpiDaily> list = service.getListKpiDailyByWeek(idKpiWeek);
 		columns = new ArrayList<ColumnModel>();
@@ -137,6 +169,27 @@ public class ReportBacking implements Serializable {
 			result = graphData.length();
 		}
 		return result;
+	}
+
+	public void drillDownAction() {
+		modelHours = new KpiDailyDelayWOModel();
+		for (int index = 0; index < graphData.length(); index++) {
+			try {
+				JSONObject data = graphData.getJSONObject(index);
+				int row = data.getInt("row");
+				int column = data.getInt("column");
+				if (row == rowReport && column == columnReport) {
+					BigDecimal id = new BigDecimal(data.getInt("id"));
+					List<KpiDailyDelayWo> list = service
+							.getListKpiDailyDelayWoByDelay(id);
+					modelHours = new KpiDailyDelayWOModel(list);
+					break;
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+
 	}
 
 }

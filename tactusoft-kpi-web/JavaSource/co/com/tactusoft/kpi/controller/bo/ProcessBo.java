@@ -189,19 +189,26 @@ public class ProcessBo implements Serializable {
 			}
 
 			double oldAvg = 0;
-			for (KpiDailySumHours row : listDailyDelay) {
+			int column = 1;
+			int row = 0;
+			for (KpiDailySumHours data : listDailyDelay) {
 				JSONObject obj = new JSONObject();
 				try {
-					obj.put("label", row.getNameDaily());
-					obj.put("value", row.getNumHours().doubleValue());
+					obj.put("id", data.getId());
+					obj.put("column", column);
+					obj.put("row", row);
+					obj.put("label", data.getNameDaily());
+					obj.put("value", data.getNumHours().doubleValue());
 					double avg = oldAvg
-							+ (row.getNumHours().doubleValue() / sum);
+							+ (data.getNumHours().doubleValue() / sum);
 					obj.put("avg", avg);
 					result.put(obj);
 					oldAvg = avg;
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
+
+				row++;
 			}
 		} catch (Exception ex) {
 
@@ -222,9 +229,10 @@ public class ProcessBo implements Serializable {
 		dao.findByNameQuery("callKpiRtDailyDelayWo", paramater1, paramater2,
 				paramater3);
 	}
-	
-	public List<KpiDailyDelayWo> getListKpiDailyDelayWoByDelay(BigDecimal idDailyDelay) {
-		return dao.find("from KpiDailyDelayWo o where kpiDailyDelay.id = " + idDailyDelay
-				+ " order by o.id");
+
+	public List<KpiDailyDelayWo> getListKpiDailyDelayWoByDelay(
+			BigDecimal idDailyDelay) {
+		return dao.find("from KpiDailyDelayWo o where kpiDailyDelay.id = "
+				+ idDailyDelay + " order by o.id");
 	}
 }

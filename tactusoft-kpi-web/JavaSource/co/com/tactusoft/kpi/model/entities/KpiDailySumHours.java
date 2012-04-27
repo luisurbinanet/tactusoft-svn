@@ -20,6 +20,7 @@ public class KpiDailySumHours implements java.io.Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private BigDecimal id;
 	private BigDecimal idDaily;
 	private BigDecimal idDelay;
 	private String nameDaily;
@@ -28,19 +29,31 @@ public class KpiDailySumHours implements java.io.Serializable {
 	public KpiDailySumHours() {
 	}
 
-	public KpiDailySumHours(BigDecimal idDaily, BigDecimal idDelay,
-			String nameDaily) {
+	public KpiDailySumHours(BigDecimal id, BigDecimal idDaily,
+			BigDecimal idDelay, String nameDaily) {
+		this.id = id;
 		this.idDaily = idDaily;
 		this.idDelay = idDelay;
 		this.nameDaily = nameDaily;
 	}
 
-	public KpiDailySumHours(BigDecimal idDaily, BigDecimal idDelay,
+	public KpiDailySumHours(BigDecimal id,BigDecimal idDaily, BigDecimal idDelay,
 			String nameDaily, BigDecimal numHours) {
+		this.id = id;
 		this.idDaily = idDaily;
 		this.idDelay = idDelay;
 		this.nameDaily = nameDaily;
 		this.numHours = numHours;
+	}
+	
+	@Id
+	@Column(name = "id", nullable = false, scale = 0)
+	public BigDecimal getId() {
+		return this.id;
+	}
+
+	public void setId(BigDecimal id) {
+		this.id = id;
 	}
 
 	@Column(name = "id_daily", nullable = false, scale = 0)
@@ -52,7 +65,6 @@ public class KpiDailySumHours implements java.io.Serializable {
 		this.idDaily = idDaily;
 	}
 
-	@Id
 	@Column(name = "id_delay", nullable = false, scale = 0)
 	public BigDecimal getIdDelay() {
 		return this.idDelay;
