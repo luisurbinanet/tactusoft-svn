@@ -16,6 +16,7 @@ import org.primefaces.json.JSONObject;
 
 import co.com.tactusoft.kpi.model.dao.CustomHibernateDao;
 import co.com.tactusoft.kpi.model.entities.KpiDaily;
+import co.com.tactusoft.kpi.model.entities.KpiDailyDelayWo;
 import co.com.tactusoft.kpi.model.entities.KpiDailySumHours;
 import co.com.tactusoft.kpi.model.entities.KpiGraphDaily;
 import co.com.tactusoft.kpi.model.entities.KpiHeaderData;
@@ -220,5 +221,10 @@ public class ProcessBo implements Serializable {
 
 		dao.findByNameQuery("callKpiRtDailyDelayWo", paramater1, paramater2,
 				paramater3);
+	}
+	
+	public List<KpiDailyDelayWo> getListKpiDailyDelayWoByDelay(BigDecimal idDailyDelay) {
+		return dao.find("from KpiDailyDelayWo o where kpiDailyDelay.id = " + idDailyDelay
+				+ " order by o.id");
 	}
 }
