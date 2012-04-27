@@ -22,6 +22,7 @@ import co.com.tactusoft.kpi.controller.bo.AdminBo;
 import co.com.tactusoft.kpi.controller.bo.ProcessBo;
 import co.com.tactusoft.kpi.model.entities.KpiDaily;
 import co.com.tactusoft.kpi.model.entities.KpiDailyDelay;
+import co.com.tactusoft.kpi.model.entities.KpiDailyDelayWo;
 import co.com.tactusoft.kpi.model.entities.KpiDelay;
 import co.com.tactusoft.kpi.model.entities.KpiWeek;
 import co.com.tactusoft.kpi.util.Constant;
@@ -67,6 +68,7 @@ public class KpiDailyBacking implements Serializable {
 
 	private String wo;
 	private BigDecimal numHours;
+	private List<KpiDailyDelayWo> listHours;
 	private KpiDailyDelayWOModel modelHours;
 
 	public KpiDailyBacking() {
@@ -367,15 +369,18 @@ public class KpiDailyBacking implements Serializable {
 	}
 
 	public void saveDetailAction() {
+		RequestContext context = RequestContext.getCurrentInstance();
 		service.saveKpiDailyDelayWo(selectedDetail.getId(), this.wo,
 				this.numHours);
 		listDailyDelay = adminService.getListKpiDailyDelayByDay(selected
 				.getId());
 		modelDailyDelay = new KpiDailyDelayModel(listDailyDelay);
+		context.addCallbackParam("validate", true); 
 	}
 
 	public void searchDetailAction() {
-
+		listHours = service.getListKpiDailyDelayWoByDelay(selectedDetail.getId());
+		modelHours = new KpiDailyDelayWOModel(listHours);
 	}
 
 }

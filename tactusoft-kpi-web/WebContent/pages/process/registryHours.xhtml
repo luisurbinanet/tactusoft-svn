@@ -54,8 +54,7 @@
 
 				<p:dataTable id="recordTable" var="rec"
 					value="#{kpiDailyBacking.modelDailyDelay}" rowKey="#{rec.id}"
-					paginator="true" rows="20"
-					selected="#{kpiDailyBacking.selectedDetail}">
+					paginator="true" rows="20">
 
 					<p:column headerText="#{msg['day_wo_delays']}" style="width:75%">#{rec.kpiDelay.name}</p:column>
 
@@ -74,9 +73,9 @@
 					<p:column style="width:40px">
 						<h:panelGrid columns="2" styleClass="actions" cellpadding="2">
 							<p:commandButton id="addButton" update=":editForm:dlgDisplay"
-								action="#{kpiDailyBacking.searchDetailAction}"
+								action="#{kpiDailyBacking.newDetailAction}"
 								oncomplete="dlgEdit.show()" icon="ui-icon-plusthick"
-								title="#{msg['btn_new']}">
+								title="#{msg['btn_new']}" process="@this">
 								<f:setPropertyActionListener value="#{rec}"
 									target="#{kpiDailyBacking.selectedDetail}" />
 							</p:commandButton>
@@ -84,7 +83,7 @@
 								update=":editForm:recordTableHours"
 								action="#{kpiDailyBacking.searchDetailAction}"
 								oncomplete="dlgView.show()" icon="ui-icon-search"
-								title="#{msg['btn_view']}">
+								title="#{msg['btn_view']}" process="@this">
 								<f:setPropertyActionListener value="#{rec}"
 									target="#{kpiDailyBacking.selectedDetail}" />
 							</p:commandButton>
@@ -115,7 +114,7 @@
 					<h:outputText value="#{msg['day_wo_num_hours']}" />
 					<pe:inputNumber value="#{kpiDailyBacking.numHours}" symbol="hrs "
 						label="#{msg['day_wo_num_hours']}">
-
+						<f:validateDoubleRange minimum="1.0" maximum="999.9" />
 					</pe:inputNumber>
 
 					<h:outputText value="#{msg['day_wo_OT']}" />
@@ -127,13 +126,14 @@
 				<f:facet name="footer">
 					<p:commandButton id="cmdSaveDetail"
 						action="#{kpiDailyBacking.saveDetailAction}"
-						update=":editForm:recordTable" oncomplete="dlgEdit.hide()"
-						icon="ui-icon-disk" value="#{msg['btn_save']}" />
+						update=":editForm:recordTable growl" icon="ui-icon-disk"
+						value="#{msg['btn_save']}" process="@parent"
+						oncomplete="handleLoginRequest(xhr, status, args)" />
 				</f:facet>
 
 			</p:dialog>
 
-			<p:dialog header="#{msg['day_reg_wo_num_hours']}" widgetVar="dlgView"
+			<p:dialog header="#{msg['day_viw_wo_num_hours']}" widgetVar="dlgView"
 				resizable="false" id="dialogView" showEffect="fade"
 				hideEffect="explode" modal="true">
 
@@ -158,6 +158,16 @@
 				</f:facet>
 
 			</p:dialog>
+
+			<script type="text/javascript">
+				function handleLoginRequest(xhr, status, args) {
+					if(args.validationFailed || !args.validate) {
+						jQuery('#dialogView').effect("shake", { times:3 }, 100);
+					} else {
+						dlgEdit.hide();
+					}
+				}
+			</script>
 
 		</h:form>
 	</ui:define>
