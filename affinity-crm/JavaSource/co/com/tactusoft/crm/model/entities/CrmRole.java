@@ -23,6 +23,7 @@ public class CrmRole implements java.io.Serializable {
 	private String name;
 	private String description;
 	private int state;
+	private Set<CrmPageRole> crmPageRoles = new HashSet<CrmPageRole>(0);
 	private Set<CrmUserRole> crmUserRoles = new HashSet<CrmUserRole>(0);
 
 	public CrmRole() {
@@ -35,11 +36,12 @@ public class CrmRole implements java.io.Serializable {
 	}
 
 	public CrmRole(BigDecimal id, String name, String description, int state,
-			Set<CrmUserRole> crmUserRoles) {
+			Set<CrmPageRole> crmPageRoles, Set<CrmUserRole> crmUserRoles) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.state = state;
+		this.crmPageRoles = crmPageRoles;
 		this.crmUserRoles = crmUserRoles;
 	}
 
@@ -78,6 +80,15 @@ public class CrmRole implements java.io.Serializable {
 
 	public void setState(int state) {
 		this.state = state;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmRole")
+	public Set<CrmPageRole> getCrmPageRoles() {
+		return this.crmPageRoles;
+	}
+
+	public void setCrmPageRoles(Set<CrmPageRole> crmPageRoles) {
+		this.crmPageRoles = crmPageRoles;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmRole")

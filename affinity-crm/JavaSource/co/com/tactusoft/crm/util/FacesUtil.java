@@ -1,6 +1,20 @@
 package co.com.tactusoft.crm.util;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -12,6 +26,10 @@ import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.security.core.context.SecurityContextHolder;
+
+import co.com.tactusoft.crm.model.entities.CrmRole;
+import co.com.tactusoft.crm.model.entities.CrmUser;
+import co.com.tactusoft.crm.security.UserData;
 
 @Named
 public class FacesUtil {
@@ -99,7 +117,7 @@ public class FacesUtil {
 		session.invalidate();
 	}
 
-	/*public static UserData getCurrentUserData() {
+	public static UserData getCurrentUserData() {
 		UserData userData = null;
 		try {
 			userData = (UserData) SecurityContextHolder.getContext()
@@ -110,7 +128,7 @@ public class FacesUtil {
 		return userData;
 	}
 
-	public static User getCurrentUser() {
+	public static CrmUser getCurrentUser() {
 		UserData userData = null;
 		try {
 			userData = (UserData) SecurityContextHolder.getContext()
@@ -125,15 +143,19 @@ public class FacesUtil {
 		return getCurrentUser().getId();
 	}
 
-	public static String getCurrentRole() {
+	public static List<String> getCurrentRoles() {
+		List<String> list = new LinkedList<String>();
 		UserData userData = null;
 		try {
 			userData = (UserData) SecurityContextHolder.getContext()
 					.getAuthentication().getPrincipal();
+			for (CrmRole role : userData.getRoles()) {
+				list.add(role.getName());
+			}
 		} catch (Exception ex) {
 			userData = new UserData();
 		}
-		return userData.getRole();
+		return list;
 	}
 
 	public static void createFile(InputStream inputStream, String fileName)
@@ -175,5 +197,5 @@ public class FacesUtil {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String currentDate = sdf.format(date);
 		return currentDate;
-	}*/
+	}
 }
