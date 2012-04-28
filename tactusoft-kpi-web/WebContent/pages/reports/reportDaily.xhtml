@@ -113,14 +113,15 @@
 			</h:panelGrid>
 
 			<pe:remoteCommand name="drillDown"
-				action="#{reportBacking.drillDownAction}" update="recordTableHours" oncomplete="dlgView.show()">
+				action="#{reportBacking.drillDownAction}" update="dialogView"
+				oncomplete="dlgView.show()">
 				<pe:remoteCommandParameter name="p_row"
 					applyTo="#{reportBacking.rowReport}" />
 				<pe:remoteCommandParameter name="p_column"
 					applyTo="#{reportBacking.columnReport}" />
 			</pe:remoteCommand>
 
-			<p:dialog header="#{msg['day_viw_wo_num_hours']}" widgetVar="dlgView"
+			<p:dialog header="#{reportBacking.delayName}" widgetVar="dlgView"
 				resizable="false" id="dialogView" showEffect="fade"
 				hideEffect="explode" modal="true">
 
@@ -128,7 +129,7 @@
 					value="#{reportBacking.modelHours}" rowKey="#{rec.id}"
 					paginator="true" rows="10">
 
-					<p:column headerText="#{msg['day_wo_delays']}">#{rec.wo}</p:column>
+					<p:column headerText="#{msg['day_wo_OT']}">#{rec.wo}</p:column>
 
 					<p:column headerText="#{msg['day_wo_num_hours']}">
 						<h:outputText value="#{rec.numHours}">

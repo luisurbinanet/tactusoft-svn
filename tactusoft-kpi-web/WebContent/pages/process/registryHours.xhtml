@@ -141,7 +141,7 @@
 					value="#{kpiDailyBacking.modelHours}" rowKey="#{rec.id}"
 					paginator="true" rows="10">
 
-					<p:column headerText="#{msg['day_wo_delays']}">#{rec.wo}</p:column>
+					<p:column headerText="#{msg['day_wo_OT']}">#{rec.wo}</p:column>
 
 					<p:column headerText="#{msg['day_wo_num_hours']}">
 						<h:outputText value="#{rec.numHours}">

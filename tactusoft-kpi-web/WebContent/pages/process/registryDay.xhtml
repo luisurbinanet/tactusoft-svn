@@ -24,7 +24,8 @@
 					<p:selectOneMenu value="#{kpiDailyBacking.kpiWeekSelected}"
 						style="width:430px">
 						<f:selectItems value="#{kpiDailyBacking.listCalendarWeeks}" />
-						<p:ajax update="selDay weekState :editForm:display"
+						<p:ajax
+							update="selDay weekState :editForm:display :editForm:cmdSave"
 							listener="#{kpiDailyBacking.handleWeekChange}" />
 					</p:selectOneMenu>
 
@@ -32,7 +33,7 @@
 					<p:selectOneMenu id="selDay"
 						value="#{kpiDailyBacking.kpiDailySelected}" style="width:430px">
 						<f:selectItems value="#{kpiDailyBacking.listDays}" />
-						<p:ajax update=":editForm:display"
+						<p:ajax update=":editForm:display :editForm:cmdSave"
 							listener="#{kpiDailyBacking.handleDayChange}" />
 					</p:selectOneMenu>
 
@@ -86,15 +87,17 @@
 
 				</h:panelGrid>
 
-			</p:panel>
+				<f:facet name="footer">
+					<p:commandButton id="cmdSave"
+						action="#{kpiDailyBacking.saveAction}" update="growl"
+						icon="ui-icon-disk" value="#{msg['btn_save']}" process="@form"
+						disabled="#{kpiDailyBacking.selected.state == 0?true:false || kpiDailyBacking.selected.id == null}">
+						<f:setPropertyActionListener target="#{kpiDailyBacking.pageType}"
+							value="registryDay" />
+					</p:commandButton>
+				</f:facet>
 
-			<p:commandButton id="cmdSave" action="#{kpiDailyBacking.saveAction}"
-				update="growl" icon="ui-icon-disk" value="#{msg['btn_save']}"
-				process="@form"
-				disabled="#{kpiDailyBacking.selected.state == 0?true:false || kpiDailyBacking.selected.id == null}">
-				<f:setPropertyActionListener target="#{kpiDailyBacking.pageType}"
-					value="registryDay" />
-			</p:commandButton>
+			</p:panel>
 
 		</h:form>
 	</ui:define>

@@ -48,6 +48,7 @@ public class ReportBacking implements Serializable {
 
 	private JSONArray graphData;
 	private KpiDailyDelayWOModel modelHours;
+	private String delayName;
 
 	public ReportBacking() {
 		listItemWeeks = null;
@@ -147,6 +148,14 @@ public class ReportBacking implements Serializable {
 		this.modelHours = modelHours;
 	}
 
+	public String getDelayName() {
+		return delayName;
+	}
+
+	public void setDelayName(String delayName) {
+		this.delayName = delayName;
+	}
+
 	public void generateAction(ActionEvent actionEvent) {
 		List<KpiDaily> list = service.getListKpiDailyByWeek(idKpiWeek);
 		columns = new ArrayList<ColumnModel>();
@@ -180,6 +189,7 @@ public class ReportBacking implements Serializable {
 				int column = data.getInt("column");
 				if (row == rowReport && column == columnReport) {
 					BigDecimal id = new BigDecimal(data.getInt("id"));
+					delayName = data.getString("label");
 					List<KpiDailyDelayWo> list = service
 							.getListKpiDailyDelayWoByDelay(id);
 					modelHours = new KpiDailyDelayWOModel(list);
