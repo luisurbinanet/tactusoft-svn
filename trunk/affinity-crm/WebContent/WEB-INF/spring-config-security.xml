@@ -53,7 +53,7 @@
 
 	<bean id="successHandler"
 		class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
-		<property name="defaultTargetUrl" value="/pages/view/video.jsf" />
+		<property name="defaultTargetUrl" value="/pages/tables/doctor.jsf" />
 	</bean>
 
 	<bean id="failureHandler"
@@ -72,7 +72,7 @@
 
 	<bean id="anonymousAuthFilter"
 		class="org.springframework.security.web.authentication.AnonymousAuthenticationFilter">
-		<property name="key" value="video123" />
+		<property name="key" value="crm123" />
 		<property name="userAttribute" value="anonymousUser,ROL_ANONYMOUS" />
 	</bean>
 
@@ -108,7 +108,7 @@
 	</bean>
 
 	<bean id="securityMetadataSourceCustom"
-		class="co.com.tactusoft.video.security.SecurityMetadataSourceCustom" />
+		class="co.com.tactusoft.crm.security.SecurityMetadataSourceCustom" />
 
 	<bean id="filterSecurityInterceptor"
 		class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
@@ -120,12 +120,8 @@
 	<bean id="rememberMeServices"
 		class="org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices">
 		<property name="userDetailsService" ref="userDetailsService" />
-		<property name="key" value="video123" />
+		<property name="key" value="crm123" />
 		<property name="tokenValiditySeconds" value="0" />
-	</bean>
-
-	<bean id="passwordEncoder"
-		class="org.springframework.security.authentication.encoding.Md5PasswordEncoder">
 	</bean>
 
 	<bean id="authenticationManager"
@@ -135,18 +131,22 @@
 				<ref local="daoAuthenticationProvider" />
 				<bean
 					class="org.springframework.security.authentication.AnonymousAuthenticationProvider">
-					<property name="key" value="video123" />
+					<property name="key" value="crm123" />
 				</bean>
 				<bean
 					class="org.springframework.security.authentication.RememberMeAuthenticationProvider">
-					<property name="key" value="video123" />
+					<property name="key" value="crm123" />
 				</bean>
 			</list>
 		</property>
 	</bean>
 
+	<bean id="passwordEncoder"
+		class="org.springframework.security.authentication.encoding.Md5PasswordEncoder">
+	</bean>
+
 	<bean id="daoAuthenticationProvider"
-		class="co.com.tactusoft.video.security.DaoAuthenticationProviderCustom">
+		class="co.com.tactusoft.crm.security.DaoAuthenticationProviderCustom">
 		<property name="userDetailsService" ref="userDetailsService" />
 		<property name="userCache">
 			<bean
@@ -162,11 +162,10 @@
 				</property>
 			</bean>
 		</property>
-		<property name="passwordEncoder" ref="passwordEncoder"/>
+		<property name="passwordEncoder" ref="passwordEncoder" />
 	</bean>
 
-	<bean id="userDetailsService"
-		class="co.com.tactusoft.video.security.UserDetailsServiceCustom" />
+	<bean id="userDetailsService" class="co.com.tactusoft.crm.security.UserDetailsServiceCustom" />
 
 	<bean id="loggerListener"
 		class="org.springframework.security.access.event.LoggerListener" />

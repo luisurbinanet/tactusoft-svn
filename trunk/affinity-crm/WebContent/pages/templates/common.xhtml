@@ -14,12 +14,21 @@
 	</h:head>
 
 	<h:body>
+
 		<div id="content">
+
 			<div id="mainContent">
+				
+				<ui:insert name="menu">
+					<ui:include src="menu.xhtml" />
+				</ui:insert>
+				
+				<p:spacer height="10"/>
+
 				<ui:insert name="body">Page Body</ui:insert>
 			</div>
 		</div>
 	</h:body>
-	
+
 </f:view>
 </html>
