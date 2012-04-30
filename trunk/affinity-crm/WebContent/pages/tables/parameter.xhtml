@@ -30,7 +30,7 @@
 
 				<p:dataTable id="recordTable" var="rec"
 					value="#{parameterBacking.model}" rowKey="#{rec.id}"
-					selection="#{parameterBacking.selected}" paginator="true" rows="10"
+					selection="#{parameterBacking.selected}" paginator="true" rows="5"
 					style="width:100%">
 
 					<p:column selectionMode="single" style="width:18px" />
@@ -40,7 +40,8 @@
 					</p:column>
 
 					<p:column headerText="#{msg['par_text_value']}">
-						<h:outputLabel value="#{rec.textValue}" />
+						<h:inputTextarea value="#{rec.textValue}" rows="4" disabled="true"
+							style="width:99%;border-width:0px;color:black;background: white;" />
 					</p:column>
 
 					<p:column headerText="#{msg['par_number_value']}">
@@ -88,8 +89,8 @@
 						style="width:100%" />
 
 					<h:outputLabel value="#{msg['par_text_value']}" />
-					<h:inputText value="#{parameterBacking.selected.textValue}"
-						style="width:100%" />
+					<h:inputTextarea value="#{parameterBacking.selected.textValue}"
+						style="width:100%" rows="5"/>
 
 					<h:outputLabel value="#{msg['par_number_value']}" />
 					<h:inputText value="#{parameterBacking.selected.numberValue}"

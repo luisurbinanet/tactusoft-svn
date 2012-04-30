@@ -17,7 +17,7 @@ public class Patient implements Serializable {
 	private String address;
 	private String email;
 	private String phoneNumber;
-	private Integer cellNumber;
+	private String cellNumber;
 	private String country;
 	private String region;
 	private String city;
@@ -111,11 +111,11 @@ public class Patient implements Serializable {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public Integer getCellNumber() {
+	public String getCellNumber() {
 		return cellNumber;
 	}
 
-	public void setCellNumber(Integer cellNumber) {
+	public void setCellNumber(String cellNumber) {
 		this.cellNumber = cellNumber;
 	}
 

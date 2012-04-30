@@ -15,8 +15,6 @@ import co.com.tactusoft.crm.controller.bo.SecurityBo;
 import co.com.tactusoft.crm.model.entities.CrmPage;
 import co.com.tactusoft.crm.model.entities.CrmRole;
 import co.com.tactusoft.crm.model.entities.CrmUser;
-import co.com.tactusoft.crm.util.FacesUtil;
-import co.com.tactusoft.crm.view.backing.MenuBacking;
 
 @Service
 public class UserDetailsServiceCustom implements UserDetailsService {
@@ -43,9 +41,6 @@ public class UserDetailsServiceCustom implements UserDetailsService {
 				List<CrmPage> listPage = service.getListCrmPageByRole(object
 						.getId());
 				user.setListPage(listPage);
-
-				MenuBacking menuBacking = FacesUtil.findBean("menuBacking");
-				menuBacking.init(listPage);
 			}
 		} catch (HibernateException e) {
 			e.printStackTrace();

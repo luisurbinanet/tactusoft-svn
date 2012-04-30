@@ -94,7 +94,7 @@ public class CrmUser implements java.io.Serializable {
 		this.crmDepartment = crmDepartment;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_profile", nullable = false)
 	public CrmProfile getCrmProfile() {
 		return this.crmProfile;

@@ -24,9 +24,14 @@
 						<h:inputSecret value="#{loginBacking.password}" style="width:100%" />
 
 						<f:facet name="footer">
-							<p:spacer height="50" />
-							<h:commandButton action="#{loginBacking.doLogin}"
-								value="#{msg['btn_ok']}"/>
+							<p:spacer />
+							<center>
+								<span class="rco-button-wrapper"> <span
+									class="rco-button-l"> </span> <span class="rco-button-r">
+								</span> <h:commandButton value="#{msg['btn_ok']}"
+										action="#{loginBacking.doLogin}" style="left: 0px; top: 0"
+										styleClass="rco-button" /> </span>
+							</center>
 						</f:facet>
 					</h:panelGrid>
 
