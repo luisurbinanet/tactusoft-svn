@@ -84,7 +84,7 @@ public class FacesUtil {
 
 	public static void addError(String text) {
 		String title = FacesUtil.getMessage("msg_error");
-		addWarn(title, text);
+		addError(title, text);
 	}
 
 	public static void addFatal(String title, String text) {

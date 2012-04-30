@@ -16,7 +16,7 @@
 
 	<bean id="logoutFilter"
 		class="org.springframework.security.web.authentication.logout.LogoutFilter">
-		<constructor-arg value="/pages/secure/login.jsf" />
+		<constructor-arg value="/pages/public/login.jsf" />
 		<!-- URL redirected to after logout -->
 		<constructor-arg>
 			<list>
@@ -33,7 +33,7 @@
 	<bean id="concurrencyFilter"
 		class="org.springframework.security.web.session.ConcurrentSessionFilter">
 		<property name="sessionRegistry" ref="sessionRegistry" />
-		<property name="expiredUrl" value="/pages/secure/expired.jsf" />
+		<property name="expiredUrl" value="/pages/public/expired.jsf" />
 	</bean>
 
 	<bean id="usernamePasswordAuthenticationFilter"
@@ -58,7 +58,7 @@
 
 	<bean id="failureHandler"
 		class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
-		<property name="defaultFailureUrl" value="/pages/secure/login.jsf" />
+		<property name="defaultFailureUrl" value="/pages/public/login.jsf" />
 	</bean>
 
 	<bean id="securityContextHolderAwareRequestFilter"
@@ -84,12 +84,12 @@
 
 	<bean id="loginUrlAuthenticationEntryPoint"
 		class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
-		<property name="loginFormUrl" value="/pages/secure/login.jsf" />
+		<property name="loginFormUrl" value="/pages/public/login.jsf" />
 	</bean>
 
 	<bean id="accessDeniedHandler"
 		class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
-		<property name="errorPage" value="/pages/secure/accessDenied.jsf" />
+		<property name="errorPage" value="/pages/public/accessDenied.jsf" />
 	</bean>
 
 	<bean id="affirmativeBased"

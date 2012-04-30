@@ -1,4 +1,4 @@
 <%
-	String redirectURL = "pages/secure/login.jsf";
+	String redirectURL = "pages/public/login.jsf";
     response.sendRedirect(redirectURL);
 %>

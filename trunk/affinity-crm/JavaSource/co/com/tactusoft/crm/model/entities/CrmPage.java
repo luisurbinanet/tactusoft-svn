@@ -29,12 +29,9 @@ public class CrmPage implements java.io.Serializable {
 	public CrmPage() {
 	}
 
-	public CrmPage(BigDecimal id, String name, String page, String icon,
-			int orderby) {
+	public CrmPage(BigDecimal id, String name, int orderby) {
 		this.id = id;
 		this.name = name;
-		this.page = page;
-		this.icon = icon;
 		this.orderby = orderby;
 	}
 
@@ -68,7 +65,7 @@ public class CrmPage implements java.io.Serializable {
 		this.name = name;
 	}
 
-	@Column(name = "page", nullable = false)
+	@Column(name = "page")
 	public String getPage() {
 		return this.page;
 	}
@@ -77,9 +74,9 @@ public class CrmPage implements java.io.Serializable {
 		this.page = page;
 	}
 
-	@Column(name = "icon", nullable = false)
+	@Column(name = "icon")
 	public String getIcon() {
-		return icon;
+		return this.icon;
 	}
 
 	public void setIcon(String icon) {
