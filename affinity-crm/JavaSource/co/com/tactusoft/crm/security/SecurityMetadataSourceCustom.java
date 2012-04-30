@@ -21,7 +21,7 @@ public class SecurityMetadataSourceCustom implements
 
 		try {
 
-			if (url.contains("secure") || url.contains("jquery")
+			if (url.contains("public") || url.contains("jquery")
 					|| url.contains("primefaces")
 					|| url.contains("javax.faces.resource")
 					|| url.contains(".css") || url.contains(".png")

@@ -102,7 +102,7 @@ public class LoginBacking {
 
 	public String logout() {
 		FacesUtil.logout();
-		return "/pages/secure/login?faces-redirect=true";
+		return "/pages/public/login?faces-redirect=true";
 	}
 
 	public List<String> getRole() {

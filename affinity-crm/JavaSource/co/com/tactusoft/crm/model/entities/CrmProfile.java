@@ -3,6 +3,7 @@ package co.com.tactusoft.crm.model.entities;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -26,6 +27,9 @@ public class CrmProfile implements java.io.Serializable {
 	private String distrChan;
 	private String salesOff;
 	private String division;
+	private String country;
+	private String city;
+	private String region;
 	private int state;
 	private Set<CrmUser> crmUsers = new HashSet<CrmUser>(0);
 
@@ -40,7 +44,8 @@ public class CrmProfile implements java.io.Serializable {
 
 	public CrmProfile(BigDecimal id, String code, String description,
 			String salesOrg, String distrChan, String salesOff,
-			String division, int state, Set<CrmUser> crmUsers) {
+			String division, String country, String city, String region,
+			int state, Set<CrmUser> crmUsers) {
 		this.id = id;
 		this.code = code;
 		this.description = description;
@@ -48,6 +53,9 @@ public class CrmProfile implements java.io.Serializable {
 		this.distrChan = distrChan;
 		this.salesOff = salesOff;
 		this.division = division;
+		this.country = country;
+		this.city = city;
+		this.region = region;
 		this.state = state;
 		this.crmUsers = crmUsers;
 	}
@@ -114,6 +122,33 @@ public class CrmProfile implements java.io.Serializable {
 
 	public void setDivision(String division) {
 		this.division = division;
+	}
+
+	@Column(name = "country", length = 2)
+	public String getCountry() {
+		return this.country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	@Column(name = "city", length = 45)
+	public String getCity() {
+		return this.city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	@Column(name = "region", length = 2)
+	public String getRegion() {
+		return this.region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
 	}
 
 	@Column(name = "state", nullable = false)
