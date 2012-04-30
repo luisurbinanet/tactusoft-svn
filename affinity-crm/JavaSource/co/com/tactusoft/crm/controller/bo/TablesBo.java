@@ -9,6 +9,7 @@ import javax.inject.Named;
 
 import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
+import co.com.tactusoft.crm.model.entities.CrmPage;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
 import co.com.tactusoft.crm.model.entities.CrmRole;
 import co.com.tactusoft.crm.model.entities.CrmSpeciality;
@@ -39,7 +40,7 @@ public class TablesBo implements Serializable {
 	public List<CrmSpeciality> getListSpecialityActive() {
 		return dao.find("from CrmSpeciality o where o.state = 1");
 	}
-	
+
 	public List<CrmProfile> getListProfile() {
 		return dao.find("from CrmProfile o");
 	}
@@ -47,7 +48,7 @@ public class TablesBo implements Serializable {
 	public List<CrmProfile> getListProfileActive() {
 		return dao.find("from CrmProfile o where o.state = 1");
 	}
-	
+
 	public List<CrmRole> getListRole() {
 		return dao.find("from CrmRole o");
 	}
@@ -56,27 +57,38 @@ public class TablesBo implements Serializable {
 		return dao.find("from CrmRole o where o.state = 1");
 	}
 
+	public List<CrmPage> getListPages() {
+		return dao
+				.find("from CrmPage o where o.parent is not null order by o.parent");
+	}
+
+	public List<CrmPage> getListPagesByRole(BigDecimal idRole) {
+		return dao
+				.find("select o.crmPage from CrmPageRole o where o.crmPage.parent is not null and o.crmRole.id = "
+						+ idRole + " order by o.crmPage.parent");
+	}
+
 	public Integer saveDoctor(CrmDoctor entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmDoctor.class));
 		}
 		return dao.persist(entity);
 	}
-	
+
 	public Integer saveSpeciality(CrmSpeciality entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmSpeciality.class));
 		}
 		return dao.persist(entity);
 	}
-	
+
 	public Integer saveProfile(CrmProfile entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmProfile.class));
 		}
 		return dao.persist(entity);
 	}
-	
+
 	public Integer saveRole(CrmRole entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmRole.class));
