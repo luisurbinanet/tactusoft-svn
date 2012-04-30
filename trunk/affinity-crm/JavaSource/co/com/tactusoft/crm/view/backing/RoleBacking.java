@@ -6,9 +6,11 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.primefaces.model.DualListModel;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.controller.bo.TablesBo;
+import co.com.tactusoft.crm.model.entities.CrmPage;
 import co.com.tactusoft.crm.model.entities.CrmRole;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
@@ -26,6 +28,8 @@ public class RoleBacking implements Serializable {
 	private List<CrmRole> list;
 	private RoleDataModel model;
 	private CrmRole selected;
+
+	private DualListModel<CrmPage> listPages;
 
 	public RoleBacking() {
 		newAction();
@@ -59,6 +63,32 @@ public class RoleBacking implements Serializable {
 		this.selected = selected;
 	}
 
+	public DualListModel<CrmPage> getListPages() {
+		List<CrmPage> listTarget = tablesService.getListPagesByRole(selected.getId());
+
+		List<CrmPage> listSource = FacesUtil.getCurrentUserData()
+				.getListPageAll();
+		boolean exits = false;
+		for (CrmPage row : FacesUtil.getCurrentUserData().getListPage()) {
+			for (CrmPage avb : listTarget) {
+				if (avb.getId().intValue() != row.getId().intValue()) {
+					exits = true;
+				}
+			}
+
+			if (!exits) {
+				listSource.add(row);
+			}
+		}
+
+		listPages = new DualListModel<CrmPage>(listSource, listTarget);
+		return listPages;
+	}
+
+	public void setListPages(DualListModel<CrmPage> listPages) {
+		this.listPages = listPages;
+	}
+
 	public void newAction() {
 		selected = new CrmRole();
 		selected.setState(Constant.STATE_ACTIVE);
@@ -75,7 +105,8 @@ public class RoleBacking implements Serializable {
 			FacesUtil.addInfo(message);
 		} else if (result == -1) {
 			String paramValue = FacesUtil.getMessage("rol_name");
-			message = FacesUtil.getMessage("msg_record_unique_exception", paramValue);
+			message = FacesUtil.getMessage("msg_record_unique_exception",
+					paramValue);
 			FacesUtil.addError(message);
 
 		}

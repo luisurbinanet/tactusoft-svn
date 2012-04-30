@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import co.com.tactusoft.crm.controller.bo.SecurityBo;
+import co.com.tactusoft.crm.controller.bo.TablesBo;
 import co.com.tactusoft.crm.model.entities.CrmPage;
 import co.com.tactusoft.crm.model.entities.CrmRole;
 import co.com.tactusoft.crm.model.entities.CrmUser;
@@ -21,6 +22,9 @@ public class UserDetailsServiceCustom implements UserDetailsService {
 
 	@Resource
 	private SecurityBo service;
+	
+	@Resource
+	private TablesBo tableService;
 
 	public UserDetails loadUserByUsername(String userName)
 			throws UsernameNotFoundException, DataAccessException {
@@ -35,12 +39,15 @@ public class UserDetailsServiceCustom implements UserDetailsService {
 
 				List<CrmRole> listRole = service.getListCrmRoleByUser(object
 						.getId());
-				user.setRole(listRole);
+				user.setRoles(listRole);
 				user.setUser(object);
 
 				List<CrmPage> listPage = service.getListCrmPageByRole(object
 						.getId());
 				user.setListPage(listPage);
+				
+				listPage = tableService.getListPages();
+				user.setListPageAll(listPage);
 			}
 		} catch (HibernateException e) {
 			e.printStackTrace();

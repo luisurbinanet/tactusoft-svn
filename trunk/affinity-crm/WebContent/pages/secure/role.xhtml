@@ -20,7 +20,7 @@
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
 							action="#{roleBacking.newAction}" oncomplete="dlg.show()"
-							update=":editForm:pnlDetail" />
+							update=":editForm:dialog" />
 						<p:commandButton value="#{msg['btn_edit']}" icon="ui-icon-pencil"
 							oncomplete="dlg.show()" update=":editForm:pnlDetail" />
 					</p:toolbarGroup>
@@ -55,7 +55,7 @@
 			<p:growl id="growl" showDetail="true" />
 
 			<p:dialog header="#{msg['msg_detail']}" widgetVar="dlg"
-				resizable="false" id="dlg" showEffect="fade" hideEffect="explode"
+				resizable="false" id="dialog" showEffect="fade" hideEffect="explode"
 				modal="true" width="500">
 
 				<p:toolbar style="width:100%">
@@ -92,6 +92,16 @@
 					</p:selectOneMenu>
 
 				</h:panelGrid>
+
+				<h:outputLabel value="Paginas" style="font-weight:bold;" />
+
+				<p:pickList var="row" effect="bounce"
+					value="#{roleBacking.listPages}" converter="pageConverter"
+					itemValue="#{row}" itemLabel="#{row.name}">
+
+					<f:facet name="sourceCaption">#{msg['rol_source_caption']}</f:facet>
+					<f:facet name="targetCaption">#{msg['rol_target_caption']}</f:facet>
+				</p:pickList>
 
 			</p:dialog>
 		</h:form>

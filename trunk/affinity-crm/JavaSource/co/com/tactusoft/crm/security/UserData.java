@@ -21,6 +21,7 @@ public class UserData implements UserDetails {
 	private List<CrmRole> roles;
 	private CrmUser user;
 	private List<CrmPage> listPage;
+	private List<CrmPage> listPageAll;
 
 	public void setUsername(String username) {
 		this.username = username;
@@ -42,7 +43,7 @@ public class UserData implements UserDetails {
 		return roles;
 	}
 
-	public void setRole(List<CrmRole> roles) {
+	public void setRoles(List<CrmRole> roles) {
 		this.roles = roles;
 	}
 
@@ -76,6 +77,14 @@ public class UserData implements UserDetails {
 
 	public void setListPage(List<CrmPage> listPage) {
 		this.listPage = listPage;
+	}
+
+	public List<CrmPage> getListPageAll() {
+		return listPageAll;
+	}
+
+	public void setListPageAll(List<CrmPage> listPageAll) {
+		this.listPageAll = listPageAll;
 	}
 
 	@Override
