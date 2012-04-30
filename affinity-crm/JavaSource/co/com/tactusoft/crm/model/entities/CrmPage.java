@@ -21,6 +21,7 @@ public class CrmPage implements java.io.Serializable {
 	private BigDecimal id;
 	private String name;
 	private String page;
+	private String icon;
 	private BigDecimal parent;
 	private int orderby;
 	private Set<CrmPageRole> crmPageRoles = new HashSet<CrmPageRole>(0);
@@ -28,18 +29,21 @@ public class CrmPage implements java.io.Serializable {
 	public CrmPage() {
 	}
 
-	public CrmPage(BigDecimal id, String name, String page, int orderby) {
+	public CrmPage(BigDecimal id, String name, String page, String icon,
+			int orderby) {
 		this.id = id;
 		this.name = name;
 		this.page = page;
+		this.icon = icon;
 		this.orderby = orderby;
 	}
 
-	public CrmPage(BigDecimal id, String name, String page, BigDecimal parent,
-			int orderby, Set<CrmPageRole> crmPageRoles) {
+	public CrmPage(BigDecimal id, String name, String page, String icon,
+			BigDecimal parent, int orderby, Set<CrmPageRole> crmPageRoles) {
 		this.id = id;
 		this.name = name;
 		this.page = page;
+		this.icon = icon;
 		this.parent = parent;
 		this.orderby = orderby;
 		this.crmPageRoles = crmPageRoles;
@@ -71,6 +75,15 @@ public class CrmPage implements java.io.Serializable {
 
 	public void setPage(String page) {
 		this.page = page;
+	}
+
+	@Column(name = "icon", nullable = false)
+	public String getIcon() {
+		return icon;
+	}
+
+	public void setIcon(String icon) {
+		this.icon = icon;
 	}
 
 	@Column(name = "parent", scale = 0)

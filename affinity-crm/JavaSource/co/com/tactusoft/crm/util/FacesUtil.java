@@ -19,6 +19,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import javax.el.ELContext;
+import javax.el.ExpressionFactory;
+import javax.el.MethodExpression;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -197,5 +200,14 @@ public class FacesUtil {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String currentDate = sdf.format(date);
 		return currentDate;
+	}
+
+	public static MethodExpression getMethodExpression(String action) {
+		FacesContext facesCtx = FacesContext.getCurrentInstance();
+		ELContext elCtx = facesCtx.getELContext();
+		ExpressionFactory expFact = facesCtx.getApplication()
+				.getExpressionFactory();
+		return expFact.createMethodExpression(elCtx, "#{" + action + "}",
+				String.class, new Class[0]);
 	}
 }
