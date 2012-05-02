@@ -1,6 +1,7 @@
 package co.com.tactusoft.crm.view.backing;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -64,15 +65,17 @@ public class RoleBacking implements Serializable {
 	}
 
 	public DualListModel<CrmPage> getListPages() {
-		List<CrmPage> listTarget = tablesService.getListPagesByRole(selected.getId());
+		List<CrmPage> listTarget = tablesService.getListPagesByRole(selected
+				.getId());
 
-		List<CrmPage> listSource = FacesUtil.getCurrentUserData()
-				.getListPageAll();
-		boolean exits = false;
-		for (CrmPage row : FacesUtil.getCurrentUserData().getListPage()) {
+		List<CrmPage> listSource = new LinkedList<CrmPage>();
+
+		for (CrmPage row : FacesUtil.getCurrentUserData().getListPageAll()) {
+			boolean exits = false;
 			for (CrmPage avb : listTarget) {
-				if (avb.getId().intValue() != row.getId().intValue()) {
+				if (avb.getId().intValue() == row.getId().intValue()) {
 					exits = true;
+					break;
 				}
 			}
 
@@ -99,6 +102,7 @@ public class RoleBacking implements Serializable {
 
 		int result = tablesService.saveRole(selected);
 		if (result == 0) {
+			tablesService.savePageRole(selected, listPages.getTarget());
 			list = tablesService.getListRole();
 			model = new RoleDataModel(list);
 			message = FacesUtil.getMessage("msg_record_ok");

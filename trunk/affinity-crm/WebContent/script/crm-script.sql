@@ -164,7 +164,7 @@ CREATE TABLE `crm_role` (
 
 LOCK TABLES `crm_role` WRITE;
 /*!40000 ALTER TABLE `crm_role` DISABLE KEYS */;
-INSERT INTO `crm_role` VALUES (1,'ADMINISTRADOR','Administrador',1);
+INSERT INTO `crm_role` VALUES (1,'ADMINISTRADOR','Administrador',1),(2,'CALL_CENTER','',1);
 /*!40000 ALTER TABLE `crm_role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -193,7 +193,7 @@ CREATE TABLE `crm_page_role` (
 
 LOCK TABLES `crm_page_role` WRITE;
 /*!40000 ALTER TABLE `crm_page_role` DISABLE KEYS */;
-INSERT INTO `crm_page_role` VALUES (1,1,1),(2,2,1),(3,3,1),(4,4,1),(5,5,1),(6,6,1),(7,7,1);
+INSERT INTO `crm_page_role` VALUES (1,1,1),(2,2,1),(3,3,1),(4,4,1),(5,5,1),(6,6,1),(7,7,1),(8,8,1),(9,9,1);
 /*!40000 ALTER TABLE `crm_page_role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -212,6 +212,9 @@ CREATE TABLE `crm_profile` (
   `distr_chan` varchar(4) COLLATE latin1_spanish_ci DEFAULT NULL,
   `sales_off` varchar(4) COLLATE latin1_spanish_ci DEFAULT NULL,
   `division` varchar(4) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `country` varchar(2) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `city` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `region` varchar(2) COLLATE latin1_spanish_ci DEFAULT NULL,
   `state` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`)
@@ -224,7 +227,7 @@ CREATE TABLE `crm_profile` (
 
 LOCK TABLES `crm_profile` WRITE;
 /*!40000 ALTER TABLE `crm_profile` DISABLE KEYS */;
-INSERT INTO `crm_profile` VALUES (1,'PROFILE 1',NULL,'1000','20','1400','10',1);
+INSERT INTO `crm_profile` VALUES (1,'PROFILE 1',NULL,'1000','20','1400','10','CO','BOGOTA','11',1),(2,'PROFILE 2','','1000','20','1400','10','MX','MEXICO','11',1);
 /*!40000 ALTER TABLE `crm_profile` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -265,6 +268,33 @@ INSERT INTO `crm_doctor` VALUES (1,'8647362','JUAN','','PEREZ','',1,'M',1,0,1),(
 UNLOCK TABLES;
 
 --
+-- Table structure for table `crm_specialty`
+--
+
+DROP TABLE IF EXISTS `crm_specialty`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `crm_specialty` (
+  `id` decimal(19,0) NOT NULL,
+  `code` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `description` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
+  `state` int(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code_UNIQUE` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `crm_specialty`
+--
+
+LOCK TABLES `crm_specialty` WRITE;
+/*!40000 ALTER TABLE `crm_specialty` DISABLE KEYS */;
+INSERT INTO `crm_specialty` VALUES (1,'MED_GENERAL','Médico General',1);
+/*!40000 ALTER TABLE `crm_specialty` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `crm_page`
 --
 
@@ -288,7 +318,7 @@ CREATE TABLE `crm_page` (
 
 LOCK TABLES `crm_page` WRITE;
 /*!40000 ALTER TABLE `crm_page` DISABLE KEYS */;
-INSERT INTO `crm_page` VALUES (1,'Seguridad',NULL,'ui-icon-document',NULL,1),(2,'Tablas',NULL,'ui-icon-gear',NULL,2),(3,'Usuarios',NULL,NULL,1,1),(4,'Roles',NULL,NULL,1,2),(5,'Doctor','/pages/tables/doctor.jsf',NULL,2,1),(6,'Parámetros','/pages/tables/parameter.jsf',NULL,2,2),(7,'Especialidad','/pages/tables/speciality.jsf',NULL,2,3);
+INSERT INTO `crm_page` VALUES (1,'Seguridad',NULL,'ui-icon-document',NULL,1),(2,'Tablas',NULL,'ui-icon-gear',NULL,2),(3,'Usuarios',NULL,NULL,1,2),(4,'Roles','/pages/secure/role.jsf',NULL,1,1),(5,'Doctor','/pages/tables/doctor.jsf',NULL,2,1),(6,'Parámetros','/pages/tables/parameter.jsf',NULL,2,2),(7,'Especialidad','/pages/tables/speciality.jsf',NULL,2,3),(8,'Paciente','/pages/tables/patient.jsf',NULL,2,4),(9,'Perfiles','/pages/tables/profile.jsf',NULL,2,5),(10,'Cambiar Clave',NULL,NULL,1,3);
 /*!40000 ALTER TABLE `crm_page` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -328,4 +358,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-04-29 21:51:15
+-- Dump completed on 2012-05-01 17:26:43

@@ -72,35 +72,45 @@ public class PatientBacking implements Serializable {
 
 	public void saveAction() {
 		String message = null;
-		String names = null;
-
-		names = selected.getFirstName();
-		if (selected.getSecondName().trim().length() > 0) {
-			names = names + " " + selected.getSecondName();
-		}
-
-		names = names + " " + selected.getFirstSurname();
-		if (selected.getSecondSurname().trim().length() > 0) {
-			names = names + " " + selected.getSecondSurname();
-		}
-
-		SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
-		CrmProfile profile = FacesUtil.getCurrentUser().getCrmProfile();
-
 		try {
-			String codigoSAP = CustomerExecute.excecute(sap.getEnvironment(), "13",
-					selected.getCode(), names, selected.getCountry(),
-					selected.getCity(), selected.getRegion(), "D001",
-					profile.getSalesOrg(), profile.getDistrChan(),
-					profile.getDivision(), profile.getSalesOff(), "01", "Z001",
-					selected.getAddress(), selected.getPhoneNumber(),
-					selected.getCellNumber(), "");
+			String customer = CustomerExecute.getCustomer(selected.getCode());
 
-			if (codigoSAP != null) {
-				message = FacesUtil.getMessage("pat_msg_ok", codigoSAP);
-				FacesUtil.addInfo(message);
+			if (customer.isEmpty()) {
+				String names = null;
+
+				names = selected.getFirstName();
+				if (selected.getSecondName().trim().length() > 0) {
+					names = names + " " + selected.getSecondName();
+				}
+
+				names = names + " " + selected.getFirstSurname();
+				if (selected.getSecondSurname().trim().length() > 0) {
+					names = names + " " + selected.getSecondSurname();
+				}
+
+				SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
+				CrmProfile profile = FacesUtil.getCurrentUser().getCrmProfile();
+
+				String codigoSAP = CustomerExecute.excecute(
+						sap.getEnvironment(), "13", selected.getCode(), names,
+						selected.getCountry(), selected.getCity(),
+						selected.getRegion(), "D001", profile.getSalesOrg(),
+						profile.getDistrChan(), profile.getDivision(),
+						profile.getSalesOff(), "01", "Z001",
+						selected.getAddress(), selected.getPhoneNumber(),
+						selected.getCellNumber(), "");
+
+				if (codigoSAP != null) {
+					message = FacesUtil.getMessage("pat_msg_ok", codigoSAP);
+					FacesUtil.addInfo(message);
+				} else {
+					message = FacesUtil.getMessage("Error");
+					FacesUtil.addError(message);
+				}
 			} else {
-				message = FacesUtil.getMessage("Error");
+				String field = FacesUtil.getMessage("pat");
+				message = FacesUtil.getMessage("msg_record_unique_exception",
+						field);
 				FacesUtil.addError(message);
 			}
 		} catch (Exception ex) {

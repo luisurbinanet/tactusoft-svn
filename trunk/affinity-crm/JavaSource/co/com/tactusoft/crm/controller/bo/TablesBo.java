@@ -10,6 +10,7 @@ import javax.inject.Named;
 import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmPage;
+import co.com.tactusoft.crm.model.entities.CrmPageRole;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
 import co.com.tactusoft.crm.model.entities.CrmRole;
 import co.com.tactusoft.crm.model.entities.CrmSpeciality;
@@ -94,6 +95,37 @@ public class TablesBo implements Serializable {
 			entity.setId(getId(CrmRole.class));
 		}
 		return dao.persist(entity);
+	}
+
+	public Integer savePageRole(CrmRole entity, List<CrmPage> listPages) {
+		String ids = "";
+		int i = 0;
+
+		dao.executeHQL("delete from CrmPageRole o where o.crmRole.id = "
+				+ entity.getId());
+
+		for (CrmPage page : listPages) {
+			CrmPageRole crmPageRole = new CrmPageRole();
+			crmPageRole.setId(getId(CrmPageRole.class));
+			crmPageRole.setCrmRole(entity);
+			crmPageRole.setCrmPage(page);
+			dao.persist(crmPageRole);
+
+			ids = ids + page.getParent() + ",";
+		}
+
+		ids = ids.substring(0, ids.length() - 1);
+		List<CrmPage> listParent = dao.find("from CrmPage o where o.id in ("
+				+ ids + ")");
+		for (CrmPage page : listParent) {
+			CrmPageRole crmPageRole = new CrmPageRole();
+			crmPageRole.setId(getId(CrmPageRole.class));
+			crmPageRole.setCrmRole(entity);
+			crmPageRole.setCrmPage(page);
+			dao.persist(crmPageRole);
+		}
+
+		return i;
 	}
 
 	public <T> void remove(Class<T> entity) {

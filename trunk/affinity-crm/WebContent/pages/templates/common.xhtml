@@ -15,15 +15,24 @@
 
 	<h:body>
 
+		<p:ajaxStatus onstart="statusDialog.show();"
+			onsuccess="statusDialog.hide();" />
+
+		<p:dialog modal="false" widgetVar="statusDialog"
+			header="#{msg['msg_wait']}" draggable="false" closable="false"
+			resizable="false">
+			<p:graphicImage value="../../images/ajaxloadingbar.gif" />
+		</p:dialog>
+
 		<div id="content">
 
 			<div id="mainContent">
-				
+
 				<ui:insert name="menu">
 					<ui:include src="menu.xhtml" />
 				</ui:insert>
-				
-				<p:spacer height="10"/>
+
+				<p:spacer height="10" />
 
 				<ui:insert name="body">Page Body</ui:insert>
 			</div>
