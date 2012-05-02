@@ -31,7 +31,7 @@
 				<p:dataTable id="recordTable" var="rec"
 					value="#{doctorBacking.model}" rowKey="#{rec.id}"
 					selection="#{doctorBacking.selected}" paginator="true" rows="10"
-					style="width:100%">
+					style="width:100%" emptyMessage="#{msg['glb_no_records_found']}">
 
 					<p:column selectionMode="single" style="width:18px" />
 
@@ -67,7 +67,7 @@
 			<p:growl id="growl" showDetail="true" />
 
 			<p:dialog header="#{msg['msg_detail']}" widgetVar="dlg"
-				resizable="false" id="dlg" showEffect="fade" hideEffect="explode"
+				resizable="false" id="dialog" showEffect="fade" hideEffect="explode"
 				modal="true" width="500">
 
 				<p:toolbar style="width:100%">

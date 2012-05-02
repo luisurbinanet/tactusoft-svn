@@ -21,10 +21,10 @@
 				<p:toolbar style="width:100%">
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
-							action="#{patientBacking.newAction}" update="pnlDetail"
-							process="@none" />
+							action="#{salesOrderBacking.newAction}" process="@form"
+							update="selectedTable" />
 						<p:commandButton value="#{msg['btn_save']}" icon="ui-icon-disk"
-							action="#{patientBacking.saveAction}" update="growl" />
+							action="#{salesOrderBacking.saveAction}" update="growl" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -47,15 +47,52 @@
 
 					<p:commandButton value="#{msg['btn_add_material']}"
 						icon="ui-icon-plusthick" oncomplete="dlg.show()"
-						update=":editForm:dialog" />
+						update=":editForm:dialog"
+						action="#{salesOrderBacking.generateListMaterialAction}" />
 					<h:outputLabel value=" " />
 
 				</h:panelGrid>
+
+				<p:spacer height="10" />
+
+				<p:dataTable id="selectedTable" var="rec"
+					value="#{salesOrderBacking.materialSelectedModel}"
+					rowKey="#{rec.code}"
+					selection="#{salesOrderBacking.listDeletedMaterial}"
+					paginator="true" rows="15" style="width:100%"
+					emptyMessage="#{msg['glb_no_records_found']}">
+
+					<p:column selectionMode="multiple" style="width:18px" />
+
+					<p:column headerText="#{msg['sal_material_code']}">
+						<h:outputLabel value="#{rec.code}" />
+					</p:column>
+
+					<p:column headerText="#{msg['sal_material_descr']}">
+						<h:outputLabel value="#{rec.descr}" />
+					</p:column>
+
+					<p:column headerText="#{msg['sal_material_price']}">
+						<h:outputLabel value="#{rec.price}" />
+					</p:column>
+
+					<p:column headerText="#{msg['sal_material_amount']}">
+						<p:inplace>
+							<p:spinner value="#{rec.amount}" min="1" max="9" stepFactor="1" />
+						</p:inplace>
+					</p:column>
+
+					<f:facet name="footer">
+						<p:commandButton value="#{msg['btn_delete']}"
+							icon="ui-icon-closethick" update="selectedTable"
+							action="#{salesOrderBacking.removeMaterialAction}" />
+					</f:facet>
+
+				</p:dataTable>
+
 			</h:form>
 
 			<h:form id="editForm">
-
-				<p:growl id="growl" showDetail="true" />
 
 				<p:dialog header="#{msg['sal_material']}" widgetVar="dlg"
 					resizable="false" id="dialog" showEffect="fade"
@@ -65,13 +102,21 @@
 						<h:outputLabel value="#{msg['sal_key_press']}" style="width:100%" />
 						<h:inputText value="#{salesOrderBacking.codeNameMaterial}"
 							style="width:100%" />
+
+						<f:facet name="footer">
+							<p:spacer height="10" />
+
+							<p:commandButton id="btnSearchMaterial"
+								value="#{msg['btn_search']}" icon="ui-icon-search"
+								update="recordTable"
+								action="#{salesOrderBacking.searchMaterialAction}"
+								widgetVar="btnSearchMaterial" />
+							<p:commandButton value="#{msg['btn_add']}"
+								icon="ui-icon-plusthick"
+								update=":form:selectedTable recordTable"
+								action="#{salesOrderBacking.addMaterialAction}" />
+						</f:facet>
 					</h:panelGrid>
-
-					<p:spacer height="10" />
-
-					<p:commandButton value="#{msg['btn_search']}" icon="ui-icon-search"
-						update="recordTable" style="width:100%"
-						action="#{salesOrderBacking.searchMaterialAction}" />
 
 					<p:spacer height="10" />
 

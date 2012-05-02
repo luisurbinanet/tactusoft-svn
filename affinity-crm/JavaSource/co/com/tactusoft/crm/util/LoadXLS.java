@@ -68,7 +68,7 @@ public class LoadXLS implements Serializable {
 				String price = String.valueOf(row.getCell(2)
 						.getNumericCellValue());
 
-				Material material = new Material(code, descr, price);
+				Material material = new Material(code, descr, price, "1");
 				list.add(material);
 			}
 		} catch (FileNotFoundException e) {
