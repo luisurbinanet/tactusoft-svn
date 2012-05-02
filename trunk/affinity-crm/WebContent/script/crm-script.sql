@@ -110,7 +110,7 @@ CREATE TABLE `crm_user` (
 
 LOCK TABLES `crm_user` WRITE;
 /*!40000 ALTER TABLE `crm_user` DISABLE KEYS */;
-INSERT INTO `crm_user` VALUES (1,'gsolorzano','202cb962ac59075b964b07152d234b70','Geerardo',NULL,'Solorzano',NULL,'gsolorzano@affinity.com.co',NULL,NULL,1,1,1);
+INSERT INTO `crm_user` VALUES (1,'gsolorzano','202cb962ac59075b964b07152d234b70','Gerardo',NULL,'Solorzano',NULL,'gsolorzano@affinity.com.co',NULL,NULL,1,1,1),(2,'jennyalvarez','202cb962ac59075b964b07152d234b70','Jenny',NULL,'Alvarez',NULL,'jennyalvarez@affinitycolombia.com',NULL,NULL,1,1,1);
 /*!40000 ALTER TABLE `crm_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -180,6 +180,7 @@ CREATE TABLE `crm_page_role` (
   `id_page` decimal(19,0) NOT NULL,
   `id_role` decimal(19,0) NOT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_crm_page_role_1` (`id_page`,`id_role`),
   KEY `fk_crm_page_role_1` (`id_page`),
   KEY `fk_crm_page_role_2` (`id_role`),
   CONSTRAINT `fk_crm_page_role_1` FOREIGN KEY (`id_page`) REFERENCES `crm_page` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -193,7 +194,7 @@ CREATE TABLE `crm_page_role` (
 
 LOCK TABLES `crm_page_role` WRITE;
 /*!40000 ALTER TABLE `crm_page_role` DISABLE KEYS */;
-INSERT INTO `crm_page_role` VALUES (1,1,1),(2,2,1),(3,3,1),(4,4,1),(5,5,1),(6,6,1),(7,7,1),(8,8,1),(9,9,1);
+INSERT INTO `crm_page_role` VALUES (34,1,1),(12,1,2),(35,2,1),(13,2,2),(25,3,1),(10,3,2),(26,4,1),(27,5,1),(28,6,1),(29,7,1),(31,8,1),(11,8,2),(30,9,1),(33,10,1),(36,11,1),(24,11,2),(32,12,1);
 /*!40000 ALTER TABLE `crm_page_role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -318,7 +319,7 @@ CREATE TABLE `crm_page` (
 
 LOCK TABLES `crm_page` WRITE;
 /*!40000 ALTER TABLE `crm_page` DISABLE KEYS */;
-INSERT INTO `crm_page` VALUES (1,'Seguridad',NULL,'ui-icon-document',NULL,1),(2,'Tablas',NULL,'ui-icon-gear',NULL,2),(3,'Usuarios',NULL,NULL,1,2),(4,'Roles','/pages/secure/role.jsf',NULL,1,1),(5,'Doctor','/pages/tables/doctor.jsf',NULL,2,1),(6,'Parámetros','/pages/tables/parameter.jsf',NULL,2,2),(7,'Especialidad','/pages/tables/speciality.jsf',NULL,2,3),(8,'Paciente','/pages/tables/patient.jsf',NULL,2,4),(9,'Perfiles','/pages/tables/profile.jsf',NULL,2,5),(10,'Cambiar Clave',NULL,NULL,1,3);
+INSERT INTO `crm_page` VALUES (1,'Seguridad',NULL,'ui-icon-document',NULL,1),(2,'Tablas',NULL,'ui-icon-gear',NULL,2),(3,'Usuarios',NULL,NULL,1,2),(4,'Roles','/pages/secure/role.jsf',NULL,1,1),(5,'Doctor','/pages/tables/doctor.jsf',NULL,2,1),(6,'Parámetros','/pages/tables/parameter.jsf',NULL,2,2),(7,'Especialidad','/pages/tables/speciality.jsf',NULL,2,3),(8,'Paciente','/pages/tables/patient.jsf',NULL,11,1),(9,'Perfiles','/pages/tables/profile.jsf',NULL,2,5),(10,'Cambiar Clave','/pages/tables/changePassword.jsf',NULL,1,3),(11,'Procesos',NULL,'ui-icon-contact',NULL,3),(12,'Crear Pedido',NULL,NULL,11,2);
 /*!40000 ALTER TABLE `crm_page` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -358,4 +359,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-05-01 17:26:43
+-- Dump completed on 2012-05-02  7:11:56
