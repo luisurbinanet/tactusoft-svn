@@ -65,8 +65,12 @@ public class MenuBacking implements Serializable {
 		this.model = model;
 	}
 
-	public void generateModel() {
-
+	public String actionPage() {
+		String page = FacesUtil.getParam("page");
+		if (page != null) {
+			page = page + "?faces-redirect=true";
+		}
+		return page;
 	}
 
 }
