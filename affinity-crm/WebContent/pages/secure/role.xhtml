@@ -22,7 +22,7 @@
 							action="#{roleBacking.newAction}" oncomplete="dlg.show()"
 							update=":editForm:dialog" />
 						<p:commandButton value="#{msg['btn_edit']}" icon="ui-icon-pencil"
-							oncomplete="dlg.show()" update=":editForm:pnlDetail" />
+							oncomplete="dlg.show()" update=":editForm:dialog" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -95,7 +95,7 @@
 
 				<h:outputLabel value="Paginas" style="font-weight:bold;" />
 
-				<p:pickList var="row" effect="bounce"
+				<p:pickList id="picRole" var="row" effect="bounce"
 					value="#{roleBacking.listPages}" converter="pageConverter"
 					itemValue="#{row}" itemLabel="#{row.name}">
 

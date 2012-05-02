@@ -5,9 +5,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import org.hibernate.Query;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
@@ -81,18 +79,13 @@ public class CustomHibernateDaoImpl extends HibernateDaoSupport implements
 	public <T> BigDecimal getId(Class<T> clasz) {
 		BigDecimal id = null;
 		try {
-			Session session = getHibernateTemplate().getSessionFactory()
-					.getCurrentSession();
-			Transaction transaction = session.beginTransaction();
-			id = (BigDecimal) session.createQuery(
-					"select MAX(o.id) from " + clasz.getName() + " o")
-					.uniqueResult();
+			id = (BigDecimal) this.find(
+					"select MAX(o.id) from " + clasz.getName() + " o").get(0);
 			if (id != null) {
 				id = new BigDecimal(id.intValue() + 1);
 			} else {
 				id = new BigDecimal(1);
 			}
-			transaction.commit();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

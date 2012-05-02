@@ -69,7 +69,8 @@
 
 					<h:outputText value="#{msg['pat_email']}" />
 					<h:inputText value="#{patientBacking.selected.email}"
-						style="width:100%" label="#{msg['pat_email']}" />
+						style="width:100%" label="#{msg['pat_email']}"
+						validator="emailValidator" />
 
 					<h:outputText value="#{msg['pat_phone_number']}" />
 					<h:inputText value="#{patientBacking.selected.phoneNumber}"
@@ -78,7 +79,8 @@
 
 					<h:outputText value="#{msg['pat_cell_number']}" />
 					<h:inputText value="#{patientBacking.selected.cellNumber}"
-						style="width:100%" />
+						style="width:100%" label="#{msg['pat_cell_number']}"
+						required="true" />
 
 					<h:outputText value="#{msg['pat_cycle']}" />
 					<p:selectOneRadio id="optionsCycle" layout="pageDirection"
@@ -95,7 +97,6 @@
 						<f:selectItem itemLabel="#{msg['pat_send_postal']}" itemValue="3" />
 						<f:selectItem itemLabel="#{msg['pat_send_sms']}" itemValue="4" />
 					</p:selectManyCheckbox>
-
 				</h:panelGrid>
 
 			</h:form>
