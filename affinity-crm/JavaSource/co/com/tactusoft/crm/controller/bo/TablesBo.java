@@ -9,6 +9,7 @@ import javax.inject.Named;
 
 import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
+import co.com.tactusoft.crm.model.entities.CrmDomain;
 import co.com.tactusoft.crm.model.entities.CrmPage;
 import co.com.tactusoft.crm.model.entities.CrmPageRole;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
@@ -67,6 +68,10 @@ public class TablesBo implements Serializable {
 		return dao
 				.find("select o.crmPage from CrmPageRole o where o.crmPage.parent is not null and o.crmRole.id = "
 						+ idRole + " order by o.crmPage.parent");
+	}
+
+	public List<CrmDomain> getListDomain(String group) {
+		return dao.find("from CrmDomain o where o.group = '" + group + "'");
 	}
 
 	public Integer saveDoctor(CrmDoctor entity) {
