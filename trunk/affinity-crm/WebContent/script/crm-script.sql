@@ -70,7 +70,7 @@ CREATE TABLE `crm_parameter` (
 
 LOCK TABLES `crm_parameter` WRITE;
 /*!40000 ALTER TABLE `crm_parameter` DISABLE KEYS */;
-INSERT INTO `crm_parameter` VALUES (1,'SAP_ENVIRONMENT',NULL,'300',NULL),(2,'SAP_PRUEBA','','',2.000),(3,'SAP_URL_CUSTOMER_MAINTAIN_ALL',NULL,'http://ansrvsap2.affinity.net:8001/sap/bc/srt/rfc/sap/zsd_customer_maintain_all/300/zsd_customer_maintain_all/zsd_customer_maintain_all',NULL),(4,'SAP_URL_CUSTOMER_FIND',NULL,'http://ansrvsap2.affinity.net:8001/sap/bc/srt/rfc/sap/zbapi_customer_find/300/zbapi_customer_find/zbapi_customer_find',NULL),(5,'SAP_URL_SALESORDER_CREATEFROMDAT',NULL,'http://ansrvsap2.affinity.net:8001/sap/bc/srt/rfc/sap/zbapi_salesorder_createfromdat/300/zbapi_salesorder_createfromdat/zbapi_salesorder_createfromdat',NULL),(6,'SAP_URL_CUSTOMER2',NULL,'http://ansrvsap2.affinity.net:8001/sap/bc/srt/rfc/sap/zcustomer2/300/zcustomer2/zcustomer2',NULL),(7,'SAP_LOGIN',NULL,'TACTUSOFT',NULL),(8,'SAP_PASSWORD',NULL,'AFFINITY',NULL);
+INSERT INTO `crm_parameter` VALUES (1,'SAP_ENVIRONMENT',NULL,'300',NULL),(2,'SAP_PRUEBA','','',2.000),(3,'SAP_URL_CUSTOMER_MAINTAIN_ALL',NULL,'http://ansrvsap2.affinity.net:8001/sap/bc/srt/rfc/sap/zsd_customer_maintain_all/300/zsd_customer_maintain_all/zsd_customer_maintain_all',NULL),(4,'SAP_URL_CUSTOMER_FIND',NULL,'http://ansrvsap2.affinity.net:8001/sap/bc/srt/rfc/sap/zbapi_customer_find/300/zbapi_customer_find/zbapi_customer_find',NULL),(5,'SAP_URL_SALESORDER_CREATEFROMDAT',NULL,'http://ansrvsap2.affinity.net:8001/sap/bc/srt/rfc/sap/zbapi_salesorder_createfromdat/300/zbapi_salesorder_createfromdat/zbapi_salesorder_createfromdat',NULL),(6,'SAP_URL_CUSTOMER2',NULL,'http://ansrvsap2.affinity.net:8001/sap/bc/srt/rfc/sap/zcustomer2/300/zcustomer2/zcustomer2',NULL),(7,'SAP_LOGIN',NULL,'TACTUSOFT',NULL),(8,'SAP_PASSWORD',NULL,'AFFINITY',NULL),(9,'RUTA_ARCHIVO_MATERIALES','','C:\\affinity\\Materiales4000.xlsx',0.000);
 /*!40000 ALTER TABLE `crm_parameter` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -112,6 +112,34 @@ LOCK TABLES `crm_user` WRITE;
 /*!40000 ALTER TABLE `crm_user` DISABLE KEYS */;
 INSERT INTO `crm_user` VALUES (1,'gsolorzano','202cb962ac59075b964b07152d234b70','Gerardo',NULL,'Solorzano',NULL,'gsolorzano@affinity.com.co',NULL,NULL,1,1,1),(2,'jennyalvarez','202cb962ac59075b964b07152d234b70','Jenny',NULL,'Alvarez',NULL,'jennyalvarez@affinitycolombia.com',NULL,NULL,1,1,1);
 /*!40000 ALTER TABLE `crm_user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `crm_page`
+--
+
+DROP TABLE IF EXISTS `crm_page`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `crm_page` (
+  `id` decimal(19,0) NOT NULL,
+  `name` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
+  `page` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `icon` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `parent` decimal(19,0) DEFAULT NULL,
+  `orderby` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `crm_page`
+--
+
+LOCK TABLES `crm_page` WRITE;
+/*!40000 ALTER TABLE `crm_page` DISABLE KEYS */;
+INSERT INTO `crm_page` VALUES (1,'Seguridad',NULL,'ui-icon-document',NULL,1),(2,'Tablas',NULL,'ui-icon-gear',NULL,2),(3,'Usuarios',NULL,NULL,1,2),(4,'Roles','/pages/secure/role.jsf',NULL,1,1),(5,'Doctor','/pages/tables/doctor.jsf',NULL,2,1),(6,'Parámetros','/pages/tables/parameter.jsf',NULL,2,2),(7,'Especialdades','/pages/tables/speciality.jsf',NULL,2,3),(8,'Pacientes','/pages/processes/patient.jsf',NULL,11,1),(9,'Perfiles','/pages/tables/profile.jsf',NULL,2,5),(10,'Cambiar Clave','/pages/tables/changePassword.jsf',NULL,1,3),(11,'Procesos',NULL,'ui-icon-contact',NULL,3),(12,'Crear Pedido','/pages/processes/salesOrder.jsf',NULL,11,2);
+/*!40000 ALTER TABLE `crm_page` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -164,7 +192,7 @@ CREATE TABLE `crm_role` (
 
 LOCK TABLES `crm_role` WRITE;
 /*!40000 ALTER TABLE `crm_role` DISABLE KEYS */;
-INSERT INTO `crm_role` VALUES (1,'ADMINISTRADOR','Administrador',1),(2,'CALL_CENTER','',1);
+INSERT INTO `crm_role` VALUES (1,'ADMINISTRADOR','Administrador',1),(2,'CALL_CENTER','',1),(3,'GERENCIA','',1);
 /*!40000 ALTER TABLE `crm_role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -194,7 +222,7 @@ CREATE TABLE `crm_page_role` (
 
 LOCK TABLES `crm_page_role` WRITE;
 /*!40000 ALTER TABLE `crm_page_role` DISABLE KEYS */;
-INSERT INTO `crm_page_role` VALUES (34,1,1),(12,1,2),(35,2,1),(13,2,2),(25,3,1),(10,3,2),(26,4,1),(27,5,1),(28,6,1),(29,7,1),(31,8,1),(11,8,2),(30,9,1),(33,10,1),(36,11,1),(24,11,2),(32,12,1);
+INSERT INTO `crm_page_role` VALUES (34,1,1),(12,1,2),(35,2,1),(13,2,2),(25,3,1),(10,3,2),(26,4,1),(27,5,1),(28,6,1),(29,7,1),(31,8,1),(11,8,2),(30,9,1),(33,10,1),(36,11,1),(24,11,2),(38,11,3),(32,12,1),(37,12,3);
 /*!40000 ALTER TABLE `crm_page_role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -228,7 +256,7 @@ CREATE TABLE `crm_profile` (
 
 LOCK TABLES `crm_profile` WRITE;
 /*!40000 ALTER TABLE `crm_profile` DISABLE KEYS */;
-INSERT INTO `crm_profile` VALUES (1,'PROFILE 1',NULL,'1000','20','1400','10','CO','BOGOTA','11',1),(2,'PROFILE 2','','1000','20','1400','10','MX','MEXICO','11',1);
+INSERT INTO `crm_profile` VALUES (1,'PROFILE 1','','4000','10','4000','10','CO','BOGOTA','11',1),(2,'PROFILE 2','','1000','20','1400','10','MX','MEXICO','11',1);
 /*!40000 ALTER TABLE `crm_profile` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -296,31 +324,30 @@ INSERT INTO `crm_specialty` VALUES (1,'MED_GENERAL','Médico General',1);
 UNLOCK TABLES;
 
 --
--- Table structure for table `crm_page`
+-- Table structure for table `crm_domain`
 --
 
-DROP TABLE IF EXISTS `crm_page`;
+DROP TABLE IF EXISTS `crm_domain`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `crm_page` (
+CREATE TABLE `crm_domain` (
   `id` decimal(19,0) NOT NULL,
-  `name` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
-  `page` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `icon` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `parent` decimal(19,0) DEFAULT NULL,
-  `orderby` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  `code` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `item_value` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `group` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_crm_domain_1` (`code`,`group`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `crm_page`
+-- Dumping data for table `crm_domain`
 --
 
-LOCK TABLES `crm_page` WRITE;
-/*!40000 ALTER TABLE `crm_page` DISABLE KEYS */;
-INSERT INTO `crm_page` VALUES (1,'Seguridad',NULL,'ui-icon-document',NULL,1),(2,'Tablas',NULL,'ui-icon-gear',NULL,2),(3,'Usuarios',NULL,NULL,1,2),(4,'Roles','/pages/secure/role.jsf',NULL,1,1),(5,'Doctor','/pages/tables/doctor.jsf',NULL,2,1),(6,'Parámetros','/pages/tables/parameter.jsf',NULL,2,2),(7,'Especialidad','/pages/tables/speciality.jsf',NULL,2,3),(8,'Paciente','/pages/tables/patient.jsf',NULL,11,1),(9,'Perfiles','/pages/tables/profile.jsf',NULL,2,5),(10,'Cambiar Clave','/pages/tables/changePassword.jsf',NULL,1,3),(11,'Procesos',NULL,'ui-icon-contact',NULL,3),(12,'Crear Pedido',NULL,NULL,11,2);
-/*!40000 ALTER TABLE `crm_page` ENABLE KEYS */;
+LOCK TABLES `crm_domain` WRITE;
+/*!40000 ALTER TABLE `crm_domain` DISABLE KEYS */;
+INSERT INTO `crm_domain` VALUES (1,'E','Efectivo','FORMA_PAGO'),(2,'C','Cheque','FORMA_PAGO'),(3,'T','Tarjeta de Crédito','FORMA_PAGO'),(4,'Z001','Pagadero Inmediato','CONDICION_PAGO'),(5,'Z024','Cuotas: 25% + 6 semanales','CONDICION_PAGO'),(6,'Z025','Cuotas: 12.5% + 3 semanales','CONDICION_PAGO');
+/*!40000 ALTER TABLE `crm_domain` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -359,4 +386,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-05-02  7:11:56
+-- Dump completed on 2012-05-02 15:46:29

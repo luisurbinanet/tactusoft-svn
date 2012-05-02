@@ -8,6 +8,7 @@ public class Material implements Serializable {
 	private String code;
 	private String descr;
 	private String price;
+	private String amount;
 
 	public Material() {
 
@@ -17,6 +18,13 @@ public class Material implements Serializable {
 		this.code = code;
 		this.descr = descr;
 		this.price = price;
+	}
+
+	public Material(String code, String descr, String price, String amount) {
+		this.code = code;
+		this.descr = descr;
+		this.price = price;
+		this.amount = amount;
 	}
 
 	public String getCode() {
@@ -41,6 +49,14 @@ public class Material implements Serializable {
 
 	public void setPrice(String price) {
 		this.price = price;
+	}
+
+	public String getAmount() {
+		return amount;
+	}
+
+	public void setAmount(String amount) {
+		this.amount = amount;
 	}
 
 }

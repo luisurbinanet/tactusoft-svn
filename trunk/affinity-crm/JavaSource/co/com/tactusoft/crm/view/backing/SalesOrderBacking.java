@@ -38,7 +38,12 @@ public class SalesOrderBacking implements Serializable {
 
 	private String codeNameMaterial;
 
+	private List<Material> listSelectedMaterial;
+	private MaterialDataModel materialSelectedModel;
+	private Material[] listDeletedMaterial;
+
 	public SalesOrderBacking() {
+		newAction();
 	}
 
 	public List<SelectItem> getListMethodPayment() {
@@ -88,11 +93,6 @@ public class SalesOrderBacking implements Serializable {
 	}
 
 	public MaterialDataModel getMaterialModel() {
-		if (materialModel == null) {
-			LoadXLS loadXLS = FacesUtil.findBean("loadXLS");
-			listMaterial = loadXLS.getListMaterial();
-			materialModel = new MaterialDataModel(listMaterial);
-		}
 		return materialModel;
 	}
 
@@ -116,15 +116,102 @@ public class SalesOrderBacking implements Serializable {
 		this.codeNameMaterial = codeNameMaterial;
 	}
 
+	public List<Material> getListMaterial() {
+		return listMaterial;
+	}
+
+	public void setListMaterial(List<Material> listMaterial) {
+		this.listMaterial = listMaterial;
+	}
+
+	public List<Material> getListSelectedMaterial() {
+		return listSelectedMaterial;
+	}
+
+	public void setListSelectedMaterial(List<Material> listSelectedMaterial) {
+		this.listSelectedMaterial = listSelectedMaterial;
+	}
+
+	public MaterialDataModel getMaterialSelectedModel() {
+		return materialSelectedModel;
+	}
+
+	public void setMaterialSelectedModel(MaterialDataModel materialSelectedModel) {
+		this.materialSelectedModel = materialSelectedModel;
+	}
+
+	public Material[] getListDeletedMaterial() {
+		return listDeletedMaterial;
+	}
+
+	public void setListDeletedMaterial(Material[] listDeletedMaterial) {
+		this.listDeletedMaterial = listDeletedMaterial;
+	}
+
+	public void generateListMaterialAction() {
+		if (listMaterial.size() == 0) {
+			LoadXLS loadXLS = FacesUtil.findBean("loadXLS");
+			listMaterial = loadXLS.getListMaterial();
+			materialModel = new MaterialDataModel(listMaterial);
+		} else {
+			List<Material> listMaterial2 = new LinkedList<Material>();
+			for (Material row : listMaterial) {
+				boolean exits = false;
+				for (Material sel : listSelectedMaterial) {
+					if (sel.getCode().equals(row.getCode())) {
+						exits = true;
+						break;
+					}
+				}
+
+				if (!exits) {
+					listMaterial2.add(row);
+				}
+			}
+			listMaterial = listMaterial2;
+			materialModel = new MaterialDataModel(listMaterial);
+		}
+	}
+
+	public void newAction() {
+		selectedMaterial = new Material();
+		listMaterial = new LinkedList<Material>();
+		materialModel = new MaterialDataModel(listMaterial);
+		listSelectedMaterial = new LinkedList<Material>();
+		materialSelectedModel = new MaterialDataModel(listSelectedMaterial);
+	}
+
+	public void saveAction() {
+		selectedMaterial = new Material();
+	}
+
 	public void searchMaterialAction() {
 		List<Material> listMaterial2 = new LinkedList<Material>();
 		for (Material material : listMaterial) {
-			if (material.getCode().lastIndexOf(this.codeNameMaterial) >= 0
-					|| material.getDescr().lastIndexOf(this.codeNameMaterial) >= 0) {
+			if (material.getCode().toUpperCase()
+					.lastIndexOf(this.codeNameMaterial.toUpperCase()) >= 0
+					|| material.getDescr().toUpperCase()
+							.lastIndexOf(this.codeNameMaterial.toUpperCase()) >= 0) {
 				listMaterial2.add(material);
 			}
 		}
 		materialModel = new MaterialDataModel(listMaterial2);
+	}
+
+	public void addMaterialAction() {
+		listSelectedMaterial.add(selectedMaterial);
+		materialSelectedModel = new MaterialDataModel(listSelectedMaterial);
+		generateListMaterialAction();
+		if (!codeNameMaterial.isEmpty()) {
+			searchMaterialAction();
+		}
+	}
+	
+	public void removeMaterialAction() {
+		for (Material row : listDeletedMaterial) {
+			listSelectedMaterial.remove(row);
+		}
+		materialModel = new MaterialDataModel(listSelectedMaterial);
 	}
 
 }
