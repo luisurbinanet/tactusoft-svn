@@ -23,16 +23,16 @@ public class ParameterBo implements Serializable {
 
 	public String getTextValue(String param) {
 		return ((CrmParameter) dao.find(
-				"CrmParameter o where o.code = '" + param + "'").get(0))
+				"from CrmParameter o where o.code = '" + param + "'").get(0))
 				.getTextValue();
 	}
 
 	public BigDecimal getNumberValue(String param) {
 		return ((CrmParameter) dao.find(
-				"CrmParameter o where o.code = '" + param + "'").get(0))
+				"from CrmParameter o where o.code = '" + param + "'").get(0))
 				.getNumberValue();
 	}
-	
+
 	public List<CrmParameter> getListParameter() {
 		return dao.find("from CrmParameter o");
 	}
@@ -43,7 +43,7 @@ public class ParameterBo implements Serializable {
 		}
 		return dao.persist(entity);
 	}
-	
+
 	public <T> BigDecimal getId(Class<T> clasz) {
 		return dao.getId(clasz);
 	}
