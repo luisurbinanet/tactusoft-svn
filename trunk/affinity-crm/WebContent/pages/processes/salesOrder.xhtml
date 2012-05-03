@@ -21,10 +21,12 @@
 				<p:toolbar style="width:100%">
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
-							action="#{salesOrderBacking.newAction}" process="@form"
-							update="selectedTable" />
-						<p:commandButton value="#{msg['btn_save']}" icon="ui-icon-disk"
-							action="#{salesOrderBacking.saveAction}" update="growl" />
+							actionListener="#{salesOrderBacking.newAction}" process="@this"
+							update="pnlDetail btnSaveOrder" />
+						<p:commandButton id="btnSaveOrder" value="#{msg['btn_save']}"
+							icon="ui-icon-disk" action="#{salesOrderBacking.saveAction}"
+							update="growl btnSaveOrder"
+							disabled="#{salesOrderBacking.disabledSaveButton}" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -61,6 +63,12 @@
 					<p:selectOneMenu value="#{salesOrderBacking.conditionPayment}"
 						style="width:350px">
 						<f:selectItems value="#{salesOrderBacking.listConditionPayment}" />
+					</p:selectOneMenu>
+
+					<h:outputLabel value="#{msg['sal_sales_grp']}" style="width:40%" />
+					<p:selectOneMenu value="#{salesOrderBacking.salesGrp}"
+						style="width:350px">
+						<f:selectItems value="#{salesOrderBacking.listSalesGrp}" />
 					</p:selectOneMenu>
 
 					<p:commandButton value="#{msg['btn_add_material']}"
@@ -169,7 +177,8 @@
 					hideEffect="explode" modal="true" width="600">
 
 					<h:panelGrid columns="2" width="100%">
-						<h:outputLabel value="#{msg['sal_key_press_doc']}" style="width:100%" />
+						<h:outputLabel value="#{msg['sal_key_press_doc']}"
+							style="width:100%" />
 						<h:inputText value="#{salesOrderBacking.namePatient}"
 							style="width:100%" />
 
@@ -181,7 +190,6 @@
 								action="#{salesOrderBacking.searchPatientAction}" />
 							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
 								icon="ui-icon-plusthick" update=":form:pnlDetail"
-								action="#{salesOrderBacking.addMaterialAction}"
 								oncomplete="dlg2.hide()"
 								disabled="#{salesOrderBacking.disabledAddPatient}" />
 						</f:facet>

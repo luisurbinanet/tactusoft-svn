@@ -3,6 +3,7 @@ package co.com.tactusoft.crm.view.backing;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 
 import org.springframework.context.annotation.Scope;
@@ -30,7 +31,7 @@ public class PatientBacking implements Serializable {
 	private boolean disabledSaveButton;
 
 	public PatientBacking() {
-		newAction();
+		newAction(null);
 	}
 
 	public List<Patient> getList() {
@@ -76,7 +77,7 @@ public class PatientBacking implements Serializable {
 		this.disabledSaveButton = disabledSaveButton;
 	}
 	
-	public void newAction() {
+	public void newAction(ActionEvent event) {
 		selected = new Patient();
 		disabledSaveButton = false;
 	}

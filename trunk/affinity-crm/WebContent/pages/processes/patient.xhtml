@@ -21,8 +21,8 @@
 				<p:toolbar style="width:100%">
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
-							action="#{patientBacking.newAction}"
-							update="pnlDetail btnSavePatient" process="@none"/>
+							actionListener="#{patientBacking.newAction}"
+							update="pnlDetail btnSavePatient" process="@this"/>
 						<p:commandButton value="#{msg['btn_search']}"
 							icon="ui-icon-search" update="pnlDetail" process="@none" />
 						<p:commandButton id="btnSavePatient" value="#{msg['btn_save']}"
