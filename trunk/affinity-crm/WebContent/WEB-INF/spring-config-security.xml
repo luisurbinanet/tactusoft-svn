@@ -52,9 +52,7 @@
 	</bean>
 
 	<bean id="successHandler"
-		class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
-		<property name="defaultTargetUrl" value="/pages/tables/doctor.jsf" />
-	</bean>
+		class="co.com.tactusoft.crm.security.AuthenticationSuccessHandlerCustom" />
 
 	<bean id="failureHandler"
 		class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
