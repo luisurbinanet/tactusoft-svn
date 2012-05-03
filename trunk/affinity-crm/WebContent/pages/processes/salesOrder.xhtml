@@ -33,15 +33,33 @@
 				<h:panelGrid id="pnlDetail" columns="2" cellpadding="4"
 					style="margin:0 auto;" width="100%">
 
+					<p:commandButton value="#{msg['btn_add_patient']}"
+						icon="ui-icon-plusthick" oncomplete="dlg2.show()"
+						update=":editForm:dialog2" />
+					<h:outputLabel value=" " />
+
+					<h:outputLabel value="#{msg['pat_sap_code']}" style="width:40%" />
+					<p:inputText value="#{salesOrderBacking.selectedPatient.SAPCode}"
+						style="width:350px" readonly="true" />
+
+					<h:outputLabel value="#{msg['pat_names']}" style="width:40%" />
+					<p:inputText value="#{salesOrderBacking.selectedPatient.names}"
+						style="width:350px" readonly="true" />
+
+					<p:spacer height="5" />
+					<p:spacer height="5" />
+
 					<h:outputLabel value="#{msg['sal_method_payment']}"
-						style="width:100%" />
-					<p:selectOneMenu value="#{salesOrderBacking.methodPayment}">
+						style="width:40%" />
+					<p:selectOneMenu value="#{salesOrderBacking.methodPayment}"
+						style="width:350px">
 						<f:selectItems value="#{salesOrderBacking.listMethodPayment}" />
 					</p:selectOneMenu>
 
 					<h:outputLabel value="#{msg['sal_condition_payment']}"
-						style="width:100%" />
-					<p:selectOneMenu value="#{salesOrderBacking.conditionPayment}">
+						style="width:40%" />
+					<p:selectOneMenu value="#{salesOrderBacking.conditionPayment}"
+						style="width:350px">
 						<f:selectItems value="#{salesOrderBacking.listConditionPayment}" />
 					</p:selectOneMenu>
 
@@ -110,11 +128,13 @@
 								value="#{msg['btn_search']}" icon="ui-icon-search"
 								update="recordTable"
 								action="#{salesOrderBacking.searchMaterialAction}"
-								widgetVar="btnSearchMaterial" />
+								widgetVar="btnSearchMaterial"
+								disabled="#{salesOrderBacking.disabledAddMaterial}" />
 							<p:commandButton value="#{msg['btn_add']}"
 								icon="ui-icon-plusthick"
 								update=":form:selectedTable recordTable"
-								action="#{salesOrderBacking.addMaterialAction}" />
+								action="#{salesOrderBacking.addMaterialAction}"
+								disabled="#{salesOrderBacking.disabledAddMaterial}" />
 						</f:facet>
 					</h:panelGrid>
 
@@ -139,6 +159,50 @@
 							<h:outputLabel value="#{rec.price}" />
 						</p:column>
 
+
+					</p:dataTable>
+
+				</p:dialog>
+
+				<p:dialog header="#{msg['sal_patient']}" widgetVar="dlg2"
+					resizable="false" id="dialog2" showEffect="fade"
+					hideEffect="explode" modal="true" width="600">
+
+					<h:panelGrid columns="2" width="100%">
+						<h:outputLabel value="#{msg['sal_key_press_doc']}" style="width:100%" />
+						<h:inputText value="#{salesOrderBacking.namePatient}"
+							style="width:100%" />
+
+						<f:facet name="footer">
+							<p:spacer height="10" />
+
+							<p:commandButton value="#{msg['btn_search']}"
+								icon="ui-icon-search" update="recordTable2 btnAddPatient"
+								action="#{salesOrderBacking.searchPatientAction}" />
+							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
+								icon="ui-icon-plusthick" update=":form:pnlDetail"
+								action="#{salesOrderBacking.addMaterialAction}"
+								oncomplete="dlg2.hide()"
+								disabled="#{salesOrderBacking.disabledAddPatient}" />
+						</f:facet>
+					</h:panelGrid>
+
+					<p:spacer height="10" />
+
+					<p:dataTable id="recordTable2" var="rec"
+						value="#{salesOrderBacking.patientModel}" rowKey="#{rec.SAPCode}"
+						selection="#{salesOrderBacking.selectedPatient}" paginator="true"
+						rows="15" style="width:100%">
+
+						<p:column selectionMode="single" style="width:18px" />
+
+						<p:column headerText="#{msg['pat_sap_code']}">
+							<h:outputLabel value="#{rec.SAPCode}" />
+						</p:column>
+
+						<p:column headerText="#{msg['pat_names']}">
+							<h:outputLabel value="#{rec.names}" />
+						</p:column>
 
 					</p:dataTable>
 

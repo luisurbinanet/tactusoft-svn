@@ -1,6 +1,9 @@
 package co.com.tactusoft.crm.view.backing;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,10 +15,20 @@ import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.controller.bo.TablesBo;
 import co.com.tactusoft.crm.model.entities.CrmDomain;
+import co.com.tactusoft.crm.model.entities.CrmProfile;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.util.LoadXLS;
 import co.com.tactusoft.crm.view.beans.Material;
+import co.com.tactusoft.crm.view.beans.Patient;
 import co.com.tactusoft.crm.view.datamodel.MaterialDataModel;
+import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
+
+import com.tactusoft.webservice.client.custom.MaterialesCustom;
+import com.tactusoft.webservice.client.custom.ResultCreateOrder;
+import com.tactusoft.webservice.client.execute.CreateSalesOrderExecute;
+import com.tactusoft.webservice.client.execute.CustomerExecute;
+import com.tactusoft.webservice.client.objects.Bapikna111;
+import com.tactusoft.webservice.client.objects.Bapiret2;
 
 @Named
 @Scope("view")
@@ -32,15 +45,22 @@ public class SalesOrderBacking implements Serializable {
 	private String methodPayment;
 	private String conditionPayment;
 
+	private List<Patient> listPatient;
+	private PatientDataModel patientModel;
+	private Patient selectedPatient;
+
 	private List<Material> listMaterial;
 	private MaterialDataModel materialModel;
 	private Material selectedMaterial;
 
 	private String codeNameMaterial;
+	private String namePatient;
 
 	private List<Material> listSelectedMaterial;
 	private MaterialDataModel materialSelectedModel;
 	private Material[] listDeletedMaterial;
+
+	private boolean disabledSaveButton;
 
 	public SalesOrderBacking() {
 		newAction();
@@ -90,6 +110,38 @@ public class SalesOrderBacking implements Serializable {
 
 	public void setConditionPayment(String conditionPayment) {
 		this.conditionPayment = conditionPayment;
+	}
+
+	public TablesBo getTablesService() {
+		return tablesService;
+	}
+
+	public void setTablesService(TablesBo tablesService) {
+		this.tablesService = tablesService;
+	}
+
+	public List<Patient> getListPatient() {
+		return listPatient;
+	}
+
+	public void setListPatient(List<Patient> listPatient) {
+		this.listPatient = listPatient;
+	}
+
+	public PatientDataModel getPatientModel() {
+		return patientModel;
+	}
+
+	public void setPatientModel(PatientDataModel patientModel) {
+		this.patientModel = patientModel;
+	}
+
+	public Patient getSelectedPatient() {
+		return selectedPatient;
+	}
+
+	public void setSelectedPatient(Patient selectedPatient) {
+		this.selectedPatient = selectedPatient;
 	}
 
 	public MaterialDataModel getMaterialModel() {
@@ -148,28 +200,46 @@ public class SalesOrderBacking implements Serializable {
 		this.listDeletedMaterial = listDeletedMaterial;
 	}
 
+	public String getNamePatient() {
+		return namePatient;
+	}
+
+	public void setNamePatient(String namePatient) {
+		this.namePatient = namePatient;
+	}
+
+	public boolean isDisabledSaveButton() {
+		return disabledSaveButton;
+	}
+
+	public void setDisabledSaveButton(boolean disabledSaveButton) {
+		this.disabledSaveButton = disabledSaveButton;
+	}
+
 	public void generateListMaterialAction() {
 		if (listMaterial.size() == 0) {
 			LoadXLS loadXLS = FacesUtil.findBean("loadXLS");
 			listMaterial = loadXLS.getListMaterial();
 			materialModel = new MaterialDataModel(listMaterial);
 		} else {
-			List<Material> listMaterial2 = new LinkedList<Material>();
-			for (Material row : listMaterial) {
-				boolean exits = false;
-				for (Material sel : listSelectedMaterial) {
-					if (sel.getCode().equals(row.getCode())) {
-						exits = true;
-						break;
+			if (isDisabledAddMaterial()) {
+				List<Material> listMaterial2 = new LinkedList<Material>();
+				for (Material row : listMaterial) {
+					boolean exits = false;
+					for (Material sel : listSelectedMaterial) {
+						if (sel.getCode().equals(row.getCode())) {
+							exits = true;
+							break;
+						}
+					}
+
+					if (!exits) {
+						listMaterial2.add(row);
 					}
 				}
-
-				if (!exits) {
-					listMaterial2.add(row);
-				}
+				listMaterial = listMaterial2;
+				materialModel = new MaterialDataModel(listMaterial);
 			}
-			listMaterial = listMaterial2;
-			materialModel = new MaterialDataModel(listMaterial);
 		}
 	}
 
@@ -179,10 +249,74 @@ public class SalesOrderBacking implements Serializable {
 		materialModel = new MaterialDataModel(listMaterial);
 		listSelectedMaterial = new LinkedList<Material>();
 		materialSelectedModel = new MaterialDataModel(listSelectedMaterial);
+		selectedPatient = new Patient();
+		listPatient = new LinkedList<Patient>();
+		patientModel = new PatientDataModel(listPatient);
 	}
 
 	public void saveAction() {
 		selectedMaterial = new Material();
+		if (selectedPatient.getSAPCode() == null) {
+			FacesUtil.addError("No se ha sellecionado el Paciente");
+		} else if (listSelectedMaterial.size() == 0) {
+			FacesUtil.addError("No se han digitado Materiales");
+		} else {
+			// SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
+			CrmProfile profile = FacesUtil.getCurrentUser().getCrmProfile();
+
+			String orgVentas = profile.getSalesOrg();
+			String canalDistribucion = profile.getDistrChan();
+			String division = profile.getDivision();
+			String oficinaVentas = profile.getSalesOff();
+
+			String tipoDocVenta = "ZOP";
+			String solicitante = null;
+			String interlocutor = null;
+			String codigoPauta = "Z05";
+			String medico = "30000000";
+
+			Date currentDate = new Date();
+			java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(
+					"yyyy-MM-dd");
+			String fechaPedido = sdf.format(currentDate);
+
+			List<MaterialesCustom> listMaterialTmp = new ArrayList<MaterialesCustom>();
+			int index = 1;
+			for (Material row : this.listSelectedMaterial) {
+				MaterialesCustom custom = new MaterialesCustom();
+				String itmNumber = FacesUtil
+						.lpad(String.valueOf(index), '0', 6);
+				custom.setItmNumber(itmNumber);
+				custom.setMaterial(FacesUtil.lpad(row.getCode(), '0', 18));
+				custom.setQuantity(new BigDecimal(row.getAmount()));
+				custom.setCurrency(Double.valueOf(row.getPrice()));
+				listMaterialTmp.add(custom);
+				index++;
+			}
+
+			ResultCreateOrder result = CreateSalesOrderExecute.execute(
+					tipoDocVenta, orgVentas, canalDistribucion, division,
+					oficinaVentas, fechaPedido, selectedPatient.getSAPCode(),
+					this.methodPayment, this.conditionPayment, solicitante,
+					listMaterialTmp, interlocutor, codigoPauta, medico, "ZHD2");
+
+			if (!result.getSalesdocument().equals("")) {
+				FacesUtil.addInfo("Pedido nro." + result.getSalesdocument()
+						+ " creado satisfactoriamente");
+				disabledSaveButton = true;
+			} else {
+				FacesUtil.addError("ERROR al crear el PEDIDO");
+				Bapiret2[] messages = result.getMessages().value;
+				for (Bapiret2 message : messages) {
+					if (message.getType().equals("E")
+							&& !message.getMessage().contains("SALES_ITEM_IN")
+							&& !message.getMessage().contains(
+									"documento de venta")) {
+						FacesUtil.addError(message.getMessage());
+					}
+				}
+			}
+		}
 	}
 
 	public void searchMaterialAction() {
@@ -206,12 +340,49 @@ public class SalesOrderBacking implements Serializable {
 			searchMaterialAction();
 		}
 	}
-	
+
 	public void removeMaterialAction() {
 		for (Material row : listDeletedMaterial) {
 			listSelectedMaterial.remove(row);
 		}
 		materialModel = new MaterialDataModel(listSelectedMaterial);
+	}
+
+	public boolean isDisabledAddMaterial() {
+		if (listMaterial.size() == 1) {
+			if (listMaterial.get(0).getCode().equals("-1")) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void searchPatientAction() {
+		if (this.namePatient.isEmpty()) {
+		} else {
+			Bapikna111[] result = CustomerExecute.find(this.namePatient, 0);
+			listPatient = new ArrayList<Patient>();
+			if (result != null) {
+				for (Bapikna111 row : result) {
+					Patient patient = new Patient();
+					patient.setSAPCode(row.getCustomer());
+					patient.setNames(row.getFieldvalue());
+					listPatient.add(patient);
+				}
+				patientModel = new PatientDataModel(listPatient);
+			}
+		}
+	}
+
+	public boolean isDisabledAddPatient() {
+		if (listPatient.size() == 0) {
+			return true;
+		} else if (listPatient.size() == 1) {
+			if (listPatient.get(0).getSAPCode().isEmpty()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

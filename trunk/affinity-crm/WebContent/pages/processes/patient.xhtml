@@ -21,12 +21,14 @@
 				<p:toolbar style="width:100%">
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
-							action="#{patientBacking.newAction}" update="pnlDetail"
-							process="@none" />
+							action="#{patientBacking.newAction}"
+							update="pnlDetail btnSavePatient" process="@none"/>
 						<p:commandButton value="#{msg['btn_search']}"
 							icon="ui-icon-search" update="pnlDetail" process="@none" />
-						<p:commandButton value="#{msg['btn_save']}" icon="ui-icon-disk"
-							action="#{patientBacking.saveAction}" update="growl" />
+						<p:commandButton id="btnSavePatient" value="#{msg['btn_save']}"
+							icon="ui-icon-disk" action="#{patientBacking.saveAction}"
+							update="growl btnSavePatient"
+							disabled="#{patientBacking.disabledSaveButton}" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
