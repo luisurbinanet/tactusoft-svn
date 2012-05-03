@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -41,9 +42,11 @@ public class SalesOrderBacking implements Serializable {
 
 	private List<SelectItem> listMethodPayment;
 	private List<SelectItem> listConditionPayment;
+	private List<SelectItem> listSalesGrp;
 
 	private String methodPayment;
 	private String conditionPayment;
+	private String salesGrp;
 
 	private List<Patient> listPatient;
 	private PatientDataModel patientModel;
@@ -63,7 +66,7 @@ public class SalesOrderBacking implements Serializable {
 	private boolean disabledSaveButton;
 
 	public SalesOrderBacking() {
-		newAction();
+		newAction(null);
 	}
 
 	public List<SelectItem> getListMethodPayment() {
@@ -96,6 +99,21 @@ public class SalesOrderBacking implements Serializable {
 		this.listConditionPayment = listConditionPayment;
 	}
 
+	public List<SelectItem> getListSalesGrp() {
+		if (listSalesGrp == null) {
+			listSalesGrp = new LinkedList<SelectItem>();
+			for (CrmDomain row : tablesService.getListDomain("PAUTA")) {
+				listSalesGrp.add(new SelectItem(row.getCode(), row
+						.getItemValue()));
+			}
+		}
+		return listSalesGrp;
+	}
+
+	public void setListSalesGrp(List<SelectItem> listSalesGrp) {
+		this.listSalesGrp = listSalesGrp;
+	}
+
 	public String getMethodPayment() {
 		return methodPayment;
 	}
@@ -110,6 +128,14 @@ public class SalesOrderBacking implements Serializable {
 
 	public void setConditionPayment(String conditionPayment) {
 		this.conditionPayment = conditionPayment;
+	}
+
+	public String getSalesGrp() {
+		return salesGrp;
+	}
+
+	public void setSalesGrp(String salesGrp) {
+		this.salesGrp = salesGrp;
 	}
 
 	public TablesBo getTablesService() {
@@ -222,7 +248,7 @@ public class SalesOrderBacking implements Serializable {
 			listMaterial = loadXLS.getListMaterial();
 			materialModel = new MaterialDataModel(listMaterial);
 		} else {
-			if (isDisabledAddMaterial()) {
+			if (!isDisabledAddMaterial()) {
 				List<Material> listMaterial2 = new LinkedList<Material>();
 				for (Material row : listMaterial) {
 					boolean exits = false;
@@ -243,7 +269,7 @@ public class SalesOrderBacking implements Serializable {
 		}
 	}
 
-	public void newAction() {
+	public void newAction(ActionEvent event) {
 		selectedMaterial = new Material();
 		listMaterial = new LinkedList<Material>();
 		materialModel = new MaterialDataModel(listMaterial);
@@ -252,15 +278,23 @@ public class SalesOrderBacking implements Serializable {
 		selectedPatient = new Patient();
 		listPatient = new LinkedList<Patient>();
 		patientModel = new PatientDataModel(listPatient);
+		disabledSaveButton = false;
 	}
 
 	public void saveAction() {
 		selectedMaterial = new Material();
+		String message = "";
+
 		if (selectedPatient.getSAPCode() == null) {
-			FacesUtil.addError("No se ha sellecionado el Paciente");
-		} else if (listSelectedMaterial.size() == 0) {
-			FacesUtil.addError("No se han digitado Materiales");
-		} else {
+			message = FacesUtil.getMessage("sal_msg_error_pat");
+			FacesUtil.addError(message);
+		}
+		if (listSelectedMaterial.size() == 0) {
+			message = FacesUtil.getMessage("sal_msg_error_mat");
+			FacesUtil.addError(message);
+		}
+
+		if (message.isEmpty()) {
 			// SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
 			CrmProfile profile = FacesUtil.getCurrentUser().getCrmProfile();
 
@@ -272,7 +306,6 @@ public class SalesOrderBacking implements Serializable {
 			String tipoDocVenta = "ZOP";
 			String solicitante = null;
 			String interlocutor = null;
-			String codigoPauta = "Z05";
 			String medico = "30000000";
 
 			Date currentDate = new Date();
@@ -298,21 +331,22 @@ public class SalesOrderBacking implements Serializable {
 					tipoDocVenta, orgVentas, canalDistribucion, division,
 					oficinaVentas, fechaPedido, selectedPatient.getSAPCode(),
 					this.methodPayment, this.conditionPayment, solicitante,
-					listMaterialTmp, interlocutor, codigoPauta, medico, "ZHD2");
+					listMaterialTmp, interlocutor, this.salesGrp, medico,
+					"ZHD2");
 
 			if (!result.getSalesdocument().equals("")) {
-				FacesUtil.addInfo("Pedido nro." + result.getSalesdocument()
-						+ " creado satisfactoriamente");
+				message = FacesUtil.getMessage("sal_msg_ok",
+						result.getSalesdocument());
+				FacesUtil.addInfo(message);
 				disabledSaveButton = true;
 			} else {
-				FacesUtil.addError("ERROR al crear el PEDIDO");
+				FacesUtil.addError(FacesUtil.getMessage("sal_msg_error"));
 				Bapiret2[] messages = result.getMessages().value;
-				for (Bapiret2 message : messages) {
-					if (message.getType().equals("E")
-							&& !message.getMessage().contains("SALES_ITEM_IN")
-							&& !message.getMessage().contains(
-									"documento de venta")) {
-						FacesUtil.addError(message.getMessage());
+				for (Bapiret2 bap : messages) {
+					if (bap.getType().equals("E")
+							&& !bap.getMessage().contains("SALES_ITEM_IN")
+							&& !bap.getMessage().contains("documento de venta")) {
+						FacesUtil.addError(bap.getMessage());
 					}
 				}
 			}
