@@ -26,6 +26,8 @@ public class PatientBacking implements Serializable {
 	private Patient selected;
 
 	private List<String> selectedSendOptions;
+	
+	private boolean disabledSaveButton;
 
 	public PatientBacking() {
 		newAction();
@@ -58,16 +60,25 @@ public class PatientBacking implements Serializable {
 		this.selected = selected;
 	}
 
-	public void newAction() {
-		selected = new Patient();
-	}
-
 	public List<String> getSelectedSendOptions() {
 		return selectedSendOptions;
 	}
 
 	public void setSelectedSendOptions(List<String> selectedSendOptions) {
 		this.selectedSendOptions = selectedSendOptions;
+	}
+
+	public boolean isDisabledSaveButton() {
+		return disabledSaveButton;
+	}
+
+	public void setDisabledSaveButton(boolean disabledSaveButton) {
+		this.disabledSaveButton = disabledSaveButton;
+	}
+	
+	public void newAction() {
+		selected = new Patient();
+		disabledSaveButton = false;
 	}
 
 	public void saveAction() {
@@ -101,6 +112,7 @@ public class PatientBacking implements Serializable {
 						selected.getCellNumber(), "");
 
 				if (codigoSAP != null) {
+					disabledSaveButton = true;
 					message = FacesUtil.getMessage("pat_msg_ok", codigoSAP);
 					FacesUtil.addInfo(message);
 				} else {

@@ -26,7 +26,10 @@ public class Patient implements Serializable {
 	private Integer sendEmail;
 	private Integer sendPortal;
 	private Integer sendSMS;
-
+	
+	private String SAPCode;
+	private String names;
+	
 	public Patient() {
 
 	}
@@ -181,6 +184,22 @@ public class Patient implements Serializable {
 
 	public void setSendSMS(Integer sendSMS) {
 		this.sendSMS = sendSMS;
+	}
+
+	public String getSAPCode() {
+		return SAPCode;
+	}
+
+	public void setSAPCode(String sAPCode) {
+		SAPCode = sAPCode;
+	}
+
+	public String getNames() {
+		return names;
+	}
+
+	public void setNames(String names) {
+		this.names = names;
 	}
 
 }
