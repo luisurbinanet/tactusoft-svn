@@ -48,6 +48,9 @@ public class UserDetailsServiceCustom implements UserDetailsService {
 				
 				listPage = tableService.getListPages();
 				user.setListPageAll(listPage);
+				
+				String pageDefault = listRole.get(0).getCrmPage().getPage();
+				user.setPageDefault(pageDefault);
 			}
 		} catch (HibernateException e) {
 			e.printStackTrace();

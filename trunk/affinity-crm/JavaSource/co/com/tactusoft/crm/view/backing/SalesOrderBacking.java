@@ -19,6 +19,7 @@ import co.com.tactusoft.crm.model.entities.CrmDomain;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.util.LoadXLS;
+import co.com.tactusoft.crm.util.SAPEnvironment;
 import co.com.tactusoft.crm.view.beans.Material;
 import co.com.tactusoft.crm.view.beans.Patient;
 import co.com.tactusoft.crm.view.datamodel.MaterialDataModel;
@@ -295,7 +296,7 @@ public class SalesOrderBacking implements Serializable {
 		}
 
 		if (message.isEmpty()) {
-			// SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
+			SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
 			CrmProfile profile = FacesUtil.getCurrentUser().getCrmProfile();
 
 			String orgVentas = profile.getSalesOrg();
@@ -306,7 +307,7 @@ public class SalesOrderBacking implements Serializable {
 			String tipoDocVenta = "ZOP";
 			String solicitante = null;
 			String interlocutor = null;
-			String medico = "30000000";
+			String medico = "101";
 
 			Date currentDate = new Date();
 			java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(
@@ -332,7 +333,7 @@ public class SalesOrderBacking implements Serializable {
 					oficinaVentas, fechaPedido, selectedPatient.getSAPCode(),
 					this.methodPayment, this.conditionPayment, solicitante,
 					listMaterialTmp, interlocutor, this.salesGrp, medico,
-					"ZHD2");
+					sap.getConditionType());
 
 			if (!result.getSalesdocument().equals("")) {
 				message = FacesUtil.getMessage("sal_msg_ok",

@@ -22,7 +22,8 @@
 							action="#{roleBacking.newAction}" oncomplete="dlg.show()"
 							update=":editForm:dialog" />
 						<p:commandButton value="#{msg['btn_edit']}" icon="ui-icon-pencil"
-							oncomplete="dlg.show()" update=":editForm:dialog" />
+							oncomplete="dlg.show()" update=":editForm:dialog"
+							actionListener="#{roleBacking.generateListAction}" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -71,21 +72,22 @@
 
 				<p:spacer height="10" />
 
-				<h:panelGrid id="pnlDetail" columns="2" cellpadding="4"
-					style="margin:0 auto;" width="100%">
+				<h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;"
+					width="100%">
 
 					<h:outputLabel value="#{msg['rol_name']}" />
-					<h:inputText value="#{roleBacking.selected.name}"
+					<p:inputText value="#{roleBacking.selected.name}"
 						style="width:100%" label="#{msg['rol_name']}" required="true" />
 
 					<h:outputLabel value="#{msg['rol_description']}" />
-					<h:inputTextarea value="#{roleBacking.selected.description}"
+					<p:inputTextarea value="#{roleBacking.selected.description}"
 						style="width:100%" rows="3" />
 
 					<h:outputLabel value="#{msg['glb_state']}"
 						rendered="#{roleBacking.selected.id!=null?true:false}" />
 					<p:selectOneMenu value="#{roleBacking.selected.state}"
-						rendered="#{roleBacking.selected.id!=null?true:false}">
+						rendered="#{roleBacking.selected.id!=null?true:false}"
+						style="width:200px">
 						<f:selectItem itemValue="1" itemLabel="#{msg['glb_state_active']}" />
 						<f:selectItem itemValue="0"
 							itemLabel="#{msg['glb_state_inactive']}" />
@@ -93,15 +95,33 @@
 
 				</h:panelGrid>
 
+				<p:spacer height="10" />
+
 				<h:outputLabel value="Paginas" style="font-weight:bold;" />
 
 				<p:pickList id="picRole" var="row" effect="bounce"
 					value="#{roleBacking.listPages}" converter="pageConverter"
-					itemValue="#{row}" itemLabel="#{row.name}">
+					itemValue="#{row}" itemLabel="#{row.name}"
+					onTransfer="handleTransfer(e);">
 
 					<f:facet name="sourceCaption">#{msg['rol_source_caption']}</f:facet>
 					<f:facet name="targetCaption">#{msg['rol_target_caption']}</f:facet>
 				</p:pickList>
+
+				<p:spacer height="10" />
+
+				<h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;"
+					width="100%">
+					<h:outputLabel value="#{msg['rol_page_default']}" />
+					<p:selectOneMenu id="selPageDefault"
+						value="#{roleBacking.selected.crmPage.id}" style="width:200px">
+						<f:selectItems value="#{roleBacking.listPagesDefault}" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+
+				<pe:remoteCommand name="handleTransfer" update="selPageDefault">
+					
+				</pe:remoteCommand>
 
 			</p:dialog>
 		</h:form>

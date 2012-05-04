@@ -1,9 +1,14 @@
 package co.com.tactusoft.crm.view.backing;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
+import javax.faces.event.ActionEvent;
+import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -30,6 +35,10 @@ public class RoleBacking implements Serializable {
 	private RoleDataModel model;
 	private CrmRole selected;
 
+	private List<SelectItem> listPagesDefault;
+	private Map<BigDecimal, CrmPage> mapCrmPage;
+
+	private List<CrmPage> listTarget;
 	private DualListModel<CrmPage> listPages;
 
 	public RoleBacking() {
@@ -64,10 +73,25 @@ public class RoleBacking implements Serializable {
 		this.selected = selected;
 	}
 
-	public DualListModel<CrmPage> getListPages() {
-		List<CrmPage> listTarget = tablesService.getListPagesByRole(selected
-				.getId());
+	public List<SelectItem> getListPagesDefault() {
+		mapCrmPage = new HashMap<BigDecimal, CrmPage>();
+		listPagesDefault = new LinkedList<SelectItem>();
+		for (CrmPage row : listTarget) {
+			if (row.getParent() != null) {
+				listPagesDefault
+						.add(new SelectItem(row.getId(), row.getName()));
+				mapCrmPage.put(row.getId(), row);
+			}
+		}
 
+		return listPagesDefault;
+	}
+
+	public void setListPagesDefault(List<SelectItem> listPagesDefault) {
+		this.listPagesDefault = listPagesDefault;
+	}
+
+	public DualListModel<CrmPage> getListPages() {
 		List<CrmPage> listSource = new LinkedList<CrmPage>();
 
 		for (CrmPage row : FacesUtil.getCurrentUserData().getListPageAll()) {
@@ -95,12 +119,17 @@ public class RoleBacking implements Serializable {
 	public void newAction() {
 		selected = new CrmRole();
 		selected.setState(Constant.STATE_ACTIVE);
+		selected.setCrmPage(new CrmPage());
+
+		listTarget = new LinkedList<CrmPage>();
 	}
 
 	public void saveAction() {
 		String message = null;
 
+		selected.setCrmPage(mapCrmPage.get(selected.getCrmPage().getId()));
 		int result = tablesService.saveRole(selected);
+
 		if (result == 0) {
 			tablesService.savePageRole(selected, listPages.getTarget());
 			list = tablesService.getListRole();
@@ -114,6 +143,10 @@ public class RoleBacking implements Serializable {
 			FacesUtil.addError(message);
 
 		}
+	}
+
+	public void generateListAction(ActionEvent event) {
+		listTarget = tablesService.getListPagesByRole(selected.getId());
 	}
 
 }
