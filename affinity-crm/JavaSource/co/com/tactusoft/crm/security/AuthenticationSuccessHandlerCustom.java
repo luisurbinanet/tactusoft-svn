@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
+import co.com.tactusoft.crm.util.FacesUtil;
+
 public class AuthenticationSuccessHandlerCustom implements
 		AuthenticationSuccessHandler {
 
@@ -17,8 +19,10 @@ public class AuthenticationSuccessHandlerCustom implements
 			HttpServletResponse response, Authentication arg2)
 			throws IOException, ServletException {
 
+		String page = FacesUtil.getCurrentUserData().getPageDefault();
+
 		response.sendRedirect(response.encodeRedirectURL(request
-				.getContextPath() + "/pages/tables/doctor.jsf"));
+				.getContextPath() + page));
 
 	}
 

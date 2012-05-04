@@ -25,6 +25,7 @@ public class SAPEnvironment implements Serializable {
 	private String environment;
 	private String user;
 	private String password;
+	private String conditionType;
 
 	private String urlCustomerMaintainAll;
 	private String urlCustomerFind;
@@ -54,6 +55,10 @@ public class SAPEnvironment implements Serializable {
 					this.environment = par.getTextValue();
 				}
 
+				if (par.getCode().equals("SAP_CONDITION_TYPE")) {
+					this.conditionType = par.getTextValue();
+				}
+
 				if (par.getCode().equals("SAP_LOGIN")) {
 					this.user = par.getTextValue();
 				}
@@ -61,19 +66,19 @@ public class SAPEnvironment implements Serializable {
 				if (par.getCode().equals("SAP_PASSWORD")) {
 					this.password = par.getTextValue();
 				}
-				
+
 				if (par.getCode().equals("SAP_URL_CUSTOMER_MAINTAIN_ALL")) {
 					this.urlCustomerMaintainAll = par.getTextValue();
 				}
-				
+
 				if (par.getCode().equals("SAP_URL_CUSTOMER_FIND")) {
 					this.urlCustomerFind = par.getTextValue();
 				}
-				
+
 				if (par.getCode().equals("SAP_URL_SALESORDER_CREATEFROMDAT")) {
 					this.urlCustomerSalesOrderCreate = par.getTextValue();
 				}
-				
+
 				if (par.getCode().equals("SAP_URL_CUSTOMER2")) {
 					this.urlCustomer2 = par.getTextValue();
 				}
@@ -111,6 +116,14 @@ public class SAPEnvironment implements Serializable {
 		this.password = password;
 	}
 
+	public String getConditionType() {
+		return conditionType;
+	}
+
+	public void setConditionType(String conditionType) {
+		this.conditionType = conditionType;
+	}
+
 	public String getUrlCustomerMaintainAll() {
 		return urlCustomerMaintainAll;
 	}
@@ -131,7 +144,8 @@ public class SAPEnvironment implements Serializable {
 		return urlCustomerSalesOrderCreate;
 	}
 
-	public void setUrlCustomerSalesOrderCreate(String urlCustomerSalesOrderCreate) {
+	public void setUrlCustomerSalesOrderCreate(
+			String urlCustomerSalesOrderCreate) {
 		this.urlCustomerSalesOrderCreate = urlCustomerSalesOrderCreate;
 	}
 

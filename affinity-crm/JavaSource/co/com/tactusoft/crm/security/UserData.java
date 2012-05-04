@@ -22,6 +22,7 @@ public class UserData implements UserDetails {
 	private CrmUser user;
 	private List<CrmPage> listPage;
 	private List<CrmPage> listPageAll;
+	private String pageDefault;
 
 	public void setUsername(String username) {
 		this.username = username;
@@ -85,6 +86,14 @@ public class UserData implements UserDetails {
 
 	public void setListPageAll(List<CrmPage> listPageAll) {
 		this.listPageAll = listPageAll;
+	}
+
+	public String getPageDefault() {
+		return pageDefault;
+	}
+
+	public void setPageDefault(String pageDefault) {
+		this.pageDefault = pageDefault;
 	}
 
 	@Override
