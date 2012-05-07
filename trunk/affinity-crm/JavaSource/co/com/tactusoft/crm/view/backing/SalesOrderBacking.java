@@ -286,7 +286,10 @@ public class SalesOrderBacking implements Serializable {
 		selectedMaterial = new Material();
 		String message = "";
 
-		if (selectedPatient.getSAPCode() == null) {
+		if (selectedPatient == null) {
+			message = FacesUtil.getMessage("sal_msg_error_pat");
+			FacesUtil.addError(message);
+		} else if (FacesUtil.isEmptyOrBlank(selectedPatient.getSAPCode())) {
 			message = FacesUtil.getMessage("sal_msg_error_pat");
 			FacesUtil.addError(message);
 		}
@@ -295,7 +298,7 @@ public class SalesOrderBacking implements Serializable {
 			FacesUtil.addError(message);
 		}
 
-		if (message.isEmpty()) {
+		if (FacesUtil.isEmptyOrBlank(message)) {
 			SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
 			CrmProfile profile = FacesUtil.getCurrentUser().getCrmProfile();
 

@@ -22,7 +22,7 @@ public class UserDetailsServiceCustom implements UserDetailsService {
 
 	@Resource
 	private SecurityBo service;
-	
+
 	@Resource
 	private TablesBo tableService;
 
@@ -42,13 +42,19 @@ public class UserDetailsServiceCustom implements UserDetailsService {
 				user.setRoles(listRole);
 				user.setUser(object);
 
-				List<CrmPage> listPage = service.getListCrmPageByRole(object
-						.getId());
+				String idRoles = "";
+				for (CrmRole row : listRole) {
+					idRoles = idRoles + row.getId() + ",";
+				}
+
+				idRoles = idRoles.substring(0, idRoles.length() - 1);
+
+				List<CrmPage> listPage = service.getListCrmPageByRole(idRoles);
 				user.setListPage(listPage);
-				
+
 				listPage = tableService.getListPages();
 				user.setListPageAll(listPage);
-				
+
 				String pageDefault = listRole.get(0).getCrmPage().getPage();
 				user.setPageDefault(pageDefault);
 			}

@@ -210,7 +210,7 @@ public class FacesUtil {
 		return expFact.createMethodExpression(elCtx, "#{" + action + "}",
 				String.class, new Class[0]);
 	}
-	
+
 	public static String lpad(String valueToPad, char filler, int size) {
 		char[] array = new char[size];
 
@@ -223,5 +223,14 @@ public class FacesUtil {
 				size - valueToPad.length());
 
 		return String.valueOf(array);
+	}
+
+	public static boolean isEmptyOrBlank(String str) {
+		return str == null || str.trim().isEmpty();
+	}
+
+	public static String getContextPath() {
+		return FacesContext.getCurrentInstance().getExternalContext()
+				.getRequestContextPath();
 	}
 }

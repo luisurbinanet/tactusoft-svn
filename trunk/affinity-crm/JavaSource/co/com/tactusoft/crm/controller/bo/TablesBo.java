@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
+import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmDomain;
 import co.com.tactusoft.crm.model.entities.CrmPage;
@@ -59,6 +60,10 @@ public class TablesBo implements Serializable {
 		return dao.find("from CrmRole o where o.state = 1");
 	}
 
+	public List<CrmBranch> getListBranch() {
+		return dao.find("from CrmBranch o");
+	}
+
 	public List<CrmPage> getListPages() {
 		return dao
 				.find("from CrmPage o where o.parent is not null order by o.parent");
@@ -98,6 +103,13 @@ public class TablesBo implements Serializable {
 	public Integer saveRole(CrmRole entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmRole.class));
+		}
+		return dao.persist(entity);
+	}
+
+	public Integer saveBranch(CrmBranch entity) {
+		if (entity.getId() == null) {
+			entity.setId(getId(CrmBranch.class));
 		}
 		return dao.persist(entity);
 	}
