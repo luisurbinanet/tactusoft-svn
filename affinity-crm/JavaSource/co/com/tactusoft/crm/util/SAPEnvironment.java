@@ -117,6 +117,7 @@ public class SAPEnvironment implements Serializable {
 	}
 
 	public String getConditionType() {
+		getLisParameter();
 		return conditionType;
 	}
 

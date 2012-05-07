@@ -35,10 +35,10 @@ public class SecurityBo {
 						+ idUser);
 	}
 
-	public List<CrmPage> getListCrmPageByRole(BigDecimal idRole) {
+	public List<CrmPage> getListCrmPageByRole(String idRoles) {
 		return dao
-				.find("select distinct o.crmPage from CrmPageRole o where o.crmRole.id = "
-						+ idRole + " order by o.crmPage.orderby");
+				.find("select distinct o.crmPage from CrmPageRole o where o.crmRole.id in ("
+						+ idRoles + ") order by o.crmPage.orderby");
 	}
 
 	public List<CrmUser> getListCrmUser() {
