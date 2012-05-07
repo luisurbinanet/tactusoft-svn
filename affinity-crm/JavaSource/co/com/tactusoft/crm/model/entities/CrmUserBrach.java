@@ -56,7 +56,7 @@ public class CrmUserBrach implements java.io.Serializable {
 		this.crmUser = crmUser;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_branch")
 	public CrmBranch getCrmBranch() {
 		return this.crmBranch;

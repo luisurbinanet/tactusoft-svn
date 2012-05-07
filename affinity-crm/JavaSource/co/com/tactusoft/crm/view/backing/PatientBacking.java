@@ -1,13 +1,16 @@
 package co.com.tactusoft.crm.view.backing;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.faces.event.ActionEvent;
+import javax.faces.model.SelectItem;
 import javax.inject.Named;
 
 import org.springframework.context.annotation.Scope;
 
+import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.util.SAPEnvironment;
@@ -25,6 +28,9 @@ public class PatientBacking implements Serializable {
 	private List<Patient> list;
 	private PatientDataModel model;
 	private Patient selected;
+	
+	private List<SelectItem> listBranch;
+	private String salesOff;
 
 	private List<String> selectedSendOptions;
 	
@@ -59,6 +65,28 @@ public class PatientBacking implements Serializable {
 
 	public void setSelected(Patient selected) {
 		this.selected = selected;
+	}
+
+	public List<SelectItem> getListBranch() {
+		if (listBranch == null) {
+			listBranch = new LinkedList<SelectItem>();
+			for (CrmBranch row : FacesUtil.getCurrentUserData().getListBranch()) {
+				listBranch.add(new SelectItem(row.getCode(), row.getName()));
+			}
+		}
+		return listBranch;
+	}
+
+	public void setListBranch(List<SelectItem> listBranch) {
+		this.listBranch = listBranch;
+	}
+
+	public String getSalesOff() {
+		return salesOff;
+	}
+
+	public void setSalesOff(String salesOff) {
+		this.salesOff = salesOff;
 	}
 
 	public List<String> getSelectedSendOptions() {
@@ -108,7 +136,7 @@ public class PatientBacking implements Serializable {
 						selected.getCountry(), selected.getCity(),
 						selected.getRegion(), "D001", profile.getSalesOrg(),
 						profile.getDistrChan(), profile.getDivision(),
-						profile.getSalesOff(), "01", "Z001",
+						this.salesOff, "01", "Z001",
 						selected.getAddress(), selected.getPhoneNumber(),
 						selected.getCellNumber(), "");
 

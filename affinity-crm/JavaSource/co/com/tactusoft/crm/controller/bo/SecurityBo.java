@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
+import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmPage;
 import co.com.tactusoft.crm.model.entities.CrmRole;
 import co.com.tactusoft.crm.model.entities.CrmUser;
@@ -43,6 +44,12 @@ public class SecurityBo {
 
 	public List<CrmUser> getListCrmUser() {
 		return dao.find("from CrmUser o");
+	}
+
+	public List<CrmBranch> getListBranchByUser(BigDecimal idUser) {
+		return dao
+				.find("select o.crmBranch from CrmUserBrach o where o.crmUser.id = "
+						+ idUser);
 	}
 
 	public List<CrmRole> getListCrmRole() {

@@ -25,7 +25,6 @@ public class CrmProfile implements java.io.Serializable {
 	private String description;
 	private String salesOrg;
 	private String distrChan;
-	private String salesOff;
 	private String division;
 	private String country;
 	private String city;
@@ -43,15 +42,13 @@ public class CrmProfile implements java.io.Serializable {
 	}
 
 	public CrmProfile(BigDecimal id, String code, String description,
-			String salesOrg, String distrChan, String salesOff,
-			String division, String country, String city, String region,
-			int state, Set<CrmUser> crmUsers) {
+			String salesOrg, String distrChan, String division, String country,
+			String city, String region, int state, Set<CrmUser> crmUsers) {
 		this.id = id;
 		this.code = code;
 		this.description = description;
 		this.salesOrg = salesOrg;
 		this.distrChan = distrChan;
-		this.salesOff = salesOff;
 		this.division = division;
 		this.country = country;
 		this.city = city;
@@ -104,15 +101,6 @@ public class CrmProfile implements java.io.Serializable {
 
 	public void setDistrChan(String distrChan) {
 		this.distrChan = distrChan;
-	}
-
-	@Column(name = "sales_off", length = 4)
-	public String getSalesOff() {
-		return this.salesOff;
-	}
-
-	public void setSalesOff(String salesOff) {
-		this.salesOff = salesOff;
 	}
 
 	@Column(name = "division", length = 4)

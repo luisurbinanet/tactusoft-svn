@@ -84,6 +84,12 @@
 						style="width:100%" label="#{msg['pat_cell_number']}"
 						required="true" />
 
+					<h:outputLabel value="#{msg['pat_sales_off']}" style="width:40%" />
+					<p:selectOneMenu value="#{patientBacking.salesOff}"
+						style="width:350px">
+						<f:selectItems value="#{patientBacking.listBranch}" />
+					</p:selectOneMenu>	
+
 					<h:outputText value="#{msg['pat_cycle']}" />
 					<p:selectOneRadio id="optionsCycle" layout="pageDirection"
 						value="#{patientBacking.selected.cycle}">
