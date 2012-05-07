@@ -23,7 +23,7 @@ public class SAPEnvironment implements Serializable {
 	List<CrmParameter> lisParameter;
 
 	private String environment;
-	private String user;
+	private String username;
 	private String password;
 	private String conditionType;
 
@@ -35,10 +35,10 @@ public class SAPEnvironment implements Serializable {
 	public SAPEnvironment() {
 	}
 
-	public SAPEnvironment(String environment, String user, String password,
+	public SAPEnvironment(String environment, String username, String password,
 			String urlCustomerMaintainAll, String urlCustomerFind,
 			String urlCustomerSalesOrderCreate, String urlCustomer2) {
-		this.user = user;
+		this.username = username;
 		this.password = password;
 		this.environment = environment;
 		this.urlCustomerMaintainAll = urlCustomerMaintainAll;
@@ -59,8 +59,8 @@ public class SAPEnvironment implements Serializable {
 					this.conditionType = par.getTextValue();
 				}
 
-				if (par.getCode().equals("SAP_LOGIN")) {
-					this.user = par.getTextValue();
+				if (par.getCode().equals("SAP_USERNAME")) {
+					this.username = par.getTextValue();
 				}
 
 				if (par.getCode().equals("SAP_PASSWORD")) {
@@ -100,12 +100,12 @@ public class SAPEnvironment implements Serializable {
 		this.environment = environment;
 	}
 
-	public String getUser() {
-		return user;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUser(String user) {
-		this.user = user;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getPassword() {

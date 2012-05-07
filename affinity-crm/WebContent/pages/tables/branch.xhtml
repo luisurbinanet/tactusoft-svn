@@ -35,7 +35,7 @@
 
 					<p:column selectionMode="single" style="width:18px" />
 
-					<p:column headerText="#{msg['bra_sales_org']}">
+					<p:column headerText="#{msg['bra_sales_off']}">
 						<h:outputLabel value="#{rec.code}" />
 					</p:column>
 
@@ -79,9 +79,9 @@
 				<h:panelGrid id="pnlDetail" columns="2" cellpadding="4"
 					style="margin:0 auto;" width="100%">
 
-					<h:outputLabel value="#{msg['bra_sales_org']}" />
+					<h:outputLabel value="#{msg['bra_sales_off']}" />
 					<h:inputText value="#{branchBacking.selected.code}"
-						style="width:100%" label="#{msg['bra_sales_org']}" required="true"
+						style="width:100%" label="#{msg['bra_sales_off']}" required="true"
 						maxlength="4" />
 
 					<h:outputLabel value="#{msg['bra_name']}" />
