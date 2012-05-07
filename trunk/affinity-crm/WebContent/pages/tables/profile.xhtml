@@ -51,10 +51,6 @@
 						<h:outputLabel value="#{rec.division}" />
 					</p:column>
 
-					<p:column headerText="#{msg['pro_sales_off']}">
-						<h:outputLabel value="#{rec.salesOff}" />
-					</p:column>
-
 					<p:column headerText="#{msg['pro_country']}">
 						<h:outputLabel value="#{rec.country}" />
 					</p:column>
@@ -121,11 +117,6 @@
 					<h:inputText value="#{profileBacking.selected.division}"
 						style="width:100%" label="#{msg['pro_division']}" required="true"
 						maxlength="2" />
-
-					<h:outputLabel value="#{msg['pro_sales_off']}" />
-					<h:inputText value="#{profileBacking.selected.salesOff}"
-						style="width:100%" label="#{msg['pro_sales_off']}" required="true"
-						maxlength="4" />
 
 					<h:outputLabel value="#{msg['pro_country']}" />
 					<h:inputText value="#{profileBacking.selected.country}"

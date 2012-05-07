@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmPage;
 import co.com.tactusoft.crm.model.entities.CrmRole;
 import co.com.tactusoft.crm.model.entities.CrmUser;
@@ -23,6 +24,7 @@ public class UserData implements UserDetails {
 	private List<CrmPage> listPage;
 	private List<CrmPage> listPageAll;
 	private String pageDefault;
+	private List<CrmBranch> listBranch;
 
 	public void setUsername(String username) {
 		this.username = username;
@@ -56,22 +58,6 @@ public class UserData implements UserDetails {
 		this.user = user;
 	}
 
-	public boolean isAccountNonExpired() {
-		return true;
-	}
-
-	public boolean isAccountNonLocked() {
-		return true;
-	}
-
-	public boolean isCredentialsNonExpired() {
-		return true;
-	}
-
-	public boolean isEnabled() {
-		return true;
-	}
-
 	public List<CrmPage> getListPage() {
 		return listPage;
 	}
@@ -94,6 +80,30 @@ public class UserData implements UserDetails {
 
 	public void setPageDefault(String pageDefault) {
 		this.pageDefault = pageDefault;
+	}
+	
+	public List<CrmBranch> getListBranch() {
+		return listBranch;
+	}
+
+	public void setListBranch(List<CrmBranch> listBranch) {
+		this.listBranch = listBranch;
+	}
+
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	public boolean isEnabled() {
+		return true;
 	}
 
 	@Override

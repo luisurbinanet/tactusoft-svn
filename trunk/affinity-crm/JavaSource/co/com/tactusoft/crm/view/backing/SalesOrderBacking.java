@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
@@ -15,6 +17,7 @@ import javax.inject.Named;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.controller.bo.TablesBo;
+import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmDomain;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
 import co.com.tactusoft.crm.util.FacesUtil;
@@ -52,6 +55,10 @@ public class SalesOrderBacking implements Serializable {
 	private List<Patient> listPatient;
 	private PatientDataModel patientModel;
 	private Patient selectedPatient;
+
+	private List<SelectItem> listBranch;
+	private String salesOff;
+	private Map<String, CrmBranch> mapBranch;
 
 	private List<Material> listMaterial;
 	private MaterialDataModel materialModel;
@@ -169,6 +176,30 @@ public class SalesOrderBacking implements Serializable {
 
 	public void setSelectedPatient(Patient selectedPatient) {
 		this.selectedPatient = selectedPatient;
+	}
+
+	public List<SelectItem> getListBranch() {
+		if (listBranch == null) {
+			mapBranch = new HashMap<String, CrmBranch>();
+			listBranch = new LinkedList<SelectItem>();
+			for (CrmBranch row : FacesUtil.getCurrentUserData().getListBranch()) {
+				listBranch.add(new SelectItem(row.getCode(), row.getName()));
+				mapBranch.put(row.getCode(), row);
+			}
+		}
+		return listBranch;
+	}
+
+	public void setListBranch(List<SelectItem> listBranch) {
+		this.listBranch = listBranch;
+	}
+
+	public String getSalesOff() {
+		return salesOff;
+	}
+
+	public void setSalesOff(String salesOff) {
+		this.salesOff = salesOff;
 	}
 
 	public MaterialDataModel getMaterialModel() {
@@ -305,7 +336,6 @@ public class SalesOrderBacking implements Serializable {
 			String orgVentas = profile.getSalesOrg();
 			String canalDistribucion = profile.getDistrChan();
 			String division = profile.getDivision();
-			String oficinaVentas = profile.getSalesOff();
 
 			String tipoDocVenta = "ZOP";
 			String solicitante = null;
@@ -316,6 +346,8 @@ public class SalesOrderBacking implements Serializable {
 			java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(
 					"yyyy-MM-dd");
 			String fechaPedido = sdf.format(currentDate);
+			
+			String formula = mapBranch.get(this.salesOff).getFormula();
 
 			List<MaterialesCustom> listMaterialTmp = new ArrayList<MaterialesCustom>();
 			int index = 1;
@@ -333,12 +365,12 @@ public class SalesOrderBacking implements Serializable {
 
 			ResultCreateOrder result = CreateSalesOrderExecute.execute(
 					tipoDocVenta, orgVentas, canalDistribucion, division,
-					oficinaVentas, fechaPedido, selectedPatient.getSAPCode(),
+					this.salesOff, fechaPedido, selectedPatient.getSAPCode(),
 					this.methodPayment, this.conditionPayment, solicitante,
 					listMaterialTmp, interlocutor, this.salesGrp, medico,
-					sap.getConditionType());
+					formula);
 
-			if (!result.getSalesdocument().equals("")) {
+			if (!FacesUtil.isEmptyOrBlank(result.getSalesdocument())) {
 				message = FacesUtil.getMessage("sal_msg_ok",
 						result.getSalesdocument());
 				FacesUtil.addInfo(message);
