@@ -346,7 +346,7 @@ public class SalesOrderBacking implements Serializable {
 			java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(
 					"yyyy-MM-dd");
 			String fechaPedido = sdf.format(currentDate);
-			
+
 			String formula = mapBranch.get(this.salesOff).getFormula();
 
 			List<MaterialesCustom> listMaterialTmp = new ArrayList<MaterialesCustom>();
@@ -362,13 +362,16 @@ public class SalesOrderBacking implements Serializable {
 				listMaterialTmp.add(custom);
 				index++;
 			}
+			
+			sap.getEnvironment();
 
 			ResultCreateOrder result = CreateSalesOrderExecute.execute(
-					tipoDocVenta, orgVentas, canalDistribucion, division,
-					this.salesOff, fechaPedido, selectedPatient.getSAPCode(),
-					this.methodPayment, this.conditionPayment, solicitante,
-					listMaterialTmp, interlocutor, this.salesGrp, medico,
-					formula);
+					sap.getUrlCustomerSalesOrderCreate(), sap.getUsername(),
+					sap.getPassword(), tipoDocVenta, orgVentas,
+					canalDistribucion, division, this.salesOff, fechaPedido,
+					selectedPatient.getSAPCode(), this.methodPayment,
+					this.conditionPayment, solicitante, listMaterialTmp,
+					interlocutor, this.salesGrp, medico, formula);
 
 			if (!FacesUtil.isEmptyOrBlank(result.getSalesdocument())) {
 				message = FacesUtil.getMessage("sal_msg_ok",
