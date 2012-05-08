@@ -34,7 +34,7 @@ public class CrmUser implements java.io.Serializable {
 	private String phone;
 	private String extension;
 	private int state;
-	private Set<CrmUserBrach> crmUserBrachs = new HashSet<CrmUserBrach>(0);
+	private Set<CrmUserBranch> crmUserBranchs = new HashSet<CrmUserBranch>(0);
 	private Set<CrmUserRole> crmUserRoles = new HashSet<CrmUserRole>(0);
 
 	public CrmUser() {
@@ -58,7 +58,7 @@ public class CrmUser implements java.io.Serializable {
 			CrmProfile crmProfile, String username, String password,
 			String firstName, String middleName, String firstSurname,
 			String secondSurname, String email, String phone, String extension,
-			int state, Set<CrmUserBrach> crmUserBrachs,
+			int state, Set<CrmUserBranch> crmUserBranchs,
 			Set<CrmUserRole> crmUserRoles) {
 		this.id = id;
 		this.crmDepartment = crmDepartment;
@@ -73,7 +73,7 @@ public class CrmUser implements java.io.Serializable {
 		this.phone = phone;
 		this.extension = extension;
 		this.state = state;
-		this.crmUserBrachs = crmUserBrachs;
+		this.crmUserBranchs = crmUserBranchs;
 		this.crmUserRoles = crmUserRoles;
 	}
 
@@ -198,12 +198,12 @@ public class CrmUser implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmUser")
-	public Set<CrmUserBrach> getCrmUserBrachs() {
-		return this.crmUserBrachs;
+	public Set<CrmUserBranch> getCrmUserBranchs() {
+		return this.crmUserBranchs;
 	}
 
-	public void setCrmUserBrachs(Set<CrmUserBrach> crmUserBrachs) {
-		this.crmUserBrachs = crmUserBrachs;
+	public void setCrmUserBranchs(Set<CrmUserBranch> crmUserBranchs) {
+		this.crmUserBranchs = crmUserBranchs;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmUser")

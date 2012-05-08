@@ -88,28 +88,39 @@
 					width="100%">
 
 					<h:outputLabel value="#{msg['usr_username']}" />
-					<p:inputText value="#{userBacking.selected.name}"
-						style="width:100%" label="#{msg['usr_username']}" required="true" />
+					<p:inputText value="#{userBacking.selected.username}"
+						style="width:100%" label="#{msg['usr_username']}" required="true"
+						readonly="#{userBacking.selected.id==null?true:false}" />
 
 					<h:outputLabel value="#{msg['usr_first_name']}" />
-					<p:inputText value="#{userBacking.selected.name}"
+					<p:inputText value="#{userBacking.selected.firstName}"
 						style="width:100%" label="#{msg['usr_first_name']}"
 						required="true" />
 
+					<h:outputLabel value="#{msg['usr_middle_name']}" />
+					<p:inputText value="#{userBacking.selected.middleName}"
+						style="width:100%" label="#{msg['usr_middle_name']}"
+						required="false" />
+
 					<h:outputLabel value="#{msg['usr_first_surname']}" />
-					<p:inputText value="#{userBacking.selected.name}"
+					<p:inputText value="#{userBacking.selected.firstSurname}"
 						style="width:100%" label="#{msg['usr_first_surname']}"
 						required="true" />
-						
+
+					<h:outputLabel value="#{msg['usr_second_surname']}" />
+					<p:inputText value="#{userBacking.selected.secondSurname}"
+						style="width:100%" label="#{msg['usr_second_surname']}"
+						required="false" />
+
 					<h:outputLabel value="#{msg['usr_departament']}" />
 					<p:selectOneMenu value="#{userBacking.selected.crmDepartment.id}"
-						style="width:200px">
+						style="width:350px">
 						<f:selectItems value="#{userBacking.listDepartment}" />
-					</p:selectOneMenu>	
+					</p:selectOneMenu>
 
 					<h:outputLabel value="#{msg['usr_profile']}" />
 					<p:selectOneMenu value="#{userBacking.selected.crmProfile.id}"
-						style="width:200px">
+						style="width:350px">
 						<f:selectItems value="#{userBacking.listProfile}" />
 					</p:selectOneMenu>
 
@@ -117,7 +128,7 @@
 						rendered="#{userBacking.selected.id!=null?true:false}" />
 					<p:selectOneMenu value="#{userBacking.selected.state}"
 						rendered="#{userBacking.selected.id!=null?true:false}"
-						style="width:200px">
+						style="width:350px">
 						<f:selectItem itemValue="1" itemLabel="#{msg['glb_state_active']}" />
 						<f:selectItem itemValue="0"
 							itemLabel="#{msg['glb_state_inactive']}" />
@@ -127,21 +138,16 @@
 
 				<p:spacer height="10" />
 
-				<h:outputLabel value="#{msg['usr_branch']}" style="font-weight:bold;" />
+				<h:outputLabel value="#{msg['usr_branch']}"
+					style="font-weight:bold;" />
 
-				<p:pickList id="picRole" var="row" effect="bounce"
-					value="#{userBacking.listBranch}" converter="pageConverter"
-					itemValue="#{row}" itemLabel="#{row.name}"
-					onTransfer="handleTransfer(e);">
+				<p:pickList var="row" effect="bounce"
+					value="#{userBacking.listBranch}" converter="branchConverter"
+					itemValue="#{row}" itemLabel="#{row.name}">
 
 					<f:facet name="sourceCaption">#{msg['glb_source_caption']}</f:facet>
 					<f:facet name="targetCaption">#{msg['glb_target_caption']}</f:facet>
 				</p:pickList>
-
-				<pe:remoteCommand name="handleTransfer" update="selPageDefault">
-
-				</pe:remoteCommand>
-
 			</p:dialog>
 		</h:form>
 

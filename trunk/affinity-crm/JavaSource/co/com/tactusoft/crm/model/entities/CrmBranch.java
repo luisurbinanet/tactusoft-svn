@@ -24,7 +24,7 @@ public class CrmBranch implements java.io.Serializable {
 	private String name;
 	private String formula;
 	private Integer state;
-	private Set<CrmUserBrach> crmUserBrachs = new HashSet<CrmUserBrach>(0);
+	private Set<CrmUserBranch> crmUserBranchs = new HashSet<CrmUserBranch>(0);
 
 	public CrmBranch() {
 	}
@@ -35,13 +35,13 @@ public class CrmBranch implements java.io.Serializable {
 	}
 
 	public CrmBranch(BigDecimal id, String code, String name, String formula,
-			Integer state, Set<CrmUserBrach> crmUserBrachs) {
+			Integer state, Set<CrmUserBranch> crmUserBranchs) {
 		this.id = id;
 		this.code = code;
 		this.name = name;
 		this.formula = formula;
 		this.state = state;
-		this.crmUserBrachs = crmUserBrachs;
+		this.crmUserBranchs = crmUserBranchs;
 	}
 
 	@Id
@@ -82,12 +82,12 @@ public class CrmBranch implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmBranch")
-	public Set<CrmUserBrach> getCrmUserBrachs() {
-		return this.crmUserBrachs;
+	public Set<CrmUserBranch> getCrmUserBranchs() {
+		return this.crmUserBranchs;
 	}
 
-	public void setCrmUserBrachs(Set<CrmUserBrach> crmUserBrachs) {
-		this.crmUserBrachs = crmUserBrachs;
+	public void setCrmUserBranchs(Set<CrmUserBranch> crmUserBranchs) {
+		this.crmUserBranchs = crmUserBranchs;
 	}
 
 	@Column(name = "formula", nullable = false, length = 4)

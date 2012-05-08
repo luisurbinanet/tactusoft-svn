@@ -66,6 +66,9 @@ public class UserDetailsServiceCustom implements UserDetailsService {
 				List<CrmBranch> listBranch = service.getListBranchByUser(object
 						.getId());
 				user.setListBranch(listBranch);
+
+				listBranch = tableService.getListBranchActive();
+				user.setListBranchAll(listBranch);
 			}
 		} catch (HibernateException e) {
 			e.printStackTrace();

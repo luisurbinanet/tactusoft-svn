@@ -48,7 +48,7 @@ public class SecurityBo {
 
 	public List<CrmBranch> getListBranchByUser(BigDecimal idUser) {
 		return dao
-				.find("select o.crmBranch from CrmUserBrach o where o.crmUser.id = "
+				.find("select o.crmBranch from CrmUserBranch o where o.crmUser.id = "
 						+ idUser);
 	}
 
