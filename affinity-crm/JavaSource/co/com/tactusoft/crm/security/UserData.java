@@ -25,6 +25,7 @@ public class UserData implements UserDetails {
 	private List<CrmPage> listPageAll;
 	private String pageDefault;
 	private List<CrmBranch> listBranch;
+	private List<CrmBranch> listBranchAll;
 
 	public void setUsername(String username) {
 		this.username = username;
@@ -88,6 +89,14 @@ public class UserData implements UserDetails {
 
 	public void setListBranch(List<CrmBranch> listBranch) {
 		this.listBranch = listBranch;
+	}
+
+	public List<CrmBranch> getListBranchAll() {
+		return listBranchAll;
+	}
+
+	public void setListBranchAll(List<CrmBranch> listBranchAll) {
+		this.listBranchAll = listBranchAll;
 	}
 
 	public boolean isAccountNonExpired() {

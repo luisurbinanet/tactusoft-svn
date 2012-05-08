@@ -82,7 +82,8 @@ public class UserBacking implements Serializable {
 			mapProfile = new HashMap<BigDecimal, CrmProfile>();
 			listProfile = new LinkedList<SelectItem>();
 			for (CrmProfile row : tablesService.getListProfileActive()) {
-				listProfile.add(new SelectItem(row.getId(), row.getCountry()));
+				listProfile.add(new SelectItem(row.getId(), row
+						.getDescription()));
 				mapProfile.put(row.getId(), row);
 			}
 		}
@@ -110,19 +111,6 @@ public class UserBacking implements Serializable {
 	}
 
 	public DualListModel<CrmBranch> getListBranch() {
-		List<CrmBranch> listTarget = new LinkedList<CrmBranch>();
-		List<CrmBranch> listSource = new LinkedList<CrmBranch>();
-
-		/*
-		 * for (CrmPage row : FacesUtil.getCurrentUserData().getListPageAll()) {
-		 * boolean exits = false; for (CrmPage avb : listTarget) { if
-		 * (avb.getId().intValue() == row.getId().intValue()) { exits = true;
-		 * break; } }
-		 * 
-		 * if (!exits) { listSource.add(row); } }
-		 */
-
-		listBranch = new DualListModel<CrmBranch>(listSource, listTarget);
 		return listBranch;
 	}
 
@@ -135,6 +123,8 @@ public class UserBacking implements Serializable {
 		selected.setState(Constant.STATE_ACTIVE);
 		selected.setCrmProfile(new CrmProfile());
 		selected.setCrmDepartment(new CrmDepartment());
+
+		listBranch = new DualListModel<CrmBranch>();
 	}
 
 	public void saveAction() {
@@ -147,7 +137,7 @@ public class UserBacking implements Serializable {
 		int result = tablesService.saveUser(selected);
 
 		if (result == 0) {
-			// tablesService.savePageUser(selected, listPages.getTarget());
+			tablesService.saveUserBranch(selected, listBranch.getTarget());
 			list = tablesService.getListUser();
 			model = new UserDataModel(list);
 			message = FacesUtil.getMessage("msg_record_ok");
@@ -162,7 +152,25 @@ public class UserBacking implements Serializable {
 	}
 
 	public void generateListAction(ActionEvent event) {
-		// listTarget = tablesService.getListPagesByUser(selected.getId());
+		List<CrmBranch> listTarget = tablesService.getListBranchByUser(selected
+				.getId());
+		List<CrmBranch> listSource = new LinkedList<CrmBranch>();
+
+		for (CrmBranch row : FacesUtil.getCurrentUserData().getListBranchAll()) {
+			boolean exits = false;
+			for (CrmBranch avb : listTarget) {
+				if (avb.getId().intValue() == row.getId().intValue()) {
+					exits = true;
+					break;
+				}
+			}
+
+			if (!exits) {
+				listSource.add(row);
+			}
+		}
+
+		listBranch = new DualListModel<CrmBranch>(listSource, listTarget);
 	}
 
 }

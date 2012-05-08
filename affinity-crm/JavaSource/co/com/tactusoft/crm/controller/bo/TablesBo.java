@@ -18,6 +18,7 @@ import co.com.tactusoft.crm.model.entities.CrmProfile;
 import co.com.tactusoft.crm.model.entities.CrmRole;
 import co.com.tactusoft.crm.model.entities.CrmSpeciality;
 import co.com.tactusoft.crm.model.entities.CrmUser;
+import co.com.tactusoft.crm.model.entities.CrmUserBranch;
 
 @Named
 public class TablesBo implements Serializable {
@@ -73,15 +74,21 @@ public class TablesBo implements Serializable {
 	public List<CrmBranch> getListBranch() {
 		return dao.find("from CrmBranch o");
 	}
-	
+
 	public List<CrmBranch> getListBranchActive() {
 		return dao.find("from CrmBranch o where o.state = 1");
 	}
-	
+
+	public List<CrmBranch> getListBranchByUser(BigDecimal idUser) {
+		return dao
+				.find("select o.crmBranch from CrmUserBranch o where o.crmUser.id = "
+						+ idUser);
+	}
+
 	public List<CrmDepartment> getListDepartment() {
 		return dao.find("from CrmDepartment o");
 	}
-	
+
 	public List<CrmDepartment> getListDepartmentActive() {
 		return dao.find("from CrmDepartment o where o.state = 1");
 	}
@@ -121,7 +128,7 @@ public class TablesBo implements Serializable {
 		}
 		return dao.persist(entity);
 	}
-	
+
 	public Integer saveUser(CrmUser entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmUser.class));
@@ -169,6 +176,23 @@ public class TablesBo implements Serializable {
 			crmPageRole.setCrmRole(entity);
 			crmPageRole.setCrmPage(page);
 			dao.persist(crmPageRole);
+		}
+
+		return i;
+	}
+
+	public Integer saveUserBranch(CrmUser entity, List<CrmBranch> listBranch) {
+		int i = 0;
+
+		dao.executeHQL("delete from CrmUserBranch o where o.crmUser.id = "
+				+ entity.getId());
+
+		for (CrmBranch branch : listBranch) {
+			CrmUserBranch crmUserBranch = new CrmUserBranch();
+			crmUserBranch.setId(getId(CrmUserBranch.class));
+			crmUserBranch.setCrmUser(entity);
+			crmUserBranch.setCrmBranch(branch);
+			dao.persist(crmUserBranch);
 		}
 
 		return i;
