@@ -9,6 +9,7 @@ import javax.inject.Named;
 
 import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
+import co.com.tactusoft.crm.model.entities.CrmDepartment;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmDomain;
 import co.com.tactusoft.crm.model.entities.CrmPage;
@@ -16,6 +17,7 @@ import co.com.tactusoft.crm.model.entities.CrmPageRole;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
 import co.com.tactusoft.crm.model.entities.CrmRole;
 import co.com.tactusoft.crm.model.entities.CrmSpeciality;
+import co.com.tactusoft.crm.model.entities.CrmUser;
 
 @Named
 public class TablesBo implements Serializable {
@@ -52,6 +54,14 @@ public class TablesBo implements Serializable {
 		return dao.find("from CrmProfile o where o.state = 1");
 	}
 
+	public List<CrmUser> getListUser() {
+		return dao.find("from CrmUser o");
+	}
+
+	public List<CrmUser> getListUserActive() {
+		return dao.find("from CrmUser o where o.state = 1");
+	}
+
 	public List<CrmRole> getListRole() {
 		return dao.find("from CrmRole o");
 	}
@@ -62,6 +72,18 @@ public class TablesBo implements Serializable {
 
 	public List<CrmBranch> getListBranch() {
 		return dao.find("from CrmBranch o");
+	}
+	
+	public List<CrmBranch> getListBranchActive() {
+		return dao.find("from CrmBranch o where o.state = 1");
+	}
+	
+	public List<CrmDepartment> getListDepartment() {
+		return dao.find("from CrmDepartment o");
+	}
+	
+	public List<CrmDepartment> getListDepartmentActive() {
+		return dao.find("from CrmDepartment o where o.state = 1");
 	}
 
 	public List<CrmPage> getListPages() {
@@ -96,6 +118,13 @@ public class TablesBo implements Serializable {
 	public Integer saveProfile(CrmProfile entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmProfile.class));
+		}
+		return dao.persist(entity);
+	}
+	
+	public Integer saveUser(CrmUser entity) {
+		if (entity.getId() == null) {
+			entity.setId(getId(CrmUser.class));
 		}
 		return dao.persist(entity);
 	}
