@@ -51,9 +51,9 @@ public class MenuBacking implements Serializable {
 		MenuItem menuItem = new MenuItem();
 		menuItem.setValue(closeLabel);
 		menuItem.setIcon("ui-icon-close");
-		/*menuItem.setActionExpression(FacesUtil
-				.getMethodExpression("loginBacking.logout"));*/
-		menuItem.setUrl(FacesUtil.getContextPath() +  "/j_spring_security_logout");
+		menuItem.setActionExpression(FacesUtil
+				.getMethodExpression("loginBacking.logout"));
+		//menuItem.setUrl(FacesUtil.getContextPath() +  "/j_spring_security_logout");
 		model.addMenuItem(menuItem);
 
 	}

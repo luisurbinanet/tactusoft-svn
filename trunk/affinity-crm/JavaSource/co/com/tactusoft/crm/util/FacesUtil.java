@@ -112,12 +112,11 @@ public class FacesUtil {
 	}
 
 	public static void logout() {
-		SecurityContextHolder.getContext().setAuthentication(null);
 		ExternalContext ectx = FacesContext.getCurrentInstance()
 				.getExternalContext();
 		HttpSession session = (HttpSession) ectx.getSession(false);
-		SecurityContextHolder.clearContext();
 		session.invalidate();
+		
 	}
 
 	public static UserData getCurrentUserData() {
