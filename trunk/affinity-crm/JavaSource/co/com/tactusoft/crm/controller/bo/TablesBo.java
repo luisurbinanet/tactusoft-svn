@@ -150,6 +150,13 @@ public class TablesBo implements Serializable {
 		return dao.persist(entity);
 	}
 
+	public Integer saveDepartment(CrmDepartment entity) {
+		if (entity.getId() == null) {
+			entity.setId(getId(CrmDepartment.class));
+		}
+		return dao.persist(entity);
+	}
+
 	public Integer savePageRole(CrmRole entity, List<CrmPage> listPages) {
 		String ids = "";
 		int i = 0;

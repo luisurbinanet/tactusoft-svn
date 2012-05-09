@@ -1,0 +1,105 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="../templates/common.xhtml">
+
+	<ui:define name="body">
+
+		<p:panel style="width:100%;height:800px;"
+			header="#{msg['title_doctor']}">
+
+			<p:spacer height="5" />
+
+			<h:form id="form">
+
+				<p:toolbar style="width:100%">
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
+							action="#{departmentBacking.newAction}" oncomplete="dlg.show()"
+							update=":editForm:pnlDetail" />
+						<p:commandButton value="#{msg['btn_edit']}" icon="ui-icon-pencil"
+							oncomplete="dlg.show()" update=":editForm:pnlDetail" />
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="10" />
+
+				<p:dataTable id="recordTable" var="rec"
+					value="#{departmentBacking.model}" rowKey="#{rec.id}"
+					selection="#{departmentBacking.selected}" paginator="true"
+					rows="10" style="width:100%">
+
+					<p:column selectionMode="single" style="width:18px" />
+
+					<p:column headerText="#{msg['dep_code']}">
+						<h:outputLabel value="#{rec.code}" />
+					</p:column>
+
+					<p:column headerText="#{msg['dep_name']}">
+						<h:outputLabel value="#{rec.name}" />
+					</p:column>
+
+					<p:column headerText="#{msg['glb_state']}">
+						<h:outputLabel value="#{rec.state==1?msg['glb_state_active']:msg['glb_state_inactive']}" />
+					</p:column>
+
+				</p:dataTable>
+
+			</h:form>
+
+		</p:panel>
+
+		<h:form id="editForm">
+
+			<p:growl id="growl" showDetail="true" />
+
+			<p:dialog header="#{msg['msg_detail']}" widgetVar="dlg"
+				resizable="false" id="dialog" showEffect="fade" hideEffect="explode"
+				modal="true" width="500">
+
+				<p:toolbar style="width:100%">
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{msg['btn_save']}" icon="ui-icon-disk"
+							action="#{departmentBacking.saveAction}"
+							update="growl :form:recordTable" />
+						<p:commandButton value="#{msg['btn_close']}"
+							icon="ui-icon-closethick" update="growl :form:recordTable"
+							process="@none" oncomplete="dlg.hide()" />
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="10" />
+
+				<h:panelGrid id="pnlDetail" columns="2" cellpadding="4"
+					style="margin:0 auto;" width="100%">
+
+					<h:outputLabel value="#{msg['dep_code']}" />
+					<h:inputText value="#{departmentBacking.selected.code}"
+						style="width:100%" label="#{msg['dep_code']}" required="true" />
+
+					<h:outputLabel value="#{msg['dep_name']}" />
+					<h:inputText value="#{departmentBacking.selected.name}"
+						style="width:100%" label="#{msg['dep_name']}" required="true" />
+
+					<h:outputLabel value="#{msg['glb_state']}"
+						rendered="#{departmentBacking.selected.id!=null?true:false}" />
+					<p:selectOneMenu value="#{departmentBacking.selected.state}"
+						style="width:250px"
+						rendered="#{departmentBacking.selected.id!=null?true:false}">
+						<f:selectItem itemValue="1" itemLabel="#{msg['glb_state_active']}" />
+						<f:selectItem itemValue="0"
+							itemLabel="#{msg['glb_state_inactive']}" />
+					</p:selectOneMenu>
+
+				</h:panelGrid>
+
+			</p:dialog>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>
