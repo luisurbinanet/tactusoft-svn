@@ -20,9 +20,10 @@
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
 							action="#{doctorBacking.newAction}" oncomplete="dlg.show()"
-							update=":editForm:pnlDetail" />
+							update=":editForm:dialog" />
 						<p:commandButton value="#{msg['btn_edit']}" icon="ui-icon-pencil"
-							oncomplete="dlg.show()" update=":editForm:pnlDetail" />
+							oncomplete="dlg.show()" update=":editForm:dialog"
+							actionListener="#{doctorBacking.generateListAction}" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -127,6 +128,12 @@
 						<f:selectItems value="#{doctorBacking.listCrmSpeciality}" />
 					</p:selectOneMenu>
 
+					<h:outputLabel value="#{msg['doc_branch']}" />
+					<p:selectOneMenu value="#{doctorBacking.selected.crmBranch.id}"
+						style="width:250px">
+						<f:selectItems value="#{doctorBacking.listCrmBranch}" />
+					</p:selectOneMenu>
+
 					<h:outputLabel value="#{msg['glb_state']}"
 						rendered="#{doctorBacking.selected.id!=null?true:false}" />
 					<p:selectOneMenu value="#{doctorBacking.selected.state}"
@@ -159,37 +166,39 @@
 					<p:inputMask mask="99:99" value="#{doctorBacking.endHour}" />
 
 					<p:commandButton value="#{msg['btn_add']}"
-						action="#{doctorBacking.addScheduleAction}" update="recordTableDetail"/>
+						action="#{doctorBacking.addScheduleAction}"
+						update="growl recordTableDetail" />
 
 				</h:panelGrid>
 
 				<p:dataTable id="recordTableDetail" var="rec"
 					value="#{doctorBacking.modelDoctorSchedule}" rowKey="#{rec.id}"
 					selection="#{doctorBacking.selectedDoctorSchedule}"
-					paginator="true" rows="5" style="width:100%"
+					paginator="true" rows="7" style="width:100%"
 					emptyMessage="#{msg['glb_no_records_found']}">
 
 					<p:column selectionMode="multiple" style="width:18px" />
 
 					<p:column headerText="#{msg['doc_day']}">
-						<h:outputLabel value="#{rec.day}" />
+						<h:outputLabel value="#{rec.detDay}" />
 					</p:column>
 
 					<p:column headerText="#{msg['doc_star_hour']}">
 						<h:outputLabel value="#{rec.startHour}">
-							<f:convertDateTime pattern="dd/MM/yyyy" />
+							<f:convertDateTime pattern="HH:mm" />
 						</h:outputLabel>
 					</p:column>
 
 					<p:column headerText="#{msg['doc_end_hour']}">
 						<h:outputLabel value="#{rec.endHour}">
-							<f:convertDateTime pattern="dd/MM/yyyy" />
+							<f:convertDateTime pattern="HH:mm" />
 						</h:outputLabel>
 					</p:column>
 
 					<f:facet name="footer">
 						<p:commandButton value="#{msg['btn_delete']}"
-							action="#{doctorBacking.deleteScheduleAction}" />
+							action="#{doctorBacking.deleteScheduleAction}"
+							update="recordTableDetail" />
 					</f:facet>
 
 				</p:dataTable>
