@@ -163,7 +163,7 @@ CREATE TABLE `crm_page_role` (
 
 LOCK TABLES `crm_page_role` WRITE;
 /*!40000 ALTER TABLE `crm_page_role` DISABLE KEYS */;
-INSERT INTO `crm_page_role` VALUES (50,1,1),(12,1,2),(51,2,1),(13,2,2),(39,3,1),(10,3,2),(41,4,1),(46,5,1),(43,6,1),(44,7,1),(47,8,1),(11,8,2),(45,9,1),(40,10,1),(52,11,1),(24,11,2),(38,11,3),(48,12,1),(37,12,3),(42,13,1),(49,14,1),(53,15,1);
+INSERT INTO `crm_page_role` VALUES (50,1,1),(12,1,2),(51,2,1),(13,2,2),(39,3,1),(10,3,2),(41,4,1),(46,5,1),(43,6,1),(44,7,1),(47,8,1),(11,8,2),(45,9,1),(40,10,1),(52,11,1),(24,11,2),(38,11,3),(48,12,1),(37,12,3),(42,13,1),(49,14,1),(53,15,1),(54,16,1);
 /*!40000 ALTER TABLE `crm_page_role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -186,6 +186,8 @@ CREATE TABLE `crm_appointment` (
   `id_doctor` decimal(19,0) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_crm_appointment_1` (`id_doctor`),
+  KEY `fk_crm_appointment_2` (`id_procedure`),
+  CONSTRAINT `fk_crm_appointment_2` FOREIGN KEY (`id_procedure`) REFERENCES `crm_procedure` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_crm_appointment_1` FOREIGN KEY (`id_doctor`) REFERENCES `crm_doctor` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -250,10 +252,13 @@ CREATE TABLE `crm_doctor` (
   `gender` varchar(1) COLLATE latin1_spanish_ci DEFAULT NULL,
   `on_site` tinyint(1) DEFAULT NULL,
   `virtual` tinyint(1) DEFAULT NULL,
+  `id_branch` decimal(19,0) NOT NULL,
   `state` int(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`),
   KEY `fk_crm_doctor_1` (`id_speciality`),
+  KEY `fk_crm_doctor_2` (`id_branch`),
+  CONSTRAINT `fk_crm_doctor_2` FOREIGN KEY (`id_branch`) REFERENCES `crm_branch` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_crm_doctor_1` FOREIGN KEY (`id_speciality`) REFERENCES `crm_speciality` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -264,7 +269,7 @@ CREATE TABLE `crm_doctor` (
 
 LOCK TABLES `crm_doctor` WRITE;
 /*!40000 ALTER TABLE `crm_doctor` DISABLE KEYS */;
-INSERT INTO `crm_doctor` VALUES (1,'8647362','JUAN','','PEREZ','',1,'M',1,0,1),(2,'123','Pedro','','Perez','',1,'W',1,0,1),(3,'456','Adriana','','Fuente','',1,'W',1,1,1);
+INSERT INTO `crm_doctor` VALUES (1,'8647362','JUAN','','PEREZ','',1,'M',1,0,1,1),(2,'123','Pedro','','Perez','',1,'W',1,0,1,1),(3,'456','Adriana','','Fuente','',1,'W',1,1,1,1),(4,'142589','MARIA','','JUANA','',1,'W',1,1,1,0);
 /*!40000 ALTER TABLE `crm_doctor` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -429,7 +434,7 @@ CREATE TABLE `crm_doctor_schedule` (
   `start_hour` time NOT NULL,
   `end_hour` time NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_crm_doctor_schedule_1` (`id_doctor`,`day`),
+  UNIQUE KEY `uk_crm_doctor_schedule_1` (`id_doctor`,`day`,`start_hour`),
   KEY `fk_crm_doctor_schedule_1` (`id_doctor`),
   CONSTRAINT `fk_crm_doctor_schedule_1` FOREIGN KEY (`id_doctor`) REFERENCES `crm_doctor` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
@@ -441,7 +446,40 @@ CREATE TABLE `crm_doctor_schedule` (
 
 LOCK TABLES `crm_doctor_schedule` WRITE;
 /*!40000 ALTER TABLE `crm_doctor_schedule` DISABLE KEYS */;
+INSERT INTO `crm_doctor_schedule` VALUES (1,1,2,'08:00:00','12:00:00'),(2,1,2,'13:00:00','18:00:00'),(3,4,1,'08:00:00','12:00:00');
 /*!40000 ALTER TABLE `crm_doctor_schedule` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `crm_procedure_detail`
+--
+
+DROP TABLE IF EXISTS `crm_procedure_detail`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `crm_procedure_detail` (
+  `id` decimal(19,0) NOT NULL,
+  `name` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
+  `id_procedure` decimal(19,0) NOT NULL,
+  `time_doctor` int(11) DEFAULT '0',
+  `time_nurses` int(11) DEFAULT '0',
+  `time_stretchers` int(11) DEFAULT '0',
+  `state` int(11) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name_UNIQUE` (`name`),
+  KEY `fk_crm_procedure_detail_1` (`id_procedure`),
+  CONSTRAINT `fk_crm_procedure_detail_1` FOREIGN KEY (`id_procedure`) REFERENCES `crm_procedure` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `crm_procedure_detail`
+--
+
+LOCK TABLES `crm_procedure_detail` WRITE;
+/*!40000 ALTER TABLE `crm_procedure_detail` DISABLE KEYS */;
+INSERT INTO `crm_procedure_detail` VALUES (1,'Primera Cita',1,30,0,0,1),(2,'Control',2,30,0,0,1);
+/*!40000 ALTER TABLE `crm_procedure_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -467,6 +505,7 @@ CREATE TABLE `crm_procedure` (
 
 LOCK TABLES `crm_procedure` WRITE;
 /*!40000 ALTER TABLE `crm_procedure` DISABLE KEYS */;
+INSERT INTO `crm_procedure` VALUES (1,'Primera Cita','Primera Cita',1),(2,'Control','Control',1);
 /*!40000 ALTER TABLE `crm_procedure` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -548,7 +587,7 @@ CREATE TABLE `crm_page` (
 
 LOCK TABLES `crm_page` WRITE;
 /*!40000 ALTER TABLE `crm_page` DISABLE KEYS */;
-INSERT INTO `crm_page` VALUES (1,'Seguridad',NULL,'ui-icon-document',NULL,1),(2,'Tablas',NULL,'ui-icon-gear',NULL,2),(3,'Usuarios','/pages/secure/user.jsf',NULL,1,2),(4,'Roles','/pages/secure/role.jsf',NULL,1,1),(5,'Doctor','/pages/tables/doctor.jsf',NULL,2,1),(6,'Parámetros','/pages/tables/parameter.jsf',NULL,2,2),(7,'Especialdades','/pages/tables/speciality.jsf',NULL,2,3),(8,'Pacientes','/pages/processes/patient.jsf',NULL,11,1),(9,'Perfiles','/pages/tables/profile.jsf',NULL,2,5),(10,'Cambiar Clave','/pages/tables/changePassword.jsf',NULL,1,3),(11,'Procesos',NULL,'ui-icon-contact',NULL,3),(12,'Crear Pedido','/pages/processes/salesOrder.jsf',NULL,11,2),(13,'Sucursales','/pages/tables/branch.jsf',NULL,2,4),(14,'Departamentos','/pages/tables/department.jsf',NULL,2,6),(15,'Agenda',NULL,'ui-icon-calendar',NULL,4);
+INSERT INTO `crm_page` VALUES (1,'Seguridad',NULL,'ui-icon-document',NULL,1),(2,'Tablas',NULL,'ui-icon-gear',NULL,2),(3,'Usuarios','/pages/secure/user.jsf',NULL,1,2),(4,'Roles','/pages/secure/role.jsf',NULL,1,1),(5,'Doctor','/pages/tables/doctor.jsf',NULL,2,1),(6,'Parámetros','/pages/tables/parameter.jsf',NULL,2,2),(7,'Especialdades','/pages/tables/speciality.jsf',NULL,2,3),(8,'Pacientes','/pages/processes/patient.jsf',NULL,11,1),(9,'Perfiles','/pages/tables/profile.jsf',NULL,2,5),(10,'Cambiar Clave','/pages/tables/changePassword.jsf',NULL,1,3),(11,'Procesos',NULL,'ui-icon-contact',NULL,3),(12,'Crear Pedido','/pages/processes/salesOrder.jsf',NULL,11,2),(13,'Sucursales','/pages/tables/branch.jsf',NULL,2,4),(14,'Departamentos','/pages/tables/department.jsf',NULL,2,6),(15,'Agenda',NULL,'ui-icon-calendar',NULL,4),(16,'Procedimientos','/pages/tables/procedure.jsf',NULL,2,7);
 /*!40000 ALTER TABLE `crm_page` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -561,4 +600,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-05-10  7:03:11
+-- Dump completed on 2012-05-10 17:44:50
