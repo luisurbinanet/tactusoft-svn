@@ -68,7 +68,7 @@
 
 			<p:dialog header="#{msg['msg_detail']}" widgetVar="dlg"
 				resizable="false" id="dialog" showEffect="fade" hideEffect="explode"
-				modal="true" width="500">
+				modal="true" width="1000">
 
 				<p:toolbar style="width:100%">
 					<p:toolbarGroup align="left">
@@ -83,29 +83,12 @@
 
 				<p:spacer height="10" />
 
-				<h:panelGrid id="pnlDetail" columns="2" cellpadding="4"
+				<h:panelGrid id="pnlDetail" columns="4" cellpadding="4"
 					style="margin:0 auto;" width="100%">
 
 					<h:outputLabel value="#{msg['doc_code']}" />
-					<h:inputText value="#{doctorBacking.selected.code}"
-						style="width:100%" label="#{msg['doc_code']}" required="true" />
-
-					<h:outputLabel value="#{msg['doc_firstName']}" />
-					<h:inputText value="#{doctorBacking.selected.firstName}"
-						style="width:100%" label="#{msg['doc_firstName']}" required="true" />
-
-					<h:outputLabel value="#{msg['doc_secondName']}" />
-					<h:inputText value="#{doctorBacking.selected.secondName}"
-						style="width:100%" />
-
-					<h:outputLabel value="#{msg['doc_firstSurname']}" />
-					<h:inputText value="#{doctorBacking.selected.firstSurname}"
-						style="width:100%" label="#{msg['doc_firstSurname']}"
-						required="true" />
-
-					<h:outputLabel value="#{msg['doc_secondSurname']}" />
-					<h:inputText value="#{doctorBacking.selected.secondSurname}"
-						style="width:100%" />
+					<p:inputText value="#{doctorBacking.selected.code}"
+						style="width:250px" label="#{msg['doc_code']}" required="true" />
 
 					<h:outputText value="#{msg['glb_gender']}" />
 					<p:selectOneMenu value="#{doctorBacking.selected.gender}"
@@ -113,6 +96,24 @@
 						<f:selectItem itemLabel="#{msg['glb_gender_woman']}" itemValue="W" />
 						<f:selectItem itemLabel="#{msg['glb_gender_man']}" itemValue="M" />
 					</p:selectOneMenu>
+
+					<h:outputLabel value="#{msg['doc_firstName']}" />
+					<p:inputText value="#{doctorBacking.selected.firstName}"
+						style="width:250px" label="#{msg['doc_firstName']}"
+						required="true" />
+
+					<h:outputLabel value="#{msg['doc_secondName']}" />
+					<p:inputText value="#{doctorBacking.selected.secondName}"
+						style="width:250px" />
+
+					<h:outputLabel value="#{msg['doc_firstSurname']}" />
+					<p:inputText value="#{doctorBacking.selected.firstSurname}"
+						style="width:250px" label="#{msg['doc_firstSurname']}"
+						required="true" />
+
+					<h:outputLabel value="#{msg['doc_secondSurname']}" />
+					<p:inputText value="#{doctorBacking.selected.secondSurname}"
+						style="width:250px" />
 
 					<h:outputText value="#{msg['doc_onSite']}" />
 					<p:selectBooleanCheckbox value="#{doctorBacking.selected.onSite}" />
@@ -137,6 +138,61 @@
 					</p:selectOneMenu>
 
 				</h:panelGrid>
+
+
+				<p:spacer width="5" />
+				<p:separator style="width:100%" />
+				<p:spacer width="5" />
+
+				<h:panelGrid columns="7" cellpadding="4" style="margin:0 auto;"
+					width="100%">
+
+					<h:outputLabel value="#{msg['doc_day']}" style="width:100%" />
+					<p:selectOneMenu value="#{doctorBacking.idDay}" style="width:200px">
+						<f:selectItems value="#{doctorBacking.listDays}" />
+					</p:selectOneMenu>
+
+					<h:outputLabel value="#{msg['doc_star_hour']}" style="width:100%" />
+					<p:inputMask mask="99:99" value="#{doctorBacking.startHour}" />
+
+					<h:outputLabel value="#{msg['doc_end_hour']}" style="width:100%" />
+					<p:inputMask mask="99:99" value="#{doctorBacking.endHour}" />
+
+					<p:commandButton value="#{msg['btn_add']}"
+						action="#{doctorBacking.addScheduleAction}" update="recordTableDetail"/>
+
+				</h:panelGrid>
+
+				<p:dataTable id="recordTableDetail" var="rec"
+					value="#{doctorBacking.modelDoctorSchedule}" rowKey="#{rec.id}"
+					selection="#{doctorBacking.selectedDoctorSchedule}"
+					paginator="true" rows="5" style="width:100%"
+					emptyMessage="#{msg['glb_no_records_found']}">
+
+					<p:column selectionMode="multiple" style="width:18px" />
+
+					<p:column headerText="#{msg['doc_day']}">
+						<h:outputLabel value="#{rec.day}" />
+					</p:column>
+
+					<p:column headerText="#{msg['doc_star_hour']}">
+						<h:outputLabel value="#{rec.startHour}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputLabel>
+					</p:column>
+
+					<p:column headerText="#{msg['doc_end_hour']}">
+						<h:outputLabel value="#{rec.endHour}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputLabel>
+					</p:column>
+
+					<f:facet name="footer">
+						<p:commandButton value="#{msg['btn_delete']}"
+							action="#{doctorBacking.deleteScheduleAction}" />
+					</f:facet>
+
+				</p:dataTable>
 
 			</p:dialog>
 		</h:form>
