@@ -11,6 +11,7 @@ import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmDepartment;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
+import co.com.tactusoft.crm.model.entities.CrmDoctorSchedule;
 import co.com.tactusoft.crm.model.entities.CrmDomain;
 import co.com.tactusoft.crm.model.entities.CrmPage;
 import co.com.tactusoft.crm.model.entities.CrmPageRole;
@@ -37,6 +38,11 @@ public class TablesBo implements Serializable {
 
 	public List<CrmDoctor> getListDoctorActive() {
 		return dao.find("CrmDoctor o where o.state = 1");
+	}
+
+	public List<CrmDoctorSchedule> getListScheduleByDoctor(BigDecimal idDoctor) {
+		return dao.find("from CrmDoctorSchedule o where o.crmDoctor.id = "
+				+ idDoctor);
 	}
 
 	public List<CrmSpeciality> getListSpeciality() {
@@ -200,6 +206,26 @@ public class TablesBo implements Serializable {
 			crmUserBranch.setCrmUser(entity);
 			crmUserBranch.setCrmBranch(branch);
 			dao.persist(crmUserBranch);
+		}
+
+		return i;
+	}
+
+	public Integer saveDoctorSchedule(CrmDoctor entity,
+			List<CrmDoctorSchedule> listSchedule) {
+		int i = 0;
+
+		dao.executeHQL("delete from CrmDoctorSchedule o where o.crmDoctor.id = "
+				+ entity.getId());
+
+		for (CrmDoctorSchedule row : listSchedule) {
+			CrmDoctorSchedule data = new CrmDoctorSchedule();
+			data.setId(getId(CrmDoctorSchedule.class));
+			data.setCrmDoctor(entity);
+			data.setDay(row.getDay());
+			data.setStartHour(row.getStartHour());
+			data.setEndHour(row.getEndHour());
+			dao.persist(data);
 		}
 
 		return i;

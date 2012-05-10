@@ -1,12 +1,15 @@
 package co.com.tactusoft.crm.model.entities;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -20,6 +23,7 @@ public class CrmDoctor implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
 	private CrmSpeciality crmSpeciality;
+	private CrmBranch crmBranch;
 	private String code;
 	private String firstName;
 	private String secondName;
@@ -29,6 +33,9 @@ public class CrmDoctor implements java.io.Serializable {
 	private Boolean onSite;
 	private Boolean virtual;
 	private int state;
+	private Set<CrmAppointment> crmAppointments = new HashSet<CrmAppointment>(0);
+	private Set<CrmDoctorSchedule> crmDoctorSchedules = new HashSet<CrmDoctorSchedule>(
+			0);
 
 	public CrmDoctor() {
 	}
@@ -43,12 +50,15 @@ public class CrmDoctor implements java.io.Serializable {
 		this.state = state;
 	}
 
-	public CrmDoctor(BigDecimal id, CrmSpeciality crmSpeciality, String code,
-			String firstName, String secondName, String firstSurname,
-			String secondSurname, String gender, Boolean onSite,
-			Boolean virtual, int state) {
+	public CrmDoctor(BigDecimal id, CrmSpeciality crmSpeciality,
+			CrmBranch crmBranch, String code, String firstName,
+			String secondName, String firstSurname, String secondSurname,
+			String gender, Boolean onSite, Boolean virtual, int state,
+			Set<CrmAppointment> crmAppointments,
+			Set<CrmDoctorSchedule> crmDoctorSchedules) {
 		this.id = id;
 		this.crmSpeciality = crmSpeciality;
+		this.crmBranch = crmBranch;
 		this.code = code;
 		this.firstName = firstName;
 		this.secondName = secondName;
@@ -58,6 +68,8 @@ public class CrmDoctor implements java.io.Serializable {
 		this.onSite = onSite;
 		this.virtual = virtual;
 		this.state = state;
+		this.crmAppointments = crmAppointments;
+		this.crmDoctorSchedules = crmDoctorSchedules;
 	}
 
 	@Id
@@ -78,6 +90,16 @@ public class CrmDoctor implements java.io.Serializable {
 
 	public void setCrmSpeciality(CrmSpeciality crmSpeciality) {
 		this.crmSpeciality = crmSpeciality;
+	}
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "id_branch", nullable = false)
+	public CrmBranch getCrmBranch() {
+		return this.crmBranch;
+	}
+
+	public void setCrmBranch(CrmBranch crmBranch) {
+		this.crmBranch = crmBranch;
 	}
 
 	@Column(name = "code", unique = true, nullable = false, length = 45)
@@ -159,6 +181,24 @@ public class CrmDoctor implements java.io.Serializable {
 
 	public void setState(int state) {
 		this.state = state;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmDoctor")
+	public Set<CrmAppointment> getCrmAppointments() {
+		return this.crmAppointments;
+	}
+
+	public void setCrmAppointments(Set<CrmAppointment> crmAppointments) {
+		this.crmAppointments = crmAppointments;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmDoctor")
+	public Set<CrmDoctorSchedule> getCrmDoctorSchedules() {
+		return this.crmDoctorSchedules;
+	}
+
+	public void setCrmDoctorSchedules(Set<CrmDoctorSchedule> crmDoctorSchedules) {
+		this.crmDoctorSchedules = crmDoctorSchedules;
 	}
 
 }

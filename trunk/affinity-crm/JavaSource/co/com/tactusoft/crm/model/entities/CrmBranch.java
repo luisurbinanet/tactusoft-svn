@@ -23,7 +23,11 @@ public class CrmBranch implements java.io.Serializable {
 	private String code;
 	private String name;
 	private String formula;
+	private Integer doctors;
+	private Integer nurses;
+	private Integer stretchers;
 	private Integer state;
+	private Set<CrmDoctor> crmDoctors = new HashSet<CrmDoctor>(0);
 	private Set<CrmUserBranch> crmUserBranchs = new HashSet<CrmUserBranch>(0);
 
 	public CrmBranch() {
@@ -35,12 +39,17 @@ public class CrmBranch implements java.io.Serializable {
 	}
 
 	public CrmBranch(BigDecimal id, String code, String name, String formula,
-			Integer state, Set<CrmUserBranch> crmUserBranchs) {
+			Integer doctors, Integer nurses, Integer stretchers, Integer state,
+			Set<CrmDoctor> crmDoctors, Set<CrmUserBranch> crmUserBranchs) {
 		this.id = id;
 		this.code = code;
 		this.name = name;
 		this.formula = formula;
+		this.doctors = doctors;
+		this.nurses = nurses;
+		this.stretchers = stretchers;
 		this.state = state;
+		this.crmDoctors = crmDoctors;
 		this.crmUserBranchs = crmUserBranchs;
 	}
 
@@ -72,6 +81,42 @@ public class CrmBranch implements java.io.Serializable {
 		this.name = name;
 	}
 
+	@Column(name = "formula", nullable = false, length = 4)
+	public String getFormula() {
+		return this.formula;
+	}
+
+	public void setFormula(String formula) {
+		this.formula = formula;
+	}
+
+	@Column(name = "doctors")
+	public Integer getDoctors() {
+		return this.doctors;
+	}
+
+	public void setDoctors(Integer doctors) {
+		this.doctors = doctors;
+	}
+
+	@Column(name = "nurses")
+	public Integer getNurses() {
+		return this.nurses;
+	}
+
+	public void setNurses(Integer nurses) {
+		this.nurses = nurses;
+	}
+
+	@Column(name = "stretchers")
+	public Integer getStretchers() {
+		return this.stretchers;
+	}
+
+	public void setStretchers(Integer stretchers) {
+		this.stretchers = stretchers;
+	}
+
 	@Column(name = "state")
 	public Integer getState() {
 		return this.state;
@@ -82,21 +127,21 @@ public class CrmBranch implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmBranch")
+	public Set<CrmDoctor> getCrmDoctors() {
+		return this.crmDoctors;
+	}
+
+	public void setCrmDoctors(Set<CrmDoctor> crmDoctors) {
+		this.crmDoctors = crmDoctors;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmBranch")
 	public Set<CrmUserBranch> getCrmUserBranchs() {
 		return this.crmUserBranchs;
 	}
 
 	public void setCrmUserBranchs(Set<CrmUserBranch> crmUserBranchs) {
 		this.crmUserBranchs = crmUserBranchs;
-	}
-
-	@Column(name = "formula", nullable = false, length = 4)
-	public String getFormula() {
-		return this.formula;
-	}
-
-	public void setFormula(String formula) {
-		this.formula = formula;
 	}
 
 }

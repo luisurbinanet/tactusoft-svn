@@ -2,12 +2,17 @@ package co.com.tactusoft.crm.view.backing;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -15,6 +20,7 @@ import javax.inject.Named;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.controller.bo.TablesBo;
+import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmDoctorSchedule;
 import co.com.tactusoft.crm.model.entities.CrmSpeciality;
@@ -38,6 +44,9 @@ public class DoctorBacking implements Serializable {
 
 	private List<SelectItem> listCrmSpeciality;
 	private Map<BigDecimal, CrmSpeciality> mapCrmSpeciality;
+
+	private List<SelectItem> listCrmBranch;
+	private Map<BigDecimal, CrmBranch> mapCrmBranch;
 
 	private DoctorScheduleDataModel modelDoctorSchedule;
 	private CrmDoctorSchedule[] selectedDoctorSchedule;
@@ -106,6 +115,22 @@ public class DoctorBacking implements Serializable {
 		this.listCrmSpeciality = listCrmSpeciality;
 	}
 
+	public List<SelectItem> getListCrmBranch() {
+		if (listCrmBranch == null) {
+			listCrmBranch = new LinkedList<SelectItem>();
+			mapCrmBranch = new HashMap<BigDecimal, CrmBranch>();
+			for (CrmBranch row : tableService.getListBranchActive()) {
+				mapCrmBranch.put(row.getId(), row);
+				listCrmBranch.add(new SelectItem(row.getId(), row.getName()));
+			}
+		}
+		return listCrmBranch;
+	}
+
+	public void setListCrmBranch(List<SelectItem> listCrmBranch) {
+		this.listCrmBranch = listCrmBranch;
+	}
+
 	public DoctorScheduleDataModel getModelDoctorSchedule() {
 		return modelDoctorSchedule;
 	}
@@ -170,6 +195,7 @@ public class DoctorBacking implements Serializable {
 		selected.setVirtual(false);
 		selected.setState(Constant.STATE_ACTIVE);
 		selected.setCrmSpeciality(new CrmSpeciality());
+		selected.setCrmBranch(new CrmBranch());
 
 		listDoctorSchedule = new LinkedList<CrmDoctorSchedule>();
 		modelDoctorSchedule = new DoctorScheduleDataModel(listDoctorSchedule);
@@ -181,33 +207,77 @@ public class DoctorBacking implements Serializable {
 	public void saveAction() {
 		String message = null;
 
-		selected.setCrmSpeciality(mapCrmSpeciality.get(selected
-				.getCrmSpeciality().getId()));
-
-		int result = tableService.saveDoctor(selected);
-		if (result == 0) {
-			list = tableService.getListDoctor();
-			model = new DoctorDataModel(list);
-			message = FacesUtil.getMessage("msg_record_ok");
-			FacesUtil.addInfo(message);
-		} else if (result == -1) {
-			String paramValue = FacesUtil.getMessage("doc_code");
-			message = FacesUtil.getMessage("msg_record_unique_exception",
-					paramValue);
+		if (listDoctorSchedule.size() == 0) {
+			message = FacesUtil.getMessage("sal_msg_error_schedule");
 			FacesUtil.addError(message);
+		} else {
+			selected.setCrmSpeciality(mapCrmSpeciality.get(selected
+					.getCrmSpeciality().getId()));
+
+			selected.setCrmBranch(mapCrmBranch.get(selected.getCrmBranch()
+					.getId()));
+
+			int result = tableService.saveDoctor(selected);
+			if (result == 0) {
+				tableService.saveDoctorSchedule(selected, listDoctorSchedule);
+				list = tableService.getListDoctor();
+				model = new DoctorDataModel(list);
+				message = FacesUtil.getMessage("msg_record_ok");
+				FacesUtil.addInfo(message);
+			} else if (result == -1) {
+				String paramValue = FacesUtil.getMessage("doc_code");
+				message = FacesUtil.getMessage("msg_record_unique_exception",
+						paramValue);
+				FacesUtil.addError(message);
+			}
 		}
 	}
 
 	public void addScheduleAction() {
-		listDoctorSchedule.add(new CrmDoctorSchedule(new BigDecimal(-1),
-				selected, idDay,  null, null));
-		modelDoctorSchedule = new DoctorScheduleDataModel(listDoctorSchedule);
+		String message = null;
+		Date date = null;
+		Date startHourDate = null;
+		Date endHourDate = null;
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+		try {
+			Calendar gc = new GregorianCalendar();
+			date = df.parse("1900-01-01 " + startHour);
+			gc.setTime(date);
+			startHourDate = gc.getTime();
+
+			gc = new GregorianCalendar();
+			date = df.parse("1900-01-01 " + endHour);
+			gc.setTime(date);
+			endHourDate = gc.getTime();
+
+			if (startHourDate.getTime() >= endHourDate.getTime()) {
+				message = FacesUtil.getMessage("sal_msg_error_dates_1");
+				FacesUtil.addError(message);
+			} else {
+				listDoctorSchedule.add(new CrmDoctorSchedule(
+						new BigDecimal(-1), selected, idDay, startHourDate,
+						endHourDate));
+				modelDoctorSchedule = new DoctorScheduleDataModel(
+						listDoctorSchedule);
+			}
+
+		} catch (ParseException e) {
+			message = FacesUtil.getMessage("sal_msg_error_dates_2");
+			FacesUtil.addError(message);
+		}
 	}
 
 	public void deleteScheduleAction() {
 		for (CrmDoctorSchedule row : selectedDoctorSchedule) {
 			listDoctorSchedule.remove(row);
 		}
+		modelDoctorSchedule = new DoctorScheduleDataModel(listDoctorSchedule);
+	}
+
+	public void generateListAction(ActionEvent event) {
+		listDoctorSchedule = tableService.getListScheduleByDoctor(selected
+				.getId());
 		modelDoctorSchedule = new DoctorScheduleDataModel(listDoctorSchedule);
 	}
 
