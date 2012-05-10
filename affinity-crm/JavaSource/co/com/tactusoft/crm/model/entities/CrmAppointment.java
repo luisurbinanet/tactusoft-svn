@@ -19,13 +19,16 @@ import javax.persistence.TemporalType;
 @Table(name = "crm_appointment", catalog = "crm_db")
 public class CrmAppointment implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
+	private CrmProcedure crmProcedure;
 	private CrmDoctor crmDoctor;
 	private String patient;
 	private Date startAppointmentDate;
 	private Date endAppointmentDate;
-	private BigDecimal idProcedure;
 	private BigDecimal idPublicity;
 	private BigDecimal idBranch;
 	private BigDecimal appointmentDetailType;
@@ -33,16 +36,16 @@ public class CrmAppointment implements java.io.Serializable {
 	public CrmAppointment() {
 	}
 
-	public CrmAppointment(BigDecimal id, CrmDoctor crmDoctor, String patient,
-			Date startAppointmentDate, Date endAppointmentDate,
-			BigDecimal idProcedure, BigDecimal idPublicity,
+	public CrmAppointment(BigDecimal id, CrmProcedure crmProcedure,
+			CrmDoctor crmDoctor, String patient, Date startAppointmentDate,
+			Date endAppointmentDate, BigDecimal idPublicity,
 			BigDecimal idBranch, BigDecimal appointmentDetailType) {
 		this.id = id;
+		this.crmProcedure = crmProcedure;
 		this.crmDoctor = crmDoctor;
 		this.patient = patient;
 		this.startAppointmentDate = startAppointmentDate;
 		this.endAppointmentDate = endAppointmentDate;
-		this.idProcedure = idProcedure;
 		this.idPublicity = idPublicity;
 		this.idBranch = idBranch;
 		this.appointmentDetailType = appointmentDetailType;
@@ -56,6 +59,16 @@ public class CrmAppointment implements java.io.Serializable {
 
 	public void setId(BigDecimal id) {
 		this.id = id;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_procedure", nullable = false)
+	public CrmProcedure getCrmProcedure() {
+		return this.crmProcedure;
+	}
+
+	public void setCrmProcedure(CrmProcedure crmProcedure) {
+		this.crmProcedure = crmProcedure;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -95,15 +108,6 @@ public class CrmAppointment implements java.io.Serializable {
 
 	public void setEndAppointmentDate(Date endAppointmentDate) {
 		this.endAppointmentDate = endAppointmentDate;
-	}
-
-	@Column(name = "id_procedure", nullable = false, scale = 0)
-	public BigDecimal getIdProcedure() {
-		return this.idProcedure;
-	}
-
-	public void setIdProcedure(BigDecimal idProcedure) {
-		this.idProcedure = idProcedure;
 	}
 
 	@Column(name = "id_publicity", nullable = false, scale = 0)

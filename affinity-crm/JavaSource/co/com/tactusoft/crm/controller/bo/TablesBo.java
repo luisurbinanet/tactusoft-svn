@@ -15,6 +15,8 @@ import co.com.tactusoft.crm.model.entities.CrmDoctorSchedule;
 import co.com.tactusoft.crm.model.entities.CrmDomain;
 import co.com.tactusoft.crm.model.entities.CrmPage;
 import co.com.tactusoft.crm.model.entities.CrmPageRole;
+import co.com.tactusoft.crm.model.entities.CrmProcedure;
+import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
 import co.com.tactusoft.crm.model.entities.CrmRole;
 import co.com.tactusoft.crm.model.entities.CrmSpeciality;
@@ -114,6 +116,20 @@ public class TablesBo implements Serializable {
 		return dao.find("from CrmDomain o where o.group = '" + group + "'");
 	}
 
+	public List<CrmProcedure> getListProcedure() {
+		return dao.find("from CrmProcedure o");
+	}
+
+	public List<CrmProcedure> getListProcedureActive() {
+		return dao.find("from CrmProcedure o where o.state = 1");
+	}
+
+	public List<CrmProcedureDetail> getListProcedureDetailByProcedure(
+			BigDecimal idProcedure) {
+		return dao.find("from CrmProcedureDetail o where o.crmProcedure.id = "
+				+ idProcedure);
+	}
+
 	public Integer saveDoctor(CrmDoctor entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmDoctor.class));
@@ -159,6 +175,13 @@ public class TablesBo implements Serializable {
 	public Integer saveDepartment(CrmDepartment entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmDepartment.class));
+		}
+		return dao.persist(entity);
+	}
+
+	public Integer saveProcedure(CrmProcedure entity) {
+		if (entity.getId() == null) {
+			entity.setId(getId(CrmProcedure.class));
 		}
 		return dao.persist(entity);
 	}
@@ -219,13 +242,24 @@ public class TablesBo implements Serializable {
 				+ entity.getId());
 
 		for (CrmDoctorSchedule row : listSchedule) {
-			CrmDoctorSchedule data = new CrmDoctorSchedule();
-			data.setId(getId(CrmDoctorSchedule.class));
-			data.setCrmDoctor(entity);
-			data.setDay(row.getDay());
-			data.setStartHour(row.getStartHour());
-			data.setEndHour(row.getEndHour());
-			dao.persist(data);
+			row.setId(getId(CrmDoctorSchedule.class));
+			row.setCrmDoctor(entity);
+			dao.persist(row);
+		}
+
+		return i;
+	}
+
+	public Integer saveProcedureDetail(CrmProcedure entity,
+			List<CrmProcedureDetail> listSchedule) {
+		int i = 0;
+
+		for (CrmProcedureDetail row : listSchedule) {
+			if (row.getId().intValue() == -1) {
+				row.setId(getId(CrmProcedureDetail.class));
+			}
+			row.setCrmProcedure(entity);
+			dao.persist(row);
 		}
 
 		return i;
