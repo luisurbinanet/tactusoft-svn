@@ -40,16 +40,38 @@
 						update=":editForm:dialog2" />
 					<h:outputLabel value=" " />
 
-					<h:outputLabel value="#{msg['pat_sap_code']}" style="width:40%" />
+					<h:outputLabel value="#{msg['pat_sap_code']}" style="width:100%" />
 					<p:inputText value="#{appointmentBacking.selectedPatient.SAPCode}"
-						style="width:350px" readonly="true" />
+						style="width:600px" readonly="true" />
 
-					<h:outputLabel value="#{msg['pat_names']}" style="width:40%" />
+					<h:outputLabel value="#{msg['pat_names']}" style="width:100%" />
 					<p:inputText value="#{appointmentBacking.selectedPatient.names}"
-						style="width:350px" readonly="true" />
+						style="width:600px" readonly="true" />
 
 					<p:spacer height="5" />
 					<p:spacer height="5" />
+
+					<h:outputLabel value="#{msg['app_procedure']}" style="width:100%" />
+					<p:selectOneMenu style="width:600px"
+						value="#{appointmentBacking.idProcedure}">
+						<f:selectItems value="#{appointmentBacking.listProcedure}" />
+						<p:ajax update="selProcedureDetail"
+							listener="#{appointmentBacking.handleProcedureDetailChange}" />
+					</p:selectOneMenu>
+
+					<h:outputLabel value="#{msg['app_procedure_type']}"
+						style="width:100%" />
+					<p:selectOneMenu id="selProcedureDetail" style="width:600px"
+						value="#{appointmentBacking.selected.crmProcedureDetail.id}">
+						<f:selectItems value="#{appointmentBacking.listProcedureDetail}" />
+					</p:selectOneMenu>
+
+					<h:outputLabel value="#{msg['app_procedure_search']}"
+						style="width:100%" />
+					<p:selectOneMenu style="width:600px"
+						value="#{appointmentBacking.idSearch}">
+						<f:selectItems value="#{appointmentBacking.listSearch}" />
+					</p:selectOneMenu>
 
 				</h:panelGrid>
 

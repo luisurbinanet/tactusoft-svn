@@ -177,7 +177,7 @@ public class ProcedureBacking implements Serializable {
 			} else {
 				listProcedureDetail.add(new CrmProcedureDetail(new BigDecimal(
 						-1), selected, this.name, timeDoctor, timeNurses,
-						timeStretchers, Constant.STATE_ACTIVE));
+						timeStretchers, Constant.STATE_ACTIVE, null));
 				modelProcedureDetail = new ProcedureDetailDataModel(
 						listProcedureDetail);
 			}
