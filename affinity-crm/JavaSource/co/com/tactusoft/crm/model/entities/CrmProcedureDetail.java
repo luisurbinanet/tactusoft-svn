@@ -1,12 +1,15 @@
 package co.com.tactusoft.crm.model.entities;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -17,9 +20,6 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "crm_procedure_detail", catalog = "crm_db", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
 public class CrmProcedureDetail implements java.io.Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
 	private CrmProcedure crmProcedure;
@@ -28,6 +28,7 @@ public class CrmProcedureDetail implements java.io.Serializable {
 	private Integer timeNurses;
 	private Integer timeStretchers;
 	private int state;
+	private Set<CrmAppointment> crmAppointments = new HashSet<CrmAppointment>(0);
 
 	public CrmProcedureDetail() {
 	}
@@ -42,7 +43,8 @@ public class CrmProcedureDetail implements java.io.Serializable {
 
 	public CrmProcedureDetail(BigDecimal id, CrmProcedure crmProcedure,
 			String name, Integer timeDoctor, Integer timeNurses,
-			Integer timeStretchers, int state) {
+			Integer timeStretchers, int state,
+			Set<CrmAppointment> crmAppointments) {
 		this.id = id;
 		this.crmProcedure = crmProcedure;
 		this.name = name;
@@ -50,6 +52,7 @@ public class CrmProcedureDetail implements java.io.Serializable {
 		this.timeNurses = timeNurses;
 		this.timeStretchers = timeStretchers;
 		this.state = state;
+		this.crmAppointments = crmAppointments;
 	}
 
 	@Id
@@ -62,7 +65,7 @@ public class CrmProcedureDetail implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_procedure", nullable = false)
 	public CrmProcedure getCrmProcedure() {
 		return this.crmProcedure;
@@ -115,6 +118,15 @@ public class CrmProcedureDetail implements java.io.Serializable {
 
 	public void setState(int state) {
 		this.state = state;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmProcedureDetail")
+	public Set<CrmAppointment> getCrmAppointments() {
+		return this.crmAppointments;
+	}
+
+	public void setCrmAppointments(Set<CrmAppointment> crmAppointments) {
+		this.crmAppointments = crmAppointments;
 	}
 
 }

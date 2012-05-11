@@ -1,15 +1,25 @@
 package co.com.tactusoft.crm.view.backing;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.event.ActionEvent;
+import javax.faces.model.SelectItem;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.context.annotation.Scope;
 
+import co.com.tactusoft.crm.controller.bo.TablesBo;
+import co.com.tactusoft.crm.model.entities.CrmAppointment;
+import co.com.tactusoft.crm.model.entities.CrmDomain;
+import co.com.tactusoft.crm.model.entities.CrmProcedure;
+import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
 import co.com.tactusoft.crm.view.beans.Patient;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 
@@ -22,15 +32,38 @@ public class AppointmentBacking implements Serializable {
 
 	private static final long serialVersionUID = -7936516411298237407L;
 
+	@Inject
+	private TablesBo tableService;
+
+	private CrmAppointment selected;
+
 	private List<Patient> listPatient;
 	private PatientDataModel patientModel;
 	private Patient selectedPatient;
 	private String namePatient;
 
+	private List<SelectItem> listProcedure;
+	private Map<BigDecimal, CrmProcedure> mapProcedure;
+	private BigDecimal idProcedure;
+
+	private List<SelectItem> listProcedureDetail;
+	private Map<BigDecimal, CrmProcedureDetail> mapProcedureDetail;
+
+	private List<SelectItem> listSearch;
+	private BigDecimal idSearch;
+
 	private boolean disabledSaveButton;
 
 	public AppointmentBacking() {
 		newAction(null);
+	}
+
+	public CrmAppointment getSelected() {
+		return selected;
+	}
+
+	public void setSelected(CrmAppointment selected) {
+		this.selected = selected;
 	}
 
 	public List<Patient> getListPatient() {
@@ -63,6 +96,83 @@ public class AppointmentBacking implements Serializable {
 
 	public void setNamePatient(String namePatient) {
 		this.namePatient = namePatient;
+	}
+
+	public List<SelectItem> getListProcedure() {
+		if (listProcedure == null) {
+			listProcedure = new LinkedList<SelectItem>();
+			mapProcedure = new HashMap<BigDecimal, CrmProcedure>();
+			for (CrmProcedure row : tableService.getListProcedureActive()) {
+				mapProcedure.put(row.getId(), row);
+				listProcedure.add(new SelectItem(row.getId(), row.getName()));
+			}
+
+			if (listProcedure.size() > 0) {
+				idProcedure = (BigDecimal) listProcedure.get(0).getValue();
+				handleProcedureDetailChange();
+			}
+		}
+		return listProcedure;
+	}
+
+	public void setListProcedure(List<SelectItem> listProcedure) {
+		this.listProcedure = listProcedure;
+	}
+
+	public Map<BigDecimal, CrmProcedure> getMapProcedure() {
+		return mapProcedure;
+	}
+
+	public void setMapProcedure(Map<BigDecimal, CrmProcedure> mapProcedure) {
+		this.mapProcedure = mapProcedure;
+	}
+
+	public BigDecimal getIdProcedure() {
+		return idProcedure;
+	}
+
+	public void setIdProcedure(BigDecimal idProcedure) {
+		this.idProcedure = idProcedure;
+	}
+
+	public List<SelectItem> getListProcedureDetail() {
+		return listProcedureDetail;
+	}
+
+	public void setListProcedureDetail(List<SelectItem> listProcedureDetail) {
+		this.listProcedureDetail = listProcedureDetail;
+	}
+
+	public Map<BigDecimal, CrmProcedureDetail> getMapProcedureDetail() {
+		return mapProcedureDetail;
+	}
+
+	public void setMapProcedureDetail(
+			Map<BigDecimal, CrmProcedureDetail> mapProcedureDetail) {
+		this.mapProcedureDetail = mapProcedureDetail;
+	}
+
+	public List<SelectItem> getListSearch() {
+		if (listSearch == null) {
+			listSearch = new LinkedList<SelectItem>();
+			for (CrmDomain row : tableService.getListDomain("TIPO_DETALLE_CITA")) {
+				listSearch
+						.add(new SelectItem(row.getCode(), row.getItemValue()));
+			}
+		}
+		return listSearch;
+	}
+
+	public void setListSearch(List<SelectItem> listSearch) {
+		this.listSearch = listSearch;
+	}
+
+	public BigDecimal getIdSearch() {
+		return idSearch;
+	}
+
+	public void setIdSearch(BigDecimal idSearch) {
+		this.idSearch = idSearch;
 	}
 
 	public boolean isDisabledSaveButton() {
@@ -107,9 +217,22 @@ public class AppointmentBacking implements Serializable {
 		listPatient = new LinkedList<Patient>();
 		patientModel = new PatientDataModel(listPatient);
 		disabledSaveButton = false;
+
+		selected = new CrmAppointment();
+		selected.setCrmProcedureDetail(new CrmProcedureDetail());
 	}
 
 	public void saveAction() {
+	}
+
+	public void handleProcedureDetailChange() {
+		listProcedureDetail = new LinkedList<SelectItem>();
+		mapProcedureDetail = new HashMap<BigDecimal, CrmProcedureDetail>();
+		for (CrmProcedureDetail row : tableService
+				.getListProcedureDetailByProcedure(idProcedure)) {
+			mapProcedureDetail.put(row.getId(), row);
+			listProcedureDetail.add(new SelectItem(row.getId(), row.getName()));
+		}
 	}
 
 }

@@ -26,7 +26,6 @@ public class CrmProcedure implements java.io.Serializable {
 	private String name;
 	private String description;
 	private int state;
-	private Set<CrmAppointment> crmAppointments = new HashSet<CrmAppointment>(0);
 	private Set<CrmProcedureDetail> crmProcedureDetails = new HashSet<CrmProcedureDetail>(
 			0);
 
@@ -40,13 +39,11 @@ public class CrmProcedure implements java.io.Serializable {
 	}
 
 	public CrmProcedure(BigDecimal id, String name, String description,
-			int state, Set<CrmAppointment> crmAppointments,
-			Set<CrmProcedureDetail> crmProcedureDetails) {
+			int state, Set<CrmProcedureDetail> crmProcedureDetails) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.state = state;
-		this.crmAppointments = crmAppointments;
 		this.crmProcedureDetails = crmProcedureDetails;
 	}
 
@@ -85,15 +82,6 @@ public class CrmProcedure implements java.io.Serializable {
 
 	public void setState(int state) {
 		this.state = state;
-	}
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmProcedure")
-	public Set<CrmAppointment> getCrmAppointments() {
-		return this.crmAppointments;
-	}
-
-	public void setCrmAppointments(Set<CrmAppointment> crmAppointments) {
-		this.crmAppointments = crmAppointments;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmProcedure")

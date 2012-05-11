@@ -19,12 +19,9 @@ import javax.persistence.TemporalType;
 @Table(name = "crm_appointment", catalog = "crm_db")
 public class CrmAppointment implements java.io.Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
-	private CrmProcedure crmProcedure;
+	private CrmProcedureDetail crmProcedureDetail;
 	private CrmDoctor crmDoctor;
 	private String patient;
 	private Date startAppointmentDate;
@@ -36,12 +33,12 @@ public class CrmAppointment implements java.io.Serializable {
 	public CrmAppointment() {
 	}
 
-	public CrmAppointment(BigDecimal id, CrmProcedure crmProcedure,
+	public CrmAppointment(BigDecimal id, CrmProcedureDetail crmProcedureDetail,
 			CrmDoctor crmDoctor, String patient, Date startAppointmentDate,
 			Date endAppointmentDate, BigDecimal idPublicity,
 			BigDecimal idBranch, BigDecimal appointmentDetailType) {
 		this.id = id;
-		this.crmProcedure = crmProcedure;
+		this.crmProcedureDetail = crmProcedureDetail;
 		this.crmDoctor = crmDoctor;
 		this.patient = patient;
 		this.startAppointmentDate = startAppointmentDate;
@@ -62,13 +59,13 @@ public class CrmAppointment implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_procedure", nullable = false)
-	public CrmProcedure getCrmProcedure() {
-		return this.crmProcedure;
+	@JoinColumn(name = "id_procedure_detail", nullable = false)
+	public CrmProcedureDetail getCrmProcedureDetail() {
+		return this.crmProcedureDetail;
 	}
 
-	public void setCrmProcedure(CrmProcedure crmProcedure) {
-		this.crmProcedure = crmProcedure;
+	public void setCrmProcedureDetail(CrmProcedureDetail crmProcedureDetail) {
+		this.crmProcedureDetail = crmProcedureDetail;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
