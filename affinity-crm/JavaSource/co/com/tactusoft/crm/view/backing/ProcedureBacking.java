@@ -180,6 +180,12 @@ public class ProcedureBacking implements Serializable {
 						timeStretchers, Constant.STATE_ACTIVE, null));
 				modelProcedureDetail = new ProcedureDetailDataModel(
 						listProcedureDetail);
+				
+				
+				this.name = "";
+				this.timeDoctor = 0;
+				this.timeNurses = 0;
+				this.timeStretchers = 0;
 			}
 		} catch (NumberFormatException e) {
 			message = FacesUtil.getMessage("prc_msg_error_times");

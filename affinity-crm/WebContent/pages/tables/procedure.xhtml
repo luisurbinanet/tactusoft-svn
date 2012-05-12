@@ -88,6 +88,10 @@
 						style="width:250px" label="#{msg['prc_descr']}" required="true"
 						rows="5" />
 
+					<h:outputLabel value="#{msg['prc_parallel']}" />
+					<p:selectBooleanCheckbox
+						value="#{procedureBacking.selected.parallel}" />
+
 					<h:outputLabel value="#{msg['glb_state']}"
 						rendered="#{procedureBacking.selected.id!=null?true:false}" />
 					<p:selectOneMenu value="#{procedureBacking.selected.state}"
@@ -107,7 +111,7 @@
 				<p:separator style="width:100%" />
 				<p:spacer height="5" />
 
-				<h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;"
+				<h:panelGrid id="pnlProcedureDetail" columns="2" cellpadding="4" style="margin:0 auto;"
 					width="100%">
 
 					<h:outputLabel value="#{msg['prc_name']}" />
@@ -132,7 +136,7 @@
 
 					<p:commandButton value="#{msg['btn_add']}"
 						action="#{procedureBacking.addProcedureDetailAction}"
-						update="growl recordTableDetail" />
+						update="growl recordTableDetail pnlProcedureDetail" />
 				</h:panelGrid>
 
 				<p:spacer height="5" />
