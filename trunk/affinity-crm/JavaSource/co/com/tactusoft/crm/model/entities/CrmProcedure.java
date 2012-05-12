@@ -18,13 +18,11 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "crm_procedure", catalog = "crm_db", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
 public class CrmProcedure implements java.io.Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
 	private String name;
 	private String description;
+	private boolean parallel;
 	private int state;
 	private Set<CrmProcedureDetail> crmProcedureDetails = new HashSet<CrmProcedureDetail>(
 			0);
@@ -32,17 +30,20 @@ public class CrmProcedure implements java.io.Serializable {
 	public CrmProcedure() {
 	}
 
-	public CrmProcedure(BigDecimal id, String name, int state) {
+	public CrmProcedure(BigDecimal id, String name, boolean parallel, int state) {
 		this.id = id;
 		this.name = name;
+		this.parallel = parallel;
 		this.state = state;
 	}
 
 	public CrmProcedure(BigDecimal id, String name, String description,
-			int state, Set<CrmProcedureDetail> crmProcedureDetails) {
+			boolean parallel, int state,
+			Set<CrmProcedureDetail> crmProcedureDetails) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
+		this.parallel = parallel;
 		this.state = state;
 		this.crmProcedureDetails = crmProcedureDetails;
 	}
@@ -73,6 +74,15 @@ public class CrmProcedure implements java.io.Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	@Column(name = "parallel", nullable = false)
+	public boolean isParallel() {
+		return this.parallel;
+	}
+
+	public void setParallel(boolean parallel) {
+		this.parallel = parallel;
 	}
 
 	@Column(name = "state", nullable = false)

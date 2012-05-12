@@ -45,6 +45,8 @@ public class UserBacking implements Serializable {
 
 	private DualListModel<CrmBranch> listBranch;
 
+	private String password;
+
 	public UserBacking() {
 		newAction();
 	}
@@ -118,6 +120,14 @@ public class UserBacking implements Serializable {
 		this.listBranch = listBranch;
 	}
 
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	public void newAction() {
 		selected = new CrmUser();
 		selected.setState(Constant.STATE_ACTIVE);
@@ -171,6 +181,19 @@ public class UserBacking implements Serializable {
 		}
 
 		listBranch = new DualListModel<CrmBranch>(listSource, listTarget);
+	}
+
+	public void updatePasswordAction() {
+		String message = null;
+		selected = FacesUtil.getCurrentUser();
+		selected.setPassword(FacesUtil.getMD5(this.password));
+		int result = tablesService.saveUser(selected);
+
+		if (result == 0) {
+			model = new UserDataModel(list);
+			message = FacesUtil.getMessage("msg_record_ok");
+			FacesUtil.addInfo(message);
+		}
 	}
 
 }
