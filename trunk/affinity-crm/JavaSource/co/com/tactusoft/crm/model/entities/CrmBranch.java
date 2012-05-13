@@ -28,6 +28,7 @@ public class CrmBranch implements java.io.Serializable {
 	private Integer stretchers;
 	private Integer state;
 	private Set<CrmDoctor> crmDoctors = new HashSet<CrmDoctor>(0);
+	private Set<CrmAppointment> crmAppointments = new HashSet<CrmAppointment>(0);
 	private Set<CrmUserBranch> crmUserBranchs = new HashSet<CrmUserBranch>(0);
 
 	public CrmBranch() {
@@ -40,7 +41,8 @@ public class CrmBranch implements java.io.Serializable {
 
 	public CrmBranch(BigDecimal id, String code, String name, String formula,
 			Integer doctors, Integer nurses, Integer stretchers, Integer state,
-			Set<CrmDoctor> crmDoctors, Set<CrmUserBranch> crmUserBranchs) {
+			Set<CrmDoctor> crmDoctors, Set<CrmAppointment> crmAppointments,
+			Set<CrmUserBranch> crmUserBranchs) {
 		this.id = id;
 		this.code = code;
 		this.name = name;
@@ -50,6 +52,7 @@ public class CrmBranch implements java.io.Serializable {
 		this.stretchers = stretchers;
 		this.state = state;
 		this.crmDoctors = crmDoctors;
+		this.crmAppointments = crmAppointments;
 		this.crmUserBranchs = crmUserBranchs;
 	}
 
@@ -133,6 +136,15 @@ public class CrmBranch implements java.io.Serializable {
 
 	public void setCrmDoctors(Set<CrmDoctor> crmDoctors) {
 		this.crmDoctors = crmDoctors;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmBranch")
+	public Set<CrmAppointment> getCrmAppointments() {
+		return this.crmAppointments;
+	}
+
+	public void setCrmAppointments(Set<CrmAppointment> crmAppointments) {
+		this.crmAppointments = crmAppointments;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmBranch")
