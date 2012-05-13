@@ -51,12 +51,17 @@
 					<p:spacer height="5" />
 					<p:spacer height="5" />
 
+					<h:outputLabel value="#{msg['app_branch']}" style="width:100%" />
+					<p:selectOneMenu style="width:600px">
+						<f:selectItems value="#{appointmentBacking.listBranch}" />
+					</p:selectOneMenu>
+
 					<h:outputLabel value="#{msg['app_procedure']}" style="width:100%" />
 					<p:selectOneMenu style="width:600px"
 						value="#{appointmentBacking.idProcedure}">
 						<f:selectItems value="#{appointmentBacking.listProcedure}" />
-						<p:ajax update="selProcedureDetail"
-							listener="#{appointmentBacking.handleProcedureDetailChange}" />
+						<p:ajax update="selProcedureDetail selSearch pnlSchedule"
+							listener="#{appointmentBacking.handleProcedureChange}" />
 					</p:selectOneMenu>
 
 					<h:outputLabel value="#{msg['app_procedure_type']}"
@@ -64,14 +69,25 @@
 					<p:selectOneMenu id="selProcedureDetail" style="width:600px"
 						value="#{appointmentBacking.selected.crmProcedureDetail.id}">
 						<f:selectItems value="#{appointmentBacking.listProcedureDetail}" />
+						<p:ajax update="selSearch pnlSchedule"
+							listener="#{appointmentBacking.handleProcedureDetailChange}" />
 					</p:selectOneMenu>
 
 					<h:outputLabel value="#{msg['app_procedure_search']}"
 						style="width:100%" />
-					<p:selectOneMenu style="width:600px"
+					<p:selectOneMenu id="selSearch" style="width:600px"
 						value="#{appointmentBacking.idSearch}">
 						<f:selectItems value="#{appointmentBacking.listSearch}" />
+						<p:ajax update="pnlSchedule pnlSchedule"
+							listener="#{appointmentBacking.handleSearchDetailChange}" />
 					</p:selectOneMenu>
+
+					<p:panelGrid id="pnlSchedule"
+						rendered="#{appointmentBacking.idSearch ne -1?true:false}">
+						
+						<h:outputLabel value="Hola" />
+						
+					</p:panelGrid>
 
 				</h:panelGrid>
 
@@ -81,7 +97,7 @@
 
 				<p:dialog header="#{msg['sal_patient']}" widgetVar="dlg2"
 					resizable="false" id="dialog2" showEffect="fade"
-					hideEffect="explode" modal="true" width="600">
+					hideEffect="explode" modal="true" width="570" height="600">
 
 					<h:panelGrid columns="2" width="100%">
 						<h:outputLabel value="#{msg['sal_key_press_doc']}"
@@ -107,7 +123,8 @@
 					<p:dataTable id="recordTable2" var="rec"
 						value="#{appointmentBacking.patientModel}" rowKey="#{rec.SAPCode}"
 						selection="#{appointmentBacking.selectedPatient}" paginator="true"
-						rows="15" style="width:100%">
+						rows="13" style="width:100%"
+						emptyMessage="#{msg['glb_no_records_found']}">
 
 						<p:column selectionMode="single" style="width:18px" />
 

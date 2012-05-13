@@ -15,11 +15,14 @@ import javax.inject.Named;
 
 import org.springframework.context.annotation.Scope;
 
+import co.com.tactusoft.crm.controller.bo.ProcessBo;
 import co.com.tactusoft.crm.controller.bo.TablesBo;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
-import co.com.tactusoft.crm.model.entities.CrmDomain;
+import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmProcedure;
 import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
+import co.com.tactusoft.crm.util.Constant;
+import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.beans.Patient;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 
@@ -35,12 +38,18 @@ public class AppointmentBacking implements Serializable {
 	@Inject
 	private TablesBo tableService;
 
+	@Inject
+	private ProcessBo processService;
+
 	private CrmAppointment selected;
 
 	private List<Patient> listPatient;
 	private PatientDataModel patientModel;
 	private Patient selectedPatient;
 	private String namePatient;
+
+	private List<SelectItem> listBranch;
+	private Map<BigDecimal, CrmBranch> mapBranch;
 
 	private List<SelectItem> listProcedure;
 	private Map<BigDecimal, CrmProcedure> mapProcedure;
@@ -94,6 +103,30 @@ public class AppointmentBacking implements Serializable {
 		return namePatient;
 	}
 
+	public List<SelectItem> getListBranch() {
+		if (listBranch == null) {
+			listBranch = new LinkedList<SelectItem>();
+			mapBranch = new HashMap<BigDecimal, CrmBranch>();
+			for (CrmBranch row : tableService.getListBranchActive()) {
+				mapBranch.put(row.getId(), row);
+				listBranch.add(new SelectItem(row.getId(), row.getName()));
+			}
+		}
+		return listBranch;
+	}
+
+	public void setListBranch(List<SelectItem> listBranch) {
+		this.listBranch = listBranch;
+	}
+
+	public Map<BigDecimal, CrmBranch> getMapBranch() {
+		return mapBranch;
+	}
+
+	public void setMapBranch(Map<BigDecimal, CrmBranch> mapBranch) {
+		this.mapBranch = mapBranch;
+	}
+
 	public void setNamePatient(String namePatient) {
 		this.namePatient = namePatient;
 	}
@@ -109,7 +142,7 @@ public class AppointmentBacking implements Serializable {
 
 			if (listProcedure.size() > 0) {
 				idProcedure = (BigDecimal) listProcedure.get(0).getValue();
-				handleProcedureDetailChange();
+				handleProcedureChange();
 			}
 		}
 		return listProcedure;
@@ -155,10 +188,12 @@ public class AppointmentBacking implements Serializable {
 	public List<SelectItem> getListSearch() {
 		if (listSearch == null) {
 			listSearch = new LinkedList<SelectItem>();
-			for (CrmDomain row : tableService.getListDomain("TIPO_DETALLE_CITA")) {
-				listSearch
-						.add(new SelectItem(row.getCode(), row.getItemValue()));
-			}
+			listSearch.add(new SelectItem(Constant.DEFAULT_VALUE, FacesUtil
+					.getMessage(Constant.DEFAULT_LABEL)));
+			listSearch.add(new SelectItem(Constant.APP_TYPE_FOR_DATE_VALUE,
+					FacesUtil.getMessage(Constant.APP_TYPE_FOR_DATE_DESC)));
+			listSearch.add(new SelectItem(Constant.APP_TYPE_FOR_DOCTOR_VALUE,
+					FacesUtil.getMessage(Constant.APP_TYPE_FOR_DOCTOR_DESC)));
 		}
 		return listSearch;
 	}
@@ -223,9 +258,17 @@ public class AppointmentBacking implements Serializable {
 	}
 
 	public void saveAction() {
+		String code = "";
+
+		selected.setCode(code);
+		selected.setCrmBranch(mapBranch.get(selected.getCrmBranch().getId()));
+		selected.setCrmProcedureDetail(mapProcedureDetail.get(selected
+				.getCrmProcedureDetail().getId()));
+
+		processService.saveAppointment(selected);
 	}
 
-	public void handleProcedureDetailChange() {
+	public void handleProcedureChange() {
 		listProcedureDetail = new LinkedList<SelectItem>();
 		mapProcedureDetail = new HashMap<BigDecimal, CrmProcedureDetail>();
 		for (CrmProcedureDetail row : tableService
@@ -233,6 +276,16 @@ public class AppointmentBacking implements Serializable {
 			mapProcedureDetail.put(row.getId(), row);
 			listProcedureDetail.add(new SelectItem(row.getId(), row.getName()));
 		}
+
+		idSearch = Constant.DEFAULT_VALUE;
+	}
+
+	public void handleProcedureDetailChange() {
+		idSearch = Constant.DEFAULT_VALUE;
+	}
+
+	public void handleSearchDetailChange() {
+
 	}
 
 }
