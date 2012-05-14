@@ -52,7 +52,8 @@
 					<p:spacer height="5" />
 
 					<h:outputLabel value="#{msg['app_branch']}" style="width:100%" />
-					<p:selectOneMenu style="width:600px">
+					<p:selectOneMenu style="width:600px"
+						value="#{appointmentBacking.selected.crmBranch.id}">
 						<f:selectItems value="#{appointmentBacking.listBranch}" />
 					</p:selectOneMenu>
 
@@ -82,11 +83,16 @@
 							listener="#{appointmentBacking.handleSearchDetailChange}" />
 					</p:selectOneMenu>
 
+					<p:commandButton value="#{msg['btn_search_app']}"
+						icon="ui-icon-plusthick" update="pnlSchedule"
+						action="#{appointmentBacking.searchAppointMentChange}" />
+					<h:outputLabel value=" " />
+
 					<p:panelGrid id="pnlSchedule"
 						rendered="#{appointmentBacking.idSearch ne -1?true:false}">
-						
+
 						<h:outputLabel value="Hola" />
-						
+
 					</p:panelGrid>
 
 				</h:panelGrid>

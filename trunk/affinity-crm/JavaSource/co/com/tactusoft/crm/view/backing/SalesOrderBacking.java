@@ -62,7 +62,7 @@ public class SalesOrderBacking implements Serializable {
 
 	private List<Material> listMaterial;
 	private MaterialDataModel materialModel;
-	private Material selectedMaterial;
+	private Material[] selectedMaterial;
 
 	private String codeNameMaterial;
 	private String namePatient;
@@ -210,11 +210,11 @@ public class SalesOrderBacking implements Serializable {
 		this.materialModel = materialModel;
 	}
 
-	public Material getSelectedMaterial() {
+	public Material[] getSelectedMaterial() {
 		return selectedMaterial;
 	}
 
-	public void setSelectedMaterial(Material selectedMaterial) {
+	public void setSelectedMaterial(Material[] selectedMaterial) {
 		this.selectedMaterial = selectedMaterial;
 	}
 
@@ -302,7 +302,7 @@ public class SalesOrderBacking implements Serializable {
 	}
 
 	public void newAction(ActionEvent event) {
-		selectedMaterial = new Material();
+		selectedMaterial = null;
 		listMaterial = new LinkedList<Material>();
 		materialModel = new MaterialDataModel(listMaterial);
 		listSelectedMaterial = new LinkedList<Material>();
@@ -314,7 +314,6 @@ public class SalesOrderBacking implements Serializable {
 	}
 
 	public void saveAction() {
-		selectedMaterial = new Material();
 		String message = "";
 
 		if (selectedPatient == null) {
@@ -362,7 +361,7 @@ public class SalesOrderBacking implements Serializable {
 				listMaterialTmp.add(custom);
 				index++;
 			}
-			
+
 			sap.getEnvironment();
 
 			ResultCreateOrder result = CreateSalesOrderExecute.execute(
@@ -390,6 +389,8 @@ public class SalesOrderBacking implements Serializable {
 				}
 			}
 		}
+
+		selectedMaterial = null;
 	}
 
 	public void searchMaterialAction() {
@@ -406,7 +407,10 @@ public class SalesOrderBacking implements Serializable {
 	}
 
 	public void addMaterialAction() {
-		listSelectedMaterial.add(selectedMaterial);
+		for (Material row : selectedMaterial) {
+			listSelectedMaterial.add(row);
+		}
+
 		materialSelectedModel = new MaterialDataModel(listSelectedMaterial);
 		generateListMaterialAction();
 		if (!codeNameMaterial.isEmpty()) {
