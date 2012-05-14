@@ -9,6 +9,7 @@ import javax.inject.Named;
 
 import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
+import co.com.tactusoft.crm.model.entities.VwDoctorHour;
 
 @Named
 public class ProcessBo implements Serializable {
@@ -29,7 +30,7 @@ public class ProcessBo implements Serializable {
 		return dao.find("from CrmAppointment o where o.crmDoctor.id = "
 				+ idDoctor);
 	}
-	
+
 	public Integer saveAppointment(CrmAppointment entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmAppointment.class));
@@ -43,6 +44,13 @@ public class ProcessBo implements Serializable {
 
 	public <T> BigDecimal getId(Class<T> clasz) {
 		return dao.getId(clasz);
+	}
+
+	public void getScheduleAppointment(BigDecimal idBranch) {
+		VwDoctorHour vwDoctorHour = (VwDoctorHour) dao.find(
+				"from VwDoctorHour o where o.id.idBranch = " + idBranch)
+				.get(0);
+		BigDecimal idDoctor = vwDoctorHour.getId().getIdDoctor();
 	}
 
 }

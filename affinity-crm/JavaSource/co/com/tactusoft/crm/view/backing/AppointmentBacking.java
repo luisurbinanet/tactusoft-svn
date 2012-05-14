@@ -19,6 +19,7 @@ import co.com.tactusoft.crm.controller.bo.ProcessBo;
 import co.com.tactusoft.crm.controller.bo.TablesBo;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
+import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmProcedure;
 import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
 import co.com.tactusoft.crm.util.Constant;
@@ -254,6 +255,8 @@ public class AppointmentBacking implements Serializable {
 		disabledSaveButton = false;
 
 		selected = new CrmAppointment();
+		selected.setCrmBranch(new CrmBranch());
+		selected.setCrmDoctor(new CrmDoctor());
 		selected.setCrmProcedureDetail(new CrmProcedureDetail());
 	}
 
@@ -284,8 +287,8 @@ public class AppointmentBacking implements Serializable {
 		idSearch = Constant.DEFAULT_VALUE;
 	}
 
-	public void handleSearchDetailChange() {
-
+	public void searchAppointMentChange() {
+		processService.getScheduleAppointment(selected.getCrmBranch().getId());
 	}
 
 }
