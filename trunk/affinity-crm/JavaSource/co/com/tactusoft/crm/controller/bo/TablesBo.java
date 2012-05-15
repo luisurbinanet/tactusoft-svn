@@ -39,7 +39,7 @@ public class TablesBo implements Serializable {
 	}
 
 	public List<CrmDoctor> getListDoctorActive() {
-		return dao.find("CrmDoctor o where o.state = 1");
+		return dao.find("from CrmDoctor o where o.state = 1");
 	}
 
 	public List<CrmDoctorSchedule> getListScheduleByDoctor(BigDecimal idDoctor) {
