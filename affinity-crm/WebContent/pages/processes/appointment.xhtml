@@ -61,7 +61,7 @@
 					<p:selectOneMenu style="width:600px"
 						value="#{appointmentBacking.idProcedure}">
 						<f:selectItems value="#{appointmentBacking.listProcedure}" />
-						<p:ajax update="selProcedureDetail selSearch pnlSchedule"
+						<p:ajax update="form"
 							listener="#{appointmentBacking.handleProcedureChange}" />
 					</p:selectOneMenu>
 
@@ -70,7 +70,7 @@
 					<p:selectOneMenu id="selProcedureDetail" style="width:600px"
 						value="#{appointmentBacking.selected.crmProcedureDetail.id}">
 						<f:selectItems value="#{appointmentBacking.listProcedureDetail}" />
-						<p:ajax update="selSearch pnlSchedule"
+						<p:ajax update="form"
 							listener="#{appointmentBacking.handleProcedureDetailChange}" />
 					</p:selectOneMenu>
 
@@ -79,17 +79,33 @@
 					<p:selectOneMenu id="selSearch" style="width:600px"
 						value="#{appointmentBacking.idSearch}">
 						<f:selectItems value="#{appointmentBacking.listSearch}" />
-						<p:ajax update="pnlSchedule pnlSchedule"
-							listener="#{appointmentBacking.handleSearchDetailChange}" />
+						<p:ajax update="form"
+							listener="#{appointmentBacking.handleSearchChange}" />
+					</p:selectOneMenu>
+
+					<h:outputLabel id="lblCurrentDate" value="#{msg['app_date']}"
+						rendered="#{appointmentBacking.renderedForDate}"
+						style="width:100%" />
+					<p:calendar value="#{appointmentBacking.currentDate}"
+						id="calCurrentDate" showOn="button" navigator="true"
+						pattern="dd/MM/yyyy" readOnlyInputText="true" mindate="14/05/2012"
+						rendered="#{appointmentBacking.renderedForDate}" />
+
+					<h:outputLabel value="#{msg['app_doctor']}" style="width:100%"
+						rendered="#{appointmentBacking.renderedForDoctor}" />
+					<p:selectOneMenu id="selDoctor" style="width:600px"
+						value="#{appointmentBacking.selected.crmDoctor.id}"
+						rendered="#{appointmentBacking.renderedForDoctor}">
+						<f:selectItems value="#{appointmentBacking.listDoctor}" />
 					</p:selectOneMenu>
 
 					<p:commandButton value="#{msg['btn_search_app']}"
-						icon="ui-icon-plusthick" update="pnlSchedule"
+						icon="ui-icon-plusthick" update="lblCurrentDate"
 						action="#{appointmentBacking.searchAppointMentChange}" />
 					<h:outputLabel value=" " />
 
 					<p:panelGrid id="pnlSchedule"
-						rendered="#{appointmentBacking.idSearch ne -1?true:false}">
+						rendered="#{appointmentBacking.idSearch eq 1?true:false}">
 
 						<h:outputLabel value="Hola" />
 
