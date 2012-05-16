@@ -311,6 +311,9 @@ public class SalesOrderBacking implements Serializable {
 		listPatient = new LinkedList<Patient>();
 		patientModel = new PatientDataModel(listPatient);
 		disabledSaveButton = false;
+		
+		codeNameMaterial = "";
+		namePatient = "";
 	}
 
 	public void saveAction() {

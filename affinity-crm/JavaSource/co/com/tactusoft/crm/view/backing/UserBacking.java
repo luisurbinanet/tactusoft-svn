@@ -84,8 +84,7 @@ public class UserBacking implements Serializable {
 			mapProfile = new HashMap<BigDecimal, CrmProfile>();
 			listProfile = new LinkedList<SelectItem>();
 			for (CrmProfile row : tablesService.getListProfileActive()) {
-				listProfile.add(new SelectItem(row.getId(), row
-						.getDescription()));
+				listProfile.add(new SelectItem(row.getId(), row.getCode()));
 				mapProfile.put(row.getId(), row);
 			}
 		}

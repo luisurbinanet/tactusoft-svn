@@ -91,7 +91,6 @@
 				</h:panelGrid>
 
 				<p:spacer height="10" />
-
 				<p:dataTable id="selectedTable" var="rec"
 					value="#{salesOrderBacking.materialSelectedModel}"
 					rowKey="#{rec.code}"
@@ -147,7 +146,7 @@
 
 							<p:commandButton id="btnSearchMaterial"
 								value="#{msg['btn_search']}" icon="ui-icon-search"
-								update="recordTable"
+								update="pnlTable recordTable"
 								action="#{salesOrderBacking.searchMaterialAction}"
 								widgetVar="btnSearchMaterial"
 								disabled="#{salesOrderBacking.disabledAddMaterial}" />
@@ -160,27 +159,29 @@
 					</h:panelGrid>
 
 					<p:spacer height="10" />
+					<p:scrollPanel id="pnlTable" style="width:580px;height:400px">
+						<p:dataTable id="recordTable" var="rec"
+							value="#{salesOrderBacking.materialModel}" rowKey="#{rec.code}"
+							selection="#{salesOrderBacking.selectedMaterial}"
+							paginator="true" rows="15" style="width:570px"
+							emptyMessage="#{msg['glb_no_records_found']}">
 
-					<p:dataTable id="recordTable" var="rec"
-						value="#{salesOrderBacking.materialModel}" rowKey="#{rec.code}"
-						selection="#{salesOrderBacking.selectedMaterial}" paginator="true"
-						rows="15" style="width:100%">
+							<p:column selectionMode="multiple" style="width:18px" />
 
-						<p:column selectionMode="multiple" style="width:18px" />
+							<p:column headerText="#{msg['sal_material_code']}">
+								<h:outputLabel value="#{rec.code}" />
+							</p:column>
 
-						<p:column headerText="#{msg['sal_material_code']}">
-							<h:outputLabel value="#{rec.code}" />
-						</p:column>
+							<p:column headerText="#{msg['sal_material_descr']}">
+								<h:outputLabel value="#{rec.descr}" />
+							</p:column>
 
-						<p:column headerText="#{msg['sal_material_descr']}">
-							<h:outputLabel value="#{rec.descr}" />
-						</p:column>
+							<p:column headerText="#{msg['sal_material_price']}">
+								<h:outputLabel value="#{rec.price}" />
+							</p:column>
 
-						<p:column headerText="#{msg['sal_material_price']}">
-							<h:outputLabel value="#{rec.price}" />
-						</p:column>
-
-					</p:dataTable>
+						</p:dataTable>
+					</p:scrollPanel>
 
 				</p:dialog>
 
@@ -198,7 +199,8 @@
 							<p:spacer height="10" />
 
 							<p:commandButton value="#{msg['btn_search']}"
-								icon="ui-icon-search" update="recordTable2 btnAddPatient"
+								icon="ui-icon-search"
+								update="pnlTable2 recordTable2 btnAddPatient"
 								action="#{salesOrderBacking.searchPatientAction}" />
 							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
 								icon="ui-icon-plusthick" update=":form:pnlDetail"
@@ -208,23 +210,25 @@
 					</h:panelGrid>
 
 					<p:spacer height="10" />
+					<p:scrollPanel id="pnlTable2" style="width:580px;height:400px">
+						<p:dataTable id="recordTable2" var="rec"
+							value="#{salesOrderBacking.patientModel}" rowKey="#{rec.SAPCode}"
+							selection="#{salesOrderBacking.selectedPatient}" paginator="true"
+							rows="15" style="width:570px"
+							emptyMessage="#{msg['glb_no_records_found']}">
 
-					<p:dataTable id="recordTable2" var="rec"
-						value="#{salesOrderBacking.patientModel}" rowKey="#{rec.SAPCode}"
-						selection="#{salesOrderBacking.selectedPatient}" paginator="true"
-						rows="15" style="width:100%">
+							<p:column selectionMode="single" style="width:18px" />
 
-						<p:column selectionMode="single" style="width:18px" />
+							<p:column headerText="#{msg['pat_sap_code']}">
+								<h:outputLabel value="#{rec.SAPCode}" />
+							</p:column>
 
-						<p:column headerText="#{msg['pat_sap_code']}">
-							<h:outputLabel value="#{rec.SAPCode}" />
-						</p:column>
+							<p:column headerText="#{msg['pat_names']}">
+								<h:outputLabel value="#{rec.names}" />
+							</p:column>
 
-						<p:column headerText="#{msg['pat_names']}">
-							<h:outputLabel value="#{rec.names}" />
-						</p:column>
-
-					</p:dataTable>
+						</p:dataTable>
+					</p:scrollPanel>
 
 				</p:dialog>
 			</h:form>
