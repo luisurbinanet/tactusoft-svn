@@ -46,7 +46,14 @@ public class ProcessBo implements Serializable {
 		return dao.getId(clasz);
 	}
 
-	public void getScheduleAppointment(BigDecimal idBranch) {
+	public void getScheduleAppointmentForDoctor(BigDecimal idBranch) {
+		VwDoctorHour vwDoctorHour = (VwDoctorHour) dao.find(
+				"from VwDoctorHour o where o.id.idBranch = " + idBranch)
+				.get(0);
+		BigDecimal idDoctor = vwDoctorHour.getId().getIdDoctor();
+	}
+	
+	public void getScheduleAppointmentForDate(BigDecimal idBranch) {
 		VwDoctorHour vwDoctorHour = (VwDoctorHour) dao.find(
 				"from VwDoctorHour o where o.id.idBranch = " + idBranch)
 				.get(0);

@@ -146,20 +146,6 @@
 	<bean id="daoAuthenticationProvider"
 		class="co.com.tactusoft.crm.security.DaoAuthenticationProviderCustom">
 		<property name="userDetailsService" ref="userDetailsService" />
-		<property name="userCache">
-			<bean
-				class="org.springframework.security.core.userdetails.cache.EhCacheBasedUserCache">
-				<property name="cache">
-					<bean class="org.springframework.cache.ehcache.EhCacheFactoryBean">
-						<property name="cacheManager">
-							<bean
-								class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean" />
-						</property>
-						<property name="cacheName" value="userCache" />
-					</bean>
-				</property>
-			</bean>
-		</property>
 		<property name="passwordEncoder" ref="passwordEncoder" />
 	</bean>
 
