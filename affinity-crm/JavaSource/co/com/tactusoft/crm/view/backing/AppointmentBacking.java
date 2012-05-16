@@ -361,8 +361,11 @@ public class AppointmentBacking implements Serializable {
 			processService.getScheduleAppointmentForDate(selected
 					.getCrmBranch().getId());
 		} else if (this.renderedForDoctor) {
+			CrmProcedureDetail procedureDetail = mapProcedureDetail
+					.get(selected.getCrmProcedureDetail().getId());
 			processService.getScheduleAppointmentForDoctor(selected
-					.getCrmBranch().getId());
+					.getCrmBranch().getId(), selected.getCrmDoctor().getId(),
+					10, procedureDetail);
 
 		}
 	}
