@@ -10,7 +10,9 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
 import java.text.MessageFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
@@ -231,5 +233,16 @@ public class FacesUtil {
 	public static String getContextPath() {
 		return FacesContext.getCurrentInstance().getExternalContext()
 				.getRequestContextPath();
+	}
+	
+	public static Date getDateWithoutTime(Date date){
+		DateFormat df1 = new SimpleDateFormat("dd/MM/yyyy");
+		Date now = new Date();
+		try {
+			now = df1.parse(df1.format(date));
+		} catch (ParseException e) {
+			now = null;
+		}
+		return now;
 	}
 }

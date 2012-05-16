@@ -23,5 +23,7 @@ public class Constant {
 
 	public static String APP_TYPE_FOR_DATE_DESC = "app_for_date";
 	public static String APP_TYPE_FOR_DOCTOR_DESC = "app_for_doctor";
+	
+	public static final Integer INTERVAL_TIME_APPOINTMENT = 5;
 
 }
