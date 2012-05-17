@@ -81,7 +81,7 @@ CREATE TABLE `crm_user` (
 
 LOCK TABLES `crm_user` WRITE;
 /*!40000 ALTER TABLE `crm_user` DISABLE KEYS */;
-INSERT INTO `crm_user` VALUES (1,'gsolorzano','250cf8b51c773f3f8dc8b4be867a9a02','Gerardo',NULL,'Solorzano',NULL,'gsolorzano@affinity.com.co',NULL,NULL,1,1,1),(2,'jennyalvarez','202cb962ac59075b964b07152d234b70','Jenny',NULL,'Alvarez',NULL,'jennyalvarez@affinitycolombia.com',NULL,NULL,1,1,1);
+INSERT INTO `crm_user` VALUES (1,'gsolorzano','250cf8b51c773f3f8dc8b4be867a9a02','Gerardo','','Solorzano','','gsolorzano@affinity.com.co',NULL,NULL,1,2,1),(2,'jennyalvarez','202cb962ac59075b964b07152d234b70','Jenny',NULL,'Alvarez',NULL,'jennyalvarez@affinitycolombia.com',NULL,NULL,1,1,1);
 /*!40000 ALTER TABLE `crm_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -138,7 +138,7 @@ CREATE TABLE `crm_page_role` (
 
 LOCK TABLES `crm_page_role` WRITE;
 /*!40000 ALTER TABLE `crm_page_role` DISABLE KEYS */;
-INSERT INTO `crm_page_role` VALUES (50,1,1),(12,1,2),(51,2,1),(13,2,2),(39,3,1),(10,3,2),(41,4,1),(46,5,1),(43,6,1),(44,7,1),(47,8,1),(11,8,2),(45,9,1),(40,10,1),(52,11,1),(24,11,2),(38,11,3),(48,12,1),(37,12,3),(42,13,1),(49,14,1),(53,15,1),(54,16,1),(55,17,1);
+INSERT INTO `crm_page_role` VALUES (52,1,1),(12,1,2),(53,2,1),(13,2,2),(39,3,1),(10,3,2),(41,4,1),(45,5,1),(47,6,1),(42,7,1),(49,8,1),(11,8,2),(44,9,1),(40,10,1),(54,11,1),(24,11,2),(38,11,3),(50,12,1),(37,12,3),(46,13,1),(48,14,1),(55,15,1),(43,16,1),(51,17,1);
 /*!40000 ALTER TABLE `crm_page_role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -160,6 +160,7 @@ CREATE TABLE `crm_appointment` (
   `end_appointment_date` datetime NOT NULL,
   `id_publicity` decimal(19,0) DEFAULT NULL,
   `obs` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `state` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`),
   KEY `fk_crm_appointment_1` (`id_doctor`),
@@ -177,7 +178,7 @@ CREATE TABLE `crm_appointment` (
 
 LOCK TABLES `crm_appointment` WRITE;
 /*!40000 ALTER TABLE `crm_appointment` DISABLE KEYS */;
-INSERT INTO `crm_appointment` VALUES (1,'1','1',1,1,1,'2012-05-14 08:00:00','2012-05-14 08:45:00',NULL,NULL),(2,'2','2',1,1,2,'2012-05-14 08:00:00','2012-05-14 08:45:00',NULL,NULL),(3,'3','3',1,1,1,'2012-05-14 09:30:00','2012-05-14 10:15:00',NULL,NULL);
+INSERT INTO `crm_appointment` VALUES (1,'1','1',1,1,1,'2012-05-18 08:00:00','2012-05-18 08:45:00',NULL,NULL,1),(2,'2','2',1,1,2,'2012-05-18 08:00:00','2012-05-18 08:45:00',NULL,NULL,1),(3,'3','3',1,1,1,'2012-05-18 09:30:00','2012-05-18 10:15:00',NULL,NULL,1),(4,'4','4',1,1,1,'2012-05-19 08:50:00','2012-05-19 09:20:00',NULL,NULL,1),(5,'5','1',1,1,2,'2012-05-18 13:00:00','2012-05-18 13:30:00',NULL,NULL,1);
 /*!40000 ALTER TABLE `crm_appointment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -350,7 +351,7 @@ CREATE TABLE `crm_user_branch` (
 
 LOCK TABLES `crm_user_branch` WRITE;
 /*!40000 ALTER TABLE `crm_user_branch` DISABLE KEYS */;
-INSERT INTO `crm_user_branch` VALUES (1,1,1),(2,1,2),(3,2,1),(4,2,2);
+INSERT INTO `crm_user_branch` VALUES (5,1,1),(6,1,2),(3,2,1),(4,2,2);
 /*!40000 ALTER TABLE `crm_user_branch` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -411,7 +412,7 @@ CREATE TABLE `crm_role` (
 
 LOCK TABLES `crm_role` WRITE;
 /*!40000 ALTER TABLE `crm_role` DISABLE KEYS */;
-INSERT INTO `crm_role` VALUES (1,'ADMINISTRADOR','Administrador',12,1),(2,'CALL_CENTER','',3,1),(3,'GERENCIA','',12,1);
+INSERT INTO `crm_role` VALUES (1,'ADMINISTRADOR','Administrador',17,1),(2,'CALL_CENTER','',3,1),(3,'GERENCIA','',12,1);
 /*!40000 ALTER TABLE `crm_role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -441,7 +442,7 @@ CREATE TABLE `crm_doctor_schedule` (
 
 LOCK TABLES `crm_doctor_schedule` WRITE;
 /*!40000 ALTER TABLE `crm_doctor_schedule` DISABLE KEYS */;
-INSERT INTO `crm_doctor_schedule` VALUES (1,1,2,'08:00:00','12:00:00'),(2,1,2,'13:00:00','18:00:00'),(3,4,1,'08:00:00','12:00:00');
+INSERT INTO `crm_doctor_schedule` VALUES (1,1,2,'08:00:00','12:00:00'),(2,1,2,'13:00:00','18:00:00'),(3,1,3,'08:00:00','12:00:00'),(4,1,3,'13:00:00','18:00:00'),(5,1,6,'08:00:00','12:00:00');
 /*!40000 ALTER TABLE `crm_doctor_schedule` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -615,4 +616,33 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-05-16  5:30:50
+-- Dump completed on 2012-05-17  7:25:52
+CREATE DATABASE  IF NOT EXISTS `kpi_db` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `kpi_db`;
+-- MySQL dump 10.13  Distrib 5.5.16, for Win32 (x86)
+--
+-- Host: localhost    Database: kpi_db
+-- ------------------------------------------------------
+-- Server version	5.5.20
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2012-05-17  7:25:52

@@ -25,6 +25,7 @@ import co.com.tactusoft.crm.model.entities.CrmProcedure;
 import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
+import co.com.tactusoft.crm.view.beans.Candidate;
 import co.com.tactusoft.crm.view.beans.Patient;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 
@@ -307,6 +308,7 @@ public class AppointmentBacking implements Serializable {
 		String code = "";
 
 		selected.setCode(code);
+		selected.setCrmDoctor(mapDoctor.get(selected.getCrmDoctor().getId()));
 		selected.setCrmBranch(mapBranch.get(selected.getCrmBranch().getId()));
 		selected.setCrmProcedureDetail(mapProcedureDetail.get(selected
 				.getCrmProcedureDetail().getId()));
@@ -363,9 +365,11 @@ public class AppointmentBacking implements Serializable {
 		} else if (this.renderedForDoctor) {
 			CrmProcedureDetail procedureDetail = mapProcedureDetail
 					.get(selected.getCrmProcedureDetail().getId());
-			processService.getScheduleAppointmentForDoctor(selected
-					.getCrmBranch().getId(), selected.getCrmDoctor().getId(),
-					10, procedureDetail);
+
+			CrmDoctor doctor = mapDoctor.get(selected.getCrmDoctor().getId());
+			List<Candidate> listCandidate = processService
+					.getScheduleAppointmentForDoctor(selected.getCrmBranch()
+							.getId(), doctor, 25, procedureDetail);
 
 		}
 	}
