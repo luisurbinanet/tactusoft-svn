@@ -14,6 +14,7 @@ import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -118,7 +119,7 @@ public class FacesUtil {
 				.getExternalContext();
 		HttpSession session = (HttpSession) ectx.getSession(false);
 		session.invalidate();
-		
+
 	}
 
 	public static UserData getCurrentUserData() {
@@ -234,8 +235,8 @@ public class FacesUtil {
 		return FacesContext.getCurrentInstance().getExternalContext()
 				.getRequestContextPath();
 	}
-	
-	public static Date getDateWithoutTime(Date date){
+
+	public static Date getDateWithoutTime(Date date) {
 		DateFormat df1 = new SimpleDateFormat("dd/MM/yyyy");
 		Date now = new Date();
 		try {
@@ -244,5 +245,18 @@ public class FacesUtil {
 			now = null;
 		}
 		return now;
+	}
+
+	public static Date addHourToDate(Date date, Date addHour) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(addHour);
+		int hour = calendar.get(Calendar.HOUR_OF_DAY);
+		int min = calendar.get(Calendar.MINUTE);
+		int total = (hour * 60) + min;
+
+		calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.MINUTE, total);
+		return calendar.getTime();
 	}
 }
