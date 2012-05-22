@@ -22,12 +22,12 @@
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
 							actionListener="#{patientBacking.newAction}"
-							update="pnlDetail btnSavePatient" process="@this"/>
+							update="pnlDetail btnSavePatient" process="@this" />
 						<p:commandButton value="#{msg['btn_search']}"
 							icon="ui-icon-search" update="pnlDetail" process="@none" />
 						<p:commandButton id="btnSavePatient" value="#{msg['btn_save']}"
 							icon="ui-icon-disk" action="#{patientBacking.saveAction}"
-							update="growl btnSavePatient"
+							update="growl btnSavePatient pnlDetail"
 							disabled="#{patientBacking.disabledSaveButton}" />
 					</p:toolbarGroup>
 				</p:toolbar>
@@ -38,25 +38,25 @@
 					style="margin:0 auto;" width="100%">
 
 					<h:outputLabel value="#{msg['pat_code']}" />
-					<h:inputText value="#{patientBacking.selected.code}"
+					<p:inputText value="#{patientBacking.selected.code}"
 						style="width:230px;" label="#{msg['pat_code']}" required="true" />
 
-					<h:outputLabel value="#{msg['pat_firstName']}" />
-					<h:inputText value="#{patientBacking.selected.firstName}"
-						style="width:230px" label="#{msg['pat_firstName']}" required="true" />
+					<h:outputLabel value="#{msg['pat_sap_code']}"
+						rendered="#{patientBacking.disabledSaveButton}" />
+					<p:inputText value="#{patientBacking.selected.SAPCode}"
+						style="color:Red;width:230px;font-weight:bold;" label="#{msg['pat_sap_code']}"
+						readonly="true" rendered="#{patientBacking.disabledSaveButton}" />
+						
+					<h:outputText rendered="#{!patientBacking.disabledSaveButton}" />
+					<h:outputText rendered="#{!patientBacking.disabledSaveButton}" />	
 
-					<h:outputLabel value="#{msg['pat_secondName']}" />
-					<h:inputText value="#{patientBacking.selected.secondName}"
-						style="width:230px" />
+					<h:outputLabel value="#{msg['pat_names']}" />
+					<p:inputText value="#{patientBacking.selected.names}"
+						style="width:230px" label="#{msg['pat_names']}" required="true" />
 
-					<h:outputLabel value="#{msg['pat_firstSurname']}" />
-					<h:inputText value="#{patientBacking.selected.firstSurname}"
-						style="width:230px" label="#{msg['pat_firstSurname']}"
-						required="true" />
-
-					<h:outputLabel value="#{msg['pat_secondSurname']}" />
-					<h:inputText value="#{patientBacking.selected.secondSurname}"
-						style="width:230px" />
+					<h:outputLabel value="#{msg['pat_surnames']}" />
+					<p:inputText value="#{patientBacking.selected.surnames}"
+						style="width:230px" label="#{msg['pat_surnames']}" required="true" />
 
 					<h:outputText value="#{msg['glb_gender']}" />
 					<p:selectOneMenu value="#{patientBacking.selected.gender}"
@@ -66,21 +66,21 @@
 					</p:selectOneMenu>
 
 					<h:outputText value="#{msg['pat_address']}" />
-					<h:inputText value="#{patientBacking.selected.address}"
+					<p:inputText value="#{patientBacking.selected.address}"
 						style="width:230px" label="#{msg['pat_address']}" required="true" />
 
 					<h:outputText value="#{msg['pat_email']}" />
-					<h:inputText value="#{patientBacking.selected.email}"
+					<p:inputText value="#{patientBacking.selected.email}"
 						style="width:230px" label="#{msg['pat_email']}"
 						validator="emailValidator" />
 
 					<h:outputText value="#{msg['pat_phone_number']}" />
-					<h:inputText value="#{patientBacking.selected.phoneNumber}"
+					<p:inputText value="#{patientBacking.selected.phoneNumber}"
 						style="width:230px" label="#{msg['pat_phone_number']}"
 						required="true" />
 
 					<h:outputText value="#{msg['pat_cell_number']}" />
-					<h:inputText value="#{patientBacking.selected.cellNumber}"
+					<p:inputText value="#{patientBacking.selected.cellNumber}"
 						style="width:230px" label="#{msg['pat_cell_number']}"
 						required="true" />
 
@@ -88,8 +88,8 @@
 					<p:selectOneMenu value="#{patientBacking.salesOff}"
 						style="width:230px">
 						<f:selectItems value="#{patientBacking.listBranch}" />
-					</p:selectOneMenu>	
-					
+					</p:selectOneMenu>
+
 					<h:outputText value="" />
 					<h:outputText value="" />
 

@@ -259,4 +259,12 @@ public class FacesUtil {
 		calendar.add(Calendar.MINUTE, total);
 		return calendar.getTime();
 	}
+
+	public static String formatDate(Date date, String format) {
+		String stringDate = null;
+		DateFormat formatter;
+		formatter = new SimpleDateFormat(format);
+		stringDate = formatter.format(date);
+		return stringDate;
+	}
 }

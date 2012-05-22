@@ -2,8 +2,6 @@ package co.com.tactusoft.crm.controller.bo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -16,6 +14,7 @@ import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmDoctorSchedule;
+import co.com.tactusoft.crm.model.entities.CrmHoliday;
 import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
 import co.com.tactusoft.crm.model.entities.VwDoctorHour;
 import co.com.tactusoft.crm.util.Constant;
@@ -57,19 +56,33 @@ public class ProcessBo implements Serializable {
 		return dao.getId(clasz);
 	}
 
+	private List<CrmHoliday> getListHoliday() {
+		String currenDate = FacesUtil.formatDate(new Date(), "yyyy-MM-dd");
+		return dao.find("from CrmHoliday o where o.holiday >= '" + currenDate
+				+ "T00:00:00.000+05:00'");
+	}
+
+	public boolean validateHoliday(List<CrmHoliday> list, Date date) {
+		for (CrmHoliday row : list) {
+			if (row.getHoliday().compareTo(date) == 0) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public List<Candidate> getScheduleAppointmentForDoctor(BigDecimal idBranch,
 			CrmDoctor doctor, int numApp, CrmProcedureDetail procedureDetail) {
 
 		List<Candidate> result = new ArrayList<Candidate>();
+		int id = 1;
 
-		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		Date date = new Date();
-		String initDate = formatter.format(date);
+		String initDate = FacesUtil.formatDate(new Date(), "yyyy-MM-dd");
 
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date());
 		calendar.add(Calendar.DATE, 60); // 60 Días
-		String endDate = formatter.format(calendar.getTime());
+		String endDate = FacesUtil.formatDate(calendar.getTime(), "yyyy-MM-dd");
 
 		List<CrmAppointment> listApp = dao
 				.find("from CrmAppointment o where o.startAppointmentDate >= '"
@@ -78,23 +91,27 @@ public class ProcessBo implements Serializable {
 						+ endDate
 						+ "T00:23:59.999+05:00'  and o.crmBranch.id = "
 						+ idBranch + " and o.crmDoctor.id = " + doctor.getId()
+						+ "o. state = 1 "
 						+ "order by o.startAppointmentDate");
 
 		List<CrmDoctorSchedule> listDoctorSchedule = dao
 				.find("from CrmDoctorSchedule o where o.crmDoctor.id = "
 						+ doctor.getId() + " order by o.startHour");
 
+		// Buscar los festivos
+		List<CrmHoliday> listHoliday = this.getListHoliday();
+
 		// Revisar Día a Día disponibilidad de Citas
 		Date currentDate = new Date();
 		boolean iterate = true;
-		outer:
-		while (iterate) {
+		outer: while (iterate) {
 			calendar = Calendar.getInstance();
 			calendar.setTime(currentDate);
 			calendar.add(Calendar.DATE, 1);
 			currentDate = FacesUtil.getDateWithoutTime(calendar.getTime());
 
-			if (calendar.get(Calendar.DAY_OF_WEEK) != 1) {
+			if ((calendar.get(Calendar.DAY_OF_WEEK) != 1)
+					&& (this.validateHoliday(listHoliday, currentDate))) {
 				for (CrmDoctorSchedule schedule : listDoctorSchedule) {
 					if (calendar.get(Calendar.DAY_OF_WEEK) == schedule.getDay()) {
 						// Sumo el dia + hora de disponibilidad del Doctor
@@ -139,8 +156,9 @@ public class ProcessBo implements Serializable {
 							boolean validate = validateAvailabilitySchedule(
 									candidatesHours, listApp, currentDate);
 							if (validate) {
-								result.add(new Candidate(doctor, initHour,
+								result.add(new Candidate(id, doctor, initHour,
 										endHour));
+								id++;
 
 								// Numero Citas completadas
 								if (result.size() == numApp) {

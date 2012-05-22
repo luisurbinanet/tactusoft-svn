@@ -442,7 +442,7 @@ CREATE TABLE `crm_doctor_schedule` (
 
 LOCK TABLES `crm_doctor_schedule` WRITE;
 /*!40000 ALTER TABLE `crm_doctor_schedule` DISABLE KEYS */;
-INSERT INTO `crm_doctor_schedule` VALUES (1,1,2,'08:00:00','12:00:00'),(2,1,2,'13:00:00','18:00:00'),(3,1,3,'08:00:00','12:00:00'),(4,1,3,'13:00:00','18:00:00'),(5,1,6,'08:00:00','12:00:00');
+INSERT INTO `crm_doctor_schedule` VALUES (1,1,2,'08:00:00','12:00:00'),(2,1,2,'13:00:00','18:00:00'),(3,1,3,'08:00:00','12:00:00'),(4,1,3,'13:00:00','18:00:00'),(5,1,6,'08:00:00','12:00:00'),(6,1,4,'08:00:00','12:00:00'),(7,1,4,'13:00:00','12:00:00'),(8,1,5,'08:00:00','18:00:00'),(9,1,5,'13:00:00','18:00:00');
 /*!40000 ALTER TABLE `crm_doctor_schedule` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -561,6 +561,32 @@ INSERT INTO `crm_domain` VALUES (1,'E','Efectivo','FORMA_PAGO'),(2,'C','Cheque',
 UNLOCK TABLES;
 
 --
+-- Table structure for table `crm_holiday`
+--
+
+DROP TABLE IF EXISTS `crm_holiday`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `crm_holiday` (
+  `id` int(11) NOT NULL,
+  `description` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `holiday` date DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `holiday_UNIQUE` (`holiday`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `crm_holiday`
+--
+
+LOCK TABLES `crm_holiday` WRITE;
+/*!40000 ALTER TABLE `crm_holiday` DISABLE KEYS */;
+INSERT INTO `crm_holiday` VALUES (1,'Festivo','2012-05-23');
+/*!40000 ALTER TABLE `crm_holiday` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `crm_page`
 --
 
@@ -616,7 +642,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-05-17  7:25:52
+-- Dump completed on 2012-05-22  7:08:14
 CREATE DATABASE  IF NOT EXISTS `kpi_db` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `kpi_db`;
 -- MySQL dump 10.13  Distrib 5.5.16, for Win32 (x86)
@@ -645,4 +671,4 @@ USE `kpi_db`;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-05-17  7:25:52
+-- Dump completed on 2012-05-22  7:08:14
