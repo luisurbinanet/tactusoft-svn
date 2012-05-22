@@ -31,13 +31,15 @@ public class CrmAppointment implements java.io.Serializable {
 	private Date endAppointmentDate;
 	private BigDecimal idPublicity;
 	private String obs;
+	private int state;
 
 	public CrmAppointment() {
 	}
 
 	public CrmAppointment(BigDecimal id, CrmProcedureDetail crmProcedureDetail,
 			CrmBranch crmBranch, CrmDoctor crmDoctor, String code,
-			String patient, Date startAppointmentDate, Date endAppointmentDate) {
+			String patient, Date startAppointmentDate, Date endAppointmentDate,
+			int state) {
 		this.id = id;
 		this.crmProcedureDetail = crmProcedureDetail;
 		this.crmBranch = crmBranch;
@@ -46,12 +48,13 @@ public class CrmAppointment implements java.io.Serializable {
 		this.patient = patient;
 		this.startAppointmentDate = startAppointmentDate;
 		this.endAppointmentDate = endAppointmentDate;
+		this.state = state;
 	}
 
 	public CrmAppointment(BigDecimal id, CrmProcedureDetail crmProcedureDetail,
 			CrmBranch crmBranch, CrmDoctor crmDoctor, String code,
 			String patient, Date startAppointmentDate, Date endAppointmentDate,
-			BigDecimal idPublicity, String obs) {
+			BigDecimal idPublicity, String obs, int state) {
 		this.id = id;
 		this.crmProcedureDetail = crmProcedureDetail;
 		this.crmBranch = crmBranch;
@@ -62,6 +65,7 @@ public class CrmAppointment implements java.io.Serializable {
 		this.endAppointmentDate = endAppointmentDate;
 		this.idPublicity = idPublicity;
 		this.obs = obs;
+		this.state = state;
 	}
 
 	@Id
@@ -158,6 +162,15 @@ public class CrmAppointment implements java.io.Serializable {
 
 	public void setObs(String obs) {
 		this.obs = obs;
+	}
+
+	@Column(name = "state", nullable = false)
+	public int getState() {
+		return this.state;
+	}
+
+	public void setState(int state) {
+		this.state = state;
 	}
 
 }
