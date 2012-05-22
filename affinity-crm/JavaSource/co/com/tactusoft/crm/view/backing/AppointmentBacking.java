@@ -68,6 +68,7 @@ public class AppointmentBacking implements Serializable {
 	private Map<BigDecimal, CrmDoctor> mapDoctor;
 
 	private Date currentDate;
+	private int appointmentsNumber;
 
 	private List<SelectItem> listAppointment;
 	private Map<Integer, Candidate> mapAppointment;
@@ -239,6 +240,14 @@ public class AppointmentBacking implements Serializable {
 		this.currentDate = currentDate;
 	}
 
+	public int getAppointmentsNumber() {
+		return appointmentsNumber;
+	}
+
+	public void setAppointmentsNumber(int appointmentsNumber) {
+		this.appointmentsNumber = appointmentsNumber;
+	}
+
 	public List<SelectItem> getListAppointment() {
 		return listAppointment;
 	}
@@ -381,10 +390,10 @@ public class AppointmentBacking implements Serializable {
 
 			CrmDoctor doctor = mapDoctor.get(selected.getCrmDoctor().getId());
 			listCandidate = processService.getScheduleAppointmentForDoctor(
-					selected.getCrmBranch().getId(), doctor, 25,
-					procedureDetail);
+					selected.getCrmBranch().getId(), doctor,
+					this.appointmentsNumber, procedureDetail);
 		}
- 
+
 		listAppointment = new LinkedList<SelectItem>();
 		mapAppointment = new HashMap<Integer, Candidate>();
 		for (Candidate row : listCandidate) {

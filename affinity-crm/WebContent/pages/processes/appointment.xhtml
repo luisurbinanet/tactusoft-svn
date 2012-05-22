@@ -102,7 +102,12 @@
 					<p:commandButton value="#{msg['btn_search_app']}"
 						icon="ui-icon-plusthick" update="cmbApp pnlSchedule"
 						action="#{appointmentBacking.searchAppointMentChange}" />
-					<h:outputLabel value=" " />
+					<p:selectOneMenu style="width:300px"
+						value="#{appointmentBacking.appointmentsNumber}">
+						<f:selectItem itemLabel="10 Primeras Citas" itemValue="10" />
+						<f:selectItem itemLabel="20 Primeras Citas" itemValue="20" />
+						<f:selectItem itemLabel="30 Primeras Citas" itemValue="30" />
+					</p:selectOneMenu>
 
 					<h:outputLabel value="#{msg['app_avalaible']}" style="width:100%" />
 					<p:selectOneMenu id="cmbApp" style="width:600px">

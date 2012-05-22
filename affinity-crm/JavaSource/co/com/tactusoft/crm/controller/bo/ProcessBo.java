@@ -91,7 +91,7 @@ public class ProcessBo implements Serializable {
 						+ endDate
 						+ "T00:23:59.999+05:00'  and o.crmBranch.id = "
 						+ idBranch + " and o.crmDoctor.id = " + doctor.getId()
-						+ "o. state = 1 "
+						+ " and o. state = 1 "
 						+ "order by o.startAppointmentDate");
 
 		List<CrmDoctorSchedule> listDoctorSchedule = dao
@@ -236,6 +236,7 @@ public class ProcessBo implements Serializable {
 		VwDoctorHour vwDoctorHour = (VwDoctorHour) dao.find(
 				"from VwDoctorHour o where o.id.idBranch = " + idBranch).get(0);
 		BigDecimal idDoctor = vwDoctorHour.getId().getIdDoctor();
+		System.out.println(idDoctor);
 	}
 
 }
