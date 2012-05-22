@@ -28,12 +28,12 @@ public class PatientBacking implements Serializable {
 	private List<Patient> list;
 	private PatientDataModel model;
 	private Patient selected;
-	
+
 	private List<SelectItem> listBranch;
 	private String salesOff;
 
 	private List<String> selectedSendOptions;
-	
+
 	private boolean disabledSaveButton;
 
 	public PatientBacking() {
@@ -104,7 +104,7 @@ public class PatientBacking implements Serializable {
 	public void setDisabledSaveButton(boolean disabledSaveButton) {
 		this.disabledSaveButton = disabledSaveButton;
 	}
-	
+
 	public void newAction(ActionEvent event) {
 		selected = new Patient();
 		disabledSaveButton = false;
@@ -118,31 +118,29 @@ public class PatientBacking implements Serializable {
 			if (customer.isEmpty()) {
 				String names = null;
 
-				names = selected.getFirstName();
-				if (selected.getSecondName().trim().length() > 0) {
-					names = names + " " + selected.getSecondName();
-				}
-
-				names = names + " " + selected.getFirstSurname();
-				if (selected.getSecondSurname().trim().length() > 0) {
-					names = names + " " + selected.getSecondSurname();
-				}
+				names = selected.getNames() + " " + selected.getSurnames();
 
 				SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
 				CrmProfile profile = FacesUtil.getCurrentUser().getCrmProfile();
 
-				String codigoSAP = CustomerExecute.excecute(
-						sap.getEnvironment(), "13", selected.getCode(), names,
-						selected.getCountry(), selected.getCity(),
-						selected.getRegion(), "D001", profile.getSalesOrg(),
-						profile.getDistrChan(), profile.getDivision(),
-						this.salesOff, "01", "Z001",
+				String tratamiento = "1";
+				if (selected.getGender().equals("W")) {
+					tratamiento = "2";
+				}
+
+				String SAPCode = CustomerExecute.excecute(
+						sap.getEnvironment(), "13", selected.getCode(),
+						tratamiento, names, profile.getCountry(),
+						profile.getCity(), profile.getRegion(), "D001",
+						profile.getSalesOrg(), profile.getDistrChan(),
+						profile.getDivision(), this.salesOff, "01", "Z001",
 						selected.getAddress(), selected.getPhoneNumber(),
 						selected.getCellNumber(), "");
 
-				if (codigoSAP != null) {
+				if (SAPCode != null) {
+					selected.setSAPCode(SAPCode);
 					disabledSaveButton = true;
-					message = FacesUtil.getMessage("pat_msg_ok", codigoSAP);
+					message = FacesUtil.getMessage("pat_msg_ok", SAPCode);
 					FacesUtil.addInfo(message);
 				} else {
 					message = FacesUtil.getMessage("Error");

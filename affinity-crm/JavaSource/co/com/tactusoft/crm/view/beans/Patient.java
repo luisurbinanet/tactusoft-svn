@@ -9,10 +9,8 @@ public class Patient implements Serializable {
 
 	private BigDecimal id;
 	private String code;
-	private String firstName;
-	private String secondName;
-	private String firstSurname;
-	private String secondSurname;
+	private String names;
+	private String surnames;
 	private String gender;
 	private String address;
 	private String email;
@@ -28,7 +26,6 @@ public class Patient implements Serializable {
 	private Integer sendSMS;
 	
 	private String SAPCode;
-	private String names;
 	
 	public Patient() {
 
@@ -50,36 +47,20 @@ public class Patient implements Serializable {
 		this.code = code;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public String getNames() {
+		return names;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public void setNames(String names) {
+		this.names = names;
 	}
 
-	public String getSecondName() {
-		return secondName;
+	public String getSurnames() {
+		return surnames;
 	}
 
-	public void setSecondName(String secondName) {
-		this.secondName = secondName;
-	}
-
-	public String getFirstSurname() {
-		return firstSurname;
-	}
-
-	public void setFirstSurname(String firstSurname) {
-		this.firstSurname = firstSurname;
-	}
-
-	public String getSecondSurname() {
-		return secondSurname;
-	}
-
-	public void setSecondSurname(String secondSurname) {
-		this.secondSurname = secondSurname;
+	public void setSurnames(String surnames) {
+		this.surnames = surnames;
 	}
 
 	public String getGender() {
@@ -192,14 +173,6 @@ public class Patient implements Serializable {
 
 	public void setSAPCode(String sAPCode) {
 		SAPCode = sAPCode;
-	}
-
-	public String getNames() {
-		return names;
-	}
-
-	public void setNames(String names) {
-		this.names = names;
 	}
 
 }

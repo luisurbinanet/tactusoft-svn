@@ -69,6 +69,9 @@ public class AppointmentBacking implements Serializable {
 
 	private Date currentDate;
 
+	private List<SelectItem> listAppointment;
+	private Map<Integer, Candidate> mapAppointment;
+
 	private boolean disabledSaveButton;
 	private boolean renderedForDate;
 	private boolean renderedForDoctor;
@@ -236,6 +239,14 @@ public class AppointmentBacking implements Serializable {
 		this.currentDate = currentDate;
 	}
 
+	public List<SelectItem> getListAppointment() {
+		return listAppointment;
+	}
+
+	public void setListAppointment(List<SelectItem> listAppointment) {
+		this.listAppointment = listAppointment;
+	}
+
 	public boolean isDisabledSaveButton() {
 		return disabledSaveButton;
 	}
@@ -359,18 +370,26 @@ public class AppointmentBacking implements Serializable {
 	}
 
 	public void searchAppointMentChange() {
+		List<Candidate> listCandidate = null;
 		if (this.renderedForDate) {
 			processService.getScheduleAppointmentForDate(selected
 					.getCrmBranch().getId());
+			listCandidate = new LinkedList<Candidate>();
 		} else if (this.renderedForDoctor) {
 			CrmProcedureDetail procedureDetail = mapProcedureDetail
 					.get(selected.getCrmProcedureDetail().getId());
 
 			CrmDoctor doctor = mapDoctor.get(selected.getCrmDoctor().getId());
-			List<Candidate> listCandidate = processService
-					.getScheduleAppointmentForDoctor(selected.getCrmBranch()
-							.getId(), doctor, 25, procedureDetail);
-
+			listCandidate = processService.getScheduleAppointmentForDoctor(
+					selected.getCrmBranch().getId(), doctor, 25,
+					procedureDetail);
+		}
+ 
+		listAppointment = new LinkedList<SelectItem>();
+		mapAppointment = new HashMap<Integer, Candidate>();
+		for (Candidate row : listCandidate) {
+			listAppointment.add(new SelectItem(row.getId(), row.getDetail()));
+			mapAppointment.put(row.getId(), row);
 		}
 	}
 
