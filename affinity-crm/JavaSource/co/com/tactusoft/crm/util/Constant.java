@@ -25,5 +25,8 @@ public class Constant {
 	public static String APP_TYPE_FOR_DOCTOR_DESC = "app_for_doctor";
 	
 	public static final Integer INTERVAL_TIME_APPOINTMENT = 5;
+	
+	public static final int STATE_APP_ACTIVE = 1;
+	public static final int STATE_APP_CANCEl = 3;
 
 }
