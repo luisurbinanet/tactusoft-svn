@@ -29,7 +29,10 @@ public class VwDoctorHour implements java.io.Serializable {
 	@EmbeddedId
 	@AttributeOverrides({
 			@AttributeOverride(name = "idBranch", column = @Column(name = "id_branch", nullable = false, scale = 0)),
-			@AttributeOverride(name = "idDoctor", column = @Column(name = "id_doctor", nullable = false, scale = 0)) })
+			@AttributeOverride(name = "appointmentDate", column = @Column(name = "appointment_date", length = 10)),
+			@AttributeOverride(name = "idDoctor", column = @Column(name = "id_doctor", nullable = false, scale = 0)),
+			@AttributeOverride(name = "doctorName", column = @Column(name = "doctor_name", nullable = false, length = 45)),
+			@AttributeOverride(name = "doctorSurname", column = @Column(name = "doctor_surname", nullable = false, length = 45)) })
 	public VwDoctorHourId getId() {
 		return this.id;
 	}

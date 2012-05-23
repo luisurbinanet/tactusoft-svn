@@ -98,11 +98,13 @@
 						rendered="#{appointmentBacking.renderedForDoctor}">
 						<f:selectItems value="#{appointmentBacking.listDoctor}" />
 					</p:selectOneMenu>
+					<h:outputLabel value=" " rendered="#{not appointmentBacking.renderedForDoctor}"/>
 
 					<p:commandButton value="#{msg['btn_search_app']}"
 						icon="ui-icon-plusthick" update="cmbApp pnlSchedule"
 						action="#{appointmentBacking.searchAppointMentChange}" />
 					<p:selectOneMenu style="width:600px"
+						rendered="#{appointmentBacking.renderedForDoctor}"
 						value="#{appointmentBacking.appointmentsNumber}">
 						<f:selectItem itemLabel="10 Primeras Citas" itemValue="10" />
 						<f:selectItem itemLabel="20 Primeras Citas" itemValue="20" />
