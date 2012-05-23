@@ -72,6 +72,7 @@ public class AppointmentBacking implements Serializable {
 
 	private List<SelectItem> listAppointment;
 	private Map<Integer, Candidate> mapAppointment;
+	private BigDecimal selectedAppointment;
 
 	private boolean disabledSaveButton;
 	private boolean renderedForDate;
@@ -256,6 +257,14 @@ public class AppointmentBacking implements Serializable {
 		this.listAppointment = listAppointment;
 	}
 
+	public BigDecimal getSelectedAppointment() {
+		return selectedAppointment;
+	}
+
+	public void setSelectedAppointment(BigDecimal selectedAppointment) {
+		this.selectedAppointment = selectedAppointment;
+	}
+
 	public boolean isDisabledSaveButton() {
 		return disabledSaveButton;
 	}
@@ -333,6 +342,12 @@ public class AppointmentBacking implements Serializable {
 		selected.setCrmProcedureDetail(mapProcedureDetail.get(selected
 				.getCrmProcedureDetail().getId()));
 
+		Candidate candidate = mapAppointment.get(this.selectedAppointment);
+		selected.setStartAppointmentDate(candidate.getStartDate());
+		selected.setEndAppointmentDate(candidate.getEndDate());
+
+		selected.setState(Constant.STATE_APP_ACTIVE);
+
 		processService.saveAppointment(selected);
 	}
 
@@ -380,14 +395,15 @@ public class AppointmentBacking implements Serializable {
 
 	public void searchAppointMentChange() {
 		List<Candidate> listCandidate = null;
-		if (this.renderedForDate) {
-			processService.getScheduleAppointmentForDate(selected
-					.getCrmBranch().getId());
-			listCandidate = new LinkedList<Candidate>();
-		} else if (this.renderedForDoctor) {
-			CrmProcedureDetail procedureDetail = mapProcedureDetail
-					.get(selected.getCrmProcedureDetail().getId());
 
+		CrmProcedureDetail procedureDetail = mapProcedureDetail.get(selected
+				.getCrmProcedureDetail().getId());
+
+		if (this.renderedForDate) {
+			listCandidate = processService.getScheduleAppointmentForDate(
+					selected.getCrmBranch().getId(), this.currentDate,
+					procedureDetail);
+		} else if (this.renderedForDoctor) {
 			CrmDoctor doctor = mapDoctor.get(selected.getCrmDoctor().getId());
 			listCandidate = processService.getScheduleAppointmentForDoctor(
 					selected.getCrmBranch().getId(), doctor,

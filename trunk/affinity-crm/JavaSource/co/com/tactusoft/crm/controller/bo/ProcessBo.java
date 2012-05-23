@@ -71,6 +71,77 @@ public class ProcessBo implements Serializable {
 		return true;
 	}
 
+	private boolean validateAvailabilitySchedule(List<Date> candidatesHours,
+			List<CrmAppointment> listApp, Date currentDate) {
+
+		boolean result = true;
+
+		// Iterar Horas No Disponibles
+		int count = 0;
+		List<Date> ocupatedHours = new ArrayList<Date>();
+		for (CrmAppointment app : listApp) {
+			Date dateRow = FacesUtil.getDateWithoutTime(app
+					.getStartAppointmentDate());
+			if (currentDate.getTime() == dateRow.getTime()) {
+				long diff = app.getEndAppointmentDate().getTime()
+						- app.getStartAppointmentDate().getTime();
+				double diffInMin = diff / ((double) 1000 * 60);
+				int size = (int) (diffInMin / Constant.INTERVAL_TIME_APPOINTMENT) + 1;
+				ocupatedHours.add(new Date(app.getStartAppointmentDate()
+						.getTime()));
+				count++;
+				for (int k = 1; k < size; k++) {
+					Calendar calendar2 = Calendar.getInstance();
+					calendar2 = Calendar.getInstance();
+					calendar2.setTime(ocupatedHours.get(count - 1));
+					calendar2.add(Calendar.MINUTE,
+							Constant.INTERVAL_TIME_APPOINTMENT);
+					ocupatedHours.add(calendar2.getTime());
+					count++;
+				}
+			}
+
+			// validar
+			int contValidate = 0;
+			for (Date ocup : ocupatedHours) {
+				for (Date cand : candidatesHours) {
+					if (cand.compareTo(ocup) == 0) {
+						contValidate++;
+						break;
+					}
+				}
+			}
+
+			if (contValidate > 1) {
+				result = false;
+				break;
+			}
+
+			// Si la fecha
+			if (dateRow.getTime() > currentDate.getTime()) {
+				break;
+			}
+		}
+
+		return result;
+	}
+
+	private List<Date> getListcandidatesHours(Date initHour, Date endHour) {
+		long diff = endHour.getTime() - initHour.getTime();
+		double diffInMin = diff / ((double) 1000 * 60);
+		int size = (int) (diffInMin / Constant.INTERVAL_TIME_APPOINTMENT) + 1;
+		List<Date> candidatesHours = new ArrayList<Date>();
+		candidatesHours.add(initHour);
+		for (int k = 1; k < size; k++) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(candidatesHours.get(k - 1));
+			calendar.add(Calendar.MINUTE, Constant.INTERVAL_TIME_APPOINTMENT);
+			candidatesHours.add(calendar.getTime());
+		}
+
+		return candidatesHours;
+	}
+
 	public List<Candidate> getScheduleAppointmentForDoctor(BigDecimal idBranch,
 			CrmDoctor doctor, int numApp, CrmProcedureDetail procedureDetail) {
 
@@ -96,7 +167,7 @@ public class ProcessBo implements Serializable {
 
 		List<CrmDoctorSchedule> listDoctorSchedule = dao
 				.find("from CrmDoctorSchedule o where o.crmDoctor.id = "
-						+ doctor.getId() + " order by o.startHour");
+						+ doctor.getId() + " order by o.day, o.startHour");
 
 		// Buscar los festivos
 		List<CrmHoliday> listHoliday = this.getListHoliday();
@@ -177,66 +248,98 @@ public class ProcessBo implements Serializable {
 		return result;
 	}
 
-	private boolean validateAvailabilitySchedule(List<Date> candidatesHours,
-			List<CrmAppointment> listApp, Date currentDate) {
+	public List<Candidate> getScheduleAppointmentForDate(BigDecimal idBranch,
+			Date date, CrmProcedureDetail procedureDetail) {
+		List<Candidate> result = new ArrayList<Candidate>();
+		int id = 1;
 
-		boolean result = true;
+		// Buscar los festivos
+		List<CrmHoliday> listHoliday = this.getListHoliday();
 
-		// Iterar Horas No Disponibles
-		int count = 0;
-		List<Date> ocupatedHours = new ArrayList<Date>();
-		for (CrmAppointment app : listApp) {
-			Date dateRow = FacesUtil.getDateWithoutTime(app
-					.getStartAppointmentDate());
-			if (currentDate.getTime() == dateRow.getTime()) {
-				long diff = app.getEndAppointmentDate().getTime()
-						- app.getStartAppointmentDate().getTime();
-				double diffInMin = diff / ((double) 1000 * 60);
-				int size = (int) (diffInMin / Constant.INTERVAL_TIME_APPOINTMENT) + 1;
-				ocupatedHours.add(new Date(app.getStartAppointmentDate()
-						.getTime()));
-				count++;
-				for (int k = 1; k < size; k++) {
-					Calendar calendar2 = Calendar.getInstance();
-					calendar2 = Calendar.getInstance();
-					calendar2.setTime(ocupatedHours.get(count - 1));
-					calendar2.add(Calendar.MINUTE,
-							Constant.INTERVAL_TIME_APPOINTMENT);
-					ocupatedHours.add(calendar2.getTime());
-					count++;
-				}
-			}
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new Date());
 
-			// validar
-			int contValidate = 0;
-			for (Date ocup : ocupatedHours) {
-				for (Date cand : candidatesHours) {
-					if (cand.compareTo(ocup) == 0) {
-						contValidate++;
-						break;
+		if ((calendar.get(Calendar.DAY_OF_WEEK) != 1)
+				&& (this.validateHoliday(listHoliday, date))) {
+
+			String dateString = FacesUtil.formatDate(date, "yyyy-MM-dd");
+
+			VwDoctorHour vwDoctorHour = (VwDoctorHour) dao
+					.find("from VwDoctorHour o where o.id.idBranch = "
+							+ idBranch
+							+ " and o.id.appointmentDate >= '"
+							+ dateString
+							+ "T00:00:00.000+05:00' and o.id.appointmentDate <= '"
+							+ dateString + "T00:23:59.999+05:00'").get(0);
+			BigDecimal idDoctor = vwDoctorHour.getId().getIdDoctor();
+
+			List<CrmAppointment> listApp = dao
+					.find("from CrmAppointment o where o.startAppointmentDate >= '"
+							+ dateString
+							+ "T00:00:00.000+05:00' and o.startAppointmentDate <= '"
+							+ dateString
+							+ "T00:23:59.999+05:00'  and o.crmBranch.id = "
+							+ idBranch
+							+ " and o.crmDoctor.id = "
+							+ idDoctor
+							+ " and o. state = 1 "
+							+ "order by o.startAppointmentDate");
+
+			List<CrmDoctorSchedule> listDoctorSchedule = dao
+					.find("from CrmDoctorSchedule o where o.crmDoctor.id = "
+							+ idDoctor + " order by o.day, o.startHour");
+
+			for (CrmDoctorSchedule schedule : listDoctorSchedule) {
+				if (calendar.get(Calendar.DAY_OF_WEEK) == schedule.getDay()) {
+
+					Date scheduleInitHour = FacesUtil.addHourToDate(date,
+							schedule.getStartHour());
+
+					Date scheduleEndHour = FacesUtil.addHourToDate(date,
+							schedule.getEndHour());
+
+					Date initHour = new Date(scheduleInitHour.getTime());
+
+					boolean endIterate = true;
+					while (endIterate) {
+
+						Calendar calendar2 = Calendar.getInstance();
+						calendar2.setTime(initHour);
+						calendar2.add(Calendar.MINUTE,
+								procedureDetail.getTimeDoctor());
+						Date endHour = calendar2.getTime();
+
+						// Si la hora final candidata es mayor al tiempo de
+						// atencion
+						// del doctor salir
+						if (endHour.getTime() > scheduleEndHour.getTime()) {
+							endIterate = false;
+							break;
+						}
+
+						// Iterar Horas Candidatas
+						List<Date> candidatesHours = getListcandidatesHours(
+								initHour, endHour);
+						
+						// Validar Disponibilidad
+						boolean validate = validateAvailabilitySchedule(
+								candidatesHours, listApp, date);
+						
+						if (validate) {
+							result.add(new Candidate(id, new CrmDoctor(), initHour,
+									endHour));
+							id++;
+						}
+						
+						initHour = new Date(endHour.getTime());
 					}
+
 				}
 			}
 
-			if (contValidate > 1) {
-				result = false;
-				break;
-			}
-
-			// Si la fecha
-			if (dateRow.getTime() > currentDate.getTime()) {
-				break;
-			}
 		}
 
 		return result;
-	}
-
-	public void getScheduleAppointmentForDate(BigDecimal idBranch) {
-		VwDoctorHour vwDoctorHour = (VwDoctorHour) dao.find(
-				"from VwDoctorHour o where o.id.idBranch = " + idBranch).get(0);
-		BigDecimal idDoctor = vwDoctorHour.getId().getIdDoctor();
-		System.out.println(idDoctor);
 	}
 
 }
