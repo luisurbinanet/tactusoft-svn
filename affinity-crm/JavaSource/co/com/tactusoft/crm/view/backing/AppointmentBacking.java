@@ -395,6 +395,8 @@ public class AppointmentBacking implements Serializable {
 
 	public void searchAppointMentChange() {
 		List<Candidate> listCandidate = null;
+		listAppointment = new LinkedList<SelectItem>();
+		mapAppointment = new HashMap<Integer, Candidate>();
 
 		CrmProcedureDetail procedureDetail = mapProcedureDetail.get(selected
 				.getCrmProcedureDetail().getId());
@@ -403,18 +405,23 @@ public class AppointmentBacking implements Serializable {
 			listCandidate = processService.getScheduleAppointmentForDate(
 					selected.getCrmBranch().getId(), this.currentDate,
 					procedureDetail);
+
+			for (Candidate row : listCandidate) {
+				listAppointment.add(new SelectItem(row.getId(), row
+						.getDoctorDetail()));
+				mapAppointment.put(row.getId(), row);
+			}
 		} else if (this.renderedForDoctor) {
 			CrmDoctor doctor = mapDoctor.get(selected.getCrmDoctor().getId());
 			listCandidate = processService.getScheduleAppointmentForDoctor(
 					selected.getCrmBranch().getId(), doctor,
 					this.appointmentsNumber, procedureDetail);
-		}
 
-		listAppointment = new LinkedList<SelectItem>();
-		mapAppointment = new HashMap<Integer, Candidate>();
-		for (Candidate row : listCandidate) {
-			listAppointment.add(new SelectItem(row.getId(), row.getDetail()));
-			mapAppointment.put(row.getId(), row);
+			for (Candidate row : listCandidate) {
+				listAppointment
+						.add(new SelectItem(row.getId(), row.getDetail()));
+				mapAppointment.put(row.getId(), row);
+			}
 		}
 	}
 
