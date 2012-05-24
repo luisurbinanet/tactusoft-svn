@@ -16,7 +16,7 @@
 
 			<h:form id="form">
 
-				<p:growl id="growl" showDetail="true" />
+				<p:growl id="growl" showDetail="true" autoUpdate="true" />
 
 				<p:toolbar style="width:100%">
 					<p:toolbarGroup align="left">
@@ -25,7 +25,7 @@
 							update="pnlDetail btnSaveOrder" />
 						<p:commandButton id="btnSaveOrder" value="#{msg['btn_save']}"
 							icon="ui-icon-disk" action="#{appointmentBacking.saveAction}"
-							update="growl btnSaveOrder"
+							update="btnSaveOrder"
 							disabled="#{appointmentBacking.disabledSaveButton}" />
 					</p:toolbarGroup>
 				</p:toolbar>
@@ -88,7 +88,8 @@
 						style="width:100%" />
 					<p:calendar value="#{appointmentBacking.currentDate}"
 						id="calCurrentDate" showOn="button" navigator="true"
-						pattern="dd/MM/yyyy" readOnlyInputText="true" mindate="23/05/2012"
+						pattern="dd/MM/yyyy" readOnlyInputText="true"
+						mindate="#{appointmentBacking.currentDate}"
 						rendered="#{appointmentBacking.renderedForDate}" />
 
 					<h:outputLabel value="#{msg['app_doctor']}" style="width:100%"
@@ -98,7 +99,8 @@
 						rendered="#{appointmentBacking.renderedForDoctor}">
 						<f:selectItems value="#{appointmentBacking.listDoctor}" />
 					</p:selectOneMenu>
-					<h:outputLabel value=" " rendered="#{not appointmentBacking.renderedForDoctor}"/>
+					<h:outputLabel value=" "
+						rendered="#{not appointmentBacking.renderedForDoctor}" />
 
 					<p:commandButton value="#{msg['btn_search_app']}"
 						icon="ui-icon-plusthick" update="cmbApp pnlSchedule"

@@ -72,7 +72,7 @@ public class AppointmentBacking implements Serializable {
 
 	private List<SelectItem> listAppointment;
 	private Map<Integer, Candidate> mapAppointment;
-	private BigDecimal selectedAppointment;
+	private Integer selectedAppointment;
 
 	private boolean disabledSaveButton;
 	private boolean renderedForDate;
@@ -257,11 +257,11 @@ public class AppointmentBacking implements Serializable {
 		this.listAppointment = listAppointment;
 	}
 
-	public BigDecimal getSelectedAppointment() {
+	public Integer getSelectedAppointment() {
 		return selectedAppointment;
 	}
 
-	public void setSelectedAppointment(BigDecimal selectedAppointment) {
+	public void setSelectedAppointment(Integer selectedAppointment) {
 		this.selectedAppointment = selectedAppointment;
 	}
 
@@ -319,7 +319,6 @@ public class AppointmentBacking implements Serializable {
 	}
 
 	public void newAction(ActionEvent event) {
-		selectedPatient = new Patient();
 		listPatient = new LinkedList<Patient>();
 		patientModel = new PatientDataModel(listPatient);
 		disabledSaveButton = false;
@@ -329,26 +328,57 @@ public class AppointmentBacking implements Serializable {
 		selected.setCrmDoctor(new CrmDoctor());
 		selected.setCrmProcedureDetail(new CrmProcedureDetail());
 
+		selectedPatient = new Patient();
+		currentDate = new Date();
+
 		renderedForDate = false;
 		renderedForDoctor = false;
+
+		String message = FacesUtil.getMessage("app_msg_not_avalaible");
+		listAppointment = new LinkedList<SelectItem>();
+		listAppointment.add(new SelectItem(null, message));
+		this.selectedAppointment = 0;
 	}
 
 	public void saveAction() {
-		String code = "";
+		String message = null;
 
-		selected.setCode(code);
-		selected.setCrmDoctor(mapDoctor.get(selected.getCrmDoctor().getId()));
-		selected.setCrmBranch(mapBranch.get(selected.getCrmBranch().getId()));
-		selected.setCrmProcedureDetail(mapProcedureDetail.get(selected
-				.getCrmProcedureDetail().getId()));
+		// validar Selección Paciente
+		if (this.selectedPatient.getSAPCode() == null) {
+			message = FacesUtil.getMessage("app_msg_not_selected");
+			FacesUtil.addError(message);
+		}
 
-		Candidate candidate = mapAppointment.get(this.selectedAppointment);
-		selected.setStartAppointmentDate(candidate.getStartDate());
-		selected.setEndAppointmentDate(candidate.getEndDate());
+		// validar Selección Cita
+		if (this.selectedAppointment.intValue() != 0) {
+			message = FacesUtil.getMessage("app_msg_not_selected");
+			FacesUtil.addError(message);
+		} else {
 
-		selected.setState(Constant.STATE_APP_ACTIVE);
+		}
 
-		processService.saveAppointment(selected);
+		if (message == null) {
+			String code = "";
+			Candidate candidate = mapAppointment.get(this.selectedAppointment);
+
+			selected.setCode(code);
+			selected.setPatient(selectedPatient.getSAPCode());
+			selected.setPatientSap(selectedPatient.getSAPCode());
+			selected.setPatientNames(selectedPatient.getNames());
+			selected.setCrmDoctor(candidate.getDoctor());
+			selected.setCrmBranch(mapBranch
+					.get(selected.getCrmBranch().getId()));
+			selected.setCrmProcedureDetail(mapProcedureDetail.get(selected
+					.getCrmProcedureDetail().getId()));
+
+			selected.setStartAppointmentDate(candidate.getStartDate());
+			selected.setEndAppointmentDate(candidate.getEndDate());
+
+			selected.setState(Constant.STATE_APP_ACTIVE);
+
+			processService.saveAppointment(selected);
+		}
+
 	}
 
 	public void handleProcedureChange() {
@@ -422,6 +452,12 @@ public class AppointmentBacking implements Serializable {
 						.add(new SelectItem(row.getId(), row.getDetail()));
 				mapAppointment.put(row.getId(), row);
 			}
+		}
+
+		if (listAppointment.size() == 0) {
+			String message = FacesUtil.getMessage("app_msg_not_avalaible");
+			listAppointment.add(new SelectItem(null, message));
+			this.selectedAppointment = 0;
 		}
 	}
 
