@@ -361,102 +361,107 @@ public class ProcessBo implements Serializable {
 		return result;
 	}
 
-	/*public boolean validateAppointmentForDate(BigDecimal idBranch, Date date,
-			CrmProcedureDetail procedureDetail, BigDecimal idDoctor,
-			String patient) {
-		List<Candidate> result = new ArrayList<Candidate>();
-		int id = 1;
+	public int validateAppointmentForDate(BigDecimal idBranch, Date starDate,
+			Date endDate, CrmProcedureDetail procedureDetail,
+			BigDecimal idDoctor, String patient) {
+
+		int result = 0;
 
 		// Buscar los festivos
 		List<CrmHoliday> listHoliday = this.getListHoliday();
 
 		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date);
+		calendar.setTime(starDate);
+		int day = calendar.get(Calendar.DAY_OF_WEEK);
 
-		if ((calendar.get(Calendar.DAY_OF_WEEK) != 1)
-				&& (this.validateHoliday(listHoliday, date))) {
+		if ((day != 1) && (this.validateHoliday(listHoliday, starDate))) {
 
-			String dateString = FacesUtil.formatDate(date, "yyyy-MM-dd");
+			String dateString = FacesUtil.formatDate(starDate, "yyyy-MM-dd");
+			String hourString = FacesUtil.formatDate(endDate, "HH:mm:ss");
 
 			// Buscar horarios Doctor
 			List<CrmDoctorSchedule> listDoctorSchedule = dao
-					.find("from CrmDoctorSchedule o where o.crmDoctor.id = "
-							+ idDoctor + " order by o.day, o.startHour");
+					.find("from CrmDoctorSchedule o where o.day = " + day
+							+ " and o.crmDoctor.id = " + idDoctor
+							+ " and o.endHour <= '1900-01-01T" + hourString
+							+ ".000+05:00'" + " order by o.day, o.startHour");
 
 			// Validar si Doctor tiene Horario
 			if (listDoctorSchedule.size() > 0) {
 
-				List<CrmAppointment> listApp = dao
-						.find("from CrmAppointment o where o.startAppointmentDate >= '"
-								+ dateString
-								+ "T00:00:00.000+05:00' and o.startAppointmentDate <= '"
-								+ dateString
-								+ "T23:59:59.999+05:00'  and o.crmBranch.id = "
-								+ idBranch
-								+ " and o.crmDoctor.id = "
-								+ idDoctor
-								+ " and o. state = 1 "
-								+ "order by o.startAppointmentDate");
+				boolean validateScheduleDoctor = false;
 
+				// Dia Actual sin Hora
+				Date currentDate = FacesUtil.getDateWithoutTime(starDate);
+
+				// Iterar Horas Candidatas
+				List<Date> candidatesHours = getListcandidatesHours(starDate,
+						endDate);
+
+				// Validar Disponibilidad del Doctor
 				for (CrmDoctorSchedule schedule : listDoctorSchedule) {
-					if (calendar.get(Calendar.DAY_OF_WEEK) == schedule.getDay()) {
 
-						Date scheduleInitHour = FacesUtil.addHourToDate(date,
-								schedule.getStartHour());
+					Date scheduleInitHour = FacesUtil.addHourToDate(
+							currentDate, schedule.getStartHour());
 
-						Date scheduleEndHour = FacesUtil.addHourToDate(date,
-								schedule.getEndHour());
+					Date scheduleEndHour = FacesUtil.addHourToDate(currentDate,
+							schedule.getEndHour());
 
-						Date initHour = new Date(scheduleInitHour.getTime());
+					List<Date> scheduleHours = getListcandidatesHours(
+							scheduleInitHour, scheduleEndHour);
 
-						boolean endIterate = true;
-						while (endIterate) {
-
-							Calendar calendar2 = Calendar.getInstance();
-							calendar2.setTime(initHour);
-							calendar2.add(Calendar.MINUTE,
-									procedureDetail.getTimeDoctor());
-							Date endHour = calendar2.getTime();
-
-							// Si la hora final candidata es mayor al tiempo
-							// de atencion del doctor salir
-							if (endHour.getTime() > scheduleEndHour.getTime()) {
-								endIterate = false;
-								break;
+					// validar
+					int contValidate = 0;
+					for (Date ocup : scheduleHours) {
+						for (Date cand : candidatesHours) {
+							if (cand.compareTo(ocup) == 0) {
+								contValidate++;
 							}
-
-							// Iterar Horas Candidatas
-							List<Date> candidatesHours = getListcandidatesHours(
-									initHour, endHour);
-
-							// Validar Disponibilidad
-							boolean validate = validateAvailabilitySchedule(
-									candidatesHours, listApp, date);
-
-							if (validate) {
-								CrmDoctor crmDoctor = new CrmDoctor();
-								crmDoctor.setId(idDoctor);
-								crmDoctor.setFirstName(vwDoctorHour.getId()
-										.getDoctorName());
-								crmDoctor.setFirstSurname(vwDoctorHour.getId()
-										.getDoctorSurname());
-
-								result.add(new Candidate(id, crmDoctor,
-										initHour, endHour));
-								id++;
-							}
-
-							initHour = new Date(endHour.getTime());
 						}
-
 					}
+
+					if (contValidate == candidatesHours.size()) {
+						validateScheduleDoctor = true;
+						break;
+					}
+
 				}
+
+				if (validateScheduleDoctor) {
+					List<CrmAppointment> listApp = dao
+							.find("from CrmAppointment o where o.startAppointmentDate >= '"
+									+ dateString
+									+ "T00:00:00.000+05:00' and o.startAppointmentDate <= '"
+									+ dateString
+									+ "T23:59:59.999+05:00'  and o.crmBranch.id = "
+									+ idBranch
+									+ " and o.crmDoctor.id = "
+									+ idDoctor
+									+ " and o. state = 1 "
+									+ "order by o.startAppointmentDate");
+
+					// Validar Disponibilidad
+					boolean validate = validateAvailabilitySchedule(
+							candidatesHours, listApp, currentDate);
+
+					if (!validate) {
+						// Cita no disponible
+						result = -3;
+					}
+				} else {
+					// Doctor no antiende
+					result = -2;
+				}
+			} else {
+				// Doctor no antiende
+				result = -2;
 			}
 		} else {
-
+			// Dia Festivo no habil
+			result = -1;
 		}
 
-		return true;
-	}*/
+		return result;
+	}
 
 }

@@ -342,24 +342,34 @@ public class AppointmentBacking implements Serializable {
 
 	public void saveAction() {
 		String message = null;
+		Candidate candidate = mapAppointment.get(this.selectedAppointment);
+		CrmProcedureDetail procedureDetail = mapProcedureDetail.get(selected
+				.getCrmProcedureDetail().getId());
 
 		// validar Selección Paciente
 		if (this.selectedPatient.getSAPCode() == null) {
-			message = FacesUtil.getMessage("app_msg_not_selected");
+			message = FacesUtil.getMessage("app_msg_error_pat");
 			FacesUtil.addError(message);
 		}
 
 		// validar Selección Cita
-		if (this.selectedAppointment.intValue() != 0) {
-			message = FacesUtil.getMessage("app_msg_not_selected");
+		if (this.selectedAppointment == 0) {
+			message = FacesUtil.getMessage("app_msg_error_app");
 			FacesUtil.addError(message);
 		} else {
+			int validateApp = processService.validateAppointmentForDate(
+					selected.getCrmBranch().getId(), candidate.getStartDate(),
+					candidate.getEndDate(), procedureDetail, candidate
+							.getDoctor().getId(), selectedPatient.getSAPCode());
 
+			if (validateApp != 0) {
+				message = FacesUtil.getMessage("app_msg_error_not_avalaible");
+				FacesUtil.addError(message);
+			}
 		}
 
 		if (message == null) {
 			String code = "";
-			Candidate candidate = mapAppointment.get(this.selectedAppointment);
 
 			selected.setCode(code);
 			selected.setPatient(selectedPatient.getSAPCode());
@@ -368,17 +378,15 @@ public class AppointmentBacking implements Serializable {
 			selected.setCrmDoctor(candidate.getDoctor());
 			selected.setCrmBranch(mapBranch
 					.get(selected.getCrmBranch().getId()));
-			selected.setCrmProcedureDetail(mapProcedureDetail.get(selected
-					.getCrmProcedureDetail().getId()));
+			selected.setCrmProcedureDetail(procedureDetail);
 
 			selected.setStartAppointmentDate(candidate.getStartDate());
 			selected.setEndAppointmentDate(candidate.getEndDate());
 
 			selected.setState(Constant.STATE_APP_ACTIVE);
 
-			processService.saveAppointment(selected);
+			// processService.saveAppointment(selected);
 		}
-
 	}
 
 	public void handleProcedureChange() {
