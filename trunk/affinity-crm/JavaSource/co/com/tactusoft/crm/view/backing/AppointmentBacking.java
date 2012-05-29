@@ -415,7 +415,7 @@ public class AppointmentBacking implements Serializable {
 		}
 
 		if (listAppointment.size() == 0) {
-			String message = FacesUtil.getMessage("app_msg_not_avalaible");
+			String message = FacesUtil.getMessage("app_msg_error_not_avalaible");
 			listAppointment.add(new SelectItem(null, message));
 			this.selectedAppointment = 0;
 		}
