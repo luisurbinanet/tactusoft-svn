@@ -41,11 +41,16 @@ public class ProcessBo implements Serializable {
 				+ idDoctor);
 	}
 
-	public Integer saveAppointment(CrmAppointment entity) {
+	public CrmAppointment saveAppointment(CrmAppointment entity) {
 		if (entity.getId() == null) {
-			entity.setId(getId(CrmAppointment.class));
+			BigDecimal id = getId(CrmAppointment.class);
+			entity.setId(id);
+			String code = "C" + FacesUtil.lpad(id.toString(), '0', 5);
+			entity.setCode(code);
 		}
-		return dao.persist(entity);
+		
+		dao.persist(entity);
+		return entity;
 	}
 
 	public <T> void remove(Class<T> entity) {
@@ -180,6 +185,11 @@ public class ProcessBo implements Serializable {
 
 			// Revisar Día a Día disponibilidad de Citas
 			Date currentDate = new Date();
+			calendar = Calendar.getInstance();
+			calendar.setTime(currentDate);
+			calendar.add(Calendar.DATE, -1);
+			currentDate = calendar.getTime();
+
 			boolean iterate = true;
 			outer: while (iterate) {
 				calendar = Calendar.getInstance();
@@ -367,6 +377,12 @@ public class ProcessBo implements Serializable {
 
 		int result = 0;
 
+		// Validar si Paciente tiene otra cita
+		result = validateDuplicated(patient, starDate, endDate);
+		if (result > 0) {
+			return -4;
+		}
+
 		// Buscar los festivos
 		List<CrmHoliday> listHoliday = this.getListHoliday();
 
@@ -462,6 +478,23 @@ public class ProcessBo implements Serializable {
 		}
 
 		return result;
+	}
+
+	private int validateDuplicated(String patient, Date starDate, Date endDate) {
+		String dateString = FacesUtil.formatDate(starDate, "yyyy-MM-dd");
+		String startHourString = FacesUtil.formatDate(starDate, "HH:mm:ss");
+		String endHourString = FacesUtil.formatDate(endDate, "HH:mm:ss");
+
+		List<CrmAppointment> listApp = dao
+				.find("from CrmAppointment o where o.startAppointmentDate >= '"
+						+ dateString + "T" + startHourString
+						+ ".000+05:00' and o.startAppointmentDate <= '"
+						+ dateString + "T" + endHourString
+						+ ".999+05:00' and o.patient = '" + patient
+						+ "' and o.state = 1 "
+						+ "order by o.startAppointmentDate");
+
+		return listApp.size();
 	}
 
 }
