@@ -322,6 +322,7 @@ public class AppointmentBacking implements Serializable {
 		listPatient = new LinkedList<Patient>();
 		patientModel = new PatientDataModel(listPatient);
 		disabledSaveButton = false;
+		idSearch = Constant.DEFAULT_VALUE;
 
 		selected = new CrmAppointment();
 		selected.setCrmBranch(new CrmBranch());
@@ -334,59 +335,10 @@ public class AppointmentBacking implements Serializable {
 		renderedForDate = false;
 		renderedForDoctor = false;
 
-		String message = FacesUtil.getMessage("app_msg_not_avalaible");
+		String message = FacesUtil.getMessage("app_msg_error_not_avalaible");
 		listAppointment = new LinkedList<SelectItem>();
 		listAppointment.add(new SelectItem(null, message));
 		this.selectedAppointment = 0;
-	}
-
-	public void saveAction() {
-		String message = null;
-		Candidate candidate = mapAppointment.get(this.selectedAppointment);
-		CrmProcedureDetail procedureDetail = mapProcedureDetail.get(selected
-				.getCrmProcedureDetail().getId());
-
-		// validar Selección Paciente
-		if (this.selectedPatient.getSAPCode() == null) {
-			message = FacesUtil.getMessage("app_msg_error_pat");
-			FacesUtil.addError(message);
-		}
-
-		// validar Selección Cita
-		if (this.selectedAppointment == 0) {
-			message = FacesUtil.getMessage("app_msg_error_app");
-			FacesUtil.addError(message);
-		} else {
-			int validateApp = processService.validateAppointmentForDate(
-					selected.getCrmBranch().getId(), candidate.getStartDate(),
-					candidate.getEndDate(), procedureDetail, candidate
-							.getDoctor().getId(), selectedPatient.getSAPCode());
-
-			if (validateApp != 0) {
-				message = FacesUtil.getMessage("app_msg_error_not_avalaible");
-				FacesUtil.addError(message);
-			}
-		}
-
-		if (message == null) {
-			String code = "";
-
-			selected.setCode(code);
-			selected.setPatient(selectedPatient.getSAPCode());
-			selected.setPatientSap(selectedPatient.getSAPCode());
-			selected.setPatientNames(selectedPatient.getNames());
-			selected.setCrmDoctor(candidate.getDoctor());
-			selected.setCrmBranch(mapBranch
-					.get(selected.getCrmBranch().getId()));
-			selected.setCrmProcedureDetail(procedureDetail);
-
-			selected.setStartAppointmentDate(candidate.getStartDate());
-			selected.setEndAppointmentDate(candidate.getEndDate());
-
-			selected.setState(Constant.STATE_APP_ACTIVE);
-
-			// processService.saveAppointment(selected);
-		}
 	}
 
 	public void handleProcedureChange() {
@@ -466,6 +418,73 @@ public class AppointmentBacking implements Serializable {
 			String message = FacesUtil.getMessage("app_msg_not_avalaible");
 			listAppointment.add(new SelectItem(null, message));
 			this.selectedAppointment = 0;
+		}
+	}
+
+	public void saveAction() {
+		String message = null;
+
+		// validar Selección Paciente
+		if (this.selectedPatient.getSAPCode() == null) {
+			message = FacesUtil.getMessage("app_msg_error_pat");
+			FacesUtil.addError(message);
+		}
+
+		// validar Selección Cita
+		if (this.selectedAppointment == 0) {
+			message = FacesUtil.getMessage("app_msg_error_app");
+			FacesUtil.addError(message);
+		}
+
+		if (message == null) {
+			Candidate candidate = mapAppointment.get(this.selectedAppointment);
+			CrmProcedureDetail procedureDetail = mapProcedureDetail
+					.get(selected.getCrmProcedureDetail().getId());
+
+			int validateApp = processService.validateAppointmentForDate(
+					selected.getCrmBranch().getId(), candidate.getStartDate(),
+					candidate.getEndDate(), procedureDetail, candidate
+							.getDoctor().getId(), selectedPatient.getSAPCode());
+
+			if (validateApp != 0) {
+				switch (validateApp) {
+				case -1:
+					message = FacesUtil.getMessage("app_msg_error_1");
+					break;
+				case -2:
+					message = FacesUtil.getMessage("app_msg_error_2");
+					break;
+				case -3:
+					message = FacesUtil.getMessage("app_msg_error_3");
+					break;
+				case -4:
+					message = FacesUtil.getMessage("app_msg_error_4");
+					break;
+				}
+				FacesUtil.addError(message);
+			} else {
+				String code = "";
+
+				selected.setCode(code);
+				selected.setPatient(selectedPatient.getSAPCode());
+				selected.setPatientSap(selectedPatient.getSAPCode());
+				selected.setPatientNames(selectedPatient.getNames());
+				selected.setCrmDoctor(candidate.getDoctor());
+				selected.setCrmBranch(mapBranch.get(selected.getCrmBranch()
+						.getId()));
+				selected.setCrmProcedureDetail(procedureDetail);
+
+				selected.setStartAppointmentDate(candidate.getStartDate());
+				selected.setEndAppointmentDate(candidate.getEndDate());
+
+				selected.setState(Constant.STATE_APP_ACTIVE);
+
+				CrmAppointment crmAppointment = processService
+						.saveAppointment(selected);
+				message = FacesUtil.getMessage("app_msg_ok",
+						crmAppointment.getCode());
+				FacesUtil.addInfo(message);
+			}
 		}
 	}
 

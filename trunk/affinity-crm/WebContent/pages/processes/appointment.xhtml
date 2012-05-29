@@ -88,7 +88,7 @@
 						style="width:100%" />
 					<p:calendar value="#{appointmentBacking.currentDate}"
 						id="calCurrentDate" showOn="button" navigator="true"
-						pattern="dd/MM/yyyy" readOnlyInputText="true"
+						pattern="dd/MM/yyyy" readonlyInput="true"
 						mindate="#{appointmentBacking.currentDate}"
 						rendered="#{appointmentBacking.renderedForDate}" />
 
@@ -103,7 +103,7 @@
 						rendered="#{not appointmentBacking.renderedForDoctor}" />
 
 					<p:commandButton value="#{msg['btn_search_app']}"
-						icon="ui-icon-plusthick" update="cmbApp pnlSchedule"
+						icon="ui-icon-plusthick" update="cmbApp"
 						action="#{appointmentBacking.searchAppointMentChange}" />
 					<p:selectOneMenu style="width:600px"
 						rendered="#{appointmentBacking.renderedForDoctor}"
@@ -118,12 +118,6 @@
 						value="#{appointmentBacking.selectedAppointment}">
 						<f:selectItems value="#{appointmentBacking.listAppointment}" />
 					</p:selectOneMenu>
-
-					<p:panelGrid id="pnlSchedule" columns="2"
-						rendered="#{appointmentBacking.idSearch eq 2?true:false}">
-
-
-					</p:panelGrid>
 
 				</h:panelGrid>
 
