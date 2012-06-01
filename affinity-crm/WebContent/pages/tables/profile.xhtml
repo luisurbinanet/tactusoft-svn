@@ -51,18 +51,6 @@
 						<h:outputLabel value="#{rec.division}" />
 					</p:column>
 
-					<p:column headerText="#{msg['pro_country']}">
-						<h:outputLabel value="#{rec.country}" />
-					</p:column>
-
-					<p:column headerText="#{msg['pro_city']}">
-						<h:outputLabel value="#{rec.city}" />
-					</p:column>
-
-					<p:column headerText="#{msg['pro_region']}">
-						<h:outputLabel value="#{rec.region}" />
-					</p:column>
-
 					<p:column headerText="#{msg['glb_state']}">#{rec.state eq 1?msg['glb_state_active']:msg['glb_state_inactive']}</p:column>
 
 				</p:dataTable>
@@ -116,21 +104,6 @@
 					<h:outputLabel value="#{msg['pro_division']}" />
 					<h:inputText value="#{profileBacking.selected.division}"
 						style="width:100%" label="#{msg['pro_division']}" required="true"
-						maxlength="2" />
-
-					<h:outputLabel value="#{msg['pro_country']}" />
-					<h:inputText value="#{profileBacking.selected.country}"
-						style="width:100%" label="#{msg['pro_country']}" required="true"
-						maxlength="2" />
-
-					<h:outputLabel value="#{msg['pro_city']}" />
-					<h:inputText value="#{profileBacking.selected.city}"
-						style="width:100%" label="#{msg['pro_city']}" required="true"
-						maxlength="45" />
-
-					<h:outputLabel value="#{msg['pro_region']}" />
-					<h:inputText value="#{profileBacking.selected.region}"
-						style="width:100%" label="#{msg['pro_region']}" required="true"
 						maxlength="2" />
 
 					<h:outputLabel value="#{msg['glb_state']}"

@@ -9,6 +9,7 @@ import javax.inject.Named;
 
 import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
+import co.com.tactusoft.crm.model.entities.CrmCountry;
 import co.com.tactusoft.crm.model.entities.CrmDepartment;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmDoctorSchedule;
@@ -85,6 +86,10 @@ public class TablesBo implements Serializable {
 
 	public List<CrmBranch> getListBranchActive() {
 		return dao.find("from CrmBranch o where o.state = 1");
+	}
+	
+	public List<CrmCountry> getListCountry() {
+		return dao.find("from CrmCountry o");
 	}
 
 	public List<CrmBranch> getListBranchByUser(BigDecimal idUser) {

@@ -44,11 +44,12 @@
 					<h:outputLabel value="#{msg['pat_sap_code']}"
 						rendered="#{patientBacking.disabledSaveButton}" />
 					<p:inputText value="#{patientBacking.selected.SAPCode}"
-						style="color:Red;width:230px;font-weight:bold;" label="#{msg['pat_sap_code']}"
-						readonly="true" rendered="#{patientBacking.disabledSaveButton}" />
-						
+						style="color:Red;width:230px;font-weight:bold;"
+						label="#{msg['pat_sap_code']}" readonly="true"
+						rendered="#{patientBacking.disabledSaveButton}" />
+
 					<h:outputText rendered="#{!patientBacking.disabledSaveButton}" />
-					<h:outputText rendered="#{!patientBacking.disabledSaveButton}" />	
+					<h:outputText rendered="#{!patientBacking.disabledSaveButton}" />
 
 					<h:outputLabel value="#{msg['pat_names']}" />
 					<p:inputText value="#{patientBacking.selected.names}"
@@ -63,6 +64,28 @@
 						style="width:230px">
 						<f:selectItem itemLabel="#{msg['glb_gender_woman']}" itemValue="W" />
 						<f:selectItem itemLabel="#{msg['glb_gender_man']}" itemValue="M" />
+					</p:selectOneMenu>
+
+					<h:outputText value="#{msg['pat_country']}" />
+					<p:selectOneMenu value="#{patientBacking.idCountry}"
+						style="width:230px" required="true" label="#{msg['pat_country']}">
+						<f:selectItems value="#{patientBacking.listCountry}" />
+						<p:ajax update="selRegion selCity"
+							listener="#{patientBacking.handleCountryChange}" />
+					</p:selectOneMenu>
+
+					<h:outputText value="#{msg['pat_region']}" />
+					<p:selectOneMenu id="selRegion" value="#{patientBacking.idRegion}"
+						style="width:230px" required="true" label="#{msg['pat_region']}">
+						<f:selectItems value="#{patientBacking.listRegion}" />
+						<p:ajax update="selCity"
+							listener="#{patientBacking.handleRegionChange}" />
+					</p:selectOneMenu>
+
+					<h:outputText value="#{msg['pat_city']}" />
+					<p:selectOneMenu id="selCity" value="#{patientBacking.idCity}"
+						style="width:230px" required="true" label="#{msg['pat_city']}">
+						<f:selectItems value="#{patientBacking.listCity}" />
 					</p:selectOneMenu>
 
 					<h:outputText value="#{msg['pat_address']}" />
