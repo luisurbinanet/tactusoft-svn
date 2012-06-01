@@ -1,0 +1,165 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="../templates/common.xhtml">
+
+	<ui:define name="body">
+
+		<p:panel style="width:100%;height:600px;"
+			header="#{msg['title_appointment_cancel']}">
+
+			<p:spacer height="5" />
+
+			<h:form id="form">
+
+				<p:growl id="growl" showDetail="true" />
+
+				<p:toolbar style="width:100%">
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
+							actionListener="#{appoinmentPatientBacking.newAction}"
+							process="@this" update="pnlDetail btnSaveOrder" />
+						<p:commandButton id="btnSaveOrder" value="#{msg['btn_save']}"
+							icon="ui-icon-disk"
+							action="#{appoinmentPatientBacking.saveAction}"
+							update="growl btnSaveOrder"
+							disabled="#{appoinmentPatientBacking.disabledSaveButton}" />
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="10" />
+
+				<h:panelGrid id="pnlDetail" columns="4" cellpadding="4"
+					style="margin:0 auto;" width="100%">
+
+					<p:commandButton value="#{msg['btn_add_patient']}"
+						icon="ui-icon-plusthick" oncomplete="dlg2.show()"
+						update=":editForm:dialog2" />
+					<h:outputLabel value=" " />
+
+					<h:outputLabel value=" " />
+					<h:outputLabel value=" " />
+
+					<h:outputLabel value="#{msg['pat_sap_code']}" style="width:40%" />
+					<p:inputText
+						value="#{appoinmentPatientBacking.selectedPatient.SAPCode}"
+						style="width:350px" readonly="true" />
+
+					<h:outputLabel value="#{msg['pat_names']}" style="width:40%" />
+					<p:inputText
+						value="#{appoinmentPatientBacking.selectedPatient.names}"
+						style="width:350px" readonly="true" />
+
+					<p:spacer height="5" />
+					<p:spacer height="5" />
+					<p:spacer height="5" />
+					<p:spacer height="5" />
+
+					<p:commandButton value="#{msg['btn_search_app']}"
+						icon="ui-icon-plusthick" oncomplete="dlg.show()"
+						update=":editForm:dialog"
+						action="#{appoinmentPatientBacking.searchAppoinmnetConfirmedAction}" />
+					<h:outputLabel value=" " />
+
+				</h:panelGrid>
+
+				<p:spacer height="10" />
+				<p:dataTable id="selectedTable" var="rec"
+					value="#{appoinmentPatientBacking.materialSelectedModel}"
+					rowKey="#{rec.code}"
+					selection="#{appoinmentPatientBacking.listDeletedMaterial}"
+					paginator="true" rows="4" style="width:100%"
+					emptyMessage="#{msg['glb_no_records_found']}">
+
+					<p:column selectionMode="multiple" style="width:18px" />
+
+					<p:column headerText="#{msg['sal_material_code']}">
+						<h:outputLabel value="#{rec.code}" />
+					</p:column>
+
+					<p:column headerText="#{msg['sal_material_descr']}">
+						<h:outputLabel value="#{rec.descr}" />
+					</p:column>
+
+					<p:column headerText="#{msg['sal_material_price']}">
+						<h:outputLabel value="#{rec.price}" />
+					</p:column>
+
+					<p:column headerText="#{msg['sal_material_amount']}">
+						<p:inplace>
+							<pe:inputNumber value="#{rec.amount}" symbol=" Unid"
+								symbolPosition="s" decimalPlaces="0" style="width:100px"
+								maxValue="999" />
+						</p:inplace>
+					</p:column>
+
+					<f:facet name="footer">
+						<p:commandButton value="#{msg['btn_delete']}"
+							icon="ui-icon-closethick" update="selectedTable"
+							action="#{appoinmentPatientBacking.removeMaterialAction}" />
+					</f:facet>
+
+				</p:dataTable>
+
+			</h:form>
+
+			<h:form id="editForm">
+
+				<p:dialog header="#{msg['sal_patient']}" widgetVar="dlg2"
+					resizable="false" id="dialog2" showEffect="fade"
+					hideEffect="explode" modal="true" width="600">
+
+					<h:panelGrid columns="2" width="100%">
+						<h:outputLabel value="#{msg['sal_key_press_doc']}"
+							style="width:100%" />
+						<h:inputText value="#{appoinmentPatientBacking.namePatient}"
+							style="width:100%" />
+
+						<f:facet name="footer">
+							<p:spacer height="10" />
+
+							<p:commandButton value="#{msg['btn_search']}"
+								icon="ui-icon-search"
+								update="pnlTable2 recordTable2 btnAddPatient"
+								action="#{appoinmentPatientBacking.searchPatientAction}" />
+							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
+								icon="ui-icon-plusthick" update=":form:pnlDetail"
+								oncomplete="dlg2.hide()"
+								disabled="#{appoinmentPatientBacking.disabledAddPatient}" />
+						</f:facet>
+					</h:panelGrid>
+
+					<p:spacer height="10" />
+					<p:scrollPanel id="pnlTable2" style="width:580px;height:400px">
+						<p:dataTable id="recordTable2" var="rec"
+							value="#{appoinmentPatientBacking.patientModel}"
+							rowKey="#{rec.SAPCode}"
+							selection="#{appoinmentPatientBacking.selectedPatient}"
+							paginator="true" rows="15" style="width:570px"
+							emptyMessage="#{msg['glb_no_records_found']}">
+
+							<p:column selectionMode="single" style="width:18px" />
+
+							<p:column headerText="#{msg['pat_sap_code']}">
+								<h:outputLabel value="#{rec.SAPCode}" />
+							</p:column>
+
+							<p:column headerText="#{msg['pat_names']}">
+								<h:outputLabel value="#{rec.names}" />
+							</p:column>
+
+						</p:dataTable>
+					</p:scrollPanel>
+
+				</p:dialog>
+			</h:form>
+
+		</p:panel>
+
+	</ui:define>
+</ui:composition>
+</html>
