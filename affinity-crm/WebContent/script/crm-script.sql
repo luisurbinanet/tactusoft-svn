@@ -138,8 +138,38 @@ CREATE TABLE `crm_page_role` (
 
 LOCK TABLES `crm_page_role` WRITE;
 /*!40000 ALTER TABLE `crm_page_role` DISABLE KEYS */;
-INSERT INTO `crm_page_role` VALUES (52,1,1),(12,1,2),(53,2,1),(13,2,2),(39,3,1),(10,3,2),(41,4,1),(45,5,1),(47,6,1),(42,7,1),(49,8,1),(11,8,2),(44,9,1),(40,10,1),(54,11,1),(24,11,2),(38,11,3),(50,12,1),(37,12,3),(46,13,1),(48,14,1),(55,15,1),(43,16,1),(51,17,1);
+INSERT INTO `crm_page_role` VALUES (52,1,1),(12,1,2),(53,2,1),(13,2,2),(39,3,1),(10,3,2),(41,4,1),(45,5,1),(47,6,1),(42,7,1),(49,8,1),(11,8,2),(44,9,1),(40,10,1),(54,11,1),(24,11,2),(38,11,3),(50,12,1),(37,12,3),(46,13,1),(48,14,1),(55,15,1),(43,16,1),(51,17,1),(56,18,1),(57,19,1);
 /*!40000 ALTER TABLE `crm_page_role` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `crm_profile`
+--
+
+DROP TABLE IF EXISTS `crm_profile`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `crm_profile` (
+  `id` decimal(19,0) NOT NULL,
+  `code` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `description` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `sales_org` varchar(4) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `distr_chan` varchar(4) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `division` varchar(4) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `state` int(11) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code_UNIQUE` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `crm_profile`
+--
+
+LOCK TABLES `crm_profile` WRITE;
+/*!40000 ALTER TABLE `crm_profile` DISABLE KEYS */;
+INSERT INTO `crm_profile` VALUES (1,'Finders Canal10','Utiizado para perfiles de Finders Canal 10','4000','10','10',1),(2,'Affinity Canal10','Affinity Canal10','1000','10','10',1),(3,'Finders Canal20','','4000','20','10',1),(4,'Finders Canal30','','4000','30','10',1),(5,'Finders Canal31','1','4000','31','10',1);
+/*!40000 ALTER TABLE `crm_profile` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -180,60 +210,74 @@ CREATE TABLE `crm_appointment` (
 
 LOCK TABLES `crm_appointment` WRITE;
 /*!40000 ALTER TABLE `crm_appointment` DISABLE KEYS */;
-INSERT INTO `crm_appointment` VALUES (1,'1','1',NULL,NULL,1,1,1,'2012-05-29 08:00:00','2012-05-29 08:45:00',NULL,NULL,1),(2,'2','2',NULL,NULL,1,1,2,'2012-05-29 08:00:00','2012-05-29 08:45:00',NULL,NULL,1),(3,'3','3',NULL,NULL,1,1,1,'2012-05-29 09:30:00','2012-05-29 10:15:00',NULL,NULL,1),(4,'4','4',NULL,NULL,1,1,1,'2012-05-29 08:50:00','2012-05-29 09:20:00',NULL,NULL,1),(5,'5','1',NULL,NULL,1,1,2,'2012-05-29 13:00:00','2012-05-29 13:30:00',NULL,NULL,1),(6,'6','0000137537','ALVAREZ DIMAS JENNY PAOLA','0000137537',1,1,2,'2012-05-29 10:30:00','2012-05-29 11:00:00',NULL,NULL,1),(7,'7','0000137537','ALVAREZ DIMAS JENNY PAOLA','0000137537',1,1,1,'2012-05-29 11:00:00','2012-05-29 11:30:00',NULL,NULL,1),(8,'C00008','0000137537','ALVAREZ DIMAS JENNY PAOLA','0000137537',1,1,1,'2012-05-29 11:30:00','2012-05-29 12:00:00',NULL,NULL,1),(9,'C00009','0000765439','SARMIENTO ROYERO CARLOS ARTURO','0000765439',1,1,1,'2012-05-29 10:30:00','2012-05-29 11:00:00',NULL,NULL,1);
+INSERT INTO `crm_appointment` VALUES (1,'1','1',NULL,NULL,1,1,1,'2012-05-29 08:00:00','2012-05-29 08:45:00',NULL,NULL,1),(2,'2','2',NULL,NULL,1,1,2,'2012-05-29 08:00:00','2012-05-29 08:45:00',NULL,NULL,1),(3,'3','3',NULL,NULL,1,1,1,'2012-05-29 09:30:00','2012-05-29 10:15:00',NULL,NULL,1),(4,'4','4',NULL,NULL,1,1,1,'2012-05-29 08:50:00','2012-05-29 09:20:00',NULL,NULL,1),(5,'5','1',NULL,NULL,1,1,2,'2012-05-29 13:00:00','2012-05-29 13:30:00',NULL,NULL,1),(6,'6','0000137537','ALVAREZ DIMAS JENNY PAOLA','0000137537',1,1,2,'2012-05-29 10:30:00','2012-05-29 11:00:00',NULL,NULL,1),(7,'7','0000137537','ALVAREZ DIMAS JENNY PAOLA','0000137537',1,1,1,'2012-05-29 11:00:00','2012-05-29 11:30:00',NULL,NULL,1),(8,'C00008','0000137537','ALVAREZ DIMAS JENNY PAOLA','0000137537',1,1,1,'2012-05-29 11:30:00','2012-05-29 12:00:00',NULL,NULL,1),(9,'C00009','0000765439','SARMIENTO ROYERO CARLOS ARTURO','0000765439',1,1,1,'2012-05-29 10:30:00','2012-05-29 11:00:00',NULL,NULL,1),(10,'C00010','0000765439','SARMIENTO ROYERO CARLOS ARTURO','0000765439',1,1,1,'2012-05-30 10:30:00','2012-05-30 11:00:00',NULL,NULL,1);
 /*!40000 ALTER TABLE `crm_appointment` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `crm_profile`
+-- Table structure for table `crm_doctor`
 --
 
-DROP TABLE IF EXISTS `crm_profile`;
+DROP TABLE IF EXISTS `crm_doctor`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `crm_profile` (
+CREATE TABLE `crm_doctor` (
   `id` decimal(19,0) NOT NULL,
   `code` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
-  `description` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `sales_org` varchar(4) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `distr_chan` varchar(4) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `division` varchar(4) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `country` varchar(2) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `city` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `region` varchar(2) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `state` int(11) NOT NULL DEFAULT '1',
+  `first_name` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `second_name` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `first_surname` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `second_surname` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `id_speciality` decimal(19,0) NOT NULL,
+  `gender` varchar(1) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `on_site` tinyint(1) DEFAULT NULL,
+  `virtual` tinyint(1) DEFAULT NULL,
+  `id_branch` decimal(19,0) NOT NULL,
+  `state` int(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `code_UNIQUE` (`code`)
+  UNIQUE KEY `code_UNIQUE` (`code`),
+  KEY `fk_crm_doctor_1` (`id_speciality`),
+  KEY `fk_crm_doctor_2` (`id_branch`),
+  CONSTRAINT `fk_crm_doctor_1` FOREIGN KEY (`id_speciality`) REFERENCES `crm_speciality` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_crm_doctor_2` FOREIGN KEY (`id_branch`) REFERENCES `crm_branch` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `crm_profile`
+-- Dumping data for table `crm_doctor`
 --
 
-LOCK TABLES `crm_profile` WRITE;
-/*!40000 ALTER TABLE `crm_profile` DISABLE KEYS */;
-INSERT INTO `crm_profile` VALUES (1,'Finders Canal10','Utiizado para perfiles de Finders Canal 10','4000','10','10','CO','BOGOTA','11',1),(2,'Affinity Canal10','Affinity Canal10','1000','10','10','CO','BOGOTA','11',1),(3,'Finders Canal20','','4000','20','10','CO','BOGOTA','11',1),(4,'Finders Canal30','','4000','30','10','CO','BOGOTA','11',1),(5,'Finders Canal 31','Finders Canal 31','4000','31','10','CO','Bogota','11',1),(6,'Finders Canal 40','','4000','40','10','co','Bogotá','11',1);
-/*!40000 ALTER TABLE `crm_profile` ENABLE KEYS */;
+LOCK TABLES `crm_doctor` WRITE;
+/*!40000 ALTER TABLE `crm_doctor` DISABLE KEYS */;
+INSERT INTO `crm_doctor` VALUES (1,'8647362','JUAN','','PEREZ','',1,'M',1,0,1,1),(2,'123','Pedro','','Perez','',1,'W',1,0,1,1),(3,'456','Adriana','','Fuente','',1,'W',1,1,1,1),(4,'142589','MARIA','','JUANA','',1,'W',1,1,1,0);
+/*!40000 ALTER TABLE `crm_doctor` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Temporary table structure for view `vw_doctor_hour`
+-- Table structure for table `crm_country`
 --
 
-DROP TABLE IF EXISTS `vw_doctor_hour`;
-/*!50001 DROP VIEW IF EXISTS `vw_doctor_hour`*/;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-/*!50001 CREATE TABLE `vw_doctor_hour` (
-  `id_branch` decimal(19,0),
-  `appointment_date` date,
-  `id_doctor` decimal(19,0),
-  `doctor_name` varchar(45),
-  `doctor_surname` varchar(45),
-  `hours` double(23,6)
-) ENGINE=MyISAM */;
-SET character_set_client = @saved_cs_client;
+DROP TABLE IF EXISTS `crm_country`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `crm_country` (
+  `id` decimal(19,0) NOT NULL,
+  `code` varchar(2) COLLATE latin1_spanish_ci NOT NULL,
+  `name` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_crm_country_1` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `crm_country`
+--
+
+LOCK TABLES `crm_country` WRITE;
+/*!40000 ALTER TABLE `crm_country` DISABLE KEYS */;
+INSERT INTO `crm_country` VALUES (1,'CO','Colombia'),(2,'MX','México');
+/*!40000 ALTER TABLE `crm_country` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `crm_speciality`
@@ -292,43 +336,22 @@ INSERT INTO `crm_user_role` VALUES (1,1,1),(2,2,1);
 UNLOCK TABLES;
 
 --
--- Table structure for table `crm_doctor`
+-- Temporary table structure for view `vw_doctor_hour`
 --
 
-DROP TABLE IF EXISTS `crm_doctor`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `crm_doctor` (
-  `id` decimal(19,0) NOT NULL,
-  `code` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
-  `first_name` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
-  `second_name` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `first_surname` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
-  `second_surname` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `id_speciality` decimal(19,0) NOT NULL,
-  `gender` varchar(1) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `on_site` tinyint(1) DEFAULT NULL,
-  `virtual` tinyint(1) DEFAULT NULL,
-  `id_branch` decimal(19,0) NOT NULL,
-  `state` int(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `code_UNIQUE` (`code`),
-  KEY `fk_crm_doctor_1` (`id_speciality`),
-  KEY `fk_crm_doctor_2` (`id_branch`),
-  CONSTRAINT `fk_crm_doctor_1` FOREIGN KEY (`id_speciality`) REFERENCES `crm_speciality` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_crm_doctor_2` FOREIGN KEY (`id_branch`) REFERENCES `crm_branch` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `crm_doctor`
---
-
-LOCK TABLES `crm_doctor` WRITE;
-/*!40000 ALTER TABLE `crm_doctor` DISABLE KEYS */;
-INSERT INTO `crm_doctor` VALUES (1,'8647362','JUAN','','PEREZ','',1,'M',1,0,1,1),(2,'123','Pedro','','Perez','',1,'W',1,0,1,1),(3,'456','Adriana','','Fuente','',1,'W',1,1,1,1),(4,'142589','MARIA','','JUANA','',1,'W',1,1,1,0);
-/*!40000 ALTER TABLE `crm_doctor` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `vw_doctor_hour`;
+/*!50001 DROP VIEW IF EXISTS `vw_doctor_hour`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `vw_doctor_hour` (
+  `id_branch` decimal(19,0),
+  `appointment_date` date,
+  `id_doctor` decimal(19,0),
+  `doctor_name` varchar(45),
+  `doctor_surname` varchar(45),
+  `hours` double(23,6)
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
 
 --
 -- Table structure for table `crm_user_branch`
@@ -447,7 +470,7 @@ CREATE TABLE `crm_doctor_schedule` (
 
 LOCK TABLES `crm_doctor_schedule` WRITE;
 /*!40000 ALTER TABLE `crm_doctor_schedule` DISABLE KEYS */;
-INSERT INTO `crm_doctor_schedule` VALUES (1,1,2,'08:00:00','12:00:00'),(2,1,2,'13:00:00','18:00:00'),(3,1,3,'08:00:00','12:00:00'),(4,1,3,'13:00:00','18:00:00'),(5,1,6,'08:00:00','12:00:00'),(6,1,4,'08:00:00','12:00:00'),(7,1,4,'13:00:00','18:00:00'),(8,1,5,'08:00:00','12:00:00'),(9,1,5,'13:00:00','18:00:00'),(10,2,5,'13:00:00','17:00:00');
+INSERT INTO `crm_doctor_schedule` VALUES (1,1,2,'08:00:00','12:00:00'),(2,1,2,'13:00:00','18:00:00'),(3,1,3,'08:00:00','12:00:00'),(4,1,3,'13:00:00','18:00:00'),(5,1,6,'08:00:00','12:00:00'),(6,1,4,'08:00:00','12:00:00'),(7,1,4,'13:00:00','18:00:00'),(8,1,5,'08:00:00','12:00:00'),(9,1,5,'13:00:00','18:00:00'),(10,2,5,'13:00:00','17:00:00'),(11,4,4,'08:00:00','12:00:00');
 /*!40000 ALTER TABLE `crm_doctor_schedule` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -592,6 +615,81 @@ INSERT INTO `crm_holiday` VALUES (1,'Festivo','2012-05-23');
 UNLOCK TABLES;
 
 --
+-- Temporary table structure for view `vw_doctor_schedule`
+--
+
+DROP TABLE IF EXISTS `vw_doctor_schedule`;
+/*!50001 DROP VIEW IF EXISTS `vw_doctor_schedule`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `vw_doctor_schedule` (
+  `id_doctor` decimal(19,0),
+  `first_name` varchar(45),
+  `first_surname` varchar(45),
+  `id_branch` decimal(19,0),
+  `day` int(11)
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Table structure for table `crm_region`
+--
+
+DROP TABLE IF EXISTS `crm_region`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `crm_region` (
+  `id` decimal(19,0) NOT NULL,
+  `code` varchar(3) COLLATE latin1_spanish_ci NOT NULL,
+  `name` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
+  `id_country` decimal(19,0) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_crm_region_1` (`code`),
+  KEY `fk_crm_region_1` (`id_country`),
+  CONSTRAINT `fk_crm_state_1` FOREIGN KEY (`id_country`) REFERENCES `crm_country` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `crm_region`
+--
+
+LOCK TABLES `crm_region` WRITE;
+/*!40000 ALTER TABLE `crm_region` DISABLE KEYS */;
+INSERT INTO `crm_region` VALUES (1,'5','ANTIOQUIA',1),(2,'8','ATLÁNTICO',1),(3,'11','BOGOTÁ',1),(4,'13','BOLÍVAR',1),(5,'15','BOYACA',1),(6,'17','CALDAS',1),(7,'18','CAQUETA',1),(8,'19','CAUCA',1),(9,'20','CESAR',1),(10,'23','CÓRDOBA',1),(11,'25','CUNDINAMARCA',1),(12,'27','CHOCO',1),(13,'41','HUILA',1),(14,'44','LA GUAJIRA',1),(15,'47','MAGDALENA',1),(16,'50','META',1),(17,'52','NARIÑO',1),(18,'54','NORTE SANTANDER',1),(19,'63','QUINDIO',1),(20,'66','RISARALDA',1),(21,'68','SANTANDER',1),(22,'70','SUCRE',1),(23,'73','TOLIMA',1),(24,'76','VALLE',1),(25,'81','ARAUCA',1),(26,'85','CASANARE',1),(27,'86','PUTUMAYO',1),(28,'88','SAN ANDRÉS',1),(29,'91','AMAZONAS',1),(30,'94','GUAINIA',1),(31,'95','GUAVIARE',1),(32,'97','VAUPES',1),(33,'99','VICHADA',1);
+/*!40000 ALTER TABLE `crm_region` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `crm_city`
+--
+
+DROP TABLE IF EXISTS `crm_city`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `crm_city` (
+  `id` decimal(19,0) NOT NULL,
+  `code` varchar(10) COLLATE latin1_spanish_ci NOT NULL,
+  `name` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
+  `id_region` decimal(19,0) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_crm_city_1` (`code`),
+  KEY `fk_crm_city_1` (`id_region`),
+  CONSTRAINT `fk_crm_city_1` FOREIGN KEY (`id_region`) REFERENCES `crm_region` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `crm_city`
+--
+
+LOCK TABLES `crm_city` WRITE;
+/*!40000 ALTER TABLE `crm_city` DISABLE KEYS */;
+INSERT INTO `crm_city` VALUES (1,'1','MEDELLIN',1),(2,'2','BARRANQUILLA',2),(3,'3','BOGOTÁ',3),(4,'4','CARTAGENA',4),(5,'5','TUNJA',5),(6,'6','MANIZALES',6),(7,'7','FLORENCIA',7),(8,'8','POPAYAN',8),(9,'9','VALLEDUPAR',9),(10,'10','MONTERIA',10),(11,'11','BOGOTÁ',11),(12,'12','QUIBDO',12),(13,'13','NEIVA',13),(14,'14','RIOHACHA',14),(15,'15','SANTA MARTA',15),(16,'16','VILLAVIVENCIO',16),(17,'17','PASTO',17),(18,'18','CUCUTA',18),(19,'19','ARMENIA',19),(20,'20','PEREIRA',20),(21,'21','BUCARAMANGA',21),(22,'22','SINCELEJO',22),(23,'23','IBAGUE',23),(24,'24','CALI',24),(25,'25','ARAUCA',25),(26,'26','YOPAL',26),(27,'27','MOCOA',27),(28,'28','SAN ANDRES',28),(29,'29','LETICIA',29),(30,'30','INIRIDA',30),(31,'31','SAN JOSE DE GUAVIARE',31),(32,'32','MITU',32),(33,'33','PUERTO CARREÑO',33);
+/*!40000 ALTER TABLE `crm_city` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `crm_page`
 --
 
@@ -615,7 +713,7 @@ CREATE TABLE `crm_page` (
 
 LOCK TABLES `crm_page` WRITE;
 /*!40000 ALTER TABLE `crm_page` DISABLE KEYS */;
-INSERT INTO `crm_page` VALUES (1,'Seguridad',NULL,'ui-icon-document',NULL,1),(2,'Tablas',NULL,'ui-icon-gear',NULL,2),(3,'Usuarios','/pages/secure/user.jsf',NULL,1,2),(4,'Roles','/pages/secure/role.jsf',NULL,1,1),(5,'Doctor','/pages/tables/doctor.jsf',NULL,2,1),(6,'Parámetros','/pages/tables/parameter.jsf',NULL,2,2),(7,'Especialdades','/pages/tables/speciality.jsf',NULL,2,3),(8,'Pacientes','/pages/processes/patient.jsf',NULL,11,1),(9,'Perfiles','/pages/tables/profile.jsf',NULL,2,5),(10,'Cambiar Clave','/pages/secure/changePassword.jsf',NULL,1,3),(11,'Procesos',NULL,'ui-icon-contact',NULL,3),(12,'Crear Pedido','/pages/processes/salesOrder.jsf',NULL,11,2),(13,'Sucursales','/pages/tables/branch.jsf',NULL,2,4),(14,'Departamentos','/pages/tables/department.jsf',NULL,2,6),(15,'Agenda',NULL,'ui-icon-calendar',NULL,4),(16,'Procedimientos','/pages/tables/procedure.jsf',NULL,2,7),(17,'Crear Cita','/pages/processes/appointment.jsf',NULL,15,1);
+INSERT INTO `crm_page` VALUES (1,'Seguridad',NULL,'ui-icon-document',NULL,1),(2,'Tablas',NULL,'ui-icon-gear',NULL,2),(3,'Usuarios','/pages/secure/user.jsf',NULL,1,2),(4,'Roles','/pages/secure/role.jsf',NULL,1,1),(5,'Doctor','/pages/tables/doctor.jsf',NULL,2,1),(6,'Parámetros','/pages/tables/parameter.jsf',NULL,2,2),(7,'Especialdades','/pages/tables/speciality.jsf',NULL,2,3),(8,'Pacientes','/pages/processes/patient.jsf',NULL,11,1),(9,'Perfiles','/pages/tables/profile.jsf',NULL,2,5),(10,'Cambiar Clave','/pages/secure/changePassword.jsf',NULL,1,3),(11,'Procesos',NULL,'ui-icon-contact',NULL,3),(12,'Crear Pedido','/pages/processes/salesOrder.jsf',NULL,11,2),(13,'Sucursales','/pages/tables/branch.jsf',NULL,2,4),(14,'Departamentos','/pages/tables/department.jsf',NULL,2,6),(15,'Agenda',NULL,'ui-icon-calendar',NULL,4),(16,'Procedimientos','/pages/tables/procedure.jsf',NULL,2,7),(17,'Crear Cita','/pages/processes/appointment.jsf',NULL,15,1),(18,'Cancelar Cita','/pages/processes/appointmentCancel.jsf',NULL,15,2),(19,'Chequear Cita','/pages/processes/appointmentCheck.jsf',NULL,15,3);
 /*!40000 ALTER TABLE `crm_page` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -637,6 +735,25 @@ UNLOCK TABLES;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `vw_doctor_schedule`
+--
+
+/*!50001 DROP TABLE IF EXISTS `vw_doctor_schedule`*/;
+/*!50001 DROP VIEW IF EXISTS `vw_doctor_schedule`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `vw_doctor_schedule` AS select distinct `a`.`id` AS `id_doctor`,`a`.`first_name` AS `first_name`,`a`.`first_surname` AS `first_surname`,`a`.`id_branch` AS `id_branch`,`b`.`day` AS `day` from (`crm_doctor` `a` join `crm_doctor_schedule` `b` on((`b`.`id_doctor` = `a`.`id`))) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -647,4 +764,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-05-29  7:09:37
+-- Dump completed on 2012-06-01  6:57:46
