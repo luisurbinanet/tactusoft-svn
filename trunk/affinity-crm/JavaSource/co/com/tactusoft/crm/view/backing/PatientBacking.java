@@ -1,17 +1,25 @@
 package co.com.tactusoft.crm.view.backing;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.context.annotation.Scope;
 
+import co.com.tactusoft.crm.controller.bo.TablesBo;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
+import co.com.tactusoft.crm.model.entities.CrmCity;
+import co.com.tactusoft.crm.model.entities.CrmCountry;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
+import co.com.tactusoft.crm.model.entities.CrmRegion;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.util.SAPEnvironment;
 import co.com.tactusoft.crm.view.beans.Patient;
@@ -25,12 +33,27 @@ public class PatientBacking implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@Inject
+	private TablesBo tableService;
+
 	private List<Patient> list;
 	private PatientDataModel model;
 	private Patient selected;
 
 	private List<SelectItem> listBranch;
 	private String salesOff;
+
+	private List<SelectItem> listCountry;
+	private BigDecimal idCountry;
+	private Map<BigDecimal, CrmCountry> mapCountry;
+
+	private List<SelectItem> listRegion;
+	private BigDecimal idRegion;
+	private Map<BigDecimal, CrmRegion> mapRegion;
+
+	private List<SelectItem> listCity;
+	private BigDecimal idCity;
+	private Map<BigDecimal, CrmCity> mapCity;
 
 	private List<String> selectedSendOptions;
 
@@ -89,6 +112,67 @@ public class PatientBacking implements Serializable {
 		this.salesOff = salesOff;
 	}
 
+	public List<SelectItem> getListCountry() {
+		if (listCountry == null) {
+			listCountry = new LinkedList<SelectItem>();
+			mapCountry = new HashMap<BigDecimal, CrmCountry>();
+			for (CrmCountry row : tableService.getListCountry()) {
+				listCountry.add(new SelectItem(row.getId(), row.getName()));
+				mapCountry.put(row.getId(), row);
+			}
+
+			if (listCountry.size() > 0) {
+				idCountry = (BigDecimal) listCountry.get(0).getValue();
+				handleCountryChange();
+			}
+		}
+		return listCountry;
+	}
+
+	public void setListCountry(List<SelectItem> listCountry) {
+		this.listCountry = listCountry;
+	}
+
+	public BigDecimal getIdCountry() {
+		return idCountry;
+	}
+
+	public void setIdCountry(BigDecimal idCountry) {
+		this.idCountry = idCountry;
+	}
+
+	public List<SelectItem> getListRegion() {
+		return listRegion;
+	}
+
+	public void setListRegion(List<SelectItem> listRegion) {
+		this.listRegion = listRegion;
+	}
+
+	public BigDecimal getIdRegion() {
+		return idRegion;
+	}
+
+	public void setIdRegion(BigDecimal idRegion) {
+		this.idRegion = idRegion;
+	}
+
+	public List<SelectItem> getListCity() {
+		return listCity;
+	}
+
+	public void setListCity(List<SelectItem> listCity) {
+		this.listCity = listCity;
+	}
+
+	public BigDecimal getIdCity() {
+		return idCity;
+	}
+
+	public void setIdCity(BigDecimal idCity) {
+		this.idCity = idCity;
+	}
+
 	public List<String> getSelectedSendOptions() {
 		return selectedSendOptions;
 	}
@@ -103,6 +187,39 @@ public class PatientBacking implements Serializable {
 
 	public void setDisabledSaveButton(boolean disabledSaveButton) {
 		this.disabledSaveButton = disabledSaveButton;
+	}
+
+	public void handleCountryChange() {
+		CrmCountry crmCountry = mapCountry.get(idCountry);
+		listRegion = new LinkedList<SelectItem>();
+		mapRegion = new HashMap<BigDecimal, CrmRegion>();
+		for (CrmRegion row : crmCountry.getCrmRegions()) {
+			listRegion.add(new SelectItem(row.getId(), row.getName()));
+			mapRegion.put(row.getId(), row);
+		}
+
+		if (listRegion.size() > 0) {
+			idRegion = (BigDecimal) listRegion.get(0).getValue();
+			handleRegionChange();
+		} else {
+			idRegion = null;
+			idCity = null;
+			listCity = new LinkedList<SelectItem>();
+		}
+	}
+
+	public void handleRegionChange() {
+		CrmRegion crmRegion = mapRegion.get(idRegion);
+		listCity = new LinkedList<SelectItem>();
+		mapCity = new HashMap<BigDecimal, CrmCity>();
+		for (CrmCity row : crmRegion.getCrmCities()) {
+			listCity.add(new SelectItem(row.getId(), row.getName()));
+			mapCity.put(row.getId(), row);
+		}
+		
+		if (listRegion.size() == 0) {
+			idCity = null;
+		}
 	}
 
 	public void newAction(ActionEvent event) {
@@ -128,14 +245,20 @@ public class PatientBacking implements Serializable {
 					tratamiento = "2";
 				}
 
-				String SAPCode = CustomerExecute.excecute(
-						sap.getEnvironment(), "13", selected.getCode(),
-						tratamiento, names, profile.getCountry(),
-						profile.getCity(), profile.getRegion(), "D001",
-						profile.getSalesOrg(), profile.getDistrChan(),
-						profile.getDivision(), this.salesOff, "01", "Z001",
-						selected.getAddress(), selected.getPhoneNumber(),
-						selected.getCellNumber(), "");
+				CrmCountry crmCountry = mapCountry.get(idCountry);
+				CrmRegion crmRegion = mapRegion.get(idRegion);
+				CrmCity crmCity = mapCity.get(idCity);
+
+				String SAPCode = CustomerExecute
+						.excecute(sap.getEnvironment(), "13",
+								selected.getCode(), tratamiento, names,
+								crmCountry.getCode(), crmCity.getName(),
+								crmRegion.getCode(), "D001",
+								profile.getSalesOrg(), profile.getDistrChan(),
+								profile.getDivision(), this.salesOff, "01",
+								"Z001", selected.getAddress(),
+								selected.getPhoneNumber(),
+								selected.getCellNumber(), "");
 
 				if (SAPCode != null) {
 					selected.setSAPCode(SAPCode);

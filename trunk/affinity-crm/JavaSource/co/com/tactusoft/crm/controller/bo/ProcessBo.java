@@ -16,7 +16,7 @@ import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmDoctorSchedule;
 import co.com.tactusoft.crm.model.entities.CrmHoliday;
 import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
-import co.com.tactusoft.crm.model.entities.VwDoctorHour;
+import co.com.tactusoft.crm.model.entities.VwDoctorSchedule;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.beans.Candidate;
@@ -48,7 +48,7 @@ public class ProcessBo implements Serializable {
 			String code = "C" + FacesUtil.lpad(id.toString(), '0', 5);
 			entity.setCode(code);
 		}
-		
+
 		dao.persist(entity);
 		return entity;
 	}
@@ -270,22 +270,19 @@ public class ProcessBo implements Serializable {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 
-		if ((calendar.get(Calendar.DAY_OF_WEEK) != 1)
-				&& (this.validateHoliday(listHoliday, date))) {
+		int currentDay = calendar.get(Calendar.DAY_OF_WEEK);
+
+		if ((currentDay != 1) && (this.validateHoliday(listHoliday, date))) {
 
 			String dateString = FacesUtil.formatDate(date, "yyyy-MM-dd");
 
 			// Buscar citas x doctor y sucursal
-			List<VwDoctorHour> listVwDoctorHour = dao
-					.find("from VwDoctorHour o where o.id.idBranch = "
-							+ idBranch
-							+ " and o.id.appointmentDate >= '"
-							+ dateString
-							+ "T00:00:00.000+05:00' and o.id.appointmentDate <= '"
-							+ dateString + "T23:59:59.999+05:00'");
+			List<VwDoctorSchedule> listVwDoctorSchedule = dao
+					.find("from VwDoctorSchedule o where o.id.idBranch = "
+							+ idBranch + " and o.id.day = " + currentDay);
 
-			for (VwDoctorHour vwDoctorHour : listVwDoctorHour) {
-				BigDecimal idDoctor = vwDoctorHour.getId().getIdDoctor();
+			for (VwDoctorSchedule vwDoctorSchedule : listVwDoctorSchedule) {
+				BigDecimal idDoctor = vwDoctorSchedule.getId().getIdDoctor();
 
 				// Buscar horarios Doctor
 				List<CrmDoctorSchedule> listDoctorSchedule = dao
@@ -308,8 +305,7 @@ public class ProcessBo implements Serializable {
 									+ "order by o.startAppointmentDate");
 
 					for (CrmDoctorSchedule schedule : listDoctorSchedule) {
-						if (calendar.get(Calendar.DAY_OF_WEEK) == schedule
-								.getDay()) {
+						if (currentDay == schedule.getDay()) {
 
 							Date scheduleInitHour = FacesUtil.addHourToDate(
 									date, schedule.getStartHour());
@@ -349,10 +345,10 @@ public class ProcessBo implements Serializable {
 								if (validate) {
 									CrmDoctor crmDoctor = new CrmDoctor();
 									crmDoctor.setId(idDoctor);
-									crmDoctor.setFirstName(vwDoctorHour.getId()
-											.getDoctorName());
-									crmDoctor.setFirstSurname(vwDoctorHour
-											.getId().getDoctorSurname());
+									crmDoctor.setFirstName(vwDoctorSchedule
+											.getId().getFirstName());
+									crmDoctor.setFirstSurname(vwDoctorSchedule
+											.getId().getFirstSurname());
 
 									result.add(new Candidate(id, crmDoctor,
 											initHour, endHour));
@@ -369,6 +365,23 @@ public class ProcessBo implements Serializable {
 		}
 
 		return result;
+	}
+
+	private int validateDuplicated(String patient, Date starDate, Date endDate) {
+		String dateString = FacesUtil.formatDate(starDate, "yyyy-MM-dd");
+		String startHourString = FacesUtil.formatDate(starDate, "HH:mm:ss");
+		String endHourString = FacesUtil.formatDate(endDate, "HH:mm:ss");
+
+		List<CrmAppointment> listApp = dao
+				.find("from CrmAppointment o where o.startAppointmentDate >= '"
+						+ dateString + "T" + startHourString
+						+ ".000+05:00' and o.startAppointmentDate <= '"
+						+ dateString + "T" + endHourString
+						+ ".000+05:00' and o.patient = '" + patient
+						+ "' and o.state = 1 "
+						+ "order by o.startAppointmentDate");
+
+		return listApp.size();
 	}
 
 	public int validateAppointmentForDate(BigDecimal idBranch, Date starDate,
@@ -478,23 +491,6 @@ public class ProcessBo implements Serializable {
 		}
 
 		return result;
-	}
-
-	private int validateDuplicated(String patient, Date starDate, Date endDate) {
-		String dateString = FacesUtil.formatDate(starDate, "yyyy-MM-dd");
-		String startHourString = FacesUtil.formatDate(starDate, "HH:mm:ss");
-		String endHourString = FacesUtil.formatDate(endDate, "HH:mm:ss");
-
-		List<CrmAppointment> listApp = dao
-				.find("from CrmAppointment o where o.startAppointmentDate >= '"
-						+ dateString + "T" + startHourString
-						+ ".000+05:00' and o.startAppointmentDate <= '"
-						+ dateString + "T" + endHourString
-						+ ".999+05:00' and o.patient = '" + patient
-						+ "' and o.state = 1 "
-						+ "order by o.startAppointmentDate");
-
-		return listApp.size();
 	}
 
 }
