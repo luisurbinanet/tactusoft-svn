@@ -18,7 +18,7 @@
 		<p:ajaxStatus onstart="statusDialog.show();"
 			onsuccess="statusDialog.hide();" />
 
-		<p:dialog modal="false" widgetVar="statusDialog"
+		<p:dialog modal="true" widgetVar="statusDialog"
 			header="#{msg['msg_wait']}" draggable="false" closable="false"
 			resizable="false">
 			<p:graphicImage value="../../images/ajaxloadingbar.gif" />

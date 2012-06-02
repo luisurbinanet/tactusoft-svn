@@ -493,4 +493,12 @@ public class ProcessBo implements Serializable {
 		return result;
 	}
 
+	public List<CrmAppointment> listAppointmentByPatient(String patient,
+			int state) {
+		List<CrmAppointment> list = new ArrayList<CrmAppointment>();
+		list = dao.find("from CrmAppointment o where o.patient = '" + patient
+				+ "' and o.state = " + state);
+		return list;
+	}
+
 }
