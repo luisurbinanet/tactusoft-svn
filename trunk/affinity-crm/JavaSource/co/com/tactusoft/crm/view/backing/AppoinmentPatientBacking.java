@@ -11,8 +11,10 @@ import javax.inject.Named;
 
 import org.springframework.context.annotation.Scope;
 
+import co.com.tactusoft.crm.controller.bo.ProcessBo;
 import co.com.tactusoft.crm.controller.bo.TablesBo;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
+import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.beans.Patient;
 import co.com.tactusoft.crm.view.datamodel.AppointmentDataModel;
@@ -28,6 +30,9 @@ public class AppoinmentPatientBacking implements Serializable {
 	@Inject
 	private TablesBo tablesService;
 
+	@Inject
+	private ProcessBo processService;
+
 	private static final long serialVersionUID = 1L;
 
 	private List<Patient> listPatient;
@@ -37,7 +42,8 @@ public class AppoinmentPatientBacking implements Serializable {
 
 	private List<CrmAppointment> listAppointment;
 	private AppointmentDataModel appointmentModel;
-	private CrmAppointment[] selectedAppointment;
+	private CrmAppointment[] selectedsAppointment;
+	private CrmAppointment selectedAppointment;
 
 	private boolean disabledSaveButton;
 
@@ -101,11 +107,19 @@ public class AppoinmentPatientBacking implements Serializable {
 		this.appointmentModel = appointmentModel;
 	}
 
-	public CrmAppointment[] getSelectedAppointment() {
+	public CrmAppointment[] getSelectedsAppointment() {
+		return selectedsAppointment;
+	}
+
+	public void setSelectedsAppointment(CrmAppointment[] selectedsAppointment) {
+		this.selectedsAppointment = selectedsAppointment;
+	}
+
+	public CrmAppointment getSelectedAppointment() {
 		return selectedAppointment;
 	}
 
-	public void setSelectedAppointment(CrmAppointment[] selectedAppointment) {
+	public void setSelectedAppointment(CrmAppointment selectedAppointment) {
 		this.selectedAppointment = selectedAppointment;
 	}
 
@@ -120,7 +134,7 @@ public class AppoinmentPatientBacking implements Serializable {
 	public void newAction(ActionEvent event) {
 		listAppointment = new LinkedList<CrmAppointment>();
 		appointmentModel = new AppointmentDataModel(listAppointment);
-		selectedAppointment = null;
+		selectedsAppointment = null;
 
 		selectedPatient = new Patient();
 		listPatient = new LinkedList<Patient>();
@@ -130,20 +144,15 @@ public class AppoinmentPatientBacking implements Serializable {
 		namePatient = "";
 	}
 
-	public void saveAction() {
-		String message = "";
-
-		if (selectedPatient == null) {
-			message = FacesUtil.getMessage("sal_msg_error_pat");
-			FacesUtil.addError(message);
-		} else if (FacesUtil.isEmptyOrBlank(selectedPatient.getSAPCode())) {
-			message = FacesUtil.getMessage("sal_msg_error_pat");
-			FacesUtil.addError(message);
-		}
-	}
-
 	public void searchAppoinmnetConfirmedAction() {
-
+		if (selectedPatient.getSAPCode() == null) {
+			String message = FacesUtil.getMessage("sal_msg_error_pat");
+			FacesUtil.addError(message);
+		} else {
+			listAppointment = processService.listAppointmentByPatient(
+					selectedPatient.getSAPCode(), Constant.APP_STATE_CONFIRMED);
+			appointmentModel = new AppointmentDataModel(listAppointment);
+		}
 	}
 
 	public void searchPatientAction() {
@@ -172,6 +181,48 @@ public class AppoinmentPatientBacking implements Serializable {
 			}
 		}
 		return false;
+	}
+
+	public boolean isDisabledSelectedPatient() {
+		if (selectedPatient.getSAPCode() == null) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isDisabledAppointment() {
+		if (this.listAppointment.size() == 0) {
+			return true;
+		}
+		return false;
+	}
+
+	public void cancelAppointmentAction(ActionEvent actionEvent) {
+		String codes = "";
+		for (CrmAppointment row : selectedsAppointment) {
+			row.setState(Constant.APP_STATE_CANCELED);
+			processService.saveAppointment(row);
+			codes = codes + row.getCode() + ",";
+		}
+
+		codes = codes.substring(0, codes.length() - 1);
+		searchAppoinmnetConfirmedAction();
+
+		String message = FacesUtil.getMessage("app_msg_cancel", codes);
+		FacesUtil.addInfo(message);
+
+	}
+
+	public void checkAppointmentAction(ActionEvent actionEvent) {
+		String code = "";
+		selectedAppointment.setState(Constant.APP_STATE_CHECKED);
+		processService.saveAppointment(selectedAppointment);
+		code = selectedAppointment.getCode();
+
+		searchAppoinmnetConfirmedAction();
+
+		String message = FacesUtil.getMessage("app_msg_check", code);
+		FacesUtil.addInfo(message);
 	}
 
 }

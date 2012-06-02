@@ -23,10 +23,14 @@ public class Constant {
 
 	public static String APP_TYPE_FOR_DATE_DESC = "app_for_date";
 	public static String APP_TYPE_FOR_DOCTOR_DESC = "app_for_doctor";
-	
+
 	public static final Integer INTERVAL_TIME_APPOINTMENT = 5;
-	
+
 	public static final int STATE_APP_ACTIVE = 1;
 	public static final int STATE_APP_CANCEl = 3;
+
+	public static final int APP_STATE_CONFIRMED = 1;
+	public static final int APP_STATE_CANCELED = 2;
+	public static final int APP_STATE_CHECKED = 3;
 
 }

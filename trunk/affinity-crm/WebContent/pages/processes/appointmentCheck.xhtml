@@ -10,7 +10,7 @@
 	<ui:define name="body">
 
 		<p:panel style="width:100%;height:600px;"
-			header="#{msg['title_appointment_cancel']}">
+			header="#{msg['title_appointment_check']}">
 
 			<p:spacer height="5" />
 
@@ -55,11 +55,11 @@
 				<p:dataTable id="selectedTable" var="rec"
 					value="#{appoinmentPatientBacking.appointmentModel}"
 					rowKey="#{rec.code}" style="width:100%"
-					selection="#{appoinmentPatientBacking.selectedsAppointment}"
+					selection="#{appoinmentPatientBacking.selectedAppointment}"
 					paginator="true" rows="4"
 					emptyMessage="#{msg['glb_no_records_found']}">
 
-					<p:column selectionMode="multiple" style="width:18px" />
+					<p:column selectionMode="single" style="width:18px" />
 
 					<p:column headerText="#{msg['app_date']}">
 						<h:outputLabel value="#{rec.code}">
@@ -91,7 +91,7 @@
 					</p:column>
 
 					<f:facet name="footer">
-						<p:commandButton value="#{msg['btn_cancel_appointment']}"
+						<p:commandButton value="#{msg['btn_check_appointment']}"
 							icon="ui-icon-closethick" onclick="confirmation.show()"
 							disabled="#{appoinmentPatientBacking.disabledAppointment}" />
 					</f:facet>
@@ -158,7 +158,7 @@
 					<p:commandButton id="confirm" value="#{msg['glb_state_yes']}"
 						update=":form:selectedTable :form:growl"
 						oncomplete="confirmation.hide()"
-						actionListener="#{appoinmentPatientBacking.cancelAppointmentAction}" />
+						actionListener="#{appoinmentPatientBacking.checkAppointmentAction}" />
 					<p:commandButton id="decline" value="#{msg['glb_state_no']}"
 						onclick="confirmation.hide()" type="button" />
 

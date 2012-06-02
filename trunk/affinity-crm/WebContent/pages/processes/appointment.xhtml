@@ -23,6 +23,9 @@
 						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
 							actionListener="#{appointmentBacking.newAction}" process="@this"
 							update="pnlDetail btnSaveOrder" />
+						<p:commandButton value="#{msg['btn_add_patient']}"
+							icon="ui-icon-circle-check" oncomplete="dlg2.show()"
+							update=":editForm:dialog2" />
 						<p:commandButton id="btnSaveOrder" value="#{msg['btn_save']}"
 							icon="ui-icon-disk" action="#{appointmentBacking.saveAction}"
 							update="btnSaveOrder"
@@ -34,11 +37,6 @@
 
 				<h:panelGrid id="pnlDetail" columns="2" cellpadding="4"
 					style="margin:0 auto;" width="100%">
-
-					<p:commandButton value="#{msg['btn_add_patient']}"
-						icon="ui-icon-plusthick" oncomplete="dlg2.show()"
-						update=":editForm:dialog2" />
-					<h:outputLabel value=" " />
 
 					<h:outputLabel value="#{msg['pat_sap_code']}" style="width:100%" />
 					<p:inputText value="#{appointmentBacking.selectedPatient.SAPCode}"
