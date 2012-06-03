@@ -1,6 +1,8 @@
 package co.com.tactusoft.crm.model.entities;
 
+import java.math.BigDecimal;
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -17,18 +19,18 @@ import javax.persistence.UniqueConstraint;
 public class CrmHoliday implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private int id;
+	private BigDecimal id;
 	private String description;
 	private Date holiday;
 
 	public CrmHoliday() {
 	}
 
-	public CrmHoliday(int id) {
+	public CrmHoliday(BigDecimal id) {
 		this.id = id;
 	}
 
-	public CrmHoliday(int id, String description, Date holiday) {
+	public CrmHoliday(BigDecimal id, String description, Date holiday) {
 		this.id = id;
 		this.description = description;
 		this.holiday = holiday;
@@ -36,11 +38,11 @@ public class CrmHoliday implements java.io.Serializable {
 
 	@Id
 	@Column(name = "id", unique = true, nullable = false)
-	public int getId() {
+	public BigDecimal getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(BigDecimal id) {
 		this.id = id;
 	}
 

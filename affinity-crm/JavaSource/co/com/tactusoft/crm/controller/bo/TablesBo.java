@@ -14,6 +14,7 @@ import co.com.tactusoft.crm.model.entities.CrmDepartment;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmDoctorSchedule;
 import co.com.tactusoft.crm.model.entities.CrmDomain;
+import co.com.tactusoft.crm.model.entities.CrmHoliday;
 import co.com.tactusoft.crm.model.entities.CrmPage;
 import co.com.tactusoft.crm.model.entities.CrmPageRole;
 import co.com.tactusoft.crm.model.entities.CrmProcedure;
@@ -133,6 +134,10 @@ public class TablesBo implements Serializable {
 			BigDecimal idProcedure) {
 		return dao.find("from CrmProcedureDetail o where o.crmProcedure.id = "
 				+ idProcedure);
+	}
+	
+	public List<CrmHoliday> getListHoliday() {
+		return dao.find("from CrmHoliday o");
 	}
 
 	public Integer saveDoctor(CrmDoctor entity) {
@@ -268,6 +273,13 @@ public class TablesBo implements Serializable {
 		}
 
 		return i;
+	}
+	
+	public Integer saveHoliday(CrmHoliday entity) {
+		if (entity.getId() == null) {
+			entity.setId(getId(CrmHoliday.class));
+		}
+		return dao.persist(entity);
 	}
 
 	public <T> void remove(Class<T> entity) {
