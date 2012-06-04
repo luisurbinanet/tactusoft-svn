@@ -10,7 +10,7 @@
 	<ui:define name="body">
 
 		<p:panel style="width:100%;height:600px;"
-			header="#{msg['title_appointment_check']}">
+			header="#{msg['title_search_by_patient']}">
 
 			<p:spacer height="5" />
 
@@ -20,17 +20,14 @@
 
 				<p:toolbar style="width:100%">
 					<p:toolbarGroup align="left">
-						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
-							actionListener="#{appoinmentPatientBacking.newAction}"
-							process="@this" update="pnlDetail selectedTable btnSearchPatient" />
 						<p:commandButton value="#{msg['btn_add_patient']}"
 							icon="ui-icon-circle-check" oncomplete="dlg2.show()"
 							update=":editForm:dialog2" />
 						<p:commandButton id="btnSearchPatient"
 							value="#{msg['btn_search_app']}" icon="ui-icon-search"
 							update="selectedTable growl"
-							disabled="#{appoinmentPatientBacking.disabledSelectedPatient}"
-							action="#{appoinmentPatientBacking.searchAppoinmnetConfirmedAction}" />
+							disabled="#{searchByPatientBacking.disabledSelectedPatient}"
+							action="#{searchByPatientBacking.searchAppoinmnetConfirmedAction}" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -41,21 +38,31 @@
 
 					<h:outputLabel value="#{msg['pat_sap_code']}" style="width:40%" />
 					<p:inputText
-						value="#{appoinmentPatientBacking.selectedPatient.SAPCode}"
+						value="#{searchByPatientBacking.selectedPatient.SAPCode}"
 						style="width:350px" readonly="true" />
 
 					<h:outputLabel value="#{msg['pat_names']}" style="width:40%" />
 					<p:inputText
-						value="#{appoinmentPatientBacking.selectedPatient.names}"
+						value="#{searchByPatientBacking.selectedPatient.names}"
 						style="width:350px" readonly="true" />
+
+					<h:outputLabel value="#{msg['src_star_date']}" style="width:40%" />
+					<p:calendar value="#{searchByPatientBacking.startDate}"
+						label="#{msg['src_star_date']}" readonlyInput="true"
+						pattern="dd/MM/yyyy" showOn="button" navigator="true" locale="es" />
+
+					<h:outputLabel value="#{msg['src_end_date']}" style="width:40%" />
+					<p:calendar value="#{searchByPatientBacking.endDate}"
+						label="#{msg['src_end_date']}" readonlyInput="true"
+						pattern="dd/MM/yyyy" showOn="button" navigator="true" locale="es"/>
 
 				</h:panelGrid>
 
 				<p:spacer height="15" />
 				<p:dataTable id="selectedTable" var="rec"
-					value="#{appoinmentPatientBacking.appointmentModel}"
+					value="#{searchByPatientBacking.appointmentModel}"
 					rowKey="#{rec.code}" style="width:100%"
-					selection="#{appoinmentPatientBacking.selectedAppointment}"
+					selection="#{searchByPatientBacking.selectedAppointment}"
 					paginator="true" rows="10"
 					emptyMessage="#{msg['glb_no_records_found']}">
 
@@ -88,11 +95,10 @@
 							value="#{rec.crmDoctor.firstName} #{rec.crmDoctor.firstName}" />
 					</p:column>
 
-					<f:facet name="footer">
-						<p:commandButton value="#{msg['btn_check_appointment']}"
-							icon="ui-icon-closethick" onclick="confirmation.show()"
-							disabled="#{appoinmentPatientBacking.disabledAppointment}" />
-					</f:facet>
+					<p:column headerText="#{msg['app_state']}">
+						<h:outputLabel
+							value="#{rec.state eq 1?'CONFIRMADO':rec.state eq 2?'CANCELADO':'CHEQUEADO'}" />
+					</p:column>
 
 				</p:dataTable>
 
@@ -107,7 +113,7 @@
 					<h:panelGrid columns="2" width="100%">
 						<h:outputLabel value="#{msg['sal_key_press_doc']}"
 							style="width:100%" />
-						<h:inputText value="#{appoinmentPatientBacking.namePatient}"
+						<h:inputText value="#{searchByPatientBacking.namePatient}"
 							style="width:100%" />
 
 						<f:facet name="footer">
@@ -116,21 +122,21 @@
 							<p:commandButton value="#{msg['btn_search']}"
 								icon="ui-icon-search"
 								update="pnlTable2 recordTable2 btnAddPatient"
-								action="#{appoinmentPatientBacking.searchPatientAction}" />
+								action="#{searchByPatientBacking.searchPatientAction}" />
 							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
 								icon="ui-icon-plusthick"
 								update=":form:pnlDetail :form:btnSearchPatient"
 								oncomplete="dlg2.hide()"
-								disabled="#{appoinmentPatientBacking.disabledAddPatient}" />
+								disabled="#{searchByPatientBacking.disabledAddPatient}" />
 						</f:facet>
 					</h:panelGrid>
 
 					<p:spacer height="10" />
 					<p:scrollPanel id="pnlTable2" style="width:580px;height:400px">
 						<p:dataTable id="recordTable2" var="rec"
-							value="#{appoinmentPatientBacking.patientModel}"
+							value="#{searchByPatientBacking.patientModel}"
 							rowKey="#{rec.SAPCode}"
-							selection="#{appoinmentPatientBacking.selectedPatient}"
+							selection="#{searchByPatientBacking.selectedPatient}"
 							paginator="true" rows="15" style="width:570px"
 							emptyMessage="#{msg['glb_no_records_found']}">
 
@@ -156,7 +162,7 @@
 					<p:commandButton id="confirm" value="#{msg['glb_state_yes']}"
 						update=":form:selectedTable :form:growl"
 						oncomplete="confirmation.hide()"
-						actionListener="#{appoinmentPatientBacking.checkAppointmentAction}" />
+						actionListener="#{searchByPatientBacking.checkAppointmentAction}" />
 					<p:commandButton id="decline" value="#{msg['glb_state_no']}"
 						onclick="confirmation.hide()" type="button" />
 

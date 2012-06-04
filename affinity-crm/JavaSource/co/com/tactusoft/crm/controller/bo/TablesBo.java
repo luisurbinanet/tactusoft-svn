@@ -12,6 +12,7 @@ import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmCountry;
 import co.com.tactusoft.crm.model.entities.CrmDepartment;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
+import co.com.tactusoft.crm.model.entities.CrmDoctorException;
 import co.com.tactusoft.crm.model.entities.CrmDoctorSchedule;
 import co.com.tactusoft.crm.model.entities.CrmDomain;
 import co.com.tactusoft.crm.model.entities.CrmHoliday;
@@ -139,6 +140,14 @@ public class TablesBo implements Serializable {
 	public List<CrmHoliday> getListHoliday() {
 		return dao.find("from CrmHoliday o");
 	}
+	
+	public List<CrmDoctorException> getListDoctorException() {
+		return dao.find("from CrmDoctorException o order by o.startHour");
+	}
+	
+	public List<CrmDoctorException> getListDoctorExceptionByDoctor(BigDecimal idDoctor) {
+		return dao.find("from CrmDoctorException o where o.crmDoctor.id = " + idDoctor + " order by o.startHour");
+	}
 
 	public Integer saveDoctor(CrmDoctor entity) {
 		if (entity.getId() == null) {
@@ -259,6 +268,13 @@ public class TablesBo implements Serializable {
 
 		return i;
 	}
+	
+	public Integer saveDoctorException(CrmDoctorException entity) {
+		if (entity.getId() == null) {
+			entity.setId(getId(CrmDoctorException.class));
+		}
+		return dao.persist(entity);
+	}
 
 	public Integer saveProcedureDetail(CrmProcedure entity,
 			List<CrmProcedureDetail> listSchedule) {
@@ -282,7 +298,7 @@ public class TablesBo implements Serializable {
 		return dao.persist(entity);
 	}
 
-	public <T> void remove(Class<T> entity) {
+	public void remove(Object entity) {
 		dao.delete(entity);
 	}
 

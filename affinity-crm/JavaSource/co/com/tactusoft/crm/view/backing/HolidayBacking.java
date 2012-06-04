@@ -84,7 +84,7 @@ public class HolidayBacking implements Serializable {
 			message = FacesUtil.getMessage("msg_record_ok");
 			FacesUtil.addInfo(message);
 		} else if (result == -1) {
-			String paramValue = FacesUtil.getMessage("doc_code");
+			String paramValue = FacesUtil.getMessage("hol_date");
 			message = FacesUtil.getMessage("msg_record_unique_exception", paramValue);
 			FacesUtil.addError(message);
 

@@ -31,7 +31,7 @@
 				<p:dataTable id="recordTable" var="rec"
 					value="#{holidayBacking.model}" rowKey="#{rec.id}"
 					selection="#{holidayBacking.selected}" paginator="true" rows="10"
-					style="width:100%">
+					style="width:100%" emptyMessage="#{msg['glb_no_records_found']}">
 
 					<p:column selectionMode="single" style="width:18px" />
 
@@ -83,7 +83,7 @@
 					<p:calendar value="#{holidayBacking.selected.holiday}"
 						required="true" label="#{msg['hol_date']}" readonlyInput="true"
 						pattern="dd/MM/yyyy" showOn="button" navigator="true"
-						mindate="#{holidayBacking.currentDate}" />
+						mindate="#{holidayBacking.currentDate}" locale="es" />
 
 				</h:panelGrid>
 

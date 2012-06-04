@@ -22,18 +22,16 @@ public class CrmDoctorException implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
 	private CrmDoctor crmDoctor;
-	private Date currentDate;
 	private Date startHour;
 	private Date endHour;
 
 	public CrmDoctorException() {
 	}
 
-	public CrmDoctorException(BigDecimal id, CrmDoctor crmDoctor, Date currentDate,
+	public CrmDoctorException(BigDecimal id, CrmDoctor crmDoctor,
 			Date startHour, Date endHour) {
 		this.id = id;
 		this.crmDoctor = crmDoctor;
-		this.currentDate = currentDate;
 		this.startHour = startHour;
 		this.endHour = endHour;
 	}
@@ -56,16 +54,6 @@ public class CrmDoctorException implements java.io.Serializable {
 
 	public void setCrmDoctor(CrmDoctor crmDoctor) {
 		this.crmDoctor = crmDoctor;
-	}
-
-	@Temporal(TemporalType.DATE)
-	@Column(name = "current_date", nullable = false, length = 10)
-	public Date getCurrentDate() {
-		return this.currentDate;
-	}
-
-	public void setCurrentDate(Date currentDate) {
-		this.currentDate = currentDate;
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)

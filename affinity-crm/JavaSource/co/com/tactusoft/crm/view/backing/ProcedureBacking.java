@@ -174,14 +174,26 @@ public class ProcedureBacking implements Serializable {
 			if (timeDoctor < 0 || timeNurses < 0 || timeStretchers < 0) {
 				message = FacesUtil.getMessage("prc_msg_error_times");
 				FacesUtil.addError(message);
-			} else {
+			}
+
+			if (timeDoctor <= 0 && timeNurses <= 0 && timeStretchers <= 0) {
+				message = FacesUtil.getMessage("prc_msg_error_times");
+				FacesUtil.addError(message);
+			}
+
+			if ((timeDoctor % 5 != 0) || (timeNurses % 5 != 0)
+					|| (timeStretchers % 5 != 0)) {
+				message = FacesUtil.getMessage("prc_msg_error_multiplo");
+				FacesUtil.addError(message);
+			}
+
+			if (message == null) {
 				listProcedureDetail.add(new CrmProcedureDetail(new BigDecimal(
 						-1), selected, this.name, timeDoctor, timeNurses,
 						timeStretchers, Constant.STATE_ACTIVE, null));
 				modelProcedureDetail = new ProcedureDetailDataModel(
 						listProcedureDetail);
-				
-				
+
 				this.name = "";
 				this.timeDoctor = 0;
 				this.timeNurses = 0;
