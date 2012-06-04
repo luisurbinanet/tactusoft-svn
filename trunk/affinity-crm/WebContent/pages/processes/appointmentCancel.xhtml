@@ -56,15 +56,13 @@
 					value="#{appoinmentPatientBacking.appointmentModel}"
 					rowKey="#{rec.code}" style="width:100%"
 					selection="#{appoinmentPatientBacking.selectedsAppointment}"
-					paginator="true" rows="4"
+					paginator="true" rows="10"
 					emptyMessage="#{msg['glb_no_records_found']}">
 
 					<p:column selectionMode="multiple" style="width:18px" />
 
-					<p:column headerText="#{msg['app_date']}">
-						<h:outputLabel value="#{rec.code}">
-							<f:convertDateTime pattern="dd/MM/yyyy" />
-						</h:outputLabel>
+					<p:column headerText="#{msg['app_code']}">
+						<h:outputLabel value="#{rec.code}" />
 					</p:column>
 
 					<p:column headerText="#{msg['app_date']}">

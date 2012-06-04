@@ -36,14 +36,18 @@ public class CrmDoctor implements java.io.Serializable {
 	private Set<CrmAppointment> crmAppointments = new HashSet<CrmAppointment>(0);
 	private Set<CrmDoctorSchedule> crmDoctorSchedules = new HashSet<CrmDoctorSchedule>(
 			0);
+	private Set<CrmDoctorException> crmDoctorExceptions = new HashSet<CrmDoctorException>(
+			0);
 
 	public CrmDoctor() {
 	}
 
-	public CrmDoctor(BigDecimal id, CrmSpeciality crmSpeciality, String code,
-			String firstName, String firstSurname, int state) {
+	public CrmDoctor(BigDecimal id, CrmSpeciality crmSpeciality,
+			CrmBranch crmBranch, String code, String firstName,
+			String firstSurname, int state) {
 		this.id = id;
 		this.crmSpeciality = crmSpeciality;
+		this.crmBranch = crmBranch;
 		this.code = code;
 		this.firstName = firstName;
 		this.firstSurname = firstSurname;
@@ -55,7 +59,8 @@ public class CrmDoctor implements java.io.Serializable {
 			String secondName, String firstSurname, String secondSurname,
 			String gender, Boolean onSite, Boolean virtual, int state,
 			Set<CrmAppointment> crmAppointments,
-			Set<CrmDoctorSchedule> crmDoctorSchedules) {
+			Set<CrmDoctorSchedule> crmDoctorSchedules,
+			Set<CrmDoctorException> crmDoctorExceptions) {
 		this.id = id;
 		this.crmSpeciality = crmSpeciality;
 		this.crmBranch = crmBranch;
@@ -70,6 +75,7 @@ public class CrmDoctor implements java.io.Serializable {
 		this.state = state;
 		this.crmAppointments = crmAppointments;
 		this.crmDoctorSchedules = crmDoctorSchedules;
+		this.crmDoctorExceptions = crmDoctorExceptions;
 	}
 
 	@Id
@@ -199,6 +205,16 @@ public class CrmDoctor implements java.io.Serializable {
 
 	public void setCrmDoctorSchedules(Set<CrmDoctorSchedule> crmDoctorSchedules) {
 		this.crmDoctorSchedules = crmDoctorSchedules;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmDoctor")
+	public Set<CrmDoctorException> getCrmDoctorExceptions() {
+		return this.crmDoctorExceptions;
+	}
+
+	public void setCrmDoctorExceptions(
+			Set<CrmDoctorException> crmDoctorExceptions) {
+		this.crmDoctorExceptions = crmDoctorExceptions;
 	}
 
 }

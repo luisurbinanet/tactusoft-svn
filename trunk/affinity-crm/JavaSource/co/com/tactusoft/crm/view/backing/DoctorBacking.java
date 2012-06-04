@@ -245,14 +245,22 @@ public class DoctorBacking implements Serializable {
 			date = df.parse("1900-01-01 " + startHour);
 			gc.setTime(date);
 			startHourDate = gc.getTime();
+			int startHour = gc.get(Calendar.HOUR);
+			int startMinute = gc.get(Calendar.MINUTE);
 
 			gc = new GregorianCalendar();
 			date = df.parse("1900-01-01 " + endHour);
 			gc.setTime(date);
 			endHourDate = gc.getTime();
+			int endhour = gc.get(Calendar.HOUR);
+			int endMinute = gc.get(Calendar.MINUTE);
 
 			if (startHourDate.getTime() >= endHourDate.getTime()) {
 				message = FacesUtil.getMessage("sal_msg_error_dates_1");
+				FacesUtil.addError(message);
+			} else if (startHour > 23 || endhour > 23 || startMinute > 59
+					|| endMinute > 59) {
+				message = FacesUtil.getMessage("sal_msg_error_dates_3");
 				FacesUtil.addError(message);
 			} else {
 				listDoctorSchedule.add(new CrmDoctorSchedule(

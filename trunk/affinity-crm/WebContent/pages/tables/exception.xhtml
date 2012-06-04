@@ -1,0 +1,133 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="../templates/common.xhtml">
+
+	<ui:define name="body">
+
+		<p:panel style="width:100%;height:600px;"
+			header="#{msg['title_exceptions']}">
+
+			<p:spacer height="10" />
+
+			<h:form id="form">
+
+				<p:toolbar style="width:100%">
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
+							action="#{doctorExceptionBacking.newAction}"
+							oncomplete="dlg.show()" update=":editForm:pnlDetail" />
+						<p:commandButton value="#{msg['btn_edit']}" icon="ui-icon-pencil"
+							oncomplete="dlg.show()" update=":editForm:pnlDetail" />
+						<p:commandButton value="#{msg['btn_search']}"
+							icon="ui-icon-search" update="recordTable"
+							action="#{doctorExceptionBacking.searchAction}" />
+						<p:commandButton value="#{msg['btn_delete']}"
+							icon="ui-icon-minusthick" update="recordTable"
+							action="#{doctorExceptionBacking.removeAction}" />
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="10" />
+
+				<h:panelGrid columns="2" width="100%">
+					<p:outputLabel for="selDoctor" value="#{msg['exp_doctor']}" />
+					<p:selectOneMenu id="selDoctor"
+						value="#{doctorExceptionBacking.idDoctor}" style="width:450px;">
+						<f:selectItems value="#{doctorExceptionBacking.listDoctor}" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+
+				<p:dataTable id="recordTable" var="rec"
+					value="#{doctorExceptionBacking.model}" rowKey="#{rec.id}"
+					selection="#{doctorExceptionBacking.selected}" paginator="true"
+					rows="10" style="width:100%"
+					emptyMessage="#{msg['glb_no_records_found']}">
+
+					<p:column selectionMode="single" style="width:18px" />
+
+					<p:column headerText="#{msg['exp_date']}">
+						<h:outputLabel value="#{rec.startHour}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputLabel>
+					</p:column>
+
+					<p:column headerText="#{msg['exp_star_hour']}">
+						<h:outputLabel value="#{rec.startHour}">
+							<f:convertDateTime pattern="HH:mm" />
+						</h:outputLabel>
+					</p:column>
+
+					<p:column headerText="#{msg['exp_end_hour']}">
+						<h:outputLabel value="#{rec.endHour}">
+							<f:convertDateTime pattern="HH:mm" />
+						</h:outputLabel>
+					</p:column>
+
+				</p:dataTable>
+
+			</h:form>
+
+		</p:panel>
+
+		<h:form id="editForm">
+
+			<p:growl id="growl" showDetail="true" />
+
+			<p:dialog header="#{msg['msg_detail']}" widgetVar="dlg"
+				resizable="false" id="dialog" showEffect="fade" hideEffect="explode"
+				modal="true" width="500">
+
+				<p:toolbar style="width:100%">
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{msg['btn_save']}" icon="ui-icon-disk"
+							action="#{doctorExceptionBacking.saveAction}"
+							update="growl :form:recordTable" />
+						<p:commandButton value="#{msg['btn_close']}"
+							icon="ui-icon-closethick" update="growl :form:recordTable"
+							process="@none" oncomplete="dlg.hide()" />
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="10" />
+
+				<h:panelGrid id="pnlDetail" columns="2" cellpadding="4"
+					style="margin:0 auto;" width="100%">
+
+					<h:outputLabel value="#{msg['exp_date']}" />
+					<h:outputText id="outDoctor"
+						value="#{doctorExceptionBacking.selectedDoctor.firstName} #{doctorExceptionBacking.selectedDoctor.firstSurname}" />
+
+					<h:outputLabel value="#{msg['exp_date']}" />
+					<p:calendar id="calDate"
+						value="#{doctorExceptionBacking.selectedDate}" required="true"
+						label="#{msg['hol_date']}" readonlyInput="true"
+						pattern="dd/MM/yyyy" showOn="button" navigator="true"
+						mindate="#{doctorExceptionBacking.currentDate}" locale="es" />
+
+					<h:outputLabel value="#{msg['exp_star_hour']}" />
+					<p:inputMask mask="99:99"
+						value="#{doctorExceptionBacking.selected.startHour}"
+						required="true" label="#{msg['exp_star_hour']}">
+						<f:convertDateTime pattern="HH:mm" />
+					</p:inputMask>
+
+					<h:outputLabel value="#{msg['exp_end_hour']}" />
+					<p:inputMask mask="99:99"
+						value="#{doctorExceptionBacking.selected.endHour}" required="true"
+						label="#{msg['exp_end_hour']}">
+						<f:convertDateTime pattern="HH:mm" />
+					</p:inputMask>
+
+				</h:panelGrid>
+
+			</p:dialog>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

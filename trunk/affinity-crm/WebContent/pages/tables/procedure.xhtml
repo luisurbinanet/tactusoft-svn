@@ -111,28 +111,33 @@
 				<p:separator style="width:100%" />
 				<p:spacer height="5" />
 
-				<h:panelGrid id="pnlProcedureDetail" columns="2" cellpadding="4" style="margin:0 auto;"
-					width="100%">
+				<h:panelGrid id="pnlProcedureDetail" columns="4" cellpadding="4"
+					style="margin:0 auto;" width="100%">
 
 					<h:outputLabel value="#{msg['prc_name']}" />
-					<p:inputText value="#{procedureBacking.name}" style="width:250px"
-						label="#{msg['prc_name']}" />
+					<p:inputText value="#{procedureBacking.name}" style="width:200px"
+						label="#{msg['prc_name']}" required="true" />
 
-					<h:outputLabel value="#{msg['prc_time_doctor']}" style="width:100%" />
+					<h:outputLabel value="" />
+					<h:outputLabel value="" />
+
+					<h:outputLabel value="#{msg['prc_time_doctor']}" />
 					<pe:inputNumber value="#{procedureBacking.timeDoctor}"
 						symbol=" Min" symbolPosition="s" decimalPlaces="0"
-						style="width:250px" />
+						style="width:80px" />
 
-					<h:outputLabel value="#{msg['prc_time_nurse']}" style="width:100%" />
+					<h:outputLabel value="#{msg['prc_time_nurse']}" />
 					<pe:inputNumber value="#{procedureBacking.timeNurses}"
 						symbol=" Min" symbolPosition="s" decimalPlaces="0"
-						style="width:250px" />
+						style="width:80px" />
 
-					<h:outputLabel value="#{msg['prc_time_stretcher']}"
-						style="width:100%" />
+					<h:outputLabel value="#{msg['prc_time_stretcher']}" />
 					<pe:inputNumber value="#{procedureBacking.timeStretchers}"
 						symbol=" Min" symbolPosition="s" decimalPlaces="0"
-						style="width:250px" />
+						style="width:80px" />
+
+					<h:outputLabel value="" />
+					<h:outputLabel value="" />
 
 					<p:commandButton value="#{msg['btn_add']}"
 						action="#{procedureBacking.addProcedureDetailAction}"
@@ -143,7 +148,7 @@
 
 				<p:dataTable id="recordTableDetail" var="rec"
 					value="#{procedureBacking.modelProcedureDetail}" rowKey="#{rec.id}"
-					paginator="true" rows="7" style="width:100%"
+					paginator="true" rows="3" style="width:100%"
 					emptyMessage="#{msg['glb_no_records_found']}">
 
 					<p:column headerText="#{msg['prc_name']}">
