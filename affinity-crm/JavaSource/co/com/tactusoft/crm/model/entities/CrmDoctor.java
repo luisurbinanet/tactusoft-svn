@@ -22,6 +22,7 @@ public class CrmDoctor implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
+	private CrmUser crmUser;
 	private CrmSpeciality crmSpeciality;
 	private CrmBranch crmBranch;
 	private String code;
@@ -54,14 +55,15 @@ public class CrmDoctor implements java.io.Serializable {
 		this.state = state;
 	}
 
-	public CrmDoctor(BigDecimal id, CrmSpeciality crmSpeciality,
-			CrmBranch crmBranch, String code, String firstName,
-			String secondName, String firstSurname, String secondSurname,
-			String gender, Boolean onSite, Boolean virtual, int state,
-			Set<CrmAppointment> crmAppointments,
+	public CrmDoctor(BigDecimal id, CrmUser crmUser,
+			CrmSpeciality crmSpeciality, CrmBranch crmBranch, String code,
+			String firstName, String secondName, String firstSurname,
+			String secondSurname, String gender, Boolean onSite,
+			Boolean virtual, int state, Set<CrmAppointment> crmAppointments,
 			Set<CrmDoctorSchedule> crmDoctorSchedules,
 			Set<CrmDoctorException> crmDoctorExceptions) {
 		this.id = id;
+		this.crmUser = crmUser;
 		this.crmSpeciality = crmSpeciality;
 		this.crmBranch = crmBranch;
 		this.code = code;
@@ -86,6 +88,16 @@ public class CrmDoctor implements java.io.Serializable {
 
 	public void setId(BigDecimal id) {
 		this.id = id;
+	}
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "id_user")
+	public CrmUser getCrmUser() {
+		return this.crmUser;
+	}
+
+	public void setCrmUser(CrmUser crmUser) {
+		this.crmUser = crmUser;
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)

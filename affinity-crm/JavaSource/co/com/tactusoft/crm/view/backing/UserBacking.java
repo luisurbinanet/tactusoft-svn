@@ -103,6 +103,10 @@ public class UserBacking implements Serializable {
 				listDepartment.add(new SelectItem(row.getId(), row.getName()));
 				mapDepartment.put(row.getId(), row);
 			}
+
+			if (listDepartment.size() > 0) {
+				// selected =
+			}
 		}
 		return listDepartment;
 	}
@@ -128,54 +132,70 @@ public class UserBacking implements Serializable {
 	}
 
 	public void newAction() {
+		listBranch = new DualListModel<CrmBranch>();
+		generateListAction(null);
+
 		selected = new CrmUser();
 		selected.setState(Constant.STATE_ACTIVE);
 		selected.setCrmProfile(new CrmProfile());
 		selected.setCrmDepartment(new CrmDepartment());
-
-		listBranch = new DualListModel<CrmBranch>();
 	}
 
 	public void saveAction() {
 		String message = null;
 
-		selected.setCrmProfile(mapProfile.get(selected.getCrmProfile().getId()));
-		selected.setCrmDepartment(mapDepartment.get(selected.getCrmDepartment()
-				.getId()));
+		if (listBranch.getTarget().size() > 0) {
+			
+			selected.setUsername(selected.getUsername().toLowerCase());
+			selected.setCrmProfile(mapProfile.get(selected.getCrmProfile()
+					.getId()));
+			selected.setCrmDepartment(mapDepartment.get(selected
+					.getCrmDepartment().getId()));
 
-		int result = tablesService.saveUser(selected);
+			int result = tablesService.saveUser(selected);
 
-		if (result == 0) {
-			tablesService.saveUserBranch(selected, listBranch.getTarget());
-			list = tablesService.getListUser();
-			model = new UserDataModel(list);
-			message = FacesUtil.getMessage("msg_record_ok");
-			FacesUtil.addInfo(message);
-		} else if (result == -1) {
-			String paramValue = FacesUtil.getMessage("usr_username");
-			message = FacesUtil.getMessage("msg_record_unique_exception",
-					paramValue);
+			if (result == 0) {
+				tablesService.saveUserBranch(selected, listBranch.getTarget());
+				list = tablesService.getListUser();
+				model = new UserDataModel(list);
+				message = FacesUtil.getMessage("msg_record_ok");
+				FacesUtil.addInfo(message);
+			} else if (result == -1) {
+				String paramValue = FacesUtil.getMessage("usr_username");
+				message = FacesUtil.getMessage("msg_record_unique_exception",
+						paramValue);
+				FacesUtil.addError(message);
+			}
+		} else {
+			message = FacesUtil.getMessage("usr_msg_error_branch");
 			FacesUtil.addError(message);
-
 		}
 	}
 
 	public void generateListAction(ActionEvent event) {
-		List<CrmBranch> listTarget = tablesService.getListBranchByUser(selected
-				.getId());
+		List<CrmBranch> listTarget = new LinkedList<CrmBranch>();
 		List<CrmBranch> listSource = new LinkedList<CrmBranch>();
 
-		for (CrmBranch row : FacesUtil.getCurrentUserData().getListBranchAll()) {
-			boolean exits = false;
-			for (CrmBranch avb : listTarget) {
-				if (avb.getId().intValue() == row.getId().intValue()) {
-					exits = true;
-					break;
+		if (selected != null) {
+			listTarget = tablesService.getListBranchByUser(selected.getId());
+
+			for (CrmBranch row : FacesUtil.getCurrentUserData()
+					.getListBranchAll()) {
+				boolean exits = false;
+				for (CrmBranch avb : listTarget) {
+					if (avb.getId().intValue() == row.getId().intValue()) {
+						exits = true;
+						break;
+					}
+				}
+
+				if (!exits) {
+					listSource.add(row);
 				}
 			}
-
-			if (!exits) {
-				listSource.add(row);
+		} else {
+			if (tablesService != null) {
+				listSource = tablesService.getListBranchActive();
 			}
 		}
 

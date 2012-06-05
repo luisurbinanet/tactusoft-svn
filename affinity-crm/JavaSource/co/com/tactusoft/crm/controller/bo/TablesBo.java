@@ -74,6 +74,12 @@ public class TablesBo implements Serializable {
 		return dao.find("from CrmUser o where o.state = 1");
 	}
 
+	public List<CrmUser> getListUserActiveByBranch(BigDecimal idBranch) {
+		return dao
+				.find("select o.crmUser from CrmUserBranch o where o.crmUser.state = 1 and o.crmBranch.id = "
+						+ idBranch);
+	}
+
 	public List<CrmRole> getListRole() {
 		return dao.find("from CrmRole o");
 	}
@@ -89,7 +95,7 @@ public class TablesBo implements Serializable {
 	public List<CrmBranch> getListBranchActive() {
 		return dao.find("from CrmBranch o where o.state = 1");
 	}
-	
+
 	public List<CrmCountry> getListCountry() {
 		return dao.find("from CrmCountry o");
 	}
@@ -136,17 +142,19 @@ public class TablesBo implements Serializable {
 		return dao.find("from CrmProcedureDetail o where o.crmProcedure.id = "
 				+ idProcedure);
 	}
-	
+
 	public List<CrmHoliday> getListHoliday() {
 		return dao.find("from CrmHoliday o");
 	}
-	
+
 	public List<CrmDoctorException> getListDoctorException() {
 		return dao.find("from CrmDoctorException o order by o.startHour");
 	}
-	
-	public List<CrmDoctorException> getListDoctorExceptionByDoctor(BigDecimal idDoctor) {
-		return dao.find("from CrmDoctorException o where o.crmDoctor.id = " + idDoctor + " order by o.startHour");
+
+	public List<CrmDoctorException> getListDoctorExceptionByDoctor(
+			BigDecimal idDoctor) {
+		return dao.find("from CrmDoctorException o where o.crmDoctor.id = "
+				+ idDoctor + " order by o.startHour");
 	}
 
 	public Integer saveDoctor(CrmDoctor entity) {
@@ -268,7 +276,7 @@ public class TablesBo implements Serializable {
 
 		return i;
 	}
-	
+
 	public Integer saveDoctorException(CrmDoctorException entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmDoctorException.class));
@@ -290,7 +298,7 @@ public class TablesBo implements Serializable {
 
 		return i;
 	}
-	
+
 	public Integer saveHoliday(CrmHoliday entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmHoliday.class));

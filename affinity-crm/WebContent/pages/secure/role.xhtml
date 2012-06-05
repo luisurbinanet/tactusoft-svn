@@ -111,7 +111,7 @@
 				<p:spacer height="10" />
 
 				<h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;"
-					width="100%">
+					width="100%" rendered="#{roleBacking.selected.id ne null?true:false}">
 					<h:outputLabel value="#{msg['rol_page_default']}" />
 					<p:selectOneMenu id="selPageDefault"
 						value="#{roleBacking.selected.crmPage.id}" style="width:200px">
