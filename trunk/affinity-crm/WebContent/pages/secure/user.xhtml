@@ -69,7 +69,7 @@
 
 			<p:dialog header="#{msg['msg_detail']}" widgetVar="dlg"
 				resizable="false" id="dialog" showEffect="fade" hideEffect="explode"
-				modal="true" width="1000">
+				modal="true" width="920">
 
 				<p:toolbar style="width:100%">
 					<p:toolbarGroup align="left">
@@ -157,16 +157,25 @@
 
 				<p:spacer height="10" />
 
-				<h:outputLabel value="#{msg['usr_branch']}"
-					style="font-weight:bold;" />
 
-				<p:pickList var="row" effect="bounce"
-					value="#{userBacking.listBranch}" converter="branchConverter"
-					itemValue="#{row}" itemLabel="#{row.name}">
+				<h:panelGrid columns="2" width="100%">
 
-					<f:facet name="sourceCaption">#{msg['glb_source_caption']}</f:facet>
-					<f:facet name="targetCaption">#{msg['glb_target_caption']}</f:facet>
-				</p:pickList>
+					<p:pickList var="row" value="#{userBacking.listBranch}"
+						converter="branchConverter" itemValue="#{row}"
+						itemLabel="#{row.name}">
+
+						<f:facet name="sourceCaption">#{msg['usr_branch']}</f:facet>
+						<f:facet name="targetCaption">#{msg['glb_target_caption']}</f:facet>
+					</p:pickList>
+
+					<p:pickList var="row" value="#{userBacking.listRole}"
+						converter="roleConverter" itemValue="#{row}"
+						itemLabel="#{row.name}">
+
+						<f:facet name="sourceCaption">#{msg['usr_roles']}</f:facet>
+						<f:facet name="targetCaption">#{msg['glb_target_caption']}</f:facet>
+					</p:pickList>
+				</h:panelGrid>
 			</p:dialog>
 		</h:form>
 
