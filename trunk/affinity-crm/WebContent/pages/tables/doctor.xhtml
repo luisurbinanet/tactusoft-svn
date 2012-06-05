@@ -130,7 +130,7 @@
 
 					<h:outputLabel value="#{msg['doc_branch']}" />
 					<p:selectOneMenu value="#{doctorBacking.selected.crmBranch.id}"
-						style="width:250px">
+						style="width:250px" required="true" label="#{msg['doc_branch']}">
 						<f:selectItems value="#{doctorBacking.listCrmBranch}" />
 					</p:selectOneMenu>
 
@@ -142,6 +142,12 @@
 						<f:selectItem itemValue="1" itemLabel="#{msg['glb_state_active']}" />
 						<f:selectItem itemValue="0"
 							itemLabel="#{msg['glb_state_inactive']}" />
+					</p:selectOneMenu>
+
+					<h:outputLabel value="#{msg['doc_user']}" />
+					<p:selectOneMenu value="#{doctorBacking.selected.crmUser.id}"
+						style="width:250px" required="true" label="#{msg['doc_user']}">
+						<f:selectItems value="#{doctorBacking.listCrmUser}" />
 					</p:selectOneMenu>
 
 				</h:panelGrid>

@@ -127,21 +127,32 @@ public class RoleBacking implements Serializable {
 	public void saveAction() {
 		String message = null;
 
-		selected.setCrmPage(mapCrmPage.get(selected.getCrmPage().getId()));
-		int result = tablesService.saveRole(selected);
-
-		if (result == 0) {
-			tablesService.savePageRole(selected, listPages.getTarget());
-			list = tablesService.getListRole();
-			model = new RoleDataModel(list);
-			message = FacesUtil.getMessage("msg_record_ok");
-			FacesUtil.addInfo(message);
-		} else if (result == -1) {
-			String paramValue = FacesUtil.getMessage("rol_name");
-			message = FacesUtil.getMessage("msg_record_unique_exception",
-					paramValue);
+		if (listPages.getTarget().size() == 0) {
+			message = FacesUtil.getMessage("rol_msg_error_pag");
 			FacesUtil.addError(message);
+		} else {
 
+			if (selected.getId() == null) {
+				selected.setCrmPage(listPages.getTarget().get(0));
+			} else {
+				selected.setCrmPage(mapCrmPage.get(selected.getCrmPage()
+						.getId()));
+			}
+
+			int result = tablesService.saveRole(selected);
+
+			if (result == 0) {
+				tablesService.savePageRole(selected, listPages.getTarget());
+				list = tablesService.getListRole();
+				model = new RoleDataModel(list);
+				message = FacesUtil.getMessage("msg_record_ok");
+				FacesUtil.addInfo(message);
+			} else if (result == -1) {
+				String paramValue = FacesUtil.getMessage("rol_name");
+				message = FacesUtil.getMessage("msg_record_unique_exception",
+						paramValue);
+				FacesUtil.addError(message);
+			}
 		}
 	}
 

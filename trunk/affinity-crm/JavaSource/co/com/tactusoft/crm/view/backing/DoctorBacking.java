@@ -24,6 +24,7 @@ import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmDoctorSchedule;
 import co.com.tactusoft.crm.model.entities.CrmSpeciality;
+import co.com.tactusoft.crm.model.entities.CrmUser;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.datamodel.DoctorDataModel;
@@ -47,6 +48,9 @@ public class DoctorBacking implements Serializable {
 
 	private List<SelectItem> listCrmBranch;
 	private Map<BigDecimal, CrmBranch> mapCrmBranch;
+
+	private List<SelectItem> listCrmUser;
+	private Map<BigDecimal, CrmUser> mapCrmUser;
 
 	private DoctorScheduleDataModel modelDoctorSchedule;
 	private CrmDoctorSchedule[] selectedDoctorSchedule;
@@ -123,12 +127,26 @@ public class DoctorBacking implements Serializable {
 				mapCrmBranch.put(row.getId(), row);
 				listCrmBranch.add(new SelectItem(row.getId(), row.getName()));
 			}
+
+			if (listCrmBranch.size() > 0) {
+				selected.getCrmBranch().setId(
+						(BigDecimal) listCrmBranch.get(0).getValue());
+				handleBranchChange();
+			}
 		}
 		return listCrmBranch;
 	}
 
 	public void setListCrmBranch(List<SelectItem> listCrmBranch) {
 		this.listCrmBranch = listCrmBranch;
+	}
+
+	public List<SelectItem> getListCrmUser() {
+		return listCrmUser;
+	}
+
+	public void setListCrmUser(List<SelectItem> listCrmUser) {
+		this.listCrmUser = listCrmUser;
 	}
 
 	public DoctorScheduleDataModel getModelDoctorSchedule() {
@@ -196,6 +214,7 @@ public class DoctorBacking implements Serializable {
 		selected.setState(Constant.STATE_ACTIVE);
 		selected.setCrmSpeciality(new CrmSpeciality());
 		selected.setCrmBranch(new CrmBranch());
+		selected.setCrmUser(new CrmUser());
 
 		listDoctorSchedule = new LinkedList<CrmDoctorSchedule>();
 		modelDoctorSchedule = new DoctorScheduleDataModel(listDoctorSchedule);
@@ -216,6 +235,8 @@ public class DoctorBacking implements Serializable {
 
 			selected.setCrmBranch(mapCrmBranch.get(selected.getCrmBranch()
 					.getId()));
+
+			selected.setCrmUser(mapCrmUser.get(selected.getCrmUser().getId()));
 
 			int result = tableService.saveDoctor(selected);
 			if (result == 0) {
@@ -287,6 +308,18 @@ public class DoctorBacking implements Serializable {
 		listDoctorSchedule = tableService.getListScheduleByDoctor(selected
 				.getId());
 		modelDoctorSchedule = new DoctorScheduleDataModel(listDoctorSchedule);
+	}
+
+	public void handleBranchChange() {
+		if (listCrmUser == null) {
+			listCrmUser = new LinkedList<SelectItem>();
+			mapCrmUser = new HashMap<BigDecimal, CrmUser>();
+			for (CrmUser row : tableService.getListUserActiveByBranch(selected
+					.getCrmBranch().getId())) {
+				mapCrmUser.put(row.getId(), row);
+				listCrmUser.add(new SelectItem(row.getId(), row.getUsername()));
+			}
+		}
 	}
 
 }
