@@ -25,6 +25,7 @@ import co.com.tactusoft.crm.model.entities.CrmRole;
 import co.com.tactusoft.crm.model.entities.CrmSpeciality;
 import co.com.tactusoft.crm.model.entities.CrmUser;
 import co.com.tactusoft.crm.model.entities.CrmUserBranch;
+import co.com.tactusoft.crm.model.entities.CrmUserRole;
 
 @Named
 public class TablesBo implements Serializable {
@@ -256,6 +257,23 @@ public class TablesBo implements Serializable {
 			crmUserBranch.setCrmUser(entity);
 			crmUserBranch.setCrmBranch(branch);
 			dao.persist(crmUserBranch);
+		}
+
+		return i;
+	}
+	
+	public Integer saveUserRole(CrmUser entity, List<CrmRole> listRole) {
+		int i = 0;
+
+		dao.executeHQL("delete from CrmUserRole o where o.crmUser.id = "
+				+ entity.getId());
+
+		for (CrmRole role : listRole) {
+			CrmUserRole cmUserRole = new CrmUserRole();
+			cmUserRole.setId(getId(CrmUserRole.class));
+			cmUserRole.setCrmUser(entity);
+			cmUserRole.setCrmRole(role);
+			dao.persist(cmUserRole);
 		}
 
 		return i;

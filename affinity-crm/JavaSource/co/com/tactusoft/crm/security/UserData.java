@@ -20,6 +20,7 @@ public class UserData implements UserDetails {
 	private String username;
 	private String password;
 	private List<CrmRole> roles;
+	private List<CrmRole> listRoleAll;
 	private CrmUser user;
 	private List<CrmPage> listPage;
 	private List<CrmPage> listPageAll;
@@ -49,6 +50,14 @@ public class UserData implements UserDetails {
 
 	public void setRoles(List<CrmRole> roles) {
 		this.roles = roles;
+	}
+
+	public List<CrmRole> getListRoleAll() {
+		return listRoleAll;
+	}
+
+	public void setListRoleAll(List<CrmRole> listRoleAll) {
+		this.listRoleAll = listRoleAll;
 	}
 
 	public CrmUser getUser() {

@@ -15,10 +15,12 @@ import javax.inject.Named;
 import org.primefaces.model.DualListModel;
 import org.springframework.context.annotation.Scope;
 
+import co.com.tactusoft.crm.controller.bo.SecurityBo;
 import co.com.tactusoft.crm.controller.bo.TablesBo;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmDepartment;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
+import co.com.tactusoft.crm.model.entities.CrmRole;
 import co.com.tactusoft.crm.model.entities.CrmUser;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
@@ -33,6 +35,9 @@ public class UserBacking implements Serializable {
 	@Inject
 	private TablesBo tablesService;
 
+	@Inject
+	private SecurityBo securityService;
+
 	private List<CrmUser> list;
 	private UserDataModel model;
 	private CrmUser selected;
@@ -43,6 +48,7 @@ public class UserBacking implements Serializable {
 	private List<SelectItem> listDepartment;
 	private Map<BigDecimal, CrmDepartment> mapDepartment;
 
+	private DualListModel<CrmRole> listRole;
 	private DualListModel<CrmBranch> listBranch;
 
 	private String password;
@@ -115,6 +121,14 @@ public class UserBacking implements Serializable {
 		this.listDepartment = listDepartment;
 	}
 
+	public DualListModel<CrmRole> getListRole() {
+		return listRole;
+	}
+
+	public void setListRole(DualListModel<CrmRole> listRole) {
+		this.listRole = listRole;
+	}
+
 	public DualListModel<CrmBranch> getListBranch() {
 		return listBranch;
 	}
@@ -132,20 +146,30 @@ public class UserBacking implements Serializable {
 	}
 
 	public void newAction() {
-		listBranch = new DualListModel<CrmBranch>();
-		generateListAction(null);
-
 		selected = new CrmUser();
 		selected.setState(Constant.STATE_ACTIVE);
 		selected.setCrmProfile(new CrmProfile());
 		selected.setCrmDepartment(new CrmDepartment());
+
+		listBranch = new DualListModel<CrmBranch>();
+		listRole = new DualListModel<CrmRole>();
+		generateListAction(null);
 	}
 
 	public void saveAction() {
 		String message = null;
 
-		if (listBranch.getTarget().size() > 0) {
-			
+		if (listBranch.getTarget().size() == 0) {
+			message = FacesUtil.getMessage("usr_msg_error_branch");
+			FacesUtil.addError(message);
+		}
+
+		if (listRole.getTarget().size() == 0) {
+			message = FacesUtil.getMessage("usr_msg_error_role");
+			FacesUtil.addError(message);
+		}
+
+		if (message == null) {
 			selected.setUsername(selected.getUsername().toLowerCase());
 			selected.setCrmProfile(mapProfile.get(selected.getCrmProfile()
 					.getId()));
@@ -156,6 +180,7 @@ public class UserBacking implements Serializable {
 
 			if (result == 0) {
 				tablesService.saveUserBranch(selected, listBranch.getTarget());
+				tablesService.saveUserRole(selected, listRole.getTarget());
 				list = tablesService.getListUser();
 				model = new UserDataModel(list);
 				message = FacesUtil.getMessage("msg_record_ok");
@@ -166,23 +191,22 @@ public class UserBacking implements Serializable {
 						paramValue);
 				FacesUtil.addError(message);
 			}
-		} else {
-			message = FacesUtil.getMessage("usr_msg_error_branch");
-			FacesUtil.addError(message);
 		}
 	}
 
 	public void generateListAction(ActionEvent event) {
-		List<CrmBranch> listTarget = new LinkedList<CrmBranch>();
-		List<CrmBranch> listSource = new LinkedList<CrmBranch>();
+		List<CrmBranch> listTargetBranch = new LinkedList<CrmBranch>();
+		List<CrmBranch> listSourceBranch = new LinkedList<CrmBranch>();
+		List<CrmRole> listTargetRole = new LinkedList<CrmRole>();
+		List<CrmRole> listSourceRole = new LinkedList<CrmRole>();
 
-		if (selected != null) {
-			listTarget = tablesService.getListBranchByUser(selected.getId());
-
+		if (selected != null && selected.getId() != null) {
+			listTargetBranch = tablesService.getListBranchByUser(selected
+					.getId());
 			for (CrmBranch row : FacesUtil.getCurrentUserData()
 					.getListBranchAll()) {
 				boolean exits = false;
-				for (CrmBranch avb : listTarget) {
+				for (CrmBranch avb : listTargetBranch) {
 					if (avb.getId().intValue() == row.getId().intValue()) {
 						exits = true;
 						break;
@@ -190,16 +214,35 @@ public class UserBacking implements Serializable {
 				}
 
 				if (!exits) {
-					listSource.add(row);
+					listSourceBranch.add(row);
+				}
+			}
+
+			listTargetRole = securityService.getListCrmRoleByUser(selected
+					.getId());
+			for (CrmRole row : FacesUtil.getCurrentUserData().getListRoleAll()) {
+				boolean exits = false;
+				for (CrmRole avb : listTargetRole) {
+					if (avb.getId().intValue() == row.getId().intValue()) {
+						exits = true;
+						break;
+					}
+				}
+
+				if (!exits) {
+					listSourceRole.add(row);
 				}
 			}
 		} else {
 			if (tablesService != null) {
-				listSource = tablesService.getListBranchActive();
+				listSourceBranch = tablesService.getListBranchActive();
+				listSourceRole = tablesService.getListRoleActive();
 			}
 		}
 
-		listBranch = new DualListModel<CrmBranch>(listSource, listTarget);
+		listBranch = new DualListModel<CrmBranch>(listSourceBranch,
+				listTargetBranch);
+		listRole = new DualListModel<CrmRole>(listSourceRole, listTargetRole);
 	}
 
 	public void updatePasswordAction() {

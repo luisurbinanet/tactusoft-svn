@@ -50,6 +50,9 @@ public class UserDetailsServiceCustom implements UserDetailsService {
 				}
 
 				idRoles = idRoles.substring(0, idRoles.length() - 1);
+				
+				List<CrmRole> listRoleAll = tableService.getListRoleActive();
+				user.setListRoleAll(listRoleAll);
 
 				// get Pages
 				List<CrmPage> listPage = service.getListCrmPageByRole(idRoles);
