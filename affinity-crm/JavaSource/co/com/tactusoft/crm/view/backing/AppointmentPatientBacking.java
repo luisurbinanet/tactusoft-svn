@@ -25,7 +25,7 @@ import com.tactusoft.webservice.client.objects.Bapikna111;
 
 @Named
 @Scope("view")
-public class AppoinmentPatientBacking implements Serializable {
+public class AppointmentPatientBacking implements Serializable {
 
 	@Inject
 	private TablesBo tablesService;
@@ -47,7 +47,7 @@ public class AppoinmentPatientBacking implements Serializable {
 
 	private boolean disabledSaveButton;
 
-	public AppoinmentPatientBacking() {
+	public AppointmentPatientBacking() {
 		newAction(null);
 	}
 

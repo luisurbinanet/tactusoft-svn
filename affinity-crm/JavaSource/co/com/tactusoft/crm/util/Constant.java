@@ -9,6 +9,7 @@ public class Constant {
 
 	public static BigDecimal DEFAULT_VALUE = new BigDecimal(-1);
 	public static String DEFAULT_LABEL = "glb_default_value";
+	public static String ALL_LABEL = "glb_all_value";
 
 	public static final Integer SEND_PHONE = 1;
 	public static final Integer SEND_EMAIL = 2;
@@ -32,5 +33,9 @@ public class Constant {
 	public static final int APP_STATE_CONFIRMED = 1;
 	public static final int APP_STATE_CANCELED = 2;
 	public static final int APP_STATE_CHECKED = 3;
+
+	public static final String APP_STATE_CONFIRMED_LABEL = "glb_app_confirmed";
+	public static final String APP_STATE_CANCELED_LABEL = "glb_app_canceled";
+	public static final String APP_STATE_CHECKED_LABEL = "glb_app_checked";
 
 }

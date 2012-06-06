@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.faces.event.ActionEvent;
+import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -41,8 +42,11 @@ public class SearchByPatientBacking implements Serializable {
 	private Patient selectedPatient;
 	private String namePatient;
 
+	private List<SelectItem> listStates;
+
 	private Date startDate;
 	private Date endDate;
+	private int state;
 
 	private List<CrmAppointment> listAppointment;
 	private AppointmentDataModel appointmentModel;
@@ -74,6 +78,14 @@ public class SearchByPatientBacking implements Serializable {
 		return namePatient;
 	}
 
+	public List<SelectItem> getListStates() {
+		return listStates;
+	}
+
+	public void setListStates(List<SelectItem> listStates) {
+		this.listStates = listStates;
+	}
+
 	public void setNamePatient(String namePatient) {
 		this.namePatient = namePatient;
 	}
@@ -92,6 +104,14 @@ public class SearchByPatientBacking implements Serializable {
 
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+
+	public int getState() {
+		return state;
+	}
+
+	public void setState(int state) {
+		this.state = state;
 	}
 
 	public PatientDataModel getPatientModel() {
@@ -155,6 +175,17 @@ public class SearchByPatientBacking implements Serializable {
 		namePatient = "";
 		startDate = new Date();
 		endDate = new Date();
+
+		listStates = new LinkedList<SelectItem>();
+
+		String message = FacesUtil.getMessage(Constant.ALL_LABEL);
+		listStates.add(new SelectItem(Constant.DEFAULT_VALUE, message));
+		message = FacesUtil.getMessage(Constant.APP_STATE_CONFIRMED_LABEL);
+		listStates.add(new SelectItem(Constant.APP_STATE_CONFIRMED, message));
+		message = FacesUtil.getMessage(Constant.APP_STATE_CANCELED_LABEL);
+		listStates.add(new SelectItem(Constant.APP_STATE_CANCELED, message));
+		message = FacesUtil.getMessage(Constant.APP_STATE_CHECKED_LABEL);
+		listStates.add(new SelectItem(Constant.APP_STATE_CHECKED, message));
 	}
 
 	public void searchAppoinmnetConfirmedAction() {
@@ -163,7 +194,7 @@ public class SearchByPatientBacking implements Serializable {
 			FacesUtil.addError(message);
 		} else {
 			listAppointment = processService.listAppointmentByPatient(
-					selectedPatient.getSAPCode(), -1, startDate, endDate);
+					selectedPatient.getSAPCode(), this.state, startDate, endDate);
 			appointmentModel = new AppointmentDataModel(listAppointment);
 		}
 	}
@@ -208,18 +239,6 @@ public class SearchByPatientBacking implements Serializable {
 			return true;
 		}
 		return false;
-	}
-
-	public void checkAppointmentAction(ActionEvent actionEvent) {
-		String code = "";
-		selectedAppointment.setState(Constant.APP_STATE_CHECKED);
-		processService.saveAppointment(selectedAppointment);
-		code = selectedAppointment.getCode();
-
-		searchAppoinmnetConfirmedAction();
-
-		String message = FacesUtil.getMessage("app_msg_check", code);
-		FacesUtil.addInfo(message);
 	}
 
 }
