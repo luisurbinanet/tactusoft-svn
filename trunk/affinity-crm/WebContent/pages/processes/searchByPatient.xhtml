@@ -54,7 +54,12 @@
 					<h:outputLabel value="#{msg['src_end_date']}" style="width:40%" />
 					<p:calendar value="#{searchByPatientBacking.endDate}"
 						label="#{msg['src_end_date']}" readonlyInput="true"
-						pattern="dd/MM/yyyy" showOn="button" navigator="true" locale="es"/>
+						pattern="dd/MM/yyyy" showOn="button" navigator="true" locale="es" />
+
+					<h:outputLabel value="#{msg['src_state']}" style="width:40%" />
+					<p:selectOneMenu value="#{searchByPatientBacking.state}">
+						<f:selectItems value="#{searchByPatientBacking.listStates}" />
+					</p:selectOneMenu>
 
 				</h:panelGrid>
 
