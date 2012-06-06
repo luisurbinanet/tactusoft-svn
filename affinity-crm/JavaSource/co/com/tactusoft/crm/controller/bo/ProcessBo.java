@@ -39,7 +39,22 @@ public class ProcessBo implements Serializable {
 
 	public List<CrmAppointment> getListAppointmentByDoctor(BigDecimal idDoctor) {
 		return dao.find("from CrmAppointment o where o.crmDoctor.id = "
-				+ idDoctor);
+				+ idDoctor + "order by o.startAppointmentDate");
+	}
+
+	public List<CrmAppointment> getListAppointmentByDoctor(CrmDoctor doctor,
+			Date startDate) {
+
+		String startDateString = FacesUtil.formatDate(startDate, "yyyy-MM-dd");
+
+		List<CrmAppointment> list = dao
+				.find("from CrmAppointment o where o.startAppointmentDate >= '"
+						+ startDateString
+						+ "T00:00:00.000+05:00' and o.crmDoctor.id = '"
+						+ doctor.getId() + "' and o.state in (1,3) "
+						+ " order by o.startAppointmentDate desc");
+
+		return list;
 	}
 
 	public CrmAppointment saveAppointment(CrmAppointment entity) {
@@ -606,4 +621,16 @@ public class ProcessBo implements Serializable {
 
 		return list;
 	}
+
+	public CrmDoctor getCrmDoctor() {
+		BigDecimal idUser = FacesUtil.getCurrentUser().getId();
+		List<CrmDoctor> list = dao
+				.find("from CrmDoctor o where o.crmUser.id = " + idUser);
+		if (list.size() > 0) {
+			return list.get(0);
+		} else {
+			return null;
+		}
+	}
+
 }
