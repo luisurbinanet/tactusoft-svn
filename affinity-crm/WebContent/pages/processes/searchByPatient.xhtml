@@ -116,10 +116,29 @@
 					hideEffect="explode" modal="true" width="600">
 
 					<h:panelGrid columns="2" width="100%">
-						<h:outputLabel value="#{msg['sal_key_press_doc']}"
-							style="width:100%" />
-						<h:inputText value="#{searchByPatientBacking.namePatient}"
-							style="width:100%" />
+						<p:outputPanel id="customPanel">
+							<p:selectOneRadio id="customRadio"
+								value="#{searchByPatientBacking.optionSearchPatient}"
+								layout="custom">
+								<f:selectItem itemLabel="#{msg['sal_key_press_doc']}"
+									itemValue="1" />
+								<f:selectItem itemLabel="#{msg['sal_key_press_nom']}"
+									itemValue="2" />
+							</p:selectOneRadio>
+
+							<h:panelGrid columns="3" width="100%">
+								<p:radioButton id="opt1" for="customRadio" itemIndex="0" />
+								<h:outputLabel for="opt1" value="#{msg['sal_key_press_doc']}" />
+								<p:inputText value="#{searchByPatientBacking.docPatient}"
+									style="width:100%" />
+
+								<p:radioButton id="opt2" for="customRadio" itemIndex="1" />
+								<h:outputLabel for="opt2" value="#{msg['sal_key_press_nom']}" />
+								<p:inputText value="#{searchByPatientBacking.namePatient}"
+									style="width:100%" />
+
+							</h:panelGrid>
+						</p:outputPanel>
 
 						<f:facet name="footer">
 							<p:spacer height="10" />

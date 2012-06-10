@@ -1,18 +1,13 @@
 package co.com.tactusoft.crm.view.backing;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.faces.event.ActionEvent;
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.context.annotation.Scope;
 
-import co.com.tactusoft.crm.controller.bo.ProcessBo;
-import co.com.tactusoft.crm.controller.bo.TablesBo;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
@@ -20,25 +15,11 @@ import co.com.tactusoft.crm.view.beans.Patient;
 import co.com.tactusoft.crm.view.datamodel.AppointmentDataModel;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 
-import com.tactusoft.webservice.client.execute.CustomerExecute;
-import com.tactusoft.webservice.client.objects.Bapikna111;
-
 @Named
 @Scope("view")
-public class AppointmentPatientBacking implements Serializable {
-
-	@Inject
-	private TablesBo tablesService;
-
-	@Inject
-	private ProcessBo processService;
+public class AppointmentPatientBacking extends BaseBacking {
 
 	private static final long serialVersionUID = 1L;
-
-	private List<Patient> listPatient;
-	private PatientDataModel patientModel;
-	private Patient selectedPatient;
-	private String namePatient;
 
 	private List<CrmAppointment> listAppointment;
 	private AppointmentDataModel appointmentModel;
@@ -49,46 +30,6 @@ public class AppointmentPatientBacking implements Serializable {
 
 	public AppointmentPatientBacking() {
 		newAction(null);
-	}
-
-	public TablesBo getTablesService() {
-		return tablesService;
-	}
-
-	public void setTablesService(TablesBo tablesService) {
-		this.tablesService = tablesService;
-	}
-
-	public List<Patient> getListPatient() {
-		return listPatient;
-	}
-
-	public void setListPatient(List<Patient> listPatient) {
-		this.listPatient = listPatient;
-	}
-
-	public String getNamePatient() {
-		return namePatient;
-	}
-
-	public void setNamePatient(String namePatient) {
-		this.namePatient = namePatient;
-	}
-
-	public PatientDataModel getPatientModel() {
-		return patientModel;
-	}
-
-	public void setPatientModel(PatientDataModel patientModel) {
-		this.patientModel = patientModel;
-	}
-
-	public Patient getSelectedPatient() {
-		return selectedPatient;
-	}
-
-	public void setSelectedPatient(Patient selectedPatient) {
-		this.selectedPatient = selectedPatient;
 	}
 
 	public List<CrmAppointment> getListAppointment() {
@@ -141,6 +82,7 @@ public class AppointmentPatientBacking implements Serializable {
 		patientModel = new PatientDataModel(listPatient);
 		disabledSaveButton = false;
 
+		optionSearchPatient = 1;
 		namePatient = "";
 	}
 
@@ -152,23 +94,6 @@ public class AppointmentPatientBacking implements Serializable {
 			listAppointment = processService.listAppointmentByPatient(
 					selectedPatient.getSAPCode(), Constant.APP_STATE_CONFIRMED);
 			appointmentModel = new AppointmentDataModel(listAppointment);
-		}
-	}
-
-	public void searchPatientAction() {
-		if (this.namePatient.isEmpty()) {
-		} else {
-			Bapikna111[] result = CustomerExecute.find(this.namePatient, 0);
-			listPatient = new ArrayList<Patient>();
-			if (result != null) {
-				for (Bapikna111 row : result) {
-					Patient patient = new Patient();
-					patient.setSAPCode(row.getCustomer());
-					patient.setNames(row.getFieldvalue());
-					listPatient.add(patient);
-				}
-				patientModel = new PatientDataModel(listPatient);
-			}
 		}
 	}
 

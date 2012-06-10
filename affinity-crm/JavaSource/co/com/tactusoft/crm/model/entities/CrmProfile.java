@@ -3,7 +3,6 @@ package co.com.tactusoft.crm.model.entities;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -26,6 +25,9 @@ public class CrmProfile implements java.io.Serializable {
 	private String salesOrg;
 	private String distrChan;
 	private String division;
+	private String society;
+	private String account;
+	private String paymentTerm;
 	private int state;
 	private Set<CrmUser> crmUsers = new HashSet<CrmUser>(0);
 
@@ -39,14 +41,17 @@ public class CrmProfile implements java.io.Serializable {
 	}
 
 	public CrmProfile(BigDecimal id, String code, String description,
-			String salesOrg, String distrChan, String division, int state,
-			Set<CrmUser> crmUsers) {
+			String salesOrg, String distrChan, String division, String society,
+			String account, String paymentTerm, int state, Set<CrmUser> crmUsers) {
 		this.id = id;
 		this.code = code;
 		this.description = description;
 		this.salesOrg = salesOrg;
 		this.distrChan = distrChan;
 		this.division = division;
+		this.society = society;
+		this.account = account;
+		this.paymentTerm = paymentTerm;
 		this.state = state;
 		this.crmUsers = crmUsers;
 	}
@@ -104,6 +109,33 @@ public class CrmProfile implements java.io.Serializable {
 
 	public void setDivision(String division) {
 		this.division = division;
+	}
+
+	@Column(name = "society", length = 4)
+	public String getSociety() {
+		return this.society;
+	}
+
+	public void setSociety(String society) {
+		this.society = society;
+	}
+
+	@Column(name = "account", length = 45)
+	public String getAccount() {
+		return this.account;
+	}
+
+	public void setAccount(String account) {
+		this.account = account;
+	}
+
+	@Column(name = "payment_term", length = 4)
+	public String getPaymentTerm() {
+		return this.paymentTerm;
+	}
+
+	public void setPaymentTerm(String paymentTerm) {
+		this.paymentTerm = paymentTerm;
 	}
 
 	@Column(name = "state", nullable = false)

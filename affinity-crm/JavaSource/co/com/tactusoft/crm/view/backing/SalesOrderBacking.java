@@ -1,6 +1,5 @@
 package co.com.tactusoft.crm.view.backing;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,7 +10,6 @@ import java.util.Map;
 
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.context.annotation.Scope;
@@ -31,19 +29,13 @@ import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 import com.tactusoft.webservice.client.custom.MaterialesCustom;
 import com.tactusoft.webservice.client.custom.ResultCreateOrder;
 import com.tactusoft.webservice.client.execute.CreateSalesOrderExecute;
-import com.tactusoft.webservice.client.execute.CustomerExecute;
-import com.tactusoft.webservice.client.objects.Bapikna111;
 import com.tactusoft.webservice.client.objects.Bapiret2;
 
 @Named
 @Scope("view")
-public class SalesOrderBacking implements Serializable {
-
-	@Inject
-	private TablesBo tablesService;
+public class SalesOrderBacking extends BaseBacking {
 
 	private static final long serialVersionUID = 1L;
-
 	private List<SelectItem> listMethodPayment;
 	private List<SelectItem> listConditionPayment;
 	private List<SelectItem> listSalesGrp;
@@ -51,10 +43,6 @@ public class SalesOrderBacking implements Serializable {
 	private String methodPayment;
 	private String conditionPayment;
 	private String salesGrp;
-
-	private List<Patient> listPatient;
-	private PatientDataModel patientModel;
-	private Patient selectedPatient;
 
 	private List<SelectItem> listBranch;
 	private String salesOff;
@@ -65,7 +53,6 @@ public class SalesOrderBacking implements Serializable {
 	private Material[] selectedMaterial;
 
 	private String codeNameMaterial;
-	private String namePatient;
 
 	private List<Material> listSelectedMaterial;
 	private MaterialDataModel materialSelectedModel;
@@ -154,30 +141,6 @@ public class SalesOrderBacking implements Serializable {
 		this.tablesService = tablesService;
 	}
 
-	public List<Patient> getListPatient() {
-		return listPatient;
-	}
-
-	public void setListPatient(List<Patient> listPatient) {
-		this.listPatient = listPatient;
-	}
-
-	public PatientDataModel getPatientModel() {
-		return patientModel;
-	}
-
-	public void setPatientModel(PatientDataModel patientModel) {
-		this.patientModel = patientModel;
-	}
-
-	public Patient getSelectedPatient() {
-		return selectedPatient;
-	}
-
-	public void setSelectedPatient(Patient selectedPatient) {
-		this.selectedPatient = selectedPatient;
-	}
-
 	public List<SelectItem> getListBranch() {
 		if (listBranch == null) {
 			mapBranch = new HashMap<String, CrmBranch>();
@@ -258,14 +221,6 @@ public class SalesOrderBacking implements Serializable {
 		this.listDeletedMaterial = listDeletedMaterial;
 	}
 
-	public String getNamePatient() {
-		return namePatient;
-	}
-
-	public void setNamePatient(String namePatient) {
-		this.namePatient = namePatient;
-	}
-
 	public boolean isDisabledSaveButton() {
 		return disabledSaveButton;
 	}
@@ -311,8 +266,10 @@ public class SalesOrderBacking implements Serializable {
 		listPatient = new LinkedList<Patient>();
 		patientModel = new PatientDataModel(listPatient);
 		disabledSaveButton = false;
-		
+
+		optionSearchPatient = 1;
 		codeNameMaterial = "";
+		docPatient = "";
 		namePatient = "";
 	}
 
@@ -367,13 +324,14 @@ public class SalesOrderBacking implements Serializable {
 
 			sap.getEnvironment();
 
-			ResultCreateOrder result = CreateSalesOrderExecute.execute(
-					sap.getUrlCustomerSalesOrderCreate(), sap.getUsername(),
-					sap.getPassword(), tipoDocVenta, orgVentas,
-					canalDistribucion, division, this.salesOff, fechaPedido,
-					selectedPatient.getSAPCode(), this.methodPayment,
+			ResultCreateOrder result = CreateSalesOrderExecute.execute(sap
+					.getUrlCustomerSalesOrderCreate(), sap.getUsername(), sap
+					.getPassword(), tipoDocVenta, orgVentas, canalDistribucion,
+					division, this.salesOff, fechaPedido, selectedPatient
+							.getSAPCode(), this.methodPayment,
 					this.conditionPayment, solicitante, listMaterialTmp,
-					interlocutor, this.salesGrp, medico, formula);
+					interlocutor, this.salesGrp, medico, formula, FacesUtil
+							.getCurrentUser().getUsername());
 
 			if (!FacesUtil.isEmptyOrBlank(result.getSalesdocument())) {
 				message = FacesUtil.getMessage("sal_msg_ok",
@@ -435,23 +393,6 @@ public class SalesOrderBacking implements Serializable {
 			}
 		}
 		return false;
-	}
-
-	public void searchPatientAction() {
-		if (this.namePatient.isEmpty()) {
-		} else {
-			Bapikna111[] result = CustomerExecute.find(this.namePatient, 0);
-			listPatient = new ArrayList<Patient>();
-			if (result != null) {
-				for (Bapikna111 row : result) {
-					Patient patient = new Patient();
-					patient.setSAPCode(row.getCustomer());
-					patient.setNames(row.getFieldvalue());
-					listPatient.add(patient);
-				}
-				patientModel = new PatientDataModel(listPatient);
-			}
-		}
 	}
 
 	public boolean isDisabledAddPatient() {
