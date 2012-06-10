@@ -1,6 +1,5 @@
 package co.com.tactusoft.crm.view.backing;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -9,12 +8,10 @@ import java.util.Map;
 
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.context.annotation.Scope;
 
-import co.com.tactusoft.crm.controller.bo.TablesBo;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmCity;
 import co.com.tactusoft.crm.model.entities.CrmCountry;
@@ -29,12 +26,9 @@ import com.tactusoft.webservice.client.execute.CustomerExecute;
 
 @Named
 @Scope("view")
-public class PatientBacking implements Serializable {
+public class PatientBacking extends BaseBacking {
 
 	private static final long serialVersionUID = 1L;
-
-	@Inject
-	private TablesBo tableService;
 
 	private List<Patient> list;
 	private PatientDataModel model;
@@ -116,7 +110,7 @@ public class PatientBacking implements Serializable {
 		if (listCountry == null) {
 			listCountry = new LinkedList<SelectItem>();
 			mapCountry = new HashMap<BigDecimal, CrmCountry>();
-			for (CrmCountry row : tableService.getListCountry()) {
+			for (CrmCountry row : tablesService.getListCountry()) {
 				listCountry.add(new SelectItem(row.getId(), row.getName()));
 				mapCountry.put(row.getId(), row);
 			}
@@ -216,13 +210,14 @@ public class PatientBacking implements Serializable {
 			listCity.add(new SelectItem(row.getId(), row.getName()));
 			mapCity.put(row.getId(), row);
 		}
-		
+
 		if (listRegion.size() == 0) {
 			idCity = null;
 		}
 	}
 
 	public void newAction(ActionEvent event) {
+		optionSearchPatient = 1;
 		selected = new Patient();
 		disabledSaveButton = false;
 	}
@@ -249,16 +244,15 @@ public class PatientBacking implements Serializable {
 				CrmRegion crmRegion = mapRegion.get(idRegion);
 				CrmCity crmCity = mapCity.get(idCity);
 
-				String SAPCode = CustomerExecute
-						.excecute(sap.getEnvironment(), "13",
-								selected.getCode(), tratamiento, names,
-								crmCountry.getCode(), crmCity.getName(),
-								crmRegion.getCode(), "D001",
-								profile.getSalesOrg(), profile.getDistrChan(),
-								profile.getDivision(), this.salesOff, "01",
-								"Z001", selected.getAddress(),
-								selected.getPhoneNumber(),
-								selected.getCellNumber(), "");
+				String SAPCode = CustomerExecute.excecute(sap.getEnvironment(),
+						"13", selected.getCode(), tratamiento, names,
+						selected.getAddress(), selected.getPhoneNumber(),
+						selected.getCellNumber(), selected.getEmail(),
+						crmCountry.getCode(), crmCity.getName(),
+						crmRegion.getCode(), "D001", profile.getSalesOrg(),
+						profile.getDistrChan(), profile.getDivision(),
+						profile.getSociety(), this.salesOff, "01",
+						profile.getPaymentTerm(), profile.getAccount());
 
 				if (SAPCode != null) {
 					selected.setSAPCode(SAPCode);

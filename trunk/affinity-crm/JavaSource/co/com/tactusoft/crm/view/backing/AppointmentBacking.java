@@ -1,8 +1,6 @@
 package co.com.tactusoft.crm.view.backing;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -11,13 +9,10 @@ import java.util.Map;
 
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.context.annotation.Scope;
 
-import co.com.tactusoft.crm.controller.bo.ProcessBo;
-import co.com.tactusoft.crm.controller.bo.TablesBo;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
@@ -29,27 +24,13 @@ import co.com.tactusoft.crm.view.beans.Candidate;
 import co.com.tactusoft.crm.view.beans.Patient;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 
-import com.tactusoft.webservice.client.execute.CustomerExecute;
-import com.tactusoft.webservice.client.objects.Bapikna111;
-
 @Named
 @Scope("view")
-public class AppointmentBacking implements Serializable {
+public class AppointmentBacking extends BaseBacking {
 
 	private static final long serialVersionUID = -7936516411298237407L;
 
-	@Inject
-	private TablesBo tableService;
-
-	@Inject
-	private ProcessBo processService;
-
 	private CrmAppointment selected;
-
-	private List<Patient> listPatient;
-	private PatientDataModel patientModel;
-	private Patient selectedPatient;
-	private String namePatient;
 
 	private List<SelectItem> listBranch;
 	private Map<BigDecimal, CrmBranch> mapBranch;
@@ -90,39 +71,11 @@ public class AppointmentBacking implements Serializable {
 		this.selected = selected;
 	}
 
-	public List<Patient> getListPatient() {
-		return listPatient;
-	}
-
-	public void setListPatient(List<Patient> listPatient) {
-		this.listPatient = listPatient;
-	}
-
-	public PatientDataModel getPatientModel() {
-		return patientModel;
-	}
-
-	public void setPatientModel(PatientDataModel patientModel) {
-		this.patientModel = patientModel;
-	}
-
-	public Patient getSelectedPatient() {
-		return selectedPatient;
-	}
-
-	public void setSelectedPatient(Patient selectedPatient) {
-		this.selectedPatient = selectedPatient;
-	}
-
-	public String getNamePatient() {
-		return namePatient;
-	}
-
 	public List<SelectItem> getListBranch() {
 		if (listBranch == null) {
 			listBranch = new LinkedList<SelectItem>();
 			mapBranch = new HashMap<BigDecimal, CrmBranch>();
-			for (CrmBranch row : tableService.getListBranchActive()) {
+			for (CrmBranch row : tablesService.getListBranchActive()) {
 				mapBranch.put(row.getId(), row);
 				listBranch.add(new SelectItem(row.getId(), row.getName()));
 			}
@@ -142,15 +95,11 @@ public class AppointmentBacking implements Serializable {
 		this.mapBranch = mapBranch;
 	}
 
-	public void setNamePatient(String namePatient) {
-		this.namePatient = namePatient;
-	}
-
 	public List<SelectItem> getListProcedure() {
 		if (listProcedure == null) {
 			listProcedure = new LinkedList<SelectItem>();
 			mapProcedure = new HashMap<BigDecimal, CrmProcedure>();
-			for (CrmProcedure row : tableService.getListProcedureActive()) {
+			for (CrmProcedure row : tablesService.getListProcedureActive()) {
 				mapProcedure.put(row.getId(), row);
 				listProcedure.add(new SelectItem(row.getId(), row.getName()));
 			}
@@ -289,24 +238,6 @@ public class AppointmentBacking implements Serializable {
 		this.renderedForDoctor = renderedForDoctor;
 	}
 
-	//
-	public void searchPatientAction() {
-		if (this.namePatient.isEmpty()) {
-		} else {
-			Bapikna111[] result = CustomerExecute.find(this.namePatient, 0);
-			listPatient = new ArrayList<Patient>();
-			if (result != null) {
-				for (Bapikna111 row : result) {
-					Patient patient = new Patient();
-					patient.setSAPCode(row.getCustomer());
-					patient.setNames(row.getFieldvalue());
-					listPatient.add(patient);
-				}
-				patientModel = new PatientDataModel(listPatient);
-			}
-		}
-	}
-
 	public boolean isDisabledAddPatient() {
 		if (listPatient.size() == 0) {
 			return true;
@@ -334,6 +265,10 @@ public class AppointmentBacking implements Serializable {
 
 		renderedForDate = false;
 		renderedForDoctor = false;
+		
+		optionSearchPatient = 1;
+		docPatient = "";
+		namePatient = "";
 
 		String message = FacesUtil.getMessage("app_msg_error_not_avalaible");
 		listAppointment = new LinkedList<SelectItem>();
@@ -344,7 +279,7 @@ public class AppointmentBacking implements Serializable {
 	public void handleProcedureChange() {
 		listProcedureDetail = new LinkedList<SelectItem>();
 		mapProcedureDetail = new HashMap<BigDecimal, CrmProcedureDetail>();
-		for (CrmProcedureDetail row : tableService
+		for (CrmProcedureDetail row : tablesService
 				.getListProcedureDetailByProcedure(idProcedure)) {
 			mapProcedureDetail.put(row.getId(), row);
 			listProcedureDetail.add(new SelectItem(row.getId(), row.getName()));
@@ -371,7 +306,7 @@ public class AppointmentBacking implements Serializable {
 
 			listDoctor = new LinkedList<SelectItem>();
 			mapDoctor = new HashMap<BigDecimal, CrmDoctor>();
-			for (CrmDoctor row : tableService.getListDoctorActive()) {
+			for (CrmDoctor row : tablesService.getListDoctorActive()) {
 				mapDoctor.put(row.getId(), row);
 				listDoctor.add(new SelectItem(row.getId(), row.getFirstName()
 						+ " " + row.getFirstSurname()));
