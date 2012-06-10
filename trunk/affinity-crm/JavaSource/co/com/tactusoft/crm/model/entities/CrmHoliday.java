@@ -2,9 +2,13 @@ package co.com.tactusoft.crm.model.entities;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -21,18 +25,24 @@ public class CrmHoliday implements java.io.Serializable {
 	private BigDecimal id;
 	private String description;
 	private Date holiday;
+	private Set<CrmHolidayBranch> crmHolidayBranchs = new HashSet<CrmHolidayBranch>(
+			0);
 
 	public CrmHoliday() {
-	}
-
-	public CrmHoliday(BigDecimal id) {
-		this.id = id;
 	}
 
 	public CrmHoliday(BigDecimal id, String description, Date holiday) {
 		this.id = id;
 		this.description = description;
 		this.holiday = holiday;
+	}
+
+	public CrmHoliday(BigDecimal id, String description, Date holiday,
+			Set<CrmHolidayBranch> crmHolidayBranchs) {
+		this.id = id;
+		this.description = description;
+		this.holiday = holiday;
+		this.crmHolidayBranchs = crmHolidayBranchs;
 	}
 
 	@Id
@@ -45,7 +55,7 @@ public class CrmHoliday implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "description", length = 1000)
+	@Column(name = "description", nullable = false, length = 1000)
 	public String getDescription() {
 		return this.description;
 	}
@@ -55,13 +65,22 @@ public class CrmHoliday implements java.io.Serializable {
 	}
 
 	@Temporal(TemporalType.DATE)
-	@Column(name = "holiday", unique = true, length = 10)
+	@Column(name = "holiday", unique = true, nullable = false, length = 10)
 	public Date getHoliday() {
 		return this.holiday;
 	}
 
 	public void setHoliday(Date holiday) {
 		this.holiday = holiday;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmHoliday")
+	public Set<CrmHolidayBranch> getCrmHolidayBranchs() {
+		return this.crmHolidayBranchs;
+	}
+
+	public void setCrmHolidayBranchs(Set<CrmHolidayBranch> crmHolidayBranchs) {
+		this.crmHolidayBranchs = crmHolidayBranchs;
 	}
 
 }
