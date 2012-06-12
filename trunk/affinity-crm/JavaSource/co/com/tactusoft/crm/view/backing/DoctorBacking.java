@@ -57,6 +57,7 @@ public class DoctorBacking implements Serializable {
 	private List<CrmDoctorSchedule> listDoctorSchedule;
 
 	private List<SelectItem> listDays;
+	private BigDecimal idBranch;
 	private Integer idDay;
 	private String startHour;
 	private String endHour;
@@ -181,6 +182,14 @@ public class DoctorBacking implements Serializable {
 
 	public void setListDays(List<SelectItem> listDays) {
 		this.listDays = listDays;
+	}
+
+	public BigDecimal getIdBranch() {
+		return idBranch;
+	}
+
+	public void setIdBranch(BigDecimal idBranch) {
+		this.idBranch = idBranch;
 	}
 
 	public Integer getIdDay() {

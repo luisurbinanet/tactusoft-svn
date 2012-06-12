@@ -1,6 +1,7 @@
 package co.com.tactusoft.crm.view.backing;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +33,7 @@ public class HolidayBacking implements Serializable {
 
 	private List<CrmBranch> listHolidayBranch;
 	private BranchDataModel modelHolidayBranch;
+	private CrmBranch[] selectedsBranch;
 
 	private Date currentDate;
 
@@ -83,6 +85,14 @@ public class HolidayBacking implements Serializable {
 		this.modelHolidayBranch = modelHolidayBranch;
 	}
 
+	public CrmBranch[] getSelectedsBranch() {
+		return selectedsBranch;
+	}
+
+	public void setSelectedsBranch(CrmBranch[] selectedsBranch) {
+		this.selectedsBranch = selectedsBranch;
+	}
+
 	public Date getCurrentDate() {
 		return currentDate;
 	}
@@ -99,25 +109,37 @@ public class HolidayBacking implements Serializable {
 	public void saveAction() {
 		String message = null;
 
-		int result = tablesService.saveHoliday(selected);
-		if (result == 0) {
-			list = tablesService.getListHoliday();
-			model = new HolidayDataModel(list);
-			message = FacesUtil.getMessage("msg_record_ok");
-			FacesUtil.addInfo(message);
-		} else if (result == -1) {
-			String paramValue = FacesUtil.getMessage("hol_date");
-			message = FacesUtil.getMessage("msg_record_unique_exception",
-					paramValue);
+		if (selectedsBranch == null || selectedsBranch.length == 0) {
+			message = FacesUtil.getMessage("hol_msg_error_not_selected_branch");
 			FacesUtil.addError(message);
+		} else {
+			int result = tablesService.saveHoliday(selected);
+			if (result == 0) {
+				List<CrmBranch> listSelectedsBranch = Arrays
+						.asList(selectedsBranch);
+				tablesService.saveHolidayBranch(selected, listSelectedsBranch);
+				list = tablesService.getListHoliday();
+				model = new HolidayDataModel(list);
+				message = FacesUtil.getMessage("msg_record_ok");
+				FacesUtil.addInfo(message);
+			} else if (result == -1) {
+				String paramValue = FacesUtil.getMessage("hol_date");
+				message = FacesUtil.getMessage("msg_record_unique_exception",
+						paramValue);
+				FacesUtil.addError(message);
 
+			}
 		}
 	}
 
 	public void generateListAction(ActionEvent event) {
-		listHolidayBranch = tablesService.getListBranchByHoliday(selected
-				.getId());
+		listHolidayBranch = tablesService.getListBranchActive();
 		modelHolidayBranch = new BranchDataModel(listHolidayBranch);
+
+		List<CrmBranch> listSelectedsBranch = tablesService
+				.getListBranchByHoliday(selected.getId());
+		selectedsBranch = (CrmBranch[]) listSelectedsBranch
+				.toArray(new CrmBranch[listSelectedsBranch.size()]);
 	}
 
 }
