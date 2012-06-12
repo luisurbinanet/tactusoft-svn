@@ -20,9 +20,10 @@
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
 							action="#{holidayBacking.newAction}" oncomplete="dlg.show()"
-							update=":editForm:pnlDetail" />
+							update=":editForm:pnlDetail :editForm:recordTable2" />
 						<p:commandButton value="#{msg['btn_edit']}" icon="ui-icon-pencil"
-							oncomplete="dlg.show()" update=":editForm:pnlDetail"
+							oncomplete="dlg.show()"
+							update=":editForm:pnlDetail :editForm:recordTable2"
 							actionListener="#{holidayBacking.generateListAction}" />
 					</p:toolbarGroup>
 				</p:toolbar>
@@ -87,6 +88,22 @@
 						mindate="#{holidayBacking.currentDate}" locale="es" />
 
 				</h:panelGrid>
+
+				<p:dataTable id="recordTable2" var="rec" selection="#{holidayBacking.selectedsBranch}"
+					value="#{holidayBacking.modelHolidayBranch}" rowKey="#{rec.id}"
+					paginator="true" rows="10" style="width:100%">
+
+					<p:column selectionMode="multiple" style="width:18px" />
+
+					<p:column headerText="#{msg['bra_sales_off']}">
+						<h:outputLabel value="#{rec.code}" />
+					</p:column>
+
+					<p:column headerText="#{msg['bra_name']}">
+						<h:outputLabel value="#{rec.name}" />
+					</p:column>
+
+				</p:dataTable>
 
 			</p:dialog>
 		</h:form>

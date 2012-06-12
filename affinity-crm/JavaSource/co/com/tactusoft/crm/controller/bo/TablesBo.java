@@ -16,6 +16,7 @@ import co.com.tactusoft.crm.model.entities.CrmDoctorException;
 import co.com.tactusoft.crm.model.entities.CrmDoctorSchedule;
 import co.com.tactusoft.crm.model.entities.CrmDomain;
 import co.com.tactusoft.crm.model.entities.CrmHoliday;
+import co.com.tactusoft.crm.model.entities.CrmHolidayBranch;
 import co.com.tactusoft.crm.model.entities.CrmPage;
 import co.com.tactusoft.crm.model.entities.CrmPageRole;
 import co.com.tactusoft.crm.model.entities.CrmProcedure;
@@ -150,7 +151,7 @@ public class TablesBo implements Serializable {
 
 	public List<CrmBranch> getListBranchByHoliday(BigDecimal idHoliday) {
 		return dao
-				.find("select o.id, o.code, o.name, h.id as state from CrmBranch o left join o.crmHolidayBranchs h with h.crmHoliday.id = "
+				.find("select o.crmBranch from CrmHolidayBranch o where o.crmHoliday.id = "
 						+ idHoliday);
 	}
 
@@ -328,6 +329,24 @@ public class TablesBo implements Serializable {
 			entity.setId(getId(CrmHoliday.class));
 		}
 		return dao.persist(entity);
+	}
+
+	public Integer saveHolidayBranch(CrmHoliday entity,
+			List<CrmBranch> listBranch) {
+		int i = 0;
+
+		dao.executeHQL("delete from CrmHolidayBranch o where o.crmHoliday.id = "
+				+ entity.getId());
+
+		for (CrmBranch branch : listBranch) {
+			CrmHolidayBranch row = new CrmHolidayBranch();
+			row.setId(getId(CrmHolidayBranch.class));
+			row.setCrmHoliday(entity);
+			row.setCrmBranch(branch);
+			dao.persist(row);
+		}
+
+		return i;
 	}
 
 	public void remove(Object entity) {

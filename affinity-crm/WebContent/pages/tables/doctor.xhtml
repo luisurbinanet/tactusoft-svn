@@ -128,10 +128,10 @@
 						<f:selectItems value="#{doctorBacking.listCrmSpeciality}" />
 					</p:selectOneMenu>
 
-					<h:outputLabel value="#{msg['doc_branch']}" />
-					<p:selectOneMenu value="#{doctorBacking.selected.crmBranch.id}"
-						style="width:250px" required="true" label="#{msg['doc_branch']}">
-						<f:selectItems value="#{doctorBacking.listCrmBranch}" />
+					<h:outputLabel value="#{msg['doc_user']}" />
+					<p:selectOneMenu value="#{doctorBacking.selected.crmUser.id}"
+						style="width:250px" required="true" label="#{msg['doc_user']}">
+						<f:selectItems value="#{doctorBacking.listCrmUser}" />
 					</p:selectOneMenu>
 
 					<h:outputLabel value="#{msg['glb_state']}"
@@ -144,12 +144,6 @@
 							itemLabel="#{msg['glb_state_inactive']}" />
 					</p:selectOneMenu>
 
-					<h:outputLabel value="#{msg['doc_user']}" />
-					<p:selectOneMenu value="#{doctorBacking.selected.crmUser.id}"
-						style="width:250px" required="true" label="#{msg['doc_user']}">
-						<f:selectItems value="#{doctorBacking.listCrmUser}" />
-					</p:selectOneMenu>
-
 				</h:panelGrid>
 
 
@@ -157,8 +151,14 @@
 				<p:separator style="width:100%" />
 				<p:spacer width="5" />
 
-				<h:panelGrid columns="7" cellpadding="4" style="margin:0 auto;"
+				<h:panelGrid columns="9" cellpadding="4" style="margin:0 auto;"
 					width="100%">
+
+					<h:outputLabel value="#{msg['doc_branch']}" />
+					<p:selectOneMenu value="#{doctorBacking.idBranch}"
+						style="width:200px" required="true" label="#{msg['doc_branch']}">
+						<f:selectItems value="#{doctorBacking.listCrmBranch}" />
+					</p:selectOneMenu>
 
 					<h:outputLabel value="#{msg['doc_day']}" style="width:100%" />
 					<p:selectOneMenu value="#{doctorBacking.idDay}" style="width:200px">
@@ -166,10 +166,12 @@
 					</p:selectOneMenu>
 
 					<h:outputLabel value="#{msg['doc_star_hour']}" style="width:100%" />
-					<p:inputMask mask="99:99" value="#{doctorBacking.startHour}" />
+					<p:inputMask mask="99:99" value="#{doctorBacking.startHour}"
+						style="width:50px" />
 
 					<h:outputLabel value="#{msg['doc_end_hour']}" style="width:100%" />
-					<p:inputMask mask="99:99" value="#{doctorBacking.endHour}" />
+					<p:inputMask mask="99:99" value="#{doctorBacking.endHour}"
+						style="width:50px" />
 
 					<p:commandButton value="#{msg['btn_add']}"
 						action="#{doctorBacking.addScheduleAction}"
@@ -184,6 +186,10 @@
 					emptyMessage="#{msg['glb_no_records_found']}">
 
 					<p:column selectionMode="multiple" style="width:18px" />
+
+					<p:column headerText="#{msg['doc_branch']}">
+						<h:outputLabel value="#{rec.crmBranch.name}" />
+					</p:column>
 
 					<p:column headerText="#{msg['doc_day']}">
 						<h:outputLabel value="#{rec.detDay}" />
