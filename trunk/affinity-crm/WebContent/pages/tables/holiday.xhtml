@@ -22,7 +22,8 @@
 							action="#{holidayBacking.newAction}" oncomplete="dlg.show()"
 							update=":editForm:pnlDetail" />
 						<p:commandButton value="#{msg['btn_edit']}" icon="ui-icon-pencil"
-							oncomplete="dlg.show()" update=":editForm:pnlDetail" />
+							oncomplete="dlg.show()" update=":editForm:pnlDetail"
+							actionListener="#{holidayBacking.generateListAction}" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -57,7 +58,7 @@
 
 			<p:dialog header="#{msg['msg_detail']}" widgetVar="dlg"
 				resizable="false" id="dialog" showEffect="fade" hideEffect="explode"
-				modal="true" width="500">
+				modal="true" width="800">
 
 				<p:toolbar style="width:100%">
 					<p:toolbarGroup align="left">

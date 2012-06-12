@@ -113,6 +113,36 @@ INSERT INTO `crm_department` VALUES (1,'TCN','Tecnología',1),(2,'CLC','CALL CEN
 UNLOCK TABLES;
 
 --
+-- Table structure for table `crm_holiday_branch`
+--
+
+DROP TABLE IF EXISTS `crm_holiday_branch`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `crm_holiday_branch` (
+  `id` decimal(19,0) NOT NULL,
+  `id_holiday` decimal(19,0) NOT NULL,
+  `id_branch` decimal(19,0) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_crm_holiday_branch_1` (`id_holiday`,`id_branch`),
+  KEY `fk_crm_holiday_branch_1` (`id_holiday`),
+  KEY `fk_crm_holiday_branch_2` (`id_branch`),
+  CONSTRAINT `fk_crm_holiday_branch_1` FOREIGN KEY (`id_holiday`) REFERENCES `crm_holiday` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_crm_holiday_branch_2` FOREIGN KEY (`id_branch`) REFERENCES `crm_branch` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `crm_holiday_branch`
+--
+
+LOCK TABLES `crm_holiday_branch` WRITE;
+/*!40000 ALTER TABLE `crm_holiday_branch` DISABLE KEYS */;
+INSERT INTO `crm_holiday_branch` VALUES (1,1,1);
+/*!40000 ALTER TABLE `crm_holiday_branch` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `crm_page_role`
 --
 
@@ -156,6 +186,9 @@ CREATE TABLE `crm_profile` (
   `sales_org` varchar(4) COLLATE latin1_spanish_ci DEFAULT NULL,
   `distr_chan` varchar(4) COLLATE latin1_spanish_ci DEFAULT NULL,
   `division` varchar(4) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `society` varchar(4) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `account` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `payment_term` varchar(4) COLLATE latin1_spanish_ci DEFAULT NULL,
   `state` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`)
@@ -168,7 +201,7 @@ CREATE TABLE `crm_profile` (
 
 LOCK TABLES `crm_profile` WRITE;
 /*!40000 ALTER TABLE `crm_profile` DISABLE KEYS */;
-INSERT INTO `crm_profile` VALUES (1,'Finders Canal10','Utiizado para perfiles de Finders Canal 10','4000','10','10',1),(2,'Affinity Canal10','Affinity Canal10','1000','10','10',1),(3,'Finders Canal20','','4000','20','10',1),(4,'Finders Canal30','','4000','30','10',1),(5,'Finders Canal31','1','4000','31','10',1);
+INSERT INTO `crm_profile` VALUES (1,'Finders  - Canal 10','Finders  - Canal 10','4000','10','10','1000','1305050000','Z001',1),(2,'Finders  - Canal 20','Finders  - Canal 20','4000','20','10','1000','1305050000','Z001',1),(3,'Finders  - Canal 30','Finders  - Canal 30','4000','30','10','1000','1305050000','Z001',1),(4,'Finders  - Canal 31','Finders  - Canal 31','4000','31','10','1000','1305050000','Z001',1),(5,'Finders  - Canal 40','Finders  - Canal 40','4000','40','10','1000','1305050000','Z001',1),(6,'Finders  - Canal 50','Finders  - Canal 50','4000','50','10','1000','1305050000','Z001',1),(7,'Finders  - Canal 70','Finders  - Canal 70','4000','70','10','1000','1305050000','Z001',1),(8,'Affinity  - Canal 10','Affinity  - Canal 10','4000','10','10','1000','1305050000','Z001',1),(9,'Affinity  - Canal 20','Affinity  - Canal 20','4000','20','10','1000','1305050000','Z001',1),(10,'Affinity  - Canal 30','Affinity  - Canal 30','4000','30','10','1000','1305050000','Z001',1),(11,'Affinity  - Canal 31','Affinity  - Canal 31','4000','31','10','1000','1305050000','Z001',1),(12,'Affinity  - Canal 40','Affinity  - Canal 40','4000','40','10','1000','1305050000','Z001',1),(13,'Affinity  - Canal 50','Affinity  - Canal 50','4000','50','10','1000','1305050000','Z001',1),(14,'Affinity  - Canal 70','Affinity  - Canal 70','4000','70','10','1000','1305050000','Z001',1);
 /*!40000 ALTER TABLE `crm_profile` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -240,9 +273,9 @@ CREATE TABLE `crm_doctor` (
   KEY `fk_crm_doctor_1` (`id_speciality`),
   KEY `fk_crm_doctor_2` (`id_branch`),
   KEY `fk_crm_doctor_3` (`id_user`),
-  CONSTRAINT `fk_crm_doctor_3` FOREIGN KEY (`id_user`) REFERENCES `crm_user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_crm_doctor_1` FOREIGN KEY (`id_speciality`) REFERENCES `crm_speciality` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_crm_doctor_2` FOREIGN KEY (`id_branch`) REFERENCES `crm_branch` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_crm_doctor_2` FOREIGN KEY (`id_branch`) REFERENCES `crm_branch` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_crm_doctor_3` FOREIGN KEY (`id_user`) REFERENCES `crm_user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -795,4 +828,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-06-05  6:58:02
+-- Dump completed on 2012-06-12  7:27:41
