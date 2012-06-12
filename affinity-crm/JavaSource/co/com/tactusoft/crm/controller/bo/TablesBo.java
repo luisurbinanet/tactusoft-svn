@@ -148,6 +148,12 @@ public class TablesBo implements Serializable {
 		return dao.find("from CrmHoliday o");
 	}
 
+	public List<CrmBranch> getListBranchByHoliday(BigDecimal idHoliday) {
+		return dao
+				.find("select o.id, o.code, o.name, h.id as state from CrmBranch o left join o.crmHolidayBranchs h with h.crmHoliday.id = "
+						+ idHoliday);
+	}
+
 	public List<CrmDoctorException> getListDoctorException() {
 		return dao.find("from CrmDoctorException o order by o.startHour");
 	}
@@ -261,7 +267,7 @@ public class TablesBo implements Serializable {
 
 		return i;
 	}
-	
+
 	public Integer saveUserRole(CrmUser entity, List<CrmRole> listRole) {
 		int i = 0;
 

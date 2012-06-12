@@ -22,7 +22,7 @@
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
 							actionListener="#{salesOrderBacking.newAction}" process="@this"
-							update="pnlDetail btnSaveOrder" />
+							update="pnlDetail btnSaveOrder selectedTable" />
 						<p:commandButton value="#{msg['btn_add_patient']}"
 							icon="ui-icon-circle-check" oncomplete="dlg2.show()"
 							update=":editForm:dialog2" />
