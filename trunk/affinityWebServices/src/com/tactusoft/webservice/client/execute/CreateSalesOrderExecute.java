@@ -49,7 +49,8 @@ public class CreateSalesOrderExecute {
 			String fechaPedido, String cliente, String viaPago,
 			String condicionPago, String solicitante,
 			List<MaterialesCustom> listMaterial, String interlocutor,
-			String codigoPauta, String medico, String condicionCabecera) {
+			String codigoPauta, String medico, String condicionCabecera,
+			String user) {
 
 		ZBAPI_SALESORDER_CREATEFROMDATProxy createSalesOrder = new ZBAPI_SALESORDER_CREATEFROMDATProxy(
 				url, username, password);
@@ -70,7 +71,7 @@ public class CreateSalesOrderExecute {
 			orderHeaderIn.setSalesGrp(codigoPauta);
 			orderHeaderIn.setReqDateH(fechaPedido);
 			orderHeaderIn.setPriceDate(fechaPedido);
-			orderHeaderIn.setCreatedBy("TACTUSOFT");
+			orderHeaderIn.setCreatedBy(user);
 
 			List<Bapiparnr> bapiparnrList = new ArrayList<Bapiparnr>();
 			Bapiparnr bapiparnr = new Bapiparnr();
@@ -244,7 +245,7 @@ public class CreateSalesOrderExecute {
 				username, password, tipoDocVenta, orgVentas, canalDistribucion,
 				division, oficinaVentas, fechaPedido, cliente, "E", "",
 				solicitante, listMaterialTmp, interlocutor, codigoPauta,
-				medico, "ZHD2");
+				medico, "ZHD2", "CSARMIENTO");
 
 		if (!result.getSalesdocument().equals("")) {
 			System.out.println("Pedido nro." + result.getSalesdocument()

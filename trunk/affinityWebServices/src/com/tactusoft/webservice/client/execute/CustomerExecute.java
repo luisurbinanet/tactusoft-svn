@@ -1,9 +1,12 @@
 package com.tactusoft.webservice.client.execute;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.rpc.holders.StringHolder;
 
+import com.tactusoft.webservice.client.beans.WSBean;
 import com.tactusoft.webservice.client.custom.LoadParameters;
 import com.tactusoft.webservice.client.holders.Bapicustomer04Holder;
 import com.tactusoft.webservice.client.holders.Bapicustomer05Holder;
@@ -33,6 +36,7 @@ import com.tactusoft.webservice.client.locators.ZSD_CUSTOMER_MAINTAIN_ALLProxy;
 import com.tactusoft.webservice.client.locators.Zfi_customers2Proxy;
 import com.tactusoft.webservice.client.objects.Bapiaddr1;
 import com.tactusoft.webservice.client.objects.Bapiaddr2;
+import com.tactusoft.webservice.client.objects.Bapicustomer04;
 import com.tactusoft.webservice.client.objects.BapicustomerAddressdata;
 import com.tactusoft.webservice.client.objects.BapicustomerIdrange;
 import com.tactusoft.webservice.client.objects.Bapikna110;
@@ -48,11 +52,12 @@ public class CustomerExecute {
 
 	public static String excecute(String ambiente, String tipoDocumento,
 			String nroDocumento, String tratamiento, String nombre,
-			String pais, String ciudad, String region, String grupoCuenta,
-			String orgVentas, String canalDistribucion, String division,
-			String sociedad, String oficinaVentas, String grupoCliente,
-			String condicionPago, String direccion, String telefono,
-			String celular, String correoElectronico) {
+			String direccion, String telefono, String celular,
+			String correoElectronico, String pais, String ciudad,
+			String region, String grupoCuenta, String orgVentas,
+			String canalDistribucion, String division, String sociedad,
+			String oficinaVentas, String grupoCliente, String condicionPago,
+			String cuenta) {
 
 		// CREAR CLIENTES
 		Bapiaddr2 ziBapiaddr2 = new Bapiaddr2();
@@ -133,7 +138,7 @@ public class CustomerExecute {
 		Knb1 ziKnb1 = new Knb1();
 		ziKnb1.setMandt(ambiente);
 		ziKnb1.setBukrs(orgVentas);
-		ziKnb1.setAkont("1305050000");
+		ziKnb1.setAkont(cuenta);// cuenta asociada
 		ziKnb1.setZterm(condicionPago);
 
 		Fknvi fknvi = new Fknvi();
@@ -238,13 +243,24 @@ public class CustomerExecute {
 		}
 	}
 
-	public static Bapikna111[] findByName(String value, int maxCnt) {
+	public static List<WSBean> findByName(String value, int maxCnt) {
+		List<WSBean> result = new ArrayList<WSBean>();
 		value = "*" + value.replace(" ", "*") + "*";
-		return find("NAME1", value, maxCnt);
+		Bapikna111[] list = find("NAME1", value, maxCnt);
+		for (Bapikna111 row : list) {
+			result.add(new WSBean(row.getCustomer(), row.getFieldvalue()));
+		}
+		return result;
 	}
 
-	public static Bapikna111[] findByDoc(String value, int maxCnt) {
-		return find("SORTL", value, maxCnt);
+	public static List<WSBean> findByDoc(String value, int maxCnt) {
+		List<WSBean> result = new ArrayList<WSBean>();
+		Bapikna111[] list = find("SORTL", value, maxCnt);
+		for (Bapikna111 row : list) {
+			Bapicustomer04 bapicustomer04 = getDetail("4000", row.getCustomer());
+			result.add(new WSBean(row.getCustomer(), bapicustomer04.getName()));
+		}
+		return result;
 	}
 
 	public static String getCustomer(String doc) {
@@ -280,18 +296,18 @@ public class CustomerExecute {
 		return addressData.value;
 	}
 
-	public static Bapiret1Holder getDetail(String companycode, String customerNo) {
+	public static Bapicustomer04 getDetail(String companycode, String customerNo) {
 		LoadParameters loadParameters = new LoadParameters();
 		Zfi_customers2Proxy Zfi_customers2Proxy = new Zfi_customers2Proxy(
 				loadParameters.getURL_CUSTOMER2(), loadParameters.getUser(),
 				loadParameters.getPassword());
-		
+
 		Bapicustomer04Holder customerAddress = new Bapicustomer04Holder();
 		TableOfBapicustomer02Holder customerBankDetail = new TableOfBapicustomer02Holder();
 		Bapicustomer05Holder customerCompanyDetail = new Bapicustomer05Holder();
 		BapicustomerKna1Holder customerGeneralDetail = new BapicustomerKna1Holder();
 		Bapiret1Holder _return = new Bapiret1Holder();
-		
+
 		try {
 			Zfi_customers2Proxy.customerGetDetail2(companycode, customerNo,
 					customerAddress, customerBankDetail, customerCompanyDetail,
@@ -300,26 +316,31 @@ public class CustomerExecute {
 			e.printStackTrace();
 		}
 
-		return _return;
+		return customerAddress.value;
 	}
 
 	public static void main(String args[]) {
 
 		// CREAR CLIENTES
-				/*String code = CustomerExecute.excecute("300", "13", "PRUEBAX99", "1",
-						"PRUEBAX99", "CO", "BOGOTA", "11", "D001", "4000", "10", "10",
-						"4000", "4025", "01", "Z001", "PRUEBAX99", "37222477",
-						"PRUEBAX99", "PRUEBAX99@PRUEBAX3.COM");*/
-		
-		Bapiret1Holder detail = getDetail("4000", "0000765463");
+		/*
+		 * String code = CustomerExecute.excecute("300", "13", "PRUEBAX99", "1",
+		 * "PRUEBAX99", "CO", "BOGOTA", "11", "D001", "4000", "10", "10",
+		 * "4000", "4025", "01", "Z001", "PRUEBAX99", "37222477", "PRUEBAX99",
+		 * "PRUEBAX99@PRUEBAX3.COM");
+		 */
 
-		/*BapicustomerAddressdata[] add = CustomerExecute
-				.getAddresses("0000765441");
+		findByDoc("22734930", 0);
+		// Bapicustomer04 detail = getDetail("1000", "0000137537");
 
-		Bapikna111[] result = findByDoc("22734930", 0);
-		for (Bapikna111 row : result) {
-
-		}*/
+		/*
+		 * BapicustomerAddressdata[] add = CustomerExecute
+		 * .getAddresses("0000765441");
+		 * 
+		 * Bapikna111[] result = findByDoc("22734930", 0); for (Bapikna111 row :
+		 * result) {
+		 * 
+		 * }
+		 */
 
 		/*
 		 * String customerNo = null; Bapikna111[] result =
@@ -335,7 +356,6 @@ public class CustomerExecute {
 		 * System.out.println(""); } catch (RemoteException e) {
 		 * e.printStackTrace(); }
 		 */
-
 
 		// Bapikna111[] result = find("05", 0);
 		// for (Bapikna111 row : result) {
