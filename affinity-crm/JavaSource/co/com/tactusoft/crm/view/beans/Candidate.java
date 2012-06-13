@@ -137,8 +137,7 @@ public class Candidate implements Serializable {
 			break;
 		}
 
-		return this.doctor.getFirstName() + " "
-				+ this.getDoctor().getFirstSurname() + ":   " + detDay + ", "
+		return this.doctor.getNames() + ":   " + detDay + ", "
 				+ dateString + "    " + startHour + " - " + endHour;
 	}
 

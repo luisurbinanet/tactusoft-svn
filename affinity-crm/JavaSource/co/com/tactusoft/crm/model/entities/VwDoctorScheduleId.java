@@ -10,21 +10,22 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class VwDoctorScheduleId implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 	private BigDecimal idDoctor;
-	private String firstName;
-	private String firstSurname;
+	private String names;
 	private BigDecimal idBranch;
 	private int day;
 
 	public VwDoctorScheduleId() {
 	}
 
-	public VwDoctorScheduleId(BigDecimal idDoctor, String firstName,
-			String firstSurname, BigDecimal idBranch, int day) {
+	public VwDoctorScheduleId(BigDecimal idDoctor, String names,
+			BigDecimal idBranch, int day) {
 		this.idDoctor = idDoctor;
-		this.firstName = firstName;
-		this.firstSurname = firstSurname;
+		this.names = names;
 		this.idBranch = idBranch;
 		this.day = day;
 	}
@@ -38,22 +39,13 @@ public class VwDoctorScheduleId implements java.io.Serializable {
 		this.idDoctor = idDoctor;
 	}
 
-	@Column(name = "first_name", nullable = false, length = 45)
-	public String getFirstName() {
-		return this.firstName;
+	@Column(name = "names", nullable = false, length = 45)
+	public String getNames() {
+		return this.names;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	@Column(name = "first_surname", nullable = false, length = 45)
-	public String getFirstSurname() {
-		return this.firstSurname;
-	}
-
-	public void setFirstSurname(String firstSurname) {
-		this.firstSurname = firstSurname;
+	public void setNames(String names) {
+		this.names = names;
 	}
 
 	@Column(name = "id_branch", nullable = false, scale = 0)
@@ -86,14 +78,9 @@ public class VwDoctorScheduleId implements java.io.Serializable {
 		return ((this.getIdDoctor() == castOther.getIdDoctor()) || (this
 				.getIdDoctor() != null && castOther.getIdDoctor() != null && this
 				.getIdDoctor().equals(castOther.getIdDoctor())))
-				&& ((this.getFirstName() == castOther.getFirstName()) || (this
-						.getFirstName() != null
-						&& castOther.getFirstName() != null && this
-						.getFirstName().equals(castOther.getFirstName())))
-				&& ((this.getFirstSurname() == castOther.getFirstSurname()) || (this
-						.getFirstSurname() != null
-						&& castOther.getFirstSurname() != null && this
-						.getFirstSurname().equals(castOther.getFirstSurname())))
+				&& ((this.getNames() == castOther.getNames()) || (this
+						.getNames() != null && castOther.getNames() != null && this
+						.getNames().equals(castOther.getNames())))
 				&& ((this.getIdBranch() == castOther.getIdBranch()) || (this
 						.getIdBranch() != null
 						&& castOther.getIdBranch() != null && this
@@ -107,11 +94,7 @@ public class VwDoctorScheduleId implements java.io.Serializable {
 		result = 37 * result
 				+ (getIdDoctor() == null ? 0 : this.getIdDoctor().hashCode());
 		result = 37 * result
-				+ (getFirstName() == null ? 0 : this.getFirstName().hashCode());
-		result = 37
-				* result
-				+ (getFirstSurname() == null ? 0 : this.getFirstSurname()
-						.hashCode());
+				+ (getNames() == null ? 0 : this.getNames().hashCode());
 		result = 37 * result
 				+ (getIdBranch() == null ? 0 : this.getIdBranch().hashCode());
 		result = 37 * result + this.getDay();

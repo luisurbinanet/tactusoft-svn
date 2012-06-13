@@ -392,10 +392,8 @@ public class ProcessBo implements Serializable {
 								if (validate) {
 									CrmDoctor crmDoctor = new CrmDoctor();
 									crmDoctor.setId(idDoctor);
-									crmDoctor.setFirstName(vwDoctorSchedule
-											.getId().getFirstName());
-									crmDoctor.setFirstSurname(vwDoctorSchedule
-											.getId().getFirstSurname());
+									crmDoctor.setNames(vwDoctorSchedule
+											.getId().getNames());
 
 									result.add(new Candidate(id, crmDoctor,
 											initHour, endHour));
