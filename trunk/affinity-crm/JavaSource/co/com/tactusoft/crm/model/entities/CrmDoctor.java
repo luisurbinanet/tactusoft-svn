@@ -24,15 +24,8 @@ public class CrmDoctor implements java.io.Serializable {
 	private BigDecimal id;
 	private CrmUser crmUser;
 	private CrmSpeciality crmSpeciality;
-	private CrmBranch crmBranch;
 	private String code;
-	private String firstName;
-	private String secondName;
-	private String firstSurname;
-	private String secondSurname;
-	private String gender;
-	private Boolean onSite;
-	private Boolean virtual;
+	private String names;
 	private int state;
 	private Set<CrmAppointment> crmAppointments = new HashSet<CrmAppointment>(0);
 	private Set<CrmDoctorSchedule> crmDoctorSchedules = new HashSet<CrmDoctorSchedule>(
@@ -43,37 +36,26 @@ public class CrmDoctor implements java.io.Serializable {
 	public CrmDoctor() {
 	}
 
-	public CrmDoctor(BigDecimal id, CrmSpeciality crmSpeciality,
-			CrmBranch crmBranch, String code, String firstName,
-			String firstSurname, int state) {
+	public CrmDoctor(BigDecimal id, CrmUser crmUser,
+			CrmSpeciality crmSpeciality, String code, String names, int state) {
 		this.id = id;
+		this.crmUser = crmUser;
 		this.crmSpeciality = crmSpeciality;
-		this.crmBranch = crmBranch;
 		this.code = code;
-		this.firstName = firstName;
-		this.firstSurname = firstSurname;
+		this.names = names;
 		this.state = state;
 	}
 
 	public CrmDoctor(BigDecimal id, CrmUser crmUser,
-			CrmSpeciality crmSpeciality, CrmBranch crmBranch, String code,
-			String firstName, String secondName, String firstSurname,
-			String secondSurname, String gender, Boolean onSite,
-			Boolean virtual, int state, Set<CrmAppointment> crmAppointments,
+			CrmSpeciality crmSpeciality, String code, String names, int state,
+			Set<CrmAppointment> crmAppointments,
 			Set<CrmDoctorSchedule> crmDoctorSchedules,
 			Set<CrmDoctorException> crmDoctorExceptions) {
 		this.id = id;
 		this.crmUser = crmUser;
 		this.crmSpeciality = crmSpeciality;
-		this.crmBranch = crmBranch;
 		this.code = code;
-		this.firstName = firstName;
-		this.secondName = secondName;
-		this.firstSurname = firstSurname;
-		this.secondSurname = secondSurname;
-		this.gender = gender;
-		this.onSite = onSite;
-		this.virtual = virtual;
+		this.names = names;
 		this.state = state;
 		this.crmAppointments = crmAppointments;
 		this.crmDoctorSchedules = crmDoctorSchedules;
@@ -91,7 +73,7 @@ public class CrmDoctor implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_user")
+	@JoinColumn(name = "id_user", nullable = false)
 	public CrmUser getCrmUser() {
 		return this.crmUser;
 	}
@@ -110,16 +92,6 @@ public class CrmDoctor implements java.io.Serializable {
 		this.crmSpeciality = crmSpeciality;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_branch", nullable = false)
-	public CrmBranch getCrmBranch() {
-		return this.crmBranch;
-	}
-
-	public void setCrmBranch(CrmBranch crmBranch) {
-		this.crmBranch = crmBranch;
-	}
-
 	@Column(name = "code", unique = true, nullable = false, length = 45)
 	public String getCode() {
 		return this.code;
@@ -129,67 +101,13 @@ public class CrmDoctor implements java.io.Serializable {
 		this.code = code;
 	}
 
-	@Column(name = "first_name", nullable = false, length = 45)
-	public String getFirstName() {
-		return this.firstName;
+	@Column(name = "names", nullable = false, length = 45)
+	public String getNames() {
+		return this.names;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	@Column(name = "second_name", length = 45)
-	public String getSecondName() {
-		return this.secondName;
-	}
-
-	public void setSecondName(String secondName) {
-		this.secondName = secondName;
-	}
-
-	@Column(name = "first_surname", nullable = false, length = 45)
-	public String getFirstSurname() {
-		return this.firstSurname;
-	}
-
-	public void setFirstSurname(String firstSurname) {
-		this.firstSurname = firstSurname;
-	}
-
-	@Column(name = "second_surname", length = 45)
-	public String getSecondSurname() {
-		return this.secondSurname;
-	}
-
-	public void setSecondSurname(String secondSurname) {
-		this.secondSurname = secondSurname;
-	}
-
-	@Column(name = "gender", length = 1)
-	public String getGender() {
-		return this.gender;
-	}
-
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
-
-	@Column(name = "on_site")
-	public Boolean getOnSite() {
-		return this.onSite;
-	}
-
-	public void setOnSite(Boolean onSite) {
-		this.onSite = onSite;
-	}
-
-	@Column(name = "virtual")
-	public Boolean getVirtual() {
-		return this.virtual;
-	}
-
-	public void setVirtual(Boolean virtual) {
-		this.virtual = virtual;
+	public void setNames(String names) {
+		this.names = names;
 	}
 
 	@Column(name = "state", nullable = false)

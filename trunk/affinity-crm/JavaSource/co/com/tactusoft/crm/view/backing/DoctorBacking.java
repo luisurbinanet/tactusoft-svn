@@ -128,12 +128,6 @@ public class DoctorBacking implements Serializable {
 				mapCrmBranch.put(row.getId(), row);
 				listCrmBranch.add(new SelectItem(row.getId(), row.getName()));
 			}
-
-			if (listCrmBranch.size() > 0) {
-				selected.getCrmBranch().setId(
-						(BigDecimal) listCrmBranch.get(0).getValue());
-				handleBranchChange();
-			}
 		}
 		return listCrmBranch;
 	}
@@ -143,6 +137,14 @@ public class DoctorBacking implements Serializable {
 	}
 
 	public List<SelectItem> getListCrmUser() {
+		if (listCrmUser == null) {
+			listCrmUser = new LinkedList<SelectItem>();
+			mapCrmUser = new HashMap<BigDecimal, CrmUser>();
+			for (CrmUser row : tableService.getListUserActive()) {
+				mapCrmUser.put(row.getId(), row);
+				listCrmUser.add(new SelectItem(row.getId(), row.getUsername()));
+			}
+		}
 		return listCrmUser;
 	}
 
@@ -218,11 +220,8 @@ public class DoctorBacking implements Serializable {
 
 	public void newAction() {
 		selected = new CrmDoctor();
-		selected.setOnSite(false);
-		selected.setVirtual(false);
 		selected.setState(Constant.STATE_ACTIVE);
 		selected.setCrmSpeciality(new CrmSpeciality());
-		selected.setCrmBranch(new CrmBranch());
 		selected.setCrmUser(new CrmUser());
 
 		listDoctorSchedule = new LinkedList<CrmDoctorSchedule>();
@@ -241,9 +240,6 @@ public class DoctorBacking implements Serializable {
 		} else {
 			selected.setCrmSpeciality(mapCrmSpeciality.get(selected
 					.getCrmSpeciality().getId()));
-
-			selected.setCrmBranch(mapCrmBranch.get(selected.getCrmBranch()
-					.getId()));
 
 			selected.setCrmUser(mapCrmUser.get(selected.getCrmUser().getId()));
 
@@ -293,8 +289,11 @@ public class DoctorBacking implements Serializable {
 				message = FacesUtil.getMessage("sal_msg_error_dates_3");
 				FacesUtil.addError(message);
 			} else {
+				
+				CrmBranch crmBranch = mapCrmBranch.get(idBranch);
+				
 				listDoctorSchedule.add(new CrmDoctorSchedule(
-						new BigDecimal(-1), selected, idDay, startHourDate,
+						new BigDecimal(-1), crmBranch, selected, idDay, startHourDate,
 						endHourDate));
 				modelDoctorSchedule = new DoctorScheduleDataModel(
 						listDoctorSchedule);
@@ -317,18 +316,6 @@ public class DoctorBacking implements Serializable {
 		listDoctorSchedule = tableService.getListScheduleByDoctor(selected
 				.getId());
 		modelDoctorSchedule = new DoctorScheduleDataModel(listDoctorSchedule);
-	}
-
-	public void handleBranchChange() {
-		if (listCrmUser == null) {
-			listCrmUser = new LinkedList<SelectItem>();
-			mapCrmUser = new HashMap<BigDecimal, CrmUser>();
-			for (CrmUser row : tableService.getListUserActiveByBranch(selected
-					.getCrmBranch().getId())) {
-				mapCrmUser.put(row.getId(), row);
-				listCrmUser.add(new SelectItem(row.getId(), row.getUsername()));
-			}
-		}
 	}
 
 }

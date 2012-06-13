@@ -37,15 +37,7 @@
 					<p:column selectionMode="single" style="width:18px" />
 
 					<p:column headerText="#{msg['doc_names']}">
-						<h:outputLabel value="#{rec.firstName} #{rec.firstSurname}" />
-					</p:column>
-
-					<p:column headerText="#{msg['doc_onSite']}">
-						<h:outputLabel value="#{rec.onSite?'SI':'NO'}" />
-					</p:column>
-
-					<p:column headerText="#{msg['doc_virtual']}">
-						<h:outputLabel value="#{rec.virtual?'SI':'NO'}" />
+						<h:outputLabel value="#{rec.names}" />
 					</p:column>
 
 					<p:column headerText="#{msg['doc_speciality']}">
@@ -91,36 +83,10 @@
 					<p:inputText value="#{doctorBacking.selected.code}"
 						style="width:250px" label="#{msg['doc_code']}" required="true" />
 
-					<h:outputText value="#{msg['glb_gender']}" />
-					<p:selectOneMenu value="#{doctorBacking.selected.gender}"
-						style="width:250px">
-						<f:selectItem itemLabel="#{msg['glb_gender_woman']}" itemValue="W" />
-						<f:selectItem itemLabel="#{msg['glb_gender_man']}" itemValue="M" />
-					</p:selectOneMenu>
-
 					<h:outputLabel value="#{msg['doc_firstName']}" />
-					<p:inputText value="#{doctorBacking.selected.firstName}"
+					<p:inputText value="#{doctorBacking.selected.names}"
 						style="width:250px" label="#{msg['doc_firstName']}"
 						required="true" />
-
-					<h:outputLabel value="#{msg['doc_secondName']}" />
-					<p:inputText value="#{doctorBacking.selected.secondName}"
-						style="width:250px" />
-
-					<h:outputLabel value="#{msg['doc_firstSurname']}" />
-					<p:inputText value="#{doctorBacking.selected.firstSurname}"
-						style="width:250px" label="#{msg['doc_firstSurname']}"
-						required="true" />
-
-					<h:outputLabel value="#{msg['doc_secondSurname']}" />
-					<p:inputText value="#{doctorBacking.selected.secondSurname}"
-						style="width:250px" />
-
-					<h:outputText value="#{msg['doc_onSite']}" />
-					<p:selectBooleanCheckbox value="#{doctorBacking.selected.onSite}" />
-
-					<h:outputText value="#{msg['doc_virtual']}" />
-					<p:selectBooleanCheckbox value="#{doctorBacking.selected.virtual}" />
 
 					<h:outputLabel value="#{msg['doc_speciality']}" />
 					<p:selectOneMenu value="#{doctorBacking.selected.crmSpeciality.id}"

@@ -76,8 +76,7 @@ public class DoctorExceptionBacking implements Serializable {
 		mapDoctor = new HashMap<BigDecimal, CrmDoctor>();
 		for (CrmDoctor row : tableService.getListDoctorActive()) {
 			mapDoctor.put(row.getId(), row);
-			listDoctor.add(new SelectItem(row.getId(), row.getFirstName() + " "
-					+ row.getFirstSurname()));
+			listDoctor.add(new SelectItem(row.getId(), row.getNames()));
 		}
 		return listDoctor;
 	}

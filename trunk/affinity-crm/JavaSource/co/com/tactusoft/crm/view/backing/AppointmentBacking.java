@@ -308,8 +308,7 @@ public class AppointmentBacking extends BaseBacking {
 			mapDoctor = new HashMap<BigDecimal, CrmDoctor>();
 			for (CrmDoctor row : tablesService.getListDoctorActive()) {
 				mapDoctor.put(row.getId(), row);
-				listDoctor.add(new SelectItem(row.getId(), row.getFirstName()
-						+ " " + row.getFirstSurname()));
+				listDoctor.add(new SelectItem(row.getId(), row.getNames()));
 			}
 
 		} else {
