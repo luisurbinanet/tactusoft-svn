@@ -1,6 +1,5 @@
 package co.com.tactusoft.crm.view.backing;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,12 +13,10 @@ import java.util.Map;
 
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.context.annotation.Scope;
 
-import co.com.tactusoft.crm.controller.bo.TablesBo;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmDoctorSchedule;
@@ -32,12 +29,9 @@ import co.com.tactusoft.crm.view.datamodel.DoctorScheduleDataModel;
 
 @Named
 @Scope("view")
-public class DoctorBacking implements Serializable {
+public class DoctorBacking extends BaseBacking {
 
 	private static final long serialVersionUID = 1L;
-
-	@Inject
-	private TablesBo tableService;
 
 	private List<CrmDoctor> list;
 	private DoctorDataModel model;
@@ -85,7 +79,7 @@ public class DoctorBacking implements Serializable {
 
 	public DoctorDataModel getModel() {
 		if (model == null) {
-			list = tableService.getListDoctor();
+			list = tablesService.getListDoctor();
 			model = new DoctorDataModel(list);
 		}
 		return model;
@@ -107,7 +101,7 @@ public class DoctorBacking implements Serializable {
 		if (listCrmSpeciality == null) {
 			listCrmSpeciality = new LinkedList<SelectItem>();
 			mapCrmSpeciality = new HashMap<BigDecimal, CrmSpeciality>();
-			for (CrmSpeciality row : tableService.getListSpecialityActive()) {
+			for (CrmSpeciality row : tablesService.getListSpecialityActive()) {
 				mapCrmSpeciality.put(row.getId(), row);
 				listCrmSpeciality.add(new SelectItem(row.getId(), row
 						.getDescription()));
@@ -124,7 +118,7 @@ public class DoctorBacking implements Serializable {
 		if (listCrmBranch == null) {
 			listCrmBranch = new LinkedList<SelectItem>();
 			mapCrmBranch = new HashMap<BigDecimal, CrmBranch>();
-			for (CrmBranch row : tableService.getListBranchActive()) {
+			for (CrmBranch row : tablesService.getListBranchActive()) {
 				mapCrmBranch.put(row.getId(), row);
 				listCrmBranch.add(new SelectItem(row.getId(), row.getName()));
 			}
@@ -140,7 +134,7 @@ public class DoctorBacking implements Serializable {
 		if (listCrmUser == null) {
 			listCrmUser = new LinkedList<SelectItem>();
 			mapCrmUser = new HashMap<BigDecimal, CrmUser>();
-			for (CrmUser row : tableService.getListUserActive()) {
+			for (CrmUser row : tablesService.getListUserActive()) {
 				mapCrmUser.put(row.getId(), row);
 				listCrmUser.add(new SelectItem(row.getId(), row.getUsername()));
 			}
@@ -229,6 +223,10 @@ public class DoctorBacking implements Serializable {
 
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+		
+		idDay = 1;
+		startHour = null;
+		endHour = null;
 	}
 
 	public void saveAction() {
@@ -238,22 +236,25 @@ public class DoctorBacking implements Serializable {
 			message = FacesUtil.getMessage("sal_msg_error_schedule");
 			FacesUtil.addError(message);
 		} else {
+			if (selected.getId() == null) {
+				selected.setCode(selectedWSDoctor);
+				selected.setNames(mapWSDoctor.get(selectedWSDoctor));
+			}
+
 			selected.setCrmSpeciality(mapCrmSpeciality.get(selected
 					.getCrmSpeciality().getId()));
 
 			selected.setCrmUser(mapCrmUser.get(selected.getCrmUser().getId()));
 
-			int result = tableService.saveDoctor(selected);
+			int result = tablesService.saveDoctor(selected);
 			if (result == 0) {
-				tableService.saveDoctorSchedule(selected, listDoctorSchedule);
-				list = tableService.getListDoctor();
+				tablesService.saveDoctorSchedule(selected, listDoctorSchedule);
+				list = tablesService.getListDoctor();
 				model = new DoctorDataModel(list);
 				message = FacesUtil.getMessage("msg_record_ok");
 				FacesUtil.addInfo(message);
 			} else if (result == -1) {
-				String paramValue = FacesUtil.getMessage("doc_code");
-				message = FacesUtil.getMessage("msg_record_unique_exception",
-						paramValue);
+				message = FacesUtil.getMessage("doc_msg_error_unique");
 				FacesUtil.addError(message);
 			}
 		}
@@ -289,12 +290,12 @@ public class DoctorBacking implements Serializable {
 				message = FacesUtil.getMessage("sal_msg_error_dates_3");
 				FacesUtil.addError(message);
 			} else {
-				
+
 				CrmBranch crmBranch = mapCrmBranch.get(idBranch);
-				
+
 				listDoctorSchedule.add(new CrmDoctorSchedule(
-						new BigDecimal(-1), crmBranch, selected, idDay, startHourDate,
-						endHourDate));
+						new BigDecimal(-1), crmBranch, selected, idDay,
+						startHourDate, endHourDate));
 				modelDoctorSchedule = new DoctorScheduleDataModel(
 						listDoctorSchedule);
 			}
@@ -313,7 +314,7 @@ public class DoctorBacking implements Serializable {
 	}
 
 	public void generateListAction(ActionEvent event) {
-		listDoctorSchedule = tableService.getListScheduleByDoctor(selected
+		listDoctorSchedule = tablesService.getListScheduleByDoctor(selected
 				.getId());
 		modelDoctorSchedule = new DoctorScheduleDataModel(listDoctorSchedule);
 	}

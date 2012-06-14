@@ -138,7 +138,7 @@ CREATE TABLE `crm_holiday_branch` (
 
 LOCK TABLES `crm_holiday_branch` WRITE;
 /*!40000 ALTER TABLE `crm_holiday_branch` DISABLE KEYS */;
-INSERT INTO `crm_holiday_branch` VALUES (1,1,1);
+INSERT INTO `crm_holiday_branch` VALUES (1,1,1),(2,2,1),(3,2,2);
 /*!40000 ALTER TABLE `crm_holiday_branch` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -243,7 +243,6 @@ CREATE TABLE `crm_appointment` (
 
 LOCK TABLES `crm_appointment` WRITE;
 /*!40000 ALTER TABLE `crm_appointment` DISABLE KEYS */;
-INSERT INTO `crm_appointment` VALUES (1,'1','0000137537','ALVAREZ DIMAS JENNY PAOLA',NULL,1,1,1,'2012-05-29 08:00:00','2012-05-29 08:45:00',NULL,NULL,1),(2,'2','0000765439','SARMIENTO ROYERO CARLOS ARTURO',NULL,1,1,2,'2012-05-29 08:00:00','2012-05-29 08:45:00',NULL,NULL,1),(3,'3','0000137537','ALVAREZ DIMAS JENNY PAOLA',NULL,1,1,1,'2012-05-29 09:30:00','2012-05-29 10:15:00',NULL,NULL,1),(4,'4','0000765439','SARMIENTO ROYERO CARLOS ARTURO',NULL,1,1,1,'2012-05-29 08:50:00','2012-05-29 09:20:00',NULL,NULL,1),(5,'5','0000137537','ALVAREZ DIMAS JENNY PAOLA',NULL,1,1,2,'2012-05-29 13:00:00','2012-05-29 13:30:00',NULL,NULL,1),(6,'C00006','0000137537','ALVAREZ DIMAS JENNY PAOLA','0000137537',1,1,2,'2012-05-29 10:30:00','2012-05-29 11:00:00',NULL,NULL,2),(7,'C00007','0000137537','ALVAREZ DIMAS JENNY PAOLA','0000137537',1,1,1,'2012-05-29 11:00:00','2012-05-29 11:30:00',NULL,NULL,2),(8,'C00008','0000137537','ALVAREZ DIMAS JENNY PAOLA','0000137537',1,1,1,'2012-05-29 11:30:00','2012-05-29 12:00:00',NULL,NULL,2),(9,'C00009','0000765439','SARMIENTO ROYERO CARLOS ARTURO','0000765439',1,1,1,'2012-05-29 10:30:00','2012-05-29 11:00:00',NULL,NULL,2),(10,'C00010','0000765439','SARMIENTO ROYERO CARLOS ARTURO','0000765439',1,1,1,'2012-05-30 10:30:00','2012-05-30 11:00:00',NULL,NULL,3);
 /*!40000 ALTER TABLE `crm_appointment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -257,24 +256,15 @@ DROP TABLE IF EXISTS `crm_doctor`;
 CREATE TABLE `crm_doctor` (
   `id` decimal(19,0) NOT NULL,
   `code` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
-  `first_name` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
-  `second_name` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `first_surname` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
-  `second_surname` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `names` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
   `id_speciality` decimal(19,0) NOT NULL,
-  `gender` varchar(1) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `on_site` tinyint(1) DEFAULT NULL,
-  `virtual` tinyint(1) DEFAULT NULL,
-  `id_branch` decimal(19,0) NOT NULL,
-  `state` int(1) NOT NULL DEFAULT '1',
   `id_user` decimal(19,0) NOT NULL,
+  `state` int(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`),
   KEY `fk_crm_doctor_1` (`id_speciality`),
-  KEY `fk_crm_doctor_2` (`id_branch`),
   KEY `fk_crm_doctor_3` (`id_user`),
   CONSTRAINT `fk_crm_doctor_1` FOREIGN KEY (`id_speciality`) REFERENCES `crm_speciality` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_crm_doctor_2` FOREIGN KEY (`id_branch`) REFERENCES `crm_branch` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_crm_doctor_3` FOREIGN KEY (`id_user`) REFERENCES `crm_user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -285,7 +275,7 @@ CREATE TABLE `crm_doctor` (
 
 LOCK TABLES `crm_doctor` WRITE;
 /*!40000 ALTER TABLE `crm_doctor` DISABLE KEYS */;
-INSERT INTO `crm_doctor` VALUES (1,'8647362','JUAN','','PEREZ','',1,'M',1,0,1,1,1),(2,'123','Pedro','','Perez','',1,'W',1,0,1,1,1),(3,'456','Adriana','','Fuente','',1,'W',1,1,1,1,1),(4,'142589','MARIA','','JUANA','',1,'W',1,1,1,0,1);
+INSERT INTO `crm_doctor` VALUES (1,'8647362','JUAN PEREZ',1,1,1),(2,'123','Pedro',1,1,1),(3,'456','Adriana Fuente',1,1,1),(4,'142589','MARIA',1,1,0),(5,'00000082','GOMEZ ALEXANDER',1,1,1);
 /*!40000 ALTER TABLE `crm_doctor` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -370,24 +360,6 @@ LOCK TABLES `crm_user_role` WRITE;
 INSERT INTO `crm_user_role` VALUES (1,1,1),(2,2,1),(3,3,4);
 /*!40000 ALTER TABLE `crm_user_role` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Temporary table structure for view `vw_doctor_hour`
---
-
-DROP TABLE IF EXISTS `vw_doctor_hour`;
-/*!50001 DROP VIEW IF EXISTS `vw_doctor_hour`*/;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-/*!50001 CREATE TABLE `vw_doctor_hour` (
-  `id_branch` decimal(19,0),
-  `appointment_date` date,
-  `id_doctor` decimal(19,0),
-  `doctor_name` varchar(45),
-  `doctor_surname` varchar(45),
-  `hours` double(23,6)
-) ENGINE=MyISAM */;
-SET character_set_client = @saved_cs_client;
 
 --
 -- Table structure for table `crm_user_branch`
@@ -493,10 +465,12 @@ CREATE TABLE `crm_doctor_schedule` (
   `day` int(11) NOT NULL,
   `start_hour` time NOT NULL,
   `end_hour` time NOT NULL,
+  `id_branch` decimal(19,0) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_crm_doctor_schedule_1` (`id_doctor`,`day`,`start_hour`),
   KEY `fk_crm_doctor_schedule_1` (`id_doctor`),
-  CONSTRAINT `fk_crm_doctor_schedule_1` FOREIGN KEY (`id_doctor`) REFERENCES `crm_doctor` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `fk_crm_doctor_schedule_2` (`id_branch`),
+  CONSTRAINT `fk_crm_doctor_schedule_1` FOREIGN KEY (`id_doctor`) REFERENCES `crm_doctor` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_crm_doctor_schedule_2` FOREIGN KEY (`id_branch`) REFERENCES `crm_branch` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -506,7 +480,7 @@ CREATE TABLE `crm_doctor_schedule` (
 
 LOCK TABLES `crm_doctor_schedule` WRITE;
 /*!40000 ALTER TABLE `crm_doctor_schedule` DISABLE KEYS */;
-INSERT INTO `crm_doctor_schedule` VALUES (1,1,2,'08:00:00','12:00:00'),(2,1,2,'13:00:00','18:00:00'),(3,1,3,'08:00:00','12:00:00'),(4,1,3,'13:00:00','18:00:00'),(5,1,6,'08:00:00','12:00:00'),(6,1,4,'08:00:00','12:00:00'),(7,1,4,'13:00:00','18:00:00'),(8,1,5,'08:00:00','12:00:00'),(9,1,5,'13:00:00','18:00:00'),(10,2,5,'13:00:00','17:00:00'),(11,4,4,'08:00:00','12:00:00');
+INSERT INTO `crm_doctor_schedule` VALUES (23,5,1,'08:00:00','10:00:00',1);
 /*!40000 ALTER TABLE `crm_doctor_schedule` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -566,7 +540,6 @@ CREATE TABLE `crm_doctor_exception` (
 
 LOCK TABLES `crm_doctor_exception` WRITE;
 /*!40000 ALTER TABLE `crm_doctor_exception` DISABLE KEYS */;
-INSERT INTO `crm_doctor_exception` VALUES (1,1,'2012-06-04 08:00:00','2012-06-04 10:00:00'),(3,1,'2012-06-18 08:00:00','2012-06-18 20:00:00'),(4,1,'2012-06-04 11:00:00','2012-06-04 12:00:00'),(5,1,'2012-06-04 14:00:00','2012-06-04 14:30:00');
 /*!40000 ALTER TABLE `crm_doctor_exception` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -688,8 +661,7 @@ SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 /*!50001 CREATE TABLE `vw_doctor_schedule` (
   `id_doctor` decimal(19,0),
-  `first_name` varchar(45),
-  `first_surname` varchar(45),
+  `names` varchar(45),
   `id_branch` decimal(19,0),
   `day` int(11)
 ) ENGINE=MyISAM */;
@@ -782,25 +754,6 @@ INSERT INTO `crm_page` VALUES (1,'Seguridad',NULL,'ui-icon-document',NULL,1),(2,
 UNLOCK TABLES;
 
 --
--- Final view structure for view `vw_doctor_hour`
---
-
-/*!50001 DROP TABLE IF EXISTS `vw_doctor_hour`*/;
-/*!50001 DROP VIEW IF EXISTS `vw_doctor_hour`*/;
-/*!50001 SET @saved_cs_client          = @@character_set_client */;
-/*!50001 SET @saved_cs_results         = @@character_set_results */;
-/*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8 */;
-/*!50001 SET character_set_results     = utf8 */;
-/*!50001 SET collation_connection      = utf8_general_ci */;
-/*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `vw_doctor_hour` AS select `a`.`id_branch` AS `id_branch`,cast(`a`.`start_appointment_date` as date) AS `appointment_date`,`a`.`id_doctor` AS `id_doctor`,`b`.`first_name` AS `doctor_name`,`b`.`first_surname` AS `doctor_surname`,sum(timediff(`a`.`end_appointment_date`,`a`.`start_appointment_date`)) AS `hours` from (`crm_appointment` `a` join `crm_doctor` `b` on((`a`.`id_doctor` = `b`.`id`))) group by `a`.`id_branch`,cast(`a`.`start_appointment_date` as date),`a`.`id_doctor`,`b`.`first_name`,`b`.`first_surname` order by sum(timediff(`a`.`end_appointment_date`,`a`.`start_appointment_date`)) */;
-/*!50001 SET character_set_client      = @saved_cs_client */;
-/*!50001 SET character_set_results     = @saved_cs_results */;
-/*!50001 SET collation_connection      = @saved_col_connection */;
-
---
 -- Final view structure for view `vw_doctor_schedule`
 --
 
@@ -814,7 +767,7 @@ UNLOCK TABLES;
 /*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `vw_doctor_schedule` AS select distinct `a`.`id` AS `id_doctor`,`a`.`first_name` AS `first_name`,`a`.`first_surname` AS `first_surname`,`a`.`id_branch` AS `id_branch`,`b`.`day` AS `day` from (`crm_doctor` `a` join `crm_doctor_schedule` `b` on((`b`.`id_doctor` = `a`.`id`))) */;
+/*!50001 VIEW `vw_doctor_schedule` AS select distinct `a`.`id` AS `id_doctor`,`a`.`names` AS `names`,`b`.`id_branch` AS `id_branch`,`b`.`day` AS `day` from (`crm_doctor` `a` join `crm_doctor_schedule` `b` on((`b`.`id_doctor` = `a`.`id`))) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -828,4 +781,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-06-12  7:27:41
+-- Dump completed on 2012-06-13 16:36:03

@@ -20,7 +20,7 @@
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
 							action="#{doctorBacking.newAction}" oncomplete="dlg.show()"
-							update=":editForm:dialog" />
+							update=":editForm:dialog :editForm:recordTableDetail" />
 						<p:commandButton value="#{msg['btn_edit']}" icon="ui-icon-pencil"
 							oncomplete="dlg.show()" update=":editForm:dialog"
 							actionListener="#{doctorBacking.generateListAction}" />
@@ -76,17 +76,35 @@
 
 				<p:spacer height="10" />
 
-				<h:panelGrid id="pnlDetail" columns="4" cellpadding="4"
+				<h:panelGrid id="pnlDetail" columns="2" cellpadding="4"
+					style="margin:0 auto;" width="100%">
+					<h:outputLabel value="#{msg['doc_select']}"
+						rendered="#{doctorBacking.selected.id eq null?true:false}" />
+					<p:selectOneMenu style="width:500px" required="true"
+						label="#{msg['doc_select']}"
+						value="#{doctorBacking.selectedWSDoctor}"
+						rendered="#{doctorBacking.selected.id eq null?true:false}">
+						<f:selectItems value="#{doctorBacking.listWSDoctor}" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlDetail2" columns="4" cellpadding="4"
 					style="margin:0 auto;" width="100%">
 
-					<h:outputLabel value="#{msg['doc_code']}" />
+					<h:outputLabel value="#{msg['doc_code']}"
+						rendered="#{doctorBacking.selected.id ne null?true:false}" />
 					<p:inputText value="#{doctorBacking.selected.code}"
-						style="width:250px" label="#{msg['doc_code']}" required="true" />
+						style="width:250px" label="#{msg['doc_code']}" required="true"
+						rendered="#{doctorBacking.selected.id ne null?true:false}"
+						readonly="true" />
 
-					<h:outputLabel value="#{msg['doc_firstName']}" />
+					<h:outputLabel value="#{msg['doc_firstName']}"
+						rendered="#{doctorBacking.selected.id ne null?true:false}" />
 					<p:inputText value="#{doctorBacking.selected.names}"
 						style="width:250px" label="#{msg['doc_firstName']}"
-						required="true" />
+						required="true"
+						rendered="#{doctorBacking.selected.id ne null?true:false}"
+						readonly="true" />
 
 					<h:outputLabel value="#{msg['doc_speciality']}" />
 					<p:selectOneMenu value="#{doctorBacking.selected.crmSpeciality.id}"

@@ -77,10 +77,13 @@ public class ProcessBo implements Serializable {
 		return dao.getId(clasz);
 	}
 
-	private List<CrmHoliday> getListHoliday() {
+	private List<CrmHoliday> getListHoliday(BigDecimal idBranch) {
 		String currenDate = FacesUtil.formatDate(new Date(), "yyyy-MM-dd");
-		return dao.find("from CrmHoliday o where o.holiday >= '" + currenDate
-				+ "T00:00:00.000+05:00'");
+		return dao
+				.find("select o.crmHoliday from CrmHolidayBranch o where o.crmHoliday.holiday >= '"
+						+ currenDate
+						+ "T00:00:00.000+05:00' and o.crmBranch.id = "
+						+ idBranch);
 	}
 
 	public boolean validateHoliday(List<CrmHoliday> list, Date date) {
@@ -176,9 +179,11 @@ public class ProcessBo implements Serializable {
 		calendar.add(Calendar.DATE, 60); // 60 Días
 		String endDate = FacesUtil.formatDate(calendar.getTime(), "yyyy-MM-dd");
 
+		// String hourString = FacesUtil.formatDate(new Date(), "HH:mm");
 		List<CrmDoctorSchedule> listDoctorSchedule = dao
 				.find("from CrmDoctorSchedule o where o.crmDoctor.id = "
-						+ doctor.getId() + " order by o.day, o.startHour");
+						+ doctor.getId() + " and o.crmBranch.id = " + idBranch
+						+ " order by o.day, o.startHour");
 
 		// Validar si Doctor tiene Horario
 		if (listDoctorSchedule.size() > 0) {
@@ -197,7 +202,7 @@ public class ProcessBo implements Serializable {
 							+ "order by o.startAppointmentDate");
 
 			// Buscar los festivos
-			List<CrmHoliday> listHoliday = this.getListHoliday();
+			List<CrmHoliday> listHoliday = this.getListHoliday(idBranch);
 
 			// Revisar Día a Día disponibilidad de Citas
 			Date currentDate = new Date();
@@ -268,6 +273,13 @@ public class ProcessBo implements Serializable {
 											candidatesHours);
 								}
 
+								if (FacesUtil.getDateWithoutTime(new Date())
+										.compareTo(currentDate) == 0) {
+									if (new Date().compareTo(initHour) > 0) {
+										validate = false;
+									}
+								}
+
 								if (validate) {
 									result.add(new Candidate(id, doctor,
 											initHour, endHour));
@@ -297,7 +309,7 @@ public class ProcessBo implements Serializable {
 		int id = 1;
 
 		// Buscar los festivos
-		List<CrmHoliday> listHoliday = this.getListHoliday();
+		List<CrmHoliday> listHoliday = this.getListHoliday(idBranch);
 
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
@@ -312,15 +324,32 @@ public class ProcessBo implements Serializable {
 			// Buscar citas x doctor y sucursal
 			List<VwDoctorSchedule> listVwDoctorSchedule = dao
 					.find("from VwDoctorSchedule o where o.id.idBranch = "
-							+ idBranch + " and o.id.day = " + currentDay);
+							+ idBranch + " and o.id.day = " + currentDay
+							+ " and o.id.idBranch = " + idBranch);
 
 			for (VwDoctorSchedule vwDoctorSchedule : listVwDoctorSchedule) {
 				BigDecimal idDoctor = vwDoctorSchedule.getId().getIdDoctor();
 
 				// Buscar horarios Doctor
-				List<CrmDoctorSchedule> listDoctorSchedule = dao
-						.find("from CrmDoctorSchedule o where o.crmDoctor.id = "
-								+ idDoctor + " order by o.day, o.startHour");
+				List<CrmDoctorSchedule> listDoctorSchedule = null;
+				if (FacesUtil.getDateWithoutTime(new Date()).compareTo(date) == 0) {
+					String hourString = FacesUtil.formatDate(new Date(),
+							"HH:mm");
+					listDoctorSchedule = dao
+							.find("from CrmDoctorSchedule o where o.crmDoctor.id = "
+									+ idDoctor
+									+ " and o.crmBranch.id = "
+									+ idBranch
+									+ " and o.startHour >= '"
+									+ hourString
+									+ "' order by o.day, o.startHour");
+				} else {
+					listDoctorSchedule = dao
+							.find("from CrmDoctorSchedule o where o.crmDoctor.id = "
+									+ idDoctor
+									+ " and o.crmBranch.id = "
+									+ idBranch + " order by o.day, o.startHour");
+				}
 
 				// Validar si Doctor tiene Horario
 				if (listDoctorSchedule.size() > 0) {
@@ -392,8 +421,8 @@ public class ProcessBo implements Serializable {
 								if (validate) {
 									CrmDoctor crmDoctor = new CrmDoctor();
 									crmDoctor.setId(idDoctor);
-									crmDoctor.setNames(vwDoctorSchedule
-											.getId().getNames());
+									crmDoctor.setNames(vwDoctorSchedule.getId()
+											.getNames());
 
 									result.add(new Candidate(id, crmDoctor,
 											initHour, endHour));
@@ -491,7 +520,7 @@ public class ProcessBo implements Serializable {
 		}
 
 		// Buscar los festivos
-		List<CrmHoliday> listHoliday = this.getListHoliday();
+		List<CrmHoliday> listHoliday = this.getListHoliday(idBranch);
 
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(starDate);
