@@ -194,9 +194,7 @@ public class ProcessBo implements Serializable {
 							+ initDate
 							+ "T00:00:00.000+05:00' and o.startAppointmentDate <= '"
 							+ endDate
-							+ "T23:59:59.999+05:00'  and o.crmBranch.id = "
-							+ idBranch
-							+ " and o.crmDoctor.id = "
+							+ "T23:59:59.999+05:00' and o.crmDoctor.id = "
 							+ doctor.getId()
 							+ " and o. state = 1 "
 							+ "order by o.startAppointmentDate");
@@ -359,9 +357,7 @@ public class ProcessBo implements Serializable {
 									+ dateString
 									+ "T00:00:00.000+05:00' and o.startAppointmentDate <= '"
 									+ dateString
-									+ "T23:59:59.999+05:00'  and o.crmBranch.id = "
-									+ idBranch
-									+ " and o.crmDoctor.id = "
+									+ "T23:59:59.999+05:00' and o.crmDoctor.id = "
 									+ idDoctor
 									+ " and o. state = 1 "
 									+ "order by o.startAppointmentDate");
