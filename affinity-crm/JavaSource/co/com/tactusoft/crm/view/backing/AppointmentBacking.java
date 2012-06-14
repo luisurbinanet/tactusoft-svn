@@ -11,6 +11,7 @@ import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.inject.Named;
 
+import org.primefaces.event.CloseEvent;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
@@ -55,9 +56,11 @@ public class AppointmentBacking extends BaseBacking {
 	private Map<Integer, Candidate> mapAppointment;
 	private Integer selectedAppointment;
 
-	private boolean disabledSaveButton;
 	private boolean renderedForDate;
 	private boolean renderedForDoctor;
+
+	private String infoMessage;
+	private boolean saved;
 
 	public AppointmentBacking() {
 		newAction(null);
@@ -214,14 +217,6 @@ public class AppointmentBacking extends BaseBacking {
 		this.selectedAppointment = selectedAppointment;
 	}
 
-	public boolean isDisabledSaveButton() {
-		return disabledSaveButton;
-	}
-
-	public void setDisabledSaveButton(boolean disabledSaveButton) {
-		this.disabledSaveButton = disabledSaveButton;
-	}
-
 	public boolean isRenderedForDate() {
 		return renderedForDate;
 	}
@@ -249,10 +244,25 @@ public class AppointmentBacking extends BaseBacking {
 		return false;
 	}
 
+	public String getInfoMessage() {
+		return infoMessage;
+	}
+
+	public void setInfoMessage(String infoMessage) {
+		this.infoMessage = infoMessage;
+	}
+
+	public boolean isSaved() {
+		return saved;
+	}
+
+	public void setSaved(boolean saved) {
+		this.saved = saved;
+	}
+
 	public void newAction(ActionEvent event) {
 		listPatient = new LinkedList<Patient>();
 		patientModel = new PatientDataModel(listPatient);
-		disabledSaveButton = false;
 		idSearch = Constant.DEFAULT_VALUE;
 
 		selected = new CrmAppointment();
@@ -265,7 +275,7 @@ public class AppointmentBacking extends BaseBacking {
 
 		renderedForDate = false;
 		renderedForDoctor = false;
-		
+
 		optionSearchPatient = 1;
 		docPatient = "";
 		namePatient = "";
@@ -274,6 +284,9 @@ public class AppointmentBacking extends BaseBacking {
 		listAppointment = new LinkedList<SelectItem>();
 		listAppointment.add(new SelectItem(null, message));
 		this.selectedAppointment = 0;
+
+		infoMessage = null;
+		saved = false;
 	}
 
 	public void handleProcedureChange() {
@@ -349,28 +362,29 @@ public class AppointmentBacking extends BaseBacking {
 		}
 
 		if (listAppointment.size() == 0) {
-			String message = FacesUtil.getMessage("app_msg_error_not_avalaible");
+			String message = FacesUtil
+					.getMessage("app_msg_error_not_avalaible");
 			listAppointment.add(new SelectItem(null, message));
 			this.selectedAppointment = 0;
 		}
 	}
 
 	public void saveAction() {
-		String message = null;
+		infoMessage = null;
 
 		// validar Selección Paciente
 		if (this.selectedPatient.getSAPCode() == null) {
-			message = FacesUtil.getMessage("app_msg_error_pat");
-			FacesUtil.addError(message);
+			infoMessage = FacesUtil.getMessage("app_msg_error_pat");
+			// FacesUtil.addError(infoMessage);
 		}
 
 		// validar Selección Cita
 		if (this.selectedAppointment == 0) {
-			message = FacesUtil.getMessage("app_msg_error_app");
-			FacesUtil.addError(message);
+			infoMessage = FacesUtil.getMessage("app_msg_error_app");
+			// FacesUtil.addError(infoMessage);
 		}
 
-		if (message == null) {
+		if (infoMessage == null) {
 			Candidate candidate = mapAppointment.get(this.selectedAppointment);
 			CrmProcedureDetail procedureDetail = mapProcedureDetail
 					.get(selected.getCrmProcedureDetail().getId());
@@ -383,19 +397,19 @@ public class AppointmentBacking extends BaseBacking {
 			if (validateApp != 0) {
 				switch (validateApp) {
 				case -1:
-					message = FacesUtil.getMessage("app_msg_error_1");
+					infoMessage = FacesUtil.getMessage("app_msg_error_1");
 					break;
 				case -2:
-					message = FacesUtil.getMessage("app_msg_error_2");
+					infoMessage = FacesUtil.getMessage("app_msg_error_2");
 					break;
 				case -3:
-					message = FacesUtil.getMessage("app_msg_error_3");
+					infoMessage = FacesUtil.getMessage("app_msg_error_3");
 					break;
 				case -4:
-					message = FacesUtil.getMessage("app_msg_error_4");
+					infoMessage = FacesUtil.getMessage("app_msg_error_4");
 					break;
 				}
-				FacesUtil.addError(message);
+				// FacesUtil.addError(infoMessage);
 			} else {
 				String code = "";
 
@@ -415,10 +429,18 @@ public class AppointmentBacking extends BaseBacking {
 
 				CrmAppointment crmAppointment = processService
 						.saveAppointment(selected);
-				message = FacesUtil.getMessage("app_msg_ok",
+				infoMessage = FacesUtil.getMessage("app_msg_ok",
 						crmAppointment.getCode());
-				FacesUtil.addInfo(message);
+				// FacesUtil.addInfo(infoMessage);
+
+				saved = true;
 			}
+		}
+	}
+
+	public void handleClose(CloseEvent event) {
+		if (saved) {
+			newAction(null);
 		}
 	}
 

@@ -28,8 +28,8 @@
 							update=":editForm:dialog2" />
 						<p:commandButton id="btnSaveOrder" value="#{msg['btn_save']}"
 							icon="ui-icon-disk" action="#{appointmentBacking.saveAction}"
-							update="btnSaveOrder"
-							disabled="#{appointmentBacking.disabledSaveButton}" />
+							update="btnSaveOrder :editForm:conffirmation"
+							oncomplete="dlg.show()" disabled="#{appointmentBacking.saved}" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -122,6 +122,20 @@
 			</h:form>
 
 			<h:form id="editForm">
+
+				<p:dialog id="conffirmation" widgetVar="dlg"
+					header="#{msg['app_title']}" width="450" resizable="false"
+					showEffect="clip" hideEffect="clip" modal="true">
+
+					<p:ajax event="close" update=":form:pnlDetail :form:btnSaveOrder"
+						listener="#{appointmentBacking.handleClose}" />
+
+					<h:panelGrid width="100%">
+						<h:outputLabel value="#{appointmentBacking.infoMessage}"
+							style="text-align:center;font-size:large;font-weight:bold;" />
+					</h:panelGrid>
+
+				</p:dialog>
 
 				<p:dialog header="#{msg['sal_patient']}" widgetVar="dlg2"
 					resizable="false" id="dialog2" showEffect="fade"
