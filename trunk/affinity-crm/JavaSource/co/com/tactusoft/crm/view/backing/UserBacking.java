@@ -69,6 +69,10 @@ public class UserBacking implements Serializable {
 		if (model == null) {
 			list = tablesService.getListUser();
 			model = new UserDataModel(list);
+
+			if (list.size() > 0) {
+				selected = list.get(0);
+			}
 		}
 		return model;
 	}
@@ -171,6 +175,7 @@ public class UserBacking implements Serializable {
 
 		if (message == null) {
 			selected.setUsername(selected.getUsername().toLowerCase());
+			selected.setPassword(FacesUtil.getMD5(selected.getPassword()));
 			selected.setCrmProfile(mapProfile.get(selected.getCrmProfile()
 					.getId()));
 			selected.setCrmDepartment(mapDepartment.get(selected

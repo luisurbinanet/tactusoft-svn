@@ -43,6 +43,10 @@ public class ProfileBacking implements Serializable {
 		if (model == null) {
 			list = tablesService.getListProfile();
 			model = new ProfileDataModel(list);
+			
+			if (list.size() > 0) {
+				selected = list.get(0);
+			}
 		}
 		return model;
 	}

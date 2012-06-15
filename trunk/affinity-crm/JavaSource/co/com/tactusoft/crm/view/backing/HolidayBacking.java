@@ -53,6 +53,10 @@ public class HolidayBacking implements Serializable {
 		if (model == null) {
 			list = tablesService.getListHoliday();
 			model = new HolidayDataModel(list);
+			
+			if (list.size() > 0) {
+				selected = list.get(0);
+			}
 		}
 		return model;
 	}

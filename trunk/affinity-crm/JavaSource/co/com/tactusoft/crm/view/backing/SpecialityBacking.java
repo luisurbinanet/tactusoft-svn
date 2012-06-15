@@ -43,6 +43,10 @@ public class SpecialityBacking implements Serializable {
 		if (model == null) {
 			list = tableService.getListSpeciality();
 			model = new SpecialityDataModel(list);
+			
+			if (list.size() > 0) {
+				selected = list.get(0);
+			}
 		}
 		return model;
 	}

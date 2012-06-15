@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.controller.bo.ProcessBo;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
+import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
 
 @Named
@@ -26,6 +27,9 @@ public class DoctorAppointmentBacking implements Serializable {
 
 	private CrmDoctor doctor;
 	private List<CrmAppointment> listAppointment;
+	
+	private CrmBranch branch;
+	private List<CrmAppointment> listAppointmentByBranch;
 
 	private ScheduleModel eventModel;
 
@@ -47,6 +51,23 @@ public class DoctorAppointmentBacking implements Serializable {
 
 	public void setListAppointment(List<CrmAppointment> listAppointment) {
 		this.listAppointment = listAppointment;
+	}
+
+	public CrmBranch getBranch() {
+		return branch;
+	}
+
+	public void setBranch(CrmBranch branch) {
+		this.branch = branch;
+	}
+
+	public List<CrmAppointment> getListAppointmentByBranch() {
+		return listAppointmentByBranch;
+	}
+
+	public void setListAppointmentByBranch(
+			List<CrmAppointment> listAppointmentByBranch) {
+		this.listAppointmentByBranch = listAppointmentByBranch;
 	}
 
 	public ScheduleModel getEventModel() {

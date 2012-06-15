@@ -57,6 +57,10 @@ public class ProcedureBacking implements Serializable {
 		if (model == null) {
 			list = tableService.getListProcedure();
 			model = new ProcedureDataModel(list);
+
+			if (list.size() > 0) {
+				selected = list.get(0);
+			}
 		}
 		return model;
 	}
@@ -171,6 +175,12 @@ public class ProcedureBacking implements Serializable {
 	public void addProcedureDetailAction() {
 		String message = null;
 		try {
+			if (FacesUtil.isEmptyOrBlank(this.name)) {
+				String field = FacesUtil.getMessage("prc_name");
+				message = FacesUtil.getMessage("glb_required", field);
+				FacesUtil.addError(message);
+			}
+
 			if (timeDoctor < 0 || timeNurses < 0 || timeStretchers < 0) {
 				message = FacesUtil.getMessage("prc_msg_error_times");
 				FacesUtil.addError(message);

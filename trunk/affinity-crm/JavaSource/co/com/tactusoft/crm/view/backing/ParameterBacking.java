@@ -42,6 +42,10 @@ public class ParameterBacking implements Serializable {
 		if (model == null) {
 			list = parameterService.getListParameter();
 			model = new ParameterDataModel(list);
+			
+			if (list.size() > 0) {
+				selected = list.get(0);
+			}
 		}
 		return model;
 	}
