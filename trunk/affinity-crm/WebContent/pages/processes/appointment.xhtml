@@ -131,11 +131,16 @@
 					header="#{msg['app_title']}" width="450" resizable="false"
 					showEffect="clip" hideEffect="clip" modal="true">
 
-					<p:ajax event="close" update=":form:pnlDetail :form:pnlDetail2 :form:pnlDetail3 :form:btnSaveOrder"
+					<p:ajax event="close"
+						update=":form:pnlDetail :form:pnlDetail2 :form:pnlDetail3 :form:btnSaveOrder"
 						listener="#{appointmentBacking.handleClose}" />
 
 					<h:panelGrid width="100%">
 						<h:outputLabel value="#{appointmentBacking.infoMessage}"
+							style="text-align:center;font-size:large;font-weight:bold;" />
+						<p:spacer height="5" rendered="#{appointmentBacking.saved}" />
+						<h:outputLabel value="#{appointmentBacking.detSelectedAppointment}"
+							rendered="#{appointmentBacking.saved}"
 							style="text-align:center;font-size:large;font-weight:bold;" />
 					</h:panelGrid>
 
