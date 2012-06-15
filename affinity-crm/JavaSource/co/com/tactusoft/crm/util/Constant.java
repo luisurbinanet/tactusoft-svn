@@ -7,6 +7,7 @@ public class Constant {
 	public static final int STATE_ACTIVE = 1;
 	public static final int STATE_INACTIVE = 0;
 
+	public static String DEFAULT_VALUE_STRING = "-1";
 	public static BigDecimal DEFAULT_VALUE = new BigDecimal(-1);
 	public static String DEFAULT_LABEL = "glb_default_value";
 	public static String ALL_LABEL = "glb_all_value";

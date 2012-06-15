@@ -11,6 +11,8 @@ import javax.inject.Inject;
 
 import co.com.tactusoft.crm.controller.bo.ProcessBo;
 import co.com.tactusoft.crm.controller.bo.TablesBo;
+import co.com.tactusoft.crm.util.Constant;
+import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.beans.Patient;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 
@@ -122,6 +124,9 @@ public class BaseBacking implements Serializable {
 							"TACTUSOFT", "AFFINITY");
 			listWSDoctor = new ArrayList<SelectItem>();
 			mapWSDoctor = new HashMap<String, String>();
+			String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL); 
+			listWSDoctor.add(new SelectItem(Constant.DEFAULT_VALUE_STRING,
+					label));
 			for (WSBean row : result) {
 				mapWSDoctor.put(row.getCode(), row.getNames());
 				listWSDoctor.add(new SelectItem(row.getCode(), row.getNames()));

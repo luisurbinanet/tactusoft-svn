@@ -329,25 +329,11 @@ public class ProcessBo implements Serializable {
 				BigDecimal idDoctor = vwDoctorSchedule.getId().getIdDoctor();
 
 				// Buscar horarios Doctor
-				List<CrmDoctorSchedule> listDoctorSchedule = null;
-				if (FacesUtil.getDateWithoutTime(new Date()).compareTo(date) == 0) {
-					String hourString = FacesUtil.formatDate(new Date(),
-							"HH:mm");
-					listDoctorSchedule = dao
-							.find("from CrmDoctorSchedule o where o.crmDoctor.id = "
-									+ idDoctor
-									+ " and o.crmBranch.id = "
-									+ idBranch
-									+ " and o.startHour >= '"
-									+ hourString
-									+ "' order by o.day, o.startHour");
-				} else {
-					listDoctorSchedule = dao
-							.find("from CrmDoctorSchedule o where o.crmDoctor.id = "
-									+ idDoctor
-									+ " and o.crmBranch.id = "
-									+ idBranch + " order by o.day, o.startHour");
-				}
+				List<CrmDoctorSchedule> listDoctorSchedule = dao
+						.find("from CrmDoctorSchedule o where o.crmDoctor.id = "
+								+ idDoctor
+								+ " and o.crmBranch.id = "
+								+ idBranch + " order by o.day, o.startHour");
 
 				// Validar si Doctor tiene Horario
 				if (listDoctorSchedule.size() > 0) {

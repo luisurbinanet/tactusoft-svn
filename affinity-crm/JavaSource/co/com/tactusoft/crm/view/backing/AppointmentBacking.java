@@ -23,6 +23,7 @@ import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.beans.Candidate;
 import co.com.tactusoft.crm.view.beans.Patient;
+import co.com.tactusoft.crm.view.datamodel.CandidateDataModel;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 
 @Named
@@ -35,6 +36,7 @@ public class AppointmentBacking extends BaseBacking {
 
 	private List<SelectItem> listBranch;
 	private Map<BigDecimal, CrmBranch> mapBranch;
+	private BigDecimal idBranch;
 
 	private List<SelectItem> listProcedure;
 	private Map<BigDecimal, CrmProcedure> mapProcedure;
@@ -52,9 +54,9 @@ public class AppointmentBacking extends BaseBacking {
 	private Date currentDate;
 	private int appointmentsNumber;
 
-	private List<SelectItem> listAppointment;
-	private Map<Integer, Candidate> mapAppointment;
-	private Integer selectedAppointment;
+	private List<Candidate> listAppointment;
+	private CandidateDataModel modelAppointment;
+	private Candidate selectedAppointment;
 
 	private boolean renderedForDate;
 	private boolean renderedForDoctor;
@@ -82,6 +84,10 @@ public class AppointmentBacking extends BaseBacking {
 				mapBranch.put(row.getId(), row);
 				listBranch.add(new SelectItem(row.getId(), row.getName()));
 			}
+
+			if (listBranch.size() > 0) {
+				idBranch = (BigDecimal) listBranch.get(0).getValue();
+			}
 		}
 		return listBranch;
 	}
@@ -96,6 +102,14 @@ public class AppointmentBacking extends BaseBacking {
 
 	public void setMapBranch(Map<BigDecimal, CrmBranch> mapBranch) {
 		this.mapBranch = mapBranch;
+	}
+
+	public BigDecimal getIdBranch() {
+		return idBranch;
+	}
+
+	public void setIdBranch(BigDecimal idBranch) {
+		this.idBranch = idBranch;
 	}
 
 	public List<SelectItem> getListProcedure() {
@@ -201,19 +215,27 @@ public class AppointmentBacking extends BaseBacking {
 		this.appointmentsNumber = appointmentsNumber;
 	}
 
-	public List<SelectItem> getListAppointment() {
+	public List<Candidate> getListAppointment() {
 		return listAppointment;
 	}
 
-	public void setListAppointment(List<SelectItem> listAppointment) {
+	public void setListAppointment(List<Candidate> listAppointment) {
 		this.listAppointment = listAppointment;
 	}
 
-	public Integer getSelectedAppointment() {
+	public CandidateDataModel getModelAppointment() {
+		return modelAppointment;
+	}
+
+	public void setModelAppointment(CandidateDataModel modelAppointment) {
+		this.modelAppointment = modelAppointment;
+	}
+
+	public Candidate getSelectedAppointment() {
 		return selectedAppointment;
 	}
 
-	public void setSelectedAppointment(Integer selectedAppointment) {
+	public void setSelectedAppointment(Candidate selectedAppointment) {
 		this.selectedAppointment = selectedAppointment;
 	}
 
@@ -270,7 +292,7 @@ public class AppointmentBacking extends BaseBacking {
 		selected.setCrmDoctor(new CrmDoctor());
 		selected.setCrmProcedureDetail(new CrmProcedureDetail());
 
-		selectedPatient = new Patient();
+		selectedPatient = null;
 		currentDate = new Date();
 
 		renderedForDate = false;
@@ -280,10 +302,9 @@ public class AppointmentBacking extends BaseBacking {
 		docPatient = "";
 		namePatient = "";
 
-		String message = FacesUtil.getMessage("app_msg_error_not_avalaible");
-		listAppointment = new LinkedList<SelectItem>();
-		listAppointment.add(new SelectItem(null, message));
-		this.selectedAppointment = 0;
+		listAppointment = new LinkedList<Candidate>();
+		modelAppointment = new CandidateDataModel(listAppointment);
+		selectedAppointment = null;
 
 		infoMessage = null;
 		saved = false;
@@ -317,12 +338,7 @@ public class AppointmentBacking extends BaseBacking {
 			this.renderedForDate = false;
 			this.renderedForDoctor = true;
 
-			listDoctor = new LinkedList<SelectItem>();
-			mapDoctor = new HashMap<BigDecimal, CrmDoctor>();
-			for (CrmDoctor row : tablesService.getListDoctorActive()) {
-				mapDoctor.put(row.getId(), row);
-				listDoctor.add(new SelectItem(row.getId(), row.getNames()));
-			}
+			handleBranchChange();
 
 		} else {
 			this.renderedForDate = false;
@@ -331,68 +347,53 @@ public class AppointmentBacking extends BaseBacking {
 	}
 
 	public void searchAppointMentChange() {
-		List<Candidate> listCandidate = null;
-		listAppointment = new LinkedList<SelectItem>();
-		mapAppointment = new HashMap<Integer, Candidate>();
-
 		CrmProcedureDetail procedureDetail = mapProcedureDetail.get(selected
 				.getCrmProcedureDetail().getId());
 
 		if (this.renderedForDate) {
-			listCandidate = processService.getScheduleAppointmentForDate(
-					selected.getCrmBranch().getId(), this.currentDate,
-					procedureDetail);
-
-			for (Candidate row : listCandidate) {
-				listAppointment.add(new SelectItem(row.getId(), row
-						.getDoctorDetail()));
-				mapAppointment.put(row.getId(), row);
-			}
+			listAppointment = processService.getScheduleAppointmentForDate(
+					idBranch, this.currentDate, procedureDetail);
 		} else if (this.renderedForDoctor) {
 			CrmDoctor doctor = mapDoctor.get(selected.getCrmDoctor().getId());
-			listCandidate = processService.getScheduleAppointmentForDoctor(
-					selected.getCrmBranch().getId(), doctor,
-					this.appointmentsNumber, procedureDetail);
-
-			for (Candidate row : listCandidate) {
-				listAppointment
-						.add(new SelectItem(row.getId(), row.getDetail()));
-				mapAppointment.put(row.getId(), row);
-			}
+			listAppointment = processService.getScheduleAppointmentForDoctor(
+					idBranch, doctor, this.appointmentsNumber, procedureDetail);
 		}
 
-		if (listAppointment.size() == 0) {
-			String message = FacesUtil
-					.getMessage("app_msg_error_not_avalaible");
-			listAppointment.add(new SelectItem(null, message));
-			this.selectedAppointment = 0;
+		modelAppointment = new CandidateDataModel(listAppointment);
+	}
+
+	public void handleBranchChange() {
+		listDoctor = new LinkedList<SelectItem>();
+		mapDoctor = new HashMap<BigDecimal, CrmDoctor>();
+		for (CrmDoctor row : tablesService.getListDoctorByBranch(idBranch)) {
+			mapDoctor.put(row.getId(), row);
+			listDoctor.add(new SelectItem(row.getId(), row.getNames()));
 		}
 	}
 
 	public void saveAction() {
-		infoMessage = null;
+		infoMessage = "";
 
 		// validar Selección Paciente
-		if (this.selectedPatient.getSAPCode() == null) {
+		if (this.selectedPatient == null) {
 			infoMessage = FacesUtil.getMessage("app_msg_error_pat");
-			// FacesUtil.addError(infoMessage);
 		}
 
 		// validar Selección Cita
-		if (this.selectedAppointment == 0) {
+		if (selectedAppointment == null) {
 			infoMessage = FacesUtil.getMessage("app_msg_error_app");
-			// FacesUtil.addError(infoMessage);
 		}
 
-		if (infoMessage == null) {
-			Candidate candidate = mapAppointment.get(this.selectedAppointment);
+		if (infoMessage.equals("")) {
 			CrmProcedureDetail procedureDetail = mapProcedureDetail
 					.get(selected.getCrmProcedureDetail().getId());
 
 			int validateApp = processService.validateAppointmentForDate(
-					selected.getCrmBranch().getId(), candidate.getStartDate(),
-					candidate.getEndDate(), procedureDetail, candidate
-							.getDoctor().getId(), selectedPatient.getSAPCode());
+					selected.getCrmBranch().getId(),
+					selectedAppointment.getStartDate(),
+					selectedAppointment.getEndDate(), procedureDetail,
+					selectedAppointment.getDoctor().getId(),
+					selectedPatient.getSAPCode());
 
 			if (validateApp != 0) {
 				switch (validateApp) {
@@ -409,7 +410,7 @@ public class AppointmentBacking extends BaseBacking {
 					infoMessage = FacesUtil.getMessage("app_msg_error_4");
 					break;
 				}
-				// FacesUtil.addError(infoMessage);
+
 			} else {
 				String code = "";
 
@@ -417,13 +418,13 @@ public class AppointmentBacking extends BaseBacking {
 				selected.setPatient(selectedPatient.getSAPCode());
 				selected.setPatientSap(selectedPatient.getSAPCode());
 				selected.setPatientNames(selectedPatient.getNames());
-				selected.setCrmDoctor(candidate.getDoctor());
-				selected.setCrmBranch(mapBranch.get(selected.getCrmBranch()
-						.getId()));
+				selected.setCrmDoctor(selectedAppointment.getDoctor());
+				selected.setCrmBranch(mapBranch.get(idBranch));
 				selected.setCrmProcedureDetail(procedureDetail);
 
-				selected.setStartAppointmentDate(candidate.getStartDate());
-				selected.setEndAppointmentDate(candidate.getEndDate());
+				selected.setStartAppointmentDate(selectedAppointment
+						.getStartDate());
+				selected.setEndAppointmentDate(selectedAppointment.getEndDate());
 
 				selected.setState(Constant.STATE_APP_ACTIVE);
 
@@ -431,7 +432,6 @@ public class AppointmentBacking extends BaseBacking {
 						.saveAppointment(selected);
 				infoMessage = FacesUtil.getMessage("app_msg_ok",
 						crmAppointment.getCode());
-				// FacesUtil.addInfo(infoMessage);
 
 				saved = true;
 			}
@@ -442,6 +442,15 @@ public class AppointmentBacking extends BaseBacking {
 		if (saved) {
 			newAction(null);
 		}
+	}
+
+	public String getDetSelectedAppointment() {
+		String result = "";
+		if (selectedAppointment != null) {
+			String message = FacesUtil.getMessage("app_msg_selected");
+			result = message + " " + selectedAppointment.getDoctorDetail();
+		}
+		return result;
 	}
 
 }
