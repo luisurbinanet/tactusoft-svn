@@ -104,7 +104,6 @@
 
 				</h:panelGrid>
 
-
 				<p:spacer height="40" />
 				<h:outputLabel value="#{msg['prc_detail']}"
 					style="text-align:left;font-size:medium;font-weight:bold;" />
@@ -116,7 +115,7 @@
 
 					<h:outputLabel value="#{msg['prc_name']}" />
 					<p:inputText value="#{procedureBacking.name}" style="width:200px"
-						label="#{msg['prc_name']}" required="true" />
+						label="#{msg['prc_name']}" />
 
 					<h:outputLabel value="" />
 					<h:outputLabel value="" />
@@ -156,15 +155,24 @@
 					</p:column>
 
 					<p:column headerText="#{msg['prc_time_doctor']}">
-						<h:outputLabel value="#{rec.timeDoctor}" />
+						<p:inplace>
+							<pe:inputNumber value="#{rec.timeDoctor}" symbol=" Min"
+								symbolPosition="s" decimalPlaces="0" style="width:70px" />
+						</p:inplace>
 					</p:column>
 
 					<p:column headerText="#{msg['prc_time_nurse']}">
-						<h:outputLabel value="#{rec.timeNurses}" />
+						<p:inplace>
+							<pe:inputNumber value="#{rec.timeNurses}" symbol=" Min"
+								symbolPosition="s" decimalPlaces="0" style="width:70px" />
+						</p:inplace>
 					</p:column>
 
 					<p:column headerText="#{msg['prc_time_stretcher']}">
-						<h:outputLabel value="#{rec.timeStretchers}" />
+						<p:inplace>
+							<pe:inputNumber value="#{rec.timeStretchers}" symbol=" Min"
+								symbolPosition="s" decimalPlaces="0" style="width:70px" />
+						</p:inplace>
 					</p:column>
 
 					<p:column headerText="#{msg['glb_state']}">

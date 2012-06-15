@@ -68,6 +68,10 @@ public class PatientBacking extends BaseBacking {
 	public PatientDataModel getModel() {
 		if (model == null) {
 			model = new PatientDataModel(list);
+			
+			if (list.size() > 0) {
+				selected = list.get(0);
+			}
 		}
 		return model;
 	}

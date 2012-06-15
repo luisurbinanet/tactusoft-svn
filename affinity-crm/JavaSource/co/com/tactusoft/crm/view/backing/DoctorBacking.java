@@ -56,6 +56,9 @@ public class DoctorBacking extends BaseBacking {
 	private String startHour;
 	private String endHour;
 
+	private boolean disabled;
+	private boolean disabledSearch;
+
 	public DoctorBacking() {
 		newAction();
 
@@ -81,6 +84,10 @@ public class DoctorBacking extends BaseBacking {
 		if (model == null) {
 			list = tablesService.getListDoctor();
 			model = new DoctorDataModel(list);
+
+			if (list.size() > 0) {
+				selected = list.get(0);
+			}
 		}
 		return model;
 	}
@@ -212,6 +219,22 @@ public class DoctorBacking extends BaseBacking {
 		this.endHour = endHour;
 	}
 
+	public boolean isDisabled() {
+		return disabled;
+	}
+
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
+	}
+
+	public boolean isDisabledSearch() {
+		return disabledSearch;
+	}
+
+	public void setDisabledSearch(boolean disabledSearch) {
+		this.disabledSearch = disabledSearch;
+	}
+
 	public void newAction() {
 		selectedWSDoctor = "-1";
 
@@ -234,7 +257,7 @@ public class DoctorBacking extends BaseBacking {
 	public void saveAction() {
 		String message = null;
 
-		if (selectedWSDoctor.endsWith("-1")) {
+		if (selected.getId() == null && selectedWSDoctor.endsWith("-1")) {
 			message = FacesUtil.getMessage("doc_msg_error_select");
 			FacesUtil.addError(message);
 		} else if (listDoctorSchedule.size() == 0) {

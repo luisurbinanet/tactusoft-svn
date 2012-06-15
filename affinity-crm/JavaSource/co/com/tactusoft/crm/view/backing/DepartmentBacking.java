@@ -43,6 +43,10 @@ public class DepartmentBacking implements Serializable {
 		if (model == null) {
 			list = tableService.getListDepartment();
 			model = new DepartmentDataModel(list);
+
+			if (list.size() > 0) {
+				selected = list.get(0);
+			}
 		}
 		return model;
 	}
@@ -75,7 +79,8 @@ public class DepartmentBacking implements Serializable {
 			FacesUtil.addInfo(message);
 		} else if (result == -1) {
 			String paramValue = FacesUtil.getMessage("doc_code");
-			message = FacesUtil.getMessage("msg_record_unique_exception", paramValue);
+			message = FacesUtil.getMessage("msg_record_unique_exception",
+					paramValue);
 			FacesUtil.addError(message);
 
 		}
