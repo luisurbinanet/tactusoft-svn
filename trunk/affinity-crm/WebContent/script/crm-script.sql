@@ -138,7 +138,7 @@ CREATE TABLE `crm_holiday_branch` (
 
 LOCK TABLES `crm_holiday_branch` WRITE;
 /*!40000 ALTER TABLE `crm_holiday_branch` DISABLE KEYS */;
-INSERT INTO `crm_holiday_branch` VALUES (1,1,1),(2,2,1),(3,2,2);
+INSERT INTO `crm_holiday_branch` VALUES (4,1,1),(5,1,2),(2,2,1),(3,2,2);
 /*!40000 ALTER TABLE `crm_holiday_branch` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -243,6 +243,7 @@ CREATE TABLE `crm_appointment` (
 
 LOCK TABLES `crm_appointment` WRITE;
 /*!40000 ALTER TABLE `crm_appointment` DISABLE KEYS */;
+INSERT INTO `crm_appointment` VALUES (1,'C00001','0000765441','ADRIANA M FUENTE E','0000765441',1,1,5,'2012-06-14 08:00:00','2012-06-14 08:30:00',NULL,NULL,1),(2,'C00002','0000765441','ADRIANA M FUENTE E','0000765441',1,1,5,'2012-06-14 08:30:00','2012-06-14 09:00:00',NULL,NULL,1),(3,'C00003','0000765439','SARMIENTO ROYERO CARLOS ARTURO','0000765439',1,1,6,'2012-06-14 11:30:00','2012-06-14 12:00:00',NULL,NULL,1);
 /*!40000 ALTER TABLE `crm_appointment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -275,7 +276,7 @@ CREATE TABLE `crm_doctor` (
 
 LOCK TABLES `crm_doctor` WRITE;
 /*!40000 ALTER TABLE `crm_doctor` DISABLE KEYS */;
-INSERT INTO `crm_doctor` VALUES (1,'8647362','JUAN PEREZ',1,1,1),(2,'123','Pedro',1,1,1),(3,'456','Adriana Fuente',1,1,1),(4,'142589','MARIA',1,1,0),(5,'00000082','GOMEZ ALEXANDER',1,1,1);
+INSERT INTO `crm_doctor` VALUES (5,'00000082','GOMEZ ALEXANDER',1,1,1),(6,'00000086','HERNANDEZ DIANA',1,3,1);
 /*!40000 ALTER TABLE `crm_doctor` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -480,7 +481,7 @@ CREATE TABLE `crm_doctor_schedule` (
 
 LOCK TABLES `crm_doctor_schedule` WRITE;
 /*!40000 ALTER TABLE `crm_doctor_schedule` DISABLE KEYS */;
-INSERT INTO `crm_doctor_schedule` VALUES (23,5,1,'08:00:00','10:00:00',1);
+INSERT INTO `crm_doctor_schedule` VALUES (1,5,5,'08:00:00','10:00:00',1),(2,5,5,'08:00:00','10:00:00',2),(3,5,4,'10:00:00','12:00:00',1),(4,6,4,'08:00:00','12:00:00',1),(5,6,5,'08:00:00','12:00:00',1);
 /*!40000 ALTER TABLE `crm_doctor_schedule` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -647,7 +648,7 @@ CREATE TABLE `crm_holiday` (
 
 LOCK TABLES `crm_holiday` WRITE;
 /*!40000 ALTER TABLE `crm_holiday` DISABLE KEYS */;
-INSERT INTO `crm_holiday` VALUES (1,'Festivo','2012-06-02'),(2,'Festivo 11/06','2012-06-11');
+INSERT INTO `crm_holiday` VALUES (1,'Festivo','2012-06-15'),(2,'Festivo 11/06','2012-06-11');
 /*!40000 ALTER TABLE `crm_holiday` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -781,4 +782,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-06-13 16:36:03
+-- Dump completed on 2012-06-14  9:05:53

@@ -47,6 +47,12 @@ public class TablesBo implements Serializable {
 		return dao.find("from CrmDoctor o where o.state = 1");
 	}
 
+	public List<CrmDoctor> getListDoctorByBranch(BigDecimal idBranch) {
+		return dao
+				.find("select distinct o.crmDoctor from CrmDoctorSchedule o where o.crmBranch.id = "
+						+ idBranch + " and o.crmDoctor.state = 1");
+	}
+
 	public List<CrmDoctorSchedule> getListScheduleByDoctor(BigDecimal idDoctor) {
 		return dao.find("from CrmDoctorSchedule o where o.crmDoctor.id = "
 				+ idDoctor);

@@ -65,6 +65,9 @@
 
 				<p:toolbar style="width:100%">
 					<p:toolbarGroup align="left">
+						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
+							action="#{doctorBacking.newAction}"
+							update=":editForm:dialog :editForm:recordTableDetail" />
 						<p:commandButton value="#{msg['btn_save']}" icon="ui-icon-disk"
 							action="#{doctorBacking.saveAction}"
 							update="growl :form:recordTable" />

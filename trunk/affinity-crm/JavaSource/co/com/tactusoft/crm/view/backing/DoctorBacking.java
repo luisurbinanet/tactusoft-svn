@@ -213,6 +213,8 @@ public class DoctorBacking extends BaseBacking {
 	}
 
 	public void newAction() {
+		selectedWSDoctor = "-1";
+
 		selected = new CrmDoctor();
 		selected.setState(Constant.STATE_ACTIVE);
 		selected.setCrmSpeciality(new CrmSpeciality());
@@ -223,7 +225,7 @@ public class DoctorBacking extends BaseBacking {
 
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-		
+
 		idDay = 1;
 		startHour = null;
 		endHour = null;
@@ -232,7 +234,10 @@ public class DoctorBacking extends BaseBacking {
 	public void saveAction() {
 		String message = null;
 
-		if (listDoctorSchedule.size() == 0) {
+		if (selectedWSDoctor.endsWith("-1")) {
+			message = FacesUtil.getMessage("doc_msg_error_select");
+			FacesUtil.addError(message);
+		} else if (listDoctorSchedule.size() == 0) {
 			message = FacesUtil.getMessage("sal_msg_error_schedule");
 			FacesUtil.addError(message);
 		} else {
