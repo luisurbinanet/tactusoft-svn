@@ -190,13 +190,13 @@ public class ProcessBo implements Serializable {
 
 			// Buscar citas x doctor y sucursal
 			List<CrmAppointment> listApp = dao
-					.find("from CrmAppointment o where o.startAppointmentDate >= '"
+					.find("from CrmAppointment o where (o.startAppointmentDate between '"
 							+ initDate
-							+ "T00:00:00.000+05:00' and o.startAppointmentDate <= '"
+							+ "T00:00:00.000+05:00' and '"
 							+ endDate
-							+ "T23:59:59.999+05:00' and o.crmDoctor.id = "
+							+ "T23:59:59.999+05:00') and o.crmDoctor.id = "
 							+ doctor.getId()
-							+ " and o. state = 1 "
+							+ " and o.state in (1,3) "
 							+ "order by o.startAppointmentDate");
 
 			// Buscar los festivos
@@ -339,13 +339,13 @@ public class ProcessBo implements Serializable {
 				if (listDoctorSchedule.size() > 0) {
 
 					List<CrmAppointment> listApp = dao
-							.find("from CrmAppointment o where o.startAppointmentDate >= '"
+							.find("from CrmAppointment o where (o.startAppointmentDate between '"
 									+ dateString
-									+ "T00:00:00.000+05:00' and o.startAppointmentDate <= '"
+									+ "T00:00:00.000+05:00' and '"
 									+ dateString
-									+ "T23:59:59.999+05:00' and o.crmDoctor.id = "
+									+ "T23:59:59.999+05:00') and o.crmDoctor.id = "
 									+ idDoctor
-									+ " and o. state = 1 "
+									+ " and o.state in (1,3) "
 									+ "order by o.startAppointmentDate");
 
 					List<CrmDoctorException> listDoctorException = dao
@@ -398,6 +398,13 @@ public class ProcessBo implements Serializable {
 									validate = validateException(
 											listDoctorException, currentDate,
 											candidatesHours);
+								}
+								
+								if (FacesUtil.getDateWithoutTime(new Date())
+										.compareTo(currentDate) == 0) {
+									if (new Date().compareTo(initHour) > 0) {
+										validate = false;
+									}
 								}
 
 								if (validate) {
