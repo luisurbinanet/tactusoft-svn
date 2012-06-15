@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Scope;
 import co.com.tactusoft.crm.controller.bo.TablesBo;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmDoctorException;
+import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.datamodel.DoctorExceptionDataModel;
 
@@ -39,6 +40,9 @@ public class DoctorExceptionBacking implements Serializable {
 	private BigDecimal idDoctor;
 	private Date selectedDate;
 	private Date currentDate;
+
+	private boolean disabled;
+	private boolean disabledSearch;
 
 	public DoctorExceptionBacking() {
 		newAction();
@@ -72,11 +76,17 @@ public class DoctorExceptionBacking implements Serializable {
 	}
 
 	public List<SelectItem> getListDoctor() {
-		listDoctor = new LinkedList<SelectItem>();
-		mapDoctor = new HashMap<BigDecimal, CrmDoctor>();
-		for (CrmDoctor row : tableService.getListDoctorActive()) {
-			mapDoctor.put(row.getId(), row);
-			listDoctor.add(new SelectItem(row.getId(), row.getNames()));
+		if (listDoctor == null) {
+			listDoctor = new LinkedList<SelectItem>();
+			mapDoctor = new HashMap<BigDecimal, CrmDoctor>();
+
+			String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
+			listDoctor.add(new SelectItem(Constant.DEFAULT_VALUE, label));
+			for (CrmDoctor row : tableService.getListDoctorActive()) {
+				mapDoctor.put(row.getId(), row);
+				listDoctor.add(new SelectItem(row.getId(), row.getNames()));
+			}
+
 		}
 		return listDoctor;
 	}
@@ -117,10 +127,29 @@ public class DoctorExceptionBacking implements Serializable {
 		this.currentDate = currentDate;
 	}
 
+	public boolean isDisabled() {
+		return disabled;
+	}
+
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
+	}
+
+	public boolean isDisabledSearch() {
+		return disabledSearch;
+	}
+
+	public void setDisabledSearch(boolean disabledSearch) {
+		this.disabledSearch = disabledSearch;
+	}
+
 	public void newAction() {
 		selected = new CrmDoctorException();
 		selectedDate = new Date();
 		currentDate = new Date();
+		idDoctor = Constant.DEFAULT_VALUE;
+		disabled = true;
+		disabledSearch = true;
 	}
 
 	public void saveAction() {
@@ -157,6 +186,14 @@ public class DoctorExceptionBacking implements Serializable {
 		selectedDoctor = mapDoctor.get(idDoctor);
 		list = tableService.getListDoctorExceptionByDoctor(idDoctor);
 		model = new DoctorExceptionDataModel(list);
+
+		if (list.size() > 0) {
+			selected = list.get(0);
+			disabledSearch = false;
+		} else {
+			selected = new CrmDoctorException();
+			disabledSearch = true;
+		}
 	}
 
 	public void removeAction() {
@@ -166,6 +203,18 @@ public class DoctorExceptionBacking implements Serializable {
 			model = new DoctorExceptionDataModel(list);
 			String message = FacesUtil.getMessage("msg_record_ok");
 			FacesUtil.addInfo(message);
+		}
+	}
+
+	public void handleDoctorChange() {
+		list = new LinkedList<CrmDoctorException>();
+		model = new DoctorExceptionDataModel(list);
+		disabledSearch = true;
+
+		if (idDoctor.intValue() != -1) {
+			disabled = false;
+		} else {
+			disabled = true;
 		}
 	}
 

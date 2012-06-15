@@ -101,11 +101,10 @@
 						rendered="#{doctorBacking.selected.id ne null?true:false}"
 						readonly="true" />
 
-					<h:outputLabel value="#{msg['doc_firstName']}"
+					<h:outputLabel value="#{msg['doc_names']}"
 						rendered="#{doctorBacking.selected.id ne null?true:false}" />
 					<p:inputText value="#{doctorBacking.selected.names}"
-						style="width:250px" label="#{msg['doc_firstName']}"
-						required="true"
+						style="width:250px" label="#{msg['doc_names']}"
 						rendered="#{doctorBacking.selected.id ne null?true:false}"
 						readonly="true" />
 

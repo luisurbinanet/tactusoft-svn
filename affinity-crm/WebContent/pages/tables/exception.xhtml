@@ -16,19 +16,23 @@
 
 			<h:form id="form">
 
-				<p:toolbar style="width:100%">
+				<p:toolbar id="toolBar" style="width:100%">
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
 							action="#{doctorExceptionBacking.newAction}"
-							oncomplete="dlg.show()" update=":editForm:pnlDetail" />
+							oncomplete="dlg.show()" update=":editForm:pnlDetail"
+							disabled="#{doctorExceptionBacking.disabled}" />
 						<p:commandButton value="#{msg['btn_edit']}" icon="ui-icon-pencil"
-							oncomplete="dlg.show()" update=":editForm:pnlDetail" />
+							oncomplete="dlg.show()" update=":editForm:pnlDetail"
+							disabled="#{doctorExceptionBacking.disabledSearch}" />
 						<p:commandButton value="#{msg['btn_search']}"
-							icon="ui-icon-search" update="recordTable"
-							action="#{doctorExceptionBacking.searchAction}" />
+							icon="ui-icon-search" update="toolBar recordTable"
+							action="#{doctorExceptionBacking.searchAction}"
+							disabled="#{doctorExceptionBacking.disabled}" />
 						<p:commandButton value="#{msg['btn_delete']}"
 							icon="ui-icon-minusthick" update="recordTable"
-							action="#{doctorExceptionBacking.removeAction}" />
+							action="#{doctorExceptionBacking.removeAction}"
+							disabled="#{doctorExceptionBacking.disabledSearch}" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -39,6 +43,8 @@
 					<p:selectOneMenu id="selDoctor"
 						value="#{doctorExceptionBacking.idDoctor}" style="width:450px;">
 						<f:selectItems value="#{doctorExceptionBacking.listDoctor}" />
+						<p:ajax update="toolBar recordTable"
+							listener="#{doctorExceptionBacking.handleDoctorChange}" />
 					</p:selectOneMenu>
 				</h:panelGrid>
 
@@ -98,9 +104,9 @@
 				<h:panelGrid id="pnlDetail" columns="2" cellpadding="4"
 					style="margin:0 auto;" width="100%">
 
-					<h:outputLabel value="#{msg['exp_date']}" />
+					<h:outputLabel value="#{msg['exp_doctor']}" />
 					<h:outputText id="outDoctor"
-						value="#{doctorExceptionBacking.selectedDoctor.firstName} #{doctorExceptionBacking.selectedDoctor.firstSurname}" />
+						value="#{doctorExceptionBacking.selectedDoctor.names}" />
 
 					<h:outputLabel value="#{msg['exp_date']}" />
 					<p:calendar id="calDate"
