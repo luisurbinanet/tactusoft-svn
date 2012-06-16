@@ -74,6 +74,12 @@
 							listener="#{appointmentBacking.handleProcedureDetailChange}" />
 					</p:selectOneMenu>
 
+					<h:outputLabel value="#{msg['app_seller_group']}" />
+					<p:selectOneMenu style="width:600px"
+						value="#{appointmentBacking.selectedWSGroupSellers}">
+						<f:selectItems value="#{appointmentBacking.listWSGroupSellers}" />
+					</p:selectOneMenu>
+
 					<h:outputLabel value="#{msg['app_procedure_search']}" />
 					<p:selectOneMenu id="selSearch" style="width:600px"
 						value="#{appointmentBacking.idSearch}">
@@ -139,7 +145,8 @@
 						<h:outputLabel value="#{appointmentBacking.infoMessage}"
 							style="text-align:center;font-size:large;font-weight:bold;" />
 						<p:spacer height="5" rendered="#{appointmentBacking.saved}" />
-						<h:outputLabel value="#{appointmentBacking.detSelectedAppointment}"
+						<h:outputLabel
+							value="#{appointmentBacking.detSelectedAppointment}"
 							rendered="#{appointmentBacking.saved}"
 							style="text-align:center;font-size:large;font-weight:bold;" />
 					</h:panelGrid>
