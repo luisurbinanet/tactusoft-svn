@@ -80,7 +80,7 @@ public class AppointmentBacking extends BaseBacking {
 		if (listBranch == null) {
 			listBranch = new LinkedList<SelectItem>();
 			mapBranch = new HashMap<BigDecimal, CrmBranch>();
-			for (CrmBranch row : tablesService.getListBranchActive()) {
+			for (CrmBranch row : FacesUtil.getCurrentUserData().getListBranch()) {
 				mapBranch.put(row.getId(), row);
 				listBranch.add(new SelectItem(row.getId(), row.getName()));
 			}
@@ -301,6 +301,7 @@ public class AppointmentBacking extends BaseBacking {
 		optionSearchPatient = 1;
 		docPatient = "";
 		namePatient = "";
+		selectedWSGroupSellers = "-1";
 
 		listAppointment = new LinkedList<Candidate>();
 		modelAppointment = new CandidateDataModel(listAppointment);
@@ -374,6 +375,12 @@ public class AppointmentBacking extends BaseBacking {
 	public void saveAction() {
 		infoMessage = "";
 
+		// validar Selección Pauta
+		if (this.selectedWSGroupSellers.equals(Constant.DEFAULT_VALUE_STRING)) {
+			String field = FacesUtil.getMessage("app_seller_group");
+			infoMessage = FacesUtil.getMessage("glb_required", field);
+		}
+
 		// validar Selección Paciente
 		if (this.selectedPatient == null) {
 			infoMessage = FacesUtil.getMessage("app_msg_error_pat");
@@ -421,6 +428,10 @@ public class AppointmentBacking extends BaseBacking {
 				selected.setCrmDoctor(selectedAppointment.getDoctor());
 				selected.setCrmBranch(mapBranch.get(idBranch));
 				selected.setCrmProcedureDetail(procedureDetail);
+
+				selected.setCodPublicity(selectedWSGroupSellers);
+				selected.setNamePublicity(mapWSGroupSellers
+						.get(selectedWSGroupSellers));
 
 				selected.setStartAppointmentDate(selectedAppointment
 						.getStartDate());

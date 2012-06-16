@@ -41,6 +41,10 @@ public class BaseBacking implements Serializable {
 	protected Map<String, String> mapWSDoctor;
 	protected String selectedWSDoctor;
 
+	protected List<SelectItem> listWSGroupSellers;
+	protected Map<String, String> mapWSGroupSellers;
+	protected String selectedWSGroupSellers;
+
 	public List<Patient> getListPatient() {
 		return listPatient;
 	}
@@ -118,18 +122,25 @@ public class BaseBacking implements Serializable {
 
 	public List<SelectItem> getListWSDoctor() {
 		if (listWSDoctor == null) {
-			List<WSBean> result = CustomLists
-					.getDoctors(
-							"http://ansrvsap2.affinity.net:8001/sap/bc/srt/rfc/sap/zweblist/300/zweblist/zweblist",
-							"TACTUSOFT", "AFFINITY");
-			listWSDoctor = new ArrayList<SelectItem>();
-			mapWSDoctor = new HashMap<String, String>();
-			String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL); 
-			listWSDoctor.add(new SelectItem(Constant.DEFAULT_VALUE_STRING,
-					label));
-			for (WSBean row : result) {
-				mapWSDoctor.put(row.getCode(), row.getNames());
-				listWSDoctor.add(new SelectItem(row.getCode(), row.getNames()));
+			String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
+			try {
+				List<WSBean> result = CustomLists
+						.getDoctors(
+								"http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zweblist/300/zweblist/zweblist",
+								"TACTUSOFT", "AFFINITY");
+				listWSDoctor = new ArrayList<SelectItem>();
+				mapWSDoctor = new HashMap<String, String>();
+				listWSDoctor.add(new SelectItem(Constant.DEFAULT_VALUE_STRING,
+						label));
+				for (WSBean row : result) {
+					mapWSDoctor.put(row.getCode(), row.getNames());
+					listWSDoctor.add(new SelectItem(row.getCode(), row
+							.getNames()));
+				}
+			} catch (Exception ex) {
+				listWSDoctor = new ArrayList<SelectItem>();
+				listWSDoctor.add(new SelectItem(Constant.DEFAULT_VALUE_STRING,
+						label));
 			}
 		}
 		return listWSDoctor;
@@ -153,6 +164,68 @@ public class BaseBacking implements Serializable {
 
 	public void setSelectedWSDoctor(String selectedWSDoctor) {
 		this.selectedWSDoctor = selectedWSDoctor;
+	}
+
+	public TablesBo getTablesService() {
+		return tablesService;
+	}
+
+	public void setTablesService(TablesBo tablesService) {
+		this.tablesService = tablesService;
+	}
+
+	public ProcessBo getProcessService() {
+		return processService;
+	}
+
+	public void setProcessService(ProcessBo processService) {
+		this.processService = processService;
+	}
+
+	public List<SelectItem> getListWSGroupSellers() {
+		if (listWSGroupSellers == null) {
+			String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
+			try {
+				List<WSBean> result = CustomLists
+						.getGroupSellers(
+								"http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zweblist/300/zweblist/zweblist",
+								"TACTUSOFT", "AFFINITY");
+				listWSGroupSellers = new ArrayList<SelectItem>();
+				mapWSGroupSellers = new HashMap<String, String>();
+				listWSGroupSellers.add(new SelectItem(
+						Constant.DEFAULT_VALUE_STRING, label));
+				for (WSBean row : result) {
+					mapWSGroupSellers.put(row.getCode(), row.getNames());
+					listWSGroupSellers.add(new SelectItem(row.getCode(), row
+							.getNames()));
+				}
+			} catch (Exception ex) {
+				listWSGroupSellers = new ArrayList<SelectItem>();
+				listWSGroupSellers.add(new SelectItem(
+						Constant.DEFAULT_VALUE_STRING, label));
+			}
+		}
+		return listWSGroupSellers;
+	}
+
+	public void setListWSGroupSellers(List<SelectItem> listWSGroupSellers) {
+		this.listWSGroupSellers = listWSGroupSellers;
+	}
+
+	public Map<String, String> getMapWSGroupSellers() {
+		return mapWSGroupSellers;
+	}
+
+	public void setMapWSGroupSellers(Map<String, String> mapWSGroupSellers) {
+		this.mapWSGroupSellers = mapWSGroupSellers;
+	}
+
+	public String getSelectedWSGroupSellers() {
+		return selectedWSGroupSellers;
+	}
+
+	public void setSelectedWSGroupSellers(String selectedWSGroupSellers) {
+		this.selectedWSGroupSellers = selectedWSGroupSellers;
 	}
 
 }

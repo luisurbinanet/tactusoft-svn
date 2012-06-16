@@ -71,7 +71,7 @@ public class UserBacking implements Serializable {
 			model = new UserDataModel(list);
 
 			if (list.size() > 0) {
-				selected = list.get(0);
+				this.setSelected(list.get(0));
 			}
 		}
 		return model;
@@ -87,6 +87,7 @@ public class UserBacking implements Serializable {
 
 	public void setSelected(CrmUser selected) {
 		this.selected = selected;
+		password = this.selected.getPassword();
 	}
 
 	public List<SelectItem> getListProfile() {
@@ -112,10 +113,6 @@ public class UserBacking implements Serializable {
 			for (CrmDepartment row : tablesService.getListDepartmentActive()) {
 				listDepartment.add(new SelectItem(row.getId(), row.getName()));
 				mapDepartment.put(row.getId(), row);
-			}
-
-			if (listDepartment.size() > 0) {
-				// selected =
 			}
 		}
 		return listDepartment;
@@ -162,6 +159,20 @@ public class UserBacking implements Serializable {
 
 	public void saveAction() {
 		String message = null;
+		boolean validatePassword = true;
+
+		if (FacesUtil.isEmptyOrBlank(selected.getPassword())
+				&& selected.getId() == null) {
+			String field = FacesUtil.getMessage("usr_password");
+			message = FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addError(message);
+		} else {
+			if (FacesUtil.isEmptyOrBlank(selected.getPassword())
+					&& selected.getId() != null) {
+				selected.setPassword(password);
+				validatePassword = false;
+			}
+		}
 
 		if (listBranch.getTarget().size() == 0) {
 			message = FacesUtil.getMessage("usr_msg_error_branch");
@@ -175,7 +186,9 @@ public class UserBacking implements Serializable {
 
 		if (message == null) {
 			selected.setUsername(selected.getUsername().toLowerCase());
-			selected.setPassword(FacesUtil.getMD5(selected.getPassword()));
+			if (validatePassword) {
+				selected.setPassword(FacesUtil.getMD5(selected.getPassword()));
+			}
 			selected.setCrmProfile(mapProfile.get(selected.getCrmProfile()
 					.getId()));
 			selected.setCrmDepartment(mapDepartment.get(selected

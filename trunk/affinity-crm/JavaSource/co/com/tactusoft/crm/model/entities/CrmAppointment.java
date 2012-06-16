@@ -31,7 +31,8 @@ public class CrmAppointment implements java.io.Serializable {
 	private String patientSap;
 	private Date startAppointmentDate;
 	private Date endAppointmentDate;
-	private BigDecimal idPublicity;
+	private String codPublicity;
+	private String namePublicity;
 	private String obs;
 	private int state;
 
@@ -57,7 +58,7 @@ public class CrmAppointment implements java.io.Serializable {
 			CrmBranch crmBranch, CrmDoctor crmDoctor, String code,
 			String patient, String patientNames, String patientSap,
 			Date startAppointmentDate, Date endAppointmentDate,
-			BigDecimal idPublicity, String obs, int state) {
+			String codPublicity, String namePublicity, String obs, int state) {
 		this.id = id;
 		this.crmProcedureDetail = crmProcedureDetail;
 		this.crmBranch = crmBranch;
@@ -68,7 +69,8 @@ public class CrmAppointment implements java.io.Serializable {
 		this.patientSap = patientSap;
 		this.startAppointmentDate = startAppointmentDate;
 		this.endAppointmentDate = endAppointmentDate;
-		this.idPublicity = idPublicity;
+		this.codPublicity = codPublicity;
+		this.namePublicity = namePublicity;
 		this.obs = obs;
 		this.state = state;
 	}
@@ -169,13 +171,22 @@ public class CrmAppointment implements java.io.Serializable {
 		this.endAppointmentDate = endAppointmentDate;
 	}
 
-	@Column(name = "id_publicity", scale = 0)
-	public BigDecimal getIdPublicity() {
-		return this.idPublicity;
+	@Column(name = "cod_publicity", length = 45)
+	public String getCodPublicity() {
+		return this.codPublicity;
 	}
 
-	public void setIdPublicity(BigDecimal idPublicity) {
-		this.idPublicity = idPublicity;
+	public void setCodPublicity(String codPublicity) {
+		this.codPublicity = codPublicity;
+	}
+
+	@Column(name = "name_publicity", length = 1000)
+	public String getNamePublicity() {
+		return namePublicity;
+	}
+
+	public void setNamePublicity(String namePublicity) {
+		this.namePublicity = namePublicity;
 	}
 
 	@Column(name = "obs", length = 1000)
