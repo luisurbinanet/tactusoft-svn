@@ -10,16 +10,21 @@ public class WSBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String code;
 	private String names;
-	
-	public WSBean()
-	{
-		
+	private String branch;
+
+	public WSBean() {
+
 	}
-	
-	public WSBean(String code, String names)
-	{
+
+	public WSBean(String code, String names) {
 		this.code = code;
 		this.names = names;
+	}
+
+	public WSBean(String code, String names, String branch) {
+		this.code = code;
+		this.names = names;
+		this.branch = branch;
 	}
 
 	public String getCode() {
@@ -36,6 +41,14 @@ public class WSBean implements Serializable {
 
 	public void setNames(String names) {
 		this.names = names;
+	}
+
+	public String getBranch() {
+		return branch;
+	}
+
+	public void setBranch(String branch) {
+		this.branch = branch;
 	}
 
 }
