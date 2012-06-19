@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Scope;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmCity;
 import co.com.tactusoft.crm.model.entities.CrmCountry;
+import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
 import co.com.tactusoft.crm.model.entities.CrmRegion;
 import co.com.tactusoft.crm.util.FacesUtil;
@@ -68,7 +69,7 @@ public class PatientBacking extends BaseBacking {
 	public PatientDataModel getModel() {
 		if (model == null) {
 			model = new PatientDataModel(list);
-			
+
 			if (list.size() > 0) {
 				selected = list.get(0);
 			}
@@ -223,6 +224,7 @@ public class PatientBacking extends BaseBacking {
 	public void newAction(ActionEvent event) {
 		optionSearchPatient = 1;
 		selected = new Patient();
+		selected.setCycle(false);
 		disabledSaveButton = false;
 	}
 
@@ -260,6 +262,39 @@ public class PatientBacking extends BaseBacking {
 
 				if (SAPCode != null) {
 					selected.setSAPCode(SAPCode);
+
+					CrmPatient patient = new CrmPatient();
+					patient.setDoc(selected.getCode());
+					patient.setCodeSap(SAPCode);
+					patient.setNames(selected.getNames().toUpperCase());
+					patient.setSurnames(selected.getSurnames().toUpperCase());
+					patient.setGender(selected.getGender());
+					patient.setAddress(selected.getAddress());
+					patient.setTelephone(selected.getPhoneNumber());
+					patient.setCountry(crmCountry.getCode());
+					patient.setRegion(crmRegion.getCode());
+					patient.setCity(crmCity.getName());
+					patient.setCycle(selected.getCycle());
+
+					patient.setSendPhone(false);
+					patient.setSendEmail(false);
+					patient.setSendPostal(false);
+					patient.setSendSms(false);
+
+					for (String send : selectedSendOptions) {
+						if (send.equals("1")) {
+							patient.setSendPhone(true);
+						} else if (send.equals("2")) {
+							patient.setSendEmail(true);
+						} else if (send.equals("3")) {
+							patient.setSendPostal(true);
+						} else if (send.equals("4")) {
+							patient.setSendSms(true);
+						}
+					}
+
+					processService.savePatient(patient);
+
 					disabledSaveButton = true;
 					message = FacesUtil.getMessage("pat_msg_ok", SAPCode);
 					FacesUtil.addInfo(message);

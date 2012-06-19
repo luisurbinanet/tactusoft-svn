@@ -370,6 +370,8 @@ public class AppointmentBacking extends BaseBacking {
 			mapDoctor.put(row.getId(), row);
 			listDoctor.add(new SelectItem(row.getId(), row.getNames()));
 		}
+		
+		selectedWSGroupSellers = "-1";
 	}
 
 	public void saveAction() {

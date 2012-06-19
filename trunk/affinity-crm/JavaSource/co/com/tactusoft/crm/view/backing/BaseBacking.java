@@ -11,6 +11,7 @@ import javax.inject.Inject;
 
 import co.com.tactusoft.crm.controller.bo.ProcessBo;
 import co.com.tactusoft.crm.controller.bo.TablesBo;
+import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.beans.Patient;
@@ -101,21 +102,69 @@ public class BaseBacking implements Serializable {
 			this.patientModel = new PatientDataModel(listPatient);
 
 		} else {
-			List<WSBean> result = null;
-			if (optionSearchPatient == 1) {
-				result = CustomerExecute.findByDoc(this.docPatient, 0);
-			} else {
-				result = CustomerExecute.findByName(this.namePatient, 0);
-			}
 			listPatient = new ArrayList<Patient>();
-			if (result != null) {
-				for (WSBean row : result) {
+			List<CrmPatient> resultDB = null;
+			List<WSBean> result = null;
+
+			if (optionSearchPatient == 1) {
+				resultDB = processService.getListPatientByNameOrDoc("DOC",
+						this.docPatient);
+
+				for (CrmPatient row : resultDB) {
 					Patient patient = new Patient();
-					patient.setSAPCode(row.getCode());
-					patient.setNames(row.getNames());
+					patient.setSAPCode(row.getCodeSap());
+					patient.setNames(row.getNames() + " " + row.getSurnames());
 					listPatient.add(patient);
 				}
+
+				if (resultDB.size() == 0) {
+					result = CustomerExecute.findByDoc(this.docPatient, 0);
+
+					for (WSBean row : result) {
+						Patient patient = new Patient();
+						patient.setSAPCode(row.getCode());
+						patient.setNames(row.getNames());
+						listPatient.add(patient);
+					}
+				}
+			} else {
+				resultDB = processService.getListPatientByNameOrDoc("NAMES",
+						this.namePatient.toUpperCase());
+
+				for (CrmPatient row : resultDB) {
+					Patient patient = new Patient();
+					patient.setSAPCode(row.getCodeSap());
+					patient.setNames(row.getSurnames() + " " + row.getNames());
+					listPatient.add(patient);
+				}
+
+				result = CustomerExecute.findByName(this.namePatient, 0);
+
+				for (WSBean row : result) {
+					boolean validate = true;
+
+					for (Patient pat : listPatient) {
+						if (row.getCode().equals(pat.getSAPCode())) {
+							validate = false;
+							break;
+						}
+					}
+
+					if (validate) {
+						Patient patient = new Patient();
+						patient.setSAPCode(row.getCode());
+						patient.setNames(row.getNames());
+						listPatient.add(patient);
+					}
+				}
+			}
+
+			if (resultDB.size() > 0 || result != null) {
 				patientModel = new PatientDataModel(listPatient);
+
+				if (listPatient.size() > 0) {
+					selectedPatient = listPatient.get(0);
+				}
 			}
 		}
 	}
@@ -124,10 +173,16 @@ public class BaseBacking implements Serializable {
 		if (listWSDoctor == null) {
 			String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
 			try {
-				List<WSBean> result = CustomLists
-						.getDoctors(
-								"http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zweblist/300/zweblist/zweblist",
-								"TACTUSOFT", "AFFINITY");
+				String url = FacesUtil
+						.getParameterTextValue("SAP_URL_ZWEBLIST");
+				String username = FacesUtil
+						.getParameterTextValue("SAP_USERNAME");
+				String password = FacesUtil
+						.getParameterTextValue("SAP_PASSWORD");
+
+				List<WSBean> result = CustomLists.getDoctors(url, username,
+						password);
+
 				listWSDoctor = new ArrayList<SelectItem>();
 				mapWSDoctor = new HashMap<String, String>();
 				listWSDoctor.add(new SelectItem(Constant.DEFAULT_VALUE_STRING,
@@ -186,10 +241,9 @@ public class BaseBacking implements Serializable {
 		if (listWSGroupSellers == null) {
 			String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
 			try {
-				List<WSBean> result = CustomLists
-						.getGroupSellers(
-								"http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zweblist/300/zweblist/zweblist",
-								"TACTUSOFT", "AFFINITY");
+				List<WSBean> result = FacesUtil.getCurrentUserData()
+						.getListWSGroupSellers();
+
 				listWSGroupSellers = new ArrayList<SelectItem>();
 				mapWSGroupSellers = new HashMap<String, String>();
 				listWSGroupSellers.add(new SelectItem(

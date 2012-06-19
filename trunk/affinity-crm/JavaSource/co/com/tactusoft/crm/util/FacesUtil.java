@@ -33,6 +33,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import co.com.tactusoft.crm.model.entities.CrmParameter;
 import co.com.tactusoft.crm.model.entities.CrmRole;
 import co.com.tactusoft.crm.model.entities.CrmUser;
 import co.com.tactusoft.crm.security.UserData;
@@ -266,5 +267,31 @@ public class FacesUtil {
 		formatter = new SimpleDateFormat(format);
 		stringDate = formatter.format(date);
 		return stringDate;
+	}
+
+	public static String getParameterTextValue(String param) {
+		String result = null;
+		List<CrmParameter> listParameter = getCurrentUserData()
+				.getListParameter();
+		for (CrmParameter row : listParameter) {
+			if (row.getCode().equals(param)) {
+				result = row.getTextValue();
+				break;
+			}
+		}
+		return result;
+	}
+
+	public static BigDecimal getParameterNumberValue(String param) {
+		BigDecimal result = null;
+		List<CrmParameter> listParameter = getCurrentUserData()
+				.getListParameter();
+		for (CrmParameter row : listParameter) {
+			if (row.getCode().equals(param)) {
+				result = row.getNumberValue();
+				break;
+			}
+		}
+		return result;
 	}
 }

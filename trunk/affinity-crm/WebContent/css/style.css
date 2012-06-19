@@ -135,10 +135,25 @@ input,select,textarea {
 
 .width25per {
 	padding:4px;
+	width: 25%;
+}
+
+.width35per {
+	padding:4px;
 	width: 35%;
+}
+
+.width50per {
+	padding:4px;
+	width: 50%;
+}
+
+.width65per {
+	padding:4px;
+	width: 65%;
 }
 
 .width75per {
 	padding:4px;
-	width: 65%;
+	width: 75%;
 }
