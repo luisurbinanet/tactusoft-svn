@@ -7,10 +7,10 @@ import javax.faces.model.ListDataModel;
 
 import org.primefaces.model.SelectableDataModel;
 
-import co.com.tactusoft.crm.view.beans.Patient;
+import co.com.tactusoft.crm.model.entities.CrmPatient;
 
-public class PatientDataModel extends ListDataModel<Patient> implements
-		SelectableDataModel<Patient>, Serializable {
+public class PatientDataModel extends ListDataModel<CrmPatient> implements
+		SelectableDataModel<CrmPatient>, Serializable {
 
 	/**
 	 * 
@@ -20,19 +20,19 @@ public class PatientDataModel extends ListDataModel<Patient> implements
 	public PatientDataModel() {
 	}
 
-	public PatientDataModel(List<Patient> data) {
+	public PatientDataModel(List<CrmPatient> data) {
 		super(data);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Patient getRowData(String rowKey) {
+	public CrmPatient getRowData(String rowKey) {
 		// In a real app, a more efficient way like a query by rowKey should be
 		// implemented to deal with huge data
 
-		List<Patient> list = (List<Patient>) getWrappedData();
+		List<CrmPatient> list = (List<CrmPatient>) getWrappedData();
 
-		for (Patient row : list) {
+		for (CrmPatient row : list) {
 			if (row.getId().equals(rowKey))
 				return row;
 		}
@@ -41,7 +41,7 @@ public class PatientDataModel extends ListDataModel<Patient> implements
 	}
 
 	@Override
-	public Object getRowKey(Patient car) {
+	public Object getRowKey(CrmPatient car) {
 		return car.getId();
 	}
 }

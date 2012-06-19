@@ -14,7 +14,6 @@ import co.com.tactusoft.crm.controller.bo.TablesBo;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
-import co.com.tactusoft.crm.view.beans.Patient;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 
 import com.tactusoft.webservice.client.beans.WSBean;
@@ -31,9 +30,9 @@ public class BaseBacking implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	protected List<Patient> listPatient;
+	protected List<CrmPatient> listPatient;
 	protected PatientDataModel patientModel;
-	protected Patient selectedPatient;
+	protected CrmPatient selectedPatient;
 	protected String docPatient;
 	protected String namePatient;
 	protected int optionSearchPatient;
@@ -42,15 +41,11 @@ public class BaseBacking implements Serializable {
 	protected Map<String, String> mapWSDoctor;
 	protected String selectedWSDoctor;
 
-	protected List<SelectItem> listWSGroupSellers;
-	protected Map<String, String> mapWSGroupSellers;
-	protected String selectedWSGroupSellers;
-
-	public List<Patient> getListPatient() {
+	public List<CrmPatient> getListPatient() {
 		return listPatient;
 	}
 
-	public void setListPatient(List<Patient> listPatient) {
+	public void setListPatient(List<CrmPatient> listPatient) {
 		this.listPatient = listPatient;
 	}
 
@@ -62,11 +57,11 @@ public class BaseBacking implements Serializable {
 		this.patientModel = patientModel;
 	}
 
-	public Patient getSelectedPatient() {
+	public CrmPatient getSelectedPatient() {
 		return selectedPatient;
 	}
 
-	public void setSelectedPatient(Patient selectedPatient) {
+	public void setSelectedPatient(CrmPatient selectedPatient) {
 		this.selectedPatient = selectedPatient;
 	}
 
@@ -98,11 +93,11 @@ public class BaseBacking implements Serializable {
 		if ((optionSearchPatient == 1 && this.docPatient.isEmpty())
 				|| (optionSearchPatient == 2 && this.namePatient.isEmpty())) {
 
-			this.listPatient = new ArrayList<Patient>();
+			this.listPatient = new ArrayList<CrmPatient>();
 			this.patientModel = new PatientDataModel(listPatient);
 
 		} else {
-			listPatient = new ArrayList<Patient>();
+			listPatient = new ArrayList<CrmPatient>();
 			List<CrmPatient> resultDB = null;
 			List<WSBean> result = null;
 
@@ -110,19 +105,12 @@ public class BaseBacking implements Serializable {
 				resultDB = processService.getListPatientByNameOrDoc("DOC",
 						this.docPatient);
 
-				for (CrmPatient row : resultDB) {
-					Patient patient = new Patient();
-					patient.setSAPCode(row.getCodeSap());
-					patient.setNames(row.getNames() + " " + row.getSurnames());
-					listPatient.add(patient);
-				}
-
 				if (resultDB.size() == 0) {
 					result = CustomerExecute.findByDoc(this.docPatient, 0);
 
 					for (WSBean row : result) {
-						Patient patient = new Patient();
-						patient.setSAPCode(row.getCode());
+						CrmPatient patient = new CrmPatient();
+						patient.setCodeSap(row.getCode());
 						patient.setNames(row.getNames());
 						listPatient.add(patient);
 					}
@@ -131,28 +119,21 @@ public class BaseBacking implements Serializable {
 				resultDB = processService.getListPatientByNameOrDoc("NAMES",
 						this.namePatient.toUpperCase());
 
-				for (CrmPatient row : resultDB) {
-					Patient patient = new Patient();
-					patient.setSAPCode(row.getCodeSap());
-					patient.setNames(row.getSurnames() + " " + row.getNames());
-					listPatient.add(patient);
-				}
-
 				result = CustomerExecute.findByName(this.namePatient, 0);
 
 				for (WSBean row : result) {
 					boolean validate = true;
 
-					for (Patient pat : listPatient) {
-						if (row.getCode().equals(pat.getSAPCode())) {
+					for (CrmPatient pat : resultDB) {
+						if (row.getCode().equals(pat.getCodeSap())) {
 							validate = false;
 							break;
 						}
 					}
 
 					if (validate) {
-						Patient patient = new Patient();
-						patient.setSAPCode(row.getCode());
+						CrmPatient patient = new CrmPatient();
+						patient.setCodeSap(row.getCode());
 						patient.setNames(row.getNames());
 						listPatient.add(patient);
 					}
@@ -236,50 +217,4 @@ public class BaseBacking implements Serializable {
 	public void setProcessService(ProcessBo processService) {
 		this.processService = processService;
 	}
-
-	public List<SelectItem> getListWSGroupSellers() {
-		if (listWSGroupSellers == null) {
-			String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
-			try {
-				List<WSBean> result = FacesUtil.getCurrentUserData()
-						.getListWSGroupSellers();
-
-				listWSGroupSellers = new ArrayList<SelectItem>();
-				mapWSGroupSellers = new HashMap<String, String>();
-				listWSGroupSellers.add(new SelectItem(
-						Constant.DEFAULT_VALUE_STRING, label));
-				for (WSBean row : result) {
-					mapWSGroupSellers.put(row.getCode(), row.getNames());
-					listWSGroupSellers.add(new SelectItem(row.getCode(), row
-							.getNames()));
-				}
-			} catch (Exception ex) {
-				listWSGroupSellers = new ArrayList<SelectItem>();
-				listWSGroupSellers.add(new SelectItem(
-						Constant.DEFAULT_VALUE_STRING, label));
-			}
-		}
-		return listWSGroupSellers;
-	}
-
-	public void setListWSGroupSellers(List<SelectItem> listWSGroupSellers) {
-		this.listWSGroupSellers = listWSGroupSellers;
-	}
-
-	public Map<String, String> getMapWSGroupSellers() {
-		return mapWSGroupSellers;
-	}
-
-	public void setMapWSGroupSellers(Map<String, String> mapWSGroupSellers) {
-		this.mapWSGroupSellers = mapWSGroupSellers;
-	}
-
-	public String getSelectedWSGroupSellers() {
-		return selectedWSGroupSellers;
-	}
-
-	public void setSelectedWSGroupSellers(String selectedWSGroupSellers) {
-		this.selectedWSGroupSellers = selectedWSGroupSellers;
-	}
-
 }

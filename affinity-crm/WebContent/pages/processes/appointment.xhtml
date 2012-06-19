@@ -43,7 +43,7 @@
 					columnClasses="width25per,width75per">
 
 					<h:outputLabel value="#{msg['pat_sap_code']}" />
-					<p:inputText value="#{appointmentBacking.selectedPatient.SAPCode}"
+					<p:inputText value="#{appointmentBacking.selectedPatient.codeSap}"
 						style="width:600px" readonly="true" />
 
 					<h:outputLabel value="#{msg['pat_names']}" />
@@ -63,7 +63,7 @@
 						value="#{appointmentBacking.selected.crmProcedureDetail.id}">
 						<f:selectItems value="#{appointmentBacking.listProcedureDetail}" />
 						<p:ajax update="pnlDetail"
-							listener="#{appointmentBacking.handleBranchChange}" />
+							listener="#{appointmentBacking.handleProcedureDetailChange}" />
 					</p:selectOneMenu>
 
 					<h:outputLabel value="#{msg['app_branch']}" />
@@ -71,7 +71,7 @@
 						value="#{appointmentBacking.idBranch}">
 						<f:selectItems value="#{appointmentBacking.listBranch}" />
 						<p:ajax update="pnlDetail pnlDetail2"
-							listener="#{appointmentBacking.handleProcedureDetailChange}" />
+							listener="#{appointmentBacking.handleBranchChange}" />
 					</p:selectOneMenu>
 
 					<h:outputLabel value="#{msg['app_seller_group']}" />
@@ -201,7 +201,7 @@
 					<p:scrollPanel id="pnlTable2" style="width:580px;height:400px">
 						<p:dataTable id="recordTable2" var="rec"
 							value="#{appointmentBacking.patientModel}"
-							rowKey="#{rec.SAPCode}"
+							rowKey="#{rec.codeSap}"
 							selection="#{appointmentBacking.selectedPatient}"
 							paginator="true" rows="15" style="width:570px"
 							emptyMessage="#{msg['glb_no_records_found']}">
@@ -209,7 +209,7 @@
 							<p:column selectionMode="single" style="width:18px" />
 
 							<p:column headerText="#{msg['pat_sap_code']}">
-								<h:outputLabel value="#{rec.SAPCode}" />
+								<h:outputLabel value="#{rec.codeSap}" />
 							</p:column>
 
 							<p:column headerText="#{msg['pat_names']}">

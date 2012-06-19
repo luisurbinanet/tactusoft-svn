@@ -17,12 +17,12 @@ import org.springframework.context.annotation.Scope;
 import co.com.tactusoft.crm.controller.bo.TablesBo;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmDomain;
+import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.util.LoadXLS;
 import co.com.tactusoft.crm.util.SAPEnvironment;
 import co.com.tactusoft.crm.view.beans.Material;
-import co.com.tactusoft.crm.view.beans.Patient;
 import co.com.tactusoft.crm.view.datamodel.MaterialDataModel;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 
@@ -262,8 +262,8 @@ public class SalesOrderBacking extends BaseBacking {
 		materialModel = new MaterialDataModel(listMaterial);
 		listSelectedMaterial = new LinkedList<Material>();
 		materialSelectedModel = new MaterialDataModel(listSelectedMaterial);
-		selectedPatient = new Patient();
-		listPatient = new LinkedList<Patient>();
+		selectedPatient = new CrmPatient();
+		listPatient = new LinkedList<CrmPatient>();
 		patientModel = new PatientDataModel(listPatient);
 		disabledSaveButton = false;
 
@@ -279,7 +279,7 @@ public class SalesOrderBacking extends BaseBacking {
 		if (selectedPatient == null) {
 			message = FacesUtil.getMessage("sal_msg_error_pat");
 			FacesUtil.addError(message);
-		} else if (FacesUtil.isEmptyOrBlank(selectedPatient.getSAPCode())) {
+		} else if (FacesUtil.isEmptyOrBlank(selectedPatient.getCodeSap())) {
 			message = FacesUtil.getMessage("sal_msg_error_pat");
 			FacesUtil.addError(message);
 		}
@@ -328,7 +328,7 @@ public class SalesOrderBacking extends BaseBacking {
 					.getUrlCustomerSalesOrderCreate(), sap.getUsername(), sap
 					.getPassword(), tipoDocVenta, orgVentas, canalDistribucion,
 					division, this.salesOff, fechaPedido, selectedPatient
-							.getSAPCode(), this.methodPayment,
+							.getCodeSap(), this.methodPayment,
 					this.conditionPayment, solicitante, listMaterialTmp,
 					interlocutor, this.salesGrp, medico, formula, FacesUtil
 							.getCurrentUser().getUsername());
@@ -399,7 +399,7 @@ public class SalesOrderBacking extends BaseBacking {
 		if (listPatient.size() == 0) {
 			return true;
 		} else if (listPatient.size() == 1) {
-			if (listPatient.get(0).getSAPCode().isEmpty()) {
+			if (listPatient.get(0).getCodeSap().isEmpty()) {
 				return true;
 			}
 		}

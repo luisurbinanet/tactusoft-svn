@@ -20,7 +20,6 @@ import co.com.tactusoft.crm.model.entities.CrmProfile;
 import co.com.tactusoft.crm.model.entities.CrmRegion;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.util.SAPEnvironment;
-import co.com.tactusoft.crm.view.beans.Patient;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 
 import com.tactusoft.webservice.client.execute.CustomerExecute;
@@ -31,9 +30,9 @@ public class PatientBacking extends BaseBacking {
 
 	private static final long serialVersionUID = 1L;
 
-	private List<Patient> list;
+	private List<CrmPatient> list;
 	private PatientDataModel model;
-	private Patient selected;
+	private CrmPatient selected;
 
 	private List<SelectItem> listBranch;
 	private String salesOff;
@@ -58,11 +57,11 @@ public class PatientBacking extends BaseBacking {
 		newAction(null);
 	}
 
-	public List<Patient> getList() {
+	public List<CrmPatient> getList() {
 		return list;
 	}
 
-	public void setList(List<Patient> list) {
+	public void setList(List<CrmPatient> list) {
 		this.list = list;
 	}
 
@@ -71,7 +70,7 @@ public class PatientBacking extends BaseBacking {
 			model = new PatientDataModel(list);
 
 			if (list.size() > 0) {
-				selected = list.get(0);
+				// selected = list.get(0);
 			}
 		}
 		return model;
@@ -81,11 +80,11 @@ public class PatientBacking extends BaseBacking {
 		this.model = model;
 	}
 
-	public Patient getSelected() {
+	public CrmPatient getSelected() {
 		return selected;
 	}
 
-	public void setSelected(Patient selected) {
+	public void setSelected(CrmPatient selected) {
 		this.selected = selected;
 	}
 
@@ -223,7 +222,7 @@ public class PatientBacking extends BaseBacking {
 
 	public void newAction(ActionEvent event) {
 		optionSearchPatient = 1;
-		selected = new Patient();
+		selected = new CrmPatient();
 		selected.setCycle(false);
 		disabledSaveButton = false;
 	}
@@ -231,12 +230,12 @@ public class PatientBacking extends BaseBacking {
 	public void saveAction() {
 		String message = null;
 		try {
-			String customer = CustomerExecute.getCustomer(selected.getCode());
+			String customer = CustomerExecute.getCustomer(selected.getDoc());
 
 			if (customer.isEmpty()) {
 				String names = null;
 
-				names = selected.getNames() + " " + selected.getSurnames();
+				names = selected.getFirstnames() + " " + selected.getSurnames();
 
 				SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
 				CrmProfile profile = FacesUtil.getCurrentUser().getCrmProfile();
@@ -250,8 +249,8 @@ public class PatientBacking extends BaseBacking {
 				CrmRegion crmRegion = mapRegion.get(idRegion);
 				CrmCity crmCity = mapCity.get(idCity);
 
-				String SAPCode = CustomerExecute.excecute(sap.getEnvironment(),
-						"13", selected.getCode(), tratamiento, names,
+				String codeSap = CustomerExecute.excecute(sap.getEnvironment(),
+						"13", selected.getDoc(), tratamiento, names,
 						selected.getAddress(), selected.getPhoneNumber(),
 						selected.getCellNumber(), selected.getEmail(),
 						crmCountry.getCode(), crmCity.getName(),
@@ -260,43 +259,35 @@ public class PatientBacking extends BaseBacking {
 						profile.getSociety(), this.salesOff, "01",
 						profile.getPaymentTerm(), profile.getAccount());
 
-				if (SAPCode != null) {
-					selected.setSAPCode(SAPCode);
+				if (codeSap != null) {
+					selected.setCodeSap(codeSap);
+					
+					selected.setSalesOrg(profile.getSalesOrg());
+					selected.setCountry(crmCountry.getCode());
+					selected.setRegion(crmRegion.getCode());
+					selected.setCity(crmCity.getCode());
 
-					CrmPatient patient = new CrmPatient();
-					patient.setDoc(selected.getCode());
-					patient.setCodeSap(SAPCode);
-					patient.setNames(selected.getNames().toUpperCase());
-					patient.setSurnames(selected.getSurnames().toUpperCase());
-					patient.setGender(selected.getGender());
-					patient.setAddress(selected.getAddress());
-					patient.setTelephone(selected.getPhoneNumber());
-					patient.setCountry(crmCountry.getCode());
-					patient.setRegion(crmRegion.getCode());
-					patient.setCity(crmCity.getName());
-					patient.setCycle(selected.getCycle());
-
-					patient.setSendPhone(false);
-					patient.setSendEmail(false);
-					patient.setSendPostal(false);
-					patient.setSendSms(false);
+					selected.setSendPhone(false);
+					selected.setSendEmail(false);
+					selected.setSendPostal(false);
+					selected.setSendSms(false);
 
 					for (String send : selectedSendOptions) {
 						if (send.equals("1")) {
-							patient.setSendPhone(true);
+							selected.setSendPhone(true);
 						} else if (send.equals("2")) {
-							patient.setSendEmail(true);
+							selected.setSendEmail(true);
 						} else if (send.equals("3")) {
-							patient.setSendPostal(true);
+							selected.setSendPostal(true);
 						} else if (send.equals("4")) {
-							patient.setSendSms(true);
+							selected.setSendSms(true);
 						}
 					}
 
-					processService.savePatient(patient);
+					processService.savePatient(selected);
 
 					disabledSaveButton = true;
-					message = FacesUtil.getMessage("pat_msg_ok", SAPCode);
+					message = FacesUtil.getMessage("pat_msg_ok", codeSap);
 					FacesUtil.addInfo(message);
 				} else {
 					message = FacesUtil.getMessage("Error");

@@ -9,9 +9,9 @@ import javax.inject.Named;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
+import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
-import co.com.tactusoft.crm.view.beans.Patient;
 import co.com.tactusoft.crm.view.datamodel.AppointmentDataModel;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 
@@ -77,8 +77,8 @@ public class AppointmentPatientBacking extends BaseBacking {
 		appointmentModel = new AppointmentDataModel(listAppointment);
 		selectedsAppointment = null;
 
-		selectedPatient = new Patient();
-		listPatient = new LinkedList<Patient>();
+		selectedPatient = new CrmPatient();
+		listPatient = new LinkedList<CrmPatient>();
 		patientModel = new PatientDataModel(listPatient);
 		disabledSaveButton = false;
 
@@ -87,12 +87,12 @@ public class AppointmentPatientBacking extends BaseBacking {
 	}
 
 	public void searchAppoinmnetConfirmedAction() {
-		if (selectedPatient.getSAPCode() == null) {
+		if (selectedPatient.getCodeSap() == null) {
 			String message = FacesUtil.getMessage("sal_msg_error_pat");
 			FacesUtil.addError(message);
 		} else {
 			listAppointment = processService.listAppointmentByPatient(
-					selectedPatient.getSAPCode(), Constant.APP_STATE_CONFIRMED);
+					selectedPatient.getCodeSap(), Constant.APP_STATE_CONFIRMED);
 			appointmentModel = new AppointmentDataModel(listAppointment);
 		}
 	}
@@ -101,7 +101,7 @@ public class AppointmentPatientBacking extends BaseBacking {
 		if (listPatient.size() == 0) {
 			return true;
 		} else if (listPatient.size() == 1) {
-			if (listPatient.get(0).getSAPCode().isEmpty()) {
+			if (listPatient.get(0).getCodeSap().isEmpty()) {
 				return true;
 			}
 		}
@@ -109,7 +109,7 @@ public class AppointmentPatientBacking extends BaseBacking {
 	}
 
 	public boolean isDisabledSelectedPatient() {
-		if (selectedPatient.getSAPCode() == null) {
+		if (selectedPatient.getCodeSap() == null) {
 			return true;
 		}
 		return false;
