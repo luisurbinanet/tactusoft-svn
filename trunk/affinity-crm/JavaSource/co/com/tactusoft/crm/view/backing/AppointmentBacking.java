@@ -1,6 +1,7 @@
 package co.com.tactusoft.crm.view.backing;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -17,14 +18,16 @@ import org.springframework.context.annotation.Scope;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
+import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProcedure;
 import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.beans.Candidate;
-import co.com.tactusoft.crm.view.beans.Patient;
 import co.com.tactusoft.crm.view.datamodel.CandidateDataModel;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
+
+import com.tactusoft.webservice.client.beans.WSBean;
 
 @Named
 @Scope("view")
@@ -50,6 +53,10 @@ public class AppointmentBacking extends BaseBacking {
 
 	private List<SelectItem> listDoctor;
 	private Map<BigDecimal, CrmDoctor> mapDoctor;
+
+	private List<SelectItem> listWSGroupSellers;
+	private Map<String, String> mapWSGroupSellers;
+	private String selectedWSGroupSellers;
 
 	private Date currentDate;
 	private int appointmentsNumber;
@@ -87,6 +94,7 @@ public class AppointmentBacking extends BaseBacking {
 
 			if (listBranch.size() > 0) {
 				idBranch = (BigDecimal) listBranch.get(0).getValue();
+				handleBranchChange();
 			}
 		}
 		return listBranch;
@@ -239,6 +247,30 @@ public class AppointmentBacking extends BaseBacking {
 		this.selectedAppointment = selectedAppointment;
 	}
 
+	public List<SelectItem> getListWSGroupSellers() {
+		return listWSGroupSellers;
+	}
+
+	public void setListWSGroupSellers(List<SelectItem> listWSGroupSellers) {
+		this.listWSGroupSellers = listWSGroupSellers;
+	}
+
+	public Map<String, String> getMapWSGroupSellers() {
+		return mapWSGroupSellers;
+	}
+
+	public void setMapWSGroupSellers(Map<String, String> mapWSGroupSellers) {
+		this.mapWSGroupSellers = mapWSGroupSellers;
+	}
+
+	public String getSelectedWSGroupSellers() {
+		return selectedWSGroupSellers;
+	}
+
+	public void setSelectedWSGroupSellers(String selectedWSGroupSellers) {
+		this.selectedWSGroupSellers = selectedWSGroupSellers;
+	}
+
 	public boolean isRenderedForDate() {
 		return renderedForDate;
 	}
@@ -259,7 +291,7 @@ public class AppointmentBacking extends BaseBacking {
 		if (listPatient.size() == 0) {
 			return true;
 		} else if (listPatient.size() == 1) {
-			if (listPatient.get(0).getSAPCode().isEmpty()) {
+			if (listPatient.get(0).getCodeSap().isEmpty()) {
 				return true;
 			}
 		}
@@ -283,7 +315,7 @@ public class AppointmentBacking extends BaseBacking {
 	}
 
 	public void newAction(ActionEvent event) {
-		listPatient = new LinkedList<Patient>();
+		listPatient = new LinkedList<CrmPatient>();
 		patientModel = new PatientDataModel(listPatient);
 		idSearch = Constant.DEFAULT_VALUE;
 
@@ -370,7 +402,32 @@ public class AppointmentBacking extends BaseBacking {
 			mapDoctor.put(row.getId(), row);
 			listDoctor.add(new SelectItem(row.getId(), row.getNames()));
 		}
-		
+
+		String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
+		try {
+
+			String codeBranch = mapBranch.get(idBranch).getCode();
+
+			List<WSBean> result = FacesUtil.getCurrentUserData()
+					.getListWSGroupSellers();
+
+			listWSGroupSellers = new ArrayList<SelectItem>();
+			mapWSGroupSellers = new HashMap<String, String>();
+			listWSGroupSellers.add(new SelectItem(
+					Constant.DEFAULT_VALUE_STRING, label));
+			for (WSBean row : result) {
+				if (row.getBranch().equals(codeBranch)) {
+					mapWSGroupSellers.put(row.getCode(), row.getNames());
+					listWSGroupSellers.add(new SelectItem(row.getCode(), row
+							.getNames()));
+				}
+			}
+		} catch (Exception ex) {
+			listWSGroupSellers = new ArrayList<SelectItem>();
+			listWSGroupSellers.add(new SelectItem(
+					Constant.DEFAULT_VALUE_STRING, label));
+		}
+
 		selectedWSGroupSellers = "-1";
 	}
 
@@ -402,7 +459,7 @@ public class AppointmentBacking extends BaseBacking {
 					selectedAppointment.getStartDate(),
 					selectedAppointment.getEndDate(), procedureDetail,
 					selectedAppointment.getDoctor().getId(),
-					selectedPatient.getSAPCode());
+					selectedPatient.getCodeSap());
 
 			if (validateApp != 0) {
 				switch (validateApp) {
@@ -424,9 +481,10 @@ public class AppointmentBacking extends BaseBacking {
 				String code = "";
 
 				selected.setCode(code);
-				selected.setPatient(selectedPatient.getSAPCode());
-				selected.setPatientSap(selectedPatient.getSAPCode());
-				selected.setPatientNames(selectedPatient.getNames());
+				selected.setPatient(selectedPatient.getCodeSap());
+				selected.setPatientSap(selectedPatient.getCodeSap());
+				selected.setPatientNames(selectedPatient.getFirstnames() + " "
+						+ selectedPatient.getSurnames());
 				selected.setCrmDoctor(selectedAppointment.getDoctor());
 				selected.setCrmBranch(mapBranch.get(idBranch));
 				selected.setCrmProcedureDetail(procedureDetail);

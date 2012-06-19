@@ -20,6 +20,7 @@ import co.com.tactusoft.crm.model.entities.CrmPage;
 import co.com.tactusoft.crm.model.entities.CrmParameter;
 import co.com.tactusoft.crm.model.entities.CrmRole;
 import co.com.tactusoft.crm.model.entities.CrmUser;
+import co.com.tactusoft.crm.util.Constant;
 
 import com.tactusoft.webservice.client.beans.WSBean;
 import com.tactusoft.webservice.client.execute.CustomLists;
@@ -79,41 +80,66 @@ public class UserDetailsServiceCustom implements UserDetailsService {
 						.getId());
 				user.setListBranch(listBranch);
 
-				listBranch = tableService.getListBranchActive();
-				user.setListBranchAll(listBranch);
-
 				// get Parameter
 				List<CrmParameter> listParameter;
 				listParameter = parameterService.getListParameter();
 				user.setListParameter(listParameter);
 
 				// get listWSGroupSellers
+				String url = null;
+				for (CrmParameter row : listParameter) {
+					if (row.getCode().equals("SAP_URL_ZWEBLIST")) {
+						url = row.getTextValue();
+						break;
+					}
+				}
+
+				String username = null;
+				for (CrmParameter row : listParameter) {
+					if (row.getCode().equals("SAP_USERNAME")) {
+						username = row.getTextValue();
+						break;
+					}
+				}
+
+				String password = null;
+				for (CrmParameter row : listParameter) {
+					if (row.getCode().equals("SAP_PASSWORD")) {
+						password = row.getTextValue();
+						break;
+					}
+				}
+
+				listBranch = tableService.getListBranchActive();
+				user.setListBranchAll(listBranch);
+
 				try {
+					List<WSBean> result = CustomLists.getBranchs(url, username,
+							password);
 
-					String url = null;
-					for (CrmParameter row : listParameter) {
-						if (row.getCode().equals("SAP_URL_ZWEBLIST")) {
-							url = row.getTextValue();
-							break;
+					boolean notExists = true;
+					for (WSBean row : result) {
+						for (CrmBranch rowDB : listBranch) {
+							if (row.getCode().equals(rowDB.getCode())) {
+								notExists = false;
+							}
+						}
+
+						if (notExists) {
+							CrmBranch newBranch = new CrmBranch();
+							newBranch.setCode(row.getCode());
+							newBranch.setName(row.getNames());
+							newBranch.setFormula("ZHD2");
+							newBranch.setState(Constant.STATE_ACTIVE);
+							tableService.saveBranch(newBranch);
+							user.getListBranchAll().add(newBranch);
 						}
 					}
+				} catch (Exception ex) {
+					user.setListBranchAll(listBranch);
+				}
 
-					String username = null;
-					for (CrmParameter row : listParameter) {
-						if (row.getCode().equals("SAP_USERNAME")) {
-							username = row.getTextValue();
-							break;
-						}
-					}
-
-					String password = null;
-					for (CrmParameter row : listParameter) {
-						if (row.getCode().equals("SAP_PASSWORD")) {
-							password = row.getTextValue();
-							break;
-						}
-					}
-
+				try {
 					List<WSBean> result = CustomLists.getGroupSellers(url,
 							username, password);
 					user.setListWSGroupSellers(result);
@@ -126,5 +152,4 @@ public class UserDetailsServiceCustom implements UserDetailsService {
 		}
 		return user;
 	}
-
 }

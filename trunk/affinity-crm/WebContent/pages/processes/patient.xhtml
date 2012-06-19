@@ -38,12 +38,12 @@
 					style="margin:0 auto;" width="100%">
 
 					<h:outputLabel value="#{msg['pat_code']}" />
-					<p:inputText value="#{patientBacking.selected.code}"
+					<p:inputText value="#{patientBacking.selected.doc}"
 						style="width:230px;" label="#{msg['pat_code']}" required="true" />
 
 					<h:outputLabel value="#{msg['pat_sap_code']}"
 						rendered="#{patientBacking.disabledSaveButton}" />
-					<p:inputText value="#{patientBacking.selected.SAPCode}"
+					<p:inputText value="#{patientBacking.selected.codeSap}"
 						style="color:Red;width:230px;font-weight:bold;"
 						label="#{msg['pat_sap_code']}" readonly="true"
 						rendered="#{patientBacking.disabledSaveButton}" />
@@ -52,7 +52,7 @@
 					<h:outputText rendered="#{!patientBacking.disabledSaveButton}" />
 
 					<h:outputLabel value="#{msg['pat_names']}" />
-					<p:inputText value="#{patientBacking.selected.names}"
+					<p:inputText value="#{patientBacking.selected.firstnames}"
 						style="width:230px" label="#{msg['pat_names']}" required="true" />
 
 					<h:outputLabel value="#{msg['pat_surnames']}" />

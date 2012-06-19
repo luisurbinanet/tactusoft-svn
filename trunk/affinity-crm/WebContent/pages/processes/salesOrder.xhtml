@@ -39,7 +39,7 @@
 					style="margin:0 auto;" width="100%">
 
 					<h:outputLabel value="#{msg['pat_sap_code']}" style="width:40%" />
-					<p:inputText value="#{salesOrderBacking.selectedPatient.SAPCode}"
+					<p:inputText value="#{salesOrderBacking.selectedPatient.codeSap}"
 						style="width:350px" readonly="true" />
 
 					<h:outputLabel value="#{msg['pat_names']}" style="width:40%" />
@@ -227,7 +227,7 @@
 					<p:spacer height="10" />
 					<p:scrollPanel id="pnlTable2" style="width:580px;height:400px">
 						<p:dataTable id="recordTable2" var="rec"
-							value="#{salesOrderBacking.patientModel}" rowKey="#{rec.SAPCode}"
+							value="#{salesOrderBacking.patientModel}" rowKey="#{rec.codeSap}"
 							selection="#{salesOrderBacking.selectedPatient}" paginator="true"
 							rows="15" style="width:570px"
 							emptyMessage="#{msg['glb_no_records_found']}">
@@ -235,7 +235,7 @@
 							<p:column selectionMode="single" style="width:18px" />
 
 							<p:column headerText="#{msg['pat_sap_code']}">
-								<h:outputLabel value="#{rec.SAPCode}" />
+								<h:outputLabel value="#{rec.codeSap}" />
 							</p:column>
 
 							<p:column headerText="#{msg['pat_names']}">

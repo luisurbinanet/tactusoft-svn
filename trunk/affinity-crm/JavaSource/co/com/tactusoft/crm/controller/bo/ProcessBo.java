@@ -677,8 +677,8 @@ public class ProcessBo implements Serializable {
 		if (field.equals("DOC")) {
 			list = dao.find("from CrmPatient o where doc = '" + value + "'");
 		} else {
-			list = dao.find("from CrmPatient o where o.names like '%" + value
-					+ "%' or o.surnames like '%" + value + "%'");
+			list = dao.find("from CrmPatient o where o.firstnames like '%"
+					+ value + "%' or o.surnames like '%" + value + "%'");
 		}
 
 		return list;
