@@ -16,6 +16,7 @@ import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmDoctorException;
 import co.com.tactusoft.crm.model.entities.CrmDoctorSchedule;
 import co.com.tactusoft.crm.model.entities.CrmHoliday;
+import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
 import co.com.tactusoft.crm.model.entities.VwDoctorSchedule;
 import co.com.tactusoft.crm.util.Constant;
@@ -40,6 +41,18 @@ public class ProcessBo implements Serializable {
 	public List<CrmAppointment> getListAppointmentByDoctor(BigDecimal idDoctor) {
 		return dao.find("from CrmAppointment o where o.crmDoctor.id = "
 				+ idDoctor + "order by o.startAppointmentDate");
+	}
+
+	public List<CrmAppointment> getListAppointmentByBranch(BigDecimal idBranch) {
+		return dao.find("from CrmAppointment o where o.crmBranch.id = "
+				+ idBranch + "order by o.startAppointmentDate");
+	}
+
+	public List<CrmAppointment> getListAppointmentByBranchDoctor(
+			BigDecimal idBranch, BigDecimal idDoctor) {
+		return dao.find("from CrmAppointment o where o.crmBranch.id = "
+				+ idBranch + " and o.crmDoctor.id = " + idDoctor
+				+ "order by o.startAppointmentDate");
 	}
 
 	public List<CrmAppointment> getListAppointmentByDoctor(CrmDoctor doctor,
@@ -399,7 +412,7 @@ public class ProcessBo implements Serializable {
 											listDoctorException, currentDate,
 											candidatesHours);
 								}
-								
+
 								if (FacesUtil.getDateWithoutTime(new Date())
 										.compareTo(currentDate) == 0) {
 									if (new Date().compareTo(initHour) > 0) {
@@ -627,12 +640,14 @@ public class ProcessBo implements Serializable {
 		}
 
 		List<CrmAppointment> list = dao
-				.find("from CrmAppointment o where o.startAppointmentDate >= '"
+				.find("from CrmAppointment o where (o.startAppointmentDate between '"
 						+ startDateString
-						+ "T00:00:00.000+05:00' and o.startAppointmentDate <= '"
+						+ "T00:00:00.000+05:00' and '"
 						+ endDateString
-						+ "T23:59:59.999+05:00' and o.patient = '" + patient
-						+ "' and o.state = " + stateString
+						+ "T23:59:59.999+05:00') and o.patient = '"
+						+ patient
+						+ "' and o.state = "
+						+ stateString
 						+ " order by o.startAppointmentDate desc");
 
 		return list;
@@ -647,6 +662,26 @@ public class ProcessBo implements Serializable {
 		} else {
 			return null;
 		}
+	}
+
+	public int savePatient(CrmPatient entity) {
+		if (entity.getId() == null) {
+			entity.setId(getId(CrmPatient.class));
+		}
+		return dao.persist(entity);
+	}
+
+	public List<CrmPatient> getListPatientByNameOrDoc(String field, String value) {
+		List<CrmPatient> list = null;
+
+		if (field.equals("DOC")) {
+			list = dao.find("from CrmPatient o where doc = '" + value + "'");
+		} else {
+			list = dao.find("from CrmPatient o where o.names like '%" + value
+					+ "%' or o.surnames like '%" + value + "%'");
+		}
+
+		return list;
 	}
 
 }

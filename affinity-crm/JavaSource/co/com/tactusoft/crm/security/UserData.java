@@ -10,8 +10,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmPage;
+import co.com.tactusoft.crm.model.entities.CrmParameter;
 import co.com.tactusoft.crm.model.entities.CrmRole;
 import co.com.tactusoft.crm.model.entities.CrmUser;
+
+import com.tactusoft.webservice.client.beans.WSBean;
 
 public class UserData implements UserDetails {
 
@@ -27,6 +30,8 @@ public class UserData implements UserDetails {
 	private String pageDefault;
 	private List<CrmBranch> listBranch;
 	private List<CrmBranch> listBranchAll;
+	private List<CrmParameter> listParameter;
+	private List<WSBean> listWSGroupSellers;
 
 	public void setUsername(String username) {
 		this.username = username;
@@ -106,6 +111,22 @@ public class UserData implements UserDetails {
 
 	public void setListBranchAll(List<CrmBranch> listBranchAll) {
 		this.listBranchAll = listBranchAll;
+	}
+
+	public List<CrmParameter> getListParameter() {
+		return listParameter;
+	}
+
+	public void setListParameter(List<CrmParameter> listParameter) {
+		this.listParameter = listParameter;
+	}
+
+	public List<WSBean> getListWSGroupSellers() {
+		return listWSGroupSellers;
+	}
+
+	public void setListWSGroupSellers(List<WSBean> listWSGroupSellers) {
+		this.listWSGroupSellers = listWSGroupSellers;
 	}
 
 	public boolean isAccountNonExpired() {
