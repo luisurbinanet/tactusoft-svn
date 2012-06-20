@@ -227,6 +227,11 @@ public class PatientBacking extends BaseBacking {
 		disabledSaveButton = false;
 	}
 
+	public void searchActionListener(ActionEvent event) {
+		selected = processService
+				.getListPatientByCodeSap(selectedPatient.getCodeSap());
+	}
+
 	public void saveAction() {
 		String message = null;
 		try {
@@ -261,7 +266,7 @@ public class PatientBacking extends BaseBacking {
 
 				if (codeSap != null) {
 					selected.setCodeSap(codeSap);
-					
+
 					selected.setSalesOrg(profile.getSalesOrg());
 					selected.setCountry(crmCountry.getCode());
 					selected.setRegion(crmRegion.getCode());
@@ -301,6 +306,20 @@ public class PatientBacking extends BaseBacking {
 			}
 		} catch (Exception ex) {
 			message = FacesUtil.getMessage("pat_msg_error_cnx");
+			FacesUtil.addError(message);
+		}
+	}
+
+	public void saveDetailAction() {
+		String message = null;
+		int result = processService.savePatient(selected);
+		if (result == 0) {
+			disabledSaveButton = true;
+			message = FacesUtil.getMessage("pat_msg_update_ok",
+					selected.getCodeSap());
+			FacesUtil.addInfo(message);
+		} else {
+			message = FacesUtil.getMessage("Error");
 			FacesUtil.addError(message);
 		}
 	}

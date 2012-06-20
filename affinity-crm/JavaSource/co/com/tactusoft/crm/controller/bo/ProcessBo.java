@@ -684,4 +684,15 @@ public class ProcessBo implements Serializable {
 		return list;
 	}
 
+	public CrmPatient getListPatientByCodeSap(String codeSap) {
+		List<CrmPatient> list = null;
+		list = dao
+				.find("from CrmPatient o where o.codeSap = '" + codeSap + "'");
+		if (list.size() > 0) {
+			return list.get(0);
+		} else {
+			return new CrmPatient();
+		}
+	}
+
 }
