@@ -287,17 +287,6 @@ public class AppointmentBacking extends BaseBacking {
 		this.renderedForDoctor = renderedForDoctor;
 	}
 
-	public boolean isDisabledAddPatient() {
-		if (listPatient.size() == 0) {
-			return true;
-		} else if (listPatient.size() == 1) {
-			if (listPatient.get(0).getCodeSap().isEmpty()) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	public String getInfoMessage() {
 		return infoMessage;
 	}

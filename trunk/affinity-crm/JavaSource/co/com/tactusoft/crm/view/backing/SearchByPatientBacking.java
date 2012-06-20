@@ -143,24 +143,6 @@ public class SearchByPatientBacking extends BaseBacking {
 		}
 	}
 
-	public boolean isDisabledAddPatient() {
-		if (listPatient.size() == 0) {
-			return true;
-		} else if (listPatient.size() == 1) {
-			if (listPatient.get(0).getCodeSap().isEmpty()) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public boolean isDisabledSelectedPatient() {
-		if (selectedPatient.getCodeSap() == null) {
-			return true;
-		}
-		return false;
-	}
-
 	public boolean isDisabledAppointment() {
 		if (this.listAppointment.size() == 0) {
 			return true;

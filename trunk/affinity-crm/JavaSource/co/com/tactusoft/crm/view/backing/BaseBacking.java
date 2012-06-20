@@ -98,14 +98,13 @@ public class BaseBacking implements Serializable {
 
 		} else {
 			listPatient = new ArrayList<CrmPatient>();
-			List<CrmPatient> resultDB = null;
 			List<WSBean> result = null;
 
 			if (optionSearchPatient == 1) {
-				resultDB = processService.getListPatientByNameOrDoc("DOC",
+				listPatient = processService.getListPatientByNameOrDoc("DOC",
 						this.docPatient);
 
-				if (resultDB.size() == 0) {
+				if (listPatient.size() == 0) {
 					result = CustomerExecute.findByDoc(this.docPatient, 0);
 
 					for (WSBean row : result) {
@@ -116,7 +115,7 @@ public class BaseBacking implements Serializable {
 					}
 				}
 			} else {
-				resultDB = processService.getListPatientByNameOrDoc("NAMES",
+				listPatient = processService.getListPatientByNameOrDoc("NAMES",
 						this.namePatient.toUpperCase());
 
 				result = CustomerExecute.findByName(this.namePatient, 0);
@@ -124,7 +123,7 @@ public class BaseBacking implements Serializable {
 				for (WSBean row : result) {
 					boolean validate = true;
 
-					for (CrmPatient pat : resultDB) {
+					for (CrmPatient pat : listPatient) {
 						if (row.getCode().equals(pat.getCodeSap())) {
 							validate = false;
 							break;
@@ -140,12 +139,10 @@ public class BaseBacking implements Serializable {
 				}
 			}
 
-			if (resultDB.size() > 0 || result != null) {
-				patientModel = new PatientDataModel(listPatient);
+			patientModel = new PatientDataModel(listPatient);
 
-				if (listPatient.size() > 0) {
-					selectedPatient = listPatient.get(0);
-				}
+			if (listPatient.size() > 0) {
+				selectedPatient = listPatient.get(0);
 			}
 		}
 	}
@@ -216,5 +213,23 @@ public class BaseBacking implements Serializable {
 
 	public void setProcessService(ProcessBo processService) {
 		this.processService = processService;
+	}
+
+	public boolean isDisabledAddPatient() {
+		if ((listPatient == null) || (listPatient.size() == 0)) {
+			return true;
+		} else if (listPatient.size() == 1) {
+			if (listPatient.get(0).getCodeSap().isEmpty()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean isDisabledSelectedPatient() {
+		if ((selectedPatient == null) || (selectedPatient.getCodeSap() == null)) {
+			return true;
+		}
+		return false;
 	}
 }

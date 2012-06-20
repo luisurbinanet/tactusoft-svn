@@ -10,7 +10,7 @@
 	<ui:define name="body">
 
 		<p:panel style="width:100%;height:600px;"
-			header="#{msg['title_patient']}">
+			header="#{msg['title_view_history']}">
 
 			<p:spacer height="5" />
 
@@ -36,91 +36,20 @@
 
 				<p:spacer height="10" />
 
-				<p:fieldset legend="#{msg['pat_personal_data']}">
-					<h:panelGrid id="pnlDetail" columns="4" style="margin:0 auto;"
-						width="100%">
+				<p:tabView id="tabView">
+					<p:tab id="tab1" title="#{msg['his_history']}">
+					</p:tab>
 
-						<h:outputLabel value="#{msg['pat_sap_code']}" />
-						<p:inputText value="#{patientBacking.selected.codeSap}"
-							style="color:Red;width:400px;font-weight:bold;"
-							label="#{msg['pat_sap_code']}" readonly="true" />
+					<p:tab id="tab2" title="#{msg['his_history_record']}">
+					</p:tab>
 
-						<h:outputLabel value="#{msg['pat_names']}" />
-						<p:inputText value="#{patientBacking.selected.names}"
-							style="width:400px" label="#{msg['pat_names']}" readonly="true" />
+					<p:tab id="tab3" title="#{msg['his_history_history']}">
+					</p:tab>
 
-						<h:outputLabel value="#{msg['pat_born_date']}" />
-						<p:calendar value="#{patientBacking.selected.bornDate}"
-							label="#{msg['pat_born_date']}" readonlyInput="true"
-							pattern="dd/MM/yyyy" showOn="button" navigator="true" locale="es"
-							required="true" yearRange="-100:+0" />
+					<p:tab id="tab4" title="#{msg['his_history_physique']}">
+					</p:tab>
 
-						<h:outputLabel value="#{msg['pat_occupation']}" />
-						<p:inputText value="#{patientBacking.selected.occupation}"
-							style="width:400px" label="#{msg['pat_occupation']}"
-							maxlength="255" required="true" />
-
-						<h:outputLabel value="#{msg['pat_neighborhood']}" />
-						<p:inputText value="#{patientBacking.selected.neighborhood}"
-							style="width:400px" label="#{msg['pat_neighborhood']}"
-							maxlength="45" required="true" />
-
-						<h:outputLabel value="#{msg['pat_type_housing']}" />
-						<p:selectOneMenu value="#{patientBacking.selected.typeHousing}"
-							style="width:230px" required="true"
-							label="#{msg['pat_type_housing']}">
-							<f:selectItem itemLabel="#{msg['glb_default_value']}"
-								itemValue="" />
-							<f:selectItem itemLabel="#{msg['pat_type_housing_u']}"
-								itemValue="U" />
-							<f:selectItem itemLabel="#{msg['pat_type_housing_r']}"
-								itemValue="R" />
-						</p:selectOneMenu>
-
-					</h:panelGrid>
-				</p:fieldset>
-
-				<p:spacer height="8" />
-
-				<p:fieldset legend="#{msg['pat_guardian_data']}">
-					<h:panelGrid id="pnlDetail2" columns="4" style="margin:0 auto;"
-						width="100%">
-
-						<h:outputLabel value="#{msg['pat_guardian']}" />
-						<p:inputText value="#{patientBacking.selected.guardian}"
-							style="width:400px" label="#{msg['pat_guardian']}"
-							maxlength="255" required="true" />
-
-						<h:outputLabel value="#{msg['pat_guardian_address']}" />
-						<p:inputText value="#{patientBacking.selected.guardianAddress}"
-							style="width:400px" label="#{msg['pat_guardian_address']}"
-							maxlength="255" required="true" />
-
-						<h:outputLabel value="#{msg['pat_guardian_relationship']}" />
-						<p:inputText maxlength="255"
-							value="#{patientBacking.selected.guardianRelationship}"
-							style="width:400px" label="#{msg['pat_guardian_relationship']}"
-							required="true" />
-
-						<h:outputLabel value="#{msg['pat_guardian_telephone']}" />
-						<p:inputText value="#{patientBacking.selected.guardianTelephone}"
-							style="width:400px" label="#{msg['pat_guardian_telephone']}"
-							maxlength="30" required="true" />
-
-					</h:panelGrid>
-				</p:fieldset>
-
-				<p:spacer height="8" />
-
-				<p:fieldset legend="#{msg['pat_type_obs']}">
-					<h:panelGrid id="pnlDetail3" style="margin:0 auto;" width="100%">
-
-						<p:inputTextarea value="#{patientBacking.selected.obs}"
-							maxlength="1000" style="width:100%" required="true"
-							label="#{patientBacking.selected.obs}" />
-
-					</h:panelGrid>
-				</p:fieldset>
+				</p:tabView>
 
 			</h:form>
 

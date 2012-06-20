@@ -356,8 +356,12 @@ public class CrmPatient implements java.io.Serializable {
 
 	@Transient
 	public String getNames() {
-		if (FacesUtil.isEmptyOrBlank(names)) {
-			names = this.surnames + " " + this.firstnames;
+		if (FacesUtil.isEmptyOrBlank(this.names)) {
+			if (FacesUtil.isEmptyOrBlank(this.surnames)) {
+				this.names = "";
+			} else {
+				this.names = this.surnames + " " + this.firstnames;
+			}
 		}
 		return names;
 	}

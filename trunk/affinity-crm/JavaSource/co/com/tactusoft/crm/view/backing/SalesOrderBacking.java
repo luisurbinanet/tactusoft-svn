@@ -395,15 +395,4 @@ public class SalesOrderBacking extends BaseBacking {
 		return false;
 	}
 
-	public boolean isDisabledAddPatient() {
-		if (listPatient.size() == 0) {
-			return true;
-		} else if (listPatient.size() == 1) {
-			if (listPatient.get(0).getCodeSap().isEmpty()) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 }
