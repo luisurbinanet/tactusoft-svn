@@ -9,7 +9,7 @@
 
 	<ui:define name="body">
 
-		<p:panel style="width:100%;height:600px;"
+		<p:panel style="width:100%;height:1000px;"
 			header="#{msg['title_view_history']}">
 
 			<p:spacer height="5" />
@@ -18,32 +18,287 @@
 
 				<p:growl id="growl" showDetail="true" />
 
-				<p:toolbar style="width:100%">
+				<p:toolbar id="toolBar" style="width:100%">
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
-							actionListener="#{patientBacking.newAction}"
-							update="pnlDetail pnlDetail2 pnlDetail3 btnSavePatient"
-							process="@this" />
+							actionListener="#{historyBacking.newAction}"
+							update="pnlDetail tabView btnSavePatient" process="@this" />
 						<p:commandButton value="#{msg['btn_add_patient']}"
 							icon="ui-icon-circle-check" oncomplete="dlg2.show()"
 							update=":editForm:dialog2" />
+						<p:commandButton value="#{msg['btn_search']}"
+							icon="ui-icon-search" update="tabView btnSavePatient"
+							actionListener="#{historyBacking.searchAction}"
+							disabled="#{historyBacking.disabledSelectedPatient}" />
 						<p:commandButton id="btnSavePatient" value="#{msg['btn_save']}"
-							icon="ui-icon-disk" action="#{patientBacking.saveDetailAction}"
+							icon="ui-icon-disk" actionListener="#{historyBacking.saveAction}"
 							update="btnSavePatient :form"
-							disabled="#{patientBacking.disabledSaveButton}" />
+							disabled="#{historyBacking.disabledSaveButton}" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
-				<p:spacer height="10" />
+				<p:spacer height="5" />
 
-				<p:tabView id="tabView">
+				<h:panelGrid id="pnlDetail" columns="4" width="100%">
+					<h:outputLabel value="#{msg['pat_sap_code']}" />
+					<p:inputText value="#{historyBacking.selectedPatient.codeSap}"
+						style="width:400px" readonly="true" />
+
+					<h:outputLabel value="#{msg['pat_names']}" />
+					<p:inputText value="#{historyBacking.selectedPatient.names}"
+						style="width:400px" readonly="true" />
+				</h:panelGrid>
+
+				<p:spacer height="5" />
+
+				<p:tabView id="tabView" style="height:800px">
 					<p:tab id="tab1" title="#{msg['his_history']}">
+
+						<p:dataTable id="selectedTable" var="rec"
+							value="#{historyBacking.appointmentModel}" rowKey="#{rec.code}"
+							style="width:100%"
+							selection="#{historyBacking.selectedAppointment}"
+							paginator="true" rows="10"
+							emptyMessage="#{msg['glb_no_records_found']}">
+
+							<p:column headerText="#{msg['app_code']}">
+								<h:outputLabel value="#{rec.code}" />
+							</p:column>
+
+							<p:column headerText="#{msg['app_date']}">
+								<h:outputLabel value="#{rec.startAppointmentDate}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputLabel>
+							</p:column>
+
+							<p:column headerText="#{msg['app_procedure_type']}">
+								<h:outputLabel value="#{rec.crmProcedureDetail.name}" />
+							</p:column>
+
+							<p:column headerText="#{msg['app_doctor']}">
+								<h:outputLabel value="#{rec.crmDoctor.names}" />
+							</p:column>
+
+						</p:dataTable>
+
 					</p:tab>
 
 					<p:tab id="tab2" title="#{msg['his_history_record']}">
+						<p:fieldset legend="Patologicos">
+							<h:panelGrid columns="8" width="100%">
+								<p:selectBooleanCheckbox
+									value="#{historyBacking.selectedHistoryRecord.hypertension}"
+									disabled="#{historyBacking.readOnlySelectedHistoryRecord}" />
+								<h:outputText value="Hipertension" />
+
+								<p:selectBooleanCheckbox
+									value="#{historyBacking.selectedHistoryRecord.heart}"
+									disabled="#{historyBacking.readOnlySelectedHistoryRecord}" />
+								<h:outputText value="Cardiopatia" />
+
+								<p:selectBooleanCheckbox
+									value="#{historyBacking.selectedHistoryRecord.cancer}"
+									disabled="#{historyBacking.readOnlySelectedHistoryRecord}" />
+								<h:outputText value="Cancer" />
+
+								<p:selectBooleanCheckbox
+									value="#{historyBacking.selectedHistoryRecord.arthritis}"
+									disabled="#{historyBacking.readOnlySelectedHistoryRecord}" />
+								<h:outputText value="Artritis" />
+
+								<p:selectBooleanCheckbox
+									value="#{historyBacking.selectedHistoryRecord.arthritis}"
+									disabled="#{historyBacking.readOnlySelectedHistoryRecord}" />
+								<h:outputText value="Diabetes" />
+
+								<h:outputText value="Tiempo DX" />
+								<p:inputText
+									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+									value="#{historyBacking.selectedHistoryRecord.diabetesTime}" />
+
+								<h:outputText value="CH GLICEMIA" />
+								<p:inputText
+									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+									value="#{historyBacking.selectedHistoryRecord.diabetesGlycemia}" />
+
+							</h:panelGrid>
+
+							<h:panelGrid columns="2" width="100%">
+								<h:outputText value="Otros Antecedentes" />
+								<p:inputText
+									value="#{historyBacking.selectedHistoryRecord.others}"
+									style="width:900px" />
+							</h:panelGrid>
+
+						</p:fieldset>
+
+						<p:spacer height="5" />
+
+						<p:fieldset legend="Antecendentes">
+							<h:panelGrid columns="4" width="100%">
+								<h:outputText value="Quirurguicos" />
+								<p:inputText style="width:350px"
+									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+									value="#{historyBacking.selectedHistoryRecord.surgicalDesc}" />
+								<h:outputText value="Farmacologicos" />
+								<p:inputText style="width:350px"
+									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+									value="#{historyBacking.selectedHistoryRecord.pharmacologicalDesc}" />
+								<h:outputText value="Toxicos" />
+								<p:inputText style="width:350px"
+									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+									value="#{historyBacking.selectedHistoryRecord.toxicDesc}" />
+								<h:outputText value="Transfusionales" />
+								<p:inputText style="width:350px"
+									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+									value="#{historyBacking.selectedHistoryRecord.transfusionDesc}" />
+								<h:outputText value="Alergicos" />
+								<p:inputText style="width:350px"
+									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+									value="#{historyBacking.selectedHistoryRecord.allergyDesc}" />
+								<h:outputText value="Inmunizaciones" />
+								<p:inputText style="width:350px"
+									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+									value="#{historyBacking.selectedHistoryRecord.immunizationsDesc}" />
+								<h:outputText value="Otros" />
+								<p:inputText style="width:350px"
+									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+									value="#{historyBacking.selectedHistoryRecord.othersRecors}" />
+							</h:panelGrid>
+						</p:fieldset>
+
+
+						<p:spacer height="5" />
+
+						<p:fieldset legend="Antecendentes Familiares">
+							<h:panelGrid width="100%">
+								<p:inputTextarea rows="5" style="width:1100px"
+									value="#{historyBacking.selectedHistoryRecord.familyHistory}"
+									readonly="#{historyBacking.readOnlySelectedHistoryRecord}" />
+							</h:panelGrid>
+						</p:fieldset>
+
+						<p:spacer height="4" />
+
+						<p:fieldset legend="Gineco-Obstetricos">
+							<h:panelGrid columns="10" width="100%">
+
+								<h:outputText value="Gestacion" />
+								<p:inputText
+									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+									value="#{historyBacking.selectedHistoryRecord.gestation}" />
+
+								<h:outputText value="P" />
+								<p:inputText
+									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+									value="#{historyBacking.selectedHistoryRecord.obstGynP}" />
+
+								<h:outputText value="A" />
+								<p:inputText
+									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+									value="#{historyBacking.selectedHistoryRecord.obstGynA}" />
+
+								<h:outputText value="C" />
+								<p:inputText
+									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+									value="#{historyBacking.selectedHistoryRecord.obstGynC}" />
+
+								<h:outputText value="FUR" />
+								<p:inputText
+									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+									value="#{historyBacking.selectedHistoryRecord.obstGynFur}" />
+							</h:panelGrid>
+
+							<h:panelGrid width="100%" columns="2">
+								<h:outputText value="Otros" />
+								<p:inputTextarea style="width:1100px" rows="3"
+									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+									value="#{historyBacking.selectedHistoryRecord.obstGynOthers}" />
+							</h:panelGrid>
+						</p:fieldset>
+
 					</p:tab>
 
 					<p:tab id="tab3" title="#{msg['his_history_history']}">
+
+						<h:panelGrid width="100%">
+							<h:outputText value="Motivo de la consulta" />
+							<p:inputTextarea style="width:1100px" rows="3"
+								readonly="#{historyBacking.readOnlySelectedHistoryHistory}"
+								value="#{historyBacking.selectedHistoryHistory.reason}" />
+
+							<p:spacer height="10" />
+
+							<h:outputText value="Enfermedad Actual" />
+							<p:inputTextarea style="width:1100px" rows="3"
+								readonly="#{historyBacking.readOnlySelectedHistoryHistory}"
+								value="#{historyBacking.selectedHistoryHistory.disease}" />
+
+							<p:spacer height="10" />
+
+							<p:fieldset legend="Revisión por Sistemas">
+								<h:panelGrid columns="4" width="100%"
+									columnClasses="width25per,width25per,width25per,width25per">
+									<h:outputLabel value="Cabeza" />
+									<p:selectOneMenu
+										value="#{historyBacking.selectedHistoryHistory.head}"
+										style="width:230px" required="true">
+										<f:selectItem itemLabel="NEGATIVO" itemValue="N" />
+										<f:selectItem itemLabel="POSITIVO" itemValue="P" />
+									</p:selectOneMenu>
+									<h:outputLabel value="Neuromuscular" />
+									<p:selectOneMenu
+										value="#{historyBacking.selectedHistoryHistory.neuromuscular}"
+										style="width:230px" required="true">
+										<f:selectItem itemLabel="NEGATIVO" itemValue="N" />
+										<f:selectItem itemLabel="POSITIVO" itemValue="P" />
+									</p:selectOneMenu>
+									<h:outputLabel value="ORL" />
+									<p:selectOneMenu
+										value="#{historyBacking.selectedHistoryHistory.orl}"
+										style="width:230px" required="true">
+										<f:selectItem itemLabel="NEGATIVO" itemValue="N" />
+										<f:selectItem itemLabel="POSITIVO" itemValue="P" />
+									</p:selectOneMenu>
+									<h:outputLabel value="GU" />
+									<p:selectOneMenu
+										value="#{historyBacking.selectedHistoryHistory.gu}"
+										style="width:230px" required="true">
+										<f:selectItem itemLabel="NEGATIVO" itemValue="N" />
+										<f:selectItem itemLabel="POSITIVO" itemValue="P" />
+									</p:selectOneMenu>
+									<h:outputLabel value="CR" />
+									<p:selectOneMenu
+										value="#{historyBacking.selectedHistoryHistory.cr}"
+										style="width:230px" required="true">
+										<f:selectItem itemLabel="NEGATIVO" itemValue="N" />
+										<f:selectItem itemLabel="POSITIVO" itemValue="P" />
+									</p:selectOneMenu>
+									<h:outputLabel value="Psquiatrico" />
+									<p:selectOneMenu
+										value="#{historyBacking.selectedHistoryHistory.psychiatric}"
+										style="width:230px" required="true">
+										<f:selectItem itemLabel="NEGATIVO" itemValue="N" />
+										<f:selectItem itemLabel="POSITIVO" itemValue="P" />
+									</p:selectOneMenu>
+									<h:outputLabel value="GI" />
+									<p:selectOneMenu
+										value="#{historyBacking.selectedHistoryHistory.gi}"
+										style="width:230px" required="true">
+										<f:selectItem itemLabel="NEGATIVO" itemValue="N" />
+										<f:selectItem itemLabel="POSITIVO" itemValue="P" />
+									</p:selectOneMenu>
+									<h:outputLabel value="Piel y anexos" />
+									<p:selectOneMenu
+										value="#{historyBacking.selectedHistoryHistory.skin}"
+										style="width:230px" required="true">
+										<f:selectItem itemLabel="NEGATIVO" itemValue="N" />
+										<f:selectItem itemLabel="POSITIVO" itemValue="P" />
+									</p:selectOneMenu>
+								</h:panelGrid>
+							</p:fieldset>
+						</h:panelGrid>
+
 					</p:tab>
 
 					<p:tab id="tab4" title="#{msg['his_history_physique']}">
@@ -62,7 +317,7 @@
 
 						<p:outputPanel id="customPanel">
 							<p:selectOneRadio id="customRadio"
-								value="#{patientBacking.optionSearchPatient}" layout="custom">
+								value="#{historyBacking.optionSearchPatient}" layout="custom">
 								<f:selectItem itemLabel="#{msg['sal_key_press_doc']}"
 									itemValue="1" />
 								<f:selectItem itemLabel="#{msg['sal_key_press_nom']}"
@@ -72,12 +327,12 @@
 							<h:panelGrid columns="3" width="100%">
 								<p:radioButton id="opt1" for="customRadio" itemIndex="0" />
 								<h:outputLabel for="opt1" value="#{msg['sal_key_press_doc']}" />
-								<p:inputText value="#{patientBacking.docPatient}"
+								<p:inputText value="#{historyBacking.docPatient}"
 									style="width:100%" />
 
 								<p:radioButton id="opt2" for="customRadio" itemIndex="1" />
 								<h:outputLabel for="opt2" value="#{msg['sal_key_press_nom']}" />
-								<p:inputText value="#{patientBacking.namePatient}"
+								<p:inputText value="#{historyBacking.namePatient}"
 									style="width:100%" />
 
 							</h:panelGrid>
@@ -89,19 +344,19 @@
 							<p:commandButton value="#{msg['btn_search']}"
 								icon="ui-icon-search"
 								update="pnlTable2 recordTable2 btnAddPatient"
-								action="#{patientBacking.searchPatientAction}" />
+								action="#{historyBacking.searchPatientAction}" />
 							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
-								icon="ui-icon-plusthick" update=":form" oncomplete="dlg2.hide()"
-								actionListener="#{patientBacking.searchActionListener}"
-								disabled="#{patientBacking.disabledAddPatient}" />
+								icon="ui-icon-plusthick" update=":form:pnlDetail :form:toolBar"
+								oncomplete="dlg2.hide()"
+								disabled="#{historyBacking.disabledAddPatient}" />
 						</f:facet>
 					</h:panelGrid>
 
 					<p:spacer height="10" />
 					<p:scrollPanel id="pnlTable2" style="width:580px;height:400px">
 						<p:dataTable id="recordTable2" var="rec"
-							value="#{patientBacking.patientModel}" rowKey="#{rec.codeSap}"
-							selection="#{patientBacking.selectedPatient}" paginator="true"
+							value="#{historyBacking.patientModel}" rowKey="#{rec.codeSap}"
+							selection="#{historyBacking.selectedPatient}" paginator="true"
 							rows="15" style="width:570px"
 							emptyMessage="#{msg['glb_no_records_found']}">
 
