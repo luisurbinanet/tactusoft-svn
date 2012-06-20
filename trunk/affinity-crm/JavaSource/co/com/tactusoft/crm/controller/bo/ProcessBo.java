@@ -15,6 +15,9 @@ import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmDoctorException;
 import co.com.tactusoft.crm.model.entities.CrmDoctorSchedule;
+import co.com.tactusoft.crm.model.entities.CrmHistoryHistory;
+import co.com.tactusoft.crm.model.entities.CrmHistoryPhysique;
+import co.com.tactusoft.crm.model.entities.CrmHistoryRecord;
 import co.com.tactusoft.crm.model.entities.CrmHoliday;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
@@ -622,7 +625,8 @@ public class ProcessBo implements Serializable {
 			int state) {
 		List<CrmAppointment> list = new ArrayList<CrmAppointment>();
 		list = dao.find("from CrmAppointment o where o.patient = '" + patient
-				+ "' and o.state = " + state);
+				+ "' and o.state = " + state
+				+ " order by o.startAppointmentDate desc");
 		return list;
 	}
 
@@ -684,7 +688,7 @@ public class ProcessBo implements Serializable {
 		return list;
 	}
 
-	public CrmPatient getListPatientByCodeSap(String codeSap) {
+	public CrmPatient getPatientByCodeSap(String codeSap) {
 		List<CrmPatient> list = null;
 		list = dao
 				.find("from CrmPatient o where o.codeSap = '" + codeSap + "'");
@@ -693,6 +697,53 @@ public class ProcessBo implements Serializable {
 		} else {
 			return new CrmPatient();
 		}
+	}
+
+	public CrmHistoryRecord getHistoryRecord(BigDecimal idPatient) {
+		List<CrmHistoryRecord> list = null;
+		list = dao.find("from CrmHistoryRecord o where o.idPatient = "
+				+ idPatient);
+		if (list.size() > 0) {
+			return list.get(0);
+		} else {
+			return new CrmHistoryRecord();
+		}
+	}
+
+	public CrmHistoryHistory getHistoryHistory(BigDecimal idPatient) {
+		List<CrmHistoryHistory> list = null;
+		list = dao.find("from CrmHistoryHistory o where o.idPatient = "
+				+ idPatient);
+		if (list.size() > 0) {
+			return list.get(0);
+		} else {
+			return new CrmHistoryHistory();
+		}
+	}
+
+	public CrmHistoryPhysique getHistoryPhysique(BigDecimal idPatient) {
+		List<CrmHistoryPhysique> list = null;
+		list = dao.find("from CrmHistoryPhysique o where o.idPatient = "
+				+ idPatient);
+		if (list.size() > 0) {
+			return list.get(0);
+		} else {
+			return new CrmHistoryPhysique();
+		}
+	}
+
+	public int saveHistoryRecord(CrmHistoryRecord entity) {
+		if (entity.getId() == null) {
+			entity.setId(getId(CrmHistoryRecord.class));
+		}
+		return dao.persist(entity);
+	}
+
+	public int saveHistoryHistory(CrmHistoryHistory entity) {
+		if (entity.getId() == null) {
+			entity.setId(getId(CrmHistoryHistory.class));
+		}
+		return dao.persist(entity);
 	}
 
 }
