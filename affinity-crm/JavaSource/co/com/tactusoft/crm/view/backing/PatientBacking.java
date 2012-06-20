@@ -228,8 +228,8 @@ public class PatientBacking extends BaseBacking {
 	}
 
 	public void searchActionListener(ActionEvent event) {
-		selected = processService
-				.getListPatientByCodeSap(selectedPatient.getCodeSap());
+		selected = processService.getPatientByCodeSap(selectedPatient
+				.getCodeSap());
 	}
 
 	public void saveAction() {

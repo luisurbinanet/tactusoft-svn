@@ -20,8 +20,8 @@ public class CrmHistoryPhysique implements java.io.Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private int id;
-	private String idPatient;
+	private BigDecimal id;
+	private BigDecimal idPatient;
 	private String physiqueTa;
 	private String physiqueFc;
 	private String physiqueFr;
@@ -43,12 +43,12 @@ public class CrmHistoryPhysique implements java.io.Serializable {
 	public CrmHistoryPhysique() {
 	}
 
-	public CrmHistoryPhysique(int id, String idPatient) {
+	public CrmHistoryPhysique(BigDecimal id, BigDecimal idPatient) {
 		this.id = id;
 		this.idPatient = idPatient;
 	}
 
-	public CrmHistoryPhysique(int id, String idPatient, String physiqueTa,
+	public CrmHistoryPhysique(BigDecimal id, BigDecimal idPatient, String physiqueTa,
 			String physiqueFc, String physiqueFr, String physiqueTo,
 			BigDecimal physiqueSize, BigDecimal physiqueWeight,
 			String generalState, String skull, String chest, String lungs,
@@ -77,20 +77,20 @@ public class CrmHistoryPhysique implements java.io.Serializable {
 
 	@Id
 	@Column(name = "id", unique = true, nullable = false)
-	public int getId() {
+	public BigDecimal getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(BigDecimal id) {
 		this.id = id;
 	}
 
-	@Column(name = "id_patient", unique = true, nullable = false, length = 45)
-	public String getIdPatient() {
+	@Column(name = "id_patient", unique = true, nullable = false)
+	public BigDecimal getIdPatient() {
 		return this.idPatient;
 	}
 
-	public void setIdPatient(String idPatient) {
+	public void setIdPatient(BigDecimal idPatient) {
 		this.idPatient = idPatient;
 	}
 
