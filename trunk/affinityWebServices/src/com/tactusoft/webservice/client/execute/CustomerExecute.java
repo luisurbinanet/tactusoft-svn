@@ -7,7 +7,6 @@ import java.util.List;
 import javax.xml.rpc.holders.StringHolder;
 
 import com.tactusoft.webservice.client.beans.WSBean;
-import com.tactusoft.webservice.client.custom.LoadParameters;
 import com.tactusoft.webservice.client.holders.Bapicustomer04Holder;
 import com.tactusoft.webservice.client.holders.Bapicustomer05Holder;
 import com.tactusoft.webservice.client.holders.BapicustomerKna1Holder;
@@ -50,14 +49,14 @@ import com.tactusoft.webservice.client.objects.Knvv;
 
 public class CustomerExecute {
 
-	public static String excecute(String ambiente, String tipoDocumento,
-			String nroDocumento, String tratamiento, String nombre,
-			String direccion, String telefono, String celular,
-			String correoElectronico, String pais, String ciudad,
-			String region, String grupoCuenta, String orgVentas,
-			String canalDistribucion, String division, String sociedad,
-			String oficinaVentas, String grupoCliente, String condicionPago,
-			String cuenta) {
+	public static String excecute(String url, String user, String password,
+			String ambiente, String tipoDocumento, String nroDocumento,
+			String tratamiento, String nombre, String direccion,
+			String telefono, String celular, String correoElectronico,
+			String pais, String ciudad, String region, String grupoCuenta,
+			String orgVentas, String canalDistribucion, String division,
+			String sociedad, String oficinaVentas, String grupoCliente,
+			String condicionPago, String cuenta) {
 
 		// CREAR CLIENTES
 		Bapiaddr2 ziBapiaddr2 = new Bapiaddr2();
@@ -151,10 +150,8 @@ public class CustomerExecute {
 		fknviArray[0] = fknvi;
 		TableOfFknviHolder ztXknvi = new TableOfFknviHolder(fknviArray);
 
-		LoadParameters loadParameters = new LoadParameters();
 		ZSD_CUSTOMER_MAINTAIN_ALLProxy execute = new ZSD_CUSTOMER_MAINTAIN_ALLProxy(
-				loadParameters.getURL_CUSTOMER_MAINTAIN_ALL(),
-				loadParameters.getUser(), loadParameters.getPassword());
+				url, user, password);
 		try {
 			execute.zsdCustomerMaintainAll(ziBapiaddr1, ziBapiaddr2,
 					ziCustomerIsConsumer, ziForceExternalNumberRange,
@@ -173,46 +170,10 @@ public class CustomerExecute {
 		return zeKunnr.value;
 	}
 
-	public static Bapikna111[] findSORTL(String doc, int maxCnt) {
-		LoadParameters loadParameters = new LoadParameters();
+	public static Bapikna111[] find(String url, String user, String password,
+			String field, String value, int maxCnt) {
 		ZBAPI_CUSTOMER_FINDProxy zBAPI_CUSTOMER_FINDProxy = new ZBAPI_CUSTOMER_FINDProxy(
-				loadParameters.getURL_CUSTOMER_FIND(),
-				loadParameters.getUser(), loadParameters.getPassword());
-
-		String plHold = "X";
-		TableOfBapikna111Holder resultTab = new TableOfBapikna111Holder();
-
-		Bapikna110 condition1 = new Bapikna110();
-		condition1.setTabname("KNA1");
-		condition1.setFieldname("SORTL");
-		condition1.setFieldvalue(doc);
-
-		Bapikna110[] arrayBapikna110 = new Bapikna110[1];
-		arrayBapikna110[0] = condition1;
-
-		TableOfBapikna110Holder seloptTab = new TableOfBapikna110Holder(
-				arrayBapikna110);
-
-		Bapireturn1 bapireturn1 = null;
-		try {
-			bapireturn1 = zBAPI_CUSTOMER_FINDProxy.customerFind(maxCnt, plHold,
-					resultTab, seloptTab);
-		} catch (RemoteException e1) {
-			e1.printStackTrace();
-		}
-
-		if (bapireturn1.getType().equals("E")) {
-			return null;
-		} else {
-			return resultTab.value;
-		}
-	}
-
-	public static Bapikna111[] find(String field, String value, int maxCnt) {
-		LoadParameters loadParameters = new LoadParameters();
-		ZBAPI_CUSTOMER_FINDProxy zBAPI_CUSTOMER_FINDProxy = new ZBAPI_CUSTOMER_FINDProxy(
-				loadParameters.getURL_CUSTOMER_FIND(),
-				loadParameters.getUser(), loadParameters.getPassword());
+				url, user, password);
 
 		String plHold = "X";
 		TableOfBapikna111Holder resultTab = new TableOfBapikna111Holder();
@@ -243,36 +204,33 @@ public class CustomerExecute {
 		}
 	}
 
-	public static List<WSBean> findByName(String value, int maxCnt) {
+	public static List<WSBean> findByName(String url, String user,
+			String password, String value, int maxCnt) {
 		List<WSBean> result = new ArrayList<WSBean>();
 		value = "*" + value.replace(" ", "*") + "*";
-		Bapikna111[] list = find("NAME1", value, maxCnt);
+		Bapikna111[] list = find(url, password, value, "NAME1", value, maxCnt);
 		for (Bapikna111 row : list) {
 			result.add(new WSBean(row.getCustomer(), row.getFieldvalue()));
 		}
 		return result;
 	}
 
-	public static List<WSBean> findByDoc(String value, int maxCnt) {
+	public static List<WSBean> findByDoc(String url, String user,
+			String password, String value, String society, int maxCnt) {
 		List<WSBean> result = new ArrayList<WSBean>();
-		Bapikna111[] list = find("SORTL", value, maxCnt);
+		Bapikna111[] list = find(url, password, value, "SORTL", value, maxCnt);
 		for (Bapikna111 row : list) {
-			Bapicustomer04 bapicustomer04 = getDetail("4000", row.getCustomer());
+			Bapicustomer04 bapicustomer04 = getDetail(url, user, password,
+					society, row.getCustomer());
 			result.add(new WSBean(row.getCustomer(), bapicustomer04.getName()));
 		}
 		return result;
 	}
 
-	public static String getCustomer(String doc) {
-		Bapikna111[] result = CustomerExecute.findSORTL(doc, 0);
-		return result[0].getCustomer();
-	}
-
-	public static BapicustomerAddressdata[] getAddresses(String customer) {
-		LoadParameters loadParameters = new LoadParameters();
-		Zfi_customers2Proxy Zfi_customers2Proxy = new Zfi_customers2Proxy(
-				loadParameters.getURL_CUSTOMER2(), loadParameters.getUser(),
-				loadParameters.getPassword());
+	public static BapicustomerAddressdata[] getAddresses(String url,
+			String user, String password, String customer) {
+		Zfi_customers2Proxy Zfi_customers2Proxy = new Zfi_customers2Proxy(url,
+				user, password);
 		String CPDOnly = " ";
 		BapicustomerIdrange[] idRange = new BapicustomerIdrange[1];
 		BapicustomerIdrange bapicustomerIdrange = new BapicustomerIdrange();
@@ -296,11 +254,10 @@ public class CustomerExecute {
 		return addressData.value;
 	}
 
-	public static Bapicustomer04 getDetail(String companycode, String customerNo) {
-		LoadParameters loadParameters = new LoadParameters();
-		Zfi_customers2Proxy Zfi_customers2Proxy = new Zfi_customers2Proxy(
-				loadParameters.getURL_CUSTOMER2(), loadParameters.getUser(),
-				loadParameters.getPassword());
+	public static Bapicustomer04 getDetail(String url, String user,
+			String password, String companycode, String customerNo) {
+		Zfi_customers2Proxy Zfi_customers2Proxy = new Zfi_customers2Proxy(url,
+				user, password);
 
 		Bapicustomer04Holder customerAddress = new Bapicustomer04Holder();
 		TableOfBapicustomer02Holder customerBankDetail = new TableOfBapicustomer02Holder();
@@ -329,7 +286,7 @@ public class CustomerExecute {
 		 * "PRUEBAX99@PRUEBAX3.COM");
 		 */
 
-		findByDoc("22734930", 0);
+		findByDoc("http://ansrvsap2.affinity.net:8001/sap/bc/srt/rfc/sap/zcustomer2/300/zcustomer2/zcustomer2","TACTUSOFT","AFFINITY","4000","22734930",0);
 		// Bapicustomer04 detail = getDetail("1000", "0000137537");
 
 		/*
