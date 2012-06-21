@@ -3,18 +3,17 @@ package com.tactusoft.webservice.client.execute;
 import java.util.ArrayList;
 import java.util.List;
 
-import mc_style.functions.soap.sap.document.sap_com.ZWeblists;
-import mc_style.functions.soap.sap.document.sap_com.ZWeblistsResponse;
-import mc_style.functions.soap.sap.document.sap_com.Zweblist;
-import mc_style.functions.soap.sap.document.sap_com.Zweblistline;
-
 import org.apache.axis2.client.Options;
 import org.apache.axis2.client.ServiceClient;
 import org.apache.axis2.transport.http.HTTPConstants;
 import org.apache.axis2.transport.http.HttpTransportProperties;
 
-import com.tactusoft.axis2.ZWEBLISTStub;
 import com.tactusoft.webservice.client.beans.WSBean;
+import com.tactusoft.webservice.client.customlists.ZWEBLISTStub;
+import com.tactusoft.webservice.client.customlists.ZWeblists;
+import com.tactusoft.webservice.client.customlists.ZWeblistsResponse;
+import com.tactusoft.webservice.client.customlists.Zweblist;
+import com.tactusoft.webservice.client.customlists.Zweblistline;
 
 public class CustomLists {
 
@@ -45,6 +44,25 @@ public class CustomLists {
 		}
 
 		return result;
+	}
+
+	public static List<WSBean> getBranchs(String url, String user,
+			String password) {
+		List<WSBean> list = new ArrayList<WSBean>();
+		Zweblistline[] result = getCustomLists(url, user, password,
+				"OFICINAS_VENTA");
+		for (Zweblistline row : result) {
+			if (row.getText1().toString().equals("S")
+					&& !row.getText2().toString().isEmpty()
+					&& !row.getText3().toString().isEmpty()) {
+				WSBean bean = new WSBean();
+				bean.setCode(row.getText2().toString());
+				bean.setNames(row.getText3().toString());
+				bean.setSociety(row.getText4().toString());
+				list.add(bean);
+			}
+		}
+		return list;
 	}
 
 	public static List<WSBean> getDoctors(String url, String user,
@@ -78,11 +96,12 @@ public class CustomLists {
 	}
 
 	public static void main(String args[]) {
-		List<WSBean> list = getGroupSellers(
+		List<WSBean> list = getBranchs(
 				"http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zweblist/300/zweblist/zweblist",
 				"TACTUSOFT", "AFFINITY");
 		for (WSBean row : list) {
-			System.out.println(row.getCode() + " - " + row.getNames());
+			System.out.println(row.getCode() + " - " + row.getNames() + " - "
+					+ row.getSociety());
 		}
 	}
 
