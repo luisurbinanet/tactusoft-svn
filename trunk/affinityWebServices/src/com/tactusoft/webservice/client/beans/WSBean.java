@@ -11,6 +11,7 @@ public class WSBean implements Serializable {
 	private String code;
 	private String names;
 	private String branch;
+	private String society;
 
 	public WSBean() {
 
@@ -49,6 +50,14 @@ public class WSBean implements Serializable {
 
 	public void setBranch(String branch) {
 		this.branch = branch;
+	}
+
+	public String getSociety() {
+		return society;
+	}
+
+	public void setSociety(String society) {
+		this.society = society;
 	}
 
 }

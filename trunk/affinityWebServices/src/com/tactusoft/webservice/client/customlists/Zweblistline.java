@@ -1,52 +1,159 @@
 /**
- * ZWeblistsResponse.java
+ * Zweblistline.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis2 version: 1.6.2  Built on : Apr 17, 2012 (05:34:40 IST)
  */
 
-package mc_style.functions.soap.sap.document.sap_com;
+package com.tactusoft.webservice.client.customlists;
 
 /**
- * ZWeblistsResponse bean class
+ * Zweblistline bean class
  */
 @SuppressWarnings({ "unchecked", "unused" })
-public class ZWeblistsResponse implements org.apache.axis2.databinding.ADBBean {
+public class Zweblistline implements org.apache.axis2.databinding.ADBBean {
+	/*
+	 * This type was generated from the piece of schema that had name =
+	 * Zweblistline Namespace URI =
+	 * urn:sap-com:document:sap:soap:functions:mc-style Namespace Prefix = ns2
+	 */
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	public static final javax.xml.namespace.QName MY_QNAME = new javax.xml.namespace.QName(
-			"urn:sap-com:document:sap:soap:functions:mc-style",
-			"ZWeblistsResponse", "ns2");
-
 	/**
-	 * field for Zdatoslista
+	 * field for Text1
 	 */
 
-	protected mc_style.functions.soap.sap.document.sap_com.Zweblist localZdatoslista;
+	protected com.tactusoft.webservice.client.customlists.Char132 localText1;
 
 	/**
 	 * Auto generated getter method
 	 * 
-	 * @return mc_style.functions.soap.sap.document.sap_com.Zweblist
+	 * @return functions.rfc.sap.document.sap_com.Char132
 	 */
-	public mc_style.functions.soap.sap.document.sap_com.Zweblist getZdatoslista() {
-		return localZdatoslista;
+	public com.tactusoft.webservice.client.customlists.Char132 getText1() {
+		return localText1;
 	}
 
 	/**
 	 * Auto generated setter method
 	 * 
 	 * @param param
-	 *            Zdatoslista
+	 *            Text1
 	 */
-	public void setZdatoslista(
-			mc_style.functions.soap.sap.document.sap_com.Zweblist param) {
+	public void setText1(com.tactusoft.webservice.client.customlists.Char132 param) {
 
-		this.localZdatoslista = param;
+		this.localText1 = param;
+
+	}
+
+	/**
+	 * field for Text2
+	 */
+
+	protected com.tactusoft.webservice.client.customlists.Char132 localText2;
+
+	/**
+	 * Auto generated getter method
+	 * 
+	 * @return functions.rfc.sap.document.sap_com.Char132
+	 */
+	public com.tactusoft.webservice.client.customlists.Char132 getText2() {
+		return localText2;
+	}
+
+	/**
+	 * Auto generated setter method
+	 * 
+	 * @param param
+	 *            Text2
+	 */
+	public void setText2(com.tactusoft.webservice.client.customlists.Char132 param) {
+
+		this.localText2 = param;
+
+	}
+
+	/**
+	 * field for Text3
+	 */
+
+	protected com.tactusoft.webservice.client.customlists.Char132 localText3;
+
+	/**
+	 * Auto generated getter method
+	 * 
+	 * @return functions.rfc.sap.document.sap_com.Char132
+	 */
+	public com.tactusoft.webservice.client.customlists.Char132 getText3() {
+		return localText3;
+	}
+
+	/**
+	 * Auto generated setter method
+	 * 
+	 * @param param
+	 *            Text3
+	 */
+	public void setText3(com.tactusoft.webservice.client.customlists.Char132 param) {
+
+		this.localText3 = param;
+
+	}
+
+	/**
+	 * field for Text4
+	 */
+
+	protected com.tactusoft.webservice.client.customlists.Char132 localText4;
+
+	/**
+	 * Auto generated getter method
+	 * 
+	 * @return functions.rfc.sap.document.sap_com.Char132
+	 */
+	public com.tactusoft.webservice.client.customlists.Char132 getText4() {
+		return localText4;
+	}
+
+	/**
+	 * Auto generated setter method
+	 * 
+	 * @param param
+	 *            Text4
+	 */
+	public void setText4(com.tactusoft.webservice.client.customlists.Char132 param) {
+
+		this.localText4 = param;
+
+	}
+
+	/**
+	 * field for Text5
+	 */
+
+	protected com.tactusoft.webservice.client.customlists.Char132 localText5;
+
+	/**
+	 * Auto generated getter method
+	 * 
+	 * @return functions.rfc.sap.document.sap_com.Char132
+	 */
+	public com.tactusoft.webservice.client.customlists.Char132 getText5() {
+		return localText5;
+	}
+
+	/**
+	 * Auto generated setter method
+	 * 
+	 * @param param
+	 *            Text5
+	 */
+	public void setText5(com.tactusoft.webservice.client.customlists.Char132 param) {
+
+		this.localText5 = param;
 
 	}
 
@@ -62,8 +169,8 @@ public class ZWeblistsResponse implements org.apache.axis2.databinding.ADBBean {
 			throws org.apache.axis2.databinding.ADBException {
 
 		org.apache.axiom.om.OMDataSource dataSource = new org.apache.axis2.databinding.ADBDataSource(
-				this, MY_QNAME);
-		return factory.createOMElement(dataSource, MY_QNAME);
+				this, parentQName);
+		return factory.createOMElement(dataSource, parentQName);
 
 	}
 
@@ -95,21 +202,49 @@ public class ZWeblistsResponse implements org.apache.axis2.databinding.ADBBean {
 					&& (namespacePrefix.trim().length() > 0)) {
 				writeAttribute("xsi",
 						"http://www.w3.org/2001/XMLSchema-instance", "type",
-						namespacePrefix + ":ZWeblistsResponse", xmlWriter);
+						namespacePrefix + ":Zweblistline", xmlWriter);
 			} else {
 				writeAttribute("xsi",
 						"http://www.w3.org/2001/XMLSchema-instance", "type",
-						"ZWeblistsResponse", xmlWriter);
+						"Zweblistline", xmlWriter);
 			}
 
 		}
 
-		if (localZdatoslista == null) {
+		if (localText1 == null) {
 			throw new org.apache.axis2.databinding.ADBException(
-					"Zdatoslista cannot be null!!");
+					"Text1 cannot be null!!");
 		}
-		localZdatoslista.serialize(new javax.xml.namespace.QName("",
-				"Zdatoslista"), xmlWriter);
+		localText1.serialize(new javax.xml.namespace.QName("", "Text1"),
+				xmlWriter);
+
+		if (localText2 == null) {
+			throw new org.apache.axis2.databinding.ADBException(
+					"Text2 cannot be null!!");
+		}
+		localText2.serialize(new javax.xml.namespace.QName("", "Text2"),
+				xmlWriter);
+
+		if (localText3 == null) {
+			throw new org.apache.axis2.databinding.ADBException(
+					"Text3 cannot be null!!");
+		}
+		localText3.serialize(new javax.xml.namespace.QName("", "Text3"),
+				xmlWriter);
+
+		if (localText4 == null) {
+			throw new org.apache.axis2.databinding.ADBException(
+					"Text4 cannot be null!!");
+		}
+		localText4.serialize(new javax.xml.namespace.QName("", "Text4"),
+				xmlWriter);
+
+		if (localText5 == null) {
+			throw new org.apache.axis2.databinding.ADBException(
+					"Text5 cannot be null!!");
+		}
+		localText5.serialize(new javax.xml.namespace.QName("", "Text5"),
+				xmlWriter);
 
 		xmlWriter.writeEndElement();
 
@@ -325,13 +460,45 @@ public class ZWeblistsResponse implements org.apache.axis2.databinding.ADBBean {
 		java.util.ArrayList elementList = new java.util.ArrayList();
 		java.util.ArrayList attribList = new java.util.ArrayList();
 
-		elementList.add(new javax.xml.namespace.QName("", "Zdatoslista"));
+		elementList.add(new javax.xml.namespace.QName("", "Text1"));
 
-		if (localZdatoslista == null) {
+		if (localText1 == null) {
 			throw new org.apache.axis2.databinding.ADBException(
-					"Zdatoslista cannot be null!!");
+					"Text1 cannot be null!!");
 		}
-		elementList.add(localZdatoslista);
+		elementList.add(localText1);
+
+		elementList.add(new javax.xml.namespace.QName("", "Text2"));
+
+		if (localText2 == null) {
+			throw new org.apache.axis2.databinding.ADBException(
+					"Text2 cannot be null!!");
+		}
+		elementList.add(localText2);
+
+		elementList.add(new javax.xml.namespace.QName("", "Text3"));
+
+		if (localText3 == null) {
+			throw new org.apache.axis2.databinding.ADBException(
+					"Text3 cannot be null!!");
+		}
+		elementList.add(localText3);
+
+		elementList.add(new javax.xml.namespace.QName("", "Text4"));
+
+		if (localText4 == null) {
+			throw new org.apache.axis2.databinding.ADBException(
+					"Text4 cannot be null!!");
+		}
+		elementList.add(localText4);
+
+		elementList.add(new javax.xml.namespace.QName("", "Text5"));
+
+		if (localText5 == null) {
+			throw new org.apache.axis2.databinding.ADBException(
+					"Text5 cannot be null!!");
+		}
+		elementList.add(localText5);
 
 		return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(
 				qName, elementList.toArray(), attribList.toArray());
@@ -354,10 +521,9 @@ public class ZWeblistsResponse implements org.apache.axis2.databinding.ADBBean {
 		 * outer element
 		 */
 		@SuppressWarnings("rawtypes")
-		public static ZWeblistsResponse parse(
-				javax.xml.stream.XMLStreamReader reader)
+		public static Zweblistline parse(javax.xml.stream.XMLStreamReader reader)
 				throws java.lang.Exception {
-			ZWeblistsResponse object = new ZWeblistsResponse();
+			Zweblistline object = new Zweblistline();
 
 			int event;
 			java.lang.String nillableValue = null;
@@ -385,12 +551,12 @@ public class ZWeblistsResponse implements org.apache.axis2.databinding.ADBBean {
 						java.lang.String type = fullTypeName
 								.substring(fullTypeName.indexOf(":") + 1);
 
-						if (!"ZWeblistsResponse".equals(type)) {
+						if (!"Zweblistline".equals(type)) {
 							// find namespace for the prefix
 							java.lang.String nsUri = reader
 									.getNamespaceContext().getNamespaceURI(
 											nsPrefix);
-							return (ZWeblistsResponse) functions.rfc.sap.document.sap_com.ExtensionMapper
+							return (Zweblistline) com.tactusoft.webservice.client.customlists.ExtensionMapper
 									.getTypeObject(nsUri, type, reader);
 						}
 
@@ -409,10 +575,94 @@ public class ZWeblistsResponse implements org.apache.axis2.databinding.ADBBean {
 					reader.next();
 
 				if (reader.isStartElement()
-						&& new javax.xml.namespace.QName("", "Zdatoslista")
+						&& new javax.xml.namespace.QName("", "Text1")
 								.equals(reader.getName())) {
 
-					object.setZdatoslista(mc_style.functions.soap.sap.document.sap_com.Zweblist.Factory
+					object.setText1(com.tactusoft.webservice.client.customlists.Char132.Factory
+							.parse(reader));
+
+					reader.next();
+
+				} // End of if for expected property start element
+
+				else {
+					// A start element we are not expecting indicates an invalid
+					// parameter was passed
+					throw new org.apache.axis2.databinding.ADBException(
+							"Unexpected subelement " + reader.getName());
+				}
+
+				while (!reader.isStartElement() && !reader.isEndElement())
+					reader.next();
+
+				if (reader.isStartElement()
+						&& new javax.xml.namespace.QName("", "Text2")
+								.equals(reader.getName())) {
+
+					object.setText2(com.tactusoft.webservice.client.customlists.Char132.Factory
+							.parse(reader));
+
+					reader.next();
+
+				} // End of if for expected property start element
+
+				else {
+					// A start element we are not expecting indicates an invalid
+					// parameter was passed
+					throw new org.apache.axis2.databinding.ADBException(
+							"Unexpected subelement " + reader.getName());
+				}
+
+				while (!reader.isStartElement() && !reader.isEndElement())
+					reader.next();
+
+				if (reader.isStartElement()
+						&& new javax.xml.namespace.QName("", "Text3")
+								.equals(reader.getName())) {
+
+					object.setText3(com.tactusoft.webservice.client.customlists.Char132.Factory
+							.parse(reader));
+
+					reader.next();
+
+				} // End of if for expected property start element
+
+				else {
+					// A start element we are not expecting indicates an invalid
+					// parameter was passed
+					throw new org.apache.axis2.databinding.ADBException(
+							"Unexpected subelement " + reader.getName());
+				}
+
+				while (!reader.isStartElement() && !reader.isEndElement())
+					reader.next();
+
+				if (reader.isStartElement()
+						&& new javax.xml.namespace.QName("", "Text4")
+								.equals(reader.getName())) {
+
+					object.setText4(com.tactusoft.webservice.client.customlists.Char132.Factory
+							.parse(reader));
+
+					reader.next();
+
+				} // End of if for expected property start element
+
+				else {
+					// A start element we are not expecting indicates an invalid
+					// parameter was passed
+					throw new org.apache.axis2.databinding.ADBException(
+							"Unexpected subelement " + reader.getName());
+				}
+
+				while (!reader.isStartElement() && !reader.isEndElement())
+					reader.next();
+
+				if (reader.isStartElement()
+						&& new javax.xml.namespace.QName("", "Text5")
+								.equals(reader.getName())) {
+
+					object.setText5(com.tactusoft.webservice.client.customlists.Char132.Factory
 							.parse(reader));
 
 					reader.next();

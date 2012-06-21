@@ -8,6 +8,7 @@
 
 package com.tactusoft.axis2;
 
+
 /*
  *  ZWEBLIST java interface
  */
@@ -20,9 +21,9 @@ public interface ZWEBLIST {
 	 * @param zWeblists0
 	 */
 
-	public mc_style.functions.soap.sap.document.sap_com.ZWeblistsResponse zWeblists(
+	public com.tactusoft.webservice.client.customlists.ZWeblistsResponse zWeblists(
 
-	mc_style.functions.soap.sap.document.sap_com.ZWeblists zWeblists0)
+	com.tactusoft.webservice.client.customlists.ZWeblists zWeblists0)
 			throws java.rmi.RemoteException;
 
 	/**
@@ -32,9 +33,9 @@ public interface ZWEBLIST {
 	 */
 	public void startzWeblists(
 
-	mc_style.functions.soap.sap.document.sap_com.ZWeblists zWeblists0,
+	com.tactusoft.webservice.client.customlists.ZWeblists zWeblists0,
 
-	final com.tactusoft.axis2.ZWEBLISTCallbackHandler callback)
+	final com.tactusoft.webservice.client.customlists.ZWEBLISTCallbackHandler callback)
 
 	throws java.rmi.RemoteException;
 

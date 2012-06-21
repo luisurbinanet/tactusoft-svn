@@ -4,7 +4,10 @@
  * This file was auto-generated from WSDL
  * by the Apache Axis2 version: 1.6.2  Built on : Apr 17, 2012 (05:33:49 IST)
  */
-package com.tactusoft.axis2;
+package com.tactusoft.webservice.client.customlists;
+
+import com.tactusoft.axis2.ZWEBLIST;
+
 
 /*
  *  ZWEBLISTStub java implementation
@@ -144,14 +147,14 @@ public class ZWEBLISTStub extends org.apache.axis2.client.Stub implements
 	/**
 	 * Auto generated method signature
 	 * 
-	 * @see com.tactusoft.axis2.ZWEBLIST#zWeblists
+	 * @see com.tactusoft.com.tactusoft.webservice.client.customlists.ZWEBLIST#zWeblists
 	 * @param zWeblists2
 	 */
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public mc_style.functions.soap.sap.document.sap_com.ZWeblistsResponse zWeblists(
+	public com.tactusoft.webservice.client.customlists.ZWeblistsResponse zWeblists(
 
-	mc_style.functions.soap.sap.document.sap_com.ZWeblists zWeblists2)
+	com.tactusoft.webservice.client.customlists.ZWeblists zWeblists2)
 
 	throws java.rmi.RemoteException
 
@@ -204,10 +207,10 @@ public class ZWEBLISTStub extends org.apache.axis2.client.Stub implements
 
 			java.lang.Object object = fromOM(
 					_returnEnv.getBody().getFirstElement(),
-					mc_style.functions.soap.sap.document.sap_com.ZWeblistsResponse.class,
+					com.tactusoft.webservice.client.customlists.ZWeblistsResponse.class,
 					getEnvelopeNamespaces(_returnEnv));
 
-			return (mc_style.functions.soap.sap.document.sap_com.ZWeblistsResponse) object;
+			return (com.tactusoft.webservice.client.customlists.ZWeblistsResponse) object;
 
 		} catch (org.apache.axis2.AxisFault f) {
 
@@ -283,14 +286,14 @@ public class ZWEBLISTStub extends org.apache.axis2.client.Stub implements
 	/**
 	 * Auto generated method signature for Asynchronous Invocations
 	 * 
-	 * @see com.tactusoft.axis2.ZWEBLIST#startzWeblists
+	 * @see com.tactusoft.com.tactusoft.webservice.client.customlists.ZWEBLIST#startzWeblists
 	 * @param zWeblists2
 	 */
 	public void startzWeblists(
 
-	mc_style.functions.soap.sap.document.sap_com.ZWeblists zWeblists2,
+	com.tactusoft.webservice.client.customlists.ZWeblists zWeblists2,
 
-	final com.tactusoft.axis2.ZWEBLISTCallbackHandler callback)
+	final com.tactusoft.webservice.client.customlists.ZWEBLISTCallbackHandler callback)
 
 	throws java.rmi.RemoteException {
 
@@ -339,9 +342,9 @@ public class ZWEBLISTStub extends org.apache.axis2.client.Stub implements
 
 							java.lang.Object object = fromOM(
 									resultEnv.getBody().getFirstElement(),
-									mc_style.functions.soap.sap.document.sap_com.ZWeblistsResponse.class,
+									com.tactusoft.webservice.client.customlists.ZWeblistsResponse.class,
 									getEnvelopeNamespaces(resultEnv));
-							callback.receiveResultzWeblists((mc_style.functions.soap.sap.document.sap_com.ZWeblistsResponse) object);
+							callback.receiveResultzWeblists((com.tactusoft.webservice.client.customlists.ZWeblistsResponse) object);
 
 						} catch (org.apache.axis2.AxisFault e) {
 							callback.receiveErrorzWeblists(e);
@@ -505,13 +508,13 @@ public class ZWEBLISTStub extends org.apache.axis2.client.Stub implements
 	// http://ansrvsap2.affinity.net:8001/sap/bc/srt/rfc/sap/zweblist/300/zweblist/zweblist
 	@SuppressWarnings("unused")
 	private org.apache.axiom.om.OMElement toOM(
-			mc_style.functions.soap.sap.document.sap_com.ZWeblists param,
+			com.tactusoft.webservice.client.customlists.ZWeblists param,
 			boolean optimizeContent) throws org.apache.axis2.AxisFault {
 
 		try {
 			return param
 					.getOMElement(
-							mc_style.functions.soap.sap.document.sap_com.ZWeblists.MY_QNAME,
+							com.tactusoft.webservice.client.customlists.ZWeblists.MY_QNAME,
 							org.apache.axiom.om.OMAbstractFactory
 									.getOMFactory());
 		} catch (org.apache.axis2.databinding.ADBException e) {
@@ -522,13 +525,13 @@ public class ZWEBLISTStub extends org.apache.axis2.client.Stub implements
 
 	@SuppressWarnings("unused")
 	private org.apache.axiom.om.OMElement toOM(
-			mc_style.functions.soap.sap.document.sap_com.ZWeblistsResponse param,
+			com.tactusoft.webservice.client.customlists.ZWeblistsResponse param,
 			boolean optimizeContent) throws org.apache.axis2.AxisFault {
 
 		try {
 			return param
 					.getOMElement(
-							mc_style.functions.soap.sap.document.sap_com.ZWeblistsResponse.MY_QNAME,
+							com.tactusoft.webservice.client.customlists.ZWeblistsResponse.MY_QNAME,
 							org.apache.axiom.om.OMAbstractFactory
 									.getOMFactory());
 		} catch (org.apache.axis2.databinding.ADBException e) {
@@ -539,7 +542,7 @@ public class ZWEBLISTStub extends org.apache.axis2.client.Stub implements
 
 	private org.apache.axiom.soap.SOAPEnvelope toEnvelope(
 			org.apache.axiom.soap.SOAPFactory factory,
-			mc_style.functions.soap.sap.document.sap_com.ZWeblists param,
+			com.tactusoft.webservice.client.customlists.ZWeblists param,
 			boolean optimizeContent, javax.xml.namespace.QName methodQName)
 			throws org.apache.axis2.AxisFault {
 
@@ -551,7 +554,7 @@ public class ZWEBLISTStub extends org.apache.axis2.client.Stub implements
 					.getBody()
 					.addChild(
 							param.getOMElement(
-									mc_style.functions.soap.sap.document.sap_com.ZWeblists.MY_QNAME,
+									com.tactusoft.webservice.client.customlists.ZWeblists.MY_QNAME,
 									factory));
 			return emptyEnvelope;
 		} catch (org.apache.axis2.databinding.ADBException e) {
@@ -578,18 +581,18 @@ public class ZWEBLISTStub extends org.apache.axis2.client.Stub implements
 
 		try {
 
-			if (mc_style.functions.soap.sap.document.sap_com.ZWeblists.class
+			if (com.tactusoft.webservice.client.customlists.ZWeblists.class
 					.equals(type)) {
 
-				return mc_style.functions.soap.sap.document.sap_com.ZWeblists.Factory
+				return com.tactusoft.webservice.client.customlists.ZWeblists.Factory
 						.parse(param.getXMLStreamReaderWithoutCaching());
 
 			}
 
-			if (mc_style.functions.soap.sap.document.sap_com.ZWeblistsResponse.class
+			if (com.tactusoft.webservice.client.customlists.ZWeblistsResponse.class
 					.equals(type)) {
 
-				return mc_style.functions.soap.sap.document.sap_com.ZWeblistsResponse.Factory
+				return com.tactusoft.webservice.client.customlists.ZWeblistsResponse.Factory
 						.parse(param.getXMLStreamReaderWithoutCaching());
 
 			}

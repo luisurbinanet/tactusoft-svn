@@ -5,7 +5,7 @@
  * by the Apache Axis2 version: 1.6.2  Built on : Apr 17, 2012 (05:34:40 IST)
  */
 
-package mc_style.functions.soap.sap.document.sap_com;
+package com.tactusoft.webservice.client.customlists;
 
 /**
  * ZWeblists bean class
@@ -26,14 +26,14 @@ public class ZWeblists implements org.apache.axis2.databinding.ADBBean {
 	 * field for Zdatoslista
 	 */
 
-	protected mc_style.functions.soap.sap.document.sap_com.Zweblist localZdatoslista;
+	protected com.tactusoft.webservice.client.customlists.Zweblist localZdatoslista;
 
 	/**
 	 * Auto generated getter method
 	 * 
 	 * @return mc_style.functions.soap.sap.document.sap_com.Zweblist
 	 */
-	public mc_style.functions.soap.sap.document.sap_com.Zweblist getZdatoslista() {
+	public com.tactusoft.webservice.client.customlists.Zweblist getZdatoslista() {
 		return localZdatoslista;
 	}
 
@@ -44,7 +44,7 @@ public class ZWeblists implements org.apache.axis2.databinding.ADBBean {
 	 *            Zdatoslista
 	 */
 	public void setZdatoslista(
-			mc_style.functions.soap.sap.document.sap_com.Zweblist param) {
+			com.tactusoft.webservice.client.customlists.Zweblist param) {
 
 		this.localZdatoslista = param;
 
@@ -443,7 +443,7 @@ public class ZWeblists implements org.apache.axis2.databinding.ADBBean {
 							java.lang.String nsUri = reader
 									.getNamespaceContext().getNamespaceURI(
 											nsPrefix);
-							return (ZWeblists) functions.rfc.sap.document.sap_com.ExtensionMapper
+							return (ZWeblists) com.tactusoft.webservice.client.customlists.ExtensionMapper
 									.getTypeObject(nsUri, type, reader);
 						}
 
@@ -465,7 +465,7 @@ public class ZWeblists implements org.apache.axis2.databinding.ADBBean {
 						&& new javax.xml.namespace.QName("", "Zdatoslista")
 								.equals(reader.getName())) {
 
-					object.setZdatoslista(mc_style.functions.soap.sap.document.sap_com.Zweblist.Factory
+					object.setZdatoslista(com.tactusoft.webservice.client.customlists.Zweblist.Factory
 							.parse(reader));
 
 					reader.next();
