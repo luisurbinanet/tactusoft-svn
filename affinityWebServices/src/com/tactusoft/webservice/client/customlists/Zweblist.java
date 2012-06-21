@@ -1,60 +1,100 @@
 /**
- * Char132.java
+ * Zweblist.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis2 version: 1.6.2  Built on : Apr 17, 2012 (05:34:40 IST)
  */
 
-package functions.rfc.sap.document.sap_com;
+package com.tactusoft.webservice.client.customlists;
 
 /**
- * Char132 bean class
+ * Zweblist bean class
  */
-@SuppressWarnings({ "unused" })
-public class Char132 implements org.apache.axis2.databinding.ADBBean {
+@SuppressWarnings({ "unchecked", "unused" })
+public class Zweblist implements org.apache.axis2.databinding.ADBBean {
+	/*
+	 * This type was generated from the piece of schema that had name = Zweblist
+	 * Namespace URI = urn:sap-com:document:sap:soap:functions:mc-style
+	 * Namespace Prefix = ns2
+	 */
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public static final javax.xml.namespace.QName MY_QNAME = new javax.xml.namespace.QName(
-			"urn:sap-com:document:sap:rfc:functions", "char132", "ns1");
-
 	/**
-	 * field for Char132
+	 * field for Item This was an Array!
 	 */
 
-	protected java.lang.String localChar132;
+	protected com.tactusoft.webservice.client.customlists.Zweblistline[] localItem;
+
+	/*
+	 * This tracker boolean wil be used to detect whether the user called the
+	 * set method for this attribute. It will be used to determine whether to
+	 * include this field in the serialized XML
+	 */
+	protected boolean localItemTracker = false;
+
+	public boolean isItemSpecified() {
+		return localItemTracker;
+	}
 
 	/**
 	 * Auto generated getter method
 	 * 
-	 * @return java.lang.String
+	 * @return mc_style.functions.soap.sap.document.sap_com.Zweblistline[]
 	 */
-	public java.lang.String getChar132() {
-		return localChar132;
+	public com.tactusoft.webservice.client.customlists.Zweblistline[] getItem() {
+		return localItem;
+	}
+
+	/**
+	 * validate the array for Item
+	 */
+	protected void validateItem(
+			com.tactusoft.webservice.client.customlists.Zweblistline[] param) {
+
 	}
 
 	/**
 	 * Auto generated setter method
 	 * 
 	 * @param param
-	 *            Char132
+	 *            Item
 	 */
-	public void setChar132(java.lang.String param) {
+	public void setItem(
+			com.tactusoft.webservice.client.customlists.Zweblistline[] param) {
 
-		if ((java.lang.String.valueOf(param).length() <= 132)) {
-			this.localChar132 = param;
-		} else {
-			throw new java.lang.RuntimeException();
-		}
+		validateItem(param);
 
+		localItemTracker = param != null;
+
+		this.localItem = param;
 	}
 
-	public java.lang.String toString() {
+	/**
+	 * Auto generated add method for the array for convenience
+	 * 
+	 * @param param
+	 *            mc_style.functions.soap.sap.document.sap_com.Zweblistline
+	 */
+	@SuppressWarnings("rawtypes")
+	public void addItem(
+			com.tactusoft.webservice.client.customlists.Zweblistline param) {
+		if (localItem == null) {
+			localItem = new com.tactusoft.webservice.client.customlists.Zweblistline[] {};
+		}
 
-		return localChar132.toString();
+		// update the setting tracker
+		localItemTracker = true;
+
+		java.util.List list = org.apache.axis2.databinding.utils.ConverterUtil
+				.toList(localItem);
+		list.add(param);
+		this.localItem = (com.tactusoft.webservice.client.customlists.Zweblistline[]) list
+				.toArray(new com.tactusoft.webservice.client.customlists.Zweblistline[list
+						.size()]);
 
 	}
 
@@ -70,8 +110,8 @@ public class Char132 implements org.apache.axis2.databinding.ADBBean {
 			throws org.apache.axis2.databinding.ADBException {
 
 		org.apache.axiom.om.OMDataSource dataSource = new org.apache.axis2.databinding.ADBDataSource(
-				this, MY_QNAME);
-		return factory.createOMElement(dataSource, MY_QNAME);
+				this, parentQName);
+		return factory.createOMElement(dataSource, parentQName);
 
 	}
 
@@ -87,47 +127,59 @@ public class Char132 implements org.apache.axis2.databinding.ADBBean {
 			throws javax.xml.stream.XMLStreamException,
 			org.apache.axis2.databinding.ADBException {
 
-		// We can safely assume an element has only one type associated with it
+		java.lang.String prefix = null;
+		java.lang.String namespace = null;
 
-		java.lang.String namespace = parentQName.getNamespaceURI();
-		java.lang.String _localName = parentQName.getLocalPart();
+		prefix = parentQName.getPrefix();
+		namespace = parentQName.getNamespaceURI();
+		writeStartElement(prefix, namespace, parentQName.getLocalPart(),
+				xmlWriter);
 
-		writeStartElement(null, namespace, _localName, xmlWriter);
-
-		// add the type details if this is used in a simple type
 		if (serializeType) {
+
 			java.lang.String namespacePrefix = registerPrefix(xmlWriter,
-					"urn:sap-com:document:sap:rfc:functions");
+					"urn:sap-com:document:sap:soap:functions:mc-style");
 			if ((namespacePrefix != null)
 					&& (namespacePrefix.trim().length() > 0)) {
 				writeAttribute("xsi",
 						"http://www.w3.org/2001/XMLSchema-instance", "type",
-						namespacePrefix + ":char132", xmlWriter);
+						namespacePrefix + ":Zweblist", xmlWriter);
 			} else {
 				writeAttribute("xsi",
 						"http://www.w3.org/2001/XMLSchema-instance", "type",
-						"char132", xmlWriter);
+						"Zweblist", xmlWriter);
+			}
+
+		}
+		if (localItemTracker) {
+			if (localItem != null) {
+				for (int i = 0; i < localItem.length; i++) {
+					if (localItem[i] != null) {
+						localItem[i].serialize(new javax.xml.namespace.QName(
+								"", "item"), xmlWriter);
+					} else {
+
+						// we don't have to do any thing since minOccures is
+						// zero
+
+					}
+
+				}
+			} else {
+
+				throw new org.apache.axis2.databinding.ADBException(
+						"item cannot be null!!");
+
 			}
 		}
-
-		if (localChar132 == null) {
-
-			throw new org.apache.axis2.databinding.ADBException(
-					"char132 cannot be null !!");
-
-		} else {
-
-			xmlWriter.writeCharacters(localChar132);
-
-		}
-
 		xmlWriter.writeEndElement();
 
 	}
 
 	private static java.lang.String generatePrefix(java.lang.String namespace) {
-		if (namespace.equals("urn:sap-com:document:sap:rfc:functions")) {
-			return "ns1";
+		if (namespace
+				.equals("urn:sap-com:document:sap:soap:functions:mc-style")) {
+			return "ns2";
 		}
 		return org.apache.axis2.databinding.utils.BeanUtil.getUniquePrefix();
 	}
@@ -326,17 +378,40 @@ public class Char132 implements org.apache.axis2.databinding.ADBBean {
 	 * databinding method to get an XML representation of this object
 	 * 
 	 */
+	@SuppressWarnings("rawtypes")
 	public javax.xml.stream.XMLStreamReader getPullParser(
 			javax.xml.namespace.QName qName)
 			throws org.apache.axis2.databinding.ADBException {
 
-		// We can safely assume an element has only one type associated with it
+		java.util.ArrayList elementList = new java.util.ArrayList();
+		java.util.ArrayList attribList = new java.util.ArrayList();
+
+		if (localItemTracker) {
+			if (localItem != null) {
+				for (int i = 0; i < localItem.length; i++) {
+
+					if (localItem[i] != null) {
+						elementList.add(new javax.xml.namespace.QName("",
+								"item"));
+						elementList.add(localItem[i]);
+					} else {
+
+						// nothing to do
+
+					}
+
+				}
+			} else {
+
+				throw new org.apache.axis2.databinding.ADBException(
+						"item cannot be null!!");
+
+			}
+
+		}
+
 		return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(
-				MY_QNAME,
-				new java.lang.Object[] {
-						org.apache.axis2.databinding.utils.reader.ADBXMLStreamReader.ELEMENT_TEXT,
-						org.apache.axis2.databinding.utils.ConverterUtil
-								.convertToString(localChar132) }, null);
+				qName, elementList.toArray(), attribList.toArray());
 
 	}
 
@@ -344,31 +419,6 @@ public class Char132 implements org.apache.axis2.databinding.ADBBean {
 	 * Factory class that keeps the parse method
 	 */
 	public static class Factory {
-
-		public static Char132 fromString(java.lang.String value,
-				java.lang.String namespaceURI) {
-			Char132 returnValue = new Char132();
-
-			returnValue
-					.setChar132(org.apache.axis2.databinding.utils.ConverterUtil
-							.convertToString(value));
-
-			return returnValue;
-		}
-
-		public static Char132 fromString(
-				javax.xml.stream.XMLStreamReader xmlStreamReader,
-				java.lang.String content) {
-			if (content.indexOf(":") > -1) {
-				java.lang.String prefix = content.substring(0,
-						content.indexOf(":"));
-				java.lang.String namespaceUri = xmlStreamReader
-						.getNamespaceContext().getNamespaceURI(prefix);
-				return Char132.Factory.fromString(content, namespaceUri);
-			} else {
-				return Char132.Factory.fromString(content, "");
-			}
-		}
 
 		/**
 		 * static method to create the object Precondition: If this object is an
@@ -381,9 +431,9 @@ public class Char132 implements org.apache.axis2.databinding.ADBBean {
 		 * outer element
 		 */
 		@SuppressWarnings("rawtypes")
-		public static Char132 parse(javax.xml.stream.XMLStreamReader reader)
+		public static Zweblist parse(javax.xml.stream.XMLStreamReader reader)
 				throws java.lang.Exception {
-			Char132 object = new Char132();
+			Zweblist object = new Zweblist();
 
 			int event;
 			java.lang.String nillableValue = null;
@@ -394,45 +444,105 @@ public class Char132 implements org.apache.axis2.databinding.ADBBean {
 				while (!reader.isStartElement() && !reader.isEndElement())
 					reader.next();
 
+				if (reader.getAttributeValue(
+						"http://www.w3.org/2001/XMLSchema-instance", "type") != null) {
+					java.lang.String fullTypeName = reader
+							.getAttributeValue(
+									"http://www.w3.org/2001/XMLSchema-instance",
+									"type");
+					if (fullTypeName != null) {
+						java.lang.String nsPrefix = null;
+						if (fullTypeName.indexOf(":") > -1) {
+							nsPrefix = fullTypeName.substring(0,
+									fullTypeName.indexOf(":"));
+						}
+						nsPrefix = nsPrefix == null ? "" : nsPrefix;
+
+						java.lang.String type = fullTypeName
+								.substring(fullTypeName.indexOf(":") + 1);
+
+						if (!"Zweblist".equals(type)) {
+							// find namespace for the prefix
+							java.lang.String nsUri = reader
+									.getNamespaceContext().getNamespaceURI(
+											nsPrefix);
+							return (Zweblist) com.tactusoft.webservice.client.customlists.ExtensionMapper
+									.getTypeObject(nsUri, type, reader);
+						}
+
+					}
+
+				}
+
 				// Note all attributes that were handled. Used to differ normal
 				// attributes
 				// from anyAttributes.
 				java.util.Vector handledAttributes = new java.util.Vector();
 
-				while (!reader.isEndElement()) {
-					if (reader.isStartElement() || reader.hasText()) {
+				reader.next();
 
-						if (reader.isStartElement() || reader.hasText()) {
+				java.util.ArrayList list1 = new java.util.ArrayList();
 
-							nillableValue = reader
-									.getAttributeValue(
-											"http://www.w3.org/2001/XMLSchema-instance",
-											"nil");
-							if ("true".equals(nillableValue)
-									|| "1".equals(nillableValue)) {
-								throw new org.apache.axis2.databinding.ADBException(
-										"The element: " + "char132"
-												+ "  cannot be null");
-							}
+				while (!reader.isStartElement() && !reader.isEndElement())
+					reader.next();
 
-							java.lang.String content = reader.getElementText();
+				if (reader.isStartElement()
+						&& new javax.xml.namespace.QName("", "item")
+								.equals(reader.getName())) {
 
-							object.setChar132(org.apache.axis2.databinding.utils.ConverterUtil
-									.convertToString(content));
+					// Process the array and step past its final element's end.
+					list1.add(com.tactusoft.webservice.client.customlists.Zweblistline.Factory
+							.parse(reader));
 
-						} // End of if for expected property start element
-
-						else {
-							// A start element we are not expecting indicates an
-							// invalid parameter was passed
-							throw new org.apache.axis2.databinding.ADBException(
-									"Unexpected subelement " + reader.getName());
-						}
-
-					} else {
+					// loop until we find a start element that is not part of
+					// this array
+					boolean loopDone1 = false;
+					while (!loopDone1) {
+						// We should be at the end element, but make sure
+						while (!reader.isEndElement())
+							reader.next();
+						// Step out of this element
 						reader.next();
+						// Step to next element event.
+						while (!reader.isStartElement()
+								&& !reader.isEndElement())
+							reader.next();
+						if (reader.isEndElement()) {
+							// two continuous end elements means we are exiting
+							// the xml structure
+							loopDone1 = true;
+						} else {
+							if (new javax.xml.namespace.QName("", "item")
+									.equals(reader.getName())) {
+								list1.add(com.tactusoft.webservice.client.customlists.Zweblistline.Factory
+										.parse(reader));
+
+							} else {
+								loopDone1 = true;
+							}
+						}
 					}
-				} // end of while loop
+					// call the converter utility to convert and set the array
+
+					object.setItem((com.tactusoft.webservice.client.customlists.Zweblistline[]) org.apache.axis2.databinding.utils.ConverterUtil
+							.convertToArray(
+									com.tactusoft.webservice.client.customlists.Zweblistline.class,
+									list1));
+
+				} // End of if for expected property start element
+
+				else {
+
+				}
+
+				while (!reader.isStartElement() && !reader.isEndElement())
+					reader.next();
+
+				if (reader.isStartElement())
+					// A start element we are not expecting indicates a trailing
+					// invalid property
+					throw new org.apache.axis2.databinding.ADBException(
+							"Unexpected subelement " + reader.getName());
 
 			} catch (javax.xml.stream.XMLStreamException e) {
 				throw new java.lang.Exception(e);

@@ -5,7 +5,7 @@
  * by the Apache Axis2 version: 1.6.2  Built on : Apr 17, 2012 (05:34:40 IST)
  */
 
-package functions.rfc.sap.document.sap_com;
+package com.tactusoft.webservice.client.customlists;
 
 /**
  * ExtensionMapper class
@@ -19,7 +19,7 @@ public class ExtensionMapper {
 		if ("urn:sap-com:document:sap:rfc:functions".equals(namespaceURI)
 				&& "char132".equals(typeName)) {
 
-			return functions.rfc.sap.document.sap_com.Char132.Factory
+			return com.tactusoft.webservice.client.customlists.Char132.Factory
 					.parse(reader);
 
 		}
@@ -27,7 +27,7 @@ public class ExtensionMapper {
 		if ("urn:sap-com:document:sap:soap:functions:mc-style"
 				.equals(namespaceURI) && "Zweblistline".equals(typeName)) {
 
-			return mc_style.functions.soap.sap.document.sap_com.Zweblistline.Factory
+			return com.tactusoft.webservice.client.customlists.Zweblistline.Factory
 					.parse(reader);
 
 		}
@@ -35,7 +35,7 @@ public class ExtensionMapper {
 		if ("urn:sap-com:document:sap:soap:functions:mc-style"
 				.equals(namespaceURI) && "Zweblist".equals(typeName)) {
 
-			return mc_style.functions.soap.sap.document.sap_com.Zweblist.Factory
+			return com.tactusoft.webservice.client.customlists.Zweblist.Factory
 					.parse(reader);
 
 		}

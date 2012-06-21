@@ -6,7 +6,7 @@
  * by the Apache Axis2 version: 1.6.2  Built on : Apr 17, 2012 (05:33:49 IST)
  */
 
-    package com.tactusoft.axis2;
+    package com.tactusoft.webservice.client.customlists;
 
     /**
      *  ZWEBLISTCallbackHandler Callback class, Users can extend this class and implement
@@ -49,7 +49,7 @@
             * override this method for handling normal response from zWeblists operation
             */
            public void receiveResultzWeblists(
-                    mc_style.functions.soap.sap.document.sap_com.ZWeblistsResponse result
+                    com.tactusoft.webservice.client.customlists.ZWeblistsResponse result
                         ) {
            }
 
