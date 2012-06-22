@@ -95,8 +95,68 @@ public class CustomLists {
 		return list;
 	}
 
+	public static List<WSBean> getSalesArea(String url, String user,
+			String password) {
+		List<WSBean> list = new ArrayList<WSBean>();
+		Zweblistline[] result = getCustomLists(url, user, password,
+				"ZONAS_VENTA");
+		for (Zweblistline row : result) {
+			if (!row.getText2().toString().isEmpty()
+					&& !row.getText3().toString().isEmpty()) {
+				list.add(new WSBean(row.getText2().toString(), row.getText3()
+						.toString(), row.getText1().toString()));
+			}
+		}
+		return list;
+	}
+	
+	public static List<WSBean> getPaymentMethod(String url, String user,
+			String password) {
+		List<WSBean> list = new ArrayList<WSBean>();
+		Zweblistline[] result = getCustomLists(url, user, password,
+				"VIAS_PAGO");
+		for (Zweblistline row : result) {
+			if (!row.getText2().toString().isEmpty()
+					&& !row.getText3().toString().isEmpty()) {
+				list.add(new WSBean(row.getText2().toString(), row.getText3()
+						.toString(), row.getText1().toString()));
+			}
+		}
+		return list;
+	}
+
+	public static List<WSBean> getClientGroup(String url, String user,
+			String password) {
+		List<WSBean> list = new ArrayList<WSBean>();
+		Zweblistline[] result = getCustomLists(url, user, password,
+				"GRUPOS_CLIENTES");
+		for (Zweblistline row : result) {
+			if (!row.getText2().toString().isEmpty()
+					&& !row.getText3().toString().isEmpty()) {
+				list.add(new WSBean(row.getText2().toString(), row.getText3()
+						.toString(), row.getText1().toString()));
+			}
+		}
+		return list;
+	}
+
+	public static List<WSBean> getMaterials(String url, String user,
+			String password) {
+		List<WSBean> list = new ArrayList<WSBean>();
+		Zweblistline[] result = getCustomLists(url, user, password,
+				"MATERIALES");
+		for (Zweblistline row : result) {
+			if (!row.getText2().toString().isEmpty()
+					&& !row.getText3().toString().isEmpty()) {
+				list.add(new WSBean(row.getText2().toString(), row.getText3()
+						.toString(), row.getText1().toString()));
+			}
+		}
+		return list;
+	}
+
 	public static void main(String args[]) {
-		List<WSBean> list = getBranchs(
+		List<WSBean> list = getPaymentMethod(
 				"http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zweblist/300/zweblist/zweblist",
 				"TACTUSOFT", "AFFINITY");
 		for (WSBean row : list) {
