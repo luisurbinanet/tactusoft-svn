@@ -117,8 +117,8 @@ public class UserDetailsServiceCustom implements UserDetailsService {
 					List<WSBean> result = CustomLists.getBranchs(url, username,
 							password);
 
-					boolean notExists = true;
 					for (WSBean row : result) {
+						boolean notExists = true;
 						for (CrmBranch rowDB : listBranch) {
 							if (row.getCode().equals(rowDB.getCode())) {
 								notExists = false;
