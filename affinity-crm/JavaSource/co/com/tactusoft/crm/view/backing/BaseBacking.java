@@ -90,6 +90,11 @@ public class BaseBacking implements Serializable {
 	}
 
 	public void searchPatientAction() {
+
+		String url = FacesUtil.getParameterTextValue("SAP_URL_CUSTOMER2");
+		String username = FacesUtil.getParameterTextValue("SAP_USERNAME");
+		String password = FacesUtil.getParameterTextValue("SAP_PASSWORD");
+
 		if ((optionSearchPatient == 1 && this.docPatient.isEmpty())
 				|| (optionSearchPatient == 2 && this.namePatient.isEmpty())) {
 
@@ -105,7 +110,8 @@ public class BaseBacking implements Serializable {
 						this.docPatient);
 
 				if (listPatient.size() == 0) {
-					result = CustomerExecute.findByDoc(this.docPatient, 0);
+					result = CustomerExecute.findByDoc(url, username, password,
+							"4000", this.docPatient, 0);
 
 					for (WSBean row : result) {
 						CrmPatient patient = new CrmPatient();
@@ -118,7 +124,8 @@ public class BaseBacking implements Serializable {
 				listPatient = processService.getListPatientByNameOrDoc("NAMES",
 						this.namePatient.toUpperCase());
 
-				result = CustomerExecute.findByName(this.namePatient, 0);
+				result = CustomerExecute.findByName(url, username, password,
+						this.namePatient, 0);
 
 				for (WSBean row : result) {
 					boolean validate = true;

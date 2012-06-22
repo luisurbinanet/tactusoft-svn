@@ -22,6 +22,7 @@ import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.util.SAPEnvironment;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 
+import com.tactusoft.webservice.client.beans.WSBean;
 import com.tactusoft.webservice.client.execute.CustomerExecute;
 
 @Named
@@ -235,15 +236,18 @@ public class PatientBacking extends BaseBacking {
 	public void saveAction() {
 		String message = null;
 		try {
-			String customer = CustomerExecute.getCustomer(selected.getDoc());
+			SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
+			CrmProfile profile = FacesUtil.getCurrentUser().getCrmProfile();
 
-			if (customer.isEmpty()) {
+			List<WSBean> customer = CustomerExecute.findByDoc(
+					sap.getUrlCustomer2(), sap.getUsername(),
+					sap.getPassword(), profile.getSociety(), selected.getDoc(),
+					0);
+
+			if (customer.size() == 0) {
 				String names = null;
 
 				names = selected.getFirstnames() + " " + selected.getSurnames();
-
-				SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
-				CrmProfile profile = FacesUtil.getCurrentUser().getCrmProfile();
 
 				String tratamiento = "1";
 				if (selected.getGender().equals("W")) {
@@ -254,8 +258,10 @@ public class PatientBacking extends BaseBacking {
 				CrmRegion crmRegion = mapRegion.get(idRegion);
 				CrmCity crmCity = mapCity.get(idCity);
 
-				String codeSap = CustomerExecute.excecute(sap.getEnvironment(),
-						"13", selected.getDoc(), tratamiento, names,
+				String codeSap = CustomerExecute.excecute(
+						sap.getUrlCustomerMaintainAll(), sap.getUsername(),
+						sap.getPassword(), sap.getEnvironment(), "13",
+						selected.getDoc(), tratamiento, names,
 						selected.getAddress(), selected.getPhoneNumber(),
 						selected.getCellNumber(), selected.getEmail(),
 						crmCountry.getCode(), crmCity.getName(),
