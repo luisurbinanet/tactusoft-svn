@@ -193,36 +193,44 @@ public class CustomerExecute {
 		try {
 			bapireturn1 = zBAPI_CUSTOMER_FINDProxy.customerFind(maxCnt, plHold,
 					resultTab, seloptTab);
+
+			if (bapireturn1.getType().equals("E")) {
+				return null;
+			} else {
+				return resultTab.value;
+			}
+
 		} catch (RemoteException e1) {
-			e1.printStackTrace();
+			// e1.printStackTrace();
 		}
 
-		if (bapireturn1.getType().equals("E")) {
-			return null;
-		} else {
-			return resultTab.value;
-		}
+		return null;
 	}
 
 	public static List<WSBean> findByName(String url, String user,
 			String password, String value, int maxCnt) {
 		List<WSBean> result = new ArrayList<WSBean>();
 		value = "*" + value.replace(" ", "*") + "*";
-		Bapikna111[] list = find(url, password, value, "NAME1", value, maxCnt);
-		for (Bapikna111 row : list) {
-			result.add(new WSBean(row.getCustomer(), row.getFieldvalue()));
+		Bapikna111[] list = find(url, user, password, "NAME1", value, maxCnt);
+		if (list != null) {
+			for (Bapikna111 row : list) {
+				result.add(new WSBean(row.getCustomer(), row.getFieldvalue()));
+			}
 		}
 		return result;
 	}
 
 	public static List<WSBean> findByDoc(String url, String user,
-			String password, String value, String society, int maxCnt) {
+			String password, String society, String value, int maxCnt) {
 		List<WSBean> result = new ArrayList<WSBean>();
-		Bapikna111[] list = find(url, password, value, "SORTL", value, maxCnt);
-		for (Bapikna111 row : list) {
-			Bapicustomer04 bapicustomer04 = getDetail(url, user, password,
-					society, row.getCustomer());
-			result.add(new WSBean(row.getCustomer(), bapicustomer04.getName()));
+		Bapikna111[] list = find(url, user, password, "SORTL", value, maxCnt);
+		if (list != null) {
+			for (Bapikna111 row : list) {
+				Bapicustomer04 bapicustomer04 = getDetail(url, user, password,
+						society, row.getCustomer());
+				result.add(new WSBean(row.getCustomer(), bapicustomer04
+						.getName()));
+			}
 		}
 		return result;
 	}
@@ -286,7 +294,12 @@ public class CustomerExecute {
 		 * "PRUEBAX99@PRUEBAX3.COM");
 		 */
 
-		findByDoc("http://ansrvsap2.affinity.net:8001/sap/bc/srt/rfc/sap/zcustomer2/300/zcustomer2/zcustomer2","TACTUSOFT","AFFINITY","4000","22734930",0);
+		List<WSBean> result = findByDoc(
+				"http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zcustomer2/300/zcustomer2/zcustomer2",
+				"TACTUSOFT", "AFFINITY", "22734930", "1000", 0);
+		for (WSBean row : result) {
+			System.out.println(row.getCode());
+		}
 		// Bapicustomer04 detail = getDetail("1000", "0000137537");
 
 		/*
