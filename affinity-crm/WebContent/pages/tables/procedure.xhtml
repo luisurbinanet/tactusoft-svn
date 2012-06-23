@@ -81,21 +81,17 @@
 
 					<h:outputLabel value="#{msg['prc_name']}" />
 					<p:inputText value="#{procedureBacking.selected.name}"
-						style="width:250px" label="#{msg['prc_name']}" required="true" />
+						style="width:350px" label="#{msg['prc_name']}" required="true" />
 
 					<h:outputLabel value="#{msg['prc_descr']}" />
 					<p:inputTextarea value="#{procedureBacking.selected.description}"
-						style="width:250px" label="#{msg['prc_descr']}" required="true"
-						rows="5" />
-
-					<h:outputLabel value="#{msg['prc_parallel']}" />
-					<p:selectBooleanCheckbox
-						value="#{procedureBacking.selected.parallel}" />
+						style="width:350px" label="#{msg['prc_descr']}" required="true"
+						rows="2" />
 
 					<h:outputLabel value="#{msg['glb_state']}"
 						rendered="#{procedureBacking.selected.id!=null?true:false}" />
 					<p:selectOneMenu value="#{procedureBacking.selected.state}"
-						style="width:250px"
+						style="width:350px"
 						rendered="#{procedureBacking.selected.id!=null?true:false}">
 						<f:selectItem itemValue="1" itemLabel="#{msg['glb_state_active']}" />
 						<f:selectItem itemValue="0"
@@ -103,6 +99,14 @@
 					</p:selectOneMenu>
 
 				</h:panelGrid>
+
+				<p:pickList var="row" value="#{procedureBacking.listModelBranch}"
+					converter="branchConverter" itemValue="#{row}"
+					itemLabel="#{row.name} (#{row.society})">
+
+					<f:facet name="sourceCaption">#{msg['usr_branch']}</f:facet>
+					<f:facet name="targetCaption">#{msg['glb_target_caption']}</f:facet>
+				</p:pickList>
 
 				<p:spacer height="40" />
 				<h:outputLabel value="#{msg['prc_detail']}"

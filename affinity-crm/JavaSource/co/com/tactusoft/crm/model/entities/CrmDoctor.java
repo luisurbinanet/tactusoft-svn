@@ -83,7 +83,7 @@ public class CrmDoctor implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_speciality", nullable = false)
+	@JoinColumn(name = "id_speciality")
 	public CrmSpeciality getCrmSpeciality() {
 		return this.crmSpeciality;
 	}

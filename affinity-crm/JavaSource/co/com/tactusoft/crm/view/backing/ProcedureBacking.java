@@ -1,17 +1,16 @@
 package co.com.tactusoft.crm.view.backing;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.faces.event.ActionEvent;
-import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.primefaces.model.DualListModel;
 import org.springframework.context.annotation.Scope;
 
-import co.com.tactusoft.crm.controller.bo.TablesBo;
+import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmProcedure;
 import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
 import co.com.tactusoft.crm.util.Constant;
@@ -21,12 +20,9 @@ import co.com.tactusoft.crm.view.datamodel.ProcedureDetailDataModel;
 
 @Named
 @Scope("view")
-public class ProcedureBacking implements Serializable {
+public class ProcedureBacking extends BaseBacking {
 
 	private static final long serialVersionUID = 1L;
-
-	@Inject
-	private TablesBo tableService;
 
 	private List<CrmProcedure> list;
 	private ProcedureDataModel model;
@@ -40,6 +36,8 @@ public class ProcedureBacking implements Serializable {
 	private Integer timeDoctor;
 	private Integer timeNurses;
 	private Integer timeStretchers;
+
+	private DualListModel<CrmBranch> listModelBranch;
 
 	public ProcedureBacking() {
 		newAction();
@@ -55,7 +53,7 @@ public class ProcedureBacking implements Serializable {
 
 	public ProcedureDataModel getModel() {
 		if (model == null) {
-			list = tableService.getListProcedure();
+			list = tablesService.getListProcedure();
 			model = new ProcedureDataModel(list);
 
 			if (list.size() > 0) {
@@ -147,19 +145,33 @@ public class ProcedureBacking implements Serializable {
 		this.timeDoctor = 0;
 		this.timeNurses = 0;
 		this.timeStretchers = 0;
+
+		listModelBranch = new DualListModel<CrmBranch>();
 	}
 
 	public void saveAction() {
 		String message = null;
 
+		if (listModelBranch.getTarget().size() == 0) {
+			message = FacesUtil.getMessage("prc_msg_error_branch");
+			FacesUtil.addError(message);
+		}
+
 		if (listProcedureDetail.size() == 0) {
 			message = FacesUtil.getMessage("prc_msg_error_detail");
 			FacesUtil.addError(message);
-		} else {
-			int result = tableService.saveProcedure(selected);
+		}
+
+		if (message == null) {
+			int result = tablesService.saveProcedure(selected);
 			if (result == 0) {
-				tableService.saveProcedureDetail(selected, listProcedureDetail);
-				list = tableService.getListProcedure();
+				tablesService
+						.saveProcedureDetail(selected, listProcedureDetail);
+
+				tablesService.saveProcedureBranch(selected,
+						listModelBranch.getTarget());
+
+				list = tablesService.getListProcedure();
 				model = new ProcedureDataModel(list);
 				message = FacesUtil.getMessage("msg_record_ok");
 				FacesUtil.addInfo(message);
@@ -216,9 +228,46 @@ public class ProcedureBacking implements Serializable {
 	}
 
 	public void generateListAction(ActionEvent event) {
-		listProcedureDetail = tableService
+		listProcedureDetail = tablesService
 				.getListProcedureDetailByProcedure(selected.getId());
 		modelProcedureDetail = new ProcedureDetailDataModel(listProcedureDetail);
+
+		List<CrmBranch> listTargetBranch = new LinkedList<CrmBranch>();
+		List<CrmBranch> listSourceBranch = new LinkedList<CrmBranch>();
+
+		if (selected != null && selected.getId() != null) {
+			listTargetBranch = tablesService.getListBranchByProcedure(selected
+					.getId());
+			for (CrmBranch row : FacesUtil.getCurrentUserData()
+					.getListBranchAll()) {
+				boolean exits = false;
+				for (CrmBranch avb : listTargetBranch) {
+					if (avb.getId().intValue() == row.getId().intValue()) {
+						exits = true;
+						break;
+					}
+				}
+
+				if (!exits) {
+					listSourceBranch.add(row);
+				}
+			}
+		} else {
+			if (tablesService != null) {
+				listSourceBranch = tablesService.getListBranchActive();
+			}
+		}
+
+		listModelBranch = new DualListModel<CrmBranch>(listSourceBranch,
+				listTargetBranch);
+	}
+
+	public DualListModel<CrmBranch> getListModelBranch() {
+		return listModelBranch;
+	}
+
+	public void setListModelBranch(DualListModel<CrmBranch> listModelBranch) {
+		this.listModelBranch = listModelBranch;
 	}
 
 }

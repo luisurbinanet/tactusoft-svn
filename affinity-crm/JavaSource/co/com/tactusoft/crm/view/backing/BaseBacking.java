@@ -1,8 +1,10 @@
 package co.com.tactusoft.crm.view.backing;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -11,13 +13,16 @@ import javax.inject.Inject;
 
 import co.com.tactusoft.crm.controller.bo.ProcessBo;
 import co.com.tactusoft.crm.controller.bo.TablesBo;
+import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
+import co.com.tactusoft.crm.model.entities.CrmProfile;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
+import co.com.tactusoft.crm.util.SAPEnvironment;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 
 import com.tactusoft.webservice.client.beans.WSBean;
-import com.tactusoft.webservice.client.execute.CustomLists;
+import com.tactusoft.webservice.client.execute.CustomListsExecute;
 import com.tactusoft.webservice.client.execute.CustomerExecute;
 
 public class BaseBacking implements Serializable {
@@ -40,6 +45,11 @@ public class BaseBacking implements Serializable {
 	protected List<SelectItem> listWSDoctor;
 	protected Map<String, String> mapWSDoctor;
 	protected String selectedWSDoctor;
+
+	protected List<SelectItem> listCrmBranch;
+	protected Map<BigDecimal, CrmBranch> mapCrmBranch;
+	protected BigDecimal idBranch;
+	
 
 	public List<CrmPatient> getListPatient() {
 		return listPatient;
@@ -90,10 +100,8 @@ public class BaseBacking implements Serializable {
 	}
 
 	public void searchPatientAction() {
-
-		String url = FacesUtil.getParameterTextValue("SAP_URL_CUSTOMER2");
-		String username = FacesUtil.getParameterTextValue("SAP_USERNAME");
-		String password = FacesUtil.getParameterTextValue("SAP_PASSWORD");
+		SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
+		CrmProfile profile = FacesUtil.getCurrentUser().getCrmProfile();
 
 		if ((optionSearchPatient == 1 && this.docPatient.isEmpty())
 				|| (optionSearchPatient == 2 && this.namePatient.isEmpty())) {
@@ -110,8 +118,9 @@ public class BaseBacking implements Serializable {
 						this.docPatient);
 
 				if (listPatient.size() == 0) {
-					result = CustomerExecute.findByDoc(url, username, password,
-							"4000", this.docPatient, 0);
+					result = CustomerExecute.findByDoc(sap.getUrlCustomer2(),
+							sap.getUsername(), sap.getPassword(),
+							profile.getSociety(), this.docPatient, 0);
 
 					for (WSBean row : result) {
 						CrmPatient patient = new CrmPatient();
@@ -124,8 +133,9 @@ public class BaseBacking implements Serializable {
 				listPatient = processService.getListPatientByNameOrDoc("NAMES",
 						this.namePatient.toUpperCase());
 
-				result = CustomerExecute.findByName(url, username, password,
-						this.namePatient, 0);
+				result = CustomerExecute.findByName(sap.getUrlCustomer2(),
+						sap.getUsername(), sap.getPassword(), this.namePatient,
+						0);
 
 				for (WSBean row : result) {
 					boolean validate = true;
@@ -158,15 +168,11 @@ public class BaseBacking implements Serializable {
 		if (listWSDoctor == null) {
 			String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
 			try {
-				String url = FacesUtil
-						.getParameterTextValue("SAP_URL_ZWEBLIST");
-				String username = FacesUtil
-						.getParameterTextValue("SAP_USERNAME");
-				String password = FacesUtil
-						.getParameterTextValue("SAP_PASSWORD");
+				SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
 
-				List<WSBean> result = CustomLists.getDoctors(url, username,
-						password);
+				List<WSBean> result = CustomListsExecute.getDoctors(
+						sap.getUrlWebList(), sap.getUsername(),
+						sap.getPassword());
 
 				listWSDoctor = new ArrayList<SelectItem>();
 				mapWSDoctor = new HashMap<String, String>();
@@ -238,5 +244,40 @@ public class BaseBacking implements Serializable {
 			return true;
 		}
 		return false;
+	}
+
+	public List<SelectItem> getListCrmBranch() {
+		if (listCrmBranch == null) {
+			listCrmBranch = new LinkedList<SelectItem>();
+			mapCrmBranch = new HashMap<BigDecimal, CrmBranch>();
+			String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
+			listCrmBranch.add(new SelectItem(Constant.DEFAULT_VALUE, label));
+			for (CrmBranch row : tablesService.getListBranchActive()) {
+				mapCrmBranch.put(row.getId(), row);
+				listCrmBranch.add(new SelectItem(row.getId(), row.getName()
+						+ " (" + row.getSociety() + ")"));
+			}
+		}
+		return listCrmBranch;
+	}
+
+	public void setListCrmBranch(List<SelectItem> listCrmBranch) {
+		this.listCrmBranch = listCrmBranch;
+	}
+
+	public Map<BigDecimal, CrmBranch> getMapCrmBranch() {
+		return mapCrmBranch;
+	}
+
+	public void setMapCrmBranch(Map<BigDecimal, CrmBranch> mapCrmBranch) {
+		this.mapCrmBranch = mapCrmBranch;
+	}
+
+	public BigDecimal getIdBranch() {
+		return idBranch;
+	}
+
+	public void setIdBranch(BigDecimal idBranch) {
+		this.idBranch = idBranch;
 	}
 }

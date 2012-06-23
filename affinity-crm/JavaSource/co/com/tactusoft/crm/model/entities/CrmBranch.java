@@ -1,5 +1,7 @@
 package co.com.tactusoft.crm.model.entities;
 
+// Generated 23/06/2012 01:17:33 PM by Hibernate Tools 3.4.0.CR1
+
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,16 +20,22 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "crm_branch", catalog = "crm_db", uniqueConstraints = @UniqueConstraint(columnNames = "code"))
 public class CrmBranch implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
 	private String code;
 	private String name;
+	private String society;
 	private String formula;
 	private Integer doctors;
 	private Integer nurses;
 	private Integer stretchers;
 	private Integer state;
 	private Set<CrmDoctorSchedule> crmDoctorSchedules = new HashSet<CrmDoctorSchedule>(
+			0);
+	private Set<CrmProcedureBranch> crmProcedureBranchs = new HashSet<CrmProcedureBranch>(
 			0);
 	private Set<CrmHolidayBranch> crmHolidayBranchs = new HashSet<CrmHolidayBranch>(
 			0);
@@ -42,21 +50,25 @@ public class CrmBranch implements java.io.Serializable {
 		this.formula = formula;
 	}
 
-	public CrmBranch(BigDecimal id, String code, String name, String formula,
-			Integer doctors, Integer nurses, Integer stretchers, Integer state,
+	public CrmBranch(BigDecimal id, String code, String name, String society,
+			String formula, Integer doctors, Integer nurses,
+			Integer stretchers, Integer state,
 			Set<CrmDoctorSchedule> crmDoctorSchedules,
+			Set<CrmProcedureBranch> crmProcedureBranchs,
 			Set<CrmHolidayBranch> crmHolidayBranchs,
 			Set<CrmAppointment> crmAppointments,
 			Set<CrmUserBranch> crmUserBranchs) {
 		this.id = id;
 		this.code = code;
 		this.name = name;
+		this.society = society;
 		this.formula = formula;
 		this.doctors = doctors;
 		this.nurses = nurses;
 		this.stretchers = stretchers;
 		this.state = state;
 		this.crmDoctorSchedules = crmDoctorSchedules;
+		this.crmProcedureBranchs = crmProcedureBranchs;
 		this.crmHolidayBranchs = crmHolidayBranchs;
 		this.crmAppointments = crmAppointments;
 		this.crmUserBranchs = crmUserBranchs;
@@ -88,6 +100,15 @@ public class CrmBranch implements java.io.Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	@Column(name = "society", length = 4)
+	public String getSociety() {
+		return this.society;
+	}
+
+	public void setSociety(String society) {
+		this.society = society;
 	}
 
 	@Column(name = "formula", nullable = false, length = 4)
@@ -142,6 +163,16 @@ public class CrmBranch implements java.io.Serializable {
 
 	public void setCrmDoctorSchedules(Set<CrmDoctorSchedule> crmDoctorSchedules) {
 		this.crmDoctorSchedules = crmDoctorSchedules;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmBranch")
+	public Set<CrmProcedureBranch> getCrmProcedureBranchs() {
+		return this.crmProcedureBranchs;
+	}
+
+	public void setCrmProcedureBranchs(
+			Set<CrmProcedureBranch> crmProcedureBranchs) {
+		this.crmProcedureBranchs = crmProcedureBranchs;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmBranch")

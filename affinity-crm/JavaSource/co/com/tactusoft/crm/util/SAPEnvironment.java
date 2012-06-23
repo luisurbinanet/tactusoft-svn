@@ -31,6 +31,7 @@ public class SAPEnvironment implements Serializable {
 	private String urlCustomerFind;
 	private String urlCustomerSalesOrderCreate;
 	private String urlCustomer2;
+	private String urlWebList;
 
 	public SAPEnvironment() {
 	}
@@ -82,6 +83,10 @@ public class SAPEnvironment implements Serializable {
 				if (par.getCode().equals("SAP_URL_CUSTOMER2")) {
 					this.urlCustomer2 = par.getTextValue();
 				}
+
+				if (par.getCode().equals("SAP_URL_ZWEBLIST")) {
+					this.urlWebList = par.getTextValue();
+				}
 			}
 		}
 		return lisParameter;
@@ -92,7 +97,6 @@ public class SAPEnvironment implements Serializable {
 	}
 
 	public String getEnvironment() {
-		getLisParameter();
 		return environment;
 	}
 
@@ -156,6 +160,14 @@ public class SAPEnvironment implements Serializable {
 
 	public void setUrlCustomer2(String urlCustomer2) {
 		this.urlCustomer2 = urlCustomer2;
+	}
+
+	public String getUrlWebList() {
+		return urlWebList;
+	}
+
+	public void setUrlWebList(String urlWebList) {
+		this.urlWebList = urlWebList;
 	}
 
 }

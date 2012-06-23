@@ -26,9 +26,11 @@ import co.com.tactusoft.crm.view.beans.Material;
 import co.com.tactusoft.crm.view.datamodel.MaterialDataModel;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 
+import com.tactusoft.webservice.client.beans.WSBean;
 import com.tactusoft.webservice.client.custom.MaterialesCustom;
 import com.tactusoft.webservice.client.custom.ResultCreateOrder;
 import com.tactusoft.webservice.client.execute.CreateSalesOrderExecute;
+import com.tactusoft.webservice.client.execute.CustomListsExecute;
 import com.tactusoft.webservice.client.objects.Bapiret2;
 
 @Named
@@ -60,16 +62,22 @@ public class SalesOrderBacking extends BaseBacking {
 
 	private boolean disabledSaveButton;
 
+	private SAPEnvironment sap;
+
 	public SalesOrderBacking() {
+		sap = FacesUtil.findBean("SAPEnvironment");
 		newAction(null);
 	}
 
 	public List<SelectItem> getListMethodPayment() {
 		if (listMethodPayment == null) {
 			listMethodPayment = new LinkedList<SelectItem>();
-			for (CrmDomain row : tablesService.getListDomain("FORMA_PAGO")) {
+			List<WSBean> list = CustomListsExecute.getPaymentMethod(
+					sap.getUrlWebList(), sap.getUsername(), sap.getPassword(),
+					"co");
+			for (WSBean row : list) {
 				listMethodPayment.add(new SelectItem(row.getCode(), row
-						.getItemValue()));
+						.getNames()));
 			}
 		}
 		return listMethodPayment;

@@ -20,6 +20,7 @@ import co.com.tactusoft.crm.model.entities.CrmHolidayBranch;
 import co.com.tactusoft.crm.model.entities.CrmPage;
 import co.com.tactusoft.crm.model.entities.CrmPageRole;
 import co.com.tactusoft.crm.model.entities.CrmProcedure;
+import co.com.tactusoft.crm.model.entities.CrmProcedureBranch;
 import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
 import co.com.tactusoft.crm.model.entities.CrmRole;
@@ -31,9 +32,6 @@ import co.com.tactusoft.crm.model.entities.CrmUserRole;
 @Named
 public class TablesBo implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Inject
@@ -86,6 +84,10 @@ public class TablesBo implements Serializable {
 		return dao
 				.find("select o.crmUser from CrmUserBranch o where o.crmUser.state = 1 and o.crmBranch.id = "
 						+ idBranch);
+	}
+
+	public List<CrmDoctor> getDoctorByUser(BigDecimal idUser) {
+		return dao.find("from CrmDoctor o where o.crmUser.id = " + idUser);
 	}
 
 	public List<CrmRole> getListRole() {
@@ -151,6 +153,12 @@ public class TablesBo implements Serializable {
 				+ idProcedure);
 	}
 
+	public List<CrmBranch> getListBranchByProcedure(BigDecimal idProcedure) {
+		return dao
+				.find("select o.crmBranch from CrmProcedureBranch o where o.crmProcedure.id = "
+						+ idProcedure);
+	}
+
 	public List<CrmHoliday> getListHoliday() {
 		return dao.find("from CrmHoliday o");
 	}
@@ -192,11 +200,19 @@ public class TablesBo implements Serializable {
 		return dao.persist(entity);
 	}
 
-	public Integer saveUser(CrmUser entity) {
+	public Integer saveUser(CrmUser entity, CrmDoctor doctor) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmUser.class));
 		}
-		return dao.persist(entity);
+
+		int result = dao.persist(entity);
+
+		if (doctor != null) {
+			doctor.setCrmUser(entity);
+			saveDoctor(doctor);
+		}
+
+		return result;
 	}
 
 	public Integer saveRole(CrmRole entity) {
@@ -325,6 +341,23 @@ public class TablesBo implements Serializable {
 			}
 			row.setCrmProcedure(entity);
 			dao.persist(row);
+		}
+
+		return i;
+	}
+
+	public Integer saveProcedureBranch(CrmProcedure entity, List<CrmBranch> list) {
+		int i = 0;
+
+		dao.executeHQL("delete from CrmProcedureBranch o where o.crmProcedure.id = "
+				+ entity.getId());
+
+		for (CrmBranch row : list) {
+			CrmProcedureBranch newRow = new CrmProcedureBranch();
+			newRow.setId(getId(CrmProcedureBranch.class));
+			newRow.setCrmProcedure(entity);
+			newRow.setCrmBranch(row);
+			dao.persist(newRow);
 		}
 
 		return i;

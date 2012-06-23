@@ -241,7 +241,6 @@ public class DoctorBacking extends BaseBacking {
 		selected = new CrmDoctor();
 		selected.setState(Constant.STATE_ACTIVE);
 		selected.setCrmSpeciality(new CrmSpeciality());
-		selected.setCrmUser(new CrmUser());
 
 		listDoctorSchedule = new LinkedList<CrmDoctorSchedule>();
 		modelDoctorSchedule = new DoctorScheduleDataModel(listDoctorSchedule);
@@ -271,8 +270,6 @@ public class DoctorBacking extends BaseBacking {
 
 			selected.setCrmSpeciality(mapCrmSpeciality.get(selected
 					.getCrmSpeciality().getId()));
-
-			selected.setCrmUser(mapCrmUser.get(selected.getCrmUser().getId()));
 
 			int result = tablesService.saveDoctor(selected);
 			if (result == 0) {
