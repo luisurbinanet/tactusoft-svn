@@ -26,16 +26,14 @@ public class CrmUser implements java.io.Serializable {
 	private CrmProfile crmProfile;
 	private String username;
 	private String password;
-	private String firstName;
-	private String middleName;
-	private String firstSurname;
-	private String secondSurname;
+	private String doc;
+	private String names;
+	private String surnames;
 	private String email;
 	private String phone;
 	private String extension;
 	private int state;
 	private Set<CrmUserBranch> crmUserBranchs = new HashSet<CrmUserBranch>(0);
-	private Set<CrmDoctor> crmDoctors = new HashSet<CrmDoctor>(0);
 	private Set<CrmUserRole> crmUserRoles = new HashSet<CrmUserRole>(0);
 
 	public CrmUser() {
@@ -43,39 +41,37 @@ public class CrmUser implements java.io.Serializable {
 
 	public CrmUser(BigDecimal id, CrmDepartment crmDepartment,
 			CrmProfile crmProfile, String username, String password,
-			String firstName, String firstSurname, String email, int state) {
+			String doc, String names, String surnames, String email, int state) {
 		this.id = id;
 		this.crmDepartment = crmDepartment;
 		this.crmProfile = crmProfile;
 		this.username = username;
 		this.password = password;
-		this.firstName = firstName;
-		this.firstSurname = firstSurname;
+		this.doc = doc;
+		this.names = names;
+		this.surnames = surnames;
 		this.email = email;
 		this.state = state;
 	}
 
 	public CrmUser(BigDecimal id, CrmDepartment crmDepartment,
 			CrmProfile crmProfile, String username, String password,
-			String firstName, String middleName, String firstSurname,
-			String secondSurname, String email, String phone, String extension,
-			int state, Set<CrmUserBranch> crmUserBranchs,
-			Set<CrmDoctor> crmDoctors, Set<CrmUserRole> crmUserRoles) {
+			String doc, String names, String surnames, String email,
+			String phone, String extension, int state,
+			Set<CrmUserBranch> crmUserBranchs, Set<CrmUserRole> crmUserRoles) {
 		this.id = id;
 		this.crmDepartment = crmDepartment;
 		this.crmProfile = crmProfile;
 		this.username = username;
 		this.password = password;
-		this.firstName = firstName;
-		this.middleName = middleName;
-		this.firstSurname = firstSurname;
-		this.secondSurname = secondSurname;
+		this.doc = doc;
+		this.names = names;
+		this.surnames = surnames;
 		this.email = email;
 		this.phone = phone;
 		this.extension = extension;
 		this.state = state;
 		this.crmUserBranchs = crmUserBranchs;
-		this.crmDoctors = crmDoctors;
 		this.crmUserRoles = crmUserRoles;
 	}
 
@@ -127,40 +123,31 @@ public class CrmUser implements java.io.Serializable {
 		this.password = password;
 	}
 
-	@Column(name = "first_name", nullable = false)
-	public String getFirstName() {
-		return this.firstName;
+	@Column(name = "doc", nullable = false, length = 45)
+	public String getDoc() {
+		return doc;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public void setDoc(String doc) {
+		this.doc = doc;
 	}
 
-	@Column(name = "middle_name")
-	public String getMiddleName() {
-		return this.middleName;
+	@Column(name = "names", nullable = false)
+	public String getNames() {
+		return this.names;
 	}
 
-	public void setMiddleName(String middleName) {
-		this.middleName = middleName;
+	public void setNames(String names) {
+		this.names = names;
 	}
 
-	@Column(name = "first_surname", nullable = false)
-	public String getFirstSurname() {
-		return this.firstSurname;
+	@Column(name = "surnames", nullable = false)
+	public String getSurnames() {
+		return this.surnames;
 	}
 
-	public void setFirstSurname(String firstSurname) {
-		this.firstSurname = firstSurname;
-	}
-
-	@Column(name = "second_surname")
-	public String getSecondSurname() {
-		return this.secondSurname;
-	}
-
-	public void setSecondSurname(String secondSurname) {
-		this.secondSurname = secondSurname;
+	public void setSurnames(String surnames) {
+		this.surnames = surnames;
 	}
 
 	@Column(name = "email", nullable = false, length = 1000)
@@ -206,15 +193,6 @@ public class CrmUser implements java.io.Serializable {
 
 	public void setCrmUserBranchs(Set<CrmUserBranch> crmUserBranchs) {
 		this.crmUserBranchs = crmUserBranchs;
-	}
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmUser")
-	public Set<CrmDoctor> getCrmDoctors() {
-		return this.crmDoctors;
-	}
-
-	public void setCrmDoctors(Set<CrmDoctor> crmDoctors) {
-		this.crmDoctors = crmDoctors;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmUser")

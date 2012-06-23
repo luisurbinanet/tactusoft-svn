@@ -39,12 +39,12 @@
 						<h:outputLabel value="#{rec.username}" />
 					</p:column>
 
-					<p:column headerText="#{msg['usr_first_name']}">
-						<h:outputLabel value="#{rec.firstName}" />
+					<p:column headerText="#{msg['usr_names']}">
+						<h:outputLabel value="#{rec.names}" />
 					</p:column>
 
-					<p:column headerText="#{msg['usr_first_surname']}">
-						<h:outputLabel value="#{rec.firstSurname}" />
+					<p:column headerText="#{msg['usr_surnames']}">
+						<h:outputLabel value="#{rec.surnames}" />
 					</p:column>
 
 					<p:column headerText="#{msg['usr_departament']}">
@@ -91,28 +91,21 @@
 					<p:inputText value="#{userBacking.selected.username}"
 						style="width:250px" label="#{msg['usr_username']}" required="true"
 						readonly="#{userBacking.selected.id ne null?true:false}" />
-					<h:outputLabel value="" />
-					<h:outputLabel value="" />
 
-					<h:outputLabel value="#{msg['usr_first_name']}" />
-					<p:inputText value="#{userBacking.selected.firstName}"
-						style="width:250px" label="#{msg['usr_first_name']}"
-						required="true" />
+					<h:outputLabel value="#{msg['usr_doc']}" />
+					<p:inputText value="#{userBacking.selected.doc}"
+						style="width:250px" label="#{msg['usr_doc']}" required="true"
+						maxlength="45" />
 
-					<h:outputLabel value="#{msg['usr_middle_name']}" />
-					<p:inputText value="#{userBacking.selected.middleName}"
-						style="width:250px" label="#{msg['usr_middle_name']}"
-						required="false" />
+					<h:outputLabel value="#{msg['usr_names']}" />
+					<p:inputText value="#{userBacking.selected.names}"
+						style="width:250px" label="#{msg['usr_names']}" required="true"
+						maxlength="255" />
 
-					<h:outputLabel value="#{msg['usr_first_surname']}" />
-					<p:inputText value="#{userBacking.selected.firstSurname}"
-						style="width:250px" label="#{msg['usr_first_surname']}"
-						required="true" />
-
-					<h:outputLabel value="#{msg['usr_second_surname']}" />
-					<p:inputText value="#{userBacking.selected.secondSurname}"
-						style="width:250px" label="#{msg['usr_second_surname']}"
-						required="false" />
+					<h:outputLabel value="#{msg['usr_surnames']}" />
+					<p:inputText value="#{userBacking.selected.surnames}"
+						style="width:250px" label="#{msg['usr_surnames']}" required="true"
+						maxlength="255" />
 
 					<h:outputLabel value="#{msg['usr_email']}" />
 					<p:inputText value="#{userBacking.selected.email}"
@@ -143,6 +136,16 @@
 						<f:selectItems value="#{userBacking.listProfile}" />
 					</p:selectOneMenu>
 
+					<h:outputLabel value="#{msg['usr_doctor']}" />
+					<p:selectBooleanCheckbox value="#{userBacking.doctor}" />
+
+					<h:outputLabel value="#{msg['doc_speciality']}"
+						rendered="#{userBacking.doctor}" />
+					<p:selectOneMenu value="#{doctorBacking.idSpeciality}"
+						style="width:250px" rendered="#{userBacking.doctor}">
+						<f:selectItems value="#{doctorBacking.listCrmSpeciality}" />
+					</p:selectOneMenu>
+
 					<h:outputLabel value="#{msg['glb_state']}"
 						rendered="#{userBacking.selected.id!=null?true:false}" />
 					<p:selectOneMenu value="#{userBacking.selected.state}"
@@ -162,7 +165,7 @@
 
 					<p:pickList var="row" value="#{userBacking.listBranch}"
 						converter="branchConverter" itemValue="#{row}"
-						itemLabel="#{row.name}">
+						itemLabel="#{row.name} (#{row.society})">
 
 						<f:facet name="sourceCaption">#{msg['usr_branch']}</f:facet>
 						<f:facet name="targetCaption">#{msg['glb_target_caption']}</f:facet>

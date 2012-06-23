@@ -19,6 +19,7 @@ import co.com.tactusoft.crm.controller.bo.SecurityBo;
 import co.com.tactusoft.crm.controller.bo.TablesBo;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmDepartment;
+import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
 import co.com.tactusoft.crm.model.entities.CrmRole;
 import co.com.tactusoft.crm.model.entities.CrmUser;
@@ -52,6 +53,9 @@ public class UserBacking implements Serializable {
 	private DualListModel<CrmBranch> listBranch;
 
 	private String password;
+	private CrmDoctor crmDoctor;
+	private Boolean doctor;
+	private BigDecimal idSpeciality;
 
 	public UserBacking() {
 		newAction();
@@ -146,6 +150,22 @@ public class UserBacking implements Serializable {
 		this.password = password;
 	}
 
+	public Boolean getDoctor() {
+		return doctor;
+	}
+
+	public void setDoctor(Boolean doctor) {
+		this.doctor = doctor;
+	}
+
+	public BigDecimal getIdSpeciality() {
+		return idSpeciality;
+	}
+
+	public void setIdSpeciality(BigDecimal idSpeciality) {
+		this.idSpeciality = idSpeciality;
+	}
+
 	public void newAction() {
 		selected = new CrmUser();
 		selected.setState(Constant.STATE_ACTIVE);
@@ -155,6 +175,8 @@ public class UserBacking implements Serializable {
 		listBranch = new DualListModel<CrmBranch>();
 		listRole = new DualListModel<CrmRole>();
 		generateListAction(null);
+
+		doctor = false;
 	}
 
 	public void saveAction() {
@@ -189,12 +211,27 @@ public class UserBacking implements Serializable {
 			if (validatePassword) {
 				selected.setPassword(FacesUtil.getMD5(selected.getPassword()));
 			}
+
 			selected.setCrmProfile(mapProfile.get(selected.getCrmProfile()
 					.getId()));
 			selected.setCrmDepartment(mapDepartment.get(selected
 					.getCrmDepartment().getId()));
 
-			int result = tablesService.saveUser(selected);
+			if (selected.getId() == null && doctor) {
+				crmDoctor = new CrmDoctor();
+				crmDoctor.setCode(selected.getDoc());
+				crmDoctor.setNames(selected.getSurnames().toUpperCase() + " "
+						+ selected.getNames().toUpperCase());
+				crmDoctor.setState(Constant.STATE_ACTIVE);
+			} else if (crmDoctor != null) {
+				crmDoctor.setCode(selected.getDoc());
+				crmDoctor.setNames(selected.getSurnames().toUpperCase() + " "
+						+ selected.getNames().toUpperCase());
+				crmDoctor.setState(doctor ? Constant.STATE_ACTIVE
+						: Constant.STATE_INACTIVE);
+			}
+
+			int result = tablesService.saveUser(selected, crmDoctor);
 
 			if (result == 0) {
 				tablesService.saveUserBranch(selected, listBranch.getTarget());
@@ -219,6 +256,21 @@ public class UserBacking implements Serializable {
 		List<CrmRole> listSourceRole = new LinkedList<CrmRole>();
 
 		if (selected != null && selected.getId() != null) {
+
+			List<CrmDoctor> listDoctor = tablesService.getDoctorByUser(selected
+					.getId());
+			if (listDoctor.size() > 0) {
+				crmDoctor = listDoctor.get(0);
+				if (crmDoctor.getState() == Constant.STATE_ACTIVE) {
+					doctor = true;
+				} else {
+					doctor = false;
+				}
+			} else {
+				crmDoctor = null;
+				doctor = false;
+			}
+
 			listTargetBranch = tablesService.getListBranchByUser(selected
 					.getId());
 			for (CrmBranch row : FacesUtil.getCurrentUserData()
@@ -267,7 +319,7 @@ public class UserBacking implements Serializable {
 		String message = null;
 		selected = FacesUtil.getCurrentUser();
 		selected.setPassword(FacesUtil.getMD5(this.password));
-		int result = tablesService.saveUser(selected);
+		int result = tablesService.saveUser(selected, null);
 
 		if (result == 0) {
 			model = new UserDataModel(list);

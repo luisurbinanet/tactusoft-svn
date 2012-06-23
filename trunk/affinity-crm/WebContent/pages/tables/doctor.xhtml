@@ -18,9 +18,6 @@
 
 				<p:toolbar id="toolBar" style="width:100%">
 					<p:toolbarGroup align="left">
-						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
-							action="#{doctorBacking.newAction}" oncomplete="dlg.show()"
-							update=":editForm:dialog :editForm:recordTableDetail" />
 						<p:commandButton value="#{msg['btn_edit']}" icon="ui-icon-pencil"
 							oncomplete="dlg.show()" update=":editForm:dialog"
 							actionListener="#{doctorBacking.generateListAction}" />
@@ -112,12 +109,6 @@
 					<p:selectOneMenu value="#{doctorBacking.selected.crmSpeciality.id}"
 						style="width:250px">
 						<f:selectItems value="#{doctorBacking.listCrmSpeciality}" />
-					</p:selectOneMenu>
-
-					<h:outputLabel value="#{msg['doc_user']}" />
-					<p:selectOneMenu value="#{doctorBacking.selected.crmUser.id}"
-						style="width:250px" required="true" label="#{msg['doc_user']}">
-						<f:selectItems value="#{doctorBacking.listCrmUser}" />
 					</p:selectOneMenu>
 
 					<h:outputLabel value="#{msg['glb_state']}"

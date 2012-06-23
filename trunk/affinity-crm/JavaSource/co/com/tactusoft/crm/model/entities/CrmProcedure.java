@@ -24,6 +24,8 @@ public class CrmProcedure implements java.io.Serializable {
 	private String description;
 	private boolean parallel;
 	private int state;
+	private Set<CrmProcedureBranch> crmProcedureBranchs = new HashSet<CrmProcedureBranch>(
+			0);
 	private Set<CrmProcedureDetail> crmProcedureDetails = new HashSet<CrmProcedureDetail>(
 			0);
 
@@ -39,12 +41,14 @@ public class CrmProcedure implements java.io.Serializable {
 
 	public CrmProcedure(BigDecimal id, String name, String description,
 			boolean parallel, int state,
+			Set<CrmProcedureBranch> crmProcedureBranchs,
 			Set<CrmProcedureDetail> crmProcedureDetails) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.parallel = parallel;
 		this.state = state;
+		this.crmProcedureBranchs = crmProcedureBranchs;
 		this.crmProcedureDetails = crmProcedureDetails;
 	}
 
@@ -92,6 +96,16 @@ public class CrmProcedure implements java.io.Serializable {
 
 	public void setState(int state) {
 		this.state = state;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmProcedure")
+	public Set<CrmProcedureBranch> getCrmProcedureBranchs() {
+		return this.crmProcedureBranchs;
+	}
+
+	public void setCrmProcedureBranchs(
+			Set<CrmProcedureBranch> crmProcedureBranchs) {
+		this.crmProcedureBranchs = crmProcedureBranchs;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmProcedure")

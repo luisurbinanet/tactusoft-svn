@@ -21,9 +21,11 @@ import co.com.tactusoft.crm.model.entities.CrmParameter;
 import co.com.tactusoft.crm.model.entities.CrmRole;
 import co.com.tactusoft.crm.model.entities.CrmUser;
 import co.com.tactusoft.crm.util.Constant;
+import co.com.tactusoft.crm.util.FacesUtil;
+import co.com.tactusoft.crm.util.SAPEnvironment;
 
 import com.tactusoft.webservice.client.beans.WSBean;
-import com.tactusoft.webservice.client.execute.CustomLists;
+import com.tactusoft.webservice.client.execute.CustomListsExecute;
 
 @Service
 public class UserDetailsServiceCustom implements UserDetailsService {
@@ -86,36 +88,16 @@ public class UserDetailsServiceCustom implements UserDetailsService {
 				user.setListParameter(listParameter);
 
 				// get listWSGroupSellers
-				String url = null;
-				for (CrmParameter row : listParameter) {
-					if (row.getCode().equals("SAP_URL_ZWEBLIST")) {
-						url = row.getTextValue();
-						break;
-					}
-				}
+				SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
+				sap.getLisParameter();
 
-				String username = null;
-				for (CrmParameter row : listParameter) {
-					if (row.getCode().equals("SAP_USERNAME")) {
-						username = row.getTextValue();
-						break;
-					}
-				}
-
-				String password = null;
-				for (CrmParameter row : listParameter) {
-					if (row.getCode().equals("SAP_PASSWORD")) {
-						password = row.getTextValue();
-						break;
-					}
-				}
-
-				listBranch = tableService.getListBranchActive();
+				listBranch = tableService.getListBranch();
 				user.setListBranchAll(listBranch);
 
 				try {
-					List<WSBean> result = CustomLists.getBranchs(url, username,
-							password);
+					List<WSBean> result = CustomListsExecute.getBranchs(
+							sap.getUrlWebList(), sap.getUsername(),
+							sap.getPassword());
 
 					for (WSBean row : result) {
 						boolean notExists = true;
@@ -129,6 +111,7 @@ public class UserDetailsServiceCustom implements UserDetailsService {
 							CrmBranch newBranch = new CrmBranch();
 							newBranch.setCode(row.getCode());
 							newBranch.setName(row.getNames());
+							newBranch.setSociety(row.getSociety());
 							newBranch.setFormula("ZHD2");
 							newBranch.setState(Constant.STATE_ACTIVE);
 							tableService.saveBranch(newBranch);
@@ -140,8 +123,9 @@ public class UserDetailsServiceCustom implements UserDetailsService {
 				}
 
 				try {
-					List<WSBean> result = CustomLists.getGroupSellers(url,
-							username, password);
+					List<WSBean> result = CustomListsExecute.getGroupSellers(
+							sap.getUrlWebList(), sap.getUsername(),
+							sap.getPassword());
 					user.setListWSGroupSellers(result);
 				} catch (Exception ex) {
 					user.setListWSGroupSellers(new ArrayList<WSBean>());
