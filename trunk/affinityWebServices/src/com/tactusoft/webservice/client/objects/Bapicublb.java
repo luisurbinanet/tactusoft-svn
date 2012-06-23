@@ -8,7 +8,12 @@
 package com.tactusoft.webservice.client.objects;
 
 public class Bapicublb  implements java.io.Serializable {
-    private java.lang.String configId;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private java.lang.String configId;
 
     private java.lang.String context;
 

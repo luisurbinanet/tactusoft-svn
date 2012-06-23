@@ -6,14 +6,14 @@
  * by the Apache Axis2 version: 1.6.2  Built on : Apr 17, 2012 (05:33:49 IST)
  */
 
-package com.tactusoft.axis2;
+package com.tactusoft.webservice.client.customlists;
 
 
 /*
  *  ZWEBLIST java interface
  */
 
-public interface ZWEBLIST {
+public interface IZweblist {
 
 	/**
 	 * Auto generated method signature

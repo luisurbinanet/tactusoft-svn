@@ -8,7 +8,12 @@
 package com.tactusoft.webservice.client.objects;
 
 public class Bapiccard  implements java.io.Serializable {
-    private java.lang.String ccType;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private java.lang.String ccType;
 
     private java.lang.String ccNumber;
 

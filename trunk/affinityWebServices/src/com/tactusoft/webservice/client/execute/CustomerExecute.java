@@ -2,11 +2,13 @@ package com.tactusoft.webservice.client.execute;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.rpc.holders.StringHolder;
 
 import com.tactusoft.webservice.client.beans.WSBean;
+import com.tactusoft.webservice.client.beans.WSBeanComparator;
 import com.tactusoft.webservice.client.holders.Bapicustomer04Holder;
 import com.tactusoft.webservice.client.holders.Bapicustomer05Holder;
 import com.tactusoft.webservice.client.holders.BapicustomerKna1Holder;
@@ -217,6 +219,8 @@ public class CustomerExecute {
 				result.add(new WSBean(row.getCustomer(), row.getFieldvalue()));
 			}
 		}
+		
+		Collections.sort(result, new WSBeanComparator());
 		return result;
 	}
 
@@ -232,6 +236,8 @@ public class CustomerExecute {
 						.getName()));
 			}
 		}
+		
+		Collections.sort(result, new WSBeanComparator());
 		return result;
 	}
 

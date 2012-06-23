@@ -6,7 +6,6 @@
  */
 package com.tactusoft.webservice.client.customlists;
 
-import com.tactusoft.axis2.ZWEBLIST;
 
 
 /*
@@ -14,7 +13,7 @@ import com.tactusoft.axis2.ZWEBLIST;
  */
 
 public class ZWEBLISTStub extends org.apache.axis2.client.Stub implements
-		ZWEBLIST {
+		IZweblist {
 	protected org.apache.axis2.description.AxisOperation[] _operations;
 
 	// hashmaps to keep the fault mapping
@@ -147,7 +146,7 @@ public class ZWEBLISTStub extends org.apache.axis2.client.Stub implements
 	/**
 	 * Auto generated method signature
 	 * 
-	 * @see com.tactusoft.com.tactusoft.webservice.client.customlists.ZWEBLIST#zWeblists
+	 * @see com.tactusoft.webservice.client.customlists.IZweblist.tactusoft.webservice.client.customlists.ZWEBLIST#zWeblists
 	 * @param zWeblists2
 	 */
 
@@ -286,7 +285,7 @@ public class ZWEBLISTStub extends org.apache.axis2.client.Stub implements
 	/**
 	 * Auto generated method signature for Asynchronous Invocations
 	 * 
-	 * @see com.tactusoft.com.tactusoft.webservice.client.customlists.ZWEBLIST#startzWeblists
+	 * @see com.tactusoft.webservice.client.customlists.IZweblist.tactusoft.webservice.client.customlists.ZWEBLIST#startzWeblists
 	 * @param zWeblists2
 	 */
 	public void startzWeblists(
