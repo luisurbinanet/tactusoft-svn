@@ -37,9 +37,6 @@ public class DoctorBacking extends BaseBacking {
 	private DoctorDataModel model;
 	private CrmDoctor selected;
 
-	private List<SelectItem> listCrmSpeciality;
-	private Map<BigDecimal, CrmSpeciality> mapCrmSpeciality;
-
 	private List<SelectItem> listCrmBranch;
 	private Map<BigDecimal, CrmBranch> mapCrmBranch;
 
@@ -104,31 +101,13 @@ public class DoctorBacking extends BaseBacking {
 		this.selected = selected;
 	}
 
-	public List<SelectItem> getListCrmSpeciality() {
-		if (listCrmSpeciality == null) {
-			listCrmSpeciality = new LinkedList<SelectItem>();
-			mapCrmSpeciality = new HashMap<BigDecimal, CrmSpeciality>();
-			for (CrmSpeciality row : tablesService.getListSpecialityActive()) {
-				mapCrmSpeciality.put(row.getId(), row);
-				listCrmSpeciality.add(new SelectItem(row.getId(), row
-						.getDescription()));
-			}
-		}
-		return listCrmSpeciality;
-	}
-
-	public void setListCrmSpeciality(List<SelectItem> listCrmSpeciality) {
-		this.listCrmSpeciality = listCrmSpeciality;
-	}
-
 	public List<SelectItem> getListCrmBranch() {
-		if (listCrmBranch == null) {
-			listCrmBranch = new LinkedList<SelectItem>();
-			mapCrmBranch = new HashMap<BigDecimal, CrmBranch>();
-			for (CrmBranch row : tablesService.getListBranchActive()) {
-				mapCrmBranch.put(row.getId(), row);
-				listCrmBranch.add(new SelectItem(row.getId(), row.getName()));
-			}
+		listCrmBranch = new LinkedList<SelectItem>();
+		mapCrmBranch = new HashMap<BigDecimal, CrmBranch>();
+		for (CrmBranch row : tablesService.getListBranchByUser(selected
+				.getCrmUser().getId())) {
+			mapCrmBranch.put(row.getId(), row);
+			listCrmBranch.add(new SelectItem(row.getId(), row.getName()));
 		}
 		return listCrmBranch;
 	}

@@ -12,10 +12,12 @@ import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 
 import co.com.tactusoft.crm.controller.bo.ProcessBo;
+import co.com.tactusoft.crm.controller.bo.SecurityBo;
 import co.com.tactusoft.crm.controller.bo.TablesBo;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
+import co.com.tactusoft.crm.model.entities.CrmSpeciality;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.util.SAPEnvironment;
@@ -32,6 +34,9 @@ public class BaseBacking implements Serializable {
 
 	@Inject
 	protected ProcessBo processService;
+	
+	@Inject
+	protected SecurityBo securityService;
 
 	private static final long serialVersionUID = 1L;
 
@@ -50,6 +55,9 @@ public class BaseBacking implements Serializable {
 	protected Map<BigDecimal, CrmBranch> mapCrmBranch;
 	protected BigDecimal idBranch;
 	
+	protected List<SelectItem> listCrmSpeciality;
+	protected Map<BigDecimal, CrmSpeciality> mapCrmSpeciality;
+	protected BigDecimal idSpeciality;
 
 	public List<CrmPatient> getListPatient() {
 		return listPatient;
@@ -280,4 +288,40 @@ public class BaseBacking implements Serializable {
 	public void setIdBranch(BigDecimal idBranch) {
 		this.idBranch = idBranch;
 	}
+	
+	public List<SelectItem> getListCrmSpeciality() {
+		if (listCrmSpeciality == null) {
+			listCrmSpeciality = new LinkedList<SelectItem>();
+			mapCrmSpeciality = new HashMap<BigDecimal, CrmSpeciality>();
+			String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
+			listCrmSpeciality.add(new SelectItem(Constant.DEFAULT_VALUE, label));
+			for (CrmSpeciality row : tablesService.getListSpecialityActive()) {
+				mapCrmSpeciality.put(row.getId(), row);
+				listCrmSpeciality.add(new SelectItem(row.getId(), row
+						.getDescription()));
+			}
+		}
+		return listCrmSpeciality;
+	}
+
+	public void setListCrmSpeciality(List<SelectItem> listCrmSpeciality) {
+		this.listCrmSpeciality = listCrmSpeciality;
+	}
+
+	public Map<BigDecimal, CrmSpeciality> getMapCrmSpeciality() {
+		return mapCrmSpeciality;
+	}
+
+	public void setMapCrmSpeciality(Map<BigDecimal, CrmSpeciality> mapCrmSpeciality) {
+		this.mapCrmSpeciality = mapCrmSpeciality;
+	}
+
+	public BigDecimal getIdSpeciality() {
+		return idSpeciality;
+	}
+
+	public void setIdSpeciality(BigDecimal idSpeciality) {
+		this.idSpeciality = idSpeciality;
+	}
+
 }
