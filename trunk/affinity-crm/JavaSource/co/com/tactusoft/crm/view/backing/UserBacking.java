@@ -1,6 +1,5 @@
 package co.com.tactusoft.crm.view.backing;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -9,14 +8,11 @@ import java.util.Map;
 
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.primefaces.model.DualListModel;
 import org.springframework.context.annotation.Scope;
 
-import co.com.tactusoft.crm.controller.bo.SecurityBo;
-import co.com.tactusoft.crm.controller.bo.TablesBo;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmDepartment;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
@@ -29,15 +25,9 @@ import co.com.tactusoft.crm.view.datamodel.UserDataModel;
 
 @Named
 @Scope("view")
-public class UserBacking implements Serializable {
+public class UserBacking extends BaseBacking {
 
 	private static final long serialVersionUID = 1L;
-
-	@Inject
-	private TablesBo tablesService;
-
-	@Inject
-	private SecurityBo securityService;
 
 	private List<CrmUser> list;
 	private UserDataModel model;
@@ -55,7 +45,6 @@ public class UserBacking implements Serializable {
 	private String password;
 	private CrmDoctor crmDoctor;
 	private Boolean doctor;
-	private BigDecimal idSpeciality;
 
 	public UserBacking() {
 		newAction();
@@ -158,14 +147,6 @@ public class UserBacking implements Serializable {
 		this.doctor = doctor;
 	}
 
-	public BigDecimal getIdSpeciality() {
-		return idSpeciality;
-	}
-
-	public void setIdSpeciality(BigDecimal idSpeciality) {
-		this.idSpeciality = idSpeciality;
-	}
-
 	public void newAction() {
 		selected = new CrmUser();
 		selected.setState(Constant.STATE_ACTIVE);
@@ -177,6 +158,7 @@ public class UserBacking implements Serializable {
 		generateListAction(null);
 
 		doctor = false;
+		idSpeciality = Constant.DEFAULT_VALUE;
 	}
 
 	public void saveAction() {
@@ -206,6 +188,11 @@ public class UserBacking implements Serializable {
 			FacesUtil.addError(message);
 		}
 
+		if (doctor && idSpeciality.intValue() == -1) {
+			message = FacesUtil.getMessage("usr_msg_error_speciality");
+			FacesUtil.addError(message);
+		}
+
 		if (message == null) {
 			selected.setUsername(selected.getUsername().toLowerCase());
 			if (validatePassword) {
@@ -222,11 +209,13 @@ public class UserBacking implements Serializable {
 				crmDoctor.setCode(selected.getDoc());
 				crmDoctor.setNames(selected.getSurnames().toUpperCase() + " "
 						+ selected.getNames().toUpperCase());
+				crmDoctor.setCrmSpeciality(mapCrmSpeciality.get(idSpeciality));
 				crmDoctor.setState(Constant.STATE_ACTIVE);
 			} else if (crmDoctor != null) {
 				crmDoctor.setCode(selected.getDoc());
 				crmDoctor.setNames(selected.getSurnames().toUpperCase() + " "
 						+ selected.getNames().toUpperCase());
+				crmDoctor.setCrmSpeciality(mapCrmSpeciality.get(idSpeciality));
 				crmDoctor.setState(doctor ? Constant.STATE_ACTIVE
 						: Constant.STATE_INACTIVE);
 			}
@@ -261,6 +250,7 @@ public class UserBacking implements Serializable {
 					.getId());
 			if (listDoctor.size() > 0) {
 				crmDoctor = listDoctor.get(0);
+				idSpeciality = crmDoctor.getCrmSpeciality().getId();
 				if (crmDoctor.getState() == Constant.STATE_ACTIVE) {
 					doctor = true;
 				} else {
