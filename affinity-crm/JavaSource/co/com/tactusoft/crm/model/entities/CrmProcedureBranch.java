@@ -41,7 +41,7 @@ public class CrmProcedureBranch implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_procedure", nullable = false)
 	public CrmProcedure getCrmProcedure() {
 		return this.crmProcedure;

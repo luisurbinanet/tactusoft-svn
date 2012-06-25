@@ -712,7 +712,7 @@ public class ProcessBo implements Serializable {
 
 	public CrmHistoryHistory getHistoryHistory(BigDecimal idPatient) {
 		List<CrmHistoryHistory> list = null;
-		list = dao.find("from CrmHistoryHistory o where o.idPatient = "
+		list = dao.find("from CrmHistoryHistory o where o.crmPatient.id = "
 				+ idPatient);
 		if (list.size() > 0) {
 			return list.get(0);

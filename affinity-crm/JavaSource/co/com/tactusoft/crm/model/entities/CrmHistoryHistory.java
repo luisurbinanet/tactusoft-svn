@@ -1,11 +1,12 @@
 package co.com.tactusoft.crm.model.entities;
 
-// Generated 20/06/2012 02:16:10 AM by Hibernate Tools 3.4.0.CR1
-
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -21,9 +22,10 @@ public class CrmHistoryHistory implements java.io.Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
-	private BigDecimal idPatient;
+	private CrmPatient crmPatient;
 	private String reason;
 	private String disease;
+	private String results;
 	private String head;
 	private String orl;
 	private String cr;
@@ -36,19 +38,20 @@ public class CrmHistoryHistory implements java.io.Serializable {
 	public CrmHistoryHistory() {
 	}
 
-	public CrmHistoryHistory(BigDecimal id, BigDecimal idPatient) {
+	public CrmHistoryHistory(BigDecimal id, CrmPatient crmPatient) {
 		this.id = id;
-		this.idPatient = idPatient;
+		this.crmPatient = crmPatient;
 	}
 
-	public CrmHistoryHistory(BigDecimal id, BigDecimal idPatient,
-			String reason, String disease, String head, String orl, String cr,
-			String gi, String neuromuscular, String gu, String psychiatric,
-			String skin) {
+	public CrmHistoryHistory(BigDecimal id, CrmPatient crmPatient,
+			String reason, String disease, String results, String head,
+			String orl, String cr, String gi, String neuromuscular, String gu,
+			String psychiatric, String skin) {
 		this.id = id;
-		this.idPatient = idPatient;
+		this.crmPatient = crmPatient;
 		this.reason = reason;
 		this.disease = disease;
+		this.results = results;
 		this.head = head;
 		this.orl = orl;
 		this.cr = cr;
@@ -69,16 +72,17 @@ public class CrmHistoryHistory implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "id_patient", unique = true, nullable = false, scale = 0)
-	public BigDecimal getIdPatient() {
-		return this.idPatient;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_patient", unique = true, nullable = false)
+	public CrmPatient getCrmPatient() {
+		return this.crmPatient;
 	}
 
-	public void setIdPatient(BigDecimal idPatient) {
-		this.idPatient = idPatient;
+	public void setCrmPatient(CrmPatient crmPatient) {
+		this.crmPatient = crmPatient;
 	}
 
-	@Column(name = "reason", length = 1000)
+	@Column(name = "reason", length = 65535)
 	public String getReason() {
 		return this.reason;
 	}
@@ -87,7 +91,7 @@ public class CrmHistoryHistory implements java.io.Serializable {
 		this.reason = reason;
 	}
 
-	@Column(name = "disease", length = 1000)
+	@Column(name = "disease", length = 65535)
 	public String getDisease() {
 		return this.disease;
 	}
@@ -96,7 +100,16 @@ public class CrmHistoryHistory implements java.io.Serializable {
 		this.disease = disease;
 	}
 
-	@Column(name = "head", length = 1)
+	@Column(name = "results", length = 65535)
+	public String getResults() {
+		return this.results;
+	}
+
+	public void setResults(String results) {
+		this.results = results;
+	}
+
+	@Column(name = "head", length = 65535)
 	public String getHead() {
 		return this.head;
 	}
@@ -105,7 +118,7 @@ public class CrmHistoryHistory implements java.io.Serializable {
 		this.head = head;
 	}
 
-	@Column(name = "orl", length = 1)
+	@Column(name = "orl", length = 65535)
 	public String getOrl() {
 		return this.orl;
 	}
@@ -114,7 +127,7 @@ public class CrmHistoryHistory implements java.io.Serializable {
 		this.orl = orl;
 	}
 
-	@Column(name = "cr", length = 1)
+	@Column(name = "cr", length = 65535)
 	public String getCr() {
 		return this.cr;
 	}
@@ -123,7 +136,7 @@ public class CrmHistoryHistory implements java.io.Serializable {
 		this.cr = cr;
 	}
 
-	@Column(name = "gi", length = 1)
+	@Column(name = "gi", length = 65535)
 	public String getGi() {
 		return this.gi;
 	}
@@ -132,7 +145,7 @@ public class CrmHistoryHistory implements java.io.Serializable {
 		this.gi = gi;
 	}
 
-	@Column(name = "neuromuscular", length = 1)
+	@Column(name = "neuromuscular", length = 65535)
 	public String getNeuromuscular() {
 		return this.neuromuscular;
 	}
@@ -141,7 +154,7 @@ public class CrmHistoryHistory implements java.io.Serializable {
 		this.neuromuscular = neuromuscular;
 	}
 
-	@Column(name = "gu", length = 1)
+	@Column(name = "gu", length = 65535)
 	public String getGu() {
 		return this.gu;
 	}
@@ -150,7 +163,7 @@ public class CrmHistoryHistory implements java.io.Serializable {
 		this.gu = gu;
 	}
 
-	@Column(name = "psychiatric", length = 1)
+	@Column(name = "psychiatric", length = 65535)
 	public String getPsychiatric() {
 		return this.psychiatric;
 	}
@@ -159,7 +172,7 @@ public class CrmHistoryHistory implements java.io.Serializable {
 		this.psychiatric = psychiatric;
 	}
 
-	@Column(name = "skin", length = 1)
+	@Column(name = "skin", length = 65535)
 	public String getSkin() {
 		return this.skin;
 	}

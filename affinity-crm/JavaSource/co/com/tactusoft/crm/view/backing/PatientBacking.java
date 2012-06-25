@@ -268,7 +268,8 @@ public class PatientBacking extends BaseBacking {
 						crmRegion.getCode(), "D001", profile.getSalesOrg(),
 						profile.getDistrChan(), profile.getDivision(),
 						profile.getSociety(), this.salesOff, "01",
-						profile.getPaymentTerm(), profile.getAccount());
+						profile.getPaymentTerm(), profile.getAccount(), "01",
+						"1", "1");
 
 				if (codeSap != null) {
 					selected.setCodeSap(codeSap);
@@ -328,6 +329,10 @@ public class PatientBacking extends BaseBacking {
 			message = FacesUtil.getMessage("Error");
 			FacesUtil.addError(message);
 		}
+	}
+
+	public void searchAction() {
+
 	}
 
 }
