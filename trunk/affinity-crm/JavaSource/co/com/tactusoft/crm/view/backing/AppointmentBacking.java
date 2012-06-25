@@ -121,19 +121,6 @@ public class AppointmentBacking extends BaseBacking {
 	}
 
 	public List<SelectItem> getListProcedure() {
-		if (listProcedure == null) {
-			listProcedure = new LinkedList<SelectItem>();
-			mapProcedure = new HashMap<BigDecimal, CrmProcedure>();
-			for (CrmProcedure row : tablesService.getListProcedureActive()) {
-				mapProcedure.put(row.getId(), row);
-				listProcedure.add(new SelectItem(row.getId(), row.getName()));
-			}
-
-			if (listProcedure.size() > 0) {
-				idProcedure = (BigDecimal) listProcedure.get(0).getValue();
-				handleProcedureChange();
-			}
-		}
 		return listProcedure;
 	}
 
@@ -385,6 +372,19 @@ public class AppointmentBacking extends BaseBacking {
 	}
 
 	public void handleBranchChange() {
+		listProcedure = new LinkedList<SelectItem>();
+		mapProcedure = new HashMap<BigDecimal, CrmProcedure>();
+		for (CrmProcedure row : tablesService
+				.getListProcedureByBranch(idBranch)) {
+			mapProcedure.put(row.getId(), row);
+			listProcedure.add(new SelectItem(row.getId(), row.getName()));
+		}
+
+		if (listProcedure.size() > 0) {
+			idProcedure = (BigDecimal) listProcedure.get(0).getValue();
+			handleProcedureChange();
+		}
+
 		listDoctor = new LinkedList<SelectItem>();
 		mapDoctor = new HashMap<BigDecimal, CrmDoctor>();
 		for (CrmDoctor row : tablesService.getListDoctorByBranch(idBranch)) {

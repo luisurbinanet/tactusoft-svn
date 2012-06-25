@@ -2,9 +2,13 @@ package co.com.tactusoft.crm.model.entities;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -51,7 +55,9 @@ public class CrmPatient implements java.io.Serializable {
 	private Boolean sendPostal;
 	private Boolean sendSms;
 	private String salesOrg;
-
+	private Set<CrmHistoryHistory> crmHistoryHistories = new HashSet<CrmHistoryHistory>(
+			0);
+	
 	private String names;
 
 	public CrmPatient() {
@@ -69,7 +75,8 @@ public class CrmPatient implements java.io.Serializable {
 			String guardian, String guardianAddress,
 			String guardianRelationship, String guardianTelephone, String obs,
 			Boolean cycle, Boolean sendPhone, Boolean sendEmail,
-			Boolean sendPostal, Boolean sendSms, String salesOrg) {
+			Boolean sendPostal, Boolean sendSms, String salesOrg,
+			Set<CrmHistoryHistory> crmHistoryHistories) {
 		this.id = id;
 		this.doc = doc;
 		this.codeSap = codeSap;
@@ -98,6 +105,7 @@ public class CrmPatient implements java.io.Serializable {
 		this.sendPostal = sendPostal;
 		this.sendSms = sendSms;
 		this.salesOrg = salesOrg;
+		this.crmHistoryHistories = crmHistoryHistories;
 	}
 
 	@Id
@@ -354,6 +362,16 @@ public class CrmPatient implements java.io.Serializable {
 		this.salesOrg = salesOrg;
 	}
 
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmPatient")
+	public Set<CrmHistoryHistory> getCrmHistoryHistories() {
+		return this.crmHistoryHistories;
+	}
+
+	public void setCrmHistoryHistories(
+			Set<CrmHistoryHistory> crmHistoryHistories) {
+		this.crmHistoryHistories = crmHistoryHistories;
+	}
+	
 	@Transient
 	public String getNames() {
 		if (FacesUtil.isEmptyOrBlank(this.names)) {

@@ -9,7 +9,7 @@
 
 	<ui:define name="body">
 
-		<p:panel style="width:100%;height:1000px;"
+		<p:panel style="width:100%;height:2000px;"
 			header="#{msg['title_view_history']}">
 
 			<p:spacer height="5" />
@@ -20,19 +20,21 @@
 
 				<p:toolbar id="toolBar" style="width:100%">
 					<p:toolbarGroup align="left">
-						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
-							actionListener="#{historyBacking.newAction}"
-							update="pnlDetail tabView btnSavePatient" process="@this" />
 						<p:commandButton value="#{msg['btn_add_patient']}"
 							icon="ui-icon-circle-check" oncomplete="dlg2.show()"
 							update=":editForm:dialog2" />
 						<p:commandButton value="#{msg['btn_search']}"
-							icon="ui-icon-search" update="tabView btnSavePatient"
-							actionListener="#{historyBacking.searchAction}"
-							disabled="#{historyBacking.disabledSelectedPatient}" />
-						<p:commandButton id="btnSavePatient" value="#{msg['btn_save']}"
-							icon="ui-icon-disk" actionListener="#{historyBacking.saveAction}"
-							update="btnSavePatient :form"
+							icon="ui-icon-search" update="toolBar tabView growl"
+							actionListener="#{historyBacking.searchAction}" />
+						<p:commandButton id="btnSavePatient"
+							value="#{msg['btn_save_patient']}" icon="ui-icon-disk"
+							action="#{historyBacking.savePatientAction}"
+							update="toolBar growl tabView"
+							disabled="#{historyBacking.disabledSaveButtonPatient}" />
+						<p:commandButton id="btnSaveHistory"
+							value="#{msg['btn_save_history']}" icon="ui-icon-disk"
+							actionListener="#{historyBacking.saveAction}"
+							update="toolBar growl tabView"
 							disabled="#{historyBacking.disabledSaveButton}" />
 					</p:toolbarGroup>
 				</p:toolbar>
@@ -51,39 +53,164 @@
 
 				<p:spacer height="5" />
 
-				<p:tabView id="tabView" style="height:800px">
-					<p:tab id="tab1" title="#{msg['his_history']}">
+				<p:tabView id="tabView" style="height:100%">
 
-						<p:dataTable id="selectedTable" var="rec"
-							value="#{historyBacking.appointmentModel}" rowKey="#{rec.code}"
-							style="width:100%"
-							selection="#{historyBacking.selectedAppointment}"
-							paginator="true" rows="10"
-							emptyMessage="#{msg['glb_no_records_found']}">
+					<p:tab id="tab1" title="#{msg['title_patient_complementary']}">
+						<p:fieldset legend="#{msg['pat_personal_data']}">
+							<h:panelGrid id="pnlDetail" columns="4" style="margin:0 auto;"
+								width="100%">
 
-							<p:column headerText="#{msg['app_code']}">
-								<h:outputLabel value="#{rec.code}" />
-							</p:column>
+								<h:outputLabel value="#{msg['pat_born_date']}" />
+								<p:calendar value="#{historyBacking.selected.bornDate}"
+									label="#{msg['pat_born_date']}" readonlyInput="true"
+									pattern="dd/MM/yyyy" showOn="button" navigator="true"
+									locale="es" yearRange="-100:+0"
+									readonly="#{historyBacking.disabledSaveButtonPatient}" />
 
-							<p:column headerText="#{msg['app_date']}">
-								<h:outputLabel value="#{rec.startAppointmentDate}">
-									<f:convertDateTime pattern="dd/MM/yyyy" />
-								</h:outputLabel>
-							</p:column>
+								<h:outputLabel value="#{msg['pat_occupation']}" />
+								<p:inputText value="#{historyBacking.selected.occupation}"
+									style="width:400px" label="#{msg['pat_occupation']}"
+									readonly="#{historyBacking.disabledSaveButtonPatient}"
+									maxlength="255" />
 
-							<p:column headerText="#{msg['app_procedure_type']}">
-								<h:outputLabel value="#{rec.crmProcedureDetail.name}" />
-							</p:column>
+								<h:outputLabel value="#{msg['pat_neighborhood']}" />
+								<p:inputText value="#{historyBacking.selected.neighborhood}"
+									style="width:400px" label="#{msg['pat_neighborhood']}"
+									readonly="#{historyBacking.disabledSaveButtonPatient}"
+									maxlength="45" />
 
-							<p:column headerText="#{msg['app_doctor']}">
-								<h:outputLabel value="#{rec.crmDoctor.names}" />
-							</p:column>
+								<h:outputLabel value="#{msg['pat_type_housing']}" />
+								<p:selectOneMenu value="#{historyBacking.selected.typeHousing}"
+									style="width:230px" label="#{msg['pat_type_housing']}"
+									disabled="#{historyBacking.disabledSaveButtonPatient}">
+									<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										itemValue="-1" />
+									<f:selectItem itemLabel="#{msg['pat_type_housing_u']}"
+										itemValue="U" />
+									<f:selectItem itemLabel="#{msg['pat_type_housing_r']}"
+										itemValue="R" />
+								</p:selectOneMenu>
 
-						</p:dataTable>
+							</h:panelGrid>
+						</p:fieldset>
+
+						<p:spacer height="8" />
+
+						<p:fieldset legend="#{msg['pat_guardian_data']}">
+							<h:panelGrid id="pnlDetail2" columns="4" style="margin:0 auto;"
+								width="100%">
+
+								<h:outputLabel value="#{msg['pat_guardian']}" />
+								<p:inputText value="#{historyBacking.selected.guardian}"
+									style="width:400px" label="#{msg['pat_guardian']}"
+									readonly="#{historyBacking.disabledSaveButtonPatient}"
+									maxlength="255" />
+
+								<h:outputLabel value="#{msg['pat_guardian_address']}" />
+								<p:inputText value="#{historyBacking.selected.guardianAddress}"
+									style="width:400px" label="#{msg['pat_guardian_address']}"
+									readonly="#{historyBacking.disabledSaveButtonPatient}"
+									maxlength="255" />
+
+								<h:outputLabel value="#{msg['pat_guardian_relationship']}" />
+								<p:inputText maxlength="255"
+									value="#{historyBacking.selected.guardianRelationship}"
+									style="width:400px" label="#{msg['pat_guardian_relationship']}"
+									readonly="#{historyBacking.disabledSaveButtonPatient}" />
+
+								<h:outputLabel value="#{msg['pat_guardian_telephone']}" />
+								<p:inputText
+									value="#{historyBacking.selected.guardianTelephone}"
+									style="width:400px" label="#{msg['pat_guardian_telephone']}"
+									readonly="#{historyBacking.disabledSaveButtonPatient}"
+									maxlength="30" />
+
+							</h:panelGrid>
+						</p:fieldset>
+
+						<p:spacer height="8" />
+
+						<p:fieldset legend="#{msg['pat_type_obs']}">
+							<h:panelGrid id="pnlDetail3" style="margin:0 auto;" width="100%">
+
+								<p:inputTextarea value="#{historyBacking.selected.obs}"
+									maxlength="1000" style="width:100%"
+									label="#{historyBacking.selected.obs}"
+									readonly="#{historyBacking.disabledSaveButtonPatient}" />
+
+							</h:panelGrid>
+						</p:fieldset>
+					</p:tab>
+
+					<p:tab id="tab2" title="#{msg['his_history_history']}">
+
+						<h:panelGrid width="100%">
+							<h:outputText value="#{msg['his_history_reason']}" />
+							<p:inputTextarea style="width:1100px" rows="5"
+								readonly="#{historyBacking.readOnlySelectedHistoryHistory}"
+								value="#{historyBacking.selectedHistoryHistory.reason}" />
+
+							<h:outputText value="#{msg['his_history_disease']}" />
+							<p:inputTextarea style="width:1100px" rows="5"
+								readonly="#{historyBacking.readOnlySelectedHistoryHistory}"
+								value="#{historyBacking.selectedHistoryHistory.disease}" />
+
+							<h:outputText value="#{msg['his_history_results']}" />
+							<p:inputTextarea style="width:1100px" rows="5"
+								readonly="#{historyBacking.readOnlySelectedHistoryHistory}"
+								value="#{historyBacking.selectedHistoryHistory.results}" />
+
+							<p:spacer height="10" />
+
+							<p:fieldset legend="#{msg['his_history_review']}">
+								<h:panelGrid columns="2" width="100%"
+									columnClasses="width25per,width25per,width25per,width25per">
+									<h:outputLabel value="Cabeza" />
+									<p:inputTextarea style="width:750px"
+										value="#{historyBacking.selectedHistoryHistory.head}"
+										readonly="#{historyBacking.readOnlySelectedHistoryHistory}" />
+
+									<h:outputLabel value="Neuromuscular" />
+									<p:inputTextarea style="width:750px"
+										value="#{historyBacking.selectedHistoryHistory.neuromuscular}"
+										readonly="#{historyBacking.readOnlySelectedHistoryHistory}" />
+
+									<h:outputLabel value="ORL" />
+									<p:inputTextarea style="width:750px"
+										value="#{historyBacking.selectedHistoryHistory.orl}"
+										readonly="#{historyBacking.readOnlySelectedHistoryHistory}" />
+
+									<h:outputLabel value="GU" />
+									<p:inputTextarea style="width:750px"
+										value="#{historyBacking.selectedHistoryHistory.gu}"
+										readonly="#{historyBacking.readOnlySelectedHistoryHistory}" />
+
+									<h:outputLabel value="CR" />
+									<p:inputTextarea style="width:750px"
+										value="#{historyBacking.selectedHistoryHistory.cr}"
+										readonly="#{historyBacking.readOnlySelectedHistoryHistory}" />
+
+									<h:outputLabel value="Psquiatrico" />
+									<p:inputTextarea style="width:750px"
+										value="#{historyBacking.selectedHistoryHistory.psychiatric}"
+										readonly="#{historyBacking.readOnlySelectedHistoryHistory}" />
+
+									<h:outputLabel value="GI" />
+									<p:inputTextarea style="width:750px"
+										value="#{historyBacking.selectedHistoryHistory.gi}"
+										readonly="#{historyBacking.readOnlySelectedHistoryHistory}" />
+
+									<h:outputLabel value="Piel y anexos" />
+									<p:inputTextarea style="width:750px"
+										value="#{historyBacking.selectedHistoryHistory.skin}"
+										readonly="#{historyBacking.readOnlySelectedHistoryHistory}" />
+								</h:panelGrid>
+							</p:fieldset>
+						</h:panelGrid>
 
 					</p:tab>
 
-					<p:tab id="tab2" title="#{msg['his_history_record']}">
+					<p:tab id="tab3" title="#{msg['his_history_record']}">
 						<p:fieldset legend="Patologicos">
 							<h:panelGrid columns="8" width="100%">
 								<p:selectBooleanCheckbox
@@ -219,89 +346,38 @@
 
 					</p:tab>
 
-					<p:tab id="tab3" title="#{msg['his_history_history']}">
-
-						<h:panelGrid width="100%">
-							<h:outputText value="Motivo de la consulta" />
-							<p:inputTextarea style="width:1100px" rows="3"
-								readonly="#{historyBacking.readOnlySelectedHistoryHistory}"
-								value="#{historyBacking.selectedHistoryHistory.reason}" />
-
-							<p:spacer height="10" />
-
-							<h:outputText value="Enfermedad Actual" />
-							<p:inputTextarea style="width:1100px" rows="3"
-								readonly="#{historyBacking.readOnlySelectedHistoryHistory}"
-								value="#{historyBacking.selectedHistoryHistory.disease}" />
-
-							<p:spacer height="10" />
-
-							<p:fieldset legend="Revisión por Sistemas">
-								<h:panelGrid columns="4" width="100%"
-									columnClasses="width25per,width25per,width25per,width25per">
-									<h:outputLabel value="Cabeza" />
-									<p:selectOneMenu
-										value="#{historyBacking.selectedHistoryHistory.head}"
-										style="width:230px" required="true">
-										<f:selectItem itemLabel="NEGATIVO" itemValue="N" />
-										<f:selectItem itemLabel="POSITIVO" itemValue="P" />
-									</p:selectOneMenu>
-									<h:outputLabel value="Neuromuscular" />
-									<p:selectOneMenu
-										value="#{historyBacking.selectedHistoryHistory.neuromuscular}"
-										style="width:230px" required="true">
-										<f:selectItem itemLabel="NEGATIVO" itemValue="N" />
-										<f:selectItem itemLabel="POSITIVO" itemValue="P" />
-									</p:selectOneMenu>
-									<h:outputLabel value="ORL" />
-									<p:selectOneMenu
-										value="#{historyBacking.selectedHistoryHistory.orl}"
-										style="width:230px" required="true">
-										<f:selectItem itemLabel="NEGATIVO" itemValue="N" />
-										<f:selectItem itemLabel="POSITIVO" itemValue="P" />
-									</p:selectOneMenu>
-									<h:outputLabel value="GU" />
-									<p:selectOneMenu
-										value="#{historyBacking.selectedHistoryHistory.gu}"
-										style="width:230px" required="true">
-										<f:selectItem itemLabel="NEGATIVO" itemValue="N" />
-										<f:selectItem itemLabel="POSITIVO" itemValue="P" />
-									</p:selectOneMenu>
-									<h:outputLabel value="CR" />
-									<p:selectOneMenu
-										value="#{historyBacking.selectedHistoryHistory.cr}"
-										style="width:230px" required="true">
-										<f:selectItem itemLabel="NEGATIVO" itemValue="N" />
-										<f:selectItem itemLabel="POSITIVO" itemValue="P" />
-									</p:selectOneMenu>
-									<h:outputLabel value="Psquiatrico" />
-									<p:selectOneMenu
-										value="#{historyBacking.selectedHistoryHistory.psychiatric}"
-										style="width:230px" required="true">
-										<f:selectItem itemLabel="NEGATIVO" itemValue="N" />
-										<f:selectItem itemLabel="POSITIVO" itemValue="P" />
-									</p:selectOneMenu>
-									<h:outputLabel value="GI" />
-									<p:selectOneMenu
-										value="#{historyBacking.selectedHistoryHistory.gi}"
-										style="width:230px" required="true">
-										<f:selectItem itemLabel="NEGATIVO" itemValue="N" />
-										<f:selectItem itemLabel="POSITIVO" itemValue="P" />
-									</p:selectOneMenu>
-									<h:outputLabel value="Piel y anexos" />
-									<p:selectOneMenu
-										value="#{historyBacking.selectedHistoryHistory.skin}"
-										style="width:230px" required="true">
-										<f:selectItem itemLabel="NEGATIVO" itemValue="N" />
-										<f:selectItem itemLabel="POSITIVO" itemValue="P" />
-									</p:selectOneMenu>
-								</h:panelGrid>
-							</p:fieldset>
-						</h:panelGrid>
-
+					<p:tab id="tab4" title="#{msg['his_history_physique']}">
 					</p:tab>
 
-					<p:tab id="tab4" title="#{msg['his_history_physique']}">
+					<p:tab id="tab5" title="#{msg['his_history']}">
+
+						<p:dataTable id="selectedTable" var="rec"
+							value="#{historyBacking.appointmentModel}" rowKey="#{rec.code}"
+							style="width:100%"
+							selection="#{historyBacking.selectedAppointment}"
+							paginator="true" rows="10"
+							emptyMessage="#{msg['glb_no_records_found']}">
+
+							<p:column headerText="#{msg['app_code']}">
+								<h:outputLabel value="#{rec.code}" />
+							</p:column>
+
+							<p:column headerText="#{msg['app_date']}">
+								<h:outputLabel value="#{rec.startAppointmentDate}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputLabel>
+							</p:column>
+
+							<p:column headerText="#{msg['app_procedure_type']}">
+								<h:outputLabel value="#{rec.crmProcedureDetail.name}" />
+							</p:column>
+
+							<p:column headerText="#{msg['app_doctor']}">
+								<h:outputLabel value="#{rec.crmDoctor.names}" />
+							</p:column>
+
+						</p:dataTable>
+
 					</p:tab>
 
 				</p:tabView>

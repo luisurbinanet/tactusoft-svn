@@ -147,6 +147,12 @@ public class TablesBo implements Serializable {
 		return dao.find("from CrmProcedure o where o.state = 1");
 	}
 
+	public List<CrmProcedure> getListProcedureByBranch(BigDecimal idBranch) {
+		return dao
+				.find("select o.crmProcedure from CrmProcedureBranch o where o.crmProcedure.state = 1 and o.crmBranch.id = "
+						+ idBranch);
+	}
+
 	public List<CrmProcedureDetail> getListProcedureDetailByProcedure(
 			BigDecimal idProcedure) {
 		return dao.find("from CrmProcedureDetail o where o.crmProcedure.id = "

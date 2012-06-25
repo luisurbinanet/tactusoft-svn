@@ -102,13 +102,6 @@ public class DoctorBacking extends BaseBacking {
 	}
 
 	public List<SelectItem> getListCrmBranch() {
-		listCrmBranch = new LinkedList<SelectItem>();
-		mapCrmBranch = new HashMap<BigDecimal, CrmBranch>();
-		for (CrmBranch row : tablesService.getListBranchByUser(selected
-				.getCrmUser().getId())) {
-			mapCrmBranch.put(row.getId(), row);
-			listCrmBranch.add(new SelectItem(row.getId(), row.getName()));
-		}
 		return listCrmBranch;
 	}
 
@@ -321,6 +314,14 @@ public class DoctorBacking extends BaseBacking {
 		listDoctorSchedule = tablesService.getListScheduleByDoctor(selected
 				.getId());
 		modelDoctorSchedule = new DoctorScheduleDataModel(listDoctorSchedule);
+
+		listCrmBranch = new LinkedList<SelectItem>();
+		mapCrmBranch = new HashMap<BigDecimal, CrmBranch>();
+		for (CrmBranch row : tablesService.getListBranchByUser(selected
+				.getCrmUser().getId())) {
+			mapCrmBranch.put(row.getId(), row);
+			listCrmBranch.add(new SelectItem(row.getId(), row.getName()));
+		}
 	}
 
 }
