@@ -45,6 +45,7 @@ import com.tactusoft.webservice.client.objects.Bapikna111;
 import com.tactusoft.webservice.client.objects.Bapireturn1;
 import com.tactusoft.webservice.client.objects.CustAddOnData;
 import com.tactusoft.webservice.client.objects.Fknvi;
+import com.tactusoft.webservice.client.objects.Fknvk;
 import com.tactusoft.webservice.client.objects.Kna1;
 import com.tactusoft.webservice.client.objects.Knb1;
 import com.tactusoft.webservice.client.objects.Knvv;
@@ -58,7 +59,8 @@ public class CustomerExecute {
 			String pais, String ciudad, String region, String grupoCuenta,
 			String orgVentas, String canalDistribucion, String division,
 			String sociedad, String oficinaVentas, String grupoCliente,
-			String condicionPago, String cuenta) {
+			String condicionPago, String cuenta, String grupoPrecios, 
+			String esquemaClientes, String estadoCliente) {
 
 		// CREAR CLIENTES
 		Bapiaddr2 ziBapiaddr2 = new Bapiaddr2();
@@ -80,7 +82,6 @@ public class CustomerExecute {
 		TableOfFknexHolder ztXknex = new TableOfFknexHolder();
 		TableOfFknvaHolder ztXknva = new TableOfFknvaHolder();
 		TableOfFknvdHolder ztXknvd = new TableOfFknvdHolder();
-		TableOfFknvkHolder ztXknvk = new TableOfFknvkHolder();
 		TableOfFknvlHolder ztXknvl = new TableOfFknvlHolder();
 		TableOfFknvpHolder ztXknvp = new TableOfFknvpHolder();
 		TableOfFknzaHolder ztXknza = new TableOfFknzaHolder();
@@ -115,6 +116,13 @@ public class CustomerExecute {
 		ziKna1.setSpras("S");// IDIOMA
 		ziKna1.setStkzn("X");// Persona Física
 		ziKna1.setFityp("05");// Clase Impuesto Persona Natural
+		
+		Fknvk fknvk = new Fknvk();
+		fknvk.setMandt(ambiente);
+		fknvk.setGbdat("1982-01-01");
+		Fknvk[] fknvkArray = new Fknvk[1];
+		fknvkArray[0] = fknvk;
+		TableOfFknvkHolder ztXknvk = new TableOfFknvkHolder(fknvkArray);
 
 		Bapiaddr1 ziBapiaddr1 = new Bapiaddr1();
 
@@ -128,12 +136,12 @@ public class CustomerExecute {
 		ziKnvv.setZterm(sociedad);
 		ziKnvv.setBzirk("COFC05");
 		ziKnvv.setWaers("COP");
-		ziKnvv.setKonda("01");// GRUPO DE PRECIOS
-		ziKnvv.setKalks("1");// ESQUEMA DE CLIENTES
-		ziKnvv.setVersg("1");// GRUPO ESTADO CLIENTE
+		ziKnvv.setKonda(grupoPrecios);// GRUPO DE PRECIOS 01
+		ziKnvv.setKalks(esquemaClientes);// ESQUEMA DE CLIENTES 1
+		ziKnvv.setVersg(estadoCliente);// GRUPO ESTADO CLIENTE 1
 		ziKnvv.setZterm(condicionPago);
-		ziKnvv.setVsbed("01");// CONDICION EXPEDICION
 		ziKnvv.setLprio("2");// PRIORIDAD ENTREGA
+		ziKnvv.setVsbed("01");// CONDICION EXPEDICION
 		ziKnvv.setVwerk(orgVentas);// CENTRO DE SUMINISTRO
 
 		Knb1 ziKnb1 = new Knb1();
@@ -214,12 +222,12 @@ public class CustomerExecute {
 		List<WSBean> result = new ArrayList<WSBean>();
 		value = "*" + value.replace(" ", "*") + "*";
 		Bapikna111[] list = find(url, user, password, "NAME1", value, maxCnt);
-		if (list != null) {
+		if (list != null && list[0].getType().equals("S")) {
 			for (Bapikna111 row : list) {
 				result.add(new WSBean(row.getCustomer(), row.getFieldvalue()));
 			}
 		}
-		
+
 		Collections.sort(result, new WSBeanComparator());
 		return result;
 	}
@@ -228,7 +236,7 @@ public class CustomerExecute {
 			String password, String society, String value, int maxCnt) {
 		List<WSBean> result = new ArrayList<WSBean>();
 		Bapikna111[] list = find(url, user, password, "SORTL", value, maxCnt);
-		if (list != null) {
+		if (list != null && list[0].getType().equals("S")) {
 			for (Bapikna111 row : list) {
 				Bapicustomer04 bapicustomer04 = getDetail(url, user, password,
 						society, row.getCustomer());
@@ -236,7 +244,7 @@ public class CustomerExecute {
 						.getName()));
 			}
 		}
-		
+
 		Collections.sort(result, new WSBeanComparator());
 		return result;
 	}
@@ -293,20 +301,55 @@ public class CustomerExecute {
 	public static void main(String args[]) {
 
 		// CREAR CLIENTES
+		/*String url = "http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zsd_customer_maintain_all/300/zsd_customer_maintain_all/zsd_customer_maintain_all";
+		String username = "TACTUSOFT";
+		String password = "AFFINITY";
+		
+		
+		String ambiente = "300";
+		String tipoDocumento = "1";
+		String nroDocumento = "86473621";
+		String tratamiento = "1";
+		String nombre = "Carlos Arturo Sarmiento";
+		String direccion = "Carrera 55A 163 35";
+		String telefono = "6501550";
+		String celular = "3003044115";
+		String correoElectronico = "carlossarmientor@gmail.com";
+		String pais = "CO";
+		String ciudad = "BOGOTA";
+		String region = "11";
+		String grupoCuenta = "D001";
+		String orgVentas = "1000";
+		String canalDistribucion = "10";
+		String division = "10";
+		String sociedad = "1000";
+		String oficinaVentas = "1025";
+		String grupoCliente = "01";
+		String condicionPago = "Z001";
+		String cuenta = "1305050000";
+		String grupoPrecios = "01"; 
+		String esquemaClientes = "1"; 
+		String estadoCliente = "1";
+		
+		String code = CustomerExecute.excecute(url, username, password, ambiente,
+				tipoDocumento, nroDocumento, tratamiento, nombre, direccion,
+				telefono, celular, correoElectronico, pais, ciudad, region,
+				grupoCuenta, orgVentas, canalDistribucion, division, sociedad,
+				oficinaVentas, grupoCliente, condicionPago, cuenta, grupoPrecios,
+				esquemaClientes, estadoCliente);
+		
+		System.out.println("PRUEBA");*/
+
 		/*
-		 * String code = CustomerExecute.excecute("300", "13", "PRUEBAX99", "1",
-		 * "PRUEBAX99", "CO", "BOGOTA", "11", "D001", "4000", "10", "10",
-		 * "4000", "4025", "01", "Z001", "PRUEBAX99", "37222477", "PRUEBAX99",
-		 * "PRUEBAX99@PRUEBAX3.COM");
+		 * List<WSBean> result = findByDoc(url, username, password, "1000",
+		 * "22734930", 0); for (WSBean row : result) {
+		 * System.out.println(row.getCode()); }
 		 */
 
-		List<WSBean> result = findByDoc(
-				"http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zcustomer2/300/zcustomer2/zcustomer2",
-				"TACTUSOFT", "AFFINITY", "22734930", "1000", 0);
-		for (WSBean row : result) {
-			System.out.println(row.getCode());
-		}
-		// Bapicustomer04 detail = getDetail("1000", "0000137537");
+		/*url = "http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zcustomer2/300/zcustomer2/zcustomer2";
+		Bapicustomer04 detail = getDetail(url, username, password, sociedad,
+				code);
+		System.out.println("PRUEBA");*/
 
 		/*
 		 * BapicustomerAddressdata[] add = CustomerExecute
