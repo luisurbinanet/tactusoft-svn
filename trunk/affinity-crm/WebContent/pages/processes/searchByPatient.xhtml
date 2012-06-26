@@ -95,14 +95,21 @@
 						</h:outputLabel>
 					</p:column>
 
+					<p:column headerText="#{msg['app_branch']}">
+						<h:outputLabel value="#{rec.crmBranch.name}" />
+					</p:column>
+
 					<p:column headerText="#{msg['app_doctor']}">
-						<h:outputLabel
-							value="#{rec.crmDoctor.names}" />
+						<h:outputLabel value="#{rec.crmDoctor.names}" />
+					</p:column>
+
+					<p:column headerText="#{msg['app_procedure']}">
+						<h:outputLabel value="#{rec.crmProcedureDetail.name}" />
 					</p:column>
 
 					<p:column headerText="#{msg['app_state']}">
 						<h:outputLabel
-							value="#{rec.state eq 1?'CONFIRMADO':rec.state eq 2?'CANCELADO':'CHEQUEADO'}" />
+							value="#{rec.state eq 1?'AGENDADA':rec.state eq 2?'CANCELADA':'CHEQUEADA'}" />
 					</p:column>
 
 				</p:dataTable>

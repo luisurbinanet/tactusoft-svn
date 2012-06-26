@@ -25,6 +25,7 @@ public class CrmHistoryRecord implements java.io.Serializable {
 	private CrmPatient crmPatient;
 	private Boolean arthritis;
 	private String arthritisTime;
+	private String arthritisMedication;
 	private Boolean cancer;
 	private String cancerTime;
 	private String cancerMedication;
@@ -46,7 +47,6 @@ public class CrmHistoryRecord implements java.io.Serializable {
 	private Boolean infections;
 	private String infectionsTime;
 	private String infectionsMedication;
-	private String arthritisMedication;
 	private String occupational;
 	private String toxic;
 	private String bloodType;

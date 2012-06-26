@@ -16,6 +16,7 @@ import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmDoctorException;
 import co.com.tactusoft.crm.model.entities.CrmDoctorSchedule;
 import co.com.tactusoft.crm.model.entities.CrmHistoryHistory;
+import co.com.tactusoft.crm.model.entities.CrmHistoryHomeopathic;
 import co.com.tactusoft.crm.model.entities.CrmHistoryPhysique;
 import co.com.tactusoft.crm.model.entities.CrmHistoryRecord;
 import co.com.tactusoft.crm.model.entities.CrmHoliday;
@@ -699,17 +700,6 @@ public class ProcessBo implements Serializable {
 		}
 	}
 
-	public CrmHistoryRecord getHistoryRecord(BigDecimal idPatient) {
-		List<CrmHistoryRecord> list = null;
-		list = dao.find("from CrmHistoryRecord o where o.idPatient = "
-				+ idPatient);
-		if (list.size() > 0) {
-			return list.get(0);
-		} else {
-			return new CrmHistoryRecord();
-		}
-	}
-
 	public CrmHistoryHistory getHistoryHistory(BigDecimal idPatient) {
 		List<CrmHistoryHistory> list = null;
 		list = dao.find("from CrmHistoryHistory o where o.crmPatient.id = "
@@ -718,6 +708,28 @@ public class ProcessBo implements Serializable {
 			return list.get(0);
 		} else {
 			return new CrmHistoryHistory();
+		}
+	}
+	
+	public CrmHistoryRecord getHistoryRecord(BigDecimal idPatient) {
+		List<CrmHistoryRecord> list = null;
+		list = dao.find("from CrmHistoryRecord o where o.crmPatient.id = "
+				+ idPatient);
+		if (list.size() > 0) {
+			return list.get(0);
+		} else {
+			return new CrmHistoryRecord();
+		}
+	}
+	
+	public CrmHistoryHomeopathic getHistoryHomeopathic(BigDecimal idPatient) {
+		List<CrmHistoryHomeopathic> list = null;
+		list = dao.find("from CrmHistoryHomeopathic o where o.crmPatient.id = "
+				+ idPatient);
+		if (list.size() > 0) {
+			return list.get(0);
+		} else {
+			return new CrmHistoryHomeopathic();
 		}
 	}
 

@@ -83,9 +83,16 @@
 						</h:outputLabel>
 					</p:column>
 
+					<p:column headerText="#{msg['app_branch']}">
+						<h:outputLabel value="#{rec.crmBranch.name}" />
+					</p:column>
+
 					<p:column headerText="#{msg['app_doctor']}">
-						<h:outputLabel
-							value="#{rec.crmDoctor.names}" />
+						<h:outputLabel value="#{rec.crmDoctor.names}" />
+					</p:column>
+
+					<p:column headerText="#{msg['app_procedure']}">
+						<h:outputLabel value="#{rec.crmProcedureDetail.name}" />
 					</p:column>
 
 					<f:facet name="footer">

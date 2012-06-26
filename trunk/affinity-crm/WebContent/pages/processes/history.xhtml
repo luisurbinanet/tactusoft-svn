@@ -164,43 +164,43 @@
 
 							<p:fieldset legend="#{msg['his_history_review']}">
 								<h:panelGrid columns="2" width="100%"
-									columnClasses="width25per,width25per,width25per,width25per">
-									<h:outputLabel value="Cabeza" />
+									columnClasses="width25per,width75per">
+									<h:outputLabel value="#{msg['his_history_head']}" />
 									<p:inputTextarea style="width:750px"
 										value="#{historyBacking.selectedHistoryHistory.head}"
 										readonly="#{historyBacking.readOnlySelectedHistoryHistory}" />
 
-									<h:outputLabel value="Neuromuscular" />
+									<h:outputLabel value="#{msg['his_history_neuromuscular']}" />
 									<p:inputTextarea style="width:750px"
 										value="#{historyBacking.selectedHistoryHistory.neuromuscular}"
 										readonly="#{historyBacking.readOnlySelectedHistoryHistory}" />
 
-									<h:outputLabel value="ORL" />
+									<h:outputLabel value="#{msg['his_history_orl']}" />
 									<p:inputTextarea style="width:750px"
 										value="#{historyBacking.selectedHistoryHistory.orl}"
 										readonly="#{historyBacking.readOnlySelectedHistoryHistory}" />
 
-									<h:outputLabel value="GU" />
+									<h:outputLabel value="#{msg['his_history_gu']}" />
 									<p:inputTextarea style="width:750px"
 										value="#{historyBacking.selectedHistoryHistory.gu}"
 										readonly="#{historyBacking.readOnlySelectedHistoryHistory}" />
 
-									<h:outputLabel value="CR" />
+									<h:outputLabel value="#{msg['his_history_cr']}" />
 									<p:inputTextarea style="width:750px"
 										value="#{historyBacking.selectedHistoryHistory.cr}"
 										readonly="#{historyBacking.readOnlySelectedHistoryHistory}" />
 
-									<h:outputLabel value="Psquiatrico" />
+									<h:outputLabel value="#{msg['his_history_psychiatric']}" />
 									<p:inputTextarea style="width:750px"
 										value="#{historyBacking.selectedHistoryHistory.psychiatric}"
 										readonly="#{historyBacking.readOnlySelectedHistoryHistory}" />
 
-									<h:outputLabel value="GI" />
+									<h:outputLabel value="#{msg['his_history_gi']}" />
 									<p:inputTextarea style="width:750px"
 										value="#{historyBacking.selectedHistoryHistory.gi}"
 										readonly="#{historyBacking.readOnlySelectedHistoryHistory}" />
 
-									<h:outputLabel value="Piel y anexos" />
+									<h:outputLabel value="#{msg['his_history_skin']}" />
 									<p:inputTextarea style="width:750px"
 										value="#{historyBacking.selectedHistoryHistory.skin}"
 										readonly="#{historyBacking.readOnlySelectedHistoryHistory}" />
@@ -211,142 +211,127 @@
 					</p:tab>
 
 					<p:tab id="tab3" title="#{msg['his_history_record']}">
-						<p:fieldset legend="Patologicos">
-							<h:panelGrid columns="8" width="100%">
-								<p:selectBooleanCheckbox
-									value="#{historyBacking.selectedHistoryRecord.hypertension}"
-									disabled="#{historyBacking.readOnlySelectedHistoryRecord}" />
-								<h:outputText value="Hipertension" />
 
-								<p:selectBooleanCheckbox
-									value="#{historyBacking.selectedHistoryRecord.heart}"
-									disabled="#{historyBacking.readOnlySelectedHistoryRecord}" />
-								<h:outputText value="Cardiopatia" />
-
-								<p:selectBooleanCheckbox
-									value="#{historyBacking.selectedHistoryRecord.cancer}"
-									disabled="#{historyBacking.readOnlySelectedHistoryRecord}" />
-								<h:outputText value="Cancer" />
-
-								<p:selectBooleanCheckbox
-									value="#{historyBacking.selectedHistoryRecord.arthritis}"
-									disabled="#{historyBacking.readOnlySelectedHistoryRecord}" />
-								<h:outputText value="Artritis" />
-
-								<p:selectBooleanCheckbox
-									value="#{historyBacking.selectedHistoryRecord.arthritis}"
-									disabled="#{historyBacking.readOnlySelectedHistoryRecord}" />
-								<h:outputText value="Diabetes" />
-
-								<h:outputText value="Tiempo DX" />
-								<p:inputText
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.diabetesTime}" />
-
-								<h:outputText value="CH GLICEMIA" />
-								<p:inputText
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.diabetesGlycemia}" />
-
-							</h:panelGrid>
-
-							<h:panelGrid columns="2" width="100%">
-								<h:outputText value="Otros Antecedentes" />
-								<p:inputText
-									value="#{historyBacking.selectedHistoryRecord.others}"
-									style="width:900px" />
-							</h:panelGrid>
-
-						</p:fieldset>
-
-						<p:spacer height="5" />
-
-						<p:fieldset legend="Antecendentes">
+						<p:fieldset legend="#{msg['his_record_personal']}">
 							<h:panelGrid columns="4" width="100%">
-								<h:outputText value="Quirurguicos" />
-								<p:inputText style="width:350px"
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.surgicalDesc}" />
-								<h:outputText value="Farmacologicos" />
-								<p:inputText style="width:350px"
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.pharmacologicalDesc}" />
-								<h:outputText value="Toxicos" />
-								<p:inputText style="width:350px"
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.toxicDesc}" />
-								<h:outputText value="Transfusionales" />
-								<p:inputText style="width:350px"
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.transfusionDesc}" />
-								<h:outputText value="Alergicos" />
-								<p:inputText style="width:350px"
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.allergyDesc}" />
-								<h:outputText value="Inmunizaciones" />
-								<p:inputText style="width:350px"
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.immunizationsDesc}" />
-								<h:outputText value="Otros" />
-								<p:inputText style="width:350px"
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.othersRecors}" />
+								<h:outputText value="#{msg['his_rec_per_arthritis']}" />
+								<p:inplace label="Haga Clic para escribir una descripción">
+									<p:inputTextarea style="width:400px" rows="3"
+										readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+										value="#{historyBacking.selectedHistoryRecord.arthritis}" />
+								</p:inplace>
+								<p:inplace label="Haga Clic para escribir tiempo">
+									<p:inputTextarea style="width:200px" rows="3"
+										readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+										value="#{historyBacking.selectedHistoryRecord.arthritisTime}" />
+								</p:inplace>
+								<p:inplace label="Haga Clic para escribir el tratamiento">
+									<p:inputTextarea style="width:400px" rows="3"
+										readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+										value="#{historyBacking.selectedHistoryRecord.arthritisMedication}" />
+								</p:inplace>
+								<h:outputText value="#{msg['his_rec_per_cancer']}" />
+								<p:inplace label="Haga Clic para escribir una descripción">
+									<p:inputTextarea style="width:400px" rows="3"
+										readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+										value="#{historyBacking.selectedHistoryRecord.cancer}" />
+								</p:inplace>
+								<p:inplace label="Haga Clic para escribir tiempo">
+									<p:inputTextarea style="width:200px" rows="3"
+										readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+										value="#{historyBacking.selectedHistoryRecord.cancerTime}" />
+								</p:inplace>
+								<p:inplace label="Haga Clic para escribir el tratamiento">
+									<p:inputTextarea style="width:400px" rows="3"
+										readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+										value="#{historyBacking.selectedHistoryRecord.cancerMedication}" />
+								</p:inplace>
 							</h:panelGrid>
 						</p:fieldset>
-
 
 						<p:spacer height="5" />
 
-						<p:fieldset legend="Antecendentes Familiares">
-							<h:panelGrid width="100%">
-								<p:inputTextarea rows="5" style="width:1100px"
-									value="#{historyBacking.selectedHistoryRecord.familyHistory}"
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}" />
+						<p:fieldset legend="#{msg['his_record_men']}">
+							<h:panelGrid columns="2" width="100%"
+								columnClasses="width25per,width75per">
 							</h:panelGrid>
 						</p:fieldset>
 
-						<p:spacer height="4" />
+						<p:spacer height="5" />
 
-						<p:fieldset legend="Gineco-Obstetricos">
-							<h:panelGrid columns="10" width="100%">
-
-								<h:outputText value="Gestacion" />
-								<p:inputText
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.gestation}" />
-
-								<h:outputText value="P" />
-								<p:inputText
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.obstGynP}" />
-
-								<h:outputText value="A" />
-								<p:inputText
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.obstGynA}" />
-
-								<h:outputText value="C" />
-								<p:inputText
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.obstGynC}" />
-
-								<h:outputText value="FUR" />
-								<p:inputText
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.obstGynFur}" />
+						<p:fieldset legend="#{msg['his_record_women']}">
+							<h:panelGrid columns="2" width="100%"
+								columnClasses="width25per,width75per">
 							</h:panelGrid>
+						</p:fieldset>
 
-							<h:panelGrid width="100%" columns="2">
-								<h:outputText value="Otros" />
-								<p:inputTextarea style="width:1100px" rows="3"
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.obstGynOthers}" />
+						<p:spacer height="5" />
+
+						<p:fieldset legend="#{msg['his_record_children']}">
+							<h:panelGrid columns="2" width="100%"
+								columnClasses="width25per,width75per">
+							</h:panelGrid>
+						</p:fieldset>
+
+						<p:spacer height="5" />
+
+						<p:fieldset legend="#{msg['his_record_family']}">
+							<h:panelGrid columns="2" width="100%"
+								columnClasses="width25per,width75per">
 							</h:panelGrid>
 						</p:fieldset>
 
 					</p:tab>
 
-					<p:tab id="tab4" title="#{msg['his_history_physique']}">
+					<p:tab id="tab4" title="#{msg['his_history_homeopathic']}">
+
+						<p:fieldset legend="#{msg['his_homeopathic_biotipology']}">
+							<h:panelGrid width="100%">
+								<p:selectOneRadio id="options" layout="pageDirection"
+									value="#{historyBacking.selectedHistoryHomeopathic.biotypology}">
+									<f:selectItem
+										itemLabel="#{msg['his_homeopathic_biotipology_1']}"
+										itemValue="C" />
+									<f:selectItem
+										itemLabel="#{msg['his_homeopathic_biotipology_2']}"
+										itemValue="S" />
+									<f:selectItem
+										itemLabel="#{msg['his_homeopathic_biotipology_3']}"
+										itemValue="F" />
+									<f:selectItem
+										itemLabel="#{msg['his_homeopathic_biotipology_4']}"
+										itemValue="U" />
+								</p:selectOneRadio>
+							</h:panelGrid>
+						</p:fieldset>
+
+						<p:spacer height="5" />
+
+						<h:panelGrid columns="2" width="100%"
+							columnClasses="width25per,width75per">
+
+							<h:outputLabel value="#{msg['his_homeopathic_mental']}" />
+							<p:inputTextarea style="width:750px"
+								value="#{historyBacking.selectedHistoryHomeopathic.mental}"
+								readonly="#{historyBacking.readOnlySelectedHistoryHomeopathic}" />
+
+							<h:outputLabel value="#{msg['his_homeopathic_special']}" />
+							<p:inputTextarea style="width:750px"
+								value="#{historyBacking.selectedHistoryHomeopathic.special}"
+								readonly="#{historyBacking.readOnlySelectedHistoryHomeopathic}" />
+
+							<h:outputLabel value="#{msg['his_homeopathic_general']}" />
+							<p:inputTextarea style="width:750px"
+								value="#{historyBacking.selectedHistoryHomeopathic.general}"
+								readonly="#{historyBacking.readOnlySelectedHistoryHomeopathic}" />
+
+							<h:outputLabel value="#{msg['his_homeopathic_miasm']}" />
+							<p:inputTextarea style="width:750px"
+								value="#{historyBacking.selectedHistoryHomeopathic.miasm}"
+								readonly="#{historyBacking.readOnlySelectedHistoryHomeopathic}" />
+
+						</h:panelGrid>
+
 					</p:tab>
 
 					<p:tab id="tab5" title="#{msg['his_history']}">
@@ -372,8 +357,16 @@
 								<h:outputLabel value="#{rec.crmProcedureDetail.name}" />
 							</p:column>
 
+							<p:column headerText="#{msg['app_branch']}">
+								<h:outputLabel value="#{rec.crmBranch.name}" />
+							</p:column>
+
 							<p:column headerText="#{msg['app_doctor']}">
 								<h:outputLabel value="#{rec.crmDoctor.names}" />
+							</p:column>
+
+							<p:column headerText="#{msg['app_procedure']}">
+								<h:outputLabel value="#{rec.crmProcedureDetail.name}" />
 							</p:column>
 
 						</p:dataTable>

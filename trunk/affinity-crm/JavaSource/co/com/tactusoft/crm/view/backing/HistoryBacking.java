@@ -124,12 +124,16 @@ public class HistoryBacking extends BaseBacking {
 		this.disabledSaveButtonPatient = disabledSaveButtonPatient;
 	}
 
+	public boolean isReadOnlySelectedHistoryHistory() {
+		return selectedHistoryHistory.getId() != null ? true : false;
+	}
+	
 	public boolean isReadOnlySelectedHistoryRecord() {
 		return selectedHistoryRecord.getId() != null ? true : false;
 	}
 
-	public boolean isReadOnlySelectedHistoryHistory() {
-		return selectedHistoryHistory.getId() != null ? true : false;
+	public boolean isReadOnlySelectedHistoryHomeopathic() {
+		return selectedHistoryHomeopathic.getId() != null ? true : false;
 	}
 
 	public boolean isReadOnlySelectedHistoryPhysique() {
@@ -137,9 +141,11 @@ public class HistoryBacking extends BaseBacking {
 	}
 
 	public void newAction(ActionEvent event) {
-		selectedHistoryRecord = new CrmHistoryRecord();
 		selectedHistoryHistory = new CrmHistoryHistory();
+		selectedHistoryRecord = new CrmHistoryRecord();
+		selectedHistoryHomeopathic = new CrmHistoryHomeopathic();
 		selectedHistoryPhysique = new CrmHistoryPhysique();
+
 		listAppointment = new ArrayList<CrmAppointment>();
 		appointmentModel = new AppointmentDataModel(listAppointment);
 		selectedAppointment = new CrmAppointment();
@@ -169,8 +175,8 @@ public class HistoryBacking extends BaseBacking {
 					.getId());
 			selectedHistoryRecord = processService.getHistoryRecord(selected
 					.getId());
-			selectedHistoryPhysique = processService
-					.getHistoryPhysique(selected.getId());
+			selectedHistoryHomeopathic = processService
+					.getHistoryHomeopathic(selected.getId());
 
 			disabledSaveButton = false;
 			disabledSaveButtonPatient = true;
