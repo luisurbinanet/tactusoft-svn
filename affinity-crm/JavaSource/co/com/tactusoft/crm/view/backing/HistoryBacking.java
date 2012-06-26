@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmHistoryHistory;
+import co.com.tactusoft.crm.model.entities.CrmHistoryHomeopathic;
 import co.com.tactusoft.crm.model.entities.CrmHistoryPhysique;
 import co.com.tactusoft.crm.model.entities.CrmHistoryRecord;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
@@ -25,7 +26,9 @@ public class HistoryBacking extends BaseBacking {
 
 	private CrmHistoryHistory selectedHistoryHistory;
 	private CrmHistoryRecord selectedHistoryRecord;
+	private CrmHistoryHomeopathic selectedHistoryHomeopathic;
 	private CrmHistoryPhysique selectedHistoryPhysique;
+
 	private List<CrmAppointment> listAppointment;
 	private AppointmentDataModel appointmentModel;
 	private CrmAppointment selectedAppointment;
@@ -53,6 +56,15 @@ public class HistoryBacking extends BaseBacking {
 
 	public void setSelectedHistoryRecord(CrmHistoryRecord selectedHistoryRecord) {
 		this.selectedHistoryRecord = selectedHistoryRecord;
+	}
+
+	public CrmHistoryHomeopathic getSelectedHistoryHomeopathic() {
+		return selectedHistoryHomeopathic;
+	}
+
+	public void setSelectedHistoryHomeopathic(
+			CrmHistoryHomeopathic selectedHistoryHomeopathic) {
+		this.selectedHistoryHomeopathic = selectedHistoryHomeopathic;
 	}
 
 	public CrmHistoryPhysique getSelectedHistoryPhysique() {
@@ -139,44 +151,6 @@ public class HistoryBacking extends BaseBacking {
 		optionSearchPatient = 1;
 	}
 
-	public void saveAction(ActionEvent event) {
-		String field = null;
-		String message = null;
-
-		if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getReason())) {
-			field = FacesUtil.getMessage("his_history_reason");
-			message = FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addError(message);
-		}
-
-		if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getDisease())) {
-			field = FacesUtil.getMessage("his_history_disease");
-			message = FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addError(message);
-		}
-
-		if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getResults())) {
-			field = FacesUtil.getMessage("his_history_results");
-			message = FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addError(message);
-		}
-
-		if (message == null) {
-			/*selectedHistoryRecord.setIdPatient(selected.getId());
-			int result = processService
-					.saveHistoryRecord(selectedHistoryRecord);
-			if (result == 0) {*/
-				selectedHistoryHistory.setCrmPatient(selected);
-				int result = processService
-						.saveHistoryHistory(selectedHistoryHistory);
-				if (result == 0) {
-					message = FacesUtil.getMessage("msg_record_ok");
-					FacesUtil.addInfo(message);
-				//}
-			}
-		}
-	}
-
 	public void searchAction(ActionEvent event) {
 		String message = null;
 		selected = processService.getPatientByCodeSap(selectedPatient
@@ -243,6 +217,48 @@ public class HistoryBacking extends BaseBacking {
 			} else {
 				message = FacesUtil.getMessage("Error");
 				FacesUtil.addError(message);
+			}
+		}
+	}
+
+	public void saveAction(ActionEvent event) {
+		String field = null;
+		String message = null;
+
+		if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getReason())) {
+			field = FacesUtil.getMessage("his_history_reason");
+			message = FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addError(message);
+		}
+
+		if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getDisease())) {
+			field = FacesUtil.getMessage("his_history_disease");
+			message = FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addError(message);
+		}
+
+		if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getResults())) {
+			field = FacesUtil.getMessage("his_history_results");
+			message = FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addError(message);
+		}
+
+		if (message == null) {
+			selectedHistoryHistory.setCrmPatient(selected);
+			int result = processService
+					.saveHistoryHistory(selectedHistoryHistory);
+			if (result == 0) {
+				selectedHistoryRecord.setCrmPatient(selected);
+				result = processService
+						.saveHistoryRecord(selectedHistoryRecord);
+				if (result == 0) {
+					message = FacesUtil.getMessage("msg_record_ok");
+					FacesUtil.addInfo(message);
+				} else {
+
+				}
+			} else {
+
 			}
 		}
 	}
