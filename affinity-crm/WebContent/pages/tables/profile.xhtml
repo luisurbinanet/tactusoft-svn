@@ -51,6 +51,14 @@
 						<h:outputLabel value="#{rec.division}" />
 					</p:column>
 
+					<p:column headerText="#{msg['pro_society']}">
+						<h:outputLabel value="#{rec.society}" />
+					</p:column>
+
+					<p:column headerText="#{msg['pro_formula']}">
+						<h:outputLabel value="#{rec.formula}" />
+					</p:column>
+
 					<p:column headerText="#{msg['glb_state']}">#{rec.state eq 1?msg['glb_state_active']:msg['glb_state_inactive']}</p:column>
 
 				</p:dataTable>
@@ -105,6 +113,15 @@
 					<h:inputText value="#{profileBacking.selected.division}"
 						style="width:100%" label="#{msg['pro_division']}" required="true"
 						maxlength="2" />
+
+					<h:outputLabel value="#{msg['pro_society']}" />
+					<h:inputText value="#{profileBacking.selected.society}"
+						style="width:100%" label="#{msg['pro_society']}" required="true"
+						maxlength="4" />
+
+					<h:outputLabel value="#{msg['pro_formula']}" />
+					<h:inputText value="#{profileBacking.selected.formula}"
+						style="width:100%" label="#{msg['pro_formula']}" maxlength="4" />
 
 					<h:outputLabel value="#{msg['glb_state']}"
 						rendered="#{profileBacking.selected.id!=null?true:false}" />

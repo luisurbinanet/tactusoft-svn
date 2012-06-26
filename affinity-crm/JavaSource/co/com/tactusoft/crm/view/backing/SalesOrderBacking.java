@@ -154,7 +154,8 @@ public class SalesOrderBacking extends BaseBacking {
 			mapBranch = new HashMap<String, CrmBranch>();
 			listBranch = new LinkedList<SelectItem>();
 			for (CrmBranch row : FacesUtil.getCurrentUserData().getListBranch()) {
-				listBranch.add(new SelectItem(row.getCode(), row.getName()));
+				listBranch.add(new SelectItem(row.getCode(), row.getName()
+						+ " (" + row.getSociety() + ")"));
 				mapBranch.put(row.getCode(), row);
 			}
 		}
@@ -314,8 +315,6 @@ public class SalesOrderBacking extends BaseBacking {
 					"yyyy-MM-dd");
 			String fechaPedido = sdf.format(currentDate);
 
-			String formula = mapBranch.get(this.salesOff).getFormula();
-
 			List<MaterialesCustom> listMaterialTmp = new ArrayList<MaterialesCustom>();
 			int index = 1;
 			for (Material row : this.listSelectedMaterial) {
@@ -332,14 +331,14 @@ public class SalesOrderBacking extends BaseBacking {
 
 			sap.getEnvironment();
 
-			ResultCreateOrder result = CreateSalesOrderExecute.execute(sap
-					.getUrlCustomerSalesOrderCreate(), sap.getUsername(), sap
-					.getPassword(), tipoDocVenta, orgVentas, canalDistribucion,
-					division, this.salesOff, fechaPedido, selectedPatient
-							.getCodeSap(), this.methodPayment,
+			ResultCreateOrder result = CreateSalesOrderExecute.execute(
+					sap.getUrlCustomerSalesOrderCreate(), sap.getUsername(),
+					sap.getPassword(), tipoDocVenta, orgVentas,
+					canalDistribucion, division, this.salesOff, fechaPedido,
+					selectedPatient.getCodeSap(), this.methodPayment,
 					this.conditionPayment, solicitante, listMaterialTmp,
-					interlocutor, this.salesGrp, medico, formula, FacesUtil
-							.getCurrentUser().getUsername());
+					interlocutor, this.salesGrp, medico, profile.getFormula(),
+					FacesUtil.getCurrentUser().getUsername());
 
 			if (!FacesUtil.isEmptyOrBlank(result.getSalesdocument())) {
 				message = FacesUtil.getMessage("sal_msg_ok",

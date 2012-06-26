@@ -1,7 +1,5 @@
 package co.com.tactusoft.crm.model.entities;
 
-// Generated 23/06/2012 01:17:33 PM by Hibernate Tools 3.4.0.CR1
-
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,15 +18,11 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "crm_branch", catalog = "crm_db", uniqueConstraints = @UniqueConstraint(columnNames = "code"))
 public class CrmBranch implements java.io.Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
 	private String code;
 	private String name;
 	private String society;
-	private String formula;
 	private Integer doctors;
 	private Integer nurses;
 	private Integer stretchers;
@@ -45,14 +39,12 @@ public class CrmBranch implements java.io.Serializable {
 	public CrmBranch() {
 	}
 
-	public CrmBranch(BigDecimal id, String formula) {
+	public CrmBranch(BigDecimal id) {
 		this.id = id;
-		this.formula = formula;
 	}
 
 	public CrmBranch(BigDecimal id, String code, String name, String society,
-			String formula, Integer doctors, Integer nurses,
-			Integer stretchers, Integer state,
+			Integer doctors, Integer nurses, Integer stretchers, Integer state,
 			Set<CrmDoctorSchedule> crmDoctorSchedules,
 			Set<CrmProcedureBranch> crmProcedureBranchs,
 			Set<CrmHolidayBranch> crmHolidayBranchs,
@@ -62,7 +54,6 @@ public class CrmBranch implements java.io.Serializable {
 		this.code = code;
 		this.name = name;
 		this.society = society;
-		this.formula = formula;
 		this.doctors = doctors;
 		this.nurses = nurses;
 		this.stretchers = stretchers;
@@ -109,15 +100,6 @@ public class CrmBranch implements java.io.Serializable {
 
 	public void setSociety(String society) {
 		this.society = society;
-	}
-
-	@Column(name = "formula", nullable = false, length = 4)
-	public String getFormula() {
-		return this.formula;
-	}
-
-	public void setFormula(String formula) {
-		this.formula = formula;
 	}
 
 	@Column(name = "doctors")

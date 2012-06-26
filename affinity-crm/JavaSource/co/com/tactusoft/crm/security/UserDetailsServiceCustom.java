@@ -112,7 +112,6 @@ public class UserDetailsServiceCustom implements UserDetailsService {
 							newBranch.setCode(row.getCode());
 							newBranch.setName(row.getNames());
 							newBranch.setSociety(row.getSociety());
-							newBranch.setFormula("ZHD2");
 							newBranch.setState(Constant.STATE_ACTIVE);
 							tableService.saveBranch(newBranch);
 							user.getListBranchAll().add(newBranch);

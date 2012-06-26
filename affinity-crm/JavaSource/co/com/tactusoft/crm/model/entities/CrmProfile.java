@@ -28,6 +28,7 @@ public class CrmProfile implements java.io.Serializable {
 	private String society;
 	private String account;
 	private String paymentTerm;
+	private String formula;
 	private int state;
 	private Set<CrmUser> crmUsers = new HashSet<CrmUser>(0);
 
@@ -42,7 +43,8 @@ public class CrmProfile implements java.io.Serializable {
 
 	public CrmProfile(BigDecimal id, String code, String description,
 			String salesOrg, String distrChan, String division, String society,
-			String account, String paymentTerm, int state, Set<CrmUser> crmUsers) {
+			String account, String paymentTerm, String formula, int state,
+			Set<CrmUser> crmUsers) {
 		this.id = id;
 		this.code = code;
 		this.description = description;
@@ -52,6 +54,7 @@ public class CrmProfile implements java.io.Serializable {
 		this.society = society;
 		this.account = account;
 		this.paymentTerm = paymentTerm;
+		this.formula = formula;
 		this.state = state;
 		this.crmUsers = crmUsers;
 	}
@@ -136,6 +139,15 @@ public class CrmProfile implements java.io.Serializable {
 
 	public void setPaymentTerm(String paymentTerm) {
 		this.paymentTerm = paymentTerm;
+	}
+
+	@Column(name = "formula", length = 4)
+	public String getFormula() {
+		return this.formula;
+	}
+
+	public void setFormula(String formula) {
+		this.formula = formula;
 	}
 
 	@Column(name = "state", nullable = false)
