@@ -393,6 +393,11 @@ public class TablesBo implements Serializable {
 
 		return i;
 	}
+	
+	public void udpateBranch(String code, String society) {
+		dao.executeHQL("update CrmBranch set society = '" + society + "' where code = '"
+				+ code  + "'");
+	}
 
 	public void remove(Object entity) {
 		dao.delete(entity);

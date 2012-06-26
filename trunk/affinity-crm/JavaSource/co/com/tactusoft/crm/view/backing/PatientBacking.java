@@ -93,7 +93,8 @@ public class PatientBacking extends BaseBacking {
 		if (listBranch == null) {
 			listBranch = new LinkedList<SelectItem>();
 			for (CrmBranch row : FacesUtil.getCurrentUserData().getListBranch()) {
-				listBranch.add(new SelectItem(row.getCode(), row.getName()));
+				listBranch.add(new SelectItem(row.getCode(), row.getName()
+						+ " (" + row.getSociety() + ")"));
 			}
 		}
 		return listBranch;
