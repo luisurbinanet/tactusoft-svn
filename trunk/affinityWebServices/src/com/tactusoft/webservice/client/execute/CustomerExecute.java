@@ -301,12 +301,12 @@ public class CustomerExecute {
 	public static void main(String args[]) {
 
 		// CREAR CLIENTES
-		/*String url = "http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zsd_customer_maintain_all/300/zsd_customer_maintain_all/zsd_customer_maintain_all";
+		String url = "http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zsd_customer_maintain_all/300/zsd_customer_maintain_all/zsd_customer_maintain_all";
 		String username = "TACTUSOFT";
 		String password = "AFFINITY";
 		
 		
-		String ambiente = "300";
+		/*String ambiente = "300";
 		String tipoDocumento = "1";
 		String nroDocumento = "86473621";
 		String tratamiento = "1";
@@ -340,16 +340,18 @@ public class CustomerExecute {
 		
 		System.out.println("PRUEBA");*/
 
-		/*
-		 * List<WSBean> result = findByDoc(url, username, password, "1000",
-		 * "22734930", 0); for (WSBean row : result) {
-		 * System.out.println(row.getCode()); }
-		 */
+		
+		List<WSBean> result = findByDoc(url, username, password, "1000",
+		"PRUEBAD1", 0); 
+		for (WSBean row : result) {
+			System.out.println(row.getCode());
+		}	
 
-		/*url = "http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zcustomer2/300/zcustomer2/zcustomer2";
-		Bapicustomer04 detail = getDetail(url, username, password, sociedad,
-				code);
-		System.out.println("PRUEBA");*/
+
+		url = "http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zcustomer2/300/zcustomer2/zcustomer2";
+		//Bapicustomer04 detail = getDetail(url, username, password, "1000",
+		//		"0000765439");
+		//System.out.println("PRUEBA");
 
 		/*
 		 * BapicustomerAddressdata[] add = CustomerExecute
