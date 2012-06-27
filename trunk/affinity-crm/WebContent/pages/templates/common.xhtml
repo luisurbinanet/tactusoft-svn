@@ -11,7 +11,7 @@
 		<title>#{msg['title_app']}</title>
 		<link rel="stylesheet" href="../../css/style.css" type="text/css"
 			media="screen" />
-			
+
 		<script type="text/javascript">
             PrimeFaces.locales['es'] = {
                 closeText: 'Cerrar',
@@ -51,6 +51,16 @@
 			header="#{msg['msg_wait']}" draggable="false" closable="false"
 			resizable="false">
 			<p:graphicImage value="../../images/ajaxloadingbar.gif" />
+		</p:dialog>
+
+		<p:dialog header="#{msg['error.sessionTimeOut.header']}"
+			widgetVar="sessionTimeOutDialog" modal="true" closable="false"
+			width="400" visible="#{not empty param['expired']}" resizable="false">
+			<h:panelGrid width="100%" style="text-align:center;">
+				<h:outputText value="#{msg['error.sessionTimeOut.text']}" />
+				<p:button value="#{msg['btn_return_app']}"
+					onclick="window.location='#{facesContext.externalContext.requestContextPath}/login.xhtml';" />
+			</h:panelGrid>
 		</p:dialog>
 
 		<div id="content">
