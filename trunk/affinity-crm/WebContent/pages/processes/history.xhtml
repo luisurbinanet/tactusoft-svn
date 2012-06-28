@@ -26,11 +26,6 @@
 						<p:commandButton value="#{msg['btn_search']}"
 							icon="ui-icon-search" update="toolBar tabView growl"
 							actionListener="#{historyBacking.searchAction}" />
-						<p:commandButton id="btnSavePatient"
-							value="#{msg['btn_save_patient']}" icon="ui-icon-disk"
-							action="#{historyBacking.savePatientAction}"
-							update="toolBar growl tabView"
-							disabled="#{historyBacking.disabledSaveButtonPatient}" />
 						<p:commandButton id="btnSaveHistory"
 							value="#{msg['btn_save_history']}" icon="ui-icon-disk"
 							actionListener="#{historyBacking.saveAction}"
@@ -46,8 +41,27 @@
 					<p:inputText value="#{historyBacking.selectedPatient.codeSap}"
 						style="width:400px" readonly="true" />
 
+					<h:outputLabel value="#{msg['pat_code']}" />
+					<p:inputText value="#{historyBacking.selectedPatient.doc}"
+						style="width:400px" readonly="true" />
+
 					<h:outputLabel value="#{msg['pat_names']}" />
 					<p:inputText value="#{historyBacking.selectedPatient.names}"
+						style="width:400px" readonly="true" />
+
+					<h:outputLabel value="#{msg['glb_gender']}" />
+					<p:inputText style="width:400px" readonly="true"
+						value="#{historyBacking.selectedPatient.gender eq 'W'?msg['glb_gender_woman']:historyBacking.selectedPatient.gender eq 'M'?msg['glb_gender_man']:''}" />
+
+					<h:outputLabel value="#{msg['pat_born_date']}" />
+					<p:inputText value="#{historyBacking.selectedPatient.bornDate}"
+						style="width:400px" readonly="true">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</p:inputText>
+
+					<h:outputLabel value="#{msg['pat_age']}" />
+					<p:inputText
+						value="#{historyBacking.selectedPatient.age} #{msg['glb_age']}"
 						style="width:400px" readonly="true" />
 				</h:panelGrid>
 
@@ -60,29 +74,22 @@
 							<h:panelGrid id="pnlDetail" columns="4" style="margin:0 auto;"
 								width="100%">
 
-								<h:outputLabel value="#{msg['pat_born_date']}" />
-								<p:calendar value="#{historyBacking.selected.bornDate}"
-									label="#{msg['pat_born_date']}" readonlyInput="true"
-									pattern="dd/MM/yyyy" showOn="button" navigator="true"
-									locale="es" yearRange="-100:+0"
-									readonly="#{historyBacking.disabledSaveButtonPatient}" />
-
 								<h:outputLabel value="#{msg['pat_occupation']}" />
 								<p:inputText value="#{historyBacking.selected.occupation}"
 									style="width:400px" label="#{msg['pat_occupation']}"
-									readonly="#{historyBacking.disabledSaveButtonPatient}"
+									readonly="##{historyBacking.readOnlySelectedHistoryHistory}"
 									maxlength="255" />
 
 								<h:outputLabel value="#{msg['pat_neighborhood']}" />
 								<p:inputText value="#{historyBacking.selected.neighborhood}"
 									style="width:400px" label="#{msg['pat_neighborhood']}"
-									readonly="#{historyBacking.disabledSaveButtonPatient}"
+									readonly="##{historyBacking.readOnlySelectedHistoryHistory}"
 									maxlength="45" />
 
 								<h:outputLabel value="#{msg['pat_type_housing']}" />
 								<p:selectOneMenu value="#{historyBacking.selected.typeHousing}"
 									style="width:230px" label="#{msg['pat_type_housing']}"
-									disabled="#{historyBacking.disabledSaveButtonPatient}">
+									disabled="##{historyBacking.readOnlySelectedHistoryHistory}">
 									<f:selectItem itemLabel="#{msg['glb_default_value']}"
 										itemValue="-1" />
 									<f:selectItem itemLabel="#{msg['pat_type_housing_u']}"
@@ -103,26 +110,26 @@
 								<h:outputLabel value="#{msg['pat_guardian']}" />
 								<p:inputText value="#{historyBacking.selected.guardian}"
 									style="width:400px" label="#{msg['pat_guardian']}"
-									readonly="#{historyBacking.disabledSaveButtonPatient}"
+									readonly="##{historyBacking.readOnlySelectedHistoryHistory}"
 									maxlength="255" />
 
 								<h:outputLabel value="#{msg['pat_guardian_address']}" />
 								<p:inputText value="#{historyBacking.selected.guardianAddress}"
 									style="width:400px" label="#{msg['pat_guardian_address']}"
-									readonly="#{historyBacking.disabledSaveButtonPatient}"
+									readonly="##{historyBacking.readOnlySelectedHistoryHistory}"
 									maxlength="255" />
 
 								<h:outputLabel value="#{msg['pat_guardian_relationship']}" />
 								<p:inputText maxlength="255"
 									value="#{historyBacking.selected.guardianRelationship}"
 									style="width:400px" label="#{msg['pat_guardian_relationship']}"
-									readonly="#{historyBacking.disabledSaveButtonPatient}" />
+									readonly="#{historyBacking.readOnlySelectedHistoryHistory}" />
 
 								<h:outputLabel value="#{msg['pat_guardian_telephone']}" />
 								<p:inputText
 									value="#{historyBacking.selected.guardianTelephone}"
 									style="width:400px" label="#{msg['pat_guardian_telephone']}"
-									readonly="#{historyBacking.disabledSaveButtonPatient}"
+									readonly="#{historyBacking.readOnlySelectedHistoryHistory}"
 									maxlength="30" />
 
 							</h:panelGrid>
@@ -136,7 +143,7 @@
 								<p:inputTextarea value="#{historyBacking.selected.obs}"
 									maxlength="1000" style="width:100%"
 									label="#{historyBacking.selected.obs}"
-									readonly="#{historyBacking.disabledSaveButtonPatient}" />
+									readonly="#{historyBacking.readOnlySelectedHistoryHistory}" />
 
 							</h:panelGrid>
 						</p:fieldset>
@@ -249,25 +256,31 @@
 							</h:panelGrid>
 						</p:fieldset>
 
-						<p:spacer height="5" />
+						<p:spacer height="5"
+							rendered="#{historyBacking.renderedRecord eq 2?true:false}" />
 
-						<p:fieldset legend="#{msg['his_record_men']}">
+						<p:fieldset legend="#{msg['his_record_men']}"
+							rendered="#{historyBacking.renderedRecord eq 3?true:false}">
 							<h:panelGrid columns="2" width="100%"
 								columnClasses="width25per,width75per">
 							</h:panelGrid>
 						</p:fieldset>
 
-						<p:spacer height="5" />
+						<p:spacer height="5"
+							rendered="#{historyBacking.renderedRecord eq 2?true:false}" />
 
-						<p:fieldset legend="#{msg['his_record_women']}">
+						<p:fieldset legend="#{msg['his_record_women']}"
+							rendered="#{historyBacking.renderedRecord eq 2?true:false}">
 							<h:panelGrid columns="2" width="100%"
 								columnClasses="width25per,width75per">
 							</h:panelGrid>
 						</p:fieldset>
 
-						<p:spacer height="5" />
+						<p:spacer height="5"
+							rendered="#{historyBacking.renderedRecord eq 1?true:false}" />
 
-						<p:fieldset legend="#{msg['his_record_children']}">
+						<p:fieldset legend="#{msg['his_record_children']}"
+							rendered="#{historyBacking.renderedRecord eq 1?true:false}">
 							<h:panelGrid columns="2" width="100%"
 								columnClasses="width25per,width75per">
 							</h:panelGrid>

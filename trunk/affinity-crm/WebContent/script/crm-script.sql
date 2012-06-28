@@ -590,6 +590,7 @@ CREATE TABLE `crm_history_record` (
   `id_patient` decimal(19,0) NOT NULL,
   `arthritis` tinyint(1) DEFAULT NULL,
   `arthritis_time` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `arthritis_medication` text COLLATE latin1_spanish_ci,
   `cancer` tinyint(1) DEFAULT NULL,
   `cancer_time` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
   `cancer_medication` text COLLATE latin1_spanish_ci,
@@ -611,7 +612,6 @@ CREATE TABLE `crm_history_record` (
   `infections` tinyint(1) DEFAULT NULL,
   `infections_time` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
   `infections_medication` text COLLATE latin1_spanish_ci,
-  `arthritis_medication` text COLLATE latin1_spanish_ci,
   `occupational` text COLLATE latin1_spanish_ci,
   `toxic` text COLLATE latin1_spanish_ci,
   `blood_type` text COLLATE latin1_spanish_ci,
@@ -704,7 +704,7 @@ CREATE TABLE `crm_patient` (
 
 LOCK TABLES `crm_patient` WRITE;
 /*!40000 ALTER TABLE `crm_patient` DISABLE KEYS */;
-INSERT INTO `crm_patient` VALUES (1,'P1','0000765476','P1','P1','2012-06-03','W','Ingeniero','P1','Britalia Norte','P1','','','U','CO','11','3','','','','','',0,0,0,0,0,'1000');
+INSERT INTO `crm_patient` VALUES (1,'P1','0000765476','P1','P1','1982-06-03','W','Ingeniero','P1','Britalia Norte','P1','','','U','CO','11','3','','','','','',0,0,0,0,0,'1000'),(2,'P4','0000765486','P4','P4','2007-06-02','M',NULL,'P4',NULL,'P4','','',NULL,'CO','91','29',NULL,NULL,NULL,NULL,NULL,0,0,0,0,0,'4000');
 /*!40000 ALTER TABLE `crm_patient` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1103,4 +1103,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-06-26  6:19:46
+-- Dump completed on 2012-06-27  7:54:54

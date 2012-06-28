@@ -66,6 +66,12 @@
 						<f:selectItem itemLabel="#{msg['glb_gender_man']}" itemValue="M" />
 					</p:selectOneMenu>
 
+					<h:outputLabel value="#{msg['pat_born_date']}" />
+					<p:calendar value="#{patientBacking.selected.bornDate}"
+						label="#{msg['pat_born_date']}" readonlyInput="true"
+						pattern="dd/MM/yyyy" showOn="button" navigator="true" locale="es"
+						required="true" yearRange="-100:+0" />
+
 					<h:outputText value="#{msg['pat_country']}" />
 					<p:selectOneMenu value="#{patientBacking.idCountry}"
 						style="width:230px" required="true" label="#{msg['pat_country']}">
@@ -92,15 +98,15 @@
 					<p:inputText value="#{patientBacking.selected.address}"
 						style="width:230px" label="#{msg['pat_address']}" required="true" />
 
-					<h:outputText value="#{msg['pat_email']}" />
-					<p:inputText value="#{patientBacking.selected.email}"
-						style="width:230px" label="#{msg['pat_email']}"
-						validator="emailValidator" />
-
 					<h:outputText value="#{msg['pat_phone_number']}" />
 					<p:inputText value="#{patientBacking.selected.phoneNumber}"
 						style="width:230px" label="#{msg['pat_phone_number']}"
 						required="true" />
+
+					<h:outputText value="#{msg['pat_email']}" />
+					<p:inputText value="#{patientBacking.selected.email}"
+						style="width:230px" label="#{msg['pat_email']}"
+						validator="emailValidator" />
 
 					<h:outputText value="#{msg['pat_cell_number']}" />
 					<p:inputText value="#{patientBacking.selected.cellNumber}"
@@ -111,9 +117,6 @@
 						style="width:230px">
 						<f:selectItems value="#{patientBacking.listBranch}" />
 					</p:selectOneMenu>
-
-					<h:outputText value="" />
-					<h:outputText value="" />
 
 					<h:outputText value="#{msg['pat_cycle']}" />
 					<p:selectOneRadio id="optionsCycle" layout="pageDirection"
