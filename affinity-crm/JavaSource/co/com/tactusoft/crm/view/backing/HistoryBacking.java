@@ -217,18 +217,27 @@ public class HistoryBacking extends BaseBacking {
 		}
 
 		if (message == null) {
+
+			selectedHistoryHistory.setCrmPatient(selected);
+			selectedHistoryRecord.setCrmPatient(selected);
+			selectedHistoryHomeopathic.setCrmPatient(selected);
+
 			int result = processService.savePatient(selected);
 			if (result == 0) {
-				selectedHistoryHistory.setCrmPatient(selected);
 				result = processService
 						.saveHistoryHistory(selectedHistoryHistory);
 				if (result == 0) {
-					selectedHistoryRecord.setCrmPatient(selected);
 					result = processService
 							.saveHistoryRecord(selectedHistoryRecord);
 					if (result == 0) {
-						message = FacesUtil.getMessage("msg_record_ok");
-						FacesUtil.addInfo(message);
+						result = processService
+								.saveHistoryHomeopathic(selectedHistoryHomeopathic);
+						if (result == 0) {
+							message = FacesUtil.getMessage("msg_record_ok");
+							FacesUtil.addInfo(message);
+						} else {
+
+						}
 					} else {
 
 					}

@@ -757,5 +757,12 @@ public class ProcessBo implements Serializable {
 		}
 		return dao.persist(entity);
 	}
+	
+	public int saveHistoryHomeopathic(CrmHistoryHomeopathic entity) {
+		if (entity.getId() == null) {
+			entity.setId(getId(CrmHistoryHomeopathic.class));
+		}
+		return dao.persist(entity);
+	}
 
 }
