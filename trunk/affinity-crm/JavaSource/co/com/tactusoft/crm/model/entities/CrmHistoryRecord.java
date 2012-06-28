@@ -63,7 +63,7 @@ public class CrmHistoryRecord implements java.io.Serializable {
 	private Date fuc;
 	private Date fuep;
 	private String psa;
-	private String psaDate;
+	private Date psaDate;
 	private String neonatal;
 	private String perinatal;
 	private String vaccination;
@@ -99,7 +99,7 @@ public class CrmHistoryRecord implements java.io.Serializable {
 			String pregnancy, String parity, String abortions,
 			String familyHistory, String stillbirths, String caesarean,
 			String menarche, String sexarca, Date fur, String bleeding,
-			Date fuc, Date fuep, String psa, String psaDate, String neonatal,
+			Date fuc, Date fuep, String psa, Date psaDate, String neonatal,
 			String perinatal, String vaccination, String growth,
 			String hypertensionParent, String epocParent,
 			String heartDiseaseParent, String asthmaParent, String acvParent,
@@ -543,12 +543,13 @@ public class CrmHistoryRecord implements java.io.Serializable {
 		this.psa = psa;
 	}
 
-	@Column(name = "psa_date", length = 45)
-	public String getPsaDate() {
+	@Temporal(TemporalType.DATE)
+	@Column(name = "psa_date", length = 10)
+	public Date getPsaDate() {
 		return this.psaDate;
 	}
 
-	public void setPsaDate(String psaDate) {
+	public void setPsaDate(Date psaDate) {
 		this.psaDate = psaDate;
 	}
 
