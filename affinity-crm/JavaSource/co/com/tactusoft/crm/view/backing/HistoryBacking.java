@@ -35,7 +35,6 @@ public class HistoryBacking extends BaseBacking {
 	private CrmPatient selected;
 
 	private Boolean disabledSaveButton;
-	private Boolean disabledSaveButtonPatient;
 
 	public HistoryBacking() {
 		newAction(null);
@@ -116,18 +115,10 @@ public class HistoryBacking extends BaseBacking {
 		this.disabledSaveButton = disabledSaveButton;
 	}
 
-	public Boolean getDisabledSaveButtonPatient() {
-		return disabledSaveButtonPatient;
-	}
-
-	public void setDisabledSaveButtonPatient(Boolean disabledSaveButtonPatient) {
-		this.disabledSaveButtonPatient = disabledSaveButtonPatient;
-	}
-
 	public boolean isReadOnlySelectedHistoryHistory() {
 		return selectedHistoryHistory.getId() != null ? true : false;
 	}
-	
+
 	public boolean isReadOnlySelectedHistoryRecord() {
 		return selectedHistoryRecord.getId() != null ? true : false;
 	}
@@ -153,43 +144,39 @@ public class HistoryBacking extends BaseBacking {
 		selectedPatient = new CrmPatient();
 
 		disabledSaveButton = true;
-		disabledSaveButtonPatient = true;
 		optionSearchPatient = 1;
 	}
 
 	public void searchAction(ActionEvent event) {
-		String message = null;
 		selected = processService.getPatientByCodeSap(selectedPatient
 				.getCodeSap());
 
-		if (selected.getBornDate() == null) {
-			message = FacesUtil.getMessage("his_msg_error_1");
-			FacesUtil.addError(message);
-			disabledSaveButtonPatient = false;
+		listAppointment = processService.listAppointmentByPatient(
+				selectedPatient.getCodeSap(), 3);
+		appointmentModel = new AppointmentDataModel(listAppointment);
+
+		selectedHistoryHistory = processService.getHistoryHistory(selected
+				.getId());
+		selectedHistoryRecord = processService.getHistoryRecord(selected
+				.getId());
+		selectedHistoryHomeopathic = processService
+				.getHistoryHomeopathic(selected.getId());
+
+		getRenderedRecord();
+
+		if (selected.getId() == null) {
+			disabledSaveButton = true;
 		} else {
-			listAppointment = processService.listAppointmentByPatient(
-					selectedPatient.getCodeSap(), 3);
-			appointmentModel = new AppointmentDataModel(listAppointment);
-
-			selectedHistoryHistory = processService.getHistoryHistory(selected
-					.getId());
-			selectedHistoryRecord = processService.getHistoryRecord(selected
-					.getId());
-			selectedHistoryHomeopathic = processService
-					.getHistoryHomeopathic(selected.getId());
-
 			disabledSaveButton = false;
-			disabledSaveButtonPatient = true;
 		}
 	}
 
-	public void savePatientAction() {
+	public void saveAction(ActionEvent event) {
 		String field = null;
 		String message = null;
 
-		if (selected.getBornDate() == null) {
-			field = FacesUtil.getMessage("pat_born_date");
-			message = FacesUtil.getMessage("glb_required", field);
+		if (selected == null || selected.getId() == null) {
+			message = FacesUtil.getMessage("his_msg_error_1");
 			FacesUtil.addError(message);
 		}
 
@@ -211,26 +198,6 @@ public class HistoryBacking extends BaseBacking {
 			FacesUtil.addError(message);
 		}
 
-		if (message == null) {
-			int result = processService.savePatient(selected);
-			if (result == 0) {
-				disabledSaveButton = true;
-				message = FacesUtil.getMessage("his_msg_message_1",
-						selected.getCodeSap());
-				FacesUtil.addInfo(message);
-				disabledSaveButtonPatient = false;
-				disabledSaveButton = false;
-			} else {
-				message = FacesUtil.getMessage("Error");
-				FacesUtil.addError(message);
-			}
-		}
-	}
-
-	public void saveAction(ActionEvent event) {
-		String field = null;
-		String message = null;
-
 		if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getReason())) {
 			field = FacesUtil.getMessage("his_history_reason");
 			message = FacesUtil.getMessage("glb_required", field);
@@ -250,23 +217,44 @@ public class HistoryBacking extends BaseBacking {
 		}
 
 		if (message == null) {
-			selectedHistoryHistory.setCrmPatient(selected);
-			int result = processService
-					.saveHistoryHistory(selectedHistoryHistory);
+			int result = processService.savePatient(selected);
 			if (result == 0) {
-				selectedHistoryRecord.setCrmPatient(selected);
+				selectedHistoryHistory.setCrmPatient(selected);
 				result = processService
-						.saveHistoryRecord(selectedHistoryRecord);
+						.saveHistoryHistory(selectedHistoryHistory);
 				if (result == 0) {
-					message = FacesUtil.getMessage("msg_record_ok");
-					FacesUtil.addInfo(message);
+					selectedHistoryRecord.setCrmPatient(selected);
+					result = processService
+							.saveHistoryRecord(selectedHistoryRecord);
+					if (result == 0) {
+						message = FacesUtil.getMessage("msg_record_ok");
+						FacesUtil.addInfo(message);
+					} else {
+
+					}
 				} else {
 
 				}
-			} else {
-
 			}
 		}
+	}
+
+	public int getRenderedRecord() {
+		int result = 0;
+		if (selected.getId() == null) {
+			result = 0;
+		} else {
+			if (selected.getAge() <= 5) {
+				result = 1;
+			} else {
+				if (selected.getGender().equals("W")) {
+					result = 2;
+				} else {
+					result = 3;
+				}
+			}
+		}
+		return result;
 	}
 
 }

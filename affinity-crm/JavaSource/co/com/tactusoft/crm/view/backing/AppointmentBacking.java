@@ -346,29 +346,10 @@ public class AppointmentBacking extends BaseBacking {
 				.intValue()) {
 			this.renderedForDate = false;
 			this.renderedForDoctor = true;
-
-			handleBranchChange();
-
 		} else {
 			this.renderedForDate = false;
 			this.renderedForDoctor = false;
 		}
-	}
-
-	public void searchAppointMentChange() {
-		CrmProcedureDetail procedureDetail = mapProcedureDetail.get(selected
-				.getCrmProcedureDetail().getId());
-
-		if (this.renderedForDate) {
-			listAppointment = processService.getScheduleAppointmentForDate(
-					idBranch, this.currentDate, procedureDetail);
-		} else if (this.renderedForDoctor) {
-			CrmDoctor doctor = mapDoctor.get(selected.getCrmDoctor().getId());
-			listAppointment = processService.getScheduleAppointmentForDoctor(
-					idBranch, doctor, this.appointmentsNumber, procedureDetail);
-		}
-
-		modelAppointment = new CandidateDataModel(listAppointment);
 	}
 
 	public void handleBranchChange() {
@@ -418,6 +399,40 @@ public class AppointmentBacking extends BaseBacking {
 		}
 
 		selectedWSGroupSellers = "-1";
+	}
+
+	public void handleClose(CloseEvent event) {
+		if (saved) {
+			newAction(null);
+		}
+	}
+
+	public String getDetSelectedAppointment() {
+		String result = "";
+		if (selectedAppointment != null) {
+			String message = FacesUtil.getMessage("app_msg_selected");
+			result = message + " " + selectedAppointment.getDoctorDetail();
+		}
+		return result;
+	}
+
+	public void searchAppointMentAction() {
+		CrmProcedureDetail procedureDetail = mapProcedureDetail.get(selected
+				.getCrmProcedureDetail().getId());
+
+		if (this.renderedForDate) {
+			listAppointment = processService.getScheduleAppointmentForDate(
+					idBranch, this.currentDate, procedureDetail);
+		} else if (this.renderedForDoctor) {
+			CrmDoctor doctor = mapDoctor.get(selected.getCrmDoctor().getId());
+			listAppointment = processService.getScheduleAppointmentForDoctor(
+					idBranch, doctor, this.appointmentsNumber, procedureDetail);
+		}
+
+		modelAppointment = new CandidateDataModel(listAppointment);
+		if (listAppointment.size() > 0) {
+			selectedAppointment = listAppointment.get(0);
+		}
 	}
 
 	public void saveAction() {
@@ -496,21 +511,6 @@ public class AppointmentBacking extends BaseBacking {
 				saved = true;
 			}
 		}
-	}
-
-	public void handleClose(CloseEvent event) {
-		if (saved) {
-			newAction(null);
-		}
-	}
-
-	public String getDetSelectedAppointment() {
-		String result = "";
-		if (selectedAppointment != null) {
-			String message = FacesUtil.getMessage("app_msg_selected");
-			result = message + " " + selectedAppointment.getDoctorDetail();
-		}
-		return result;
 	}
 
 }

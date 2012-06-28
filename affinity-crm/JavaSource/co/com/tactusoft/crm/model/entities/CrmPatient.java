@@ -3,9 +3,11 @@ package co.com.tactusoft.crm.model.entities;
 // Generated 26/06/2012 06:16:35 AM by Hibernate Tools 3.4.0.CR1
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -68,6 +70,7 @@ public class CrmPatient implements java.io.Serializable {
 			0);
 
 	private String names;
+	private int age;
 
 	public CrmPatient() {
 	}
@@ -418,6 +421,32 @@ public class CrmPatient implements java.io.Serializable {
 
 	public void setNames(String names) {
 		this.names = names;
+	}
+
+	@Transient
+	public int getAge() {
+		if (bornDate != null) {
+			Calendar bornDate = Calendar.getInstance();
+			bornDate.setTime(this.bornDate);
+
+			Calendar currentDate = Calendar.getInstance();
+			currentDate.setTime(new Date());
+
+			age = currentDate.get(Calendar.YEAR) - bornDate.get(Calendar.YEAR);
+
+			if ((bornDate.get(Calendar.MONTH) > currentDate.get(Calendar.MONTH))
+					|| (bornDate.get(Calendar.MONTH) == currentDate
+							.get(Calendar.MONTH) && bornDate
+							.get(Calendar.DAY_OF_MONTH) > currentDate
+							.get(Calendar.DAY_OF_MONTH))) {
+				age--;
+			}
+		}
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
 	}
 
 }
