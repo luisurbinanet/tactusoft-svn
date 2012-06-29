@@ -710,7 +710,7 @@ public class ProcessBo implements Serializable {
 			return new CrmHistoryHistory();
 		}
 	}
-	
+
 	public CrmHistoryRecord getHistoryRecord(BigDecimal idPatient) {
 		List<CrmHistoryRecord> list = null;
 		list = dao.find("from CrmHistoryRecord o where o.crmPatient.id = "
@@ -721,7 +721,7 @@ public class ProcessBo implements Serializable {
 			return new CrmHistoryRecord();
 		}
 	}
-	
+
 	public CrmHistoryHomeopathic getHistoryHomeopathic(BigDecimal idPatient) {
 		List<CrmHistoryHomeopathic> list = null;
 		list = dao.find("from CrmHistoryHomeopathic o where o.crmPatient.id = "
@@ -735,7 +735,7 @@ public class ProcessBo implements Serializable {
 
 	public CrmHistoryPhysique getHistoryPhysique(BigDecimal idPatient) {
 		List<CrmHistoryPhysique> list = null;
-		list = dao.find("from CrmHistoryPhysique o where o.idPatient = "
+		list = dao.find("from CrmHistoryPhysique o where o.crmPatient.id = "
 				+ idPatient);
 		if (list.size() > 0) {
 			return list.get(0);
@@ -757,10 +757,17 @@ public class ProcessBo implements Serializable {
 		}
 		return dao.persist(entity);
 	}
-	
+
 	public int saveHistoryHomeopathic(CrmHistoryHomeopathic entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmHistoryHomeopathic.class));
+		}
+		return dao.persist(entity);
+	}
+
+	public int saveHistoryPhysique(CrmHistoryPhysique entity) {
+		if (entity.getId() == null) {
+			entity.setId(getId(CrmHistoryPhysique.class));
 		}
 		return dao.persist(entity);
 	}

@@ -230,12 +230,12 @@
 								</p:selectBooleanCheckbox>
 								<p:inputTextarea style="width:300px" rows="3"
 									label="#{msg['his_record_clic_time']}"
-									disabled="not #{historyBacking.selectedHistoryRecord.arthritis}"
+									disabled="#{not historyBacking.selectedHistoryRecord.arthritis}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.arthritisTime}" />
 								<p:inputTextarea style="width:450px" rows="3"
 									label="#{msg['his_record_clic_medi']}"
-									disabled="not #{historyBacking.selectedHistoryRecord.arthritis}"
+									disabled="#{not historyBacking.selectedHistoryRecord.arthritis}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.arthritisMedication}" />
 
@@ -246,9 +246,11 @@
 									<p:ajax update="pnlPersonal" />
 								</p:selectBooleanCheckbox>
 								<p:inputTextarea style="width:300px" rows="3"
+									disabled="#{not historyBacking.selectedHistoryRecord.cancer}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.cancerTime}" />
 								<p:inputTextarea style="width:450px" rows="3"
+									disabled="#{not historyBacking.selectedHistoryRecord.cancer}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.cancerMedication}" />
 
@@ -259,9 +261,11 @@
 									<p:ajax update="pnlPersonal" />
 								</p:selectBooleanCheckbox>
 								<p:inputTextarea style="width:300px" rows="3"
+									disabled="#{not historyBacking.selectedHistoryRecord.pulmonary}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.pulmonaryTime}" />
 								<p:inputTextarea style="width:450px" rows="3"
+									disabled="#{not historyBacking.selectedHistoryRecord.pulmonary}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.pulmonaryMedication}" />
 
@@ -272,9 +276,11 @@
 									<p:ajax update="pnlPersonal" />
 								</p:selectBooleanCheckbox>
 								<p:inputTextarea style="width:300px" rows="3"
+									disabled="#{not historyBacking.selectedHistoryRecord.diabetes}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.diabetesTime}" />
 								<p:inputTextarea style="width:450px" rows="3"
+									disabled="#{not historyBacking.selectedHistoryRecord.diabetes}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.diabetesMedication}" />
 
@@ -285,9 +291,11 @@
 									<p:ajax update="pnlPersonal" />
 								</p:selectBooleanCheckbox>
 								<p:inputTextarea style="width:300px" rows="3"
+									disabled="#{not historyBacking.selectedHistoryRecord.hypertension}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.hypertensionTime}" />
 								<p:inputTextarea style="width:450px" rows="3"
+									disabled="#{not historyBacking.selectedHistoryRecord.hypertension}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.hypertensionMedication}" />
 
@@ -298,9 +306,11 @@
 									<p:ajax update="pnlPersonal" />
 								</p:selectBooleanCheckbox>
 								<p:inputTextarea style="width:300px" rows="3"
+									disabled="#{not historyBacking.selectedHistoryRecord.hospitalizations}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.hospitalizationsTime}" />
 								<p:inputTextarea style="width:450px" rows="3"
+									disabled="#{not historyBacking.selectedHistoryRecord.hospitalizations}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.hospitalizationsMedication}" />
 
@@ -311,9 +321,11 @@
 									<p:ajax update="pnlPersonal" />
 								</p:selectBooleanCheckbox>
 								<p:inputTextarea style="width:300px" rows="3"
+									disabled="#{not historyBacking.selectedHistoryRecord.allergy}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.allergyTime}" />
 								<p:inputTextarea style="width:450px" rows="3"
+									disabled="#{not historyBacking.selectedHistoryRecord.allergy}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.allergyMedication}" />
 
@@ -324,9 +336,11 @@
 									<p:ajax update="pnlPersonal" />
 								</p:selectBooleanCheckbox>
 								<p:inputTextarea style="width:300px" rows="3"
+									disabled="#{not historyBacking.selectedHistoryRecord.infections}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.infectionsTime}" />
 								<p:inputTextarea style="width:450px" rows="3"
+									disabled="#{not historyBacking.selectedHistoryRecord.infections}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.infectionsMedication}" />
 
@@ -531,6 +545,7 @@
 						<p:fieldset legend="#{msg['his_homeopathic_biotipology']}">
 							<h:panelGrid width="100%">
 								<p:selectOneRadio id="options" layout="pageDirection"
+									disabled="#{historyBacking.readOnlySelectedHistoryHomeopathic}"
 									value="#{historyBacking.selectedHistoryHomeopathic.biotypology}">
 									<f:selectItem
 										itemLabel="#{msg['his_homeopathic_biotipology_1']}"
@@ -577,7 +592,48 @@
 
 					</p:tab>
 
-					<p:tab id="tab5" title="#{msg['his_history']}">
+					<p:tab id="tab5" title="#{msg['his_history_physique']}">
+						<h:panelGrid columns="4" width="100%"
+							columnClasses="width25per,width25per,width25per,width25per">
+
+							<h:outputLabel value="#{msg['his_physique_heart_rate']}" />
+							<pe:inputNumber symbol="   puls" symbolPosition="s"
+								decimalPlaces="0" style="width:100px" maxValue="200"
+								value="#{historyBacking.selectedHistoryPhysique.heartRate}"
+								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}" />
+
+							<h:outputLabel value="#{msg['his_physique_respiratory_rate']}" />
+							<pe:inputNumber symbol="   resp/min" symbolPosition="s"
+								decimalPlaces="0" style="width:100px" maxValue="70"
+								value="#{historyBacking.selectedHistoryPhysique.respiratoryRate}"
+								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}" />
+
+							<h:outputLabel value="#{msg['his_physique_height']}" />
+							<pe:inputNumber symbol="   cm" symbolPosition="s"
+								decimalPlaces="2" style="width:100px" maxValue="2.5"
+								value="#{historyBacking.selectedHistoryPhysique.height}"
+								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}" />
+
+							<h:outputLabel value="#{msg['his_physique_weight']}" />
+							<pe:inputNumber symbol="   kg" symbolPosition="s"
+								decimalPlaces="2" style="width:100px" maxValue="999"
+								value="#{historyBacking.selectedHistoryPhysique.weight}"
+								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}" />
+
+							<h:outputLabel value="#{msg['his_physique_blood_pressure']}" />
+							<p:inputText maxlength="7"
+								value="#{historyBacking.selectedHistoryPhysique.bloodPressure}"
+								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}" />
+
+							<h:outputLabel value="#{msg['his_physique_blood_pressure']}" />
+							<pe:inputNumber id="txtIMC" symbol="  Kg/m2" symbolPosition="s"
+								decimalPlaces="2" style="width:100px" maxValue="999"
+								value="#{historyBacking.imc}" readonly="true" />
+
+						</h:panelGrid>
+					</p:tab>
+
+					<p:tab id="tab10" title="#{msg['his_history']}">
 
 						<p:dataTable id="selectedTable" var="rec"
 							value="#{historyBacking.appointmentModel}" rowKey="#{rec.code}"

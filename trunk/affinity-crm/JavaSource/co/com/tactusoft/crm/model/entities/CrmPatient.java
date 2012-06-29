@@ -1,13 +1,10 @@
 package co.com.tactusoft.crm.model.entities;
 
-// Generated 26/06/2012 06:16:35 AM by Hibernate Tools 3.4.0.CR1
-
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -30,9 +27,6 @@ import co.com.tactusoft.crm.util.FacesUtil;
 		@UniqueConstraint(columnNames = "code_sap") })
 public class CrmPatient implements java.io.Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
 	private String doc;
@@ -62,13 +56,15 @@ public class CrmPatient implements java.io.Serializable {
 	private Boolean sendPostal;
 	private Boolean sendSms;
 	private String salesOrg;
+	private Set<CrmHistoryPhysique> crmHistoryPhysiques = new HashSet<CrmHistoryPhysique>(
+			0);
 	private Set<CrmHistoryHomeopathic> crmHistoryHomeopathics = new HashSet<CrmHistoryHomeopathic>(
 			0);
 	private Set<CrmHistoryRecord> crmHistoryRecords = new HashSet<CrmHistoryRecord>(
 			0);
 	private Set<CrmHistoryHistory> crmHistoryHistories = new HashSet<CrmHistoryHistory>(
 			0);
-
+	
 	private String names;
 	private int age;
 
@@ -88,6 +84,7 @@ public class CrmPatient implements java.io.Serializable {
 			String guardianRelationship, String guardianTelephone, String obs,
 			Boolean cycle, Boolean sendPhone, Boolean sendEmail,
 			Boolean sendPostal, Boolean sendSms, String salesOrg,
+			Set<CrmHistoryPhysique> crmHistoryPhysiques,
 			Set<CrmHistoryHomeopathic> crmHistoryHomeopathics,
 			Set<CrmHistoryRecord> crmHistoryRecords,
 			Set<CrmHistoryHistory> crmHistoryHistories) {
@@ -119,6 +116,7 @@ public class CrmPatient implements java.io.Serializable {
 		this.sendPostal = sendPostal;
 		this.sendSms = sendSms;
 		this.salesOrg = salesOrg;
+		this.crmHistoryPhysiques = crmHistoryPhysiques;
 		this.crmHistoryHomeopathics = crmHistoryHomeopathics;
 		this.crmHistoryRecords = crmHistoryRecords;
 		this.crmHistoryHistories = crmHistoryHistories;
@@ -379,6 +377,16 @@ public class CrmPatient implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmPatient")
+	public Set<CrmHistoryPhysique> getCrmHistoryPhysiques() {
+		return this.crmHistoryPhysiques;
+	}
+
+	public void setCrmHistoryPhysiques(
+			Set<CrmHistoryPhysique> crmHistoryPhysiques) {
+		this.crmHistoryPhysiques = crmHistoryPhysiques;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmPatient")
 	public Set<CrmHistoryHomeopathic> getCrmHistoryHomeopathics() {
 		return this.crmHistoryHomeopathics;
 	}
@@ -406,7 +414,7 @@ public class CrmPatient implements java.io.Serializable {
 			Set<CrmHistoryHistory> crmHistoryHistories) {
 		this.crmHistoryHistories = crmHistoryHistories;
 	}
-
+	
 	@Transient
 	public String getNames() {
 		if (FacesUtil.isEmptyOrBlank(this.names)) {
@@ -448,5 +456,6 @@ public class CrmPatient implements java.io.Serializable {
 	public void setAge(int age) {
 		this.age = age;
 	}
+
 
 }

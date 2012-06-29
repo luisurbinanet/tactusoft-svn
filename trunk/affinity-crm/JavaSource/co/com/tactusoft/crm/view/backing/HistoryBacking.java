@@ -36,6 +36,14 @@ public class HistoryBacking extends BaseBacking {
 
 	private Boolean disabledSaveButton;
 
+	private boolean readOnlySelectedHistoryHistory;
+	private boolean readOnlySelectedHistoryRecord;
+	private boolean readOnlySelectedHistoryHomeopathic;
+	private boolean readOnlySelectedHistoryPhysique;
+	
+	private double imc;
+	private String descImc;
+
 	public HistoryBacking() {
 		newAction(null);
 	}
@@ -116,19 +124,55 @@ public class HistoryBacking extends BaseBacking {
 	}
 
 	public boolean isReadOnlySelectedHistoryHistory() {
-		return selectedHistoryHistory.getId() != null ? true : false;
+		return readOnlySelectedHistoryHistory;
+	}
+
+	public void setReadOnlySelectedHistoryHistory(
+			boolean readOnlySelectedHistoryHistory) {
+		this.readOnlySelectedHistoryHistory = readOnlySelectedHistoryHistory;
 	}
 
 	public boolean isReadOnlySelectedHistoryRecord() {
-		return selectedHistoryRecord.getId() != null ? true : false;
+		return readOnlySelectedHistoryRecord;
+	}
+
+	public void setReadOnlySelectedHistoryRecord(
+			boolean readOnlySelectedHistoryRecord) {
+		this.readOnlySelectedHistoryRecord = readOnlySelectedHistoryRecord;
 	}
 
 	public boolean isReadOnlySelectedHistoryHomeopathic() {
-		return selectedHistoryHomeopathic.getId() != null ? true : false;
+		return readOnlySelectedHistoryHomeopathic;
+	}
+
+	public void setReadOnlySelectedHistoryHomeopathic(
+			boolean readOnlySelectedHistoryHomeopathic) {
+		this.readOnlySelectedHistoryHomeopathic = readOnlySelectedHistoryHomeopathic;
 	}
 
 	public boolean isReadOnlySelectedHistoryPhysique() {
-		return selectedHistoryPhysique.getId() != null ? true : false;
+		return readOnlySelectedHistoryPhysique;
+	}
+
+	public void setReadOnlySelectedHistoryPhysique(
+			boolean readOnlySelectedHistoryPhysique) {
+		this.readOnlySelectedHistoryPhysique = readOnlySelectedHistoryPhysique;
+	}
+
+	public double getImc() {
+		return imc;
+	}
+
+	public void setImc(double imc) {
+		this.imc = imc;
+	}
+
+	public String getDescImc() {
+		return descImc;
+	}
+
+	public void setDescImc(String descImc) {
+		this.descImc = descImc;
 	}
 
 	public void newAction(ActionEvent event) {
@@ -145,6 +189,11 @@ public class HistoryBacking extends BaseBacking {
 
 		disabledSaveButton = true;
 		optionSearchPatient = 1;
+
+		readOnlySelectedHistoryHistory = true;
+		readOnlySelectedHistoryRecord = true;
+		readOnlySelectedHistoryHomeopathic = true;
+		readOnlySelectedHistoryPhysique = true;
 	}
 
 	public void searchAction(ActionEvent event) {
@@ -161,6 +210,8 @@ public class HistoryBacking extends BaseBacking {
 				.getId());
 		selectedHistoryHomeopathic = processService
 				.getHistoryHomeopathic(selected.getId());
+		selectedHistoryPhysique = processService.getHistoryPhysique(selected
+				.getId());
 
 		getRenderedRecord();
 
@@ -169,6 +220,15 @@ public class HistoryBacking extends BaseBacking {
 		} else {
 			disabledSaveButton = false;
 		}
+
+		readOnlySelectedHistoryHistory = selectedHistoryHistory.getId() != null ? true
+				: false;
+		readOnlySelectedHistoryRecord = selectedHistoryRecord.getId() != null ? true
+				: false;
+		readOnlySelectedHistoryHomeopathic = selectedHistoryHomeopathic.getId() != null ? true
+				: false;
+		readOnlySelectedHistoryPhysique = selectedHistoryPhysique.getId() != null ? true
+				: false;
 	}
 
 	public void saveAction(ActionEvent event) {
@@ -216,11 +276,92 @@ public class HistoryBacking extends BaseBacking {
 			FacesUtil.addError(message);
 		}
 
+		if (selectedHistoryRecord.getArthritis()
+				&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getArthritisTime()) || FacesUtil
+						.isEmptyOrBlank(selectedHistoryRecord
+								.getArthritisMedication()))) {
+			field = FacesUtil.getMessage("his_rec_per_arthritis");
+			message = FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addError(message);
+		}
+
+		if (selectedHistoryRecord.getCancer()
+				&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getCancerTime()) || FacesUtil
+						.isEmptyOrBlank(selectedHistoryRecord
+								.getCancerMedication()))) {
+			field = FacesUtil.getMessage("his_rec_per_cancer");
+			message = FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addError(message);
+		}
+
+		if (selectedHistoryRecord.getPulmonary()
+				&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getPulmonaryTime()) || FacesUtil
+						.isEmptyOrBlank(selectedHistoryRecord
+								.getPulmonaryMedication()))) {
+			field = FacesUtil.getMessage("his_rec_per_pulmonary");
+			message = FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addError(message);
+		}
+
+		if (selectedHistoryRecord.getDiabetes()
+				&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getDiabetesTime()) || FacesUtil
+						.isEmptyOrBlank(selectedHistoryRecord
+								.getDiabetesMedication()))) {
+			field = FacesUtil.getMessage("his_rec_per_diabetes");
+			message = FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addError(message);
+		}
+
+		if (selectedHistoryRecord.getHypertension()
+				&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getHypertensionTime()) || FacesUtil
+						.isEmptyOrBlank(selectedHistoryRecord
+								.getHypertensionMedication()))) {
+			field = FacesUtil.getMessage("his_rec_per_hypertension");
+			message = FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addError(message);
+		}
+
+		if (selectedHistoryRecord.getHospitalizations()
+				&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getHospitalizationsTime()) || FacesUtil
+						.isEmptyOrBlank(selectedHistoryRecord
+								.getHospitalizationsMedication()))) {
+			field = FacesUtil.getMessage("his_rec_per_hospitalizations");
+			message = FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addError(message);
+		}
+
+		if (selectedHistoryRecord.getAllergy()
+				&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getAllergyTime()) || FacesUtil
+						.isEmptyOrBlank(selectedHistoryRecord
+								.getAllergyMedication()))) {
+			field = FacesUtil.getMessage("his_rec_per_allergy");
+			message = FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addError(message);
+		}
+
+		if (selectedHistoryRecord.getInfections()
+				&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getInfectionsTime()) || FacesUtil
+						.isEmptyOrBlank(selectedHistoryRecord
+								.getInfectionsMedication()))) {
+			field = FacesUtil.getMessage("his_rec_per_infections");
+			message = FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addError(message);
+		}
+
 		if (message == null) {
 
 			selectedHistoryHistory.setCrmPatient(selected);
 			selectedHistoryRecord.setCrmPatient(selected);
 			selectedHistoryHomeopathic.setCrmPatient(selected);
+			selectedHistoryPhysique.setCrmPatient(selected);
 
 			int result = processService.savePatient(selected);
 			if (result == 0) {
@@ -233,8 +374,14 @@ public class HistoryBacking extends BaseBacking {
 						result = processService
 								.saveHistoryHomeopathic(selectedHistoryHomeopathic);
 						if (result == 0) {
-							message = FacesUtil.getMessage("msg_record_ok");
-							FacesUtil.addInfo(message);
+							result = processService
+									.saveHistoryPhysique(selectedHistoryPhysique);
+							if (result == 0) {
+								message = FacesUtil.getMessage("msg_record_ok");
+								FacesUtil.addInfo(message);
+							} else {
+
+							}
 						} else {
 
 						}
