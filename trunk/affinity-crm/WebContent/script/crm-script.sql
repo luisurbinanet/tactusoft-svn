@@ -82,7 +82,7 @@ DROP TABLE IF EXISTS `crm_appointment`;
 CREATE TABLE `crm_appointment` (
   `id` decimal(19,0) NOT NULL,
   `code` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
-  `patient` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `id_patient` decimal(19,0) NOT NULL,
   `patient_names` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
   `patient_sap` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
   `id_branch` decimal(19,0) NOT NULL,
@@ -99,6 +99,8 @@ CREATE TABLE `crm_appointment` (
   KEY `fk_crm_appointment_1` (`id_doctor`),
   KEY `fk_crm_appointment_2` (`id_procedure_detail`),
   KEY `fk_crm_appointment_3` (`id_branch`),
+  KEY `fk_crm_appointment_4` (`id_patient`),
+  CONSTRAINT `fk_crm_appointment_4` FOREIGN KEY (`id_patient`) REFERENCES `crm_patient` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_crm_appointment_1` FOREIGN KEY (`id_doctor`) REFERENCES `crm_doctor` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_crm_appointment_2` FOREIGN KEY (`id_procedure_detail`) REFERENCES `crm_procedure_detail` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_crm_appointment_3` FOREIGN KEY (`id_branch`) REFERENCES `crm_branch` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -111,7 +113,7 @@ CREATE TABLE `crm_appointment` (
 
 LOCK TABLES `crm_appointment` WRITE;
 /*!40000 ALTER TABLE `crm_appointment` DISABLE KEYS */;
-INSERT INTO `crm_appointment` VALUES (1,'C00001','0000765476','P1 P1','0000765476',112,2,5,'2012-06-25 08:00:00','2012-06-25 08:15:00','P20','PROMOTICKET',NULL,1);
+INSERT INTO `crm_appointment` VALUES (1,'C00001',1,'P1 P1','0000765476',112,2,5,'2012-06-29 08:00:00','2012-06-25 08:15:00','P20','PROMOTICKET',NULL,4),(2,'C00002',2,'P2 P2','0000765485',112,2,5,'2012-06-29 08:30:00','2012-06-25 09:15:00','P20','PROMOTICKET',NULL,5),(3,'C00003',1,'P1 P1','0000765476',112,2,5,'2012-07-02 08:00:00','2012-07-02 08:15:00','P20','P20',NULL,4);
 /*!40000 ALTER TABLE `crm_appointment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -421,6 +423,7 @@ CREATE TABLE `crm_history_physique` (
 
 LOCK TABLES `crm_history_physique` WRITE;
 /*!40000 ALTER TABLE `crm_history_physique` DISABLE KEYS */;
+INSERT INTO `crm_history_physique` VALUES (1,1,10,10,180.00,80.00,'20/300',1,'1',1,'2',1,'3',1,'4',1,'5',1,'6',1,'7',1,'8',1,'9',1,'10',0,NULL,NULL);
 /*!40000 ALTER TABLE `crm_history_physique` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -449,6 +452,34 @@ LOCK TABLES `crm_specialty` WRITE;
 /*!40000 ALTER TABLE `crm_specialty` DISABLE KEYS */;
 INSERT INTO `crm_specialty` VALUES (1,'MED_GENERAL','Médico General',1);
 /*!40000 ALTER TABLE `crm_specialty` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `crm_history_organometry`
+--
+
+DROP TABLE IF EXISTS `crm_history_organometry`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `crm_history_organometry` (
+  `id` decimal(19,0) NOT NULL,
+  `id_patient` decimal(19,0) NOT NULL,
+  `organometry_check` tinyint(1) DEFAULT NULL,
+  `organometry_analysis` text COLLATE latin1_spanish_ci,
+  PRIMARY KEY (`id`),
+  KEY `fk_crm_history_organometry_1` (`id_patient`),
+  CONSTRAINT `fk_crm_history_organometry_1` FOREIGN KEY (`id_patient`) REFERENCES `crm_patient` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `crm_history_organometry`
+--
+
+LOCK TABLES `crm_history_organometry` WRITE;
+/*!40000 ALTER TABLE `crm_history_organometry` DISABLE KEYS */;
+INSERT INTO `crm_history_organometry` VALUES (1,1,1,'999999');
+/*!40000 ALTER TABLE `crm_history_organometry` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -545,7 +576,7 @@ CREATE TABLE `crm_page_role` (
 
 LOCK TABLES `crm_page_role` WRITE;
 /*!40000 ALTER TABLE `crm_page_role` DISABLE KEYS */;
-INSERT INTO `crm_page_role` VALUES (97,1,1),(111,1,2),(98,2,1),(77,3,1),(79,4,1),(84,5,1),(87,6,1),(81,7,1),(89,8,1),(104,8,2),(83,9,1),(78,10,1),(112,10,2),(99,11,1),(109,11,2),(38,11,3),(66,11,4),(90,12,1),(105,12,2),(37,12,3),(61,12,4),(86,13,1),(80,14,1),(100,15,1),(110,15,2),(67,15,4),(82,16,1),(92,17,1),(106,17,2),(62,17,4),(93,18,1),(107,18,2),(63,18,4),(94,19,1),(64,19,4),(85,20,1),(88,21,1),(91,22,1),(108,22,2),(65,22,4),(101,23,1),(95,24,1),(96,25,1),(103,27,1);
+INSERT INTO `crm_page_role` VALUES (97,1,1),(111,1,2),(98,2,1),(77,3,1),(79,4,1),(84,5,1),(87,6,1),(81,7,1),(89,8,1),(104,8,2),(83,9,1),(78,10,1),(112,10,2),(99,11,1),(109,11,2),(38,11,3),(121,11,4),(90,12,1),(105,12,2),(37,12,3),(114,12,4),(86,13,1),(80,14,1),(100,15,1),(110,15,2),(122,15,4),(82,16,1),(92,17,1),(106,17,2),(117,17,4),(93,18,1),(107,18,2),(118,18,4),(113,19,1),(116,19,4),(85,20,1),(88,21,1),(91,22,1),(108,22,2),(119,22,4),(101,23,1),(123,23,4),(95,24,1),(120,24,4),(96,25,1),(103,27,1),(115,27,4);
 /*!40000 ALTER TABLE `crm_page_role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -691,6 +722,7 @@ CREATE TABLE `crm_history_record` (
 
 LOCK TABLES `crm_history_record` WRITE;
 /*!40000 ALTER TABLE `crm_history_record` DISABLE KEYS */;
+INSERT INTO `crm_history_record` VALUES (1,1,1,'1','2',1,'3','4',1,'5','6',1,'7','8',1,'9','10',1,'11','12',1,'13','14',1,'15','16','17','18','19','20','21','22',NULL,'24','23','25','26','2012-06-01','','2012-06-10',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1','1','1','1','1','1','1');
 /*!40000 ALTER TABLE `crm_history_record` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1046,6 +1078,7 @@ CREATE TABLE `crm_history_homeopathic` (
 
 LOCK TABLES `crm_history_homeopathic` WRITE;
 /*!40000 ALTER TABLE `crm_history_homeopathic` DISABLE KEYS */;
+INSERT INTO `crm_history_homeopathic` VALUES (1,1,'C','1','2','3','4');
 /*!40000 ALTER TABLE `crm_history_homeopathic` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1073,7 +1106,7 @@ CREATE TABLE `crm_page` (
 
 LOCK TABLES `crm_page` WRITE;
 /*!40000 ALTER TABLE `crm_page` DISABLE KEYS */;
-INSERT INTO `crm_page` VALUES (1,'Seguridad',NULL,'ui-icon-document',NULL,1),(2,'Tablas',NULL,'ui-icon-gear',NULL,2),(3,'Usuarios','/pages/secure/user.jsf',NULL,1,2),(4,'Roles','/pages/secure/role.jsf',NULL,1,1),(5,'Doctor','/pages/tables/doctor.jsf',NULL,2,1),(6,'Parámetros','/pages/tables/parameter.jsf',NULL,2,2),(7,'Especialdades','/pages/tables/speciality.jsf',NULL,2,3),(8,'Pacientes','/pages/processes/patient.jsf',NULL,11,1),(9,'Perfiles','/pages/tables/profile.jsf',NULL,2,5),(10,'Cambiar Clave','/pages/secure/changePassword.jsf',NULL,1,3),(11,'Procesos',NULL,'ui-icon-contact',NULL,3),(12,'Crear Pedido','/pages/processes/salesOrder.jsf',NULL,11,3),(13,'Sucursales','/pages/tables/branch.jsf',NULL,2,4),(14,'Departamentos','/pages/tables/department.jsf',NULL,2,6),(15,'Agenda',NULL,'ui-icon-calendar',NULL,4),(16,'Procedimientos','/pages/tables/procedure.jsf',NULL,2,7),(17,'Crear Cita','/pages/processes/appointment.jsf',NULL,15,1),(18,'Cancelar Cita','/pages/processes/appointmentCancel.jsf',NULL,15,2),(19,'Chequear Cita','/pages/processes/appointmentCheck.jsf',NULL,15,3),(20,'Días No Hábiles','/pages/tables/holiday.jsf',NULL,2,8),(21,'Días No Trabajados','/pages/tables/exception.jsf',NULL,2,9),(22,'Búsqueda Por Paciente','/pages/processes/searchByPatient.jsf',NULL,15,10),(23,'Vistas',NULL,'ui-icon-bookmark',NULL,5),(24,'Vista Por Médico','/pages/views/viewDoctor.jsf',NULL,23,1),(25,'Vista Por Sucursal','/pages/views/viewBranch.jsf',NULL,23,2),(27,'Historia Clínica','/pages/processes/history.jsf',NULL,11,3);
+INSERT INTO `crm_page` VALUES (1,'Seguridad',NULL,'ui-icon-document',NULL,1),(2,'Tablas',NULL,'ui-icon-gear',NULL,2),(3,'Usuarios','/pages/secure/user.jsf',NULL,1,2),(4,'Roles','/pages/secure/role.jsf',NULL,1,1),(5,'Doctor','/pages/tables/doctor.jsf',NULL,2,1),(6,'Parámetros','/pages/tables/parameter.jsf',NULL,2,2),(7,'Especialdades','/pages/tables/speciality.jsf',NULL,2,3),(8,'Pacientes','/pages/processes/patient.jsf',NULL,11,1),(9,'Perfiles','/pages/tables/profile.jsf',NULL,2,5),(10,'Cambiar Clave','/pages/secure/changePassword.jsf',NULL,1,3),(11,'Procesos',NULL,'ui-icon-contact',NULL,3),(12,'Crear Pedido','/pages/processes/salesOrder.jsf',NULL,11,3),(13,'Sucursales','/pages/tables/branch.jsf',NULL,2,4),(14,'Departamentos','/pages/tables/department.jsf',NULL,2,6),(15,'Agenda',NULL,'ui-icon-calendar',NULL,4),(16,'Procedimientos','/pages/tables/procedure.jsf',NULL,2,7),(17,'Crear Cita','/pages/processes/appointment.jsf',NULL,15,1),(18,'Cancelar Cita','/pages/processes/appointmentCancel.jsf',NULL,15,2),(19,'Atender Cita','/pages/processes/attendAppointment.jsf',NULL,11,3),(20,'Días No Hábiles','/pages/tables/holiday.jsf',NULL,2,8),(21,'Días No Trabajados','/pages/tables/exception.jsf',NULL,2,9),(22,'Búsqueda Por Paciente','/pages/processes/searchByPatient.jsf',NULL,15,10),(23,'Vistas',NULL,'ui-icon-bookmark',NULL,5),(24,'Vista Por Médico','/pages/views/viewDoctor.jsf',NULL,23,1),(25,'Vista Por Sucursal','/pages/views/viewBranch.jsf',NULL,23,2),(27,'Historia Clínica','/pages/processes/history.jsf',NULL,11,4);
 /*!40000 ALTER TABLE `crm_page` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1111,6 +1144,7 @@ CREATE TABLE `crm_history_history` (
 
 LOCK TABLES `crm_history_history` WRITE;
 /*!40000 ALTER TABLE `crm_history_history` DISABLE KEYS */;
+INSERT INTO `crm_history_history` VALUES (1,1,'1','2','3','4','6','8','10','5','7','9','11');
 /*!40000 ALTER TABLE `crm_history_history` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1142,4 +1176,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-06-29  9:24:46
+-- Dump completed on 2012-06-29 16:44:42

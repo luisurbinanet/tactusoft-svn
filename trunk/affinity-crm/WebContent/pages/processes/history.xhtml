@@ -20,6 +20,9 @@
 
 				<p:toolbar id="toolBar" style="width:100%">
 					<p:toolbarGroup align="left">
+						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
+							actionListener="#{historyBacking.newAction}"
+							update="pnlDetail tabView toolBar" process="@this" />
 						<p:commandButton value="#{msg['btn_add_patient']}"
 							icon="ui-icon-circle-check" oncomplete="dlg2.show()"
 							update=":editForm:dialog2" />
@@ -612,29 +615,33 @@
 							<pe:inputNumber symbol="   cm" symbolPosition="s"
 								decimalPlaces="0" style="width:100px" maxValue="250"
 								value="#{historyBacking.selectedHistoryPhysique.height}"
-								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}">
-								<p:ajax event="keyup" update="txtIMC"
-									listener="#{historyBacking.calculateIMC}" />
-							</pe:inputNumber>
+								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}" />
 
 							<h:outputLabel value="#{msg['his_physique_weight']}" />
 							<pe:inputNumber symbol="   kg" symbolPosition="s"
 								decimalPlaces="2" style="width:100px" maxValue="999"
 								value="#{historyBacking.selectedHistoryPhysique.weight}"
-								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}">
-								<p:ajax event="keyup" update="txtIMC"
-									listener="#{historyBacking.calculateIMC}" />
-							</pe:inputNumber>
+								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}" />
 
 							<h:outputLabel value="#{msg['his_physique_blood_pressure']}" />
 							<p:inputText maxlength="7"
 								value="#{historyBacking.selectedHistoryPhysique.bloodPressure}"
 								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}" />
+						</h:panelGrid>
+
+						<h:panelGrid id="pnlIMC" columns="2" width="100%"
+							columnClasses="width25per,width75per">
 
 							<h:outputLabel value="#{msg['his_physique_imc']}" />
-							<pe:inputNumber id="txtIMC" symbol="  Kg/m2" symbolPosition="s"
+							<pe:inputNumber symbol="  Kg/m2" symbolPosition="s"
 								decimalPlaces="2" style="width:100px" maxValue="999"
 								value="#{historyBacking.imc}" readonly="true" />
+
+							<h:outputLabel value="#{msg['his_physique_imc']}" />
+							<p:inputText value="#{historyBacking.descImc}" />
+
+							<p:commandButton action="#{historyBacking.calculateIMC}"
+								update="pnlIMC" value="#{msg['btn_calculate_imc']}" />
 
 						</h:panelGrid>
 
@@ -760,7 +767,28 @@
 							<p:inputTextarea style="width:950px" rows="3"
 								disabled="#{not historyBacking.selectedHistoryPhysique.skinCheck}"
 								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}"
-								value="#{historyBacking.selectedHistoryPhysique.skinCheck}" />
+								value="#{historyBacking.selectedHistoryPhysique.skin}" />
+
+							<h:outputLabel value="#{msg['his_history_obs']}" />
+							<p:inputTextarea style="width:950px" rows="3"
+								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}"
+								value="#{historyBacking.selectedHistoryPhysique.obs}" />
+						</h:panelGrid>
+					</p:tab>
+
+					<p:tab id="tab6" title="#{msg['his_organometry']}">
+						<h:panelGrid id="pnlOrganometry" columns="1" width="100%">
+							<p:selectBooleanCheckbox
+								disabled="#{historyBacking.readOnlySelectedHistoryOrganometry}"
+								value="#{historyBacking.selectedHistoryOrganometry.organometryCheck}"
+								itemLabel="#{msg['his_organometry_check']}">
+								<p:ajax update="pnlOrganometry" />
+							</p:selectBooleanCheckbox>
+							<h:outputLabel value="#{msg['his_organometry_analysis']}" />
+							<p:inputTextarea style="width:950px" rows="3"
+								disabled="#{not historyBacking.selectedHistoryOrganometry.organometryCheck}"
+								readonly="#{historyBacking.readOnlySelectedHistoryOrganometry}"
+								value="#{historyBacking.selectedHistoryOrganometry.organometryAnalysis}" />
 						</h:panelGrid>
 					</p:tab>
 

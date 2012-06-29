@@ -23,10 +23,12 @@ public class UserDetailsServiceCustom implements UserDetailsService {
 		UserData user = null;
 		try {
 			CrmUser object = service.getObject(userName.toLowerCase());
-			user = new UserData();
-			user.setUsername(object.getUsername());
-			user.setPassword(object.getPassword());
-			user.setUser(object);
+			if (object != null) {
+				user = new UserData();
+				user.setUsername(object.getUsername());
+				user.setPassword(object.getPassword());
+				user.setUser(object);
+			}
 		} catch (HibernateException e) {
 			e.printStackTrace();
 		}

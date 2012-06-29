@@ -17,6 +17,7 @@ import co.com.tactusoft.crm.model.entities.CrmDoctorException;
 import co.com.tactusoft.crm.model.entities.CrmDoctorSchedule;
 import co.com.tactusoft.crm.model.entities.CrmHistoryHistory;
 import co.com.tactusoft.crm.model.entities.CrmHistoryHomeopathic;
+import co.com.tactusoft.crm.model.entities.CrmHistoryOrganometry;
 import co.com.tactusoft.crm.model.entities.CrmHistoryPhysique;
 import co.com.tactusoft.crm.model.entities.CrmHistoryRecord;
 import co.com.tactusoft.crm.model.entities.CrmHoliday;
@@ -45,6 +46,12 @@ public class ProcessBo implements Serializable {
 	public List<CrmAppointment> getListAppointmentByDoctor(BigDecimal idDoctor) {
 		return dao.find("from CrmAppointment o where o.crmDoctor.id = "
 				+ idDoctor + "order by o.startAppointmentDate");
+	}
+
+	public List<CrmAppointment> getListAppointmentByDoctorConfirmed(
+			BigDecimal idDoctor) {
+		return dao.find("from CrmAppointment o where o.crmDoctor.id = "
+				+ idDoctor + "and o.state = 1 order by o.startAppointmentDate");
 	}
 
 	public List<CrmAppointment> getListAppointmentByBranch(BigDecimal idBranch) {
@@ -457,7 +464,7 @@ public class ProcessBo implements Serializable {
 						+ dateString + "T" + startHourString
 						+ ".000+05:00' and o.startAppointmentDate <= '"
 						+ dateString + "T" + endHourString
-						+ ".000+05:00' and o.patient = '" + patient
+						+ ".000+05:00' and o.patientSap = '" + patient
 						+ "' and o.state = 1 "
 						+ "order by o.startAppointmentDate");
 
@@ -625,8 +632,8 @@ public class ProcessBo implements Serializable {
 	public List<CrmAppointment> listAppointmentByPatient(String patient,
 			int state) {
 		List<CrmAppointment> list = new ArrayList<CrmAppointment>();
-		list = dao.find("from CrmAppointment o where o.patient = '" + patient
-				+ "' and o.state = " + state
+		list = dao.find("from CrmAppointment o where o.patientSap = '"
+				+ patient + "' and o.state = " + state
 				+ " order by o.startAppointmentDate desc");
 		return list;
 	}
@@ -649,7 +656,7 @@ public class ProcessBo implements Serializable {
 						+ startDateString
 						+ "T00:00:00.000+05:00' and '"
 						+ endDateString
-						+ "T23:59:59.999+05:00') and o.patient = '"
+						+ "T23:59:59.999+05:00') and o.patientSap = '"
 						+ patient
 						+ "' and o.state = "
 						+ stateString
@@ -744,6 +751,17 @@ public class ProcessBo implements Serializable {
 		}
 	}
 
+	public CrmHistoryOrganometry getHistoryOrganometry(BigDecimal idPatient) {
+		List<CrmHistoryOrganometry> list = null;
+		list = dao.find("from CrmHistoryOrganometry o where o.crmPatient.id = "
+				+ idPatient);
+		if (list.size() > 0) {
+			return list.get(0);
+		} else {
+			return new CrmHistoryOrganometry();
+		}
+	}
+
 	public int saveHistoryRecord(CrmHistoryRecord entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmHistoryRecord.class));
@@ -768,6 +786,13 @@ public class ProcessBo implements Serializable {
 	public int saveHistoryPhysique(CrmHistoryPhysique entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmHistoryPhysique.class));
+		}
+		return dao.persist(entity);
+	}
+
+	public int saveHistoryOrganometry(CrmHistoryOrganometry entity) {
+		if (entity.getId() == null) {
+			entity.setId(getId(CrmHistoryOrganometry.class));
 		}
 		return dao.persist(entity);
 	}

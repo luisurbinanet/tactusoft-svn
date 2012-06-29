@@ -23,10 +23,10 @@ public class CrmAppointment implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
 	private CrmProcedureDetail crmProcedureDetail;
+	private CrmPatient crmPatient;
 	private CrmBranch crmBranch;
 	private CrmDoctor crmDoctor;
 	private String code;
-	private String patient;
 	private String patientNames;
 	private String patientSap;
 	private Date startAppointmentDate;
@@ -40,31 +40,31 @@ public class CrmAppointment implements java.io.Serializable {
 	}
 
 	public CrmAppointment(BigDecimal id, CrmProcedureDetail crmProcedureDetail,
-			CrmBranch crmBranch, CrmDoctor crmDoctor, String code,
-			String patient, Date startAppointmentDate, Date endAppointmentDate,
+			CrmPatient crmPatient, CrmBranch crmBranch, CrmDoctor crmDoctor,
+			String code, Date startAppointmentDate, Date endAppointmentDate,
 			int state) {
 		this.id = id;
 		this.crmProcedureDetail = crmProcedureDetail;
+		this.crmPatient = crmPatient;
 		this.crmBranch = crmBranch;
 		this.crmDoctor = crmDoctor;
 		this.code = code;
-		this.patient = patient;
 		this.startAppointmentDate = startAppointmentDate;
 		this.endAppointmentDate = endAppointmentDate;
 		this.state = state;
 	}
 
 	public CrmAppointment(BigDecimal id, CrmProcedureDetail crmProcedureDetail,
-			CrmBranch crmBranch, CrmDoctor crmDoctor, String code,
-			String patient, String patientNames, String patientSap,
+			CrmPatient crmPatient, CrmBranch crmBranch, CrmDoctor crmDoctor,
+			String code, String patientNames, String patientSap,
 			Date startAppointmentDate, Date endAppointmentDate,
 			String codPublicity, String namePublicity, String obs, int state) {
 		this.id = id;
 		this.crmProcedureDetail = crmProcedureDetail;
+		this.crmPatient = crmPatient;
 		this.crmBranch = crmBranch;
 		this.crmDoctor = crmDoctor;
 		this.code = code;
-		this.patient = patient;
 		this.patientNames = patientNames;
 		this.patientSap = patientSap;
 		this.startAppointmentDate = startAppointmentDate;
@@ -96,6 +96,16 @@ public class CrmAppointment implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "id_patient", nullable = false)
+	public CrmPatient getCrmPatient() {
+		return this.crmPatient;
+	}
+
+	public void setCrmPatient(CrmPatient crmPatient) {
+		this.crmPatient = crmPatient;
+	}
+
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_branch", nullable = false)
 	public CrmBranch getCrmBranch() {
 		return this.crmBranch;
@@ -122,15 +132,6 @@ public class CrmAppointment implements java.io.Serializable {
 
 	public void setCode(String code) {
 		this.code = code;
-	}
-
-	@Column(name = "patient", nullable = false, length = 45)
-	public String getPatient() {
-		return this.patient;
-	}
-
-	public void setPatient(String patient) {
-		this.patient = patient;
 	}
 
 	@Column(name = "patient_names", length = 1000)
@@ -182,7 +183,7 @@ public class CrmAppointment implements java.io.Serializable {
 
 	@Column(name = "name_publicity", length = 1000)
 	public String getNamePublicity() {
-		return namePublicity;
+		return this.namePublicity;
 	}
 
 	public void setNamePublicity(String namePublicity) {

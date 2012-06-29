@@ -485,7 +485,7 @@ public class AppointmentBacking extends BaseBacking {
 				String code = "";
 
 				selected.setCode(code);
-				selected.setPatient(selectedPatient.getCodeSap());
+				selected.setCrmPatient(selectedPatient);
 				selected.setPatientSap(selectedPatient.getCodeSap());
 				selected.setPatientNames(selectedPatient.getFirstnames() + " "
 						+ selectedPatient.getSurnames());

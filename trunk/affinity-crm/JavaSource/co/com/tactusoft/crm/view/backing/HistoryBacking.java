@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Scope;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmHistoryHistory;
 import co.com.tactusoft.crm.model.entities.CrmHistoryHomeopathic;
+import co.com.tactusoft.crm.model.entities.CrmHistoryOrganometry;
 import co.com.tactusoft.crm.model.entities.CrmHistoryPhysique;
 import co.com.tactusoft.crm.model.entities.CrmHistoryRecord;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
@@ -19,7 +20,7 @@ import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.datamodel.AppointmentDataModel;
 
 @Named
-@Scope("view")
+@Scope("session")
 public class HistoryBacking extends BaseBacking {
 
 	private static final long serialVersionUID = 1L;
@@ -28,6 +29,7 @@ public class HistoryBacking extends BaseBacking {
 	private CrmHistoryRecord selectedHistoryRecord;
 	private CrmHistoryHomeopathic selectedHistoryHomeopathic;
 	private CrmHistoryPhysique selectedHistoryPhysique;
+	private CrmHistoryOrganometry selectedHistoryOrganometry;
 
 	private List<CrmAppointment> listAppointment;
 	private AppointmentDataModel appointmentModel;
@@ -40,6 +42,7 @@ public class HistoryBacking extends BaseBacking {
 	private boolean readOnlySelectedHistoryRecord;
 	private boolean readOnlySelectedHistoryHomeopathic;
 	private boolean readOnlySelectedHistoryPhysique;
+	private boolean readOnlySelectedHistoryOrganometry;
 
 	private double imc;
 	private String descImc;
@@ -81,6 +84,15 @@ public class HistoryBacking extends BaseBacking {
 	public void setSelectedHistoryPhysique(
 			CrmHistoryPhysique selectedHistoryPhysique) {
 		this.selectedHistoryPhysique = selectedHistoryPhysique;
+	}
+
+	public CrmHistoryOrganometry getSelectedHistoryOrganometry() {
+		return selectedHistoryOrganometry;
+	}
+
+	public void setSelectedHistoryOrganometry(
+			CrmHistoryOrganometry selectedHistoryOrganometry) {
+		this.selectedHistoryOrganometry = selectedHistoryOrganometry;
 	}
 
 	public List<CrmAppointment> getListAppointment() {
@@ -159,6 +171,15 @@ public class HistoryBacking extends BaseBacking {
 		this.readOnlySelectedHistoryPhysique = readOnlySelectedHistoryPhysique;
 	}
 
+	public boolean isReadOnlySelectedHistoryOrganometry() {
+		return readOnlySelectedHistoryOrganometry;
+	}
+
+	public void setReadOnlySelectedHistoryOrganometry(
+			boolean readOnlySelectedHistoryOrganometry) {
+		this.readOnlySelectedHistoryOrganometry = readOnlySelectedHistoryOrganometry;
+	}
+
 	public double getImc() {
 		return imc;
 	}
@@ -180,6 +201,7 @@ public class HistoryBacking extends BaseBacking {
 		selectedHistoryRecord = new CrmHistoryRecord();
 		selectedHistoryHomeopathic = new CrmHistoryHomeopathic();
 		selectedHistoryPhysique = new CrmHistoryPhysique();
+		selectedHistoryOrganometry = new CrmHistoryOrganometry();
 
 		listAppointment = new ArrayList<CrmAppointment>();
 		appointmentModel = new AppointmentDataModel(listAppointment);
@@ -194,41 +216,55 @@ public class HistoryBacking extends BaseBacking {
 		readOnlySelectedHistoryRecord = true;
 		readOnlySelectedHistoryHomeopathic = true;
 		readOnlySelectedHistoryPhysique = true;
+		readOnlySelectedHistoryOrganometry = true;
 	}
 
 	public void searchAction(ActionEvent event) {
-		selected = processService.getPatientByCodeSap(selectedPatient
-				.getCodeSap());
+		String message = null;
 
-		listAppointment = processService.listAppointmentByPatient(
-				selectedPatient.getCodeSap(), 3);
-		appointmentModel = new AppointmentDataModel(listAppointment);
-
-		selectedHistoryHistory = processService.getHistoryHistory(selected
-				.getId());
-		selectedHistoryRecord = processService.getHistoryRecord(selected
-				.getId());
-		selectedHistoryHomeopathic = processService
-				.getHistoryHomeopathic(selected.getId());
-		selectedHistoryPhysique = processService.getHistoryPhysique(selected
-				.getId());
-
-		getRenderedRecord();
-
-		if (selected.getId() == null) {
-			disabledSaveButton = true;
+		if (selectedPatient == null
+				|| FacesUtil.isEmptyOrBlank(selectedPatient.getCodeSap())) {
+			message = FacesUtil.getMessage("his_msg_error_1");
+			FacesUtil.addError(message);
 		} else {
-			disabledSaveButton = false;
-		}
 
-		readOnlySelectedHistoryHistory = selectedHistoryHistory.getId() != null ? true
-				: false;
-		readOnlySelectedHistoryRecord = selectedHistoryRecord.getId() != null ? true
-				: false;
-		readOnlySelectedHistoryHomeopathic = selectedHistoryHomeopathic.getId() != null ? true
-				: false;
-		readOnlySelectedHistoryPhysique = selectedHistoryPhysique.getId() != null ? true
-				: false;
+			selected = processService.getPatientByCodeSap(selectedPatient
+					.getCodeSap());
+
+			listAppointment = processService.listAppointmentByPatient(
+					selectedPatient.getCodeSap(), 3);
+			appointmentModel = new AppointmentDataModel(listAppointment);
+
+			selectedHistoryHistory = processService.getHistoryHistory(selected
+					.getId());
+			selectedHistoryRecord = processService.getHistoryRecord(selected
+					.getId());
+			selectedHistoryHomeopathic = processService
+					.getHistoryHomeopathic(selected.getId());
+			selectedHistoryPhysique = processService
+					.getHistoryPhysique(selected.getId());
+			selectedHistoryOrganometry = processService
+					.getHistoryOrganometry(selected.getId());
+
+			getRenderedRecord();
+
+			if (selected.getId() == null) {
+				disabledSaveButton = true;
+			} else {
+				disabledSaveButton = false;
+			}
+
+			readOnlySelectedHistoryHistory = selectedHistoryHistory.getId() != null ? true
+					: false;
+			readOnlySelectedHistoryRecord = selectedHistoryRecord.getId() != null ? true
+					: false;
+			readOnlySelectedHistoryHomeopathic = selectedHistoryHomeopathic
+					.getId() != null ? true : false;
+			readOnlySelectedHistoryPhysique = selectedHistoryPhysique.getId() != null ? true
+					: false;
+			readOnlySelectedHistoryOrganometry = selectedHistoryOrganometry
+					.getId() != null ? true : false;
+		}
 	}
 
 	public void saveAction(ActionEvent event) {
@@ -431,6 +467,7 @@ public class HistoryBacking extends BaseBacking {
 			selectedHistoryRecord.setCrmPatient(selected);
 			selectedHistoryHomeopathic.setCrmPatient(selected);
 			selectedHistoryPhysique.setCrmPatient(selected);
+			selectedHistoryOrganometry.setCrmPatient(selected);
 
 			int result = processService.savePatient(selected);
 			if (result == 0) {
@@ -446,8 +483,15 @@ public class HistoryBacking extends BaseBacking {
 							result = processService
 									.saveHistoryPhysique(selectedHistoryPhysique);
 							if (result == 0) {
-								message = FacesUtil.getMessage("msg_record_ok");
-								FacesUtil.addInfo(message);
+								result = processService
+										.saveHistoryOrganometry(selectedHistoryOrganometry);
+								if (result == 0) {
+									message = FacesUtil
+											.getMessage("msg_record_ok");
+									FacesUtil.addInfo(message);
+								} else {
+
+								}
 							} else {
 
 							}
@@ -483,14 +527,14 @@ public class HistoryBacking extends BaseBacking {
 	}
 
 	public void calculateIMC() {
-		/*double weight = selectedHistoryPhysique.getWeight().doubleValue();
+		double weight = selectedHistoryPhysique.getWeight().doubleValue();
 		double height = selectedHistoryPhysique.getHeight().doubleValue() / 100;
 
 		if (height > 0) {
 			imc = weight / (height * height);
 		} else {
 			imc = 0;
-		}*/
+		}
 	}
 
 }
