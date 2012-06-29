@@ -610,26 +610,157 @@
 
 							<h:outputLabel value="#{msg['his_physique_height']}" />
 							<pe:inputNumber symbol="   cm" symbolPosition="s"
-								decimalPlaces="2" style="width:100px" maxValue="2.5"
+								decimalPlaces="0" style="width:100px" maxValue="250"
 								value="#{historyBacking.selectedHistoryPhysique.height}"
-								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}" />
+								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}">
+								<p:ajax event="keyup" update="txtIMC"
+									listener="#{historyBacking.calculateIMC}" />
+							</pe:inputNumber>
 
 							<h:outputLabel value="#{msg['his_physique_weight']}" />
 							<pe:inputNumber symbol="   kg" symbolPosition="s"
 								decimalPlaces="2" style="width:100px" maxValue="999"
 								value="#{historyBacking.selectedHistoryPhysique.weight}"
-								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}" />
+								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}">
+								<p:ajax event="keyup" update="txtIMC"
+									listener="#{historyBacking.calculateIMC}" />
+							</pe:inputNumber>
 
 							<h:outputLabel value="#{msg['his_physique_blood_pressure']}" />
 							<p:inputText maxlength="7"
 								value="#{historyBacking.selectedHistoryPhysique.bloodPressure}"
 								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}" />
 
-							<h:outputLabel value="#{msg['his_physique_blood_pressure']}" />
+							<h:outputLabel value="#{msg['his_physique_imc']}" />
 							<pe:inputNumber id="txtIMC" symbol="  Kg/m2" symbolPosition="s"
 								decimalPlaces="2" style="width:100px" maxValue="999"
 								value="#{historyBacking.imc}" readonly="true" />
 
+						</h:panelGrid>
+
+						<h:panelGrid id="pnlPhysique" columns="2" width="100%"
+							columnClasses="width25per,width75per">
+
+							<p:selectBooleanCheckbox
+								disabled="#{historyBacking.readOnlySelectedHistoryPhysique}"
+								value="#{historyBacking.selectedHistoryPhysique.generalStateCheck}"
+								itemLabel="#{msg['his_physique_general_state']}">
+								<p:ajax update="pnlPhysique" />
+							</p:selectBooleanCheckbox>
+							<p:inputTextarea style="width:950px" rows="3"
+								disabled="#{not historyBacking.selectedHistoryPhysique.generalStateCheck}"
+								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}"
+								value="#{historyBacking.selectedHistoryPhysique.generalState}" />
+
+							<p:selectBooleanCheckbox
+								disabled="#{historyBacking.readOnlySelectedHistoryPhysique}"
+								value="#{historyBacking.selectedHistoryPhysique.headNeckCheck}"
+								itemLabel="#{msg['his_physique_head_neck']}">
+								<p:ajax update="pnlPhysique" />
+							</p:selectBooleanCheckbox>
+							<p:inputTextarea style="width:950px" rows="3"
+								disabled="#{not historyBacking.selectedHistoryPhysique.headNeckCheck}"
+								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}"
+								value="#{historyBacking.selectedHistoryPhysique.headNeck}" />
+
+							<p:selectBooleanCheckbox
+								disabled="#{historyBacking.readOnlySelectedHistoryPhysique}"
+								value="#{historyBacking.selectedHistoryPhysique.chestCheck}"
+								itemLabel="#{msg['his_physique_chest']}">
+								<p:ajax update="pnlPhysique" />
+							</p:selectBooleanCheckbox>
+							<p:inputTextarea style="width:950px" rows="3"
+								disabled="#{not historyBacking.selectedHistoryPhysique.chestCheck}"
+								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}"
+								value="#{historyBacking.selectedHistoryPhysique.chest}" />
+
+							<p:selectBooleanCheckbox
+								disabled="#{historyBacking.readOnlySelectedHistoryPhysique}"
+								value="#{historyBacking.selectedHistoryPhysique.lungsCheck}"
+								itemLabel="#{msg['his_physique_lungs']}">
+								<p:ajax update="pnlPhysique" />
+							</p:selectBooleanCheckbox>
+							<p:inputTextarea style="width:950px" rows="3"
+								disabled="#{not historyBacking.selectedHistoryPhysique.lungsCheck}"
+								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}"
+								value="#{historyBacking.selectedHistoryPhysique.lungs}" />
+
+							<p:selectBooleanCheckbox
+								disabled="#{historyBacking.readOnlySelectedHistoryPhysique}"
+								value="#{historyBacking.selectedHistoryPhysique.heartCheck}"
+								itemLabel="#{msg['his_physique_heart']}">
+								<p:ajax update="pnlPhysique" />
+							</p:selectBooleanCheckbox>
+							<p:inputTextarea style="width:950px" rows="3"
+								disabled="#{not historyBacking.selectedHistoryPhysique.heartCheck}"
+								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}"
+								value="#{historyBacking.selectedHistoryPhysique.heart}" />
+
+							<p:selectBooleanCheckbox
+								disabled="#{historyBacking.readOnlySelectedHistoryPhysique}"
+								value="#{historyBacking.selectedHistoryPhysique.abdomenCheck}"
+								itemLabel="#{msg['his_physique_abdomen']}">
+								<p:ajax update="pnlPhysique" />
+							</p:selectBooleanCheckbox>
+							<p:inputTextarea style="width:950px" rows="3"
+								disabled="#{not historyBacking.selectedHistoryPhysique.abdomenCheck}"
+								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}"
+								value="#{historyBacking.selectedHistoryPhysique.abdomen}" />
+
+							<p:selectBooleanCheckbox
+								disabled="#{historyBacking.readOnlySelectedHistoryPhysique}"
+								value="#{historyBacking.selectedHistoryPhysique.genitalsCheck}"
+								itemLabel="#{msg['his_physique_genitals']}">
+								<p:ajax update="pnlPhysique" />
+							</p:selectBooleanCheckbox>
+							<p:inputTextarea style="width:950px" rows="3"
+								disabled="#{not historyBacking.selectedHistoryPhysique.genitalsCheck}"
+								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}"
+								value="#{historyBacking.selectedHistoryPhysique.genitals}" />
+
+							<p:selectBooleanCheckbox
+								disabled="#{historyBacking.readOnlySelectedHistoryPhysique}"
+								value="#{historyBacking.selectedHistoryPhysique.osteoCheck}"
+								itemLabel="#{msg['his_physique_osteo']}">
+								<p:ajax update="pnlPhysique" />
+							</p:selectBooleanCheckbox>
+							<p:inputTextarea style="width:950px" rows="3"
+								disabled="#{not historyBacking.selectedHistoryPhysique.osteoCheck}"
+								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}"
+								value="#{historyBacking.selectedHistoryPhysique.osteo}" />
+
+							<p:selectBooleanCheckbox
+								disabled="#{historyBacking.readOnlySelectedHistoryPhysique}"
+								value="#{historyBacking.selectedHistoryPhysique.tipsCheck}"
+								itemLabel="#{msg['his_physique_tips']}">
+								<p:ajax update="pnlPhysique" />
+							</p:selectBooleanCheckbox>
+							<p:inputTextarea style="width:950px" rows="3"
+								disabled="#{not historyBacking.selectedHistoryPhysique.tipsCheck}"
+								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}"
+								value="#{historyBacking.selectedHistoryPhysique.tips}" />
+
+							<p:selectBooleanCheckbox
+								disabled="#{historyBacking.readOnlySelectedHistoryPhysique}"
+								value="#{historyBacking.selectedHistoryPhysique.highlightsCheck}"
+								itemLabel="#{msg['his_physique_highlights']}">
+								<p:ajax update="pnlPhysique" />
+							</p:selectBooleanCheckbox>
+							<p:inputTextarea style="width:950px" rows="3"
+								disabled="#{not historyBacking.selectedHistoryPhysique.highlightsCheck}"
+								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}"
+								value="#{historyBacking.selectedHistoryPhysique.highlights}" />
+
+							<p:selectBooleanCheckbox
+								disabled="#{historyBacking.readOnlySelectedHistoryPhysique}"
+								value="#{historyBacking.selectedHistoryPhysique.skinCheck}"
+								itemLabel="#{msg['his_physique_skin']}">
+								<p:ajax update="pnlPhysique" />
+							</p:selectBooleanCheckbox>
+							<p:inputTextarea style="width:950px" rows="3"
+								disabled="#{not historyBacking.selectedHistoryPhysique.skinCheck}"
+								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}"
+								value="#{historyBacking.selectedHistoryPhysique.skinCheck}" />
 						</h:panelGrid>
 					</p:tab>
 

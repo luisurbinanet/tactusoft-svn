@@ -40,7 +40,7 @@ public class HistoryBacking extends BaseBacking {
 	private boolean readOnlySelectedHistoryRecord;
 	private boolean readOnlySelectedHistoryHomeopathic;
 	private boolean readOnlySelectedHistoryPhysique;
-	
+
 	private double imc;
 	private String descImc;
 
@@ -242,37 +242,49 @@ public class HistoryBacking extends BaseBacking {
 
 		if (FacesUtil.isEmptyOrBlank(selected.getOccupation())) {
 			field = FacesUtil.getMessage("pat_occupation");
-			message = FacesUtil.getMessage("glb_required", field);
+			message = FacesUtil.getMessage("title_patient_complementary");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
 			FacesUtil.addError(message);
 		}
 
 		if (FacesUtil.isEmptyOrBlank(selected.getNeighborhood())) {
 			field = FacesUtil.getMessage("pat_neighborhood");
-			message = FacesUtil.getMessage("glb_required", field);
+			message = FacesUtil.getMessage("title_patient_complementary");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
 			FacesUtil.addError(message);
 		}
 
 		if (selected.getTypeHousing().equals(Constant.DEFAULT_VALUE_STRING)) {
 			field = FacesUtil.getMessage("pat_type_housing");
-			message = FacesUtil.getMessage("glb_required", field);
+			message = FacesUtil.getMessage("title_patient_complementary");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
 			FacesUtil.addError(message);
 		}
 
 		if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getReason())) {
 			field = FacesUtil.getMessage("his_history_reason");
-			message = FacesUtil.getMessage("glb_required", field);
+			message = FacesUtil.getMessage("his_history_history");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
 			FacesUtil.addError(message);
 		}
 
 		if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getDisease())) {
 			field = FacesUtil.getMessage("his_history_disease");
-			message = FacesUtil.getMessage("glb_required", field);
+			message = FacesUtil.getMessage("his_history_history");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
 			FacesUtil.addError(message);
 		}
 
 		if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getResults())) {
 			field = FacesUtil.getMessage("his_history_results");
-			message = FacesUtil.getMessage("glb_required", field);
+			message = FacesUtil.getMessage("his_history_history");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
 			FacesUtil.addError(message);
 		}
 
@@ -282,7 +294,9 @@ public class HistoryBacking extends BaseBacking {
 						.isEmptyOrBlank(selectedHistoryRecord
 								.getArthritisMedication()))) {
 			field = FacesUtil.getMessage("his_rec_per_arthritis");
-			message = FacesUtil.getMessage("glb_required", field);
+			message = FacesUtil.getMessage("his_history_record");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
 			FacesUtil.addError(message);
 		}
 
@@ -292,7 +306,9 @@ public class HistoryBacking extends BaseBacking {
 						.isEmptyOrBlank(selectedHistoryRecord
 								.getCancerMedication()))) {
 			field = FacesUtil.getMessage("his_rec_per_cancer");
-			message = FacesUtil.getMessage("glb_required", field);
+			message = FacesUtil.getMessage("his_history_record");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
 			FacesUtil.addError(message);
 		}
 
@@ -302,7 +318,9 @@ public class HistoryBacking extends BaseBacking {
 						.isEmptyOrBlank(selectedHistoryRecord
 								.getPulmonaryMedication()))) {
 			field = FacesUtil.getMessage("his_rec_per_pulmonary");
-			message = FacesUtil.getMessage("glb_required", field);
+			message = FacesUtil.getMessage("his_history_record");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
 			FacesUtil.addError(message);
 		}
 
@@ -312,7 +330,9 @@ public class HistoryBacking extends BaseBacking {
 						.isEmptyOrBlank(selectedHistoryRecord
 								.getDiabetesMedication()))) {
 			field = FacesUtil.getMessage("his_rec_per_diabetes");
-			message = FacesUtil.getMessage("glb_required", field);
+			message = FacesUtil.getMessage("his_history_record");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
 			FacesUtil.addError(message);
 		}
 
@@ -322,7 +342,9 @@ public class HistoryBacking extends BaseBacking {
 						.isEmptyOrBlank(selectedHistoryRecord
 								.getHypertensionMedication()))) {
 			field = FacesUtil.getMessage("his_rec_per_hypertension");
-			message = FacesUtil.getMessage("glb_required", field);
+			message = FacesUtil.getMessage("his_history_record");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
 			FacesUtil.addError(message);
 		}
 
@@ -332,7 +354,9 @@ public class HistoryBacking extends BaseBacking {
 						.isEmptyOrBlank(selectedHistoryRecord
 								.getHospitalizationsMedication()))) {
 			field = FacesUtil.getMessage("his_rec_per_hospitalizations");
-			message = FacesUtil.getMessage("glb_required", field);
+			message = FacesUtil.getMessage("his_history_record");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
 			FacesUtil.addError(message);
 		}
 
@@ -342,7 +366,9 @@ public class HistoryBacking extends BaseBacking {
 						.isEmptyOrBlank(selectedHistoryRecord
 								.getAllergyMedication()))) {
 			field = FacesUtil.getMessage("his_rec_per_allergy");
-			message = FacesUtil.getMessage("glb_required", field);
+			message = FacesUtil.getMessage("his_history_record");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
 			FacesUtil.addError(message);
 		}
 
@@ -352,7 +378,50 @@ public class HistoryBacking extends BaseBacking {
 						.isEmptyOrBlank(selectedHistoryRecord
 								.getInfectionsMedication()))) {
 			field = FacesUtil.getMessage("his_rec_per_infections");
-			message = FacesUtil.getMessage("glb_required", field);
+			message = FacesUtil.getMessage("his_history_record");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addError(message);
+		}
+
+		if (selectedHistoryPhysique.getHeartRate() == 0) {
+			field = FacesUtil.getMessage("his_physique_heart_rate");
+			message = FacesUtil.getMessage("his_history_physique", field);
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addError(message);
+		}
+
+		if (selectedHistoryPhysique.getRespiratoryRate() == 0) {
+			field = FacesUtil.getMessage("his_physique_respiratory_rate");
+			message = FacesUtil.getMessage("his_history_physique", field);
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addError(message);
+		}
+
+		if (selectedHistoryPhysique.getHeight().intValue() == 0) {
+			field = FacesUtil.getMessage("his_physique_height");
+			message = FacesUtil.getMessage("his_history_physique", field);
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addError(message);
+		}
+
+		if (selectedHistoryPhysique.getWeight().intValue() == 0) {
+			field = FacesUtil.getMessage("his_physique_weight");
+			message = FacesUtil.getMessage("his_history_physique", field);
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addError(message);
+		}
+
+		if (FacesUtil
+				.isEmptyOrBlank(selectedHistoryPhysique.getBloodPressure())) {
+			field = FacesUtil.getMessage("his_physique_blood_pressure");
+			message = FacesUtil.getMessage("his_history_physique", field);
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
 			FacesUtil.addError(message);
 		}
 
@@ -411,6 +480,17 @@ public class HistoryBacking extends BaseBacking {
 			}
 		}
 		return result;
+	}
+
+	public void calculateIMC() {
+		/*double weight = selectedHistoryPhysique.getWeight().doubleValue();
+		double height = selectedHistoryPhysique.getHeight().doubleValue() / 100;
+
+		if (height > 0) {
+			imc = weight / (height * height);
+		} else {
+			imc = 0;
+		}*/
 	}
 
 }
