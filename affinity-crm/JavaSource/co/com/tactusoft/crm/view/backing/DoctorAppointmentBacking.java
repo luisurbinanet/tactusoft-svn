@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.inject.Named;
 
@@ -27,6 +28,9 @@ public class DoctorAppointmentBacking extends BaseBacking {
 	private List<SelectItem> listDoctor;
 	private CrmDoctor doctor;
 	private List<CrmAppointment> listAppointment;
+
+	private List<CrmAppointment> listAppointmentByDoctor;
+	private CrmAppointment selectedAppointment;
 
 	private List<SelectItem> listBranch;
 	private BigDecimal idBranch;
@@ -55,6 +59,30 @@ public class DoctorAppointmentBacking extends BaseBacking {
 
 	public void setListAppointment(List<CrmAppointment> listAppointment) {
 		this.listAppointment = listAppointment;
+	}
+
+	public List<CrmAppointment> getListAppointmentByDoctor() {
+		if (listAppointmentByDoctor == null) {
+			doctor = processService.getCrmDoctor();
+			if (doctor != null) {
+				listAppointmentByDoctor = processService
+						.getListAppointmentByDoctorConfirmed(doctor.getId());
+			}
+		}
+		return listAppointmentByDoctor;
+	}
+
+	public void setListAppointmentByDoctor(
+			List<CrmAppointment> listAppointmentByDoctor) {
+		this.listAppointmentByDoctor = listAppointmentByDoctor;
+	}
+
+	public CrmAppointment getSelectedAppointment() {
+		return selectedAppointment;
+	}
+
+	public void setSelectedAppointment(CrmAppointment selectedAppointment) {
+		this.selectedAppointment = selectedAppointment;
 	}
 
 	public List<SelectItem> getListBranch() {
@@ -162,6 +190,31 @@ public class DoctorAppointmentBacking extends BaseBacking {
 		} else {
 			branchEventModel = null;
 		}
+	}
+
+	public void cancelAppointmentAction(ActionEvent actionEvent) {
+		selectedAppointment.setState(Constant.APP_STATE_NOATTENDED);
+		processService.saveAppointment(selectedAppointment);
+
+		listAppointmentByDoctor = processService
+				.getListAppointmentByDoctorConfirmed(doctor.getId());
+
+		String message = FacesUtil.getMessage("app_msg_cancel",
+				selectedAppointment.getCode());
+		FacesUtil.addInfo(message);
+	}
+
+	public String attendedAppointmentAction() {
+		selectedAppointment.setState(Constant.APP_STATE_ATTENDED);
+		processService.saveAppointment(selectedAppointment);
+
+		HistoryBacking historyBacking = FacesUtil.findBean("historyBacking");
+		historyBacking.newAction(null);
+		historyBacking.setSelected(selectedAppointment.getCrmPatient());
+		historyBacking.setSelectedPatient(selectedAppointment.getCrmPatient());
+		historyBacking.searchAction(null);
+
+		return "/pages/processes/history?faces-redirect=true";
 	}
 
 }
