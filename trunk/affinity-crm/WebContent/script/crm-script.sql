@@ -2,9 +2,9 @@ CREATE DATABASE  IF NOT EXISTS `crm_db` /*!40100 DEFAULT CHARACTER SET latin1 CO
 USE `crm_db`;
 -- MySQL dump 10.13  Distrib 5.5.16, for Win32 (x86)
 --
--- Host: localhost    Database: crm_db
+-- Host: 192.168.1.29    Database: crm_db
 -- ------------------------------------------------------
--- Server version	5.5.20
+-- Server version	5.0.51a-3ubuntu5.8
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -18,6 +18,10 @@ USE `crm_db`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Not dumping tablespaces as no INFORMATION_SCHEMA.FILES table on this server
+--
+
+--
 -- Table structure for table `crm_parameter`
 --
 
@@ -26,11 +30,11 @@ DROP TABLE IF EXISTS `crm_parameter`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_parameter` (
   `id` decimal(19,0) NOT NULL,
-  `code` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `description` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `text_value` varchar(5000) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `number_value` decimal(19,3) DEFAULT NULL,
-  PRIMARY KEY (`id`),
+  `code` varchar(45) collate latin1_spanish_ci default NULL,
+  `description` varchar(255) collate latin1_spanish_ci default NULL,
+  `text_value` varchar(5000) collate latin1_spanish_ci default NULL,
+  `number_value` decimal(19,3) default NULL,
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -41,7 +45,7 @@ CREATE TABLE `crm_parameter` (
 
 LOCK TABLES `crm_parameter` WRITE;
 /*!40000 ALTER TABLE `crm_parameter` DISABLE KEYS */;
-INSERT INTO `crm_parameter` VALUES (1,'SAP_ENVIRONMENT',NULL,'300',NULL),(2,'SAP_URL_CUSTOMER_MAINTAIN_ALL',NULL,'http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zsd_customer_maintain_all/300/zsd_customer_maintain_all/zsd_customer_maintain_all',NULL),(3,'SAP_URL_CUSTOMER_FIND',NULL,'http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zbapi_customer_find/300/zbapi_customer_find/zbapi_customer_find',NULL),(4,'SAP_URL_SALESORDER_CREATEFROMDAT',NULL,'http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zbapi_salesorder_createfromdat/300/zbapi_salesorder_createfromdat/zbapi_salesorder_createfromdat',NULL),(5,'SAP_URL_CUSTOMER2',NULL,'http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zcustomer2/300/zcustomer2/zcustomer2',NULL),(6,'SAP_USERNAME',NULL,'TACTUSOFT',NULL),(7,'SAP_PASSWORD',NULL,'AFFINITY',NULL),(8,'RUTA_ARCHIVO_MATERIALES',NULL,'/opt/affinity/Materiales4000.xlsx',0.000),(9,'SAP_URL_ZWEBLIST',NULL,'http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zweblist/300/zweblist/zweblist',NULL),(10,'GRUPO_PRECIOS',NULL,'01',NULL),(11,'ESQUEMA_CLIENTE',NULL,'1',NULL),(12,'GRUPO_ESTADISTICO_CLIENTE',NULL,'1',NULL);
+INSERT INTO `crm_parameter` VALUES (1,'SAP_ENVIRONMENT',NULL,'300',NULL),(2,'SAP_URL_CUSTOMER_MAINTAIN_ALL',NULL,'http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zsd_customer_maintain_all/300/zsd_customer_maintain_all/zsd_customer_maintain_all',NULL),(3,'SAP_URL_CUSTOMER_FIND',NULL,'http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zbapi_customer_find/300/zbapi_customer_find/zbapi_customer_find',NULL),(4,'SAP_URL_SALESORDER_CREATEFROMDAT',NULL,'http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zbapi_salesorder_createfromdat/300/zbapi_salesorder_createfromdat/zbapi_salesorder_createfromdat',NULL),(5,'SAP_URL_CUSTOMER2',NULL,'http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zcustomer2/300/zcustomer2/zcustomer2',NULL),(6,'SAP_USERNAME',NULL,'TACTUSOFT',NULL),(7,'SAP_PASSWORD',NULL,'AFFINITY',NULL),(8,'RUTA_ARCHIVO_MATERIALES',NULL,'/opt/affinityWeb/Materiales4000.xlsx',0.000),(9,'SAP_URL_ZWEBLIST',NULL,'http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zweblist/300/zweblist/zweblist',NULL),(10,'GRUPO_PRECIOS',NULL,'01',NULL),(11,'ESQUEMA_CLIENTE',NULL,'1',NULL),(12,'GRUPO_ESTADISTICO_CLIENTE',NULL,'1',NULL);
 /*!40000 ALTER TABLE `crm_parameter` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -54,10 +58,10 @@ DROP TABLE IF EXISTS `crm_department`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_department` (
   `id` decimal(19,0) NOT NULL,
-  `code` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
-  `name` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
-  `state` int(11) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
+  `code` varchar(45) collate latin1_spanish_ci NOT NULL,
+  `name` varchar(255) collate latin1_spanish_ci NOT NULL,
+  `state` int(11) NOT NULL default '1',
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -81,20 +85,20 @@ DROP TABLE IF EXISTS `crm_appointment`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_appointment` (
   `id` decimal(19,0) NOT NULL,
-  `code` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
-  `patient` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
-  `patient_names` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `patient_sap` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `code` varchar(45) collate latin1_spanish_ci NOT NULL,
+  `patient` varchar(45) collate latin1_spanish_ci NOT NULL,
+  `patient_names` varchar(1000) collate latin1_spanish_ci default NULL,
+  `patient_sap` varchar(45) collate latin1_spanish_ci default NULL,
   `id_branch` decimal(19,0) NOT NULL,
   `id_procedure_detail` decimal(19,0) NOT NULL,
   `id_doctor` decimal(19,0) NOT NULL,
   `start_appointment_date` datetime NOT NULL,
   `end_appointment_date` datetime NOT NULL,
-  `cod_publicity` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `name_publicity` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `obs` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `state` int(11) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
+  `cod_publicity` varchar(45) collate latin1_spanish_ci default NULL,
+  `name_publicity` varchar(1000) collate latin1_spanish_ci default NULL,
+  `obs` varchar(1000) collate latin1_spanish_ci default NULL,
+  `state` int(11) NOT NULL default '1',
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`),
   KEY `fk_crm_appointment_1` (`id_doctor`),
   KEY `fk_crm_appointment_2` (`id_procedure_detail`),
@@ -111,7 +115,7 @@ CREATE TABLE `crm_appointment` (
 
 LOCK TABLES `crm_appointment` WRITE;
 /*!40000 ALTER TABLE `crm_appointment` DISABLE KEYS */;
-INSERT INTO `crm_appointment` VALUES (1,'C00001','0000765476','P1 P1','0000765476',112,2,5,'2012-06-25 08:00:00','2012-06-25 08:15:00','P20','PROMOTICKET',NULL,1);
+INSERT INTO `crm_appointment` VALUES (1,'C00001','0000765476','P1 P1','0000765476',112,2,5,'2012-06-25 08:00:00','2012-06-25 08:15:00','P20','PROMOTICKET',NULL,1),(2,'C00002','0000765483','Junio 25 de 2012 Junio 25 de 2012','0000765483',112,1,5,'2012-06-27 15:30:00','2012-06-27 16:00:00','T19','LA 14',NULL,1),(3,'C00003','0000765476','P1 P1','0000765476',112,3,5,'2012-06-27 08:45:00','2012-06-27 09:30:00','P14','AVISO EXTERIOR',NULL,1),(4,'C00004','0000765490','Prueba junio28 Prueba junio28','0000765490',112,1,5,'2012-07-02 08:00:00','2012-07-02 08:30:00','T11','CANAL UNO',NULL,1),(5,'C00005','0000765490','Prueba junio28 Prueba junio28','0000765490',112,2,5,'2012-07-02 08:30:00','2012-07-02 08:45:00','T14','CANAL CARACOL – COLO',NULL,3);
 /*!40000 ALTER TABLE `crm_appointment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -124,9 +128,9 @@ DROP TABLE IF EXISTS `crm_cie`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_cie` (
   `id` int(11) NOT NULL,
-  `code` varchar(4) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `description` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
-  PRIMARY KEY (`id`),
+  `code` varchar(4) collate latin1_spanish_ci default NULL,
+  `description` varchar(1000) collate latin1_spanish_ci default NULL,
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -152,7 +156,7 @@ CREATE TABLE `crm_procedure_branch` (
   `id` decimal(19,0) NOT NULL,
   `id_procedure` decimal(19,0) NOT NULL,
   `id_branch` decimal(19,0) NOT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY  (`id`),
   KEY `fk_crm_procedure_branch_1` (`id_procedure`),
   KEY `fk_crm_procedure_branch_2` (`id_branch`),
   CONSTRAINT `fk_crm_procedure_branch_1` FOREIGN KEY (`id_procedure`) REFERENCES `crm_procedure` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -179,9 +183,9 @@ DROP TABLE IF EXISTS `crm_country`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_country` (
   `id` decimal(19,0) NOT NULL,
-  `code` varchar(2) COLLATE latin1_spanish_ci NOT NULL,
-  `name` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
-  PRIMARY KEY (`id`),
+  `code` varchar(2) collate latin1_spanish_ci NOT NULL,
+  `name` varchar(255) collate latin1_spanish_ci NOT NULL,
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `uk_crm_country_1` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -208,7 +212,7 @@ CREATE TABLE `crm_doctor_exception` (
   `id_doctor` decimal(19,0) NOT NULL,
   `start_hour` datetime NOT NULL,
   `end_hour` datetime NOT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY  (`id`),
   KEY `fk_crm_doctor_exception_1` (`id_doctor`),
   CONSTRAINT `fk_crm_doctor_exception_1` FOREIGN KEY (`id_doctor`) REFERENCES `crm_doctor` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
@@ -233,9 +237,9 @@ DROP TABLE IF EXISTS `crm_user_branch`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_user_branch` (
   `id` decimal(19,0) NOT NULL,
-  `id_user` decimal(19,0) DEFAULT NULL,
-  `id_branch` decimal(19,0) DEFAULT NULL,
-  PRIMARY KEY (`id`),
+  `id_user` decimal(19,0) default NULL,
+  `id_branch` decimal(19,0) default NULL,
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `uk_crm_user_brach_1` (`id_user`,`id_branch`),
   KEY `fk_crm_user_brach_1` (`id_user`),
   KEY `fk_crm_user_brach_2` (`id_branch`),
@@ -250,7 +254,7 @@ CREATE TABLE `crm_user_branch` (
 
 LOCK TABLES `crm_user_branch` WRITE;
 /*!40000 ALTER TABLE `crm_user_branch` DISABLE KEYS */;
-INSERT INTO `crm_user_branch` VALUES (1,1,112),(2,1,116),(11,2,2),(3,5,112),(5,6,112),(6,6,116),(4,7,112),(7,8,112),(8,8,114),(9,8,116),(10,9,94);
+INSERT INTO `crm_user_branch` VALUES (1,1,112),(2,1,116),(11,2,112),(12,2,113),(13,4,46),(14,4,104),(17,4,112),(15,4,114),(16,4,116),(3,5,112),(5,6,112),(6,6,116),(4,7,112),(7,8,112),(8,8,114),(9,8,116),(10,9,94),(18,10,173);
 /*!40000 ALTER TABLE `crm_user_branch` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -263,11 +267,11 @@ DROP TABLE IF EXISTS `crm_role`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_role` (
   `id` decimal(19,0) NOT NULL,
-  `name` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
-  `description` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `id_page` decimal(19,0) DEFAULT NULL,
-  `state` int(11) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
+  `name` varchar(255) collate latin1_spanish_ci NOT NULL,
+  `description` varchar(255) collate latin1_spanish_ci default NULL,
+  `id_page` decimal(19,0) default NULL,
+  `state` int(11) NOT NULL default '1',
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`),
   KEY `fk_crm_role_1` (`id_page`),
   CONSTRAINT `fk_crm_role_1` FOREIGN KEY (`id_page`) REFERENCES `crm_page` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -280,7 +284,7 @@ CREATE TABLE `crm_role` (
 
 LOCK TABLES `crm_role` WRITE;
 /*!40000 ALTER TABLE `crm_role` DISABLE KEYS */;
-INSERT INTO `crm_role` VALUES (1,'ADMINISTRADOR','Administrador',8,1),(2,'CALL_CENTER','',17,1),(3,'GERENCIA','',12,1),(4,'MEDICO','MEDICO',22,1);
+INSERT INTO `crm_role` VALUES (1,'ADMINISTRADOR','Administrador',8,1),(2,'CALL_CENTER','',17,1),(3,'GERENCIA','',12,1),(4,'MEDICO','MEDICO',22,1),(5,'RECEPCIÓN','ROL DE RECEPCIÓN',12,1);
 /*!40000 ALTER TABLE `crm_role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -293,10 +297,10 @@ DROP TABLE IF EXISTS `crm_city`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_city` (
   `id` decimal(19,0) NOT NULL,
-  `code` varchar(10) COLLATE latin1_spanish_ci NOT NULL,
-  `name` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
-  `id_region` decimal(19,0) DEFAULT NULL,
-  PRIMARY KEY (`id`),
+  `code` varchar(10) collate latin1_spanish_ci NOT NULL,
+  `name` varchar(255) collate latin1_spanish_ci NOT NULL,
+  `id_region` decimal(19,0) default NULL,
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `uk_crm_city_1` (`code`),
   KEY `fk_crm_city_1` (`id_region`),
   CONSTRAINT `fk_crm_city_1` FOREIGN KEY (`id_region`) REFERENCES `crm_region` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -322,13 +326,13 @@ DROP TABLE IF EXISTS `crm_procedure_detail`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_procedure_detail` (
   `id` decimal(19,0) NOT NULL,
-  `name` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
+  `name` varchar(255) collate latin1_spanish_ci NOT NULL,
   `id_procedure` decimal(19,0) NOT NULL,
-  `time_doctor` int(11) DEFAULT '0',
-  `time_nurses` int(11) DEFAULT '0',
-  `time_stretchers` int(11) DEFAULT '0',
-  `state` int(11) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
+  `time_doctor` int(11) default '0',
+  `time_nurses` int(11) default '0',
+  `time_stretchers` int(11) default '0',
+  `state` int(11) NOT NULL default '1',
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`),
   KEY `fk_crm_procedure_detail_1` (`id_procedure`),
   CONSTRAINT `fk_crm_procedure_detail_1` FOREIGN KEY (`id_procedure`) REFERENCES `crm_procedure` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -355,26 +359,26 @@ DROP TABLE IF EXISTS `crm_history_physique`;
 CREATE TABLE `crm_history_physique` (
   `id` decimal(19,0) NOT NULL,
   `id_patient` decimal(19,0) NOT NULL,
-  `physique_ta` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `physique_fc` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `physique_fr` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `physique_to` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `physique_size` decimal(5,2) DEFAULT NULL,
-  `physique_weight` decimal(5,2) DEFAULT NULL,
-  `general_state` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `skull` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `chest` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `lungs` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `heart` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `abdomen` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `genitals` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `tips` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `highlights` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `skin` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `review` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
-  PRIMARY KEY (`id`),
+  `physique_ta` varchar(45) collate latin1_spanish_ci default NULL,
+  `physique_fc` varchar(45) collate latin1_spanish_ci default NULL,
+  `physique_fr` varchar(45) collate latin1_spanish_ci default NULL,
+  `physique_to` varchar(45) collate latin1_spanish_ci default NULL,
+  `physique_size` decimal(5,2) default NULL,
+  `physique_weight` decimal(5,2) default NULL,
+  `general_state` varchar(1000) collate latin1_spanish_ci default NULL,
+  `skull` varchar(1000) collate latin1_spanish_ci default NULL,
+  `chest` varchar(1000) collate latin1_spanish_ci default NULL,
+  `lungs` varchar(1000) collate latin1_spanish_ci default NULL,
+  `heart` varchar(1000) collate latin1_spanish_ci default NULL,
+  `abdomen` varchar(1000) collate latin1_spanish_ci default NULL,
+  `genitals` varchar(1000) collate latin1_spanish_ci default NULL,
+  `tips` varchar(1000) collate latin1_spanish_ci default NULL,
+  `highlights` varchar(1000) collate latin1_spanish_ci default NULL,
+  `skin` varchar(1000) collate latin1_spanish_ci default NULL,
+  `review` varchar(1000) collate latin1_spanish_ci default NULL,
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `id_patient_UNIQUE` (`id_patient`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -395,10 +399,10 @@ DROP TABLE IF EXISTS `crm_specialty`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_specialty` (
   `id` decimal(19,0) NOT NULL,
-  `code` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `description` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
-  `state` int(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
+  `code` varchar(45) collate latin1_spanish_ci default NULL,
+  `description` varchar(255) collate latin1_spanish_ci NOT NULL,
+  `state` int(1) NOT NULL default '1',
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -422,18 +426,18 @@ DROP TABLE IF EXISTS `crm_user`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_user` (
   `id` decimal(19,0) NOT NULL,
-  `username` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
-  `password` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
-  `doc` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
-  `names` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
-  `surnames` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
-  `email` varchar(1000) COLLATE latin1_spanish_ci NOT NULL,
-  `phone` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `extension` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `username` varchar(45) collate latin1_spanish_ci NOT NULL,
+  `password` varchar(45) collate latin1_spanish_ci NOT NULL,
+  `doc` varchar(45) collate latin1_spanish_ci NOT NULL,
+  `names` varchar(255) collate latin1_spanish_ci NOT NULL,
+  `surnames` varchar(255) collate latin1_spanish_ci NOT NULL,
+  `email` varchar(1000) collate latin1_spanish_ci NOT NULL,
+  `phone` varchar(255) collate latin1_spanish_ci default NULL,
+  `extension` varchar(255) collate latin1_spanish_ci default NULL,
   `id_departament` decimal(19,0) NOT NULL,
   `id_profile` decimal(19,0) NOT NULL,
-  `state` int(11) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
+  `state` int(11) NOT NULL default '1',
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `username_UNIQUE` (`username`),
   KEY `fk_crm_user_1` (`id_departament`),
   KEY `fk_crm_user_2` (`id_profile`),
@@ -448,7 +452,7 @@ CREATE TABLE `crm_user` (
 
 LOCK TABLES `crm_user` WRITE;
 /*!40000 ALTER TABLE `crm_user` DISABLE KEYS */;
-INSERT INTO `crm_user` VALUES (1,'gsolorzano','250cf8b51c773f3f8dc8b4be867a9a02','123','Gerardo','Solorzano','gsolorzano@affinity.com.co','','',1,2,1),(2,'jennyalvarez','202cb962ac59075b964b07152d234b70','456','Jenny','Alvarez','jennyalvarez@affinitycolombia.com','','',1,1,1),(3,'jperez','202cb962ac59075b964b07152d234b70','789','juan','perez','JUAN.PEREZ@hotmail.com','','',1,1,1),(4,'ccbog_age1','202cb962ac59075b964b07152d234b70','012','Agente1','Call Center','agente1.bogota@affinitycolombia.com','6231629','',2,2,1),(5,'agomez','202cb962ac59075b964b07152d234b70','00000082','ALEXANDER','GOMEZ','agomez@affinitycolombia.com','','',3,1,1),(6,'dhernandez','202cb962ac59075b964b07152d234b70','00000086','DIANA','HERNANDEZ','dhernandez@affinitycolombia.com','','',3,1,1),(7,'eespitia','202cb962ac59075b964b07152d234b70','00000089','EVANGELINA','ESPITIA','eespitia@affinitycolombia.com','','',3,1,1),(8,'gescobar','202cb962ac59075b964b07152d234b70','00000090','GUILLERMO','ESCOBAR','gescobar@affinitycolombia.com','','',3,1,1),(9,'afuente','202cb962ac59075b964b07152d234b70','22734930','ADRIANA','FUENTE','afuente@hotmail.com','123','',1,1,1);
+INSERT INTO `crm_user` VALUES (1,'gsolorzano','250cf8b51c773f3f8dc8b4be867a9a02','123','Gerardo','Solorzano','gsolorzano@affinity.com.co','','',1,2,1),(2,'jennyalvarez','202cb962ac59075b964b07152d234b70','456','Jenny','Alvarez','jennyalvarez@affinitycolombia.com','','',1,1,1),(3,'jperez','202cb962ac59075b964b07152d234b70','789','juan','perez','JUAN.PEREZ@hotmail.com','','',1,1,1),(4,'ccbog_age1','202cb962ac59075b964b07152d234b70','012','Agente1','Call Center','agente1.bogota@affinitycolombia.com','6231629','',2,2,1),(5,'agomez','202cb962ac59075b964b07152d234b70','00000082','ALEXANDER','GOMEZ','agomez@affinitycolombia.com','','',3,1,1),(6,'dhernandez','202cb962ac59075b964b07152d234b70','00000086','DIANA','HERNANDEZ','dhernandez@affinitycolombia.com','','',3,1,1),(7,'eespitia','202cb962ac59075b964b07152d234b70','00000089','EVANGELINA','ESPITIA','eespitia@affinitycolombia.com','','',3,1,1),(8,'gescobar','202cb962ac59075b964b07152d234b70','00000090','GUILLERMO','ESCOBAR','gescobar@affinitycolombia.com','','',3,1,1),(9,'afuente','202cb962ac59075b964b07152d234b70','22734930','ADRIANA','FUENTE','afuente@hotmail.com','123','',1,1,1),(10,'recepcion1','202cb962ac59075b964b07152d234b70','RECEPCION1','RECEPCION1','RECEPCION1','RECEPCION1@AFFINITYcolombia.COM.CO','','',1,1,1);
 /*!40000 ALTER TABLE `crm_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -463,7 +467,7 @@ CREATE TABLE `crm_holiday_branch` (
   `id` decimal(19,0) NOT NULL,
   `id_holiday` decimal(19,0) NOT NULL,
   `id_branch` decimal(19,0) NOT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `uk_crm_holiday_branch_1` (`id_holiday`,`id_branch`),
   KEY `fk_crm_holiday_branch_1` (`id_holiday`),
   KEY `fk_crm_holiday_branch_2` (`id_branch`),
@@ -492,7 +496,7 @@ CREATE TABLE `crm_page_role` (
   `id` decimal(19,0) NOT NULL,
   `id_page` decimal(19,0) NOT NULL,
   `id_role` decimal(19,0) NOT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `uk_crm_page_role_1` (`id_page`,`id_role`),
   KEY `fk_crm_page_role_1` (`id_page`),
   KEY `fk_crm_page_role_2` (`id_role`),
@@ -507,7 +511,7 @@ CREATE TABLE `crm_page_role` (
 
 LOCK TABLES `crm_page_role` WRITE;
 /*!40000 ALTER TABLE `crm_page_role` DISABLE KEYS */;
-INSERT INTO `crm_page_role` VALUES (97,1,1),(111,1,2),(98,2,1),(77,3,1),(79,4,1),(84,5,1),(87,6,1),(81,7,1),(89,8,1),(104,8,2),(83,9,1),(78,10,1),(112,10,2),(99,11,1),(109,11,2),(38,11,3),(66,11,4),(90,12,1),(105,12,2),(37,12,3),(61,12,4),(86,13,1),(80,14,1),(100,15,1),(110,15,2),(67,15,4),(82,16,1),(92,17,1),(106,17,2),(62,17,4),(93,18,1),(107,18,2),(63,18,4),(94,19,1),(64,19,4),(85,20,1),(88,21,1),(91,22,1),(108,22,2),(65,22,4),(101,23,1),(95,24,1),(96,25,1),(103,27,1);
+INSERT INTO `crm_page_role` VALUES (97,1,1),(111,1,2),(98,2,1),(77,3,1),(79,4,1),(84,5,1),(87,6,1),(81,7,1),(89,8,1),(104,8,2),(83,9,1),(78,10,1),(112,10,2),(99,11,1),(109,11,2),(38,11,3),(66,11,4),(117,11,5),(90,12,1),(105,12,2),(37,12,3),(61,12,4),(113,12,5),(86,13,1),(80,14,1),(100,15,1),(110,15,2),(67,15,4),(118,15,5),(82,16,1),(92,17,1),(106,17,2),(62,17,4),(93,18,1),(107,18,2),(63,18,4),(114,18,5),(94,19,1),(64,19,4),(85,20,1),(88,21,1),(91,22,1),(108,22,2),(65,22,4),(115,22,5),(101,23,1),(119,23,5),(95,24,1),(96,25,1),(116,25,5),(103,27,1);
 /*!40000 ALTER TABLE `crm_page_role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -520,17 +524,17 @@ DROP TABLE IF EXISTS `crm_profile`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_profile` (
   `id` decimal(19,0) NOT NULL,
-  `code` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
-  `description` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `sales_org` varchar(4) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `distr_chan` varchar(4) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `division` varchar(4) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `society` varchar(4) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `account` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `payment_term` varchar(4) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `formula` varchar(4) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `state` int(11) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
+  `code` varchar(45) collate latin1_spanish_ci NOT NULL,
+  `description` varchar(255) collate latin1_spanish_ci default NULL,
+  `sales_org` varchar(4) collate latin1_spanish_ci default NULL,
+  `distr_chan` varchar(4) collate latin1_spanish_ci default NULL,
+  `division` varchar(4) collate latin1_spanish_ci default NULL,
+  `society` varchar(4) collate latin1_spanish_ci default NULL,
+  `account` varchar(45) collate latin1_spanish_ci default NULL,
+  `payment_term` varchar(4) collate latin1_spanish_ci default NULL,
+  `formula` varchar(4) collate latin1_spanish_ci default NULL,
+  `state` int(11) NOT NULL default '1',
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -541,7 +545,7 @@ CREATE TABLE `crm_profile` (
 
 LOCK TABLES `crm_profile` WRITE;
 /*!40000 ALTER TABLE `crm_profile` DISABLE KEYS */;
-INSERT INTO `crm_profile` VALUES (1,'Finders  - Canal 10','Finders  - Canal 10','4000','10','10','4000','1305050000','Z001','ZHD2',1),(2,'Finders  - Canal 20','Finders  - Canal 20','4000','20','10','4000','1305050000','Z001','ZHD2',1),(3,'Finders  - Canal 30','Finders  - Canal 30','1000','30','10','1000','1305050000','Z001','ZHD2',1),(4,'Finders  - Canal 31','Finders  - Canal 31','1000','31','10','1000','1305050000','Z001','ZHD2',1),(5,'Finders  - Canal 40','Finders  - Canal 40','1000','40','10','1000','1305050000','Z001','ZHD2',1),(6,'Finders  - Canal 50','Finders  - Canal 50','1000','50','10','1000','1305050000','Z001','ZHD2',1),(7,'Finders  - Canal 70','Finders  - Canal 70','1000','70','10','1000','1305050000','Z001','ZHD2',1),(8,'Affinity  - Canal 10','Affinity  - Canal 10','1000','10','10','1000','1305050000','Z001','ZHD2',1),(9,'Affinity  - Canal 20','Affinity  - Canal 20','1000','20','10','1000','1305050000','Z001','ZHD2',1),(10,'Affinity  - Canal 30','Affinity  - Canal 30','1000','30','10','1000','1305050000','Z001','ZHD2',1),(11,'Affinity  - Canal 31','Affinity  - Canal 31','1000','31','10','1000','1305050000','Z001','ZHD2',1),(12,'Affinity  - Canal 40','Affinity  - Canal 40','1000','40','10','1000','1305050000','Z001','ZHD2',1),(13,'Affinity  - Canal 50','Affinity  - Canal 50','1000','50','10','1000','1305050000','Z001','ZHD2',1),(14,'Affinity  - Canal 70','Affinity  - Canal 70','1000','70','10','1000','1305050000','Z001','ZHD2',1);
+INSERT INTO `crm_profile` VALUES (1,'Finders  - Canal 10','Finders  - Canal 10','4000','10','10','4000','1305050000','Z001','',1),(2,'Finders  - Canal 20','Finders  - Canal 20','4000','20','10','4000','1305050000','Z001','ZHD2',1),(3,'Finders  - Canal 30','Finders  - Canal 30','4000','30','10','1000','1305050000','Z001','ZHD2',1),(4,'Finders  - Canal 31','Finders  - Canal 31','4000','31','10','1000','1305050000','Z001','ZHD2',1),(5,'Finders  - Canal 40','Finders  - Canal 40','1000','40','10','1000','1305050000','Z001','ZHD2',1),(6,'Finders  - Canal 50','Finders  - Canal 50','1000','50','10','1000','1305050000','Z001','ZHD2',1),(7,'Finders  - Canal 70','Finders  - Canal 70','1000','70','10','1000','1305050000','Z001','ZHD2',1),(8,'Affinity  - Canal 10','Affinity  - Canal 10','1000','10','10','1000','1305050000','Z001','ZHD2',1),(9,'Affinity  - Canal 20','Affinity  - Canal 20','1000','20','10','1000','1305050000','Z001','ZHD2',1),(10,'Affinity  - Canal 30','Affinity  - Canal 30','1000','30','10','1000','1305050000','Z001','ZHD2',1),(11,'Affinity  - Canal 31','Affinity  - Canal 31','1000','31','10','1000','1305050000','Z001','ZHD2',1),(12,'Affinity  - Canal 40','Affinity  - Canal 40','1000','40','10','1000','1305050000','Z001','ZHD2',1),(13,'Affinity  - Canal 50','Affinity  - Canal 50','1000','50','10','1000','1305050000','Z001','ZHD2',1),(14,'Affinity  - Canal 70','Affinity  - Canal 70','1000','70','10','1000','1305050000','Z001','ZHD2',1);
 /*!40000 ALTER TABLE `crm_profile` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -554,12 +558,12 @@ DROP TABLE IF EXISTS `crm_doctor`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_doctor` (
   `id` decimal(19,0) NOT NULL,
-  `code` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
-  `names` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
-  `id_speciality` decimal(19,0) DEFAULT NULL,
+  `code` varchar(45) collate latin1_spanish_ci NOT NULL,
+  `names` varchar(45) collate latin1_spanish_ci NOT NULL,
+  `id_speciality` decimal(19,0) default NULL,
   `id_user` decimal(19,0) NOT NULL,
-  `state` int(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
+  `state` int(1) NOT NULL default '1',
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`),
   KEY `fk_crm_doctor_1` (`id_speciality`),
   KEY `fk_crm_doctor_2` (`id_user`),
@@ -588,63 +592,62 @@ DROP TABLE IF EXISTS `crm_history_record`;
 CREATE TABLE `crm_history_record` (
   `id` decimal(19,0) NOT NULL,
   `id_patient` decimal(19,0) NOT NULL,
-  `arthritis` tinyint(1) DEFAULT NULL,
-  `arthritis_time` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `arthritis_medication` text COLLATE latin1_spanish_ci,
-  `cancer` tinyint(1) DEFAULT NULL,
-  `cancer_time` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `cancer_medication` text COLLATE latin1_spanish_ci,
-  `pulmonary` tinyint(1) DEFAULT NULL,
-  `pulmonary_time` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `pulmonary_medication` text COLLATE latin1_spanish_ci,
-  `diabetes` tinyint(1) DEFAULT NULL,
-  `diabetes_time` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `diabetes_medication` text COLLATE latin1_spanish_ci,
-  `hypertension` tinyint(1) DEFAULT NULL,
-  `hypertension_time` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `hypertension_medication` text COLLATE latin1_spanish_ci,
-  `hospitalizations` tinyint(1) DEFAULT NULL,
-  `hospitalizations_time` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `hospitalizations_medication` text COLLATE latin1_spanish_ci,
-  `allergy` tinyint(1) DEFAULT NULL,
-  `allergy_time` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `allergy_medication` text COLLATE latin1_spanish_ci,
-  `infections` tinyint(1) DEFAULT NULL,
-  `infections_time` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `infections_medication` text COLLATE latin1_spanish_ci,
-  `occupational` text COLLATE latin1_spanish_ci,
-  `toxic` text COLLATE latin1_spanish_ci,
-  `blood_type` text COLLATE latin1_spanish_ci,
-  `pregnancy` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `parity` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `abortions` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `family_history` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `stillbirths` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `caesarean` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `menarche` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `sexarca` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `fur` date DEFAULT NULL,
-  `bleeding` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `fuc` date DEFAULT NULL,
-  `fuep` date DEFAULT NULL,
-  `psa` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `psa_date` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `neonatal` text COLLATE latin1_spanish_ci,
-  `perinatal` text COLLATE latin1_spanish_ci,
-  `vaccination` text COLLATE latin1_spanish_ci,
-  `growth` text COLLATE latin1_spanish_ci,
-  `hypertension_parent` text COLLATE latin1_spanish_ci,
-  `epoc_parent` text COLLATE latin1_spanish_ci,
-  `heart_disease_parent` text COLLATE latin1_spanish_ci,
-  `asthma_parent` text COLLATE latin1_spanish_ci,
-  `acv_parent` text COLLATE latin1_spanish_ci,
-  `cancer_parent` text COLLATE latin1_spanish_ci,
-  `diabetes_parent` text COLLATE latin1_spanish_ci,
-  PRIMARY KEY (`id`),
+  `arthritis` tinyint(1) default NULL,
+  `arthritis_time` varchar(45) collate latin1_spanish_ci default NULL,
+  `arthritis_medication` text collate latin1_spanish_ci,
+  `cancer` tinyint(1) default NULL,
+  `cancer_time` varchar(45) collate latin1_spanish_ci default NULL,
+  `cancer_medication` text collate latin1_spanish_ci,
+  `pulmonary` tinyint(1) default NULL,
+  `pulmonary_time` varchar(45) collate latin1_spanish_ci default NULL,
+  `pulmonary_medication` text collate latin1_spanish_ci,
+  `diabetes` tinyint(1) default NULL,
+  `diabetes_time` varchar(45) collate latin1_spanish_ci default NULL,
+  `diabetes_medication` text collate latin1_spanish_ci,
+  `hypertension` tinyint(1) default NULL,
+  `hypertension_time` varchar(45) collate latin1_spanish_ci default NULL,
+  `hypertension_medication` text collate latin1_spanish_ci,
+  `hospitalizations` tinyint(1) default NULL,
+  `hospitalizations_time` varchar(45) collate latin1_spanish_ci default NULL,
+  `hospitalizations_medication` text collate latin1_spanish_ci,
+  `allergy` tinyint(1) default NULL,
+  `allergy_time` varchar(45) collate latin1_spanish_ci default NULL,
+  `allergy_medication` text collate latin1_spanish_ci,
+  `infections` tinyint(1) default NULL,
+  `infections_time` varchar(45) collate latin1_spanish_ci default NULL,
+  `infections_medication` text collate latin1_spanish_ci,
+  `occupational` text collate latin1_spanish_ci,
+  `toxic` text collate latin1_spanish_ci,
+  `blood_type` text collate latin1_spanish_ci,
+  `pregnancy` varchar(45) collate latin1_spanish_ci default NULL,
+  `parity` varchar(45) collate latin1_spanish_ci default NULL,
+  `abortions` varchar(45) collate latin1_spanish_ci default NULL,
+  `family_history` varchar(45) collate latin1_spanish_ci default NULL,
+  `stillbirths` varchar(45) collate latin1_spanish_ci default NULL,
+  `caesarean` varchar(45) collate latin1_spanish_ci default NULL,
+  `menarche` varchar(45) collate latin1_spanish_ci default NULL,
+  `sexarca` varchar(45) collate latin1_spanish_ci default NULL,
+  `fur` date default NULL,
+  `bleeding` varchar(1000) collate latin1_spanish_ci default NULL,
+  `fuc` date default NULL,
+  `fuep` date default NULL,
+  `psa` varchar(45) collate latin1_spanish_ci default NULL,
+  `psa_date` date default NULL,
+  `neonatal` text collate latin1_spanish_ci,
+  `perinatal` text collate latin1_spanish_ci,
+  `vaccination` text collate latin1_spanish_ci,
+  `growth` text collate latin1_spanish_ci,
+  `hypertension_parent` text collate latin1_spanish_ci,
+  `epoc_parent` text collate latin1_spanish_ci,
+  `heart_disease_parent` text collate latin1_spanish_ci,
+  `asthma_parent` text collate latin1_spanish_ci,
+  `acv_parent` text collate latin1_spanish_ci,
+  `cancer_parent` text collate latin1_spanish_ci,
+  `diabetes_parent` text collate latin1_spanish_ci,
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `id_patient_UNIQUE` (`id_patient`),
-  KEY `fk_crm_history_record_1` (`id_patient`),
-  CONSTRAINT `fk_crm_history_record_1` FOREIGN KEY (`id_patient`) REFERENCES `crm_patient` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+  KEY `fk_crm_history_record_1` (`id_patient`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -665,34 +668,34 @@ DROP TABLE IF EXISTS `crm_patient`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_patient` (
   `id` decimal(19,0) NOT NULL,
-  `doc` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `code_sap` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `firstnames` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `surnames` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `born_date` date DEFAULT NULL,
-  `gender` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `occupation` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `address` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `neighborhood` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `phone_number` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `cell_number` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `email` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `type_housing` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `country` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `region` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `city` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `guardian` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `guardian_address` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `guardian_relationship` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `guardian_telephone` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `obs` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `cycle` tinyint(1) DEFAULT NULL,
-  `send_phone` tinyint(1) DEFAULT NULL,
-  `send_email` tinyint(1) DEFAULT NULL,
-  `send_postal` tinyint(1) DEFAULT NULL,
-  `send_sms` tinyint(1) DEFAULT NULL,
-  `sales_org` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  PRIMARY KEY (`id`),
+  `doc` varchar(45) collate latin1_spanish_ci default NULL,
+  `code_sap` varchar(45) collate latin1_spanish_ci default NULL,
+  `firstnames` varchar(45) collate latin1_spanish_ci default NULL,
+  `surnames` varchar(45) collate latin1_spanish_ci default NULL,
+  `born_date` date default NULL,
+  `gender` varchar(45) collate latin1_spanish_ci default NULL,
+  `occupation` varchar(255) collate latin1_spanish_ci default NULL,
+  `address` varchar(255) collate latin1_spanish_ci default NULL,
+  `neighborhood` varchar(45) collate latin1_spanish_ci default NULL,
+  `phone_number` varchar(45) collate latin1_spanish_ci default NULL,
+  `cell_number` varchar(45) collate latin1_spanish_ci default NULL,
+  `email` varchar(1000) collate latin1_spanish_ci default NULL,
+  `type_housing` varchar(45) collate latin1_spanish_ci default NULL,
+  `country` varchar(45) collate latin1_spanish_ci default NULL,
+  `region` varchar(45) collate latin1_spanish_ci default NULL,
+  `city` varchar(45) collate latin1_spanish_ci default NULL,
+  `guardian` varchar(255) collate latin1_spanish_ci default NULL,
+  `guardian_address` varchar(255) collate latin1_spanish_ci default NULL,
+  `guardian_relationship` varchar(255) collate latin1_spanish_ci default NULL,
+  `guardian_telephone` varchar(255) collate latin1_spanish_ci default NULL,
+  `obs` varchar(1000) collate latin1_spanish_ci default NULL,
+  `cycle` tinyint(1) default NULL,
+  `send_phone` tinyint(1) default NULL,
+  `send_email` tinyint(1) default NULL,
+  `send_postal` tinyint(1) default NULL,
+  `send_sms` tinyint(1) default NULL,
+  `sales_org` varchar(45) collate latin1_spanish_ci default NULL,
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `doc_UNIQUE` (`doc`),
   UNIQUE KEY `code_sap_UNIQUE` (`code_sap`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
@@ -704,7 +707,7 @@ CREATE TABLE `crm_patient` (
 
 LOCK TABLES `crm_patient` WRITE;
 /*!40000 ALTER TABLE `crm_patient` DISABLE KEYS */;
-INSERT INTO `crm_patient` VALUES (1,'P1','0000765476','P1','P1','1982-06-03','W','Ingeniero','P1','Britalia Norte','P1','','','U','CO','11','3','','','','','',0,0,0,0,0,'1000'),(2,'P4','0000765486','P4','P4','2007-06-02','M',NULL,'P4',NULL,'P4','','',NULL,'CO','91','29',NULL,NULL,NULL,NULL,NULL,0,0,0,0,0,'4000');
+INSERT INTO `crm_patient` VALUES (1,'P1','0000765476','P1','P1','2012-06-03','M','Ingeniero','P1','Britalia Norte','P1','','','U','CO','11','3','','','','','',0,0,0,0,0,'1000'),(2,'P3','0000765482','P3','P3','2012-06-03','M',NULL,'P3',NULL,'P3','','',NULL,'CO','91','29',NULL,NULL,NULL,NULL,NULL,0,0,0,0,0,'4000'),(3,'25062012','0000765483','Junio 25 de 2012','Junio 25 de 2012','2012-06-03','W',NULL,'cra 45 67 89',NULL,'3456789','','',NULL,'CO','11','3',NULL,NULL,NULL,NULL,NULL,0,0,0,0,0,'4000'),(4,'P5','0000765487','P5','P5','2008-06-20','W',NULL,'P5',NULL,'P5','','',NULL,'CO','91','29',NULL,NULL,NULL,NULL,NULL,0,0,0,0,0,'4000'),(5,'P6','0000765489','P6','P6','1996-06-03','W',NULL,'P6',NULL,'P6','','',NULL,'CO','91','29',NULL,NULL,NULL,NULL,NULL,0,0,0,0,0,'4000'),(6,'28062012','0000765490','Prueba junio28','Prueba junio28','1983-04-24','W',NULL,'Cra 35 n 56 89',NULL,'4616793','3208378669','',NULL,'CO','91','29',NULL,NULL,NULL,NULL,NULL,0,0,0,0,0,'4000');
 /*!40000 ALTER TABLE `crm_patient` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -717,10 +720,10 @@ DROP TABLE IF EXISTS `crm_speciality`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_speciality` (
   `id` decimal(19,0) NOT NULL,
-  `code` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `description` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
-  `state` int(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
+  `code` varchar(45) collate latin1_spanish_ci default NULL,
+  `description` varchar(255) collate latin1_spanish_ci NOT NULL,
+  `state` int(1) NOT NULL default '1',
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -746,7 +749,7 @@ CREATE TABLE `crm_user_role` (
   `id` decimal(19,0) NOT NULL,
   `id_user` decimal(19,0) NOT NULL,
   `id_role` decimal(19,0) NOT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY  (`id`),
   KEY `fk_crm_user_role_1` (`id_user`),
   KEY `fk_crm_user_role_2` (`id_role`),
   CONSTRAINT `fk_crm_user_role_1` FOREIGN KEY (`id_user`) REFERENCES `crm_user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -760,7 +763,7 @@ CREATE TABLE `crm_user_role` (
 
 LOCK TABLES `crm_user_role` WRITE;
 /*!40000 ALTER TABLE `crm_user_role` DISABLE KEYS */;
-INSERT INTO `crm_user_role` VALUES (3,3,4),(4,4,2),(5,1,1),(6,5,4),(7,7,4),(8,6,4),(9,8,4),(10,9,4),(11,2,1);
+INSERT INTO `crm_user_role` VALUES (3,3,4),(5,1,1),(6,5,4),(7,7,4),(8,6,4),(9,8,4),(10,9,4),(11,2,1),(12,4,2),(13,10,5);
 /*!40000 ALTER TABLE `crm_user_role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -773,14 +776,14 @@ DROP TABLE IF EXISTS `crm_branch`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_branch` (
   `id` decimal(19,0) NOT NULL,
-  `code` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `name` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `society` varchar(4) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `doctors` int(11) DEFAULT NULL,
-  `nurses` int(11) DEFAULT NULL,
-  `stretchers` int(11) DEFAULT NULL,
-  `state` int(11) DEFAULT '1',
-  PRIMARY KEY (`id`),
+  `code` varchar(45) collate latin1_spanish_ci default NULL,
+  `name` varchar(1000) collate latin1_spanish_ci default NULL,
+  `society` varchar(4) collate latin1_spanish_ci default NULL,
+  `doctors` int(11) default NULL,
+  `nurses` int(11) default NULL,
+  `stretchers` int(11) default NULL,
+  `state` int(11) default '1',
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -809,7 +812,7 @@ CREATE TABLE `crm_doctor_schedule` (
   `start_hour` time NOT NULL,
   `end_hour` time NOT NULL,
   `id_branch` decimal(19,0) NOT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY  (`id`),
   KEY `fk_crm_doctor_schedule_1` (`id_doctor`),
   KEY `fk_crm_doctor_schedule_2` (`id_branch`),
   CONSTRAINT `fk_crm_doctor_schedule_1` FOREIGN KEY (`id_doctor`) REFERENCES `crm_doctor` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -837,10 +840,10 @@ DROP TABLE IF EXISTS `crm_consultation`;
 CREATE TABLE `crm_consultation` (
   `id` decimal(19,0) NOT NULL,
   `id_patient` decimal(19,0) NOT NULL,
-  `review` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `review` varchar(45) collate latin1_spanish_ci NOT NULL,
   `date` date NOT NULL,
   `id_doctor` decimal(19,0) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -862,11 +865,11 @@ DROP TABLE IF EXISTS `crm_procedure`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_procedure` (
   `id` decimal(19,0) NOT NULL,
-  `name` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
-  `description` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `parallel` tinyint(1) NOT NULL DEFAULT '0',
-  `state` int(11) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
+  `name` varchar(255) collate latin1_spanish_ci NOT NULL,
+  `description` varchar(1000) collate latin1_spanish_ci default NULL,
+  `parallel` tinyint(1) NOT NULL default '0',
+  `state` int(11) NOT NULL default '1',
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -890,10 +893,10 @@ DROP TABLE IF EXISTS `crm_domain`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_domain` (
   `id` decimal(19,0) NOT NULL,
-  `code` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `item_value` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `group` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  PRIMARY KEY (`id`),
+  `code` varchar(45) collate latin1_spanish_ci default NULL,
+  `item_value` varchar(255) collate latin1_spanish_ci default NULL,
+  `group` varchar(45) collate latin1_spanish_ci default NULL,
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `uk_crm_domain_1` (`code`,`group`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -917,9 +920,9 @@ DROP TABLE IF EXISTS `crm_holiday`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_holiday` (
   `id` decimal(19,0) NOT NULL,
-  `description` varchar(1000) COLLATE latin1_spanish_ci NOT NULL,
+  `description` varchar(1000) collate latin1_spanish_ci NOT NULL,
   `holiday` date NOT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `uk_crm_holiday_1` (`holiday`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -959,10 +962,10 @@ DROP TABLE IF EXISTS `crm_region`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_region` (
   `id` decimal(19,0) NOT NULL,
-  `code` varchar(3) COLLATE latin1_spanish_ci NOT NULL,
-  `name` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
+  `code` varchar(3) collate latin1_spanish_ci NOT NULL,
+  `name` varchar(255) collate latin1_spanish_ci NOT NULL,
   `id_country` decimal(19,0) NOT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `uk_crm_region_1` (`code`),
   KEY `fk_crm_region_1` (`id_country`),
   CONSTRAINT `fk_crm_state_1` FOREIGN KEY (`id_country`) REFERENCES `crm_country` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -989,15 +992,14 @@ DROP TABLE IF EXISTS `crm_history_homeopathic`;
 CREATE TABLE `crm_history_homeopathic` (
   `id` decimal(19,0) NOT NULL,
   `id_patient` decimal(19,0) NOT NULL,
-  `biotypology` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `mental` text COLLATE latin1_spanish_ci,
-  `special` text COLLATE latin1_spanish_ci,
-  `general` text COLLATE latin1_spanish_ci,
-  `miasm` text COLLATE latin1_spanish_ci,
-  PRIMARY KEY (`id`),
-  KEY `fk_crm_homeopathic_1` (`id_patient`),
-  CONSTRAINT `fk_crm_homeopathic_1` FOREIGN KEY (`id_patient`) REFERENCES `crm_patient` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+  `biotypology` varchar(45) collate latin1_spanish_ci default NULL,
+  `mental` text collate latin1_spanish_ci,
+  `special` text collate latin1_spanish_ci,
+  `general` text collate latin1_spanish_ci,
+  `miasm` text collate latin1_spanish_ci,
+  PRIMARY KEY  (`id`),
+  KEY `fk_crm_homeopathic_1` (`id_patient`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1018,12 +1020,12 @@ DROP TABLE IF EXISTS `crm_page`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_page` (
   `id` decimal(19,0) NOT NULL,
-  `name` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
-  `page` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `icon` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `parent` decimal(19,0) DEFAULT NULL,
+  `name` varchar(255) collate latin1_spanish_ci NOT NULL,
+  `page` varchar(255) collate latin1_spanish_ci default NULL,
+  `icon` varchar(255) collate latin1_spanish_ci default NULL,
+  `parent` decimal(19,0) default NULL,
   `orderby` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1047,22 +1049,21 @@ DROP TABLE IF EXISTS `crm_history_history`;
 CREATE TABLE `crm_history_history` (
   `id` decimal(19,0) NOT NULL,
   `id_patient` decimal(19,0) NOT NULL,
-  `reason` text COLLATE latin1_spanish_ci,
-  `disease` text COLLATE latin1_spanish_ci,
-  `results` text COLLATE latin1_spanish_ci,
-  `head` text COLLATE latin1_spanish_ci,
-  `orl` text COLLATE latin1_spanish_ci,
-  `cr` text COLLATE latin1_spanish_ci,
-  `gi` text COLLATE latin1_spanish_ci,
-  `neuromuscular` text COLLATE latin1_spanish_ci,
-  `gu` text COLLATE latin1_spanish_ci,
-  `psychiatric` text COLLATE latin1_spanish_ci,
-  `skin` text COLLATE latin1_spanish_ci,
-  PRIMARY KEY (`id`),
+  `reason` text collate latin1_spanish_ci,
+  `disease` text collate latin1_spanish_ci,
+  `results` text collate latin1_spanish_ci,
+  `head` text collate latin1_spanish_ci,
+  `orl` text collate latin1_spanish_ci,
+  `cr` text collate latin1_spanish_ci,
+  `gi` text collate latin1_spanish_ci,
+  `neuromuscular` text collate latin1_spanish_ci,
+  `gu` text collate latin1_spanish_ci,
+  `psychiatric` text collate latin1_spanish_ci,
+  `skin` text collate latin1_spanish_ci,
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `id_patient_UNIQUE` (`id_patient`),
-  KEY `fk_crm_history_history_1` (`id_patient`),
-  CONSTRAINT `fk_crm_history_history_1` FOREIGN KEY (`id_patient`) REFERENCES `crm_patient` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+  KEY `fk_crm_history_history_1` (`id_patient`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1071,7 +1072,6 @@ CREATE TABLE `crm_history_history` (
 
 LOCK TABLES `crm_history_history` WRITE;
 /*!40000 ALTER TABLE `crm_history_history` DISABLE KEYS */;
-INSERT INTO `crm_history_history` VALUES (1,1,'PRUEBA','PRUEBA','PRUEBA','','','','','','','','');
 /*!40000 ALTER TABLE `crm_history_history` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1081,18 +1081,7 @@ UNLOCK TABLES;
 
 /*!50001 DROP TABLE IF EXISTS `vw_doctor_schedule`*/;
 /*!50001 DROP VIEW IF EXISTS `vw_doctor_schedule`*/;
-/*!50001 SET @saved_cs_client          = @@character_set_client */;
-/*!50001 SET @saved_cs_results         = @@character_set_results */;
-/*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8 */;
-/*!50001 SET character_set_results     = utf8 */;
-/*!50001 SET collation_connection      = utf8_general_ci */;
-/*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `vw_doctor_schedule` AS select distinct `a`.`id` AS `id_doctor`,`a`.`names` AS `names`,`b`.`id_branch` AS `id_branch`,`b`.`day` AS `day` from (`crm_doctor` `a` join `crm_doctor_schedule` `b` on((`b`.`id_doctor` = `a`.`id`))) where (`a`.`state` = 1) */;
-/*!50001 SET character_set_client      = @saved_cs_client */;
-/*!50001 SET character_set_results     = @saved_cs_results */;
-/*!50001 SET collation_connection      = @saved_col_connection */;
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_doctor_schedule` AS select distinct `a`.`id` AS `id_doctor`,`a`.`names` AS `names`,`b`.`id_branch` AS `id_branch`,`b`.`day` AS `day` from (`crm_doctor` `a` join `crm_doctor_schedule` `b` on((`b`.`id_doctor` = `a`.`id`))) where (`a`.`state` = 1) */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -1103,4 +1092,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-06-27  7:54:54
+-- Dump completed on 2012-06-29  7:39:18

@@ -25,7 +25,7 @@ public class CrmHistoryPhysique implements java.io.Serializable {
 	private BigDecimal height;
 	private BigDecimal weight;
 	private String bloodPressure;
-	private Boolean generalCheck;
+	private Boolean generalStateCheck;
 	private String generalState;
 	private Boolean headNeckCheck;
 	private String headNeck;
@@ -35,7 +35,7 @@ public class CrmHistoryPhysique implements java.io.Serializable {
 	private String lungs;
 	private Boolean heartCheck;
 	private String heart;
-	private Boolean abdomeCheck;
+	private Boolean abdomenCheck;
 	private String abdomen;
 	private Boolean genitalsCheck;
 	private String genitals;
@@ -59,10 +59,10 @@ public class CrmHistoryPhysique implements java.io.Serializable {
 
 	public CrmHistoryPhysique(BigDecimal id, CrmPatient crmPatient,
 			Integer heartRate, Integer respiratoryRate, BigDecimal height,
-			BigDecimal weight, String bloodPressure, Boolean generalCheck,
+			BigDecimal weight, String bloodPressure, Boolean generalStateCheck,
 			String generalState, Boolean headNeckCheck, String headNeck,
 			Boolean chestCheck, String chest, Boolean lungsCheck, String lungs,
-			Boolean heartCheck, String heart, Boolean abdomeCheck,
+			Boolean heartCheck, String heart, Boolean abdomenCheck,
 			String abdomen, Boolean genitalsCheck, String genitals,
 			Boolean osteoCheck, String osteo, Boolean tipsCheck, String tips,
 			Boolean highlightsCheck, String highlights, Boolean skinCheck,
@@ -74,7 +74,7 @@ public class CrmHistoryPhysique implements java.io.Serializable {
 		this.height = height;
 		this.weight = weight;
 		this.bloodPressure = bloodPressure;
-		this.generalCheck = generalCheck;
+		this.generalStateCheck = generalStateCheck;
 		this.generalState = generalState;
 		this.headNeckCheck = headNeckCheck;
 		this.headNeck = headNeck;
@@ -84,7 +84,7 @@ public class CrmHistoryPhysique implements java.io.Serializable {
 		this.lungs = lungs;
 		this.heartCheck = heartCheck;
 		this.heart = heart;
-		this.abdomeCheck = abdomeCheck;
+		this.abdomenCheck = abdomenCheck;
 		this.abdomen = abdomen;
 		this.genitalsCheck = genitalsCheck;
 		this.genitals = genitals;
@@ -164,13 +164,13 @@ public class CrmHistoryPhysique implements java.io.Serializable {
 		this.bloodPressure = bloodPressure;
 	}
 
-	@Column(name = "general_check")
-	public Boolean getGeneralCheck() {
-		return this.generalCheck;
+	@Column(name = "general_state_check")
+	public Boolean getGeneralStateCheck() {
+		return this.generalStateCheck;
 	}
 
-	public void setGeneralCheck(Boolean generalCheck) {
-		this.generalCheck = generalCheck;
+	public void setGeneralStateCheck(Boolean generalStateCheck) {
+		this.generalStateCheck = generalStateCheck;
 	}
 
 	@Column(name = "general_state", length = 65535)
@@ -254,13 +254,13 @@ public class CrmHistoryPhysique implements java.io.Serializable {
 		this.heart = heart;
 	}
 
-	@Column(name = "abdome_check")
-	public Boolean getAbdomeCheck() {
-		return this.abdomeCheck;
+	@Column(name = "abdomen_check")
+	public Boolean getAbdomenCheck() {
+		return this.abdomenCheck;
 	}
 
-	public void setAbdomeCheck(Boolean abdomeCheck) {
-		this.abdomeCheck = abdomeCheck;
+	public void setAbdomenCheck(Boolean abdomenCheck) {
+		this.abdomenCheck = abdomenCheck;
 	}
 
 	@Column(name = "abdomen", length = 65535)
