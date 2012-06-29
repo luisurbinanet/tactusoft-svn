@@ -1,11 +1,12 @@
 package co.com.tactusoft.crm.model.entities;
 
-// Generated 20/06/2012 02:16:10 AM by Hibernate Tools 3.4.0.CR1
-
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -16,67 +17,90 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "crm_history_physique", catalog = "crm_db", uniqueConstraints = @UniqueConstraint(columnNames = "id_patient"))
 public class CrmHistoryPhysique implements java.io.Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
-	private BigDecimal idPatient;
-	private String physiqueTa;
-	private String physiqueFc;
-	private String physiqueFr;
-	private String physiqueTo;
-	private BigDecimal physiqueSize;
-	private BigDecimal physiqueWeight;
+	private CrmPatient crmPatient;
+	private Integer heartRate;
+	private Integer respiratoryRate;
+	private BigDecimal height;
+	private BigDecimal weight;
+	private String bloodPressure;
+	private Boolean generalCheck;
 	private String generalState;
-	private String skull;
+	private Boolean headNeckCheck;
+	private String headNeck;
+	private Boolean chestCheck;
 	private String chest;
+	private Boolean lungsCheck;
 	private String lungs;
+	private Boolean heartCheck;
 	private String heart;
+	private Boolean abdomeCheck;
 	private String abdomen;
+	private Boolean genitalsCheck;
 	private String genitals;
+	private Boolean osteoCheck;
+	private String osteo;
+	private Boolean tipsCheck;
 	private String tips;
+	private Boolean highlightsCheck;
 	private String highlights;
+	private Boolean skinCheck;
 	private String skin;
-	private String review;
+	private String obs;
 
 	public CrmHistoryPhysique() {
 	}
 
-	public CrmHistoryPhysique(BigDecimal id, BigDecimal idPatient) {
+	public CrmHistoryPhysique(BigDecimal id, CrmPatient crmPatient) {
 		this.id = id;
-		this.idPatient = idPatient;
+		this.crmPatient = crmPatient;
 	}
 
-	public CrmHistoryPhysique(BigDecimal id, BigDecimal idPatient, String physiqueTa,
-			String physiqueFc, String physiqueFr, String physiqueTo,
-			BigDecimal physiqueSize, BigDecimal physiqueWeight,
-			String generalState, String skull, String chest, String lungs,
-			String heart, String abdomen, String genitals, String tips,
-			String highlights, String skin, String review) {
+	public CrmHistoryPhysique(BigDecimal id, CrmPatient crmPatient,
+			Integer heartRate, Integer respiratoryRate, BigDecimal height,
+			BigDecimal weight, String bloodPressure, Boolean generalCheck,
+			String generalState, Boolean headNeckCheck, String headNeck,
+			Boolean chestCheck, String chest, Boolean lungsCheck, String lungs,
+			Boolean heartCheck, String heart, Boolean abdomeCheck,
+			String abdomen, Boolean genitalsCheck, String genitals,
+			Boolean osteoCheck, String osteo, Boolean tipsCheck, String tips,
+			Boolean highlightsCheck, String highlights, Boolean skinCheck,
+			String skin, String obs) {
 		this.id = id;
-		this.idPatient = idPatient;
-		this.physiqueTa = physiqueTa;
-		this.physiqueFc = physiqueFc;
-		this.physiqueFr = physiqueFr;
-		this.physiqueTo = physiqueTo;
-		this.physiqueSize = physiqueSize;
-		this.physiqueWeight = physiqueWeight;
+		this.crmPatient = crmPatient;
+		this.heartRate = heartRate;
+		this.respiratoryRate = respiratoryRate;
+		this.height = height;
+		this.weight = weight;
+		this.bloodPressure = bloodPressure;
+		this.generalCheck = generalCheck;
 		this.generalState = generalState;
-		this.skull = skull;
+		this.headNeckCheck = headNeckCheck;
+		this.headNeck = headNeck;
+		this.chestCheck = chestCheck;
 		this.chest = chest;
+		this.lungsCheck = lungsCheck;
 		this.lungs = lungs;
+		this.heartCheck = heartCheck;
 		this.heart = heart;
+		this.abdomeCheck = abdomeCheck;
 		this.abdomen = abdomen;
+		this.genitalsCheck = genitalsCheck;
 		this.genitals = genitals;
+		this.osteoCheck = osteoCheck;
+		this.osteo = osteo;
+		this.tipsCheck = tipsCheck;
 		this.tips = tips;
+		this.highlightsCheck = highlightsCheck;
 		this.highlights = highlights;
+		this.skinCheck = skinCheck;
 		this.skin = skin;
-		this.review = review;
+		this.obs = obs;
 	}
 
 	@Id
-	@Column(name = "id", unique = true, nullable = false)
+	@Column(name = "id", unique = true, nullable = false, scale = 0)
 	public BigDecimal getId() {
 		return this.id;
 	}
@@ -85,70 +109,71 @@ public class CrmHistoryPhysique implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "id_patient", unique = true, nullable = false)
-	public BigDecimal getIdPatient() {
-		return this.idPatient;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_patient", unique = true, nullable = false)
+	public CrmPatient getCrmPatient() {
+		return this.crmPatient;
 	}
 
-	public void setIdPatient(BigDecimal idPatient) {
-		this.idPatient = idPatient;
+	public void setCrmPatient(CrmPatient crmPatient) {
+		this.crmPatient = crmPatient;
 	}
 
-	@Column(name = "physique_ta", length = 45)
-	public String getPhysiqueTa() {
-		return this.physiqueTa;
+	@Column(name = "heart_rate")
+	public Integer getHeartRate() {
+		return this.heartRate;
 	}
 
-	public void setPhysiqueTa(String physiqueTa) {
-		this.physiqueTa = physiqueTa;
+	public void setHeartRate(Integer heartRate) {
+		this.heartRate = heartRate;
 	}
 
-	@Column(name = "physique_fc", length = 45)
-	public String getPhysiqueFc() {
-		return this.physiqueFc;
+	@Column(name = "respiratory_rate")
+	public Integer getRespiratoryRate() {
+		return this.respiratoryRate;
 	}
 
-	public void setPhysiqueFc(String physiqueFc) {
-		this.physiqueFc = physiqueFc;
+	public void setRespiratoryRate(Integer respiratoryRate) {
+		this.respiratoryRate = respiratoryRate;
 	}
 
-	@Column(name = "physique_fr", length = 45)
-	public String getPhysiqueFr() {
-		return this.physiqueFr;
+	@Column(name = "height", precision = 5)
+	public BigDecimal getHeight() {
+		return this.height;
 	}
 
-	public void setPhysiqueFr(String physiqueFr) {
-		this.physiqueFr = physiqueFr;
+	public void setHeight(BigDecimal height) {
+		this.height = height;
 	}
 
-	@Column(name = "physique_to", length = 45)
-	public String getPhysiqueTo() {
-		return this.physiqueTo;
+	@Column(name = "weight", precision = 5)
+	public BigDecimal getWeight() {
+		return this.weight;
 	}
 
-	public void setPhysiqueTo(String physiqueTo) {
-		this.physiqueTo = physiqueTo;
+	public void setWeight(BigDecimal weight) {
+		this.weight = weight;
 	}
 
-	@Column(name = "physique_size", precision = 5)
-	public BigDecimal getPhysiqueSize() {
-		return this.physiqueSize;
+	@Column(name = "blood_pressure", length = 7)
+	public String getBloodPressure() {
+		return this.bloodPressure;
 	}
 
-	public void setPhysiqueSize(BigDecimal physiqueSize) {
-		this.physiqueSize = physiqueSize;
+	public void setBloodPressure(String bloodPressure) {
+		this.bloodPressure = bloodPressure;
 	}
 
-	@Column(name = "physique_weight", precision = 5)
-	public BigDecimal getPhysiqueWeight() {
-		return this.physiqueWeight;
+	@Column(name = "general_check")
+	public Boolean getGeneralCheck() {
+		return this.generalCheck;
 	}
 
-	public void setPhysiqueWeight(BigDecimal physiqueWeight) {
-		this.physiqueWeight = physiqueWeight;
+	public void setGeneralCheck(Boolean generalCheck) {
+		this.generalCheck = generalCheck;
 	}
 
-	@Column(name = "general_state", length = 1000)
+	@Column(name = "general_state", length = 65535)
 	public String getGeneralState() {
 		return this.generalState;
 	}
@@ -157,16 +182,34 @@ public class CrmHistoryPhysique implements java.io.Serializable {
 		this.generalState = generalState;
 	}
 
-	@Column(name = "skull", length = 1000)
-	public String getSkull() {
-		return this.skull;
+	@Column(name = "head_neck_check")
+	public Boolean getHeadNeckCheck() {
+		return this.headNeckCheck;
 	}
 
-	public void setSkull(String skull) {
-		this.skull = skull;
+	public void setHeadNeckCheck(Boolean headNeckCheck) {
+		this.headNeckCheck = headNeckCheck;
 	}
 
-	@Column(name = "chest", length = 1000)
+	@Column(name = "head_neck", length = 65535)
+	public String getHeadNeck() {
+		return this.headNeck;
+	}
+
+	public void setHeadNeck(String headNeck) {
+		this.headNeck = headNeck;
+	}
+
+	@Column(name = "chest_check")
+	public Boolean getChestCheck() {
+		return this.chestCheck;
+	}
+
+	public void setChestCheck(Boolean chestCheck) {
+		this.chestCheck = chestCheck;
+	}
+
+	@Column(name = "chest", length = 65535)
 	public String getChest() {
 		return this.chest;
 	}
@@ -175,7 +218,16 @@ public class CrmHistoryPhysique implements java.io.Serializable {
 		this.chest = chest;
 	}
 
-	@Column(name = "lungs", length = 1000)
+	@Column(name = "lungs_check")
+	public Boolean getLungsCheck() {
+		return this.lungsCheck;
+	}
+
+	public void setLungsCheck(Boolean lungsCheck) {
+		this.lungsCheck = lungsCheck;
+	}
+
+	@Column(name = "lungs", length = 65535)
 	public String getLungs() {
 		return this.lungs;
 	}
@@ -184,7 +236,16 @@ public class CrmHistoryPhysique implements java.io.Serializable {
 		this.lungs = lungs;
 	}
 
-	@Column(name = "heart", length = 1000)
+	@Column(name = "heart_check")
+	public Boolean getHeartCheck() {
+		return this.heartCheck;
+	}
+
+	public void setHeartCheck(Boolean heartCheck) {
+		this.heartCheck = heartCheck;
+	}
+
+	@Column(name = "heart", length = 65535)
 	public String getHeart() {
 		return this.heart;
 	}
@@ -193,7 +254,16 @@ public class CrmHistoryPhysique implements java.io.Serializable {
 		this.heart = heart;
 	}
 
-	@Column(name = "abdomen", length = 1000)
+	@Column(name = "abdome_check")
+	public Boolean getAbdomeCheck() {
+		return this.abdomeCheck;
+	}
+
+	public void setAbdomeCheck(Boolean abdomeCheck) {
+		this.abdomeCheck = abdomeCheck;
+	}
+
+	@Column(name = "abdomen", length = 65535)
 	public String getAbdomen() {
 		return this.abdomen;
 	}
@@ -202,7 +272,16 @@ public class CrmHistoryPhysique implements java.io.Serializable {
 		this.abdomen = abdomen;
 	}
 
-	@Column(name = "genitals", length = 1000)
+	@Column(name = "genitals_check")
+	public Boolean getGenitalsCheck() {
+		return this.genitalsCheck;
+	}
+
+	public void setGenitalsCheck(Boolean genitalsCheck) {
+		this.genitalsCheck = genitalsCheck;
+	}
+
+	@Column(name = "genitals", length = 65535)
 	public String getGenitals() {
 		return this.genitals;
 	}
@@ -211,7 +290,34 @@ public class CrmHistoryPhysique implements java.io.Serializable {
 		this.genitals = genitals;
 	}
 
-	@Column(name = "tips", length = 1000)
+	@Column(name = "osteo_check")
+	public Boolean getOsteoCheck() {
+		return this.osteoCheck;
+	}
+
+	public void setOsteoCheck(Boolean osteoCheck) {
+		this.osteoCheck = osteoCheck;
+	}
+
+	@Column(name = "osteo", length = 65535)
+	public String getOsteo() {
+		return this.osteo;
+	}
+
+	public void setOsteo(String osteo) {
+		this.osteo = osteo;
+	}
+
+	@Column(name = "tips_check")
+	public Boolean getTipsCheck() {
+		return this.tipsCheck;
+	}
+
+	public void setTipsCheck(Boolean tipsCheck) {
+		this.tipsCheck = tipsCheck;
+	}
+
+	@Column(name = "tips", length = 65535)
 	public String getTips() {
 		return this.tips;
 	}
@@ -220,7 +326,16 @@ public class CrmHistoryPhysique implements java.io.Serializable {
 		this.tips = tips;
 	}
 
-	@Column(name = "highlights", length = 1000)
+	@Column(name = "highlights_check")
+	public Boolean getHighlightsCheck() {
+		return this.highlightsCheck;
+	}
+
+	public void setHighlightsCheck(Boolean highlightsCheck) {
+		this.highlightsCheck = highlightsCheck;
+	}
+
+	@Column(name = "highlights", length = 65535)
 	public String getHighlights() {
 		return this.highlights;
 	}
@@ -229,7 +344,16 @@ public class CrmHistoryPhysique implements java.io.Serializable {
 		this.highlights = highlights;
 	}
 
-	@Column(name = "skin", length = 1000)
+	@Column(name = "skin_check")
+	public Boolean getSkinCheck() {
+		return this.skinCheck;
+	}
+
+	public void setSkinCheck(Boolean skinCheck) {
+		this.skinCheck = skinCheck;
+	}
+
+	@Column(name = "skin", length = 65535)
 	public String getSkin() {
 		return this.skin;
 	}
@@ -238,13 +362,13 @@ public class CrmHistoryPhysique implements java.io.Serializable {
 		this.skin = skin;
 	}
 
-	@Column(name = "review", length = 1000)
-	public String getReview() {
-		return this.review;
+	@Column(name = "obs", length = 65535)
+	public String getObs() {
+		return this.obs;
 	}
 
-	public void setReview(String review) {
-		this.review = review;
+	public void setObs(String obs) {
+		this.obs = obs;
 	}
 
 }
