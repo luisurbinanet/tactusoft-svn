@@ -1,9 +1,14 @@
 package co.com.tactusoft.crm.view.backing;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.event.ActionEvent;
+import javax.faces.model.SelectItem;
 import javax.inject.Named;
 
 import org.springframework.context.annotation.Scope;
@@ -14,6 +19,7 @@ import co.com.tactusoft.crm.model.entities.CrmHistoryHomeopathic;
 import co.com.tactusoft.crm.model.entities.CrmHistoryOrganometry;
 import co.com.tactusoft.crm.model.entities.CrmHistoryPhysique;
 import co.com.tactusoft.crm.model.entities.CrmHistoryRecord;
+import co.com.tactusoft.crm.model.entities.CrmOccupation;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
@@ -43,6 +49,10 @@ public class HistoryBacking extends BaseBacking {
 	private boolean readOnlySelectedHistoryHomeopathic;
 	private boolean readOnlySelectedHistoryPhysique;
 	private boolean readOnlySelectedHistoryOrganometry;
+
+	private List<SelectItem> listOccupation;
+	private Map<BigDecimal, CrmOccupation> mapOccupation;
+	private BigDecimal idOccupation;
 
 	private double imc;
 	private String descImc;
@@ -180,6 +190,40 @@ public class HistoryBacking extends BaseBacking {
 		this.readOnlySelectedHistoryOrganometry = readOnlySelectedHistoryOrganometry;
 	}
 
+	public List<SelectItem> getListOccupation() {
+		if (listOccupation == null) {
+			listOccupation = new LinkedList<SelectItem>();
+			mapOccupation = new HashMap<BigDecimal, CrmOccupation>();
+			String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
+			listOccupation.add(new SelectItem(Constant.DEFAULT_VALUE, label));
+			for (CrmOccupation row : tablesService.getListOccupationActive()) {
+				mapOccupation.put(row.getId(), row);
+				listOccupation.add(new SelectItem(row.getId(), row.getName()));
+			}
+		}
+		return listOccupation;
+	}
+
+	public void setListOccupation(List<SelectItem> listOccupation) {
+		this.listOccupation = listOccupation;
+	}
+
+	public Map<BigDecimal, CrmOccupation> getMapOccupation() {
+		return mapOccupation;
+	}
+
+	public void setMapOccupation(Map<BigDecimal, CrmOccupation> mapOccupation) {
+		this.mapOccupation = mapOccupation;
+	}
+
+	public BigDecimal getIdOccupation() {
+		return idOccupation;
+	}
+
+	public void setIdOccupation(BigDecimal idOccupation) {
+		this.idOccupation = idOccupation;
+	}
+
 	public double getImc() {
 		return imc;
 	}
@@ -206,8 +250,14 @@ public class HistoryBacking extends BaseBacking {
 		listAppointment = new ArrayList<CrmAppointment>();
 		appointmentModel = new AppointmentDataModel(listAppointment);
 		selectedAppointment = new CrmAppointment();
+		
 		selected = new CrmPatient();
+		selected.setCrmOccupation(new CrmOccupation());
+		selected.getCrmOccupation().setId(Constant.DEFAULT_VALUE);
+		
 		selectedPatient = new CrmPatient();
+		selectedPatient.setCrmOccupation(new CrmOccupation());
+		selectedPatient.getCrmOccupation().setId(Constant.DEFAULT_VALUE);
 
 		disabledSaveButton = true;
 		optionSearchPatient = 1;
@@ -276,7 +326,7 @@ public class HistoryBacking extends BaseBacking {
 			FacesUtil.addError(message);
 		}
 
-		if (FacesUtil.isEmptyOrBlank(selected.getOccupation())) {
+		if (selected.getCrmOccupation().getId().intValue() == -1) {
 			field = FacesUtil.getMessage("pat_occupation");
 			message = FacesUtil.getMessage("title_patient_complementary");
 			message = message + " - "

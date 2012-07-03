@@ -9,6 +9,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -29,13 +31,13 @@ public class CrmPatient implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
+	private CrmOccupation crmOccupation;
 	private String doc;
 	private String codeSap;
 	private String firstnames;
 	private String surnames;
 	private Date bornDate;
 	private String gender;
-	private String occupation;
 	private String address;
 	private String neighborhood;
 	private String phoneNumber;
@@ -60,10 +62,13 @@ public class CrmPatient implements java.io.Serializable {
 			0);
 	private Set<CrmHistoryHomeopathic> crmHistoryHomeopathics = new HashSet<CrmHistoryHomeopathic>(
 			0);
+	private Set<CrmHistoryOrganometry> crmHistoryOrganometries = new HashSet<CrmHistoryOrganometry>(
+			0);
 	private Set<CrmHistoryRecord> crmHistoryRecords = new HashSet<CrmHistoryRecord>(
 			0);
 	private Set<CrmHistoryHistory> crmHistoryHistories = new HashSet<CrmHistoryHistory>(
 			0);
+	private Set<CrmAppointment> crmAppointments = new HashSet<CrmAppointment>(0);
 	
 	private String names;
 	private int age;
@@ -71,13 +76,15 @@ public class CrmPatient implements java.io.Serializable {
 	public CrmPatient() {
 	}
 
-	public CrmPatient(BigDecimal id) {
+	public CrmPatient(BigDecimal id, String doc, String codeSap) {
 		this.id = id;
+		this.doc = doc;
+		this.codeSap = codeSap;
 	}
 
-	public CrmPatient(BigDecimal id, String doc, String codeSap,
-			String firstnames, String surnames, Date bornDate, String gender,
-			String occupation, String address, String neighborhood,
+	public CrmPatient(BigDecimal id, CrmOccupation crmOccupation, String doc,
+			String codeSap, String firstnames, String surnames, Date bornDate,
+			String gender, String address, String neighborhood,
 			String phoneNumber, String cellNumber, String email,
 			String typeHousing, String country, String region, String city,
 			String guardian, String guardianAddress,
@@ -86,16 +93,18 @@ public class CrmPatient implements java.io.Serializable {
 			Boolean sendPostal, Boolean sendSms, String salesOrg,
 			Set<CrmHistoryPhysique> crmHistoryPhysiques,
 			Set<CrmHistoryHomeopathic> crmHistoryHomeopathics,
+			Set<CrmHistoryOrganometry> crmHistoryOrganometries,
 			Set<CrmHistoryRecord> crmHistoryRecords,
-			Set<CrmHistoryHistory> crmHistoryHistories) {
+			Set<CrmHistoryHistory> crmHistoryHistories,
+			Set<CrmAppointment> crmAppointments) {
 		this.id = id;
+		this.crmOccupation = crmOccupation;
 		this.doc = doc;
 		this.codeSap = codeSap;
 		this.firstnames = firstnames;
 		this.surnames = surnames;
 		this.bornDate = bornDate;
 		this.gender = gender;
-		this.occupation = occupation;
 		this.address = address;
 		this.neighborhood = neighborhood;
 		this.phoneNumber = phoneNumber;
@@ -118,8 +127,10 @@ public class CrmPatient implements java.io.Serializable {
 		this.salesOrg = salesOrg;
 		this.crmHistoryPhysiques = crmHistoryPhysiques;
 		this.crmHistoryHomeopathics = crmHistoryHomeopathics;
+		this.crmHistoryOrganometries = crmHistoryOrganometries;
 		this.crmHistoryRecords = crmHistoryRecords;
 		this.crmHistoryHistories = crmHistoryHistories;
+		this.crmAppointments = crmAppointments;
 	}
 
 	@Id
@@ -132,7 +143,17 @@ public class CrmPatient implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "doc", unique = true, length = 45)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "id_occupation")
+	public CrmOccupation getCrmOccupation() {
+		return this.crmOccupation;
+	}
+
+	public void setCrmOccupation(CrmOccupation crmOccupation) {
+		this.crmOccupation = crmOccupation;
+	}
+
+	@Column(name = "doc", unique = true, nullable = false, length = 45)
 	public String getDoc() {
 		return this.doc;
 	}
@@ -141,7 +162,7 @@ public class CrmPatient implements java.io.Serializable {
 		this.doc = doc;
 	}
 
-	@Column(name = "code_sap", unique = true, length = 45)
+	@Column(name = "code_sap", unique = true, nullable = false, length = 45)
 	public String getCodeSap() {
 		return this.codeSap;
 	}
@@ -185,15 +206,6 @@ public class CrmPatient implements java.io.Serializable {
 
 	public void setGender(String gender) {
 		this.gender = gender;
-	}
-
-	@Column(name = "occupation")
-	public String getOccupation() {
-		return this.occupation;
-	}
-
-	public void setOccupation(String occupation) {
-		this.occupation = occupation;
 	}
 
 	@Column(name = "address")
@@ -397,6 +409,16 @@ public class CrmPatient implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmPatient")
+	public Set<CrmHistoryOrganometry> getCrmHistoryOrganometries() {
+		return this.crmHistoryOrganometries;
+	}
+
+	public void setCrmHistoryOrganometries(
+			Set<CrmHistoryOrganometry> crmHistoryOrganometries) {
+		this.crmHistoryOrganometries = crmHistoryOrganometries;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmPatient")
 	public Set<CrmHistoryRecord> getCrmHistoryRecords() {
 		return this.crmHistoryRecords;
 	}
@@ -413,6 +435,15 @@ public class CrmPatient implements java.io.Serializable {
 	public void setCrmHistoryHistories(
 			Set<CrmHistoryHistory> crmHistoryHistories) {
 		this.crmHistoryHistories = crmHistoryHistories;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmPatient")
+	public Set<CrmAppointment> getCrmAppointments() {
+		return this.crmAppointments;
+	}
+
+	public void setCrmAppointments(Set<CrmAppointment> crmAppointments) {
+		this.crmAppointments = crmAppointments;
 	}
 	
 	@Transient
@@ -456,6 +487,5 @@ public class CrmPatient implements java.io.Serializable {
 	public void setAge(int age) {
 		this.age = age;
 	}
-
 
 }

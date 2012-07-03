@@ -17,6 +17,7 @@ import co.com.tactusoft.crm.model.entities.CrmDoctorSchedule;
 import co.com.tactusoft.crm.model.entities.CrmDomain;
 import co.com.tactusoft.crm.model.entities.CrmHoliday;
 import co.com.tactusoft.crm.model.entities.CrmHolidayBranch;
+import co.com.tactusoft.crm.model.entities.CrmOccupation;
 import co.com.tactusoft.crm.model.entities.CrmPage;
 import co.com.tactusoft.crm.model.entities.CrmPageRole;
 import co.com.tactusoft.crm.model.entities.CrmProcedure;
@@ -104,6 +105,14 @@ public class TablesBo implements Serializable {
 
 	public List<CrmBranch> getListBranchActive() {
 		return dao.find("from CrmBranch o where o.state = 1");
+	}
+
+	public List<CrmOccupation> getListOccupation() {
+		return dao.find("from CrmOccupation o");
+	}
+
+	public List<CrmOccupation> getListOccupationActive() {
+		return dao.find("from CrmOccupation o where o.state = 1");
 	}
 
 	public List<CrmCountry> getListCountry() {
@@ -238,6 +247,13 @@ public class TablesBo implements Serializable {
 	public Integer saveDepartment(CrmDepartment entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmDepartment.class));
+		}
+		return dao.persist(entity);
+	}
+
+	public Integer saveOccupation(CrmOccupation entity) {
+		if (entity.getId() == null) {
+			entity.setId(getId(CrmOccupation.class));
 		}
 		return dao.persist(entity);
 	}
@@ -393,10 +409,10 @@ public class TablesBo implements Serializable {
 
 		return i;
 	}
-	
+
 	public void udpateBranch(String code, String society) {
-		dao.executeHQL("update CrmBranch set society = '" + society + "' where code = '"
-				+ code  + "'");
+		dao.executeHQL("update CrmBranch set society = '" + society
+				+ "' where code = '" + code + "'");
 	}
 
 	public void remove(Object entity) {

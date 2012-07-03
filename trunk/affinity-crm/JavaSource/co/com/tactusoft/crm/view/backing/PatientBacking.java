@@ -53,6 +53,7 @@ public class PatientBacking extends BaseBacking {
 	private List<String> selectedSendOptions;
 
 	private boolean disabledSaveButton;
+	private boolean exitSAP;
 
 	public PatientBacking() {
 		newAction(null);
@@ -69,10 +70,6 @@ public class PatientBacking extends BaseBacking {
 	public PatientDataModel getModel() {
 		if (model == null) {
 			model = new PatientDataModel(list);
-
-			if (list.size() > 0) {
-				// selected = list.get(0);
-			}
 		}
 		return model;
 	}
@@ -217,7 +214,9 @@ public class PatientBacking extends BaseBacking {
 			mapCity.put(row.getId(), row);
 		}
 
-		if (listRegion.size() == 0) {
+		if (listRegion.size() > 0) {
+			idCity = (BigDecimal) listCity.get(0).getValue();
+		} else {
 			idCity = null;
 		}
 	}
@@ -225,13 +224,93 @@ public class PatientBacking extends BaseBacking {
 	public void newAction(ActionEvent event) {
 		optionSearchPatient = 1;
 		selected = new CrmPatient();
+		selected.setGender("-1");
 		selected.setCycle(false);
 		disabledSaveButton = false;
+		exitSAP = false;
 	}
 
-	public void searchActionListener(ActionEvent event) {
-		selected = processService.getPatientByCodeSap(selectedPatient
-				.getCodeSap());
+	private void searchIdCountry(String countryCode) {
+		idCountry = null;
+		for (Map.Entry<BigDecimal, CrmCountry> entry : mapCountry.entrySet()) {
+			if (entry.getValue().getCode().equals(countryCode)) {
+				idCountry = entry.getValue().getId();
+				break;
+			}
+		}
+		handleCountryChange();
+	}
+
+	private void searchIdRegion(String regionCode) {
+		idRegion = null;
+		for (Map.Entry<BigDecimal, CrmRegion> entry : mapRegion.entrySet()) {
+			if (entry.getValue().getCode().equals(regionCode)) {
+				idRegion = entry.getValue().getId();
+				break;
+			}
+		}
+		handleRegionChange();
+	}
+
+	private void searchIdCity(String cityCode) {
+		idCity = null;
+		for (Map.Entry<BigDecimal, CrmCity> entry : mapCity.entrySet()) {
+			String entryName = FacesUtil.removeCharacter(entry.getValue()
+					.getName());
+			String beanName = FacesUtil.removeCharacter(cityCode);
+			if (entryName.equals(beanName)) {
+				idCity = entry.getValue().getId();
+				break;
+			}
+		}
+	}
+
+	public void searchAction() {
+		String doc = selected.getDoc();
+		selected = processService.getPatientByDoc(doc);
+		exitSAP = false;
+		if (selected.getId() == null) {
+			selected.setDoc(doc);
+			SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
+			CrmProfile profile = FacesUtil.getCurrentUser().getCrmProfile();
+
+			List<WSBean> customer = CustomerExecute.findByDoc(
+					sap.getUrlCustomer2(), sap.getUsername(),
+					sap.getPassword(), profile.getSociety(), selected.getDoc(),
+					0);
+
+			String message = null;
+			if (customer.size() == 0) {
+				message = FacesUtil.getMessage("pat_msg_no_exists");
+				FacesUtil.addWarn(message);
+			} else {
+				exitSAP = true;
+				WSBean bean = customer.get(0);
+				selected.setCodeSap(bean.getCode());
+				selected.setFirstnames(bean.getNames());
+				selected.setAddress(bean.getAddress());
+				selected.setPhoneNumber(bean.getTelephone1());
+
+				try {
+					searchIdCountry(bean.getCountry());
+					searchIdRegion(bean.getRegion());
+					searchIdCity(bean.getCity());
+				} catch (Exception ex) {
+					idCountry = null;
+					idRegion = null;
+					idCity = null;
+				}
+
+				message = FacesUtil.getMessage("pat_msg_exists_sap");
+				FacesUtil.addWarn(message);
+			}
+			disabledSaveButton = false;
+		} else {
+			searchIdCountry(selected.getCountry());
+			searchIdRegion(selected.getRegion());
+			idCity = new BigDecimal(selected.getCity());
+			disabledSaveButton = true;
+		}
 	}
 
 	public void saveAction() {
@@ -245,7 +324,7 @@ public class PatientBacking extends BaseBacking {
 					sap.getPassword(), profile.getSociety(), selected.getDoc(),
 					0);
 
-			if (customer.size() == 0) {
+			if (customer.size() == 0 || exitSAP) {
 				String names = null;
 
 				names = selected.getFirstnames() + " " + selected.getSurnames();
@@ -259,22 +338,27 @@ public class PatientBacking extends BaseBacking {
 				CrmRegion crmRegion = mapRegion.get(idRegion);
 				CrmCity crmCity = mapCity.get(idCity);
 
-				String codeSap = CustomerExecute.excecute(
-						sap.getUrlCustomerMaintainAll(), sap.getUsername(),
-						sap.getPassword(), sap.getEnvironment(), "13",
-						selected.getDoc(), tratamiento, names,
-						selected.getAddress(), selected.getPhoneNumber(),
-						selected.getCellNumber(), selected.getEmail(),
-						crmCountry.getCode(), crmCity.getName(),
-						crmRegion.getCode(), "D001", profile.getSalesOrg(),
-						profile.getDistrChan(), profile.getDivision(),
-						profile.getSociety(), this.salesOff, "01",
-						profile.getPaymentTerm(), profile.getAccount(), "01",
-						"1", "1");
+				String codeSap = null;
+				if (!exitSAP) {
+					codeSap = CustomerExecute.excecute(
+							sap.getUrlCustomerMaintainAll(), sap.getUsername(),
+							sap.getPassword(), sap.getEnvironment(), "13",
+							selected.getDoc(), tratamiento, names,
+							selected.getAddress(), selected.getPhoneNumber(),
+							selected.getCellNumber(), selected.getEmail(),
+							crmCountry.getCode(), crmCity.getName(),
+							crmRegion.getCode(), "D001", profile.getSalesOrg(),
+							profile.getDistrChan(), profile.getDivision(),
+							profile.getSociety(), this.salesOff, "01",
+							profile.getPaymentTerm(), profile.getAccount(),
+							"01", "1", "1");
+				} else {
+					codeSap = selected.getCodeSap();
+				}
 
-				if (codeSap != null) {
+				if (!FacesUtil.isEmptyOrBlank(codeSap)) {
+
 					selected.setCodeSap(codeSap);
-
 					selected.setSalesOrg(profile.getSalesOrg());
 					selected.setCountry(crmCountry.getCode());
 					selected.setRegion(crmRegion.getCode());
@@ -303,7 +387,7 @@ public class PatientBacking extends BaseBacking {
 					message = FacesUtil.getMessage("pat_msg_ok", codeSap);
 					FacesUtil.addInfo(message);
 				} else {
-					message = FacesUtil.getMessage("Error");
+					message = FacesUtil.getMessage("msg_record_config");
 					FacesUtil.addError(message);
 				}
 			} else {
@@ -317,23 +401,4 @@ public class PatientBacking extends BaseBacking {
 			FacesUtil.addError(message);
 		}
 	}
-
-	public void saveDetailAction() {
-		String message = null;
-		int result = processService.savePatient(selected);
-		if (result == 0) {
-			disabledSaveButton = true;
-			message = FacesUtil.getMessage("pat_msg_update_ok",
-					selected.getCodeSap());
-			FacesUtil.addInfo(message);
-		} else {
-			message = FacesUtil.getMessage("Error");
-			FacesUtil.addError(message);
-		}
-	}
-
-	public void searchAction() {
-
-	}
-
 }

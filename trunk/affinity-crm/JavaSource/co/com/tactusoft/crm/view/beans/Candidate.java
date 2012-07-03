@@ -17,6 +17,8 @@ public class Candidate implements Serializable {
 	private CrmDoctor doctor;
 	private Date startDate;
 	private Date endDate;
+	private String branch;
+	private String procedure;
 
 	public Candidate() {
 
@@ -26,11 +28,14 @@ public class Candidate implements Serializable {
 		this.id = id;
 	}
 
-	public Candidate(int id, CrmDoctor doctor, Date startDate, Date endDate) {
+	public Candidate(int id, CrmDoctor doctor, Date startDate, Date endDate,
+			String branch, String procedure) {
 		this.id = id;
 		this.doctor = doctor;
 		this.startDate = startDate;
 		this.endDate = endDate;
+		this.branch = branch;
+		this.procedure = procedure;
 	}
 
 	public int getId() {
@@ -63,6 +68,22 @@ public class Candidate implements Serializable {
 
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+
+	public String getBranch() {
+		return branch;
+	}
+
+	public void setBranch(String branch) {
+		this.branch = branch;
+	}
+
+	public String getProcedure() {
+		return procedure;
+	}
+
+	public void setProcedure(String procedure) {
+		this.procedure = procedure;
 	}
 
 	public String getDetail() {
@@ -137,8 +158,14 @@ public class Candidate implements Serializable {
 			break;
 		}
 
-		return this.doctor.getNames() + ":   " + detDay + ", "
-				+ dateString + "    " + startHour + " - " + endHour;
+		String fieldDr = FacesUtil.getMessage("app_dr");
+		String fieldBranch = FacesUtil.getMessage("app_branch");
+		String fieldProcedure = FacesUtil.getMessage("app_procedure");
+
+		return fieldDr + this.doctor.getNames() + "  -  " + detDay + ", "
+				+ dateString + "    " + startHour + " - " + endHour + "  -  "
+				+ fieldBranch + ":" + this.branch + "  -  " + fieldProcedure
+				+ ": " + this.procedure;
 	}
 
 }

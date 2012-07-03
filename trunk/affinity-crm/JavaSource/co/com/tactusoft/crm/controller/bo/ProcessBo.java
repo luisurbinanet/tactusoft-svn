@@ -12,6 +12,7 @@ import javax.inject.Named;
 
 import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
+import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmDoctorException;
 import co.com.tactusoft.crm.model.entities.CrmDoctorSchedule;
@@ -190,12 +191,13 @@ public class ProcessBo implements Serializable {
 		return candidatesHours;
 	}
 
-	public List<Candidate> getScheduleAppointmentForDoctor(BigDecimal idBranch,
+	public List<Candidate> getScheduleAppointmentForDoctor(CrmBranch branch,
 			CrmDoctor doctor, int numApp, CrmProcedureDetail procedureDetail) {
 
 		List<Candidate> result = new ArrayList<Candidate>();
 		int id = 1;
 
+		BigDecimal idBranch = branch.getId();
 		String initDate = FacesUtil.formatDate(new Date(), "yyyy-MM-dd");
 
 		Calendar calendar = Calendar.getInstance();
@@ -304,7 +306,9 @@ public class ProcessBo implements Serializable {
 
 								if (validate) {
 									result.add(new Candidate(id, doctor,
-											initHour, endHour));
+											initHour, endHour,
+											branch.getName(), procedureDetail
+													.getName()));
 									id++;
 
 									// Numero Citas completadas
@@ -325,10 +329,11 @@ public class ProcessBo implements Serializable {
 		return result;
 	}
 
-	public List<Candidate> getScheduleAppointmentForDate(BigDecimal idBranch,
+	public List<Candidate> getScheduleAppointmentForDate(CrmBranch branch,
 			Date date, CrmProcedureDetail procedureDetail) {
 		List<Candidate> result = new ArrayList<Candidate>();
 		int id = 1;
+		BigDecimal idBranch = branch.getId();
 
 		// Buscar los festivos
 		List<CrmHoliday> listHoliday = this.getListHoliday(idBranch);
@@ -438,7 +443,9 @@ public class ProcessBo implements Serializable {
 											.getNames());
 
 									result.add(new Candidate(id, crmDoctor,
-											initHour, endHour));
+											initHour, endHour,
+											branch.getName(), procedureDetail
+													.getName()));
 									id++;
 								}
 
@@ -694,6 +701,16 @@ public class ProcessBo implements Serializable {
 		}
 
 		return list;
+	}
+
+	public CrmPatient getPatientByDoc(String doc) {
+		List<CrmPatient> list = null;
+		list = dao.find("from CrmPatient o where o.doc = '" + doc + "'");
+		if (list.size() > 0) {
+			return list.get(0);
+		} else {
+			return new CrmPatient();
+		}
 	}
 
 	public CrmPatient getPatientByCodeSap(String codeSap) {

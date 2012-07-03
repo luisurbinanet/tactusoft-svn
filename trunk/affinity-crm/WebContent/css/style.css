@@ -132,28 +132,39 @@ input,select,textarea {
 	float: none !important;
 }
 /* end Button */
-
 .width25per {
-	padding:4px;
+	padding: 4px;
 	width: 25%;
 }
 
 .width35per {
-	padding:4px;
+	padding: 4px;
 	width: 35%;
 }
 
 .width50per {
-	padding:4px;
+	padding: 4px;
 	width: 50%;
 }
 
 .width65per {
-	padding:4px;
+	padding: 4px;
 	width: 65%;
 }
 
 .width75per {
-	padding:4px;
+	padding: 4px;
 	width: 75%;
+}
+
+.width50perLeft {
+	padding: 4px;
+	width: 50%;
+	text-align: left;
+}
+
+.width50perRight {
+	padding: 4px;
+	width: 50%;
+	text-align: right;
 }

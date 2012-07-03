@@ -92,7 +92,7 @@ public class LoginBacking {
 			FacesUtil.addWarn(message);
 
 		} else {
-			this.init();
+			this.password = null;
 			this.visibleBadCredentials = false;
 			this.authenticated = true;
 		}
@@ -101,6 +101,7 @@ public class LoginBacking {
 	}
 
 	public String logout() {
+		this.init();
 		FacesUtil.logout();
 		return "/pages/public/login?faces-redirect=true";
 	}
