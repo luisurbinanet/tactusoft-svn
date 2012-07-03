@@ -59,6 +59,10 @@ public class BaseBacking implements Serializable {
 	protected Map<BigDecimal, CrmSpeciality> mapCrmSpeciality;
 	protected BigDecimal idSpeciality;
 
+	protected List<SelectItem> listWSGroupSellers;
+	protected Map<String, String> mapWSGroupSellers;
+	protected String selectedWSGroupSellers;
+
 	public List<CrmPatient> getListPatient() {
 		return listPatient;
 	}
@@ -324,6 +328,46 @@ public class BaseBacking implements Serializable {
 
 	public void setIdSpeciality(BigDecimal idSpeciality) {
 		this.idSpeciality = idSpeciality;
+	}
+
+	public List<SelectItem> getListWSGroupSellers() {
+		if (listWSGroupSellers == null) {
+			List<WSBean> result = FacesUtil.getCurrentUserData()
+					.getListWSGroupSellers();
+
+			listWSGroupSellers = new ArrayList<SelectItem>();
+			mapWSGroupSellers = new HashMap<String, String>();
+
+			String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
+			listWSGroupSellers.add(new SelectItem(
+					Constant.DEFAULT_VALUE_STRING, label));
+			for (WSBean row : result) {
+				mapWSGroupSellers.put(row.getCode(), row.getNames());
+				listWSGroupSellers.add(new SelectItem(row.getCode(), row
+						.getNames()));
+			}
+		}
+		return listWSGroupSellers;
+	}
+
+	public void setListWSGroupSellers(List<SelectItem> listWSGroupSellers) {
+		this.listWSGroupSellers = listWSGroupSellers;
+	}
+
+	public Map<String, String> getMapWSGroupSellers() {
+		return mapWSGroupSellers;
+	}
+
+	public void setMapWSGroupSellers(Map<String, String> mapWSGroupSellers) {
+		this.mapWSGroupSellers = mapWSGroupSellers;
+	}
+
+	public String getSelectedWSGroupSellers() {
+		return selectedWSGroupSellers;
+	}
+
+	public void setSelectedWSGroupSellers(String selectedWSGroupSellers) {
+		this.selectedWSGroupSellers = selectedWSGroupSellers;
 	}
 
 }

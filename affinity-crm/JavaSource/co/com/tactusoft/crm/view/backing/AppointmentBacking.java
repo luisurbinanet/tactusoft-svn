@@ -54,10 +54,6 @@ public class AppointmentBacking extends BaseBacking {
 	private List<SelectItem> listDoctor;
 	private Map<BigDecimal, CrmDoctor> mapDoctor;
 
-	private List<SelectItem> listWSGroupSellers;
-	private Map<String, String> mapWSGroupSellers;
-	private String selectedWSGroupSellers;
-
 	private Date currentDate;
 	private int appointmentsNumber;
 
@@ -232,30 +228,6 @@ public class AppointmentBacking extends BaseBacking {
 
 	public void setSelectedAppointment(Candidate selectedAppointment) {
 		this.selectedAppointment = selectedAppointment;
-	}
-
-	public List<SelectItem> getListWSGroupSellers() {
-		return listWSGroupSellers;
-	}
-
-	public void setListWSGroupSellers(List<SelectItem> listWSGroupSellers) {
-		this.listWSGroupSellers = listWSGroupSellers;
-	}
-
-	public Map<String, String> getMapWSGroupSellers() {
-		return mapWSGroupSellers;
-	}
-
-	public void setMapWSGroupSellers(Map<String, String> mapWSGroupSellers) {
-		this.mapWSGroupSellers = mapWSGroupSellers;
-	}
-
-	public String getSelectedWSGroupSellers() {
-		return selectedWSGroupSellers;
-	}
-
-	public void setSelectedWSGroupSellers(String selectedWSGroupSellers) {
-		this.selectedWSGroupSellers = selectedWSGroupSellers;
 	}
 
 	public boolean isRenderedForDate() {
