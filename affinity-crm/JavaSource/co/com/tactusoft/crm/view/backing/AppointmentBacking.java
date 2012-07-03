@@ -422,11 +422,12 @@ public class AppointmentBacking extends BaseBacking {
 
 		if (this.renderedForDate) {
 			listAppointment = processService.getScheduleAppointmentForDate(
-					idBranch, this.currentDate, procedureDetail);
+					mapBranch.get(idBranch), this.currentDate, procedureDetail);
 		} else if (this.renderedForDoctor) {
 			CrmDoctor doctor = mapDoctor.get(selected.getCrmDoctor().getId());
 			listAppointment = processService.getScheduleAppointmentForDoctor(
-					idBranch, doctor, this.appointmentsNumber, procedureDetail);
+					mapBranch.get(idBranch), doctor, this.appointmentsNumber,
+					procedureDetail);
 		}
 
 		modelAppointment = new CandidateDataModel(listAppointment);

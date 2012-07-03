@@ -22,7 +22,7 @@ public class CrmProcedure implements java.io.Serializable {
 	private BigDecimal id;
 	private String name;
 	private String description;
-	private boolean parallel;
+	private String codPublicity;
 	private int state;
 	private Set<CrmProcedureBranch> crmProcedureBranchs = new HashSet<CrmProcedureBranch>(
 			0);
@@ -32,21 +32,20 @@ public class CrmProcedure implements java.io.Serializable {
 	public CrmProcedure() {
 	}
 
-	public CrmProcedure(BigDecimal id, String name, boolean parallel, int state) {
+	public CrmProcedure(BigDecimal id, String name, int state) {
 		this.id = id;
 		this.name = name;
-		this.parallel = parallel;
 		this.state = state;
 	}
 
 	public CrmProcedure(BigDecimal id, String name, String description,
-			boolean parallel, int state,
+			String codPublicity, int state,
 			Set<CrmProcedureBranch> crmProcedureBranchs,
 			Set<CrmProcedureDetail> crmProcedureDetails) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
-		this.parallel = parallel;
+		this.codPublicity = codPublicity;
 		this.state = state;
 		this.crmProcedureBranchs = crmProcedureBranchs;
 		this.crmProcedureDetails = crmProcedureDetails;
@@ -80,13 +79,13 @@ public class CrmProcedure implements java.io.Serializable {
 		this.description = description;
 	}
 
-	@Column(name = "parallel", nullable = false)
-	public boolean isParallel() {
-		return this.parallel;
+	@Column(name = "cod_publicity", length = 4)
+	public String getCodPublicity() {
+		return this.codPublicity;
 	}
 
-	public void setParallel(boolean parallel) {
-		this.parallel = parallel;
+	public void setCodPublicity(String codPublicity) {
+		this.codPublicity = codPublicity;
 	}
 
 	@Column(name = "state", nullable = false)

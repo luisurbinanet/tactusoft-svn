@@ -34,7 +34,7 @@ public class BaseBacking implements Serializable {
 
 	@Inject
 	protected ProcessBo processService;
-	
+
 	@Inject
 	protected SecurityBo securityService;
 
@@ -54,7 +54,7 @@ public class BaseBacking implements Serializable {
 	protected List<SelectItem> listCrmBranch;
 	protected Map<BigDecimal, CrmBranch> mapCrmBranch;
 	protected BigDecimal idBranch;
-	
+
 	protected List<SelectItem> listCrmSpeciality;
 	protected Map<BigDecimal, CrmSpeciality> mapCrmSpeciality;
 	protected BigDecimal idSpeciality;
@@ -128,7 +128,7 @@ public class BaseBacking implements Serializable {
 				if (listPatient.size() == 0) {
 					result = CustomerExecute.findByDoc(sap.getUrlCustomer2(),
 							sap.getUsername(), sap.getPassword(),
-							profile.getSociety(), this.docPatient, 0);
+							profile.getSociety(), this.docPatient);
 
 					for (WSBean row : result) {
 						CrmPatient patient = new CrmPatient();
@@ -142,8 +142,8 @@ public class BaseBacking implements Serializable {
 						this.namePatient.toUpperCase());
 
 				result = CustomerExecute.findByName(sap.getUrlCustomer2(),
-						sap.getUsername(), sap.getPassword(), this.namePatient,
-						0);
+						sap.getUsername(), sap.getPassword(),
+						profile.getSociety(), this.namePatient);
 
 				for (WSBean row : result) {
 					boolean validate = true;
@@ -288,13 +288,14 @@ public class BaseBacking implements Serializable {
 	public void setIdBranch(BigDecimal idBranch) {
 		this.idBranch = idBranch;
 	}
-	
+
 	public List<SelectItem> getListCrmSpeciality() {
 		if (listCrmSpeciality == null) {
 			listCrmSpeciality = new LinkedList<SelectItem>();
 			mapCrmSpeciality = new HashMap<BigDecimal, CrmSpeciality>();
 			String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
-			listCrmSpeciality.add(new SelectItem(Constant.DEFAULT_VALUE, label));
+			listCrmSpeciality
+					.add(new SelectItem(Constant.DEFAULT_VALUE, label));
 			for (CrmSpeciality row : tablesService.getListSpecialityActive()) {
 				mapCrmSpeciality.put(row.getId(), row);
 				listCrmSpeciality.add(new SelectItem(row.getId(), row
@@ -312,7 +313,8 @@ public class BaseBacking implements Serializable {
 		return mapCrmSpeciality;
 	}
 
-	public void setMapCrmSpeciality(Map<BigDecimal, CrmSpeciality> mapCrmSpeciality) {
+	public void setMapCrmSpeciality(
+			Map<BigDecimal, CrmSpeciality> mapCrmSpeciality) {
 		this.mapCrmSpeciality = mapCrmSpeciality;
 	}
 

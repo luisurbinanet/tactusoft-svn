@@ -71,7 +71,16 @@
 					<ui:include src="menu.xhtml" />
 				</ui:insert>
 
-				<p:spacer height="10" />
+				<h:panelGrid width="100%"
+					columnClasses="width50perLeft,width50perRight"
+					rendered="#{loginBacking.authenticated}" columns="2">
+					<h:outputLabel value="#{msg['title_app']}"
+						style="font-size:medium;width:100%;font-weight:bold;" />
+					<h:outputLabel value="Usuario: #{loginBacking.userName}"
+						style="font-size:medium;width:100%;font-weight:bold;" />
+				</h:panelGrid>
+
+				<p:spacer height="1" />
 
 				<ui:insert name="body">Page Body</ui:insert>
 			</div>

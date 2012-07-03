@@ -9,7 +9,7 @@
 
 	<ui:define name="body">
 
-		<p:panel style="width:100%;height:600px;"
+		<p:panel style="width:100%;height:700px;"
 			header="#{msg['title_appointment']}">
 
 			<p:spacer height="5" />
@@ -22,7 +22,7 @@
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
 							actionListener="#{appointmentBacking.newAction}" process="@this"
-							update="pnlDetail pnlDetail2 pnlDetail3 btnSaveOrder" />
+							update="pnlDetail pnlDetail2 pnlDetail3 pnlDetail4 btnSaveOrder" />
 						<p:commandButton value="#{msg['btn_add_patient']}"
 							icon="ui-icon-circle-check" oncomplete="dlg2.show()"
 							update=":editForm:dialog2" />
@@ -44,14 +44,14 @@
 
 					<h:outputLabel value="#{msg['pat_sap_code']}" />
 					<p:inputText value="#{appointmentBacking.selectedPatient.codeSap}"
-						style="width:600px" readonly="true" />
+						style="width:700px" readonly="true" />
 
 					<h:outputLabel value="#{msg['pat_names']}" />
 					<p:inputText value="#{appointmentBacking.selectedPatient.names}"
-						style="width:600px" readonly="true" />
+						style="width:700px" readonly="true" />
 
 					<h:outputLabel value="#{msg['app_branch']}" />
-					<p:selectOneMenu style="width:600px"
+					<p:selectOneMenu style="width:700px"
 						value="#{appointmentBacking.idBranch}">
 						<f:selectItems value="#{appointmentBacking.listBranch}" />
 						<p:ajax update="pnlDetail pnlDetail2"
@@ -59,7 +59,7 @@
 					</p:selectOneMenu>
 
 					<h:outputLabel value="#{msg['app_procedure']}" />
-					<p:selectOneMenu style="width:600px"
+					<p:selectOneMenu style="width:700px"
 						value="#{appointmentBacking.idProcedure}">
 						<f:selectItems value="#{appointmentBacking.listProcedure}" />
 						<p:ajax update="pnlDetail"
@@ -67,7 +67,7 @@
 					</p:selectOneMenu>
 
 					<h:outputLabel value="#{msg['app_procedure_type']}" />
-					<p:selectOneMenu id="selProcedureDetail" style="width:600px"
+					<p:selectOneMenu id="selProcedureDetail" style="width:700px"
 						value="#{appointmentBacking.selected.crmProcedureDetail.id}">
 						<f:selectItems value="#{appointmentBacking.listProcedureDetail}" />
 						<p:ajax update="pnlDetail"
@@ -75,13 +75,13 @@
 					</p:selectOneMenu>
 
 					<h:outputLabel value="#{msg['app_seller_group']}" />
-					<p:selectOneMenu style="width:600px"
+					<p:selectOneMenu style="width:700px"
 						value="#{appointmentBacking.selectedWSGroupSellers}">
 						<f:selectItems value="#{appointmentBacking.listWSGroupSellers}" />
 					</p:selectOneMenu>
 
 					<h:outputLabel value="#{msg['app_procedure_search']}" />
-					<p:selectOneMenu id="selSearch" style="width:600px"
+					<p:selectOneMenu id="selSearch" style="width:700px"
 						value="#{appointmentBacking.idSearch}">
 						<f:selectItems value="#{appointmentBacking.listSearch}" />
 						<p:ajax update="pnlDetail2"
@@ -103,7 +103,7 @@
 
 					<h:outputLabel value="#{msg['app_doctor']}"
 						rendered="#{appointmentBacking.renderedForDoctor}" />
-					<p:selectOneMenu id="selDoctor" style="width:600px"
+					<p:selectOneMenu id="selDoctor" style="width:700px"
 						value="#{appointmentBacking.selected.crmDoctor.id}"
 						rendered="#{appointmentBacking.renderedForDoctor}">
 						<f:selectItems value="#{appointmentBacking.listDoctor}" />
@@ -111,7 +111,7 @@
 
 					<h:outputLabel value="#{msg['app_num']}"
 						rendered="#{appointmentBacking.renderedForDoctor}" />
-					<p:selectOneMenu style="width:600px"
+					<p:selectOneMenu style="width:700px"
 						rendered="#{appointmentBacking.renderedForDoctor}"
 						value="#{appointmentBacking.appointmentsNumber}">
 						<f:selectItem itemLabel="10 Primeras Citas" itemValue="10" />
@@ -121,7 +121,14 @@
 
 				</h:panelGrid>
 
-				<h:panelGrid id="pnlDetail3" width="100%">
+				<h:panelGrid id="pnlDetail3" columns="2" width="100%"
+					columnClasses="width25per,width75per">
+					<h:outputLabel value="#{msg['app_procedure_search']}" />
+					<p:inputTextarea value="#{appointmentBacking.selected.obs}"
+						style="width:700px" rows="3" />
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlDetail4" width="100%">
 					<p:spacer height="5" />
 					<h:outputLabel
 						style="text-align:center;font-size:large;font-weight:bold;"
@@ -138,7 +145,7 @@
 					showEffect="clip" hideEffect="clip" modal="true">
 
 					<p:ajax event="close"
-						update=":form:pnlDetail :form:pnlDetail2 :form:pnlDetail3 :form:btnSaveOrder"
+						update=":form:pnlDetail :form:pnlDetail2 :form:pnlDetail3 :form:pnlDetail4 :form:btnSaveOrder"
 						listener="#{appointmentBacking.handleClose}" />
 
 					<h:panelGrid width="100%">
@@ -258,7 +265,7 @@
 
 						<f:facet name="footer">
 							<p:commandButton value="#{msg['btn_add_app']}"
-								onclick="dlg3.hide()" update=":form:pnlDetail3" />
+								onclick="dlg3.hide()" update=":form:pnlDetail4" />
 						</f:facet>
 
 					</p:dataTable>

@@ -24,7 +24,8 @@
 							actionListener="#{patientBacking.newAction}"
 							update="pnlDetail btnSavePatient" process="@this" />
 						<p:commandButton value="#{msg['btn_search']}"
-							icon="ui-icon-search" update="pnlDetail" process="@none" />
+							icon="ui-icon-search" action="#{patientBacking.searchAction}"
+							update="growl btnSavePatient pnlDetail" process="@this,txtDoc" />
 						<p:commandButton id="btnSavePatient" value="#{msg['btn_save']}"
 							icon="ui-icon-disk" action="#{patientBacking.saveAction}"
 							update="growl btnSavePatient pnlDetail"
@@ -38,7 +39,7 @@
 					style="margin:0 auto;" width="100%">
 
 					<h:outputLabel value="#{msg['pat_code']}" />
-					<p:inputText value="#{patientBacking.selected.doc}"
+					<p:inputText id="txtDoc" value="#{patientBacking.selected.doc}"
 						style="width:230px;" label="#{msg['pat_code']}" required="true" />
 
 					<h:outputLabel value="#{msg['pat_sap_code']}"
@@ -61,7 +62,8 @@
 
 					<h:outputText value="#{msg['glb_gender']}" />
 					<p:selectOneMenu value="#{patientBacking.selected.gender}"
-						style="width:230px">
+						style="width:230px" label="#{msg['glb_gender']}" required="true">
+						<f:selectItem itemLabel="#{msg['glb_all_value']}" itemValue="" />
 						<f:selectItem itemLabel="#{msg['glb_gender_woman']}" itemValue="W" />
 						<f:selectItem itemLabel="#{msg['glb_gender_man']}" itemValue="M" />
 					</p:selectOneMenu>
@@ -75,6 +77,7 @@
 					<h:outputText value="#{msg['pat_country']}" />
 					<p:selectOneMenu value="#{patientBacking.idCountry}"
 						style="width:230px" required="true" label="#{msg['pat_country']}">
+						<f:selectItem itemLabel="#{msg['glb_all_value']}" itemValue="" />
 						<f:selectItems value="#{patientBacking.listCountry}" />
 						<p:ajax update="selRegion selCity"
 							listener="#{patientBacking.handleCountryChange}" />
@@ -83,6 +86,7 @@
 					<h:outputText value="#{msg['pat_region']}" />
 					<p:selectOneMenu id="selRegion" value="#{patientBacking.idRegion}"
 						style="width:230px" required="true" label="#{msg['pat_region']}">
+						<f:selectItem itemLabel="#{msg['glb_all_value']}" itemValue="" />
 						<f:selectItems value="#{patientBacking.listRegion}" />
 						<p:ajax update="selCity"
 							listener="#{patientBacking.handleRegionChange}" />
@@ -91,6 +95,7 @@
 					<h:outputText value="#{msg['pat_city']}" />
 					<p:selectOneMenu id="selCity" value="#{patientBacking.idCity}"
 						style="width:230px" required="true" label="#{msg['pat_city']}">
+						<f:selectItem itemLabel="#{msg['glb_all_value']}" itemValue="" />
 						<f:selectItems value="#{patientBacking.listCity}" />
 					</p:selectOneMenu>
 
@@ -106,11 +111,12 @@
 					<h:outputText value="#{msg['pat_email']}" />
 					<p:inputText value="#{patientBacking.selected.email}"
 						style="width:230px" label="#{msg['pat_email']}"
-						validator="emailValidator" />
+						validator="emailValidator" required="true" />
 
 					<h:outputText value="#{msg['pat_cell_number']}" />
 					<p:inputText value="#{patientBacking.selected.cellNumber}"
-						style="width:230px" label="#{msg['pat_cell_number']}" />
+						style="width:230px" label="#{msg['pat_cell_number']}"
+						required="true" />
 
 					<h:outputLabel value="#{msg['pat_sales_off']}" style="width:40%" />
 					<p:selectOneMenu value="#{patientBacking.salesOff}"

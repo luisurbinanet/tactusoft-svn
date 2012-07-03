@@ -78,10 +78,12 @@
 								width="100%">
 
 								<h:outputLabel value="#{msg['pat_occupation']}" />
-								<p:inputText value="#{historyBacking.selected.occupation}"
+								<p:selectOneMenu
+									value="#{historyBacking.selected.crmOccupation.id}"
 									style="width:400px" label="#{msg['pat_occupation']}"
-									readonly="##{historyBacking.readOnlySelectedHistoryHistory}"
-									maxlength="255" />
+									disabled="##{historyBacking.readOnlySelectedHistoryHistory}">
+									<f:selectItems value="#{historyBacking.listOccupation}" />
+								</p:selectOneMenu>
 
 								<h:outputLabel value="#{msg['pat_neighborhood']}" />
 								<p:inputText value="#{historyBacking.selected.neighborhood}"
@@ -91,7 +93,7 @@
 
 								<h:outputLabel value="#{msg['pat_type_housing']}" />
 								<p:selectOneMenu value="#{historyBacking.selected.typeHousing}"
-									style="width:230px" label="#{msg['pat_type_housing']}"
+									style="width:400px" label="#{msg['pat_type_housing']}"
 									disabled="##{historyBacking.readOnlySelectedHistoryHistory}">
 									<f:selectItem itemLabel="#{msg['glb_default_value']}"
 										itemValue="-1" />
