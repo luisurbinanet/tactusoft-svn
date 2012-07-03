@@ -134,11 +134,12 @@ public class DoctorAppointmentBacking extends BaseBacking {
 				listAppointment = processService
 						.getListAppointmentByDoctor(doctor.getId());
 				for (CrmAppointment row : listAppointment) {
-					eventModel.addEvent(new DefaultScheduleEvent("Cita Nro."
-							+ row.getCode() + ". Paciente: "
-							+ row.getPatientNames(), row
-							.getStartAppointmentDate(), row
-							.getStartAppointmentDate()));
+					eventModel.addEvent(new DefaultScheduleEvent("Paciente: "
+							+ row.getPatientNames() + " - Procedimiento: "
+							+ row.getCrmProcedureDetail().getName()
+							+ " - Sucursal: " + row.getCrmBranch().getName(),
+							row.getStartAppointmentDate(), row
+									.getEndAppointmentDate()));
 				}
 			}
 		}

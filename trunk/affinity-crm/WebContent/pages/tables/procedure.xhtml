@@ -61,7 +61,7 @@
 
 			<p:dialog header="#{msg['msg_detail']}" widgetVar="dlg"
 				resizable="false" id="dialog" showEffect="fade" hideEffect="explode"
-				modal="true" width="500">
+				modal="true" width="1000">
 
 				<p:toolbar style="width:100%">
 					<p:toolbarGroup align="left">
@@ -74,9 +74,9 @@
 					</p:toolbarGroup>
 				</p:toolbar>
 
-				<p:spacer height="10" />
+				<p:spacer height="5" />
 
-				<h:panelGrid id="pnlDetail" columns="2" cellpadding="4"
+				<h:panelGrid id="pnlDetail" columns="4" cellpadding="4"
 					style="margin:0 auto;" width="100%">
 
 					<h:outputLabel value="#{msg['prc_name']}" />
@@ -98,15 +98,28 @@
 							itemLabel="#{msg['glb_state_inactive']}" />
 					</p:selectOneMenu>
 
+
+					<h:outputLabel value="#{msg['prc_seller_group']}" />
+					<p:selectOneMenu style="width:350px"
+						value="#{procedureBacking.selected.codPublicity}">
+						<f:selectItems value="#{procedureBacking.listWSGroupSellers}" />
+					</p:selectOneMenu>
+
 				</h:panelGrid>
 
-				<p:pickList var="row" value="#{procedureBacking.listModelBranch}"
-					converter="branchConverter" itemValue="#{row}"
-					itemLabel="#{row.name} (#{row.society})">
+				<h:panelGrid columns="4" cellpadding="4" style="margin:0 auto;"
+					width="100%">
+					<h:outputLabel value="" />
+					<h:outputLabel value="" />
 
-					<f:facet name="sourceCaption">#{msg['usr_branch']}</f:facet>
-					<f:facet name="targetCaption">#{msg['glb_target_caption']}</f:facet>
-				</p:pickList>
+					<p:pickList var="row" value="#{procedureBacking.listModelBranch}"
+						converter="branchConverter" itemValue="#{row}"
+						itemLabel="#{row.name} (#{row.society})">
+
+						<f:facet name="sourceCaption">#{msg['usr_branch']}</f:facet>
+						<f:facet name="targetCaption">#{msg['glb_target_caption']}</f:facet>
+					</p:pickList>
+				</h:panelGrid>
 
 				<p:spacer height="40" />
 				<h:outputLabel value="#{msg['prc_detail']}"
@@ -114,7 +127,7 @@
 				<p:separator style="width:100%" />
 				<p:spacer height="5" />
 
-				<h:panelGrid id="pnlProcedureDetail" columns="4" cellpadding="4"
+				<h:panelGrid id="pnlProcedureDetail" columns="8" cellpadding="4"
 					style="margin:0 auto;" width="100%">
 
 					<h:outputLabel value="#{msg['prc_name']}" />
