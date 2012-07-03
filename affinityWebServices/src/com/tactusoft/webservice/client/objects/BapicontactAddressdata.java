@@ -7,10 +7,9 @@
 
 package com.tactusoft.webservice.client.objects;
 
+@SuppressWarnings({ "rawtypes", "unused" })
 public class BapicontactAddressdata  implements java.io.Serializable {
-    /**
-	 * 
-	 */
+    
 	private static final long serialVersionUID = 1L;
 
 	private java.lang.String partneremployeeid;
