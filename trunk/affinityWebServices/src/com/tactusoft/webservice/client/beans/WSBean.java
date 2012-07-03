@@ -12,6 +12,14 @@ public class WSBean implements Serializable {
 	private String names;
 	private String branch;
 	private String society;
+	
+	private String country;
+	private String region;
+	private String city;
+	private String address;
+	private String telephone1;
+	private String telephone2;
+	private String email;
 
 	public WSBean() {
 
@@ -58,6 +66,62 @@ public class WSBean implements Serializable {
 
 	public void setSociety(String society) {
 		this.society = society;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getTelephone1() {
+		return telephone1;
+	}
+
+	public void setTelephone1(String telephone1) {
+		this.telephone1 = telephone1;
+	}
+
+	public String getTelephone2() {
+		return telephone2;
+	}
+
+	public void setTelephone2(String telephone2) {
+		this.telephone2 = telephone2;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 }
