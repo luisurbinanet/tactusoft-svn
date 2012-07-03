@@ -242,7 +242,7 @@ public class CustomListsExecute {
 	}
 
 	public static void main(String args[]) {
-		List<WSBean> list = getCenters(
+		List<WSBean> list = getMaterials(
 				"http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zweblist/300/zweblist/zweblist",
 				"TACTUSOFT", "AFFINITY");
 		for (WSBean row : list) {

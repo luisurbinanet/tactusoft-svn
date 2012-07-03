@@ -59,7 +59,7 @@ public class CustomerExecute {
 			String pais, String ciudad, String region, String grupoCuenta,
 			String orgVentas, String canalDistribucion, String division,
 			String sociedad, String oficinaVentas, String grupoCliente,
-			String condicionPago, String cuenta, String grupoPrecios, 
+			String condicionPago, String cuenta, String grupoPrecios,
 			String esquemaClientes, String estadoCliente) {
 
 		// CREAR CLIENTES
@@ -116,7 +116,7 @@ public class CustomerExecute {
 		ziKna1.setSpras("S");// IDIOMA
 		ziKna1.setStkzn("X");// Persona Física
 		ziKna1.setFityp("05");// Clase Impuesto Persona Natural
-		
+
 		Fknvk fknvk = new Fknvk();
 		fknvk.setMandt(ambiente);
 		fknvk.setGbdat("1982-01-01");
@@ -204,49 +204,93 @@ public class CustomerExecute {
 			bapireturn1 = zBAPI_CUSTOMER_FINDProxy.customerFind(maxCnt, plHold,
 					resultTab, seloptTab);
 
-			if (bapireturn1.getType().equals("E")) {
+			if (!bapireturn1.getType().equals("S")) {
 				return null;
 			} else {
 				return resultTab.value;
 			}
 
 		} catch (RemoteException e1) {
-			// e1.printStackTrace();
+			e1.printStackTrace();
 		}
 
 		return null;
 	}
 
 	public static List<WSBean> findByName(String url, String user,
-			String password, String value, int maxCnt) {
+			String password, String society, String names, int maxCnt) {
 		List<WSBean> result = new ArrayList<WSBean>();
-		value = "*" + value.replace(" ", "*") + "*";
-		Bapikna111[] list = find(url, user, password, "NAME1", value, maxCnt);
-		if (list != null && list[0].getType().equals("S")) {
+		names = "*" + names.replace(" ", "*") + "*";
+
+		Bapikna111[] list = find(url, user, password, "NAME1", names, maxCnt);
+		if (list != null && !list[0].getType().equals("E")) {
 			for (Bapikna111 row : list) {
-				result.add(new WSBean(row.getCustomer(), row.getFieldvalue()));
+				Bapicustomer04 bapicustomer04 = getDetail(url, user, password,
+						society, row.getCustomer());
+				if (bapicustomer04 != null) {
+					WSBean bean = new WSBean();
+					bean.setCode(row.getCustomer());
+					bean.setNames(bapicustomer04.getName());
+					bean.setSociety(society);
+					bean.setCountry(bapicustomer04.getCountry().isEmpty() ? "-1"
+							: bapicustomer04.getCountry());
+					bean.setRegion(bapicustomer04.getRegion().isEmpty() ? "-1"
+							: bapicustomer04.getRegion());
+					bean.setCity(bapicustomer04.getCity().isEmpty() ? "-1"
+							: bapicustomer04.getCity());
+					bean.setAddress(bapicustomer04.getStreet());
+					bean.setTelephone1(bapicustomer04.getTelephone());
+					bean.setTelephone2(bapicustomer04.getTelephone2());
+					bean.setEmail("");
+					result.add(bean);
+				}
 			}
 		}
 
 		Collections.sort(result, new WSBeanComparator());
 		return result;
 	}
+	
+	public static List<WSBean> findByName(String url, String user,
+			String password, String society, String names) {
+		return findByName(url, user, password, society, names, 0);
+	}
 
 	public static List<WSBean> findByDoc(String url, String user,
-			String password, String society, String value, int maxCnt) {
+			String password, String society, String doc, int maxCnt) {
 		List<WSBean> result = new ArrayList<WSBean>();
-		Bapikna111[] list = find(url, user, password, "SORTL", value, maxCnt);
-		if (list != null && list[0].getType().equals("S")) {
-			for (Bapikna111 row : list) {
-				Bapicustomer04 bapicustomer04 = getDetail(url, user, password,
-						society, row.getCustomer());
-				result.add(new WSBean(row.getCustomer(), bapicustomer04
-						.getName()));
+
+		Bapikna111[] list = find(url, user, password, "SORTL", doc, maxCnt);
+		if (list != null && !list[0].getType().equals("E")) {
+			Bapikna111 row = list[0];
+			Bapicustomer04 bapicustomer04 = getDetail(url, user, password,
+					society, row.getCustomer());
+			if (bapicustomer04 != null) {
+				WSBean bean = new WSBean();
+				bean.setCode(row.getCustomer());
+				bean.setNames(bapicustomer04.getName());
+				bean.setSociety(society);
+				bean.setCountry(bapicustomer04.getCountry().isEmpty() ? "-1"
+						: bapicustomer04.getCountry());
+				bean.setRegion(bapicustomer04.getRegion().isEmpty() ? "-1"
+						: bapicustomer04.getRegion());
+				bean.setCity(bapicustomer04.getCity().isEmpty() ? "-1"
+						: bapicustomer04.getCity());
+				bean.setAddress(bapicustomer04.getStreet());
+				bean.setTelephone1(bapicustomer04.getTelephone());
+				bean.setTelephone2(bapicustomer04.getTelephone2());
+				bean.setEmail("");
+				result.add(bean);
 			}
 		}
 
 		Collections.sort(result, new WSBeanComparator());
 		return result;
+	}
+	
+	public static List<WSBean> findByDoc(String url, String user,
+			String password, String society, String doc) {
+		return findByDoc(url, user, password, society, doc, 0);
 	}
 
 	public static BapicustomerAddressdata[] getAddresses(String url,
@@ -295,7 +339,11 @@ public class CustomerExecute {
 			e.printStackTrace();
 		}
 
-		return customerAddress.value;
+		if (customerAddress.value.getCustomer().isEmpty()) {
+			return null;
+		} else {
+			return customerAddress.value;
+		}
 	}
 
 	public static void main(String args[]) {
@@ -305,10 +353,9 @@ public class CustomerExecute {
 		String username = "TACTUSOFT";
 		String password = "AFFINITY";
 		
-		
-		/*String ambiente = "300";
+		String ambiente = "300";
 		String tipoDocumento = "1";
-		String nroDocumento = "86473621";
+		String nroDocumento = "11887766";
 		String tratamiento = "1";
 		String nombre = "Carlos Arturo Sarmiento";
 		String direccion = "Carrera 55A 163 35";
@@ -319,10 +366,10 @@ public class CustomerExecute {
 		String ciudad = "BOGOTA";
 		String region = "11";
 		String grupoCuenta = "D001";
-		String orgVentas = "1000";
+		String orgVentas = "4000";
 		String canalDistribucion = "10";
 		String division = "10";
-		String sociedad = "1000";
+		String sociedad = "4000";
 		String oficinaVentas = "1025";
 		String grupoCliente = "01";
 		String condicionPago = "Z001";
@@ -331,24 +378,25 @@ public class CustomerExecute {
 		String esquemaClientes = "1"; 
 		String estadoCliente = "1";
 		
-		String code = CustomerExecute.excecute(url, username, password, ambiente,
+		CustomerExecute.excecute(url, username, password, ambiente,
 				tipoDocumento, nroDocumento, tratamiento, nombre, direccion,
 				telefono, celular, correoElectronico, pais, ciudad, region,
 				grupoCuenta, orgVentas, canalDistribucion, division, sociedad,
 				oficinaVentas, grupoCliente, condicionPago, cuenta, grupoPrecios,
 				esquemaClientes, estadoCliente);
 		
-		System.out.println("PRUEBA");*/
+		System.out.println("PRUEBA");
 
 		
+		url = "http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zcustomer2/300/zcustomer2/zcustomer2";
 		List<WSBean> result = findByDoc(url, username, password, "1000",
-		"PRUEBAD1", 0); 
+				"112233445", 0);
 		for (WSBean row : result) {
 			System.out.println(row.getCode());
-		}	
-
+		}
 
 		url = "http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zcustomer2/300/zcustomer2/zcustomer2";
+		//0000765491
 		//Bapicustomer04 detail = getDetail(url, username, password, "1000",
 		//		"0000765439");
 		//System.out.println("PRUEBA");
