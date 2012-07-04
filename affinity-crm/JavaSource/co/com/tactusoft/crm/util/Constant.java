@@ -40,5 +40,7 @@ public class Constant {
 	public static final String APP_STATE_CONFIRMED_LABEL = "glb_app_confirmed";
 	public static final String APP_STATE_CANCELED_LABEL = "glb_app_canceled";
 	public static final String APP_STATE_CHECKED_LABEL = "glb_app_checked";
+	public static final String APP_STATE_ATTENDED_LABEL = "glb_app_attended";
+	public static final String APP_STATE_NOATTENDED_LABEL = "glb_app_no_attended";
 
 }

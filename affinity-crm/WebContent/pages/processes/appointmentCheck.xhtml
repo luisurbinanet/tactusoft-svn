@@ -83,9 +83,25 @@
 						</h:outputLabel>
 					</p:column>
 
+					<p:column headerText="#{msg['app_branch']}">
+						<h:outputLabel value="#{rec.crmBranch.name}" />
+					</p:column>
+
 					<p:column headerText="#{msg['app_doctor']}">
-						<h:outputLabel
-							value="#{rec.crmDoctor.names}" />
+						<h:outputLabel value="#{rec.crmDoctor.names}" />
+					</p:column>
+
+					<p:column headerText="#{msg['app_procedure']}">
+						<h:outputLabel value="#{rec.crmProcedureDetail.name}" />
+					</p:column>
+
+					<p:column style="width:4%">
+						<p:commandButton update=":editForm:display"
+							oncomplete="obsDialog.show()" icon="ui-icon-search"
+							title="#{msg['btn_view']}">
+							<f:setPropertyActionListener value="#{rec}"
+								target="#{appointmentPatientBacking.selectedAppointment}" />
+						</p:commandButton>
 					</p:column>
 
 					<f:facet name="footer">
@@ -180,6 +196,21 @@
 						onclick="confirmation.hide()" type="button" />
 
 				</p:confirmDialog>
+
+				<p:dialog header="#{msg['app_obs']}" widgetVar="obsDialog"
+					resizable="false" id="obsDlg" showEffect="fade"
+					hideEffect="explode" modal="true">
+
+					<h:panelGrid id="display" columns="1" cellpadding="4"
+						style="margin:0 auto;" width="100%">
+
+						<h:inputTextarea style="width:500px;"
+							value="#{appointmentPatientBacking.selectedAppointment.obs}"
+							readonly="true" rows="5" />
+
+					</h:panelGrid>
+
+				</p:dialog>
 
 			</h:form>
 

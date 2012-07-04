@@ -307,4 +307,26 @@ public class FacesUtil {
 		}// for i
 		return output;
 	}
+
+	public static String getAppState(int state) {
+		String result = null;
+		switch (state) {
+		case Constant.APP_STATE_CONFIRMED:
+			result = FacesUtil.getMessage("glb_app_confirmed");
+			break;
+		case Constant.APP_STATE_CANCELED:
+			result = FacesUtil.getMessage("glb_app_canceled");
+			break;
+		case Constant.APP_STATE_CHECKED:
+			result = FacesUtil.getMessage("glb_app_checked");
+			break;
+		case Constant.APP_STATE_ATTENDED:
+			result = FacesUtil.getMessage("glb_app_attended");
+			break;
+		case Constant.APP_STATE_NOATTENDED:
+			result = FacesUtil.getMessage("glb_app_no_attended");
+			break;
+		}
+		return result;
+	}
 }

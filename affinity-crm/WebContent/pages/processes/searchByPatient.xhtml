@@ -109,7 +109,16 @@
 
 					<p:column headerText="#{msg['app_state']}">
 						<h:outputLabel
-							value="#{rec.state eq 1?'AGENDADA':rec.state eq 2?'CANCELADA':'CHEQUEADA'}" />
+							value="#{rec.state eq 1?'Agendada':rec.state eq 2?'Cancelada':rec.state eq 3?'Chequeada':rec.state eq 4?'Asistió a Consulta':'No Asistió a Consulta'}" />
+					</p:column>
+
+					<p:column style="width:4%">
+						<p:commandButton update=":editForm:display"
+							oncomplete="obsDialog.show()" icon="ui-icon-search"
+							title="#{msg['btn_view']}">
+							<f:setPropertyActionListener value="#{rec}"
+								target="#{searchByPatientBacking.selectedAppointment}" />
+						</p:commandButton>
 					</p:column>
 
 				</p:dataTable>
@@ -198,6 +207,21 @@
 						onclick="confirmation.hide()" type="button" />
 
 				</p:confirmDialog>
+
+				<p:dialog header="#{msg['app_obs']}" widgetVar="obsDialog"
+					resizable="false" id="obsDlg" showEffect="fade"
+					hideEffect="explode" modal="true">
+
+					<h:panelGrid id="display" columns="1" cellpadding="4"
+						style="margin:0 auto;" width="100%">
+
+						<h:inputTextarea style="width:500px;"
+							value="#{searchByPatientBacking.selectedAppointment.obs}"
+							readonly="true" rows="5" />
+
+					</h:panelGrid>
+
+				</p:dialog>
 
 			</h:form>
 

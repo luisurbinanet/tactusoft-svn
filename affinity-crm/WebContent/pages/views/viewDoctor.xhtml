@@ -20,12 +20,81 @@
 
 				<p:spacer height="10" />
 
-				<p:schedule value="#{doctorAppointmentBacking.eventModel}"
-					widgetVar="myschedule" view="agendaDay" minTime="7" maxTime="19"
-					slotMinutes="15" showHeader="true">
+				<p:schedule id="scheduleApp"
+					value="#{doctorAppointmentBacking.eventModel}" widgetVar="schApp"
+					view="agendaDay" minTime="7" maxTime="19" slotMinutes="15"
+					showHeader="true">
+
+					<p:ajax event="eventSelect"
+						listener="#{doctorAppointmentBacking.onEventSelect}"
+						update="detailDialog" oncomplete="detailDlg.show()" />
 
 				</p:schedule>
 
+				<p:dialog
+					header="#{msg['app_num']} #{doctorAppointmentBacking.selectedAppointment.code}"
+					widgetVar="detailDlg" resizable="false" id="detailDialog"
+					showEffect="fade" hideEffect="explode" modal="true" width="500">
+					<h:panelGrid columns="2" style="width:100%">
+						<h:outputText value="#{msg['app_procedure']}" />
+						<h:outputText style="font-weight:bold;"
+							value="#{doctorAppointmentBacking.selectedAppointment.crmProcedureDetail.name}" />
+						<h:outputText value="#{msg['app_start_hour']}" />
+						<h:outputText style="font-weight:bold;"
+							value="#{doctorAppointmentBacking.selectedAppointment.startAppointmentDate}">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+						</h:outputText>
+						<h:outputText value="#{msg['app_end_hour']}" />
+						<h:outputText style="font-weight:bold;"
+							value="#{doctorAppointmentBacking.selectedAppointment.endAppointmentDate}">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+						</h:outputText>
+						<h:outputText value="#{msg['app_branch']}" />
+						<h:outputText style="font-weight:bold;"
+							value="#{doctorAppointmentBacking.selectedAppointment.crmBranch.name}" />
+						<h:outputText value="#{msg['app_obs']}" />
+						<h:inputTextarea style="width:350px;"
+							value="#{doctorAppointmentBacking.selectedAppointment.obs}"
+							readonly="true" rows="5" />
+					</h:panelGrid>
+
+					<p:spacer />
+
+					<h:panelGrid columns="2" width="100%">
+						<p:commandButton value="#{msg['btn_assisted_appointment']}"
+							onclick="detailDlg.hide()" oncomplete="confirmation2.show()"
+							rendered="#{doctorAppointmentBacking.selectedAppointment.state eq 3?true:false}" />
+
+						<p:commandButton value="#{msg['btn_no_assisted_appointment']}"
+							onclick="detailDlg.hide()" oncomplete="confirmation.show()"
+							rendered="#{doctorAppointmentBacking.selectedAppointment.state eq 3?true:false}" />
+					</h:panelGrid>
+				</p:dialog>
+
+				<p:confirmDialog id="confirmDialog" message="#{msg['glb_question']}"
+					header="#{msg['title_app']}" severity="alert"
+					widgetVar="confirmation">
+
+					<p:commandButton id="confirm" value="#{msg['glb_state_yes']}"
+						oncomplete="schApp.update();confirmation.hide()"
+						actionListener="#{doctorAppointmentBacking.cancelAppointmentAction}"
+						style="font-weight:bold;" />
+					<p:commandButton id="decline" value="#{msg['glb_state_no']}"
+						onclick="confirmation.hide()" type="button" />
+
+				</p:confirmDialog>
+
+				<p:confirmDialog id="confirmDialog2"
+					message="#{msg['glb_question']}" header="#{msg['title_app']}"
+					severity="alert" widgetVar="confirmation2">
+
+					<p:commandButton id="confirm2" value="#{msg['glb_state_yes']}"
+						oncomplete="confirmation2.hide()"
+						action="#{doctorAppointmentBacking.attendedAppointmentAction}" />
+					<p:commandButton id="decline2" value="#{msg['glb_state_no']}"
+						onclick="confirmation2.hide()" type="button" />
+
+				</p:confirmDialog>
 			</h:form>
 
 		</p:panel>
