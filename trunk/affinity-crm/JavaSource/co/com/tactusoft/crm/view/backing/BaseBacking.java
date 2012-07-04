@@ -3,7 +3,7 @@ package co.com.tactusoft.crm.view.backing;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -187,7 +187,7 @@ public class BaseBacking implements Serializable {
 						sap.getPassword());
 
 				listWSDoctor = new ArrayList<SelectItem>();
-				mapWSDoctor = new HashMap<String, String>();
+				mapWSDoctor = new LinkedHashMap<String, String>();
 				listWSDoctor.add(new SelectItem(Constant.DEFAULT_VALUE_STRING,
 						label));
 				for (WSBean row : result) {
@@ -261,7 +261,7 @@ public class BaseBacking implements Serializable {
 	public List<SelectItem> getListCrmBranch() {
 		if (listCrmBranch == null) {
 			listCrmBranch = new LinkedList<SelectItem>();
-			mapCrmBranch = new HashMap<BigDecimal, CrmBranch>();
+			mapCrmBranch = new LinkedHashMap<BigDecimal, CrmBranch>();
 			String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
 			listCrmBranch.add(new SelectItem(Constant.DEFAULT_VALUE, label));
 			for (CrmBranch row : tablesService.getListBranchActive()) {
@@ -296,7 +296,7 @@ public class BaseBacking implements Serializable {
 	public List<SelectItem> getListCrmSpeciality() {
 		if (listCrmSpeciality == null) {
 			listCrmSpeciality = new LinkedList<SelectItem>();
-			mapCrmSpeciality = new HashMap<BigDecimal, CrmSpeciality>();
+			mapCrmSpeciality = new LinkedHashMap<BigDecimal, CrmSpeciality>();
 			String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
 			listCrmSpeciality
 					.add(new SelectItem(Constant.DEFAULT_VALUE, label));
@@ -336,7 +336,7 @@ public class BaseBacking implements Serializable {
 					.getListWSGroupSellers();
 
 			listWSGroupSellers = new ArrayList<SelectItem>();
-			mapWSGroupSellers = new HashMap<String, String>();
+			mapWSGroupSellers = new LinkedHashMap<String, String>();
 
 			String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
 			listWSGroupSellers.add(new SelectItem(

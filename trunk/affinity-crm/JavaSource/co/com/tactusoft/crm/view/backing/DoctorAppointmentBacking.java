@@ -8,6 +8,7 @@ import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.inject.Named;
 
+import org.primefaces.event.ScheduleEntrySelectEvent;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultScheduleModel;
 import org.primefaces.model.ScheduleModel;
@@ -39,10 +40,21 @@ public class DoctorAppointmentBacking extends BaseBacking {
 
 	private ScheduleModel eventModel;
 	private ScheduleModel branchEventModel;
+	private DefaultScheduleEvent event;
+
+	private String labelPatient;
+	private String labelProcedure;
+	private String labelBranch;
+	private String labelState;
 
 	public DoctorAppointmentBacking() {
 		idBranch = Constant.DEFAULT_VALUE;
 		doctor = new CrmDoctor();
+
+		labelPatient = FacesUtil.getMessage("pat");
+		labelProcedure = FacesUtil.getMessage("app_procedure");
+		labelBranch = FacesUtil.getMessage("app_branch");
+		labelState = FacesUtil.getMessage("app_state");
 	}
 
 	public CrmDoctor getDoctor() {
@@ -134,12 +146,18 @@ public class DoctorAppointmentBacking extends BaseBacking {
 				listAppointment = processService
 						.getListAppointmentByDoctor(doctor.getId());
 				for (CrmAppointment row : listAppointment) {
-					eventModel.addEvent(new DefaultScheduleEvent("Paciente: "
-							+ row.getPatientNames() + " - Procedimiento: "
-							+ row.getCrmProcedureDetail().getName()
-							+ " - Sucursal: " + row.getCrmBranch().getName(),
-							row.getStartAppointmentDate(), row
-									.getEndAppointmentDate()));
+					String title = labelPatient + ": " + row.getPatientNames()
+							+ " - " + labelProcedure + ":"
+							+ row.getCrmProcedureDetail().getName() + " - "
+							+ labelBranch + ": " + row.getCrmBranch().getName()
+							+ " - " + labelState + ": "
+							+ FacesUtil.getAppState(row.getState());
+
+					event = new DefaultScheduleEvent(title,
+							row.getStartAppointmentDate(),
+							row.getEndAppointmentDate(), row);
+
+					eventModel.addEvent(event);
 				}
 			}
 		}
@@ -196,9 +214,17 @@ public class DoctorAppointmentBacking extends BaseBacking {
 	public void cancelAppointmentAction(ActionEvent actionEvent) {
 		selectedAppointment.setState(Constant.APP_STATE_NOATTENDED);
 		processService.saveAppointment(selectedAppointment);
+		
+		String title = labelPatient + ": " + selectedAppointment.getPatientNames()
+				+ " - " + labelProcedure + ":"
+				+ selectedAppointment.getCrmProcedureDetail().getName() + " - "
+				+ labelBranch + ": " + selectedAppointment.getCrmBranch().getName()
+				+ " - " + labelState + ": "
+				+ FacesUtil.getAppState(selectedAppointment.getState());
 
-		listAppointmentByDoctor = processService
-				.getListAppointmentByDoctorConfirmed(doctor.getId());
+		event.setTitle(title);
+		event.setData(selectedAppointment);
+		eventModel.updateEvent(event);
 
 		String message = FacesUtil.getMessage("app_msg_cancel",
 				selectedAppointment.getCode());
@@ -216,6 +242,11 @@ public class DoctorAppointmentBacking extends BaseBacking {
 		historyBacking.searchAction(null);
 
 		return "/pages/processes/history?faces-redirect=true";
+	}
+
+	public void onEventSelect(ScheduleEntrySelectEvent selectEvent) {
+		event = (DefaultScheduleEvent) selectEvent.getScheduleEvent();
+		selectedAppointment = (CrmAppointment) event.getData();
 	}
 
 }

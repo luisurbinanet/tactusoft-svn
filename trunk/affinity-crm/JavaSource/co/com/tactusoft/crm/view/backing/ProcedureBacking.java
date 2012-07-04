@@ -1,10 +1,14 @@
 package co.com.tactusoft.crm.view.backing;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.LinkedHashMap;
 
 import javax.faces.event.ActionEvent;
+import javax.faces.model.SelectItem;
 import javax.inject.Named;
 
 import org.primefaces.model.DualListModel;
@@ -17,6 +21,8 @@ import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.datamodel.ProcedureDataModel;
 import co.com.tactusoft.crm.view.datamodel.ProcedureDetailDataModel;
+
+import com.tactusoft.webservice.client.beans.WSBean;
 
 @Named
 @Scope("view")
@@ -132,6 +138,32 @@ public class ProcedureBacking extends BaseBacking {
 
 	public void setTimeStretchers(Integer timeStretchers) {
 		this.timeStretchers = timeStretchers;
+	}
+
+	public List<SelectItem> getListWSGroupSellers() {
+		if (listWSGroupSellers == null) {
+			List<WSBean> result = FacesUtil.getCurrentUserData()
+					.getListWSGroupSellers();
+			
+			mapWSGroupSellers = new LinkedHashMap<String, String>();
+			for (WSBean row : result) {
+				mapWSGroupSellers.put(row.getCode(), row.getNames());
+			}
+
+			listWSGroupSellers = new ArrayList<SelectItem>();
+			String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
+			listWSGroupSellers.add(new SelectItem(
+					Constant.DEFAULT_VALUE_STRING, label));
+			for (Map.Entry<String, String> entry : mapWSGroupSellers.entrySet()) {
+				listWSGroupSellers.add(new SelectItem(entry.getKey(), entry
+						.getValue()));
+			}
+		}
+		return listWSGroupSellers;
+	}
+
+	public void setListWSGroupSellers(List<SelectItem> listWSGroupSellers) {
+		this.listWSGroupSellers = listWSGroupSellers;
 	}
 
 	public void newAction() {

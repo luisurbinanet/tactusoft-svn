@@ -20,7 +20,7 @@ import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 @Named
 @Scope("view")
 public class SearchByPatientBacking extends BaseBacking {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	private List<SelectItem> listStates;
@@ -38,7 +38,6 @@ public class SearchByPatientBacking extends BaseBacking {
 	public SearchByPatientBacking() {
 		newAction(null);
 	}
-
 
 	public List<SelectItem> getListStates() {
 		return listStates;
@@ -130,6 +129,10 @@ public class SearchByPatientBacking extends BaseBacking {
 		listStates.add(new SelectItem(Constant.APP_STATE_CANCELED, message));
 		message = FacesUtil.getMessage(Constant.APP_STATE_CHECKED_LABEL);
 		listStates.add(new SelectItem(Constant.APP_STATE_CHECKED, message));
+		message = FacesUtil.getMessage(Constant.APP_STATE_ATTENDED_LABEL);
+		listStates.add(new SelectItem(Constant.APP_STATE_ATTENDED, message));
+		message = FacesUtil.getMessage(Constant.APP_STATE_NOATTENDED_LABEL);
+		listStates.add(new SelectItem(Constant.APP_STATE_NOATTENDED, message));
 	}
 
 	public void searchAppoinmnetConfirmedAction() {
@@ -138,7 +141,8 @@ public class SearchByPatientBacking extends BaseBacking {
 			FacesUtil.addError(message);
 		} else {
 			listAppointment = processService.listAppointmentByPatient(
-					selectedPatient.getCodeSap(), this.state, startDate, endDate);
+					selectedPatient.getCodeSap(), this.state, startDate,
+					endDate);
 			appointmentModel = new AppointmentDataModel(listAppointment);
 		}
 	}

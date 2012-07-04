@@ -3,10 +3,11 @@ package co.com.tactusoft.crm.view.backing;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
@@ -82,7 +83,7 @@ public class AppointmentBacking extends BaseBacking {
 	public List<SelectItem> getListBranch() {
 		if (listBranch == null) {
 			listBranch = new LinkedList<SelectItem>();
-			mapBranch = new HashMap<BigDecimal, CrmBranch>();
+			mapBranch = new LinkedHashMap<BigDecimal, CrmBranch>();
 			for (CrmBranch row : FacesUtil.getCurrentUserData().getListBranch()) {
 				mapBranch.put(row.getId(), row);
 				listBranch.add(new SelectItem(row.getId(), row.getName()));
@@ -291,9 +292,75 @@ public class AppointmentBacking extends BaseBacking {
 		saved = false;
 	}
 
+	public void handleBranchChange() {
+		listProcedure = new LinkedList<SelectItem>();
+		mapProcedure = new LinkedHashMap<BigDecimal, CrmProcedure>();
+		for (CrmProcedure row : tablesService
+				.getListProcedureByBranch(idBranch)) {
+			mapProcedure.put(row.getId(), row);
+			listProcedure.add(new SelectItem(row.getId(), row.getName()));
+		}
+
+		if (listProcedure.size() > 0) {
+			idProcedure = (BigDecimal) listProcedure.get(0).getValue();
+			handleProcedureChange();
+		}
+
+		listDoctor = new LinkedList<SelectItem>();
+		mapDoctor = new LinkedHashMap<BigDecimal, CrmDoctor>();
+		for (CrmDoctor row : tablesService.getListDoctorByBranch(idBranch)) {
+			mapDoctor.put(row.getId(), row);
+			listDoctor.add(new SelectItem(row.getId(), row.getNames()));
+		}
+
+		String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
+		try {
+
+			String codeBranch = mapBranch.get(idBranch).getCode();
+
+			List<WSBean> result = FacesUtil.getCurrentUserData()
+					.getListWSGroupSellers();
+
+			listWSGroupSellers = new ArrayList<SelectItem>();
+			mapWSGroupSellers = new TreeMap<String, String>();
+			listWSGroupSellers.add(new SelectItem(
+					Constant.DEFAULT_VALUE_STRING, label));
+			for (WSBean row : result) {
+				if (row.getBranch().equals(codeBranch)) {
+					mapWSGroupSellers.put(row.getCode(), row.getNames());
+					listWSGroupSellers.add(new SelectItem(row.getCode(), row
+							.getNames()));
+				}
+			}
+		} catch (Exception ex) {
+			listWSGroupSellers = new ArrayList<SelectItem>();
+			listWSGroupSellers.add(new SelectItem(
+					Constant.DEFAULT_VALUE_STRING, label));
+		}
+
+		selectedWSGroupSellers = "-1";
+	}
+
 	public void handleProcedureChange() {
+
+		if (listProcedure.size() > 0) {
+			String codPublicity = mapProcedure.get(idProcedure)
+					.getCodPublicity();
+			if (!FacesUtil.isEmptyOrBlank(codPublicity)
+					&& !codPublicity.equals(Constant.DEFAULT_VALUE_STRING)) {
+				
+				String namePublicity = mapWSGroupSellers.get(codPublicity);
+
+				listWSGroupSellers = new ArrayList<SelectItem>();
+				mapWSGroupSellers = new TreeMap<String, String>();
+				mapWSGroupSellers.put(codPublicity, namePublicity);
+				listWSGroupSellers.add(new SelectItem(codPublicity,
+						namePublicity));
+			}
+		}
+
 		listProcedureDetail = new LinkedList<SelectItem>();
-		mapProcedureDetail = new HashMap<BigDecimal, CrmProcedureDetail>();
+		mapProcedureDetail = new LinkedHashMap<BigDecimal, CrmProcedureDetail>();
 		for (CrmProcedureDetail row : tablesService
 				.getListProcedureDetailByProcedure(idProcedure)) {
 			mapProcedureDetail.put(row.getId(), row);
@@ -322,55 +389,6 @@ public class AppointmentBacking extends BaseBacking {
 			this.renderedForDate = false;
 			this.renderedForDoctor = false;
 		}
-	}
-
-	public void handleBranchChange() {
-		listProcedure = new LinkedList<SelectItem>();
-		mapProcedure = new HashMap<BigDecimal, CrmProcedure>();
-		for (CrmProcedure row : tablesService
-				.getListProcedureByBranch(idBranch)) {
-			mapProcedure.put(row.getId(), row);
-			listProcedure.add(new SelectItem(row.getId(), row.getName()));
-		}
-
-		if (listProcedure.size() > 0) {
-			idProcedure = (BigDecimal) listProcedure.get(0).getValue();
-			handleProcedureChange();
-		}
-
-		listDoctor = new LinkedList<SelectItem>();
-		mapDoctor = new HashMap<BigDecimal, CrmDoctor>();
-		for (CrmDoctor row : tablesService.getListDoctorByBranch(idBranch)) {
-			mapDoctor.put(row.getId(), row);
-			listDoctor.add(new SelectItem(row.getId(), row.getNames()));
-		}
-
-		String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
-		try {
-
-			String codeBranch = mapBranch.get(idBranch).getCode();
-
-			List<WSBean> result = FacesUtil.getCurrentUserData()
-					.getListWSGroupSellers();
-
-			listWSGroupSellers = new ArrayList<SelectItem>();
-			mapWSGroupSellers = new HashMap<String, String>();
-			listWSGroupSellers.add(new SelectItem(
-					Constant.DEFAULT_VALUE_STRING, label));
-			for (WSBean row : result) {
-				if (row.getBranch().equals(codeBranch)) {
-					mapWSGroupSellers.put(row.getCode(), row.getNames());
-					listWSGroupSellers.add(new SelectItem(row.getCode(), row
-							.getNames()));
-				}
-			}
-		} catch (Exception ex) {
-			listWSGroupSellers = new ArrayList<SelectItem>();
-			listWSGroupSellers.add(new SelectItem(
-					Constant.DEFAULT_VALUE_STRING, label));
-		}
-
-		selectedWSGroupSellers = "-1";
 	}
 
 	public void handleClose(CloseEvent event) {
