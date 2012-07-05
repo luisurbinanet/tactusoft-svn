@@ -14,6 +14,7 @@ import javax.faces.model.SelectItem;
 import javax.inject.Named;
 
 import org.primefaces.event.CloseEvent;
+import org.primefaces.event.DateSelectEvent;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
@@ -348,7 +349,7 @@ public class AppointmentBacking extends BaseBacking {
 					.getCodPublicity();
 			if (!FacesUtil.isEmptyOrBlank(codPublicity)
 					&& !codPublicity.equals(Constant.DEFAULT_VALUE_STRING)) {
-				
+
 				String namePublicity = mapWSGroupSellers.get(codPublicity);
 
 				listWSGroupSellers = new ArrayList<SelectItem>();
@@ -502,6 +503,11 @@ public class AppointmentBacking extends BaseBacking {
 				saved = true;
 			}
 		}
+	}
+
+	public void handleDateSelect(DateSelectEvent event) {
+		Date date = event.getDate();
+		processService.getListcandidatesHours(date, mapBranch.get(idBranch));
 	}
 
 }

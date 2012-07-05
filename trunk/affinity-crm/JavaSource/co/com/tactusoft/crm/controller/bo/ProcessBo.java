@@ -111,6 +111,15 @@ public class ProcessBo implements Serializable {
 						+ idBranch);
 	}
 
+	private List<CrmHoliday> getListHoliday(Date date, BigDecimal idBranch) {
+		String currenDate = FacesUtil.formatDate(date, "yyyy-MM-dd");
+		return dao
+				.find("select o.crmHoliday from CrmHolidayBranch o where o.crmHoliday.holiday >= '"
+						+ currenDate
+						+ "T00:00:00.000+05:00' and o.crmBranch.id = "
+						+ idBranch);
+	}
+
 	public boolean validateHoliday(List<CrmHoliday> list, Date date) {
 		for (CrmHoliday row : list) {
 			if (row.getHoliday().compareTo(date) == 0) {
@@ -173,6 +182,31 @@ public class ProcessBo implements Serializable {
 		}
 
 		return result;
+	}
+
+	public List<Date> getListcandidatesHours(Date date, CrmBranch branch) {
+		List<Date> candidatesHours = new ArrayList<Date>();
+		BigDecimal idBranch = branch.getId();
+
+		List<CrmHoliday> listHoliday = getListHoliday(date, idBranch);
+		if (listHoliday.size() == 0) {
+
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(date);
+			int currentDay = calendar.get(Calendar.DAY_OF_WEEK);
+
+			if (currentDay != 1) {
+				// Buscar citas x doctor y sucursal
+				List<VwDoctorSchedule> listVwDoctorSchedule = dao
+						.find("from VwDoctorSchedule o where o.id.idBranch = "
+								+ idBranch + " and o.id.day = " + currentDay);
+				if (listVwDoctorSchedule.size() > 0) {
+
+				}
+			}
+
+		}
+		return candidatesHours;
 	}
 
 	private List<Date> getListcandidatesHours(Date initHour, Date endHour) {

@@ -99,7 +99,21 @@
 						id="calCurrentDate" showOn="button" navigator="true"
 						pattern="dd/MM/yyyy" readonlyInput="true"
 						mindate="#{appointmentBacking.currentDate}"
-						rendered="#{appointmentBacking.renderedForDate}" locale="es" />
+						rendered="#{appointmentBacking.renderedForDate}" locale="es">
+						<p:ajax event="dateSelect"
+							listener="#{appointmentBacking.handleDateSelect}"
+							update="selHours" />
+					</p:calendar>
+
+					<h:outputLabel id="lblCurrentHour" value="#{msg['app_start_hour']}"
+						rendered="#{appointmentBacking.renderedForDate}" />
+					<p:selectOneMenu id="selHours" style="width:700px"
+						rendered="#{appointmentBacking.renderedForDate}"
+						value="#{appointmentBacking.appointmentsNumber}">
+						<f:selectItem itemLabel="10 Primeras Citas" itemValue="10" />
+						<f:selectItem itemLabel="20 Primeras Citas" itemValue="20" />
+						<f:selectItem itemLabel="30 Primeras Citas" itemValue="30" />
+					</p:selectOneMenu>
 
 					<h:outputLabel value="#{msg['app_doctor']}"
 						rendered="#{appointmentBacking.renderedForDoctor}" />

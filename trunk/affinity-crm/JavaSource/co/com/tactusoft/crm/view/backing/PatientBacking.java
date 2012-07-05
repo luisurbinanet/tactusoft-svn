@@ -329,9 +329,9 @@ public class PatientBacking extends BaseBacking {
 
 				names = selected.getFirstnames() + " " + selected.getSurnames();
 
-				String tratamiento = "1";
+				String tratamiento = "Señor";
 				if (selected.getGender().equals("W")) {
-					tratamiento = "2";
+					tratamiento = "Señora";
 				}
 
 				CrmCountry crmCountry = mapCountry.get(idCountry);
