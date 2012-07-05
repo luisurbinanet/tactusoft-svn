@@ -184,7 +184,8 @@ public class ProcessBo implements Serializable {
 		return result;
 	}
 
-	public List<Date> getListcandidatesHours(Date date, CrmBranch branch) {
+	public List<Date> getListcandidatesHours(Date date, CrmBranch branch,
+			int minutes) {
 		List<Date> candidatesHours = new ArrayList<Date>();
 		BigDecimal idBranch = branch.getId();
 
@@ -195,13 +196,50 @@ public class ProcessBo implements Serializable {
 			calendar.setTime(date);
 			int currentDay = calendar.get(Calendar.DAY_OF_WEEK);
 
-			if (currentDay != 1) {
+			if (currentDay != 1) {// Si no es domingo
 				// Buscar citas x doctor y sucursal
-				List<VwDoctorSchedule> listVwDoctorSchedule = dao
-						.find("from VwDoctorSchedule o where o.id.idBranch = "
-								+ idBranch + " and o.id.day = " + currentDay);
-				if (listVwDoctorSchedule.size() > 0) {
+				List<CrmDoctorSchedule> listCrmDoctorSchedule = dao
+						.find("from CrmDoctorSchedule o where o.crmBranch.id = "
+								+ idBranch + " and o.day = " + currentDay);
 
+				if (listCrmDoctorSchedule.size() > 0) {
+					Date minHour = null;
+					Date maxHour = null;
+
+					for (CrmDoctorSchedule row : listCrmDoctorSchedule) {
+						if (minHour != null) {
+							if (row.getStartHour().compareTo(minHour) < 0) {
+								minHour = row.getStartHour();
+							}
+						} else {
+							minHour = row.getStartHour();
+						}
+
+						if (maxHour != null) {
+							if (row.getEndHour().compareTo(maxHour) > 0) {
+								maxHour = row.getEndHour();
+							}
+						} else {
+							maxHour = row.getEndHour();
+						}
+					}
+
+					Date scheduleInitHour = FacesUtil.addHourToDate(date,
+							minHour);
+
+					maxHour = FacesUtil.addHourToDate(date, maxHour);
+
+					boolean end = false;
+					while (!end) {
+						if (scheduleInitHour.compareTo(maxHour) >= 0) {
+							end = true;
+						} else {
+							calendar = Calendar.getInstance();
+							calendar.setTime(scheduleInitHour);
+							calendar.add(Calendar.MINUTE, minutes);
+							scheduleInitHour = calendar.getTime();
+						}
+					}
 				}
 			}
 
