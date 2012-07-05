@@ -68,7 +68,7 @@
 
 					<h:outputLabel value="#{msg['app_procedure_type']}" />
 					<p:selectOneMenu id="selProcedureDetail" style="width:700px"
-						value="#{appointmentBacking.selected.crmProcedureDetail.id}">
+						value="#{appointmentBacking.idProcedureDetail}">
 						<f:selectItems value="#{appointmentBacking.listProcedureDetail}" />
 						<p:ajax update="pnlDetail"
 							listener="#{appointmentBacking.handleProcedureDetailChange}" />

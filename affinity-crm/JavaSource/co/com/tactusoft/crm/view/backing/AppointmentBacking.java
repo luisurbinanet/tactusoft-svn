@@ -49,6 +49,7 @@ public class AppointmentBacking extends BaseBacking {
 
 	private List<SelectItem> listProcedureDetail;
 	private Map<BigDecimal, CrmProcedureDetail> mapProcedureDetail;
+	private BigDecimal idProcedureDetail;
 
 	private List<SelectItem> listSearch;
 	private BigDecimal idSearch;
@@ -157,6 +158,14 @@ public class AppointmentBacking extends BaseBacking {
 	public void setMapProcedureDetail(
 			Map<BigDecimal, CrmProcedureDetail> mapProcedureDetail) {
 		this.mapProcedureDetail = mapProcedureDetail;
+	}
+
+	public BigDecimal getIdProcedureDetail() {
+		return idProcedureDetail;
+	}
+
+	public void setIdProcedureDetail(BigDecimal idProcedureDetail) {
+		this.idProcedureDetail = idProcedureDetail;
 	}
 
 	public List<SelectItem> getListSearch() {
@@ -408,8 +417,7 @@ public class AppointmentBacking extends BaseBacking {
 	}
 
 	public void searchAppointMentAction() {
-		CrmProcedureDetail procedureDetail = mapProcedureDetail.get(selected
-				.getCrmProcedureDetail().getId());
+		CrmProcedureDetail procedureDetail = mapProcedureDetail.get(idProcedureDetail);
 
 		if (this.renderedForDate) {
 			listAppointment = processService.getScheduleAppointmentForDate(
@@ -448,7 +456,7 @@ public class AppointmentBacking extends BaseBacking {
 
 		if (infoMessage.equals("")) {
 			CrmProcedureDetail procedureDetail = mapProcedureDetail
-					.get(selected.getCrmProcedureDetail().getId());
+					.get(idProcedureDetail);
 
 			int validateApp = processService.validateAppointmentForDate(
 					selected.getCrmBranch().getId(),
@@ -507,7 +515,10 @@ public class AppointmentBacking extends BaseBacking {
 
 	public void handleDateSelect(DateSelectEvent event) {
 		Date date = event.getDate();
-		processService.getListcandidatesHours(date, mapBranch.get(idBranch));
+		CrmProcedureDetail procedureDetail = mapProcedureDetail
+				.get(idProcedureDetail);
+		processService
+				.getListcandidatesHours(date, mapBranch.get(idBranch), 15);
 	}
 
 }
