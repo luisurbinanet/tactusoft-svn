@@ -184,16 +184,27 @@ public class ProcessBo implements Serializable {
 		return result;
 	}
 
-	public List<Date> getListcandidatesHours(Date date, CrmBranch branch,
-			int minutes) {
-		List<Date> candidatesHours = new ArrayList<Date>();
+	public List<Date> getListcandidatesHours(Date currentDate,
+			CrmBranch branch, int minutes) {
+		List<Date> result = new ArrayList<Date>();
 		BigDecimal idBranch = branch.getId();
 
-		List<CrmHoliday> listHoliday = getListHoliday(date, idBranch);
+		String dateString = FacesUtil.formatDate(currentDate, "yyyy-MM-dd");
+		// Buscar Citas
+		List<CrmAppointment> listApp = dao
+				.find("from CrmAppointment o where (o.startAppointmentDate between '"
+						+ dateString
+						+ "T00:00:00.000+05:00' and '"
+						+ dateString
+						+ "T23:59:59.999+05:00') and o.state in (1,3) "
+						+ "order by o.startAppointmentDate");
+
+		// Validar Festivo
+		List<CrmHoliday> listHoliday = getListHoliday(currentDate, idBranch);
 		if (listHoliday.size() == 0) {
 
 			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(date);
+			calendar.setTime(currentDate);
 			int currentDay = calendar.get(Calendar.DAY_OF_WEEK);
 
 			if (currentDay != 1) {// Si no es domingo
@@ -224,27 +235,59 @@ public class ProcessBo implements Serializable {
 						}
 					}
 
-					Date scheduleInitHour = FacesUtil.addHourToDate(date,
-							minHour);
-
-					maxHour = FacesUtil.addHourToDate(date, maxHour);
+					Date scheduleInitHour = minHour;
+					// maxHour = FacesUtil.addHourToDate(date, maxHour);
 
 					boolean end = false;
-					while (!end) {
-						if (scheduleInitHour.compareTo(maxHour) >= 0) {
-							end = true;
-						} else {
+					do {
+						// Validar Hora
+						boolean validTime = false;
+						for (CrmDoctorSchedule row : listCrmDoctorSchedule) {
+							if ((scheduleInitHour.compareTo(row.getStartHour()) >= 0)
+									&& (scheduleInitHour.compareTo(row
+											.getEndHour()) < 0)) {
+								validTime = true;
+								break;
+							}
+						}
+
+						if (validTime) {
 							calendar = Calendar.getInstance();
 							calendar.setTime(scheduleInitHour);
 							calendar.add(Calendar.MINUTE, minutes);
-							scheduleInitHour = calendar.getTime();
+							Date scheduleEndHour = calendar.getTime();
+							scheduleEndHour = FacesUtil.addHourToDate(
+									currentDate, scheduleEndHour);
+
+							List<Date> candidatesHours = getListcandidatesHours(
+									FacesUtil.addHourToDate(currentDate,
+											scheduleInitHour), scheduleEndHour);
+
+							// Validar Disponibilidad
+							boolean validate = validateAvailabilitySchedule(
+									candidatesHours, listApp, currentDate);
+
+							if (validate) {
+								Date time = FacesUtil.addHourToDate(
+										currentDate, scheduleInitHour);
+								result.add(time);
+							}
 						}
-					}
+
+						calendar = Calendar.getInstance();
+						calendar.setTime(scheduleInitHour);
+						calendar.add(Calendar.MINUTE, minutes);
+						scheduleInitHour = calendar.getTime();
+
+						if (scheduleInitHour.compareTo(maxHour) >= 0) {
+							end = true;
+						}
+					} while (!end);
 				}
 			}
 
 		}
-		return candidatesHours;
+		return result;
 	}
 
 	private List<Date> getListcandidatesHours(Date initHour, Date endHour) {
