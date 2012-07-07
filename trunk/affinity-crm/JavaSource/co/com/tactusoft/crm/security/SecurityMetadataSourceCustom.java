@@ -36,7 +36,8 @@ public class SecurityMetadataSourceCustom implements
 
 			for (CrmPage menu : listPage) {
 				String page = menu.getPage();
-				if (page != null && url.contains(page)) {
+				if (page != null && url.contains(page)
+						|| (url.contains("appointmentEdit"))) {
 					return null;
 				}
 			}

@@ -64,12 +64,18 @@
 				</h:panelGrid>
 
 				<p:spacer height="15" />
+
 				<p:dataTable id="selectedTable" var="rec"
 					value="#{searchByPatientBacking.appointmentModel}"
 					rowKey="#{rec.code}" style="width:100%"
 					selection="#{searchByPatientBacking.selectedAppointment}"
 					paginator="true" rows="10"
 					emptyMessage="#{msg['glb_no_records_found']}">
+
+					<p:ajax event="rowSelectRadio" update="selectedTable">
+						<f:setPropertyActionListener value="#{rec}"
+							target="#{searchByPatientBacking.selectedAppointment}" />
+					</p:ajax>
 
 					<p:column selectionMode="single" style="width:18px" />
 
@@ -112,7 +118,7 @@
 							value="#{rec.state eq 1?'Agendada':rec.state eq 2?'Cancelada':rec.state eq 3?'Chequeada':rec.state eq 4?'Asistió a Consulta':'No Asistió a Consulta'}" />
 					</p:column>
 
-					<p:column style="width:4%">
+					<p:column style="width:8%">
 						<p:commandButton update=":editForm:display"
 							oncomplete="obsDialog.show()" icon="ui-icon-search"
 							title="#{msg['btn_view']}">
@@ -120,6 +126,13 @@
 								target="#{searchByPatientBacking.selectedAppointment}" />
 						</p:commandButton>
 					</p:column>
+
+					<f:facet name="footer">
+						<p:commandButton id="btnEdit" value="#{msg['btn_edit']}"
+							icon="ui-icon-clipboard"
+							disabled="#{searchByPatientBacking.selectedAppointment.state eq 1?false:true}"
+							action="#{searchByPatientBacking.editAppoinmnetAction}" />
+					</f:facet>
 
 				</p:dataTable>
 

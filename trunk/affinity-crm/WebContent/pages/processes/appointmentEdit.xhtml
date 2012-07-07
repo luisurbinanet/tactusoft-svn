@@ -1,0 +1,263 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="../templates/common.xhtml">
+
+	<ui:define name="body">
+
+		<p:panel style="width:100%;height:1000px;"
+			header="#{msg['title_appointment_edit']} #{appointmentEditBacking.selected.code}">
+
+			<p:spacer height="5" />
+
+			<h:form id="form">
+
+				<p:growl id="growl" showDetail="true" autoUpdate="true" />
+
+				<p:toolbar style="width:100%">
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
+							action="#{menuBacking.actionPage}">
+							<f:param name="page" value="/pages/processes/appointment.jsf" />
+						</p:commandButton>
+						<p:commandButton id="btnSearch" value="#{msg['btn_search_app']}"
+							icon="ui-icon-search" update=":editForm:dialog3"
+							action="#{appointmentEditBacking.searchAppointMentAction}"
+							oncomplete="dlg3.show()" />
+						<p:commandButton id="btnSaveOrder" value="#{msg['btn_save']}"
+							icon="ui-icon-disk" action="#{appointmentEditBacking.saveAction}"
+							update="btnSaveOrder :editForm:conffirmation"
+							oncomplete="dlg.show()"
+							disabled="#{appointmentEditBacking.saved}" />
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="5" />
+
+				<p:fieldset legend="Datos de Cita Actual" style="width:1000px">
+					<h:panelGrid id="pnlDetailInfo" columns="4" width="100%">
+
+						<h:outputLabel value="#{msg['app_date']}" />
+						<h:outputText
+							value="#{appointmentEditBacking.selected.startAppointmentDate}">
+							<f:convertDateTime pattern="dd/MMM/yyyy" locale="es" />
+						</h:outputText>
+
+						<h:outputLabel />
+						<h:outputLabel />
+
+						<h:outputLabel value="#{msg['app_start_hour']}" />
+						<h:outputText
+							value="#{appointmentEditBacking.selected.startAppointmentDate}">
+							<f:convertDateTime pattern="HH:mm" />
+						</h:outputText>
+
+						<h:outputLabel value="#{msg['app_end_hour']}" />
+						<h:outputText
+							value="#{appointmentEditBacking.selected.endAppointmentDate}">
+							<f:convertDateTime pattern="HH:mm" />
+						</h:outputText>
+
+						<h:outputLabel value="#{msg['app_procedure']}" />
+						<h:outputText
+							value="#{appointmentEditBacking.selected.crmProcedureDetail.name}" />
+
+						<h:outputLabel value="#{msg['app_doctor']}" />
+						<h:outputText
+							value="#{appointmentEditBacking.selected.crmDoctor.names}" />
+					</h:panelGrid>
+				</p:fieldset>
+
+				<p:spacer height="5" />
+
+				<h:panelGrid id="pnlDetail" columns="2" width="100%"
+					columnClasses="width25per,width75per">
+
+					<h:outputLabel value="#{msg['pat_sap_code']}" />
+					<p:inputText
+						value="#{appointmentEditBacking.selectedPatient.codeSap}"
+						style="width:700px" readonly="true" />
+
+					<h:outputLabel value="#{msg['pat_names']}" />
+					<p:inputText
+						value="#{appointmentEditBacking.selectedPatient.names}"
+						style="width:700px" readonly="true" />
+
+					<h:outputLabel value="#{msg['app_branch']}" />
+					<p:selectOneMenu style="width:700px"
+						value="#{appointmentEditBacking.idBranch}">
+						<f:selectItems value="#{appointmentEditBacking.listBranch}" />
+						<p:ajax update="pnlDetail pnlDetail2"
+							listener="#{appointmentEditBacking.handleBranchChange}" />
+					</p:selectOneMenu>
+
+					<h:outputLabel value="#{msg['app_procedure']}" />
+					<p:selectOneMenu style="width:700px"
+						value="#{appointmentEditBacking.idProcedure}">
+						<f:selectItems value="#{appointmentEditBacking.listProcedure}" />
+						<p:ajax update="pnlDetail pnlDetail2"
+							listener="#{appointmentEditBacking.handleProcedureChange}" />
+					</p:selectOneMenu>
+
+					<h:outputLabel value="#{msg['app_procedure_type']}" />
+					<p:selectOneMenu id="selProcedureDetail" style="width:700px"
+						value="#{appointmentEditBacking.idProcedureDetail}">
+						<f:selectItems
+							value="#{appointmentEditBacking.listProcedureDetail}" />
+						<p:ajax update="pnlDetail pnlDetail2"
+							listener="#{appointmentEditBacking.handleProcedureDetailChange}" />
+					</p:selectOneMenu>
+
+					<h:outputLabel value="#{msg['app_seller_group']}" />
+					<p:selectOneMenu style="width:700px"
+						value="#{appointmentEditBacking.selectedWSGroupSellers}">
+						<f:selectItems
+							value="#{appointmentEditBacking.listWSGroupSellers}" />
+					</p:selectOneMenu>
+
+					<h:outputLabel value="#{msg['app_procedure_search']}" />
+					<p:selectOneMenu id="selSearch" style="width:700px"
+						value="#{appointmentEditBacking.idSearch}">
+						<f:selectItems value="#{appointmentEditBacking.listSearch}" />
+						<p:ajax update="pnlDetail2 btnSearch"
+							listener="#{appointmentEditBacking.handleSearchChange}" />
+					</p:selectOneMenu>
+
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlDetail2" columns="2" width="100%"
+					columnClasses="width25per,width75per">
+
+					<h:outputLabel id="lblCurrentDate" value="#{msg['app_date']}"
+						rendered="#{appointmentEditBacking.renderedForDate}" />
+					<p:calendar value="#{appointmentEditBacking.currentDate}"
+						id="calCurrentDate" showOn="button" navigator="true"
+						pattern="dd/MM/yyyy" readonlyInput="true"
+						mindate="#{appointmentEditBacking.currentDate}"
+						rendered="#{appointmentEditBacking.renderedForDate}" locale="es">
+						<p:ajax event="dateSelect"
+							listener="#{appointmentEditBacking.handleDateSelect}"
+							update="selHours" />
+					</p:calendar>
+
+					<h:outputLabel id="lblCurrentHour" value="#{msg['app_start_hour']}"
+						rendered="#{appointmentEditBacking.renderedForDate}" />
+					<p:selectOneMenu id="selHours" style="width:700px"
+						rendered="#{appointmentEditBacking.renderedForDate}"
+						value="#{appointmentEditBacking.currentTime}">
+						<f:selectItems value="#{appointmentEditBacking.listTimes}" />
+					</p:selectOneMenu>
+
+					<h:outputLabel value="#{msg['app_doctor']}"
+						rendered="#{appointmentEditBacking.renderedForDoctor}" />
+					<p:selectOneMenu id="selDoctor" style="width:700px"
+						value="#{appointmentEditBacking.selected.crmDoctor.id}"
+						rendered="#{appointmentEditBacking.renderedForDoctor}">
+						<f:selectItems value="#{appointmentEditBacking.listDoctor}" />
+					</p:selectOneMenu>
+
+					<h:outputLabel value="#{msg['app_num']}"
+						rendered="#{appointmentEditBacking.renderedForDoctor}" />
+					<p:selectOneMenu style="width:700px"
+						rendered="#{appointmentEditBacking.renderedForDoctor}"
+						value="#{appointmentEditBacking.appointmentsNumber}">
+						<f:selectItem itemLabel="10 Primeras Citas" itemValue="10" />
+						<f:selectItem itemLabel="20 Primeras Citas" itemValue="20" />
+						<f:selectItem itemLabel="30 Primeras Citas" itemValue="30" />
+					</p:selectOneMenu>
+
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlDetail3" columns="2" width="100%"
+					columnClasses="width25per,width75per">
+					<h:outputLabel value="#{msg['app_obs']}" />
+					<p:inputTextarea value="#{appointmentEditBacking.selected.obs}"
+						style="width:700px" rows="3" />
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlDetail4" width="100%">
+					<p:spacer height="5" />
+					<h:outputLabel
+						style="text-align:center;font-size:large;font-weight:bold;"
+						value="#{appointmentEditBacking.detSelectedCandidate}" />
+
+				</h:panelGrid>
+
+			</h:form>
+
+			<h:form id="editForm">
+
+				<p:dialog id="conffirmation" widgetVar="dlg"
+					header="#{msg['app_title']}" width="450" resizable="false"
+					showEffect="clip" hideEffect="clip" modal="true">
+
+					<p:ajax event="close"
+						update=":form:pnlDetail :form:pnlDetail2 :form:pnlDetail3 :form:pnlDetail4 :form:btnSaveOrder"
+						listener="#{appointmentEditBacking.handleClose}" />
+
+					<h:panelGrid width="100%">
+						<h:outputLabel value="#{appointmentEditBacking.infoMessage}"
+							style="text-align:center;font-size:large;font-weight:bold;" />
+						<p:spacer height="5" rendered="#{appointmentEditBacking.saved}" />
+						<h:outputLabel
+							value="#{appointmentEditBacking.detSelectedCandidate}"
+							rendered="#{appointmentEditBacking.saved}"
+							style="text-align:center;font-size:large;font-weight:bold;" />
+					</h:panelGrid>
+
+				</p:dialog>
+
+				<p:dialog header="#{msg['app_avalaible']}" widgetVar="dlg3"
+					resizable="false" id="dialog3" showEffect="fade"
+					hideEffect="explode" modal="true" width="700">
+
+					<p:dataTable id="selectedTable" var="rec"
+						value="#{appointmentEditBacking.modelAppointment}"
+						rowKey="#{rec.id}" style="width:100%"
+						selection="#{appointmentEditBacking.selectedCandidate}"
+						paginator="true" rows="10"
+						emptyMessage="#{msg['glb_no_records_found']}">
+
+						<p:column selectionMode="single" style="width:18px" />
+
+						<p:column headerText="#{msg['app_date']}">
+							<h:outputLabel value="#{rec.startDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+						</p:column>
+
+						<p:column headerText="#{msg['app_start_hour']}">
+							<h:outputLabel value="#{rec.startDate}">
+								<f:convertDateTime pattern="HH:mm" />
+							</h:outputLabel>
+						</p:column>
+
+						<p:column headerText="#{msg['app_end_hour']}">
+							<h:outputLabel value="#{rec.endDate}">
+								<f:convertDateTime pattern="HH:mm" />
+							</h:outputLabel>
+						</p:column>
+
+						<p:column headerText="#{msg['app_doctor']}">
+							<h:outputLabel value="#{rec.doctor.names}" />
+						</p:column>
+
+						<f:facet name="footer">
+							<p:commandButton value="#{msg['btn_add_app']}"
+								onclick="dlg3.hide()" update=":form:pnlDetail4" />
+						</f:facet>
+
+					</p:dataTable>
+
+				</p:dialog>
+			</h:form>
+
+		</p:panel>
+
+	</ui:define>
+</ui:composition>
+</html>

@@ -39,6 +39,7 @@ public class MenuBacking implements Serializable {
 						menuItem.setValue(children.getName());
 						menuItem.setIcon(children.getIcon());
 						menuItem.setUrl(children.getPage());
+						menuItem.setOnstart("refreshBacking();");
 						submenu.getChildren().add(menuItem);
 					}
 				}
@@ -53,7 +54,6 @@ public class MenuBacking implements Serializable {
 		menuItem.setIcon("ui-icon-close");
 		menuItem.setActionExpression(FacesUtil
 				.getMethodExpression("loginBacking.logout"));
-		//menuItem.setUrl(FacesUtil.getContextPath() +  "/j_spring_security_logout");
 		model.addMenuItem(menuItem);
 
 	}
@@ -64,6 +64,15 @@ public class MenuBacking implements Serializable {
 
 	public void setModel(MenuModel model) {
 		this.model = model;
+	}
+
+	public void refreshBacking() {
+		HistoryBacking historyBacking = FacesUtil.findBean("historyBacking");
+		historyBacking.newAction(null);
+
+		AppointmentBacking appointmentBacking = FacesUtil
+				.findBean("appointmentBacking");
+		appointmentBacking.newAction(null);
 	}
 
 	public String actionPage() {
