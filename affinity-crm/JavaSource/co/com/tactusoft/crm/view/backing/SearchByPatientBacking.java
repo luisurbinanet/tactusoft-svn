@@ -144,6 +144,10 @@ public class SearchByPatientBacking extends BaseBacking {
 					selectedPatient.getCodeSap(), this.state, startDate,
 					endDate);
 			appointmentModel = new AppointmentDataModel(listAppointment);
+
+			if (listAppointment.size() > 0) {
+				selectedAppointment = listAppointment.get(0);
+			}
 		}
 	}
 
@@ -152,6 +156,29 @@ public class SearchByPatientBacking extends BaseBacking {
 			return true;
 		}
 		return false;
+	}
+
+	public String editAppoinmnetAction() {
+		AppointmentEditBacking appointmentEditBacking = FacesUtil
+				.findBean("appointmentEditBacking");
+		
+		appointmentEditBacking.editAction(null);
+		appointmentEditBacking.setSelected(selectedAppointment);
+		appointmentEditBacking.setSelectedPatient(selectedAppointment.getCrmPatient());
+		appointmentEditBacking.setCurrentDate(selectedAppointment
+				.getStartAppointmentDate());
+		appointmentEditBacking.setIdBranch(selectedAppointment.getCrmBranch().getId());
+		appointmentEditBacking.handleBranchChange();
+		appointmentEditBacking.setIdProcedure(selectedAppointment
+				.getCrmProcedureDetail().getCrmProcedure().getId());
+		appointmentEditBacking.handleProcedureChange();
+		appointmentEditBacking.setIdProcedureDetail(selectedAppointment
+				.getCrmProcedureDetail().getId());
+		appointmentEditBacking.handleProcedureDetailChange();
+		appointmentEditBacking.setSelectedWSGroupSellers(selectedAppointment
+				.getCodPublicity());
+
+		return "/pages/processes/appointmentEdit.jsf?faces-redirect=true";
 	}
 
 }

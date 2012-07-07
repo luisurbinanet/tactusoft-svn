@@ -22,12 +22,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.event.MethodExpressionActionListener;
 import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 
@@ -206,12 +206,41 @@ public class FacesUtil {
 	}
 
 	public static MethodExpression getMethodExpression(String action) {
-		FacesContext facesCtx = FacesContext.getCurrentInstance();
-		ELContext elCtx = facesCtx.getELContext();
-		ExpressionFactory expFact = facesCtx.getApplication()
-				.getExpressionFactory();
-		return expFact.createMethodExpression(elCtx, "#{" + action + "}",
-				String.class, new Class[0]);
+		return createMethodExpression("#{" + action + "}", String.class,
+				new Class[0]);
+	}
+
+	private static MethodExpression createMethodExpression(
+			String valueExpression, Class<?> valueType,
+			Class<?>[] expectedParamTypes) {
+
+		MethodExpression methodExpression = null;
+		try {
+			ExpressionFactory factory = FacesContext.getCurrentInstance()
+					.getApplication().getExpressionFactory();
+			methodExpression = factory.createMethodExpression(FacesContext
+					.getCurrentInstance().getELContext(), valueExpression,
+					valueType, expectedParamTypes);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return methodExpression;
+	}
+
+	public static MethodExpressionActionListener createMethodActionListener(
+			String valueExpression, Class<?> valueType,
+			Class<?>[] expectedParamTypes) {
+
+		MethodExpressionActionListener actionListener = null;
+		try {
+			actionListener = new MethodExpressionActionListener(
+					createMethodExpression(valueExpression, valueType,
+							expectedParamTypes));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return actionListener;
 	}
 
 	public static String lpad(String valueToPad, char filler, int size) {
