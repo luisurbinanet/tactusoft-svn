@@ -101,7 +101,7 @@
 						pattern="dd/MM/yyyy" readonlyInput="true"
 						mindate="#{appointmentBacking.currentDate}"
 						rendered="#{appointmentBacking.renderedForDate}" locale="es">
-						<p:ajax event="dateSelect" process="pnlDetail"
+						<p:ajax event="dateSelect"
 							listener="#{appointmentBacking.handleDateSelect}"
 							update="selHours" />
 					</p:calendar>
