@@ -18,7 +18,7 @@ import co.com.tactusoft.crm.view.datamodel.AppointmentDataModel;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 
 @Named
-@Scope("view")
+@Scope("session")
 public class SearchByPatientBacking extends BaseBacking {
 
 	private static final long serialVersionUID = 1L;

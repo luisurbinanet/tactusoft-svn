@@ -127,9 +127,12 @@
 					<p:selectOneMenu style="width:700px"
 						rendered="#{appointmentBacking.renderedForDoctor}"
 						value="#{appointmentBacking.appointmentsNumber}">
-						<f:selectItem itemLabel="10 Primeras Citas" itemValue="10" />
-						<f:selectItem itemLabel="20 Primeras Citas" itemValue="20" />
-						<f:selectItem itemLabel="30 Primeras Citas" itemValue="30" />
+						<f:selectItem itemLabel="#{msg['app_first_10_app']}"
+							itemValue="10" />
+						<f:selectItem itemLabel="#{msg['app_first_20_app']}"
+							itemValue="20" />
+						<f:selectItem itemLabel="#{msg['app_first_30_app']}"
+							itemValue="30" />
 					</p:selectOneMenu>
 
 				</h:panelGrid>

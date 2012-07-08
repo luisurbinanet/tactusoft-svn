@@ -512,60 +512,46 @@ public class ProcessBo implements Serializable {
 		calendar.add(Calendar.MINUTE, procedureDetail.getTimeDoctor());
 		Date endTime = calendar.getTime();
 
-		/*List<VwDoctorSchedule> listVwDoctorSchedule = dao
-				.find("from VwDoctorSchedule o where o.day = " + currentDay
-						+ " and o.id.idBranch = " + idBranch + " and ('"
-						+ timeString + "' between o.startHour and o.endHour)");
-		for (VwDoctorSchedule row : listVwDoctorSchedule) {
-			boolean noApp = true;
-			for (VwDoctorHour row2 : listDoctorHour) {
-				if (row.getId().getIdDoctor().intValue() == row2.getId()
-						.getIdDoctor().intValue()) {
-					noApp = false;
-					break;
-				}
-			}
-		}*/
+		List<CrmDoctor> listCrmDoctorWithoutApp = dao
+				.find("select distinct c from CrmDoctorSchedule a inner join a.crmDoctor as c where a.day = "
+						+ currentDay
+						+ " and ('"
+						+ timeString
+						+ "' between a.startHour and a.endHour) "
+						+ " and a.crmBranch.id = "
+						+ idBranch
+						+ " and a.crmDoctor.id not in (select b.crmDoctor.id from CrmAppointment b where cast(b.startAppointmentDate as date) = '"
+						+ dateString + "')");
 
-		for (VwDoctorHour row : listDoctorHour) {
+		if (listCrmDoctorWithoutApp.size() > 0) {
+			CrmDoctor doctor = listCrmDoctorWithoutApp.get(0);
+			result.add(new Candidate(1, doctor, selectedDate, endTime, branch
+					.getName(), procedureDetail.getName()));
+		} else {
+			for (VwDoctorHour row : listDoctorHour) {
 
-			List<CrmDoctorSchedule> listDoctorSchedule = dao
-					.find("from CrmDoctorSchedule o where o.day = "
-							+ currentDay + " and o.crmBranch.id = " + idBranch
-							+ " and o.crmDoctor.id = "
-							+ row.getId().getIdDoctor() + " and ('"
-							+ timeString
-							+ "' between o.startHour and o.endHour)");
+				List<CrmDoctorSchedule> listDoctorSchedule = dao
+						.find("from CrmDoctorSchedule o where o.day = "
+								+ currentDay + " and o.crmBranch.id = "
+								+ idBranch + " and o.crmDoctor.id = "
+								+ row.getId().getIdDoctor() + " and ('"
+								+ timeString
+								+ "' between o.startHour and o.endHour)");
 
-			if (listDoctorSchedule.size() > 0) {
-				List<CrmAppointment> listApp = dao
-						.find("from CrmAppointment o where cast(o.startAppointmentDate as date) = '"
-								+ dateString
-								+ "' and ('"
-								+ dateTimeString
-								+ "' between o.startAppointmentDate and o.endAppointmentDate) and o.crmDoctor.id = "
-								+ row.getId().getIdDoctor()
-								+ " and o.crmBranch.id = "
-								+ idBranch
-								+ " and o.state in (1,3) "
-								+ "order by o.startAppointmentDate");
+				if (listDoctorSchedule.size() > 0) {
+					List<CrmAppointment> listApp = dao
+							.find("from CrmAppointment o where cast(o.startAppointmentDate as date) = '"
+									+ dateString
+									+ "' and ('"
+									+ dateTimeString
+									+ "' between o.startAppointmentDate and o.endAppointmentDate) and o.crmDoctor.id = "
+									+ row.getId().getIdDoctor()
+									+ " and o.crmBranch.id = "
+									+ idBranch
+									+ " and o.state in (1,3) "
+									+ "order by o.startAppointmentDate");
 
-				if (listApp.size() == 0) {
-					CrmDoctor doctor = (CrmDoctor) dao.find(
-							"from CrmDoctor o where o.id = "
-									+ row.getId().getIdDoctor()).get(0);
-					result.add(new Candidate(1, doctor, selectedDate, endTime,
-							branch.getName(), procedureDetail.getName()));
-					break;
-				} else {
-					// Iterar Horas Candidatas
-					List<Date> candidatesHours = getListcandidatesHours(
-							selectedDate, endTime);
-
-					boolean validate = validateAvailabilitySchedule(
-							candidatesHours, listApp, selectedDate);
-
-					if (validate) {
+					if (listApp.size() == 0) {
 						CrmDoctor doctor = (CrmDoctor) dao.find(
 								"from CrmDoctor o where o.id = "
 										+ row.getId().getIdDoctor()).get(0);
@@ -573,11 +559,27 @@ public class ProcessBo implements Serializable {
 								endTime, branch.getName(), procedureDetail
 										.getName()));
 						break;
+					} else {
+						// Iterar Horas Candidatas
+						List<Date> candidatesHours = getListcandidatesHours(
+								selectedDate, endTime);
+
+						boolean validate = validateAvailabilitySchedule(
+								candidatesHours, listApp, selectedDate);
+
+						if (validate) {
+							CrmDoctor doctor = (CrmDoctor) dao.find(
+									"from CrmDoctor o where o.id = "
+											+ row.getId().getIdDoctor()).get(0);
+							result.add(new Candidate(1, doctor, selectedDate,
+									endTime, branch.getName(), procedureDetail
+											.getName()));
+							break;
+						}
 					}
+
 				}
-
 			}
-
 		}
 
 		return result;

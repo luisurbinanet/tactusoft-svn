@@ -34,6 +34,7 @@ public class CrmAppointment implements java.io.Serializable {
 	private String codPublicity;
 	private String namePublicity;
 	private String obs;
+	private Boolean untimely;
 	private int state;
 
 	public CrmAppointment() {
@@ -58,7 +59,8 @@ public class CrmAppointment implements java.io.Serializable {
 			CrmPatient crmPatient, CrmBranch crmBranch, CrmDoctor crmDoctor,
 			String code, String patientNames, String patientSap,
 			Date startAppointmentDate, Date endAppointmentDate,
-			String codPublicity, String namePublicity, String obs, int state) {
+			String codPublicity, String namePublicity, String obs,
+			Boolean untimely, int state) {
 		this.id = id;
 		this.crmProcedureDetail = crmProcedureDetail;
 		this.crmPatient = crmPatient;
@@ -72,6 +74,7 @@ public class CrmAppointment implements java.io.Serializable {
 		this.codPublicity = codPublicity;
 		this.namePublicity = namePublicity;
 		this.obs = obs;
+		this.untimely = untimely;
 		this.state = state;
 	}
 
@@ -190,13 +193,22 @@ public class CrmAppointment implements java.io.Serializable {
 		this.namePublicity = namePublicity;
 	}
 
-	@Column(name = "obs", length = 1000)
+	@Column(name = "obs", length = 65535)
 	public String getObs() {
 		return this.obs;
 	}
 
 	public void setObs(String obs) {
 		this.obs = obs;
+	}
+
+	@Column(name = "untimely")
+	public Boolean getUntimely() {
+		return this.untimely;
+	}
+
+	public void setUntimely(Boolean untimely) {
+		this.untimely = untimely;
 	}
 
 	@Column(name = "state", nullable = false)
