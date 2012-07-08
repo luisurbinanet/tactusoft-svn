@@ -33,12 +33,16 @@
 							update="btnSaveOrder :editForm:conffirmation"
 							oncomplete="dlg.show()"
 							disabled="#{appointmentEditBacking.saved}" />
+						<p:commandButton value="#{msg['btn_return']}"
+							icon="ui-icon-document" action="#{menuBacking.actionPage}">
+							<f:param name="page" value="/pages/processes/searchByPatient.jsf" />
+						</p:commandButton>
 					</p:toolbarGroup>
 				</p:toolbar>
 
 				<p:spacer height="5" />
 
-				<p:fieldset legend="Datos de Cita Actual" style="width:1000px">
+				<p:fieldset legend="#{msg['app_edit_current']}" style="width:1000px">
 					<h:panelGrid id="pnlDetailInfo" columns="4" width="100%">
 
 						<h:outputLabel value="#{msg['app_date']}" />
@@ -165,9 +169,12 @@
 					<p:selectOneMenu style="width:700px"
 						rendered="#{appointmentEditBacking.renderedForDoctor}"
 						value="#{appointmentEditBacking.appointmentsNumber}">
-						<f:selectItem itemLabel="10 Primeras Citas" itemValue="10" />
-						<f:selectItem itemLabel="20 Primeras Citas" itemValue="20" />
-						<f:selectItem itemLabel="30 Primeras Citas" itemValue="30" />
+						<f:selectItem itemLabel="#{msg['app_first_10_app']}"
+							itemValue="10" />
+						<f:selectItem itemLabel="#{msg['app_first_20_app']}"
+							itemValue="20" />
+						<f:selectItem itemLabel="#{msg['app_first_30_app']}"
+							itemValue="30" />
 					</p:selectOneMenu>
 
 				</h:panelGrid>
@@ -195,10 +202,6 @@
 					header="#{msg['app_title']}" width="450" resizable="false"
 					showEffect="clip" hideEffect="clip" modal="true">
 
-					<p:ajax event="close"
-						update=":form:pnlDetail :form:pnlDetail2 :form:pnlDetail3 :form:pnlDetail4 :form:btnSaveOrder"
-						listener="#{appointmentEditBacking.handleClose}" />
-
 					<h:panelGrid width="100%">
 						<h:outputLabel value="#{appointmentEditBacking.infoMessage}"
 							style="text-align:center;font-size:large;font-weight:bold;" />
@@ -208,6 +211,17 @@
 							rendered="#{appointmentEditBacking.saved}"
 							style="text-align:center;font-size:large;font-weight:bold;" />
 					</h:panelGrid>
+
+					<f:facet name="footer">
+						<center>
+							<p:commandButton value="#{msg['btn_return']}"
+								update=":form:pnlDetail :form:pnlDetail2 :form:pnlDetail3 :form:pnlDetail4 :form:btnSaveOrder"
+								action="#{menuBacking.actionPage}">
+								<f:param name="page"
+									value="/pages/processes/searchByPatient.jsf" />
+							</p:commandButton>
+						</center>
+					</f:facet>
 
 				</p:dialog>
 

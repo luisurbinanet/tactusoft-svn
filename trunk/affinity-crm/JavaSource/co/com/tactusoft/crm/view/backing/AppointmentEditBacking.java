@@ -447,10 +447,12 @@ public class AppointmentEditBacking extends BaseBacking {
 		}
 	}
 
-	public void handleClose(CloseEvent event) {
+	public String handleClose(CloseEvent event) {
+		String result = null;
 		if (saved) {
-
+			return "/pages/processes/searchByPatient.jsf?faces-redirect=true";
 		}
+		return result;
 	}
 
 	public String getDetSelectedCandidate() {
@@ -552,9 +554,13 @@ public class AppointmentEditBacking extends BaseBacking {
 
 				CrmAppointment crmAppointment = processService
 						.saveAppointment(selected);
+
+				SearchByPatientBacking searchByPatientBacking = FacesUtil
+						.findBean("searchByPatientBacking");
+				searchByPatientBacking.searchAppoinmnetConfirmedAction();
+
 				infoMessage = FacesUtil.getMessage("app_msg_update_ok",
 						crmAppointment.getCode());
-
 				saved = true;
 			}
 		}
