@@ -1,6 +1,11 @@
 package co.com.tactusoft.crm.view.backing;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -8,6 +13,7 @@ import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.inject.Named;
 
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.ScheduleEntrySelectEvent;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultScheduleModel;
@@ -19,6 +25,7 @@ import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
+import co.com.tactusoft.crm.view.datamodel.AppointmentDataModel;
 
 @Named
 @Scope("view")
@@ -34,6 +41,7 @@ public class DoctorAppointmentBacking extends BaseBacking {
 	private CrmAppointment selectedAppointment;
 
 	private List<CrmAppointment> listAppointmentByDoctorUntimely;
+	private AppointmentDataModel appointmentModel;
 	private boolean untimely;
 
 	private List<SelectItem> listBranch;
@@ -44,6 +52,9 @@ public class DoctorAppointmentBacking extends BaseBacking {
 	private ScheduleModel eventModel;
 	private ScheduleModel branchEventModel;
 	private DefaultScheduleEvent event;
+
+	private String startTime;
+	private String endTime;
 
 	private String labelPatient;
 	private String labelProcedure;
@@ -104,13 +115,25 @@ public class DoctorAppointmentBacking extends BaseBacking {
 		this.listAppointmentByDoctorUntimely = listAppointmentByDoctorUntimely;
 	}
 
+	public AppointmentDataModel getAppointmentModel() {
+		return appointmentModel;
+	}
+
+	public void setAppointmentModel(AppointmentDataModel appointmentModel) {
+		this.appointmentModel = appointmentModel;
+	}
+
 	public boolean isUntimely() {
 		if (listAppointmentByDoctorUntimely == null) {
 			doctor = processService.getCrmDoctor();
 			if (doctor != null) {
 				listAppointmentByDoctorUntimely = processService
 						.getListAppointmentByDoctorWithUntimely(doctor.getId());
+				appointmentModel = new AppointmentDataModel(
+						listAppointmentByDoctorUntimely);
 				if (listAppointmentByDoctorUntimely.size() > 0) {
+					selectedAppointment = listAppointmentByDoctorUntimely
+							.get(0);
 					untimely = true;
 				}
 			}
@@ -208,6 +231,22 @@ public class DoctorAppointmentBacking extends BaseBacking {
 		this.branchEventModel = branchEventModel;
 	}
 
+	public String getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+
+	public String getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
+	}
+
 	public void handleBranchChange() {
 		listDoctor = new LinkedList<SelectItem>();
 		String label = FacesUtil.getMessage(Constant.ALL_LABEL);
@@ -276,6 +315,69 @@ public class DoctorAppointmentBacking extends BaseBacking {
 		historyBacking.searchAction(null);
 
 		return "/pages/processes/history?faces-redirect=true";
+	}
+
+	public String attendedUntimelyAppointmentAction() {
+		String result = null;
+		Date date = null;
+		Date startHourDate = null;
+		Date endHourDate = null;
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		String message = null;
+		boolean saved = false;
+
+		Calendar gc = new GregorianCalendar();
+		try {
+			String dateString = FacesUtil
+					.formatDate(selectedAppointment.getStartAppointmentDate(),
+							"yyyy-MM-dd");
+
+			date = df.parse(dateString + " " + startTime);
+			gc.setTime(date);
+			startHourDate = gc.getTime();
+			int startHour = gc.get(Calendar.HOUR);
+			int startMinute = gc.get(Calendar.MINUTE);
+
+			gc = new GregorianCalendar();
+			date = df.parse(dateString + " " + endTime);
+			gc.setTime(date);
+			endHourDate = gc.getTime();
+			int endhour = gc.get(Calendar.HOUR);
+			int endMinute = gc.get(Calendar.MINUTE);
+
+			if (startHourDate.getTime() >= endHourDate.getTime()) {
+				message = FacesUtil.getMessage("sal_msg_error_dates_1");
+				FacesUtil.addError(message);
+			} else if (startHour > 23 || endhour > 23 || startMinute > 59
+					|| endMinute > 59) {
+				message = FacesUtil.getMessage("sal_msg_error_dates_3");
+				FacesUtil.addError(message);
+			} else {
+				selectedAppointment.setStartAppointmentDate(startHourDate);
+				selectedAppointment.setEndAppointmentDate(endHourDate);
+				selectedAppointment.setState(Constant.APP_STATE_ATTENDED);
+				processService.saveAppointment(selectedAppointment);
+				saved = true;
+
+				HistoryBacking historyBacking = FacesUtil
+						.findBean("historyBacking");
+				historyBacking.newAction(null);
+				historyBacking.setSelected(selectedAppointment.getCrmPatient());
+				historyBacking.setSelectedPatient(selectedAppointment
+						.getCrmPatient());
+				historyBacking.searchAction(null);
+
+				result = "/pages/processes/history?faces-redirect=true";
+			}
+
+			RequestContext context = RequestContext.getCurrentInstance();
+			context.addCallbackParam("saved", saved);
+		} catch (ParseException e) {
+			message = FacesUtil.getMessage("sal_msg_error_dates_2");
+			FacesUtil.addError(message);
+		}
+
+		return result;
 	}
 
 	public void onEventSelect(ScheduleEntrySelectEvent selectEvent) {

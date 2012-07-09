@@ -24,8 +24,10 @@
 
 					<h:panelGrid rendered="#{doctorAppointmentBacking.untimely}"
 						width="100%">
-						<p:commandLink value="#{msg['app_untimely']}" onclick="untimelyDlg.show()"
-							style="text-align:center;font-size:large;font-weight:bold;"/>
+						<p:commandLink value="#{msg['app_untimely']}"
+							oncomplete="untimelyDlg.show();"
+							style="text-align:center;font-size:large;font-weight:bold;"
+							update="untimelyDialog" />
 						<p:spacer height="10" />
 					</h:panelGrid>
 
@@ -85,8 +87,63 @@
 				<p:dialog header="#{msg['app_untimely_title']}"
 					widgetVar="untimelyDlg" resizable="false" id="untimelyDialog"
 					showEffect="fade" hideEffect="explode" modal="true" width="800">
+
+					<p:dataTable id="selectedTable" var="rec"
+						value="#{doctorAppointmentBacking.appointmentModel}"
+						rowKey="#{rec.code}" style="width:100%"
+						selection="#{doctorAppointmentBacking.selectedAppointment}"
+						paginator="true" rows="10"
+						emptyMessage="#{msg['glb_no_records_found']}">
+
+						<p:column selectionMode="single" style="width:18px" />
+
+						<p:column headerText="#{msg['app_code']}">
+							<h:outputLabel value="#{rec.code}" />
+						</p:column>
+
+						<p:column headerText="#{msg['app_date']}">
+							<h:outputLabel value="#{rec.startAppointmentDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+						</p:column>
+
+						<p:column headerText="#{msg['app_branch']}">
+							<h:outputLabel value="#{rec.crmBranch.name}" />
+						</p:column>
+
+						<p:column headerText="#{msg['app_procedure']}">
+							<h:outputLabel value="#{rec.crmProcedureDetail.name}" />
+						</p:column>
+
+						<f:facet name="footer">
+							<p:commandButton value="#{msg['btn_assisted_appointment']}"
+								icon="ui-icon-clipboard" onclick="appUntimelyDlg.hide();"
+								oncomplete="appUntimelyDlg.show();" />
+						</f:facet>
+
+					</p:dataTable>
+
+				</p:dialog>
+
+				<p:dialog
+					header="#{msg['app_num']} #{doctorAppointmentBacking.selectedAppointment.code}"
+					widgetVar="appUntimelyDlg" resizable="false" id="appUntimelyDialog"
+					showEffect="fade" hideEffect="explode" modal="true" width="500">
 					<h:panelGrid columns="2" style="width:100%">
+						<h:outputLabel value="#{msg['app_start_hour']}" style="width:100%" />
+						<p:inputMask mask="99:99"
+							value="#{doctorAppointmentBacking.startTime}" style="width:50px" />
+
+						<h:outputLabel value="#{msg['app_end_hour']}" style="width:100%" />
+						<p:inputMask mask="99:99"
+							value="#{doctorAppointmentBacking.endTime}" style="width:50px" />
 					</h:panelGrid>
+
+					<f:facet name="footer">
+						<p:commandButton value="#{msg['btn_save']}" icon="ui-icon-disk"
+							update="growl" oncomplete="handleSaveRequest(xhr, status, args)"
+							action="#{doctorAppointmentBacking.attendedUntimelyAppointmentAction}" />
+					</f:facet>
 				</p:dialog>
 
 				<p:confirmDialog id="confirmDialog" message="#{msg['glb_question']}"
@@ -113,6 +170,17 @@
 						onclick="confirmation2.hide()" type="button" />
 
 				</p:confirmDialog>
+
+				<script type="text/javascript">
+					function handleSaveRequest(xhr, status, args) {
+						if(args.validationFailed || !args.saved) {
+							jQuery('#appUntimelyDialog').effect("shake", { times:3 }, 100);
+						} else {
+							appUntimelyDlg.hide();
+						}
+					}
+				</script>
+				
 			</h:form>
 
 		</p:panel>
