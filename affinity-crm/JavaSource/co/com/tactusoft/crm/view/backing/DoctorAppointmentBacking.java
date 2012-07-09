@@ -33,6 +33,9 @@ public class DoctorAppointmentBacking extends BaseBacking {
 	private List<CrmAppointment> listAppointmentByDoctor;
 	private CrmAppointment selectedAppointment;
 
+	private List<CrmAppointment> listAppointmentByDoctorUntimely;
+	private boolean untimely;
+
 	private List<SelectItem> listBranch;
 	private BigDecimal idBranch;
 
@@ -55,6 +58,8 @@ public class DoctorAppointmentBacking extends BaseBacking {
 		labelProcedure = FacesUtil.getMessage("app_procedure");
 		labelBranch = FacesUtil.getMessage("app_branch");
 		labelState = FacesUtil.getMessage("app_state");
+
+		untimely = false;
 	}
 
 	public CrmDoctor getDoctor() {
@@ -78,7 +83,8 @@ public class DoctorAppointmentBacking extends BaseBacking {
 			doctor = processService.getCrmDoctor();
 			if (doctor != null) {
 				listAppointmentByDoctor = processService
-						.getListAppointmentByDoctorConfirmed(doctor.getId());
+						.getListAppointmentByDoctorWithOutUntimely(doctor
+								.getId());
 			}
 		}
 		return listAppointmentByDoctor;
@@ -87,6 +93,33 @@ public class DoctorAppointmentBacking extends BaseBacking {
 	public void setListAppointmentByDoctor(
 			List<CrmAppointment> listAppointmentByDoctor) {
 		this.listAppointmentByDoctor = listAppointmentByDoctor;
+	}
+
+	public List<CrmAppointment> getListAppointmentByDoctorUntimely() {
+		return listAppointmentByDoctorUntimely;
+	}
+
+	public void setListAppointmentByDoctorUntimely(
+			List<CrmAppointment> listAppointmentByDoctorUntimely) {
+		this.listAppointmentByDoctorUntimely = listAppointmentByDoctorUntimely;
+	}
+
+	public boolean isUntimely() {
+		if (listAppointmentByDoctorUntimely == null) {
+			doctor = processService.getCrmDoctor();
+			if (doctor != null) {
+				listAppointmentByDoctorUntimely = processService
+						.getListAppointmentByDoctorWithUntimely(doctor.getId());
+				if (listAppointmentByDoctorUntimely.size() > 0) {
+					untimely = true;
+				}
+			}
+		}
+		return untimely;
+	}
+
+	public void setUntimely(boolean untimely) {
+		this.untimely = untimely;
 	}
 
 	public CrmAppointment getSelectedAppointment() {
@@ -141,7 +174,6 @@ public class DoctorAppointmentBacking extends BaseBacking {
 	public ScheduleModel getEventModel() {
 		if (eventModel == null) {
 			eventModel = new DefaultScheduleModel();
-			doctor = processService.getCrmDoctor();
 			if (doctor != null) {
 				listAppointment = processService
 						.getListAppointmentByDoctor(doctor.getId());
@@ -214,12 +246,14 @@ public class DoctorAppointmentBacking extends BaseBacking {
 	public void cancelAppointmentAction(ActionEvent actionEvent) {
 		selectedAppointment.setState(Constant.APP_STATE_NOATTENDED);
 		processService.saveAppointment(selectedAppointment);
-		
-		String title = labelPatient + ": " + selectedAppointment.getPatientNames()
-				+ " - " + labelProcedure + ":"
+
+		String title = labelPatient + ": "
+				+ selectedAppointment.getPatientNames() + " - "
+				+ labelProcedure + ":"
 				+ selectedAppointment.getCrmProcedureDetail().getName() + " - "
-				+ labelBranch + ": " + selectedAppointment.getCrmBranch().getName()
-				+ " - " + labelState + ": "
+				+ labelBranch + ": "
+				+ selectedAppointment.getCrmBranch().getName() + " - "
+				+ labelState + ": "
 				+ FacesUtil.getAppState(selectedAppointment.getState());
 
 		event.setTitle(title);
