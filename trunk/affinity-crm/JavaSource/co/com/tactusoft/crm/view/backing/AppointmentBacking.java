@@ -493,6 +493,7 @@ public class AppointmentBacking extends BaseBacking {
 	}
 
 	public void saveAction() {
+		String appType = FacesUtil.getParam("APP_TYPE");
 		infoMessage = "";
 
 		// validar Selección Pauta
@@ -507,20 +508,31 @@ public class AppointmentBacking extends BaseBacking {
 		}
 
 		// validar Selección Cita
-		if (selectedAppointment == null) {
+		if ((selectedAppointment == null) && (appType.equals("ORDINARY"))) {
 			infoMessage = FacesUtil.getMessage("app_msg_error_app");
 		}
 
 		if (infoMessage.equals("")) {
+
 			CrmProcedureDetail procedureDetail = mapProcedureDetail
 					.get(idProcedureDetail);
 
-			int validateApp = processService.validateAppointmentForDate(
-					selected.getCrmBranch().getId(),
-					selectedAppointment.getStartDate(),
-					selectedAppointment.getEndDate(), procedureDetail,
-					selectedAppointment.getDoctor().getId(),
-					selectedPatient.getCodeSap());
+			int validateApp = 0;
+			if (appType.equals("ORDINARY")) {
+				validateApp = processService.validateAppointmentForDate(
+						selected.getCrmBranch().getId(),
+						selectedAppointment.getStartDate(),
+						selectedAppointment.getEndDate(), procedureDetail,
+						selectedAppointment.getDoctor().getId(),
+						selectedPatient.getCodeSap());
+			} else {
+				CrmDoctor doctor = mapDoctor.get(selected.getCrmDoctor()
+						.getId());
+				selectedAppointment = new Candidate();
+				selectedAppointment.setStartDate(currentDate);
+				selectedAppointment.setEndDate(currentDate);
+				selectedAppointment.setDoctor(doctor);
+			}
 
 			if (validateApp != 0) {
 				switch (validateApp) {
@@ -558,7 +570,13 @@ public class AppointmentBacking extends BaseBacking {
 						.getStartDate());
 				selected.setEndAppointmentDate(selectedAppointment.getEndDate());
 
-				selected.setState(Constant.STATE_APP_ACTIVE);
+				if (appType.equals("ORDINARY")) {
+					selected.setUntimely(false);
+					selected.setState(Constant.APP_STATE_CONFIRMED);
+				} else {
+					selected.setUntimely(true);
+					selected.setState(Constant.APP_STATE_CHECKED);
+				}
 
 				CrmAppointment crmAppointment = processService
 						.saveAppointment(selected);
