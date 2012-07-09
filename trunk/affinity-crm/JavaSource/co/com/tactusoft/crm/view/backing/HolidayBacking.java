@@ -53,7 +53,7 @@ public class HolidayBacking implements Serializable {
 		if (model == null) {
 			list = tablesService.getListHoliday();
 			model = new HolidayDataModel(list);
-			
+
 			if (list.size() > 0) {
 				selected = list.get(0);
 			}
@@ -82,6 +82,10 @@ public class HolidayBacking implements Serializable {
 	}
 
 	public BranchDataModel getModelHolidayBranch() {
+		if (modelHolidayBranch == null) {
+			listHolidayBranch = tablesService.getListBranchActive();
+			modelHolidayBranch = new BranchDataModel(listHolidayBranch);
+		}
 		return modelHolidayBranch;
 	}
 
@@ -108,6 +112,7 @@ public class HolidayBacking implements Serializable {
 	public void newAction() {
 		selected = new CrmHoliday();
 		currentDate = new Date();
+		selectedsBranch = null;
 	}
 
 	public void saveAction() {
@@ -137,9 +142,6 @@ public class HolidayBacking implements Serializable {
 	}
 
 	public void generateListAction(ActionEvent event) {
-		listHolidayBranch = tablesService.getListBranchActive();
-		modelHolidayBranch = new BranchDataModel(listHolidayBranch);
-
 		List<CrmBranch> listSelectedsBranch = tablesService
 				.getListBranchByHoliday(selected.getId());
 		selectedsBranch = (CrmBranch[]) listSelectedsBranch

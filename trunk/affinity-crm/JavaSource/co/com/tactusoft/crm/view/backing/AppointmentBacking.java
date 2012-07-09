@@ -370,7 +370,15 @@ public class AppointmentBacking extends BaseBacking {
 			if (!FacesUtil.isEmptyOrBlank(codPublicity)
 					&& !codPublicity.equals(Constant.DEFAULT_VALUE_STRING)) {
 
-				String namePublicity = mapWSGroupSellers.get(codPublicity);
+				String namePublicity = null;
+				List<WSBean> result = FacesUtil.getCurrentUserData()
+						.getListWSGroupSellers();
+				for (WSBean row : result) {
+					if (row.getCode().equals(codPublicity)) {
+						namePublicity = row.getNames();
+						break;
+					}
+				}
 
 				listWSGroupSellers = new ArrayList<SelectItem>();
 				mapWSGroupSellers = new TreeMap<String, String>();
@@ -442,6 +450,8 @@ public class AppointmentBacking extends BaseBacking {
 				.intValue()) {
 			this.renderedForDate = false;
 			this.renderedForDoctor = true;
+			this.disabledSearch = false;
+
 		} else {
 			disabledSearch = false;
 			this.renderedForDate = false;
