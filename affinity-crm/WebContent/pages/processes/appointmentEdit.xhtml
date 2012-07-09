@@ -32,7 +32,9 @@
 							icon="ui-icon-disk" action="#{appointmentEditBacking.saveAction}"
 							update="btnSaveOrder :editForm:conffirmation"
 							oncomplete="dlg.show()"
-							disabled="#{appointmentEditBacking.saved}" />
+							disabled="#{appointmentEditBacking.saved}">
+							<f:param name="APP_TYPE" value="ORDINARY" />
+						</p:commandButton>
 						<p:commandButton value="#{msg['btn_return']}"
 							icon="ui-icon-document" action="#{menuBacking.actionPage}">
 							<f:param name="page" value="/pages/processes/searchByPatient.jsf" />

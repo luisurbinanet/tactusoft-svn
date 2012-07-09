@@ -93,6 +93,7 @@ CREATE TABLE `crm_appointment` (
   `cod_publicity` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
   `name_publicity` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
   `obs` text COLLATE latin1_spanish_ci,
+  `untimely` tinyint(1) DEFAULT '0',
   `state` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`),
@@ -113,7 +114,7 @@ CREATE TABLE `crm_appointment` (
 
 LOCK TABLES `crm_appointment` WRITE;
 /*!40000 ALTER TABLE `crm_appointment` DISABLE KEYS */;
-INSERT INTO `crm_appointment` VALUES (1,'C00001',1,'P1 P1','0000765476',112,2,5,'2012-06-29 08:00:00','2012-06-25 08:15:00','P20','PROMOTICKET',NULL,4),(2,'C00002',2,'P2 P2','0000765485',112,2,5,'2012-06-29 08:30:00','2012-06-25 09:15:00','P20','PROMOTICKET',NULL,5),(3,'C00003',1,'P1 P1','0000765476',112,2,5,'2012-07-02 08:00:00','2012-07-02 08:15:00','P20','P20',NULL,4),(4,'C00004',5,'N11554477 A11554477','0000765504',112,2,5,'2012-07-03 08:00:00','2012-07-03 08:15:00','P11','CADENA AMIGO SALUDAB','',1),(5,'C00005',5,'N11554477 A11554477','0000765504',112,2,5,'2012-07-03 08:15:00','2012-07-03 08:30:00','T14','CANAL CARACOL – COLO','',1),(6,'C00006',5,'N11554477 A11554477','0000765504',112,2,5,'2012-07-03 08:45:00','2012-07-03 09:00:00','T14','CANAL CARACOL – COLO','Prueba',1);
+INSERT INTO `crm_appointment` VALUES (1,'C00001',1,'P1 P1','0000765476',112,2,5,'2012-06-29 08:00:00','2012-06-29 08:15:00','P20','PROMOTICKET',NULL,0,4),(2,'C00002',2,'P2 P2','0000765485',112,2,5,'2012-06-29 08:30:00','2012-06-29 09:15:00','P20','PROMOTICKET',NULL,0,5),(3,'C00003',1,'P1 P1','0000765476',112,2,5,'2012-07-02 08:00:00','2012-07-02 08:15:00','P20','P20',NULL,0,4),(4,'C00004',5,'N11554477 A11554477','0000765504',112,2,5,'2012-07-03 08:00:00','2012-07-03 08:15:00','P11','CADENA AMIGO SALUDAB','',0,5),(5,'C00005',5,'N11554477 A11554477','0000765504',112,2,5,'2012-07-03 08:15:00','2012-07-03 08:30:00','T14','CANAL CARACOL – COLO','',0,5),(6,'C00006',5,'N11554477 A11554477','0000765504',112,2,5,'2012-07-03 08:45:00','2012-07-03 09:00:00','T14','CANAL CARACOL – COLO','Prueba',0,4),(7,'C00007',1,'P1 P1','0000765476',112,2,5,'2012-07-09 08:45:00','2012-07-09 09:00:00','P16','CONTROLES NACIONALES','PRUEBA',0,1),(8,'C00008',5,'N11554477 A11554477','0000765504',112,2,7,'2012-07-09 09:00:00','2012-07-09 09:15:00','P16','CONTROLES NACIONALES','',0,1),(9,'C00009',5,'N11554477 A11554477','0000765504',112,2,8,'2012-07-07 09:00:00','2012-07-07 09:15:00','P16','CONTROLES NACIONALES','',0,1),(10,'C00010',5,'N11554477 A11554477','0000765504',112,1,5,'2012-07-07 08:00:00','2012-07-07 08:30:00','P11','CADENA AMIGO SALUDAB','11554477',0,1),(11,'C00011',2,'P2 P2','0000765485',112,1,8,'2012-07-07 11:30:00','2012-07-07 12:00:00','P11','CADENA AMIGO SALUDAB','PRU4EBA',0,1),(12,'C00012',2,'P2 P2','0000765485',112,1,5,'2012-07-09 12:30:00','2012-07-09 13:00:00','P14','AVISO EXTERIOR','Prueba',0,1),(13,'C00013',2,'P2 P2','0000765485',112,1,7,'2012-07-07 10:00:00','2012-07-07 10:30:00','P11','CADENA AMIGO SALUDAB','',0,1),(14,'C00014',3,'P4 P4','0000765486',112,2,5,'2012-07-08 00:00:00','2012-07-08 00:00:00','P16','CONTROLES NACIONALES','',1,1),(15,'C00015',3,'P4 P4','0000765486',112,1,5,'2012-07-09 15:00:00','2012-07-09 15:30:00','T14','CANAL CARACOL – COLO','',0,3),(16,'C00016',3,'P4 P4','0000765486',112,1,5,'2012-07-08 00:00:00','2012-07-08 00:00:00','T11','CANAL UNO','sgdgsd',1,3);
 /*!40000 ALTER TABLE `crm_appointment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -168,7 +169,7 @@ CREATE TABLE `crm_procedure_branch` (
 
 LOCK TABLES `crm_procedure_branch` WRITE;
 /*!40000 ALTER TABLE `crm_procedure_branch` DISABLE KEYS */;
-INSERT INTO `crm_procedure_branch` VALUES (3,2,112),(4,2,116),(5,1,112),(6,1,116),(7,1,2),(8,3,112);
+INSERT INTO `crm_procedure_branch` VALUES (5,1,112),(6,1,116),(7,1,2),(8,3,112),(9,2,112),(10,2,116);
 /*!40000 ALTER TABLE `crm_procedure_branch` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -250,7 +251,7 @@ CREATE TABLE `crm_user_branch` (
 
 LOCK TABLES `crm_user_branch` WRITE;
 /*!40000 ALTER TABLE `crm_user_branch` DISABLE KEYS */;
-INSERT INTO `crm_user_branch` VALUES (12,1,112),(13,1,116),(11,2,2),(3,5,112),(5,6,112),(6,6,116),(4,7,112),(7,8,112),(8,8,114),(9,8,116),(10,9,94);
+INSERT INTO `crm_user_branch` VALUES (12,1,112),(13,1,116),(14,2,112),(15,2,116),(3,5,112),(5,6,112),(6,6,116),(4,7,112),(7,8,112),(8,8,114),(9,8,116),(10,9,94);
 /*!40000 ALTER TABLE `crm_user_branch` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -280,7 +281,7 @@ CREATE TABLE `crm_role` (
 
 LOCK TABLES `crm_role` WRITE;
 /*!40000 ALTER TABLE `crm_role` DISABLE KEYS */;
-INSERT INTO `crm_role` VALUES (1,'ADMINISTRADOR','Administrador',8,1),(2,'CALL_CENTER','',17,1),(3,'GERENCIA','',12,1),(4,'MEDICO','MEDICO',22,1);
+INSERT INTO `crm_role` VALUES (1,'ADMINISTRADOR','Administrador',17,1),(2,'CALL_CENTER','',17,1),(3,'GERENCIA','',12,1),(4,'MEDICO','MEDICO',22,1);
 /*!40000 ALTER TABLE `crm_role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -423,7 +424,7 @@ CREATE TABLE `crm_history_physique` (
 
 LOCK TABLES `crm_history_physique` WRITE;
 /*!40000 ALTER TABLE `crm_history_physique` DISABLE KEYS */;
-INSERT INTO `crm_history_physique` VALUES (1,1,10,10,180.00,80.00,'20/300',1,'1',1,'2',1,'3',1,'4',1,'5',1,'6',1,'7',1,'8',1,'9',1,'10',0,NULL,NULL);
+INSERT INTO `crm_history_physique` VALUES (1,1,10,10,180.00,80.00,'20/300',1,'1',1,'2',1,'3',1,'4',1,'5',1,'6',1,'7',1,'8',1,'9',1,'10',0,NULL,NULL),(2,5,10,20,30.00,30.00,'20/60',0,NULL,0,NULL,0,NULL,0,NULL,0,NULL,0,NULL,0,NULL,0,NULL,0,NULL,0,NULL,0,NULL,'');
 /*!40000 ALTER TABLE `crm_history_physique` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -478,7 +479,7 @@ CREATE TABLE `crm_history_organometry` (
 
 LOCK TABLES `crm_history_organometry` WRITE;
 /*!40000 ALTER TABLE `crm_history_organometry` DISABLE KEYS */;
-INSERT INTO `crm_history_organometry` VALUES (1,1,1,'999999');
+INSERT INTO `crm_history_organometry` VALUES (1,1,1,'999999'),(2,5,0,NULL);
 /*!40000 ALTER TABLE `crm_history_organometry` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -520,6 +521,22 @@ LOCK TABLES `crm_user` WRITE;
 INSERT INTO `crm_user` VALUES (1,'gsolorzano','250cf8b51c773f3f8dc8b4be867a9a02','123','Gerardo','Solorzano','gsolorzano@affinity.com.co','','',1,1,1),(2,'jennyalvarez','202cb962ac59075b964b07152d234b70','456','Jenny','Alvarez','jennyalvarez@affinitycolombia.com','','',1,1,1),(3,'jperez','202cb962ac59075b964b07152d234b70','789','juan','perez','JUAN.PEREZ@hotmail.com','','',1,1,1),(4,'ccbog_age1','202cb962ac59075b964b07152d234b70','012','Agente1','Call Center','agente1.bogota@affinitycolombia.com','6231629','',2,2,1),(5,'agomez','202cb962ac59075b964b07152d234b70','00000082','ALEXANDER','GOMEZ','agomez@affinitycolombia.com','','',3,1,1),(6,'dhernandez','202cb962ac59075b964b07152d234b70','00000086','DIANA','HERNANDEZ','dhernandez@affinitycolombia.com','','',3,1,1),(7,'eespitia','202cb962ac59075b964b07152d234b70','00000089','EVANGELINA','ESPITIA','eespitia@affinitycolombia.com','','',3,1,1),(8,'gescobar','202cb962ac59075b964b07152d234b70','00000090','GUILLERMO','ESCOBAR','gescobar@affinitycolombia.com','','',3,1,1),(9,'afuente','202cb962ac59075b964b07152d234b70','22734930','ADRIANA','FUENTE','afuente@hotmail.com','123','',1,1,1);
 /*!40000 ALTER TABLE `crm_user` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Temporary table structure for view `vw_doctor_hour_preview`
+--
+
+DROP TABLE IF EXISTS `vw_doctor_hour_preview`;
+/*!50001 DROP VIEW IF EXISTS `vw_doctor_hour_preview`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `vw_doctor_hour_preview` (
+  `id_branch` decimal(19,0),
+  `id_doctor` decimal(19,0),
+  `only_date` date,
+  `hours` time
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
 
 --
 -- Table structure for table `crm_holiday_branch`
@@ -576,7 +593,7 @@ CREATE TABLE `crm_page_role` (
 
 LOCK TABLES `crm_page_role` WRITE;
 /*!40000 ALTER TABLE `crm_page_role` DISABLE KEYS */;
-INSERT INTO `crm_page_role` VALUES (97,1,1),(111,1,2),(98,2,1),(77,3,1),(79,4,1),(84,5,1),(87,6,1),(81,7,1),(89,8,1),(104,8,2),(83,9,1),(78,10,1),(112,10,2),(99,11,1),(109,11,2),(38,11,3),(121,11,4),(90,12,1),(105,12,2),(37,12,3),(114,12,4),(86,13,1),(80,14,1),(100,15,1),(110,15,2),(122,15,4),(82,16,1),(92,17,1),(106,17,2),(117,17,4),(93,18,1),(107,18,2),(118,18,4),(113,19,1),(116,19,4),(85,20,1),(88,21,1),(91,22,1),(108,22,2),(119,22,4),(101,23,1),(123,23,4),(95,24,1),(120,24,4),(96,25,1),(103,27,1),(115,27,4),(124,28,1);
+INSERT INTO `crm_page_role` VALUES (146,1,1),(111,1,2),(147,2,1),(124,3,1),(126,4,1),(133,5,1),(136,6,1),(129,7,1),(137,8,1),(104,8,2),(131,9,1),(125,10,1),(112,10,2),(148,11,1),(109,11,2),(38,11,3),(121,11,4),(139,12,1),(105,12,2),(37,12,3),(114,12,4),(135,13,1),(128,14,1),(149,15,1),(110,15,2),(122,15,4),(130,16,1),(141,17,1),(106,17,2),(117,17,4),(142,18,1),(107,18,2),(118,18,4),(143,19,1),(116,19,4),(134,20,1),(127,21,1),(140,22,1),(108,22,2),(119,22,4),(150,23,1),(123,23,4),(144,24,1),(120,24,4),(145,25,1),(138,27,1),(115,27,4),(132,28,1),(151,29,1);
 /*!40000 ALTER TABLE `crm_page_role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -722,7 +739,7 @@ CREATE TABLE `crm_history_record` (
 
 LOCK TABLES `crm_history_record` WRITE;
 /*!40000 ALTER TABLE `crm_history_record` DISABLE KEYS */;
-INSERT INTO `crm_history_record` VALUES (1,1,1,'1','2',1,'3','4',1,'5','6',1,'7','8',1,'9','10',1,'11','12',1,'13','14',1,'15','16','17','18','19','20','21','22',NULL,'24','23','25','26','2012-06-01','','2012-06-10',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1','1','1','1','1','1','1');
+INSERT INTO `crm_history_record` VALUES (1,1,1,'1','2',1,'3','4',1,'5','6',1,'7','8',1,'9','10',1,'11','12',1,'13','14',1,'15','16','17','18','19','20','21','22',NULL,'24','23','25','26','2012-06-01','','2012-06-10',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1','1','1','1','1','1','1'),(2,5,0,NULL,NULL,0,NULL,NULL,0,NULL,NULL,0,NULL,NULL,0,NULL,NULL,0,NULL,NULL,0,NULL,NULL,0,NULL,NULL,'','','',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'','','','','','','','','','','');
 /*!40000 ALTER TABLE `crm_history_record` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -776,7 +793,7 @@ CREATE TABLE `crm_patient` (
 
 LOCK TABLES `crm_patient` WRITE;
 /*!40000 ALTER TABLE `crm_patient` DISABLE KEYS */;
-INSERT INTO `crm_patient` VALUES (1,'P1','0000765476','P1','P1','1982-06-03','W',1,'P1','Britalia Norte','P1','','','U','CO','11','3','','','','','',0,0,0,0,0,'1000'),(2,'P2','0000765485','P2','P2','2007-06-02','M',1,'P2','2','P2','','','U','CO','91','29','3','4','5','6','7',0,0,0,0,0,'4000'),(3,'P4','0000765486','P4','P4','2000-06-02','M',1,'P4',NULL,'P4','','',NULL,'CO','91','29',NULL,NULL,NULL,NULL,NULL,0,0,0,0,0,'4000'),(4,'9988776655','0000765491','Carlos Arturo','Sarmiento','1982-11-03','M',1,'Carrera 55A 163 35',NULL,'6501550','3003044115','carlossarmientor@gmail.com',NULL,'CO','11','3',NULL,NULL,NULL,NULL,NULL,0,1,0,1,0,'1025'),(5,'11554477','0000765504','N11554477','A11554477','2012-03-06','M',1,'DIR',NULL,'11554477','11554477','DIR@DIR.COM',NULL,'CO','8','2',NULL,NULL,NULL,NULL,NULL,0,0,0,0,0,'4000');
+INSERT INTO `crm_patient` VALUES (1,'P1','0000765476','P1','P1','1982-06-03','W',1,'P1','Britalia Norte','P1','','','U','CO','11','3','','','','','',0,0,0,0,0,'1000'),(2,'P2','0000765485','P2','P2','2007-06-02','M',1,'P2','2','P2','','','U','CO','91','29','3','4','5','6','7',0,0,0,0,0,'4000'),(3,'P4','0000765486','P4','P4','2000-06-02','M',1,'P4',NULL,'P4','','',NULL,'CO','91','29',NULL,NULL,NULL,NULL,NULL,0,0,0,0,0,'4000'),(4,'9988776655','0000765491','Carlos Arturo','Sarmiento','1982-11-03','M',1,'Carrera 55A 163 35',NULL,'6501550','3003044115','carlossarmientor@gmail.com',NULL,'CO','11','3',NULL,NULL,NULL,NULL,NULL,0,1,0,1,0,'1025'),(5,'11554477','0000765504','N11554477','A11554477','2012-03-06','M',2,'DIR','BRITALIA','11554477','11554477','DIR@DIR.COM','U','CO','8','2','','','','','',0,0,0,0,0,'4000');
 /*!40000 ALTER TABLE `crm_patient` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -832,9 +849,25 @@ CREATE TABLE `crm_user_role` (
 
 LOCK TABLES `crm_user_role` WRITE;
 /*!40000 ALTER TABLE `crm_user_role` DISABLE KEYS */;
-INSERT INTO `crm_user_role` VALUES (3,3,4),(4,4,2),(6,5,4),(7,7,4),(8,6,4),(9,8,4),(10,9,4),(11,2,1),(12,1,1);
+INSERT INTO `crm_user_role` VALUES (3,3,4),(4,4,2),(6,5,4),(7,7,4),(8,6,4),(9,8,4),(10,9,4),(12,1,1),(13,2,1);
 /*!40000 ALTER TABLE `crm_user_role` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Temporary table structure for view `vw_doctor_hour`
+--
+
+DROP TABLE IF EXISTS `vw_doctor_hour`;
+/*!50001 DROP VIEW IF EXISTS `vw_doctor_hour`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `vw_doctor_hour` (
+  `id_branch` decimal(19,0),
+  `id_doctor` decimal(19,0),
+  `only_date` date,
+  `hours` double
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
 
 --
 -- Table structure for table `crm_branch`
@@ -895,7 +928,7 @@ CREATE TABLE `crm_doctor_schedule` (
 
 LOCK TABLES `crm_doctor_schedule` WRITE;
 /*!40000 ALTER TABLE `crm_doctor_schedule` DISABLE KEYS */;
-INSERT INTO `crm_doctor_schedule` VALUES (1,5,2,'08:00:00','17:00:00',112),(2,5,3,'08:00:00','17:00:00',112),(3,5,4,'08:00:00','17:00:00',112),(4,7,2,'08:00:00','17:00:00',112),(5,7,3,'08:00:00','17:00:00',112);
+INSERT INTO `crm_doctor_schedule` VALUES (6,5,2,'08:00:00','17:00:00',112),(7,5,3,'08:00:00','17:00:00',112),(8,5,4,'08:00:00','17:00:00',112),(9,5,7,'08:00:00','12:00:00',112),(10,5,7,'13:00:00','18:00:00',112),(11,8,7,'08:00:00','12:00:00',112),(12,7,2,'08:00:00','17:00:00',112),(13,7,3,'08:00:00','17:00:00',112),(14,7,7,'10:00:00','12:00:00',112);
 /*!40000 ALTER TABLE `crm_doctor_schedule` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -951,7 +984,7 @@ CREATE TABLE `crm_procedure` (
 
 LOCK TABLES `crm_procedure` WRITE;
 /*!40000 ALTER TABLE `crm_procedure` DISABLE KEYS */;
-INSERT INTO `crm_procedure` VALUES (1,'Primera Cita','Primera Cita',NULL,1),(2,'Control','Control',NULL,1),(3,'Terapias','Terapias',NULL,1);
+INSERT INTO `crm_procedure` VALUES (1,'Primera Cita','Primera Cita',NULL,1),(2,'Control','Control','P16',1),(3,'Terapias','Terapias','-1',1);
 /*!40000 ALTER TABLE `crm_procedure` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1106,7 +1139,7 @@ CREATE TABLE `crm_history_homeopathic` (
 
 LOCK TABLES `crm_history_homeopathic` WRITE;
 /*!40000 ALTER TABLE `crm_history_homeopathic` DISABLE KEYS */;
-INSERT INTO `crm_history_homeopathic` VALUES (1,1,'C','1','2','3','4');
+INSERT INTO `crm_history_homeopathic` VALUES (1,1,'C','1','2','3','4'),(2,5,'','','','','');
 /*!40000 ALTER TABLE `crm_history_homeopathic` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1134,7 +1167,7 @@ CREATE TABLE `crm_page` (
 
 LOCK TABLES `crm_page` WRITE;
 /*!40000 ALTER TABLE `crm_page` DISABLE KEYS */;
-INSERT INTO `crm_page` VALUES (1,'Seguridad',NULL,'ui-icon-document',NULL,1),(2,'Tablas',NULL,'ui-icon-gear',NULL,2),(3,'Usuarios','/pages/secure/user.jsf',NULL,1,2),(4,'Roles','/pages/secure/role.jsf',NULL,1,1),(5,'Doctor','/pages/tables/doctor.jsf',NULL,2,1),(6,'Parámetros','/pages/tables/parameter.jsf',NULL,2,2),(7,'Especialdades','/pages/tables/speciality.jsf',NULL,2,3),(8,'Pacientes','/pages/processes/patient.jsf',NULL,11,1),(9,'Perfiles','/pages/tables/profile.jsf',NULL,2,5),(10,'Cambiar Clave','/pages/secure/changePassword.jsf',NULL,1,3),(11,'Procesos',NULL,'ui-icon-contact',NULL,3),(12,'Crear Pedido','/pages/processes/salesOrder.jsf',NULL,11,3),(13,'Sucursales','/pages/tables/branch.jsf',NULL,2,4),(14,'Departamentos','/pages/tables/department.jsf',NULL,2,6),(15,'Agenda',NULL,'ui-icon-calendar',NULL,4),(16,'Procedimientos','/pages/tables/procedure.jsf',NULL,2,7),(17,'Crear Cita','/pages/processes/appointment.jsf',NULL,15,1),(18,'Cancelar Cita','/pages/processes/appointmentCancel.jsf',NULL,15,2),(19,'Atender Cita','/pages/processes/attendAppointment.jsf',NULL,11,3),(20,'Días No Hábiles','/pages/tables/holiday.jsf',NULL,2,8),(21,'Días No Trabajados','/pages/tables/exception.jsf',NULL,2,9),(22,'Búsqueda Por Paciente','/pages/processes/searchByPatient.jsf',NULL,15,10),(23,'Vistas',NULL,'ui-icon-bookmark',NULL,5),(24,'Vista Por Médico','/pages/views/viewDoctor.jsf',NULL,23,1),(25,'Vista Por Sucursal','/pages/views/viewBranch.jsf',NULL,23,2),(27,'Historia Clínica','/pages/processes/history.jsf',NULL,11,4),(28,'Ocupaciones','/pages/tables/occupation.jsf',NULL,2,10);
+INSERT INTO `crm_page` VALUES (1,'Seguridad',NULL,'ui-icon-document',NULL,1),(2,'Tablas',NULL,'ui-icon-gear',NULL,2),(3,'Usuarios','/pages/secure/user.jsf',NULL,1,2),(4,'Roles','/pages/secure/role.jsf',NULL,1,1),(5,'Doctor','/pages/tables/doctor.jsf',NULL,2,1),(6,'Parámetros','/pages/tables/parameter.jsf',NULL,2,2),(7,'Especialdades','/pages/tables/speciality.jsf',NULL,2,3),(8,'Pacientes','/pages/processes/patient.jsf',NULL,11,1),(9,'Perfiles','/pages/tables/profile.jsf',NULL,2,5),(10,'Cambiar Clave','/pages/secure/changePassword.jsf',NULL,1,3),(11,'Procesos',NULL,'ui-icon-contact',NULL,3),(12,'Crear Pedido','/pages/processes/salesOrder.jsf',NULL,11,3),(13,'Sucursales','/pages/tables/branch.jsf',NULL,2,4),(14,'Departamentos','/pages/tables/department.jsf',NULL,2,6),(15,'Agenda',NULL,'ui-icon-calendar',NULL,4),(16,'Procedimientos','/pages/tables/procedure.jsf',NULL,2,7),(17,'Crear Cita','/pages/processes/appointment.jsf',NULL,15,1),(18,'Cancelar Cita','/pages/processes/appointmentCancel.jsf',NULL,15,2),(19,'Chequear Cita','/pages/processes/appointmentCheck.jsf',NULL,15,3),(20,'Días No Hábiles','/pages/tables/holiday.jsf',NULL,2,8),(21,'Días No Trabajados','/pages/tables/exception.jsf',NULL,2,9),(22,'Búsqueda Por Paciente','/pages/processes/searchByPatient.jsf',NULL,15,4),(23,'Vistas',NULL,'ui-icon-bookmark',NULL,5),(24,'Vista Por Médico','/pages/views/viewDoctor.jsf',NULL,23,1),(25,'Vista Por Sucursal','/pages/views/viewBranch.jsf',NULL,23,2),(27,'Historia Clínica','/pages/processes/history.jsf',NULL,11,4),(28,'Ocupaciones','/pages/tables/occupation.jsf',NULL,2,10),(29,'Cita Extemporanea','/pages/processes/appointmentUntimely.jsf',NULL,15,5);
 /*!40000 ALTER TABLE `crm_page` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1172,9 +1205,47 @@ CREATE TABLE `crm_history_history` (
 
 LOCK TABLES `crm_history_history` WRITE;
 /*!40000 ALTER TABLE `crm_history_history` DISABLE KEYS */;
-INSERT INTO `crm_history_history` VALUES (1,1,'1','2','3','4','6','8','10','5','7','9','11');
+INSERT INTO `crm_history_history` VALUES (1,1,'1','2','3','4','6','8','10','5','7','9','11'),(2,5,'1','2','3','','','','','','','','');
 /*!40000 ALTER TABLE `crm_history_history` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Final view structure for view `vw_doctor_hour_preview`
+--
+
+/*!50001 DROP TABLE IF EXISTS `vw_doctor_hour_preview`*/;
+/*!50001 DROP VIEW IF EXISTS `vw_doctor_hour_preview`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `vw_doctor_hour_preview` AS select `crm_appointment`.`id_branch` AS `id_branch`,`crm_appointment`.`id_doctor` AS `id_doctor`,cast(`crm_appointment`.`start_appointment_date` as date) AS `only_date`,timediff(`crm_appointment`.`end_appointment_date`,`crm_appointment`.`start_appointment_date`) AS `hours` from `crm_appointment` where (`crm_appointment`.`state` in (1,3,4)) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `vw_doctor_hour`
+--
+
+/*!50001 DROP TABLE IF EXISTS `vw_doctor_hour`*/;
+/*!50001 DROP VIEW IF EXISTS `vw_doctor_hour`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `vw_doctor_hour` AS select `x`.`id_branch` AS `id_branch`,`x`.`id_doctor` AS `id_doctor`,`x`.`only_date` AS `only_date`,sum(`x`.`hours`) AS `hours` from `vw_doctor_hour_preview` `x` group by `x`.`id_branch`,`x`.`id_doctor`,`x`.`only_date` order by sum(`x`.`hours`) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
 
 --
 -- Final view structure for view `vw_doctor_schedule`
@@ -1204,4 +1275,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-07-03  7:23:48
+-- Dump completed on 2012-07-08 21:09:31
