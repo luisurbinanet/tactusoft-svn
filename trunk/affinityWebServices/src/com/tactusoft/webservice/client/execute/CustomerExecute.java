@@ -45,7 +45,6 @@ import com.tactusoft.webservice.client.objects.Bapikna111;
 import com.tactusoft.webservice.client.objects.Bapireturn1;
 import com.tactusoft.webservice.client.objects.CustAddOnData;
 import com.tactusoft.webservice.client.objects.Fknvi;
-import com.tactusoft.webservice.client.objects.Fknvk;
 import com.tactusoft.webservice.client.objects.Kna1;
 import com.tactusoft.webservice.client.objects.Knb1;
 import com.tactusoft.webservice.client.objects.Knvv;
@@ -60,10 +59,9 @@ public class CustomerExecute {
 			String orgVentas, String canalDistribucion, String division,
 			String sociedad, String oficinaVentas, String grupoCliente,
 			String condicionPago, String cuenta, String grupoPrecios,
-			String esquemaClientes, String estadoCliente) {
+			String esquemaClientes, String estadoCliente, String moneda) {
 
 		// CREAR CLIENTES
-		Bapiaddr2 ziBapiaddr2 = new Bapiaddr2();
 		String ziCustomerIsConsumer = new String();
 		String ziForceExternalNumberRange = new String();
 		String ziFromCustomermaster = new String();
@@ -116,15 +114,14 @@ public class CustomerExecute {
 		ziKna1.setSpras("S");// IDIOMA
 		ziKna1.setStkzn("X");// Persona Física
 		ziKna1.setFityp("05");// Clase Impuesto Persona Natural
-
-		Fknvk fknvk = new Fknvk();
-		fknvk.setMandt(ambiente);
-		fknvk.setGbdat("1982-01-01");
-		Fknvk[] fknvkArray = new Fknvk[1];
-		fknvkArray[0] = fknvk;
-		TableOfFknvkHolder ztXknvk = new TableOfFknvkHolder(fknvkArray);
-
+		
 		Bapiaddr1 ziBapiaddr1 = new Bapiaddr1();
+		
+		Bapiaddr2 ziBapiaddr2 = new Bapiaddr2();
+		ziBapiaddr2.setTel1Numbr(telefono);
+		ziBapiaddr2.setEMail(correoElectronico);
+
+		TableOfFknvkHolder ztXknvk = new TableOfFknvkHolder();
 
 		Knvv ziKnvv = new Knvv();
 		ziKnvv.setMandt(ambiente);
@@ -133,9 +130,9 @@ public class CustomerExecute {
 		ziKnvv.setSpart(division);
 		ziKnvv.setVkbur(oficinaVentas);
 		ziKnvv.setKdgrp(grupoCliente);
-		ziKnvv.setZterm(sociedad);
+		//ziKnvv.setZterm(sociedad);
 		ziKnvv.setBzirk("COFC05");
-		ziKnvv.setWaers("COP");
+		ziKnvv.setWaers(moneda);
 		ziKnvv.setKonda(grupoPrecios);// GRUPO DE PRECIOS 01
 		ziKnvv.setKalks(esquemaClientes);// ESQUEMA DE CLIENTES 1
 		ziKnvv.setVersg(estadoCliente);// GRUPO ESTADO CLIENTE 1
@@ -152,7 +149,7 @@ public class CustomerExecute {
 
 		Fknvi fknvi = new Fknvi();
 		fknvi.setMandt(ambiente);
-		fknvi.setAland("CO");
+		fknvi.setAland(pais);
 		fknvi.setTatyp("MWST");
 		fknvi.setTaxkd("1");
 
@@ -160,8 +157,11 @@ public class CustomerExecute {
 		fknviArray[0] = fknvi;
 		TableOfFknviHolder ztXknvi = new TableOfFknviHolder(fknviArray);
 
+		ziMaintainAddressByKna1 = "X";
+		
 		ZSD_CUSTOMER_MAINTAIN_ALLProxy execute = new ZSD_CUSTOMER_MAINTAIN_ALLProxy(
 				url, user, password);
+		
 		try {
 			execute.zsdCustomerMaintainAll(ziBapiaddr1, ziBapiaddr2,
 					ziCustomerIsConsumer, ziForceExternalNumberRange,
@@ -355,47 +355,48 @@ public class CustomerExecute {
 		
 		String ambiente = "300";
 		String tipoDocumento = "1";
-		String nroDocumento = "11887766";
-		String tratamiento = "1";
+		String nroDocumento = "00551166";
+		String tratamiento = "Señor";
 		String nombre = "Carlos Arturo Sarmiento";
 		String direccion = "Carrera 55A 163 35";
 		String telefono = "6501550";
 		String celular = "3003044115";
 		String correoElectronico = "carlossarmientor@gmail.com";
-		String pais = "CO";
-		String ciudad = "BOGOTA";
-		String region = "11";
+		String pais = "MX";
+		String ciudad = "Distrito Federal";
+		String region = "DF";
 		String grupoCuenta = "D001";
-		String orgVentas = "4000";
+		String orgVentas = "3000";
 		String canalDistribucion = "10";
-		String division = "10";
-		String sociedad = "4000";
-		String oficinaVentas = "1025";
+		String division = "00";
+		String sociedad = "3000";
+		String oficinaVentas = "3000";
 		String grupoCliente = "01";
 		String condicionPago = "Z001";
 		String cuenta = "1305050000";
 		String grupoPrecios = "01"; 
 		String esquemaClientes = "1"; 
 		String estadoCliente = "1";
+		String moneda = "MXN";
 		
-		CustomerExecute.excecute(url, username, password, ambiente,
+		String code = CustomerExecute.excecute(url, username, password, ambiente,
 				tipoDocumento, nroDocumento, tratamiento, nombre, direccion,
 				telefono, celular, correoElectronico, pais, ciudad, region,
 				grupoCuenta, orgVentas, canalDistribucion, division, sociedad,
 				oficinaVentas, grupoCliente, condicionPago, cuenta, grupoPrecios,
-				esquemaClientes, estadoCliente);
+				esquemaClientes, estadoCliente, moneda);
 		
-		System.out.println("PRUEBA");
+		System.out.println(code);
 
 		
-		url = "http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zcustomer2/300/zcustomer2/zcustomer2";
-		List<WSBean> result = findByDoc(url, username, password, "1000",
-				"112233445", 0);
+		/*url = "http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zcustomer2/300/zcustomer2/zcustomer2";
+		List<WSBean> result = findByDoc(url, username, password, "4000",
+				"A0224466", 0);
 		for (WSBean row : result) {
 			System.out.println(row.getCode());
-		}
+		}*/
 
-		url = "http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zcustomer2/300/zcustomer2/zcustomer2";
+		//url = "http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zcustomer2/300/zcustomer2/zcustomer2";
 		//0000765491
 		//Bapicustomer04 detail = getDetail(url, username, password, "1000",
 		//		"0000765439");
