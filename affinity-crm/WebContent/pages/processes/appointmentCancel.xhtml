@@ -55,11 +55,11 @@
 				<p:dataTable id="selectedTable" var="rec"
 					value="#{appointmentPatientBacking.appointmentModel}"
 					rowKey="#{rec.code}" style="width:100%"
-					selection="#{appointmentPatientBacking.selectedsAppointment}"
+					selection="#{appointmentPatientBacking.selectedAppointment}"
 					paginator="true" rows="10"
 					emptyMessage="#{msg['glb_no_records_found']}">
 
-					<p:column selectionMode="multiple" style="width:18px" />
+					<p:column selectionMode="single" style="width:18px" />
 
 					<p:column headerText="#{msg['app_code']}">
 						<h:outputLabel value="#{rec.code}" />
@@ -188,13 +188,22 @@
 					header="#{msg['title_app']}" severity="alert"
 					widgetVar="confirmation">
 
-					<p:commandButton id="confirm" value="#{msg['glb_state_yes']}"
-						update=":form:selectedTable :form:growl"
-						oncomplete="confirmation.hide()"
-						actionListener="#{appointmentPatientBacking.cancelAppointmentAction}" />
-					<p:commandButton id="decline" value="#{msg['glb_state_no']}"
-						onclick="confirmation.hide()" type="button" />
+					<h:panelGrid columns="1">
 
+						<h:outputLabel value="#{msg['app_obs']}" />
+						<h:inputTextarea rows="3" style="width:400px"
+							rendered="#{appointmentPatientBacking.selectedAppointment eq null?false:true}"
+							value="#{appointmentPatientBacking.selectedAppointment.obs}" />
+
+						<f:facet name="footer">
+							<p:commandButton id="confirm" value="#{msg['glb_state_yes']}"
+								update=":form:selectedTable :form:growl"
+								oncomplete="confirmation.hide()"
+								actionListener="#{appointmentPatientBacking.cancelAppointmentAction}" />
+							<p:commandButton id="decline" value="#{msg['glb_state_no']}"
+								onclick="confirmation.hide()" type="button" />
+						</f:facet>
+					</h:panelGrid>
 				</p:confirmDialog>
 
 				<p:dialog header="#{msg['app_obs']}" widgetVar="obsDialog"

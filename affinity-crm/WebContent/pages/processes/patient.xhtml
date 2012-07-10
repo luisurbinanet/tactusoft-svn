@@ -40,7 +40,8 @@
 
 					<h:outputLabel value="#{msg['pat_code']}" />
 					<p:inputText id="txtDoc" value="#{patientBacking.selected.doc}"
-						style="width:230px;" label="#{msg['pat_code']}" required="true" />
+						style="width:230px;" label="#{msg['pat_code']}" required="true"
+						maxlength="10" />
 
 					<h:outputLabel value="#{msg['pat_sap_code']}"
 						rendered="#{patientBacking.disabledSaveButton}" />

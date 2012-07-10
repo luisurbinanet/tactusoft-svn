@@ -45,13 +45,17 @@
 				<h:panelGrid id="pnlDetail" columns="2" width="100%"
 					columnClasses="width25per,width75per">
 
-					<h:outputLabel value="#{msg['pat_sap_code']}" />
+					<h:outputLabel value="#{msg['pat_sap_code']}"
+						rendered="#{appointmentBacking.selectedPatient eq null?false:true}"/>
 					<p:inputText value="#{appointmentBacking.selectedPatient.codeSap}"
-						style="width:700px" readonly="true" />
+						style="width:700px;background-color:#FFFF80;" readonly="true"
+						rendered="#{appointmentBacking.selectedPatient eq null?false:true}" />
 
-					<h:outputLabel value="#{msg['pat_names']}" />
+					<h:outputLabel value="#{msg['pat_names']}"
+						rendered="#{appointmentBacking.selectedPatient eq null?false:true}" />
 					<p:inputText value="#{appointmentBacking.selectedPatient.names}"
-						style="width:700px" readonly="true" />
+						style="width:700px;background-color:#FFFF80;" readonly="true"
+						rendered="#{appointmentBacking.selectedPatient eq null?false:true}" />
 
 					<h:outputLabel value="#{msg['app_branch']}" />
 					<p:selectOneMenu style="width:700px"

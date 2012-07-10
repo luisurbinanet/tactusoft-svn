@@ -1,0 +1,58 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="../templates/common.xhtml">
+
+	<ui:define name="body">
+
+		<p:panel style="width:100%;height:600px;"
+			header="#{msg['title_view_doctor']}">
+
+			<p:spacer height="5" />
+
+			<h:form id="form">
+
+				<p:toolbar style="width:100%">
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{msg['btn_search']}"
+							action="#{doctorAppointmentBacking.searchAction}"
+							update="schCalendar" />
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="5" />
+
+				<h:panelGrid columns="2" width="100%">
+					<h:outputLabel value="#{msg['app_branch']}" />
+					<p:selectOneMenu style="width:600px"
+						value="#{doctorAppointmentBacking.idBranch}">
+						<f:selectItems value="#{doctorAppointmentBacking.listBranch}" />
+						<p:ajax update="selDoctor"
+							listener="#{doctorAppointmentBacking.handleBranchChange}" />
+					</p:selectOneMenu>
+
+					<h:outputLabel value="#{msg['app_doctor']}" />
+					<p:selectOneMenu id="selDoctor" style="width:600px"
+						value="#{doctorAppointmentBacking.doctor.id}">
+						<f:selectItems value="#{doctorAppointmentBacking.listDoctor}" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+
+				<p:spacer height="5" />
+
+				<p:schedule id="schCalendar"
+					value="#{doctorAppointmentBacking.branchEventModel}"
+					widgetVar="myschedule" view="agendaWeek" minTime="7" maxTime="19"
+					slotMinutes="15" showHeader="true"/>
+
+			</h:form>
+
+		</p:panel>
+
+	</ui:define>
+</ui:composition>
+</html>

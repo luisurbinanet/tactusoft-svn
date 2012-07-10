@@ -351,7 +351,7 @@ public class PatientBacking extends BaseBacking {
 							profile.getDistrChan(), profile.getDivision(),
 							profile.getSociety(), this.salesOff, "01",
 							profile.getPaymentTerm(), profile.getAccount(),
-							"01", "1", "1");
+							"01", "1", "1", crmCountry.getCurrencyIso());
 				} else {
 					codeSap = selected.getCodeSap();
 				}
