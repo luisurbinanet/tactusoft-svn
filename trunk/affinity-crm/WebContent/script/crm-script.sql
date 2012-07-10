@@ -2,9 +2,9 @@ CREATE DATABASE  IF NOT EXISTS `crm_db` /*!40100 DEFAULT CHARACTER SET latin1 CO
 USE `crm_db`;
 -- MySQL dump 10.13  Distrib 5.5.16, for Win32 (x86)
 --
--- Host: localhost    Database: crm_db
+-- Host: 192.168.1.29    Database: crm_db
 -- ------------------------------------------------------
--- Server version	5.5.20
+-- Server version	5.0.51a-3ubuntu5.8
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -18,6 +18,10 @@ USE `crm_db`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Not dumping tablespaces as no INFORMATION_SCHEMA.FILES table on this server
+--
+
+--
 -- Table structure for table `crm_parameter`
 --
 
@@ -26,11 +30,11 @@ DROP TABLE IF EXISTS `crm_parameter`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_parameter` (
   `id` decimal(19,0) NOT NULL,
-  `code` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `description` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `text_value` varchar(5000) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `number_value` decimal(19,3) DEFAULT NULL,
-  PRIMARY KEY (`id`),
+  `code` varchar(45) collate latin1_spanish_ci default NULL,
+  `description` varchar(255) collate latin1_spanish_ci default NULL,
+  `text_value` varchar(5000) collate latin1_spanish_ci default NULL,
+  `number_value` decimal(19,3) default NULL,
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -41,7 +45,7 @@ CREATE TABLE `crm_parameter` (
 
 LOCK TABLES `crm_parameter` WRITE;
 /*!40000 ALTER TABLE `crm_parameter` DISABLE KEYS */;
-INSERT INTO `crm_parameter` VALUES (1,'SAP_ENVIRONMENT',NULL,'300',NULL),(2,'SAP_URL_CUSTOMER_MAINTAIN_ALL',NULL,'http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zsd_customer_maintain_all/300/zsd_customer_maintain_all/zsd_customer_maintain_all',NULL),(3,'SAP_URL_CUSTOMER_FIND',NULL,'http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zbapi_customer_find/300/zbapi_customer_find/zbapi_customer_find',NULL),(4,'SAP_URL_SALESORDER_CREATEFROMDAT',NULL,'http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zbapi_salesorder_createfromdat/300/zbapi_salesorder_createfromdat/zbapi_salesorder_createfromdat',NULL),(5,'SAP_URL_CUSTOMER2',NULL,'http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zcustomer2/300/zcustomer2/zcustomer2',NULL),(6,'SAP_USERNAME',NULL,'TACTUSOFT',NULL),(7,'SAP_PASSWORD',NULL,'AFFINITY',NULL),(8,'RUTA_ARCHIVO_MATERIALES',NULL,'/opt/affinity/Materiales4000.xlsx',0.000),(9,'SAP_URL_ZWEBLIST',NULL,'http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zweblist/300/zweblist/zweblist',NULL),(10,'GRUPO_PRECIOS',NULL,'01',NULL),(11,'ESQUEMA_CLIENTE',NULL,'1',NULL),(12,'GRUPO_ESTADISTICO_CLIENTE',NULL,'1',NULL);
+INSERT INTO `crm_parameter` VALUES (1,'SAP_ENVIRONMENT',NULL,'300',NULL),(2,'SAP_URL_CUSTOMER_MAINTAIN_ALL',NULL,'http://ansrvsap2.affinity.net:8001/sap/bc/srt/rfc/sap/z_sd_customer_maintain_all/300/z_sd_customer_maintain_all/z_sd_customer_maintain_all',NULL),(3,'SAP_URL_CUSTOMER_FIND',NULL,'http://ansrvsap2.affinity.net:8001/sap/bc/srt/rfc/sap/z_bapi_customer_find/300/z_bapi_customer_find/z_bapi_customer_find',NULL),(4,'SAP_URL_SALESORDER_CREATEFROMDAT',NULL,'http://ansrvsap2.affinity.net:8001/sap/bc/srt/rfc/sap/z_bapi_salesorder_create/300/z_bapi_salesorder_create/z_bapi_salesorder_create',NULL),(5,'SAP_URL_CUSTOMER2',NULL,'http://ansrvsap2.affinity.net:8001/sap/bc/srt/rfc/sap/z_customer/300/z_customer/z_customer',NULL),(6,'SAP_USERNAME',NULL,'TACTUSOFT',NULL),(7,'SAP_PASSWORD',NULL,'AFFINITY',NULL),(8,'RUTA_ARCHIVO_MATERIALES',NULL,'/opt/affinity/Materiales4000.xlsx',0.000),(9,'SAP_URL_ZWEBLIST',NULL,'http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zweblist/300/zweblist/zweblist',NULL),(10,'GRUPO_PRECIOS',NULL,'01',NULL),(11,'ESQUEMA_CLIENTE',NULL,'1',NULL),(12,'GRUPO_ESTADISTICO_CLIENTE',NULL,'1',NULL);
 /*!40000 ALTER TABLE `crm_parameter` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -54,10 +58,10 @@ DROP TABLE IF EXISTS `crm_department`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_department` (
   `id` decimal(19,0) NOT NULL,
-  `code` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
-  `name` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
-  `state` int(11) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
+  `code` varchar(45) collate latin1_spanish_ci NOT NULL,
+  `name` varchar(255) collate latin1_spanish_ci NOT NULL,
+  `state` int(11) NOT NULL default '1',
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -81,21 +85,21 @@ DROP TABLE IF EXISTS `crm_appointment`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_appointment` (
   `id` decimal(19,0) NOT NULL,
-  `code` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `code` varchar(45) collate latin1_spanish_ci NOT NULL,
   `id_patient` decimal(19,0) NOT NULL,
-  `patient_names` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `patient_sap` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `patient_names` varchar(1000) collate latin1_spanish_ci default NULL,
+  `patient_sap` varchar(45) collate latin1_spanish_ci default NULL,
   `id_branch` decimal(19,0) NOT NULL,
   `id_procedure_detail` decimal(19,0) NOT NULL,
   `id_doctor` decimal(19,0) NOT NULL,
   `start_appointment_date` datetime NOT NULL,
   `end_appointment_date` datetime NOT NULL,
-  `cod_publicity` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `name_publicity` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `obs` text COLLATE latin1_spanish_ci,
-  `untimely` tinyint(1) DEFAULT '0',
-  `state` int(11) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
+  `cod_publicity` varchar(45) collate latin1_spanish_ci default NULL,
+  `name_publicity` varchar(1000) collate latin1_spanish_ci default NULL,
+  `obs` text collate latin1_spanish_ci,
+  `untimely` tinyint(1) default '0',
+  `state` int(11) NOT NULL default '1',
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`),
   KEY `fk_crm_appointment_1` (`id_doctor`),
   KEY `fk_crm_appointment_2` (`id_procedure_detail`),
@@ -114,7 +118,7 @@ CREATE TABLE `crm_appointment` (
 
 LOCK TABLES `crm_appointment` WRITE;
 /*!40000 ALTER TABLE `crm_appointment` DISABLE KEYS */;
-INSERT INTO `crm_appointment` VALUES (1,'C00001',1,'P1 P1','0000765476',112,2,5,'2012-06-29 08:00:00','2012-06-29 08:15:00','P20','PROMOTICKET',NULL,0,4),(2,'C00002',2,'P2 P2','0000765485',112,2,5,'2012-06-29 08:30:00','2012-06-29 09:15:00','P20','PROMOTICKET',NULL,0,5),(3,'C00003',1,'P1 P1','0000765476',112,2,5,'2012-07-02 08:00:00','2012-07-02 08:15:00','P20','P20',NULL,0,4),(4,'C00004',5,'N11554477 A11554477','0000765504',112,2,5,'2012-07-03 08:00:00','2012-07-03 08:15:00','P11','CADENA AMIGO SALUDAB','',0,5),(5,'C00005',5,'N11554477 A11554477','0000765504',112,2,5,'2012-07-03 08:15:00','2012-07-03 08:30:00','T14','CANAL CARACOL – COLO','',0,5),(6,'C00006',5,'N11554477 A11554477','0000765504',112,2,5,'2012-07-03 08:45:00','2012-07-03 09:00:00','T14','CANAL CARACOL – COLO','Prueba',0,4),(7,'C00007',1,'P1 P1','0000765476',112,2,5,'2012-07-09 08:45:00','2012-07-09 09:00:00','P16','CONTROLES NACIONALES','PRUEBA',0,1),(8,'C00008',5,'N11554477 A11554477','0000765504',112,2,7,'2012-07-09 09:00:00','2012-07-09 09:15:00','P16','CONTROLES NACIONALES','',0,1),(9,'C00009',5,'N11554477 A11554477','0000765504',112,2,8,'2012-07-07 09:00:00','2012-07-07 09:15:00','P16','CONTROLES NACIONALES','',0,1),(10,'C00010',5,'N11554477 A11554477','0000765504',112,1,5,'2012-07-07 08:00:00','2012-07-07 08:30:00','P11','CADENA AMIGO SALUDAB','11554477',0,1),(11,'C00011',2,'P2 P2','0000765485',112,1,8,'2012-07-07 11:30:00','2012-07-07 12:00:00','P11','CADENA AMIGO SALUDAB','PRU4EBA',0,1),(12,'C00012',2,'P2 P2','0000765485',112,1,5,'2012-07-09 12:30:00','2012-07-09 13:00:00','P14','AVISO EXTERIOR','Prueba',0,1),(13,'C00013',2,'P2 P2','0000765485',112,1,7,'2012-07-07 10:00:00','2012-07-07 10:30:00','P11','CADENA AMIGO SALUDAB','',0,1),(14,'C00014',3,'P4 P4','0000765486',112,2,5,'2012-07-08 00:00:00','2012-07-08 00:00:00','P16','CONTROLES NACIONALES','',1,1),(15,'C00015',3,'P4 P4','0000765486',112,1,5,'2012-07-09 15:00:00','2012-07-09 15:30:00','T14','CANAL CARACOL – COLO','',0,3),(16,'C00016',3,'P4 P4','0000765486',112,1,5,'2012-07-08 00:00:00','2012-07-08 00:00:00','T11','CANAL UNO','sgdgsd',1,3);
+INSERT INTO `crm_appointment` VALUES (1,'C00001',1,'P1 P1','0000765476',112,2,5,'2012-06-29 08:00:00','2012-06-25 08:15:00','P20','PROMOTICKET',NULL,0,4),(2,'C00002',2,'P2 P2','0000765485',112,2,5,'2012-06-29 08:30:00','2012-06-25 09:15:00','P20','PROMOTICKET',NULL,0,5),(3,'C00003',1,'P1 P1','0000765476',112,2,5,'2012-07-02 08:00:00','2012-07-02 08:15:00','P20','P20',NULL,0,4),(4,'C00004',1,'P1 P1','0000765476',112,2,5,'2012-07-02 08:00:00','2012-07-02 08:15:00','P14','AVISO EXTERIOR',NULL,0,4),(5,'C00005',2,'P2 P2','0000765485',112,2,5,'2012-07-02 08:45:00','2012-07-02 09:00:00','P11','CADENA AMIGO SALUDAB',NULL,0,1),(6,'C00006',1,'P1 P1','0000765476',112,2,5,'2012-07-04 12:20:00','2012-07-04 12:40:00','P16','CONTROLES NACIONALES','',0,2),(7,'C00007',4,'Andres Pulido','0000765516',112,1,5,'2012-07-09 08:40:00','2012-07-09 09:20:00','P11','CADENA AMIGO SALUDAB','',0,2),(8,'C00008',5,'SARA QUIJANO ACEVEDO','0000765517',112,1,5,'2012-07-09 10:40:00','2012-07-09 11:20:00','P16','CONTROLES NACIONALES','\r\n',0,2),(9,'C00009',6,'DIANA PAOLA GARCIA MARTINEZ','0000765518',112,1,5,'2012-07-09 10:00:00','2012-07-09 10:40:00','P14','AVISO EXTERIOR','',0,1),(10,'C00010',8,'MARIA PAULA PEREZ NEIRA','0000765519',112,1,5,'2012-07-16 12:00:00','2012-07-16 12:40:00','T11','CANAL UNO','',0,1),(11,'C00011',1,'P1 P1','0000765476',112,1,7,'2012-07-09 08:00:00','2012-07-09 08:40:00','P11','CADENA AMIGO SALUDAB','',0,2),(12,'C00012',2,'P2 P2','0000765485',112,1,5,'2012-07-09 08:40:00','2012-07-09 09:20:00','P14','AVISO EXTERIOR','',0,1),(13,'C00013',1,'P1 P1','0000765476',54,1,10,'2012-07-09 10:00:00','2012-07-09 10:40:00','Y61','4TV - D.F.','',0,2),(14,'C00014',10,'Gerardo Solórzano','0000765520',54,1,11,'2012-07-09 15:20:00','2012-07-09 16:00:00','Y14','Tv3 Televisa Puebla','',0,2),(15,'C00015',8,'MARIA PAULA PEREZ NEIRA','0000765519',54,1,10,'2013-01-02 10:00:00','2013-01-02 10:40:00','T23','CANAL 40','',0,1),(16,'C00016',15,'CINTHYA MABEL CASTAÑEDA MANCERA','0000765525',54,1,10,'2013-01-25 10:00:00','2013-01-25 10:40:00','T23','CANAL 40','',0,1),(17,'C00017',22,'yeidi lizeth perez salazar','0000765532',54,1,10,'2013-01-03 08:40:00','2013-01-03 09:20:00','T23','CANAL 40','',0,1),(18,'C00018',33,'maria marin','0000765543',54,1,10,'2013-01-01 08:00:00','2013-01-01 08:40:00','T23','CANAL 40','',0,1),(19,'C00019',38,'PRUEBA PRUEBA','0000765548',54,1,10,'2012-07-12 10:00:00','2012-07-12 10:40:00','T23','CANAL 40','',0,1),(20,'C00020',33,'maria marin','0000765543',54,1,11,'2013-01-01 08:00:00','2013-01-01 08:40:00','T23','CANAL 40','',0,1),(21,'C00021',40,'MA ROSA MORENO SANCHEZ','0000765550',54,1,10,'2012-07-13 10:00:00','2012-07-13 10:40:00','P16','CONTROLES NACIONALES','',0,1),(22,'C00022',33,'maria marin','0000765543',54,1,12,'2012-07-09 09:20:00','2012-07-09 10:00:00','T23','CANAL 40','',0,1),(23,'C00023',37,'ANDRES ESCORZA','0000765547',54,1,11,'2012-07-13 15:20:00','2012-07-13 16:00:00','T23','CANAL 40','',0,1),(24,'C00024',44,'juan gacha','0000765554',54,1,12,'2013-01-01 08:00:00','2013-01-01 08:40:00','T23','CANAL 40','',0,1),(25,'C00025',51,'MATTIA NEIRA','0000765561',54,1,10,'2013-01-23 08:40:00','2013-01-23 09:20:00','T23','CANAL 40','',0,1),(26,'C00026',56,'YURANI  BENITEZ','0000765566',54,1,10,'2013-01-16 12:00:00','2013-01-16 12:40:00','T23','CANAL 40','',0,1),(27,'C00027',57,'CARLOS  CARREÑO MONTERPO','0000765567',54,1,10,'2013-07-13 15:20:00','2013-07-13 16:00:00','T23','CANAL 40','',0,1),(28,'C00028',58,'MARTHA  JASINTO ANTONIO','0000765568',54,1,12,'2012-07-13 12:00:00','2012-07-13 12:40:00','T23','CANAL 40','',0,1),(29,'C00029',43,'JULIETH  TATIANA AGUDELO BARBOSA','0000765553',54,2,10,'2013-01-10 09:00:00','2013-01-10 09:20:00','P16','CONTROLES NACIONALES','',0,1),(30,'C00030',18,'DANIEL FELIPE  RAMOS','0000765528',54,1,11,'2013-01-16 12:00:00','2013-01-16 12:40:00','T23','CANAL 40','',0,1),(31,'C00031',55,'RICARDO  LOPEZ NAVARRO','0000765565',54,1,10,'2013-07-04 08:00:00','2013-07-04 08:40:00','T23','CANAL 40','',0,1),(32,'C00032',60,'HEIDY JHOANA FERNANDEZ GONZALEZ','0000765570',54,1,12,'2013-01-16 10:00:00','2013-01-16 10:40:00','T23','CANAL 40','',0,1),(33,'C00033',61,'MARIA LISA  TORRES PERES','0000765571',54,1,11,'2013-01-02 08:40:00','2013-01-02 09:20:00','T23','CANAL 40','',0,1),(34,'C00034',62,'ANGIE  KATHERINE HURTADO SUAREZ','0000765572',54,1,11,'2013-01-23 08:40:00','2013-01-23 09:20:00','T23','CANAL 40','',0,1),(35,'C00035',64,'LUISAFERNANDA PINEDA GONZALEZ','0000765574',54,1,10,'2013-01-09 17:20:00','2013-01-09 18:00:00','T23','CANAL 40','',0,1),(36,'C00036',63,'ALEJANDRA CONTRERAS HURTADO','0000765573',54,1,10,'2013-07-12 09:20:00','2013-07-12 10:00:00','T23','CANAL 40','',0,1),(37,'C00037',65,'AMANDITA  NARANJITO','0000765575',54,1,12,'2013-01-02 08:00:00','2013-01-02 08:40:00','T23','CANAL 40','',0,1),(38,'C00038',59,'luis lopez','0000765569',54,1,13,'2013-01-01 08:00:00','2013-01-01 08:40:00','P16','CONTROLES NACIONALES','',0,1),(39,'C00039',52,'CAMILO  LEON','0000765562',54,1,11,'2013-07-04 08:00:00','2013-07-04 08:40:00','T23','CANAL 40','',0,1),(40,'C00040',66,'JAIR RODRIGUEZ','0000765576',54,1,10,'2013-01-15 11:20:00','2013-01-15 12:00:00','T23','CANAL 40','',0,1),(41,'C00041',69,'DENISSE ENGGY  GARAVITO CRISTANCHO','0000765579',54,1,13,'2013-01-02 09:20:00','2013-01-02 10:00:00','T23','CANAL 40','',0,1),(42,'C00042',68,'yenny oprjuela','0000765578',54,1,10,'2013-07-05 10:00:00','2013-07-05 10:40:00','T23','CANAL 40','',0,1),(43,'C00043',70,'ANDREA RIOS OVALLE','0000765580',54,1,10,'2013-07-10 12:00:00','2013-07-10 12:40:00','P17','RECOMENDADOS NAL','',0,1),(44,'C00044',72,'JOANA ESPINEL','0000765582',54,1,13,'2013-01-16 08:00:00','2013-01-16 08:40:00','T23','CANAL 40','',0,1),(45,'C00045',67,'SANDRA PATRICIA  ARANGI PIÑEROS','0000765577',54,1,11,'2013-01-03 08:40:00','2013-01-03 09:20:00','T23','CANAL 40','',0,1),(46,'C00046',71,'ANDREA DUQUE ANZOLA','0000765581',54,1,13,'2012-07-13 13:20:00','2012-07-13 14:00:00','T23','CANAL 40','',0,1),(47,'C00047',74,'STEPHANNIE MUÑOZ GARAY','0000765584',54,1,10,'2013-07-02 09:20:00','2013-07-02 10:00:00','T23','CANAL 40','',0,1),(48,'C00048',73,'ELIANA CAROLINA RODRIGUEZ MARTINEZ','0000765583',54,1,10,'2013-01-02 08:40:00','2013-01-02 09:20:00','T23','CANAL 40','',0,1),(49,'C00049',76,'MARCELA MONTEALEGRE','0000765586',54,1,12,'2013-01-03 09:20:00','2013-01-03 10:00:00','T23','CANAL 40','PRENATAL',0,1),(50,'C00050',33,'maria marin','0000765543',54,1,11,'2013-01-09 09:20:00','2013-01-09 10:00:00','T23','CANAL 40','',0,1),(51,'C00051',75,'XIMENA BOBADILLA CALDERON','0000765585',54,1,11,'2013-07-12 10:00:00','2013-07-12 10:40:00','T23','CANAL 40','',0,1),(52,'C00052',77,'SARA ORJUELA','0000765587',54,1,11,'2013-07-13 10:00:00','2013-07-13 10:40:00','T23','CANAL 40','',0,1),(53,'C00053',78,'ISABEL HURTADO HERNANDEZ','0000765588',54,1,13,'2013-01-03 14:40:00','2013-01-03 15:20:00','T23','CANAL 40','',0,1),(54,'C00054',73,'ELIANA CAROLINA RODRIGUEZ MARTINEZ','0000765583',54,1,12,'2013-01-02 10:00:00','2013-01-02 10:40:00','T23','CANAL 40','',0,1),(55,'C00055',79,'MARIA PEREZ','0000765589',54,1,10,'2013-01-04 09:20:00','2013-01-04 10:00:00','T23','CANAL 40','',0,1),(56,'C00056',81,'DIANA  NIETO PEREZ','0000765591',54,1,10,'2012-07-11 16:00:00','2012-07-11 16:40:00','P16','CONTROLES NACIONALES','',0,1),(57,'C00057',80,'BLANCA ISABEL MOLINA GORDILLO','0000765590',54,1,10,'2013-07-19 11:20:00','2013-07-19 12:00:00','T23','CANAL 40','',0,1),(58,'C00058',83,'ERNESTO DUQUE RICO ','0000765593',54,1,10,'2013-07-11 12:00:00','2013-07-11 12:40:00','T23','CANAL 40','',0,1),(59,'C00059',85,'JENI CASIANO TOVAR','0000765595',54,1,10,'2013-07-09 08:40:00','2013-07-09 09:20:00','T23','CANAL 40','',0,1),(60,'C00060',86,'LUIS ALBERTO SUAREZ','0000765596',54,1,10,'2013-01-17 11:20:00','2013-01-17 12:00:00','P16','CONTROLES NACIONALES','',0,1),(61,'C00061',84,'DAVID LOPEZ','0000765594',54,1,10,'2013-02-07 13:20:00','2013-02-07 14:00:00','T23','CANAL 40','',0,1),(62,'C00062',35,'YENNY CAROLINA PRIETO VILLAMIL','0000765545',54,1,10,'2013-07-31 10:00:00','2013-07-31 10:40:00','T23','CANAL 40','',0,1),(63,'C00063',82,'VICTOR TORRES','0000765592',54,1,10,'2013-07-15 08:00:00','2013-07-15 08:40:00','T23','CANAL 40','',0,1),(64,'C00064',87,'JEISON CARVAJAL ERAZO','0000765597',54,1,10,'2013-01-24 15:20:00','2013-01-24 16:00:00','T23','CANAL 40','',0,1),(65,'C00065',88,'CARLOS LOPEZ','0000765598',54,1,10,'2013-02-08 10:00:00','2013-02-08 10:40:00','T23','CANAL 40','',0,1),(66,'C00066',89,'MERCEDES  GUERRA GUPACHAN','0000765599',54,1,10,'2012-07-20 10:40:00','2012-07-20 11:20:00','P17','RECOMENDADOS NAL','',0,1),(67,'C00067',92,'JUAN ALEJANDRO  CARVAJAL ERAZO','0000765602',54,1,13,'2012-07-09 16:00:00','2012-07-09 16:40:00','T23','CANAL 40','',0,2),(68,'C00068',48,'HEIDY JHOANA FERNANDEZ GONZALEZ','0000765558',54,1,10,'2013-10-11 08:00:00','2013-10-11 08:40:00','T23','CANAL 40','',0,1),(69,'C00069',91,'OLGA PATRICIA PERALTA DIAZ','0000765601',54,1,10,'2013-03-13 08:00:00','2013-03-13 08:40:00','T23','CANAL 40','',0,1),(70,'C00070',90,'JEFFERSON STEVEN FONSECA RIVEROS','0000765600',54,1,12,'2013-07-12 10:00:00','2013-07-12 10:40:00','T23','CANAL 40','',0,1),(71,'C00071',93,'CAMILO SANCHEZ','0000765603',54,1,10,'2013-01-18 17:20:00','2013-01-18 18:00:00','P16','CONTROLES NACIONALES','',0,1),(72,'C00072',94,'SARA  VALENTINA MARTINEZ','0000765604',54,1,12,'2013-01-09 08:40:00','2013-01-09 09:20:00','T23','CANAL 40','',0,2),(73,'C00073',95,'ALBERTO  HUMBERTO RAMIREZ','0000765605',54,1,11,'2012-07-20 16:40:00','2012-07-20 17:20:00','P16','CONTROLES NACIONALES','',0,1),(74,'C00074',96,'BRAYAN CAMILO ALVARADO PERALTA','0000765606',54,1,10,'2013-03-02 09:20:00','2013-03-02 10:00:00','T23','CANAL 40','',0,1),(75,'C00075',97,'CARLOS ALBERTO CABALLERO RUBIO','0000765607',54,1,10,'2013-01-22 10:00:00','2013-01-22 10:40:00','P16','CONTROLES NACIONALES','',0,1),(76,'C00076',98,'JUNIOR MARTINEZ','0000765608',54,1,11,'2013-07-10 10:00:00','2013-07-10 10:40:00','T23','CANAL 40','',0,2),(77,'C00077',99,'PAOLA  BERNAL','0000765609',54,1,11,'2013-01-10 11:20:00','2013-01-10 12:00:00','T23','CANAL 40','',0,1),(78,'C00078',101,'ISABEL MOLINA LINARES','0000765611',54,1,10,'2013-07-03 09:20:00','2013-07-03 10:00:00','P16','CONTROLES NACIONALES','',0,1),(79,'C00079',102,'SANDRA  COLMENARES','0000765612',54,1,13,'2013-07-12 08:00:00','2013-07-12 08:40:00','T23','CANAL 40','',0,1),(80,'C00080',103,'CARLOS SARMIENTO','0000765615',54,1,12,'2012-07-09 17:20:00','2012-07-09 18:00:00','P16','CONTROLES NACIONALES','Prueba',0,1);
 /*!40000 ALTER TABLE `crm_appointment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -127,9 +131,9 @@ DROP TABLE IF EXISTS `crm_cie`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_cie` (
   `id` decimal(19,0) NOT NULL,
-  `code` varchar(4) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `description` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
-  PRIMARY KEY (`id`),
+  `code` varchar(4) collate latin1_spanish_ci default NULL,
+  `description` varchar(1000) collate latin1_spanish_ci default NULL,
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -155,7 +159,7 @@ CREATE TABLE `crm_procedure_branch` (
   `id` decimal(19,0) NOT NULL,
   `id_procedure` decimal(19,0) NOT NULL,
   `id_branch` decimal(19,0) NOT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY  (`id`),
   KEY `fk_crm_procedure_branch_1` (`id_procedure`),
   KEY `fk_crm_procedure_branch_2` (`id_branch`),
   CONSTRAINT `fk_crm_procedure_branch_1` FOREIGN KEY (`id_procedure`) REFERENCES `crm_procedure` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -169,7 +173,7 @@ CREATE TABLE `crm_procedure_branch` (
 
 LOCK TABLES `crm_procedure_branch` WRITE;
 /*!40000 ALTER TABLE `crm_procedure_branch` DISABLE KEYS */;
-INSERT INTO `crm_procedure_branch` VALUES (5,1,112),(6,1,116),(7,1,2),(8,3,112),(9,2,112),(10,2,116);
+INSERT INTO `crm_procedure_branch` VALUES (14,1,112),(15,1,116),(16,1,2),(17,1,175),(18,1,48),(19,1,49),(20,1,50),(21,1,51),(22,1,52),(23,1,53),(24,1,54),(25,1,55),(26,1,56),(27,1,57),(28,1,58),(29,1,59),(30,1,60),(31,1,61),(32,1,62),(33,1,63),(34,1,64),(35,1,65),(36,1,66),(37,1,67),(38,1,68),(39,1,69),(40,1,70),(41,1,72),(42,1,74),(43,1,76),(44,1,78),(45,1,80),(46,1,82),(47,1,84),(48,1,86),(49,1,88),(50,1,90),(51,1,92),(52,1,94),(53,1,96),(54,1,98),(55,1,100),(56,1,102),(57,1,104),(58,1,106),(59,1,108),(60,1,110),(61,1,114),(62,1,118),(63,1,120),(64,1,122),(65,1,124),(66,1,126),(67,1,129),(68,1,131),(69,1,133),(70,1,135),(71,1,137),(72,1,139),(73,1,141),(74,1,143),(75,1,145),(76,1,147),(77,1,149),(78,1,151),(79,1,153),(80,1,155),(81,2,112),(82,2,116),(83,2,48),(84,2,49),(85,2,50),(86,2,51),(87,2,52),(88,2,53),(89,2,54),(90,2,55),(91,2,56),(92,2,57),(93,2,58),(94,2,59),(95,2,60),(96,2,61),(97,2,62),(98,2,63),(99,2,64),(100,2,65),(101,2,66),(102,2,67),(103,2,68),(104,2,69),(105,2,70),(106,2,72),(107,2,74),(108,2,76),(109,2,78),(110,2,80),(111,2,82),(112,2,84),(113,2,86),(114,2,88),(115,2,90),(116,2,92),(117,2,94),(118,2,96),(119,2,98),(120,2,100),(121,2,102),(122,2,104),(123,2,106),(124,2,108),(125,2,110),(126,2,114),(127,2,118),(128,2,120),(129,2,122),(130,2,124),(131,2,126),(132,2,129),(133,2,131),(134,2,133),(135,2,135),(136,2,137),(137,2,139),(138,2,141),(139,2,143),(140,2,145),(141,2,147),(142,2,149),(143,2,151),(144,2,153),(145,2,155),(146,2,165),(147,2,167),(148,2,169),(149,2,171),(150,2,173),(151,2,175),(152,3,112),(153,3,1),(154,3,2),(155,3,3),(156,3,4),(157,3,5),(158,3,6),(159,3,7),(160,3,8),(161,3,9),(162,3,10),(163,3,11),(164,3,12),(165,3,13),(166,3,14),(167,3,15),(168,3,16),(169,3,17),(170,3,18),(171,3,19),(172,3,20),(173,3,21),(174,3,22),(175,3,23),(176,3,24),(177,3,25),(178,3,26),(179,3,27),(180,3,28),(181,3,29),(182,3,30),(183,3,31),(184,3,32),(185,3,33),(186,3,34),(187,3,35),(188,3,36),(189,3,37),(190,3,38),(191,3,39),(192,3,40),(193,3,47),(194,3,48),(195,3,49),(196,3,50),(197,3,51),(198,3,52),(199,3,53),(200,3,54),(201,3,55),(202,3,56),(203,3,57),(204,3,58),(205,3,59),(206,3,60),(207,3,61);
 /*!40000 ALTER TABLE `crm_procedure_branch` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -182,9 +186,10 @@ DROP TABLE IF EXISTS `crm_country`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_country` (
   `id` decimal(19,0) NOT NULL,
-  `code` varchar(2) COLLATE latin1_spanish_ci NOT NULL,
-  `name` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
-  PRIMARY KEY (`id`),
+  `code` varchar(2) collate latin1_spanish_ci NOT NULL,
+  `name` varchar(255) collate latin1_spanish_ci NOT NULL,
+  `currency_iso` varchar(3) collate latin1_spanish_ci default NULL,
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `uk_crm_country_1` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -195,7 +200,7 @@ CREATE TABLE `crm_country` (
 
 LOCK TABLES `crm_country` WRITE;
 /*!40000 ALTER TABLE `crm_country` DISABLE KEYS */;
-INSERT INTO `crm_country` VALUES (1,'CO','Colombia'),(2,'MX','México');
+INSERT INTO `crm_country` VALUES (1,'CO','Colombia','COP'),(2,'MX','México','MXN');
 /*!40000 ALTER TABLE `crm_country` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -209,10 +214,10 @@ DROP TABLE IF EXISTS `crm_consultation`;
 CREATE TABLE `crm_consultation` (
   `id` decimal(19,0) NOT NULL,
   `id_patient` decimal(19,0) NOT NULL,
-  `review` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `review` varchar(45) collate latin1_spanish_ci NOT NULL,
   `date` date NOT NULL,
   `id_doctor` decimal(19,0) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -234,9 +239,9 @@ DROP TABLE IF EXISTS `crm_user_branch`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_user_branch` (
   `id` decimal(19,0) NOT NULL,
-  `id_user` decimal(19,0) DEFAULT NULL,
-  `id_branch` decimal(19,0) DEFAULT NULL,
-  PRIMARY KEY (`id`),
+  `id_user` decimal(19,0) default NULL,
+  `id_branch` decimal(19,0) default NULL,
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `uk_crm_user_brach_1` (`id_user`,`id_branch`),
   KEY `fk_crm_user_brach_1` (`id_user`),
   KEY `fk_crm_user_brach_2` (`id_branch`),
@@ -251,7 +256,7 @@ CREATE TABLE `crm_user_branch` (
 
 LOCK TABLES `crm_user_branch` WRITE;
 /*!40000 ALTER TABLE `crm_user_branch` DISABLE KEYS */;
-INSERT INTO `crm_user_branch` VALUES (12,1,112),(13,1,116),(14,2,112),(15,2,116),(3,5,112),(5,6,112),(6,6,116),(4,7,112),(7,8,112),(8,8,114),(9,8,116),(10,9,94);
+INSERT INTO `crm_user_branch` VALUES (243,1,54),(241,1,112),(242,1,116),(11,2,2),(12,2,112),(13,2,116),(3,5,112),(5,6,112),(6,6,116),(4,7,112),(7,8,112),(8,8,114),(9,8,116),(10,9,94),(16,10,1),(17,10,2),(18,10,3),(19,10,4),(20,10,5),(21,10,6),(22,10,7),(23,10,8),(24,10,9),(25,10,10),(26,10,11),(27,10,12),(28,10,13),(29,10,14),(30,10,15),(31,10,16),(32,10,17),(33,10,18),(34,10,19),(35,10,20),(36,10,21),(37,10,22),(38,10,23),(39,10,24),(40,10,25),(41,10,26),(42,10,27),(43,10,28),(44,10,29),(45,10,30),(46,10,31),(47,10,32),(48,10,33),(49,10,34),(50,10,35),(51,10,36),(52,10,37),(53,10,38),(54,10,39),(55,10,40),(56,10,41),(57,10,42),(58,10,43),(59,10,44),(60,10,45),(61,10,46),(62,10,47),(63,10,48),(64,10,49),(65,10,50),(66,10,51),(67,10,52),(68,10,53),(69,10,54),(70,10,55),(71,10,56),(72,10,57),(73,10,58),(74,10,59),(75,10,60),(76,10,61),(77,10,62),(78,10,63),(79,10,64),(80,10,65),(81,10,66),(82,10,67),(83,10,68),(84,10,69),(85,10,70),(86,10,71),(87,10,72),(88,10,73),(89,10,74),(90,10,75),(91,10,76),(92,10,77),(93,10,78),(94,10,79),(95,10,80),(96,10,81),(97,10,82),(98,10,83),(99,10,84),(100,10,85),(101,10,86),(102,10,87),(103,10,88),(104,10,89),(105,10,90),(106,10,91),(107,10,92),(108,10,93),(109,10,94),(110,10,95),(111,10,96),(112,10,97),(113,10,98),(114,10,99),(115,10,100),(116,10,101),(117,10,102),(118,10,103),(119,10,104),(120,10,105),(121,10,106),(122,10,107),(123,10,108),(124,10,109),(125,10,110),(126,10,111),(127,10,112),(128,10,113),(129,10,114),(130,10,115),(131,10,116),(132,10,117),(133,10,118),(134,10,119),(135,10,120),(136,10,121),(137,10,122),(138,10,123),(139,10,124),(140,10,125),(141,10,126),(142,10,127),(143,10,128),(144,10,129),(145,10,130),(146,10,131),(147,10,132),(148,10,133),(149,10,134),(150,10,135),(151,10,136),(152,10,137),(153,10,138),(154,10,139),(155,10,140),(156,10,141),(157,10,142),(158,10,143),(159,10,144),(160,10,145),(161,10,146),(162,10,147),(163,10,148),(164,10,149),(165,10,150),(166,10,151),(167,10,152),(168,10,153),(169,10,154),(170,10,155),(171,10,156),(172,10,157),(173,10,158),(174,10,159),(175,10,160),(176,10,161),(177,10,162),(178,10,163),(179,10,164),(180,10,165),(181,10,166),(182,10,167),(183,10,168),(184,10,169),(185,10,170),(186,10,171),(187,10,172),(188,10,173),(189,10,174),(190,10,175),(191,10,176),(256,11,54),(245,12,54),(246,13,54),(247,14,54),(248,15,54),(249,16,54),(250,17,54),(205,18,54),(206,19,54),(207,20,54),(208,21,54),(209,22,54),(210,23,54),(211,24,54),(212,25,54),(213,26,54),(214,27,54),(215,28,54),(216,29,54),(217,30,54),(252,31,54),(253,32,54),(254,33,54),(255,34,54),(223,35,54),(236,36,54),(225,37,54),(226,38,54),(235,39,54),(228,40,54),(229,41,54),(233,42,54),(234,43,54),(232,44,54),(237,45,54),(238,46,54),(239,47,54),(240,48,54),(251,49,54);
 /*!40000 ALTER TABLE `crm_user_branch` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -264,11 +269,11 @@ DROP TABLE IF EXISTS `crm_role`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_role` (
   `id` decimal(19,0) NOT NULL,
-  `name` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
-  `description` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `id_page` decimal(19,0) DEFAULT NULL,
-  `state` int(11) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
+  `name` varchar(255) collate latin1_spanish_ci NOT NULL,
+  `description` varchar(255) collate latin1_spanish_ci default NULL,
+  `id_page` decimal(19,0) default NULL,
+  `state` int(11) NOT NULL default '1',
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`),
   KEY `fk_crm_role_1` (`id_page`),
   CONSTRAINT `fk_crm_role_1` FOREIGN KEY (`id_page`) REFERENCES `crm_page` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -281,7 +286,7 @@ CREATE TABLE `crm_role` (
 
 LOCK TABLES `crm_role` WRITE;
 /*!40000 ALTER TABLE `crm_role` DISABLE KEYS */;
-INSERT INTO `crm_role` VALUES (1,'ADMINISTRADOR','Administrador',17,1),(2,'CALL_CENTER','',17,1),(3,'GERENCIA','',12,1),(4,'MEDICO','MEDICO',22,1);
+INSERT INTO `crm_role` VALUES (1,'ADMINISTRADOR','Administrador',8,1),(2,'CALL_CENTER','',17,1),(3,'GERENCIA','',12,1),(4,'MEDICO','MEDICO',22,1);
 /*!40000 ALTER TABLE `crm_role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -294,10 +299,10 @@ DROP TABLE IF EXISTS `crm_city`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_city` (
   `id` decimal(19,0) NOT NULL,
-  `code` varchar(10) COLLATE latin1_spanish_ci NOT NULL,
-  `name` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
-  `id_region` decimal(19,0) DEFAULT NULL,
-  PRIMARY KEY (`id`),
+  `code` varchar(10) collate latin1_spanish_ci NOT NULL,
+  `name` varchar(255) collate latin1_spanish_ci NOT NULL,
+  `id_region` decimal(19,0) default NULL,
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `uk_crm_city_1` (`code`),
   KEY `fk_crm_city_1` (`id_region`),
   CONSTRAINT `fk_crm_city_1` FOREIGN KEY (`id_region`) REFERENCES `crm_region` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -310,7 +315,7 @@ CREATE TABLE `crm_city` (
 
 LOCK TABLES `crm_city` WRITE;
 /*!40000 ALTER TABLE `crm_city` DISABLE KEYS */;
-INSERT INTO `crm_city` VALUES (1,'1','MEDELLIN',1),(2,'2','BARRANQUILLA',2),(3,'3','BOGOTÁ',3),(4,'4','CARTAGENA',4),(5,'5','TUNJA',5),(6,'6','MANIZALES',6),(7,'7','FLORENCIA',7),(8,'8','POPAYAN',8),(9,'9','VALLEDUPAR',9),(10,'10','MONTERIA',10),(11,'11','BOGOTÁ',11),(12,'12','QUIBDO',12),(13,'13','NEIVA',13),(14,'14','RIOHACHA',14),(15,'15','SANTA MARTA',15),(16,'16','VILLAVIVENCIO',16),(17,'17','PASTO',17),(18,'18','CUCUTA',18),(19,'19','ARMENIA',19),(20,'20','PEREIRA',20),(21,'21','BUCARAMANGA',21),(22,'22','SINCELEJO',22),(23,'23','IBAGUE',23),(24,'24','CALI',24),(25,'25','ARAUCA',25),(26,'26','YOPAL',26),(27,'27','MOCOA',27),(28,'28','SAN ANDRES',28),(29,'29','LETICIA',29),(30,'30','INIRIDA',30),(31,'31','SAN JOSE DE GUAVIARE',31),(32,'32','MITU',32),(33,'33','PUERTO CARREÑO',33);
+INSERT INTO `crm_city` VALUES (1,'1','MEDELLIN',1),(2,'2','BARRANQUILLA',2),(3,'3','BOGOTÁ',3),(4,'4','CARTAGENA',4),(5,'5','TUNJA',5),(6,'6','MANIZALES',6),(7,'7','FLORENCIA',7),(8,'8','POPAYAN',8),(9,'9','VALLEDUPAR',9),(10,'10','MONTERIA',10),(11,'11','BOGOTÁ',11),(12,'12','QUIBDO',12),(13,'13','NEIVA',13),(14,'14','RIOHACHA',14),(15,'15','SANTA MARTA',15),(16,'16','VILLAVIVENCIO',16),(17,'17','PASTO',17),(18,'18','CUCUTA',18),(19,'19','ARMENIA',19),(20,'20','PEREIRA',20),(21,'21','BUCARAMANGA',21),(22,'22','SINCELEJO',22),(23,'23','IBAGUE',23),(24,'24','CALI',24),(25,'25','ARAUCA',25),(26,'26','YOPAL',26),(27,'27','MOCOA',27),(28,'28','SAN ANDRES',28),(29,'29','LETICIA',29),(30,'30','INIRIDA',30),(31,'31','SAN JOSE DE GUAVIARE',31),(32,'32','MITU',32),(33,'33','PUERTO CARREÑO',33),(34,'AGS','Aguascalientes',34),(35,'BC','Baja California',35),(36,'BCS','Baja California S',36),(37,'CHI','Chihuahua',37),(38,'CHS','Chiapas',38),(39,'CMP','Campeche',39),(40,'COA','Coahuila',40),(41,'COL','Colima',41),(42,'DF','Distrito Federal',42),(43,'DGO','Durango',43),(44,'GRO','Guerrero',44),(45,'GTO','Guanajuato',45),(46,'HGO','Hidalgo',46),(47,'JAL','Jalisco',47),(48,'MCH','Michoacán',48),(49,'MEX','Estado de México',49),(50,'MOR','Morelos',50),(51,'NAY','Nayarit',51),(52,'NL','Nuevo León',52),(53,'OAX','Oaxaca',53),(54,'PUE','Puebla',54),(55,'QR','Quintana Roo',55),(56,'QRO','Querétaro',56),(57,'SIN','Sinaloa',57),(58,'SLP','San Luis Potosí',58),(59,'SON','Sonora',59),(60,'TAB','Tabasco',60),(61,'TLX','Tlaxcala',61),(62,'TMS','Tamaulipas',62),(63,'VER','Veracruz',63),(64,'YUC','Yucatán',64),(65,'ZAC','Zacatecas',65);
 /*!40000 ALTER TABLE `crm_city` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -323,13 +328,13 @@ DROP TABLE IF EXISTS `crm_procedure_detail`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_procedure_detail` (
   `id` decimal(19,0) NOT NULL,
-  `name` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
+  `name` varchar(255) collate latin1_spanish_ci NOT NULL,
   `id_procedure` decimal(19,0) NOT NULL,
-  `time_doctor` int(11) DEFAULT '0',
-  `time_nurses` int(11) DEFAULT '0',
-  `time_stretchers` int(11) DEFAULT '0',
-  `state` int(11) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
+  `time_doctor` int(11) default '0',
+  `time_nurses` int(11) default '0',
+  `time_stretchers` int(11) default '0',
+  `state` int(11) NOT NULL default '1',
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`),
   KEY `fk_crm_procedure_detail_1` (`id_procedure`),
   CONSTRAINT `fk_crm_procedure_detail_1` FOREIGN KEY (`id_procedure`) REFERENCES `crm_procedure` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -342,7 +347,7 @@ CREATE TABLE `crm_procedure_detail` (
 
 LOCK TABLES `crm_procedure_detail` WRITE;
 /*!40000 ALTER TABLE `crm_procedure_detail` DISABLE KEYS */;
-INSERT INTO `crm_procedure_detail` VALUES (1,'Primera Cita',1,30,0,0,1),(2,'Control',2,15,0,0,0),(3,'Terapia 1',3,45,45,45,1),(4,'Terapia 2',3,50,50,50,1);
+INSERT INTO `crm_procedure_detail` VALUES (1,'Primera Cita',1,40,0,0,1),(2,'Control',2,20,0,0,0),(3,'Terapia 1',3,45,45,45,1),(4,'Terapia 2',3,50,50,50,1);
 /*!40000 ALTER TABLE `crm_procedure_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -355,10 +360,10 @@ DROP TABLE IF EXISTS `crm_cie_material`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_cie_material` (
   `id` decimal(19,0) NOT NULL,
-  `description` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `material` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
+  `description` varchar(255) collate latin1_spanish_ci default NULL,
+  `material` varchar(45) collate latin1_spanish_ci NOT NULL,
   `id_cie` decimal(19,0) NOT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY  (`id`),
   KEY `fk_crm_cie_material_1` (`id_cie`),
   CONSTRAINT `fk_crm_cie_material_1` FOREIGN KEY (`id_cie`) REFERENCES `crm_cie` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
@@ -383,35 +388,35 @@ DROP TABLE IF EXISTS `crm_history_physique`;
 CREATE TABLE `crm_history_physique` (
   `id` decimal(19,0) NOT NULL,
   `id_patient` decimal(19,0) NOT NULL,
-  `heart_rate` int(11) DEFAULT NULL,
-  `respiratory_rate` int(11) DEFAULT NULL,
-  `height` decimal(5,2) DEFAULT NULL,
-  `weight` decimal(5,2) DEFAULT NULL,
-  `blood_pressure` varchar(7) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `general_state_check` tinyint(1) DEFAULT NULL,
-  `general_state` text COLLATE latin1_spanish_ci,
-  `head_neck_check` tinyint(1) DEFAULT NULL,
-  `head_neck` text COLLATE latin1_spanish_ci,
-  `chest_check` tinyint(1) DEFAULT NULL,
-  `chest` text COLLATE latin1_spanish_ci,
-  `lungs_check` tinyint(1) DEFAULT NULL,
-  `lungs` text COLLATE latin1_spanish_ci,
-  `heart_check` tinyint(1) DEFAULT NULL,
-  `heart` text COLLATE latin1_spanish_ci,
-  `abdomen_check` tinyint(1) DEFAULT NULL,
-  `abdomen` text COLLATE latin1_spanish_ci,
-  `genitals_check` tinyint(1) DEFAULT NULL,
-  `genitals` text COLLATE latin1_spanish_ci,
-  `osteo_check` tinyint(1) DEFAULT NULL,
-  `osteo` text COLLATE latin1_spanish_ci,
-  `tips_check` tinyint(1) DEFAULT NULL,
-  `tips` text COLLATE latin1_spanish_ci,
-  `highlights_check` tinyint(1) DEFAULT NULL,
-  `highlights` text COLLATE latin1_spanish_ci,
-  `skin_check` tinyint(1) DEFAULT NULL,
-  `skin` text COLLATE latin1_spanish_ci,
-  `obs` text COLLATE latin1_spanish_ci,
-  PRIMARY KEY (`id`),
+  `heart_rate` int(11) default NULL,
+  `respiratory_rate` int(11) default NULL,
+  `height` decimal(5,2) default NULL,
+  `weight` decimal(5,2) default NULL,
+  `blood_pressure` varchar(7) collate latin1_spanish_ci default NULL,
+  `general_state_check` tinyint(1) default NULL,
+  `general_state` text collate latin1_spanish_ci,
+  `head_neck_check` tinyint(1) default NULL,
+  `head_neck` text collate latin1_spanish_ci,
+  `chest_check` tinyint(1) default NULL,
+  `chest` text collate latin1_spanish_ci,
+  `lungs_check` tinyint(1) default NULL,
+  `lungs` text collate latin1_spanish_ci,
+  `heart_check` tinyint(1) default NULL,
+  `heart` text collate latin1_spanish_ci,
+  `abdomen_check` tinyint(1) default NULL,
+  `abdomen` text collate latin1_spanish_ci,
+  `genitals_check` tinyint(1) default NULL,
+  `genitals` text collate latin1_spanish_ci,
+  `osteo_check` tinyint(1) default NULL,
+  `osteo` text collate latin1_spanish_ci,
+  `tips_check` tinyint(1) default NULL,
+  `tips` text collate latin1_spanish_ci,
+  `highlights_check` tinyint(1) default NULL,
+  `highlights` text collate latin1_spanish_ci,
+  `skin_check` tinyint(1) default NULL,
+  `skin` text collate latin1_spanish_ci,
+  `obs` text collate latin1_spanish_ci,
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `id_patient_UNIQUE` (`id_patient`),
   KEY `fk_crm_history_physique_1` (`id_patient`),
   CONSTRAINT `fk_crm_history_physique_1` FOREIGN KEY (`id_patient`) REFERENCES `crm_patient` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -424,7 +429,7 @@ CREATE TABLE `crm_history_physique` (
 
 LOCK TABLES `crm_history_physique` WRITE;
 /*!40000 ALTER TABLE `crm_history_physique` DISABLE KEYS */;
-INSERT INTO `crm_history_physique` VALUES (1,1,10,10,180.00,80.00,'20/300',1,'1',1,'2',1,'3',1,'4',1,'5',1,'6',1,'7',1,'8',1,'9',1,'10',0,NULL,NULL),(2,5,10,20,30.00,30.00,'20/60',0,NULL,0,NULL,0,NULL,0,NULL,0,NULL,0,NULL,0,NULL,0,NULL,0,NULL,0,NULL,0,NULL,'');
+INSERT INTO `crm_history_physique` VALUES (1,1,10,10,180.00,80.00,'20/300',1,'1',1,'2',1,'3',1,'4',1,'5',1,'6',1,'7',1,'8',1,'9',1,'10',0,NULL,NULL);
 /*!40000 ALTER TABLE `crm_history_physique` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -437,10 +442,10 @@ DROP TABLE IF EXISTS `crm_specialty`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_specialty` (
   `id` decimal(19,0) NOT NULL,
-  `code` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `description` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
-  `state` int(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
+  `code` varchar(45) collate latin1_spanish_ci default NULL,
+  `description` varchar(255) collate latin1_spanish_ci NOT NULL,
+  `state` int(1) NOT NULL default '1',
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -465,9 +470,9 @@ DROP TABLE IF EXISTS `crm_history_organometry`;
 CREATE TABLE `crm_history_organometry` (
   `id` decimal(19,0) NOT NULL,
   `id_patient` decimal(19,0) NOT NULL,
-  `organometry_check` tinyint(1) DEFAULT NULL,
-  `organometry_analysis` text COLLATE latin1_spanish_ci,
-  PRIMARY KEY (`id`),
+  `organometry_check` tinyint(1) default NULL,
+  `organometry_analysis` text collate latin1_spanish_ci,
+  PRIMARY KEY  (`id`),
   KEY `fk_crm_history_organometry_1` (`id_patient`),
   CONSTRAINT `fk_crm_history_organometry_1` FOREIGN KEY (`id_patient`) REFERENCES `crm_patient` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
@@ -479,7 +484,7 @@ CREATE TABLE `crm_history_organometry` (
 
 LOCK TABLES `crm_history_organometry` WRITE;
 /*!40000 ALTER TABLE `crm_history_organometry` DISABLE KEYS */;
-INSERT INTO `crm_history_organometry` VALUES (1,1,1,'999999'),(2,5,0,NULL);
+INSERT INTO `crm_history_organometry` VALUES (1,1,1,'999999');
 /*!40000 ALTER TABLE `crm_history_organometry` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -492,18 +497,18 @@ DROP TABLE IF EXISTS `crm_user`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_user` (
   `id` decimal(19,0) NOT NULL,
-  `username` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
-  `password` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
-  `doc` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
-  `names` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
-  `surnames` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
-  `email` varchar(1000) COLLATE latin1_spanish_ci NOT NULL,
-  `phone` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `extension` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
+  `username` varchar(45) collate latin1_spanish_ci NOT NULL,
+  `password` varchar(45) collate latin1_spanish_ci NOT NULL,
+  `doc` varchar(45) collate latin1_spanish_ci NOT NULL,
+  `names` varchar(255) collate latin1_spanish_ci NOT NULL,
+  `surnames` varchar(255) collate latin1_spanish_ci NOT NULL,
+  `email` varchar(1000) collate latin1_spanish_ci NOT NULL,
+  `phone` varchar(255) collate latin1_spanish_ci default NULL,
+  `extension` varchar(255) collate latin1_spanish_ci default NULL,
   `id_departament` decimal(19,0) NOT NULL,
   `id_profile` decimal(19,0) NOT NULL,
-  `state` int(11) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
+  `state` int(11) NOT NULL default '1',
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `username_UNIQUE` (`username`),
   KEY `fk_crm_user_1` (`id_departament`),
   KEY `fk_crm_user_2` (`id_profile`),
@@ -518,7 +523,7 @@ CREATE TABLE `crm_user` (
 
 LOCK TABLES `crm_user` WRITE;
 /*!40000 ALTER TABLE `crm_user` DISABLE KEYS */;
-INSERT INTO `crm_user` VALUES (1,'gsolorzano','250cf8b51c773f3f8dc8b4be867a9a02','123','Gerardo','Solorzano','gsolorzano@affinity.com.co','','',1,1,1),(2,'jennyalvarez','202cb962ac59075b964b07152d234b70','456','Jenny','Alvarez','jennyalvarez@affinitycolombia.com','','',1,1,1),(3,'jperez','202cb962ac59075b964b07152d234b70','789','juan','perez','JUAN.PEREZ@hotmail.com','','',1,1,1),(4,'ccbog_age1','202cb962ac59075b964b07152d234b70','012','Agente1','Call Center','agente1.bogota@affinitycolombia.com','6231629','',2,2,1),(5,'agomez','202cb962ac59075b964b07152d234b70','00000082','ALEXANDER','GOMEZ','agomez@affinitycolombia.com','','',3,1,1),(6,'dhernandez','202cb962ac59075b964b07152d234b70','00000086','DIANA','HERNANDEZ','dhernandez@affinitycolombia.com','','',3,1,1),(7,'eespitia','202cb962ac59075b964b07152d234b70','00000089','EVANGELINA','ESPITIA','eespitia@affinitycolombia.com','','',3,1,1),(8,'gescobar','202cb962ac59075b964b07152d234b70','00000090','GUILLERMO','ESCOBAR','gescobar@affinitycolombia.com','','',3,1,1),(9,'afuente','202cb962ac59075b964b07152d234b70','22734930','ADRIANA','FUENTE','afuente@hotmail.com','123','',1,1,1);
+INSERT INTO `crm_user` VALUES (1,'gsolorzano','2464a6a1090dbebb515652b9f6b8677e','123','Gerardo','Solorzano','gsolorzano@affinity.com.co','','',1,2,1),(2,'jennyalvarez','202cb962ac59075b964b07152d234b70','456','Jenny','Alvarez','jennyalvarez@affinitycolombia.com','','',1,1,1),(3,'jperez','202cb962ac59075b964b07152d234b70','789','juan','perez','JUAN.PEREZ@hotmail.com','','',1,1,1),(4,'ccbog_age1','202cb962ac59075b964b07152d234b70','012','Agente1','Call Center','agente1.bogota@affinitycolombia.com','6231629','',2,2,1),(5,'agomez','202cb962ac59075b964b07152d234b70','00000082','ALEXANDER','GOMEZ','agomez@affinitycolombia.com','','',3,1,1),(6,'dhernandez','202cb962ac59075b964b07152d234b70','00000086','DIANA','HERNANDEZ','dhernandez@affinitycolombia.com','','',3,1,1),(7,'eespitia','202cb962ac59075b964b07152d234b70','00000089','EVANGELINA','ESPITIA','eespitia@affinitycolombia.com','','',3,1,1),(8,'gescobar','202cb962ac59075b964b07152d234b70','00000090','GUILLERMO','ESCOBAR','gescobar@affinitycolombia.com','','',3,1,1),(9,'afuente','202cb962ac59075b964b07152d234b70','22734930','ADRIANA','FUENTE','afuente@hotmail.com','123','',1,1,1),(10,'lberdugo','2f4a946e5b0aec5024b3c5ca53ec2cfc','22465189','Liz','Berdugo','lizberdugo@affinitycolombia.com','','',2,2,1),(11,'cos01','ef6299c9e7fdae6d775819ce1e2620b8','cos01','cos01','cos01','cos01@affinitycolombia.com','','',2,15,1),(12,'cos02','ef6299c9e7fdae6d775819ce1e2620b8','cos02','cos02','cos02','cos02@affinitycolombia.com','','',2,8,1),(13,'cos08','ef6299c9e7fdae6d775819ce1e2620b8','cos08','cos08','cos08','cos08@affinitycolombia.com','','',2,8,1),(14,'cos03','ef6299c9e7fdae6d775819ce1e2620b8','cos03','cos03','cos03','cos03@affinitycolombia.com','cos03','',2,8,1),(15,'cos04','ef6299c9e7fdae6d775819ce1e2620b8','cos04','cos04','cos04','cos04@affinitycolombia.com','cos04','',2,8,1),(16,'cos05','ef6299c9e7fdae6d775819ce1e2620b8','cos05','cos05','cos05','cos05@affinitycolombia.com','cos05','',2,8,1),(17,'cos06','ef6299c9e7fdae6d775819ce1e2620b8','cos06','cos06','cos06','cos06@affinitycolombia.com','cos06','',2,8,1),(18,'cos07','ef6299c9e7fdae6d775819ce1e2620b8','cos07','cos07','cos07','cos07@affinitycolombia.com','cos07','',2,8,1),(19,'cos09','ef6299c9e7fdae6d775819ce1e2620b8','cos09','cos09','cos09','cos09@affinitycolombia.com','cos09','',2,8,1),(20,'cos10','ef6299c9e7fdae6d775819ce1e2620b8','cos10','cos10','cos10','cos10@affinitycolombia.com','cos10','',2,8,1),(21,'cos11','ef6299c9e7fdae6d775819ce1e2620b8','cos11','cos11','cos11','cos11@affinitycolombia.com','cos11','',2,8,1),(22,'cos12','ef6299c9e7fdae6d775819ce1e2620b8','cos12','cos12','cos12','cos12@affinitycolombia.com','cos12','',2,8,1),(23,'cos13','ef6299c9e7fdae6d775819ce1e2620b8','cos13','cos13','cos13','cos13@affinitycolombia.com','','',2,8,1),(24,'cos14','ef6299c9e7fdae6d775819ce1e2620b8','cos14','cos14','cos14','cos14@affinitycolombia.com','','',2,8,1),(25,'cos15','ef6299c9e7fdae6d775819ce1e2620b8','cos15','cos15','cos15','cos15@affinitycolombia.com','','',2,8,1),(26,'cos16','ef6299c9e7fdae6d775819ce1e2620b8','cos16','cos16','cos16','cos16@affinitycolombia.com','','',2,8,1),(27,'cos17','ef6299c9e7fdae6d775819ce1e2620b8','cos17','cos17','cos17','cos17@affinitycolombia.com','','',2,8,1),(28,'cos18','ef6299c9e7fdae6d775819ce1e2620b8','cos18','cos18','cos18','cos18@affinitycolombia.com','','',2,8,1),(29,'cos19','ef6299c9e7fdae6d775819ce1e2620b8','cos19','cos19','cos19','cos19@affinitycolombia.com','','',2,8,1),(30,'cos20','ef6299c9e7fdae6d775819ce1e2620b8','cos20','cos20','cos20','cos20@affinitycolombia.com','','',2,8,1),(31,'temporal_medico','ef6299c9e7fdae6d775819ce1e2620b8','7154543','Paulina','Romero','medico4.mexico@affinitycolombia.com','','',3,8,1),(32,'temporal_medico1','ef6299c9e7fdae6d775819ce1e2620b8','7164416','Rodrigo','Urban','medico1.mexico@affinitycolombia.com','','',3,8,1),(33,'temporal_medico2','ef6299c9e7fdae6d775819ce1e2620b8','4386759','Ricardo','Calerón','medico2.mexico@affinitycolombia.com','','',3,8,1),(34,'temporal_medico3','ef6299c9e7fdae6d775819ce1e2620b8','6186189','Daniel','Torres','medico3.mexico@affinitycolombia.com','','',3,8,1),(35,'cos21','ef6299c9e7fdae6d775819ce1e2620b8','cos21','cos21','cos21','cos21@affinitycolombia.com','','',2,8,1),(36,'cos22','ef6299c9e7fdae6d775819ce1e2620b8','cos22','cos22','cos22','cos22@affinitycolombia.com','','',2,8,1),(37,'cos23','ef6299c9e7fdae6d775819ce1e2620b8','cos23','cos23','cos23','cos23@affinitycolombia.com','','',2,8,1),(38,'cos24','ef6299c9e7fdae6d775819ce1e2620b8','cos24','cos24','cos24','cos24@affinitycolombia.com','','',2,8,1),(39,'cos25','ef6299c9e7fdae6d775819ce1e2620b8','cos25','cos25','cos25','cos25@affinitycolombia.com','','',2,8,1),(40,'cos26','ef6299c9e7fdae6d775819ce1e2620b8','cos26','cos26','cos26','cos26@affinitycolombia.com','','',2,8,1),(41,'cos27','ef6299c9e7fdae6d775819ce1e2620b8','cos27','cos27','cos27','cos27@affinitycolombia.com','','',2,8,1),(42,'cos28','ef6299c9e7fdae6d775819ce1e2620b8','cos28','cos28','cos28','cos28@affinitycolombia.com','','',2,8,1),(43,'cos29','ef6299c9e7fdae6d775819ce1e2620b8','cos29','cos29','cos29','cos29@affinitycolombia.com','','',2,8,1),(44,'cos30','ef6299c9e7fdae6d775819ce1e2620b8','cos30','cos30','cos30','cos30@affinitycolombia.com','','',2,8,1),(45,'cos31','ef6299c9e7fdae6d775819ce1e2620b8','cos31','cos31','cos31','cos31@affinitycolombia.com','','',2,8,1),(46,'cos32','ef6299c9e7fdae6d775819ce1e2620b8','cos32','cos32','cos32','cos32@affinitycolombia.com','','',2,8,1),(47,'cos33','ef6299c9e7fdae6d775819ce1e2620b8','cos33','cos33','cos33','cos33@affinitycolombia.com','','',2,8,1),(48,'cos34','ef6299c9e7fdae6d775819ce1e2620b8','cos34','cos34','cos34','cos34@affinitycolombia.com','','',2,8,1),(49,'cos35','ef6299c9e7fdae6d775819ce1e2620b8','cos35','cos35','cos35','cos35@affinitycolombia.com','','',2,8,1);
 /*!40000 ALTER TABLE `crm_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -549,7 +554,7 @@ CREATE TABLE `crm_holiday_branch` (
   `id` decimal(19,0) NOT NULL,
   `id_holiday` decimal(19,0) NOT NULL,
   `id_branch` decimal(19,0) NOT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `uk_crm_holiday_branch_1` (`id_holiday`,`id_branch`),
   KEY `fk_crm_holiday_branch_1` (`id_holiday`),
   KEY `fk_crm_holiday_branch_2` (`id_branch`),
@@ -564,6 +569,7 @@ CREATE TABLE `crm_holiday_branch` (
 
 LOCK TABLES `crm_holiday_branch` WRITE;
 /*!40000 ALTER TABLE `crm_holiday_branch` DISABLE KEYS */;
+INSERT INTO `crm_holiday_branch` VALUES (1,3,1),(2,3,2),(3,3,3),(4,3,4),(5,3,5),(6,3,6),(7,3,7),(8,3,8),(9,3,9),(10,3,10),(11,3,11),(12,3,12),(13,3,13),(14,3,14),(15,3,15),(16,3,16),(17,3,17),(18,3,18),(19,3,19),(20,3,20);
 /*!40000 ALTER TABLE `crm_holiday_branch` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -578,7 +584,7 @@ CREATE TABLE `crm_page_role` (
   `id` decimal(19,0) NOT NULL,
   `id_page` decimal(19,0) NOT NULL,
   `id_role` decimal(19,0) NOT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `uk_crm_page_role_1` (`id_page`,`id_role`),
   KEY `fk_crm_page_role_1` (`id_page`),
   KEY `fk_crm_page_role_2` (`id_role`),
@@ -593,7 +599,7 @@ CREATE TABLE `crm_page_role` (
 
 LOCK TABLES `crm_page_role` WRITE;
 /*!40000 ALTER TABLE `crm_page_role` DISABLE KEYS */;
-INSERT INTO `crm_page_role` VALUES (146,1,1),(111,1,2),(147,2,1),(124,3,1),(126,4,1),(133,5,1),(136,6,1),(129,7,1),(137,8,1),(104,8,2),(131,9,1),(125,10,1),(112,10,2),(148,11,1),(109,11,2),(38,11,3),(121,11,4),(139,12,1),(105,12,2),(37,12,3),(114,12,4),(135,13,1),(128,14,1),(149,15,1),(110,15,2),(122,15,4),(130,16,1),(141,17,1),(106,17,2),(117,17,4),(142,18,1),(107,18,2),(118,18,4),(143,19,1),(116,19,4),(134,20,1),(127,21,1),(140,22,1),(108,22,2),(119,22,4),(150,23,1),(123,23,4),(144,24,1),(120,24,4),(145,25,1),(138,27,1),(115,27,4),(132,28,1),(151,29,1);
+INSERT INTO `crm_page_role` VALUES (97,1,1),(111,1,2),(98,2,1),(77,3,1),(79,4,1),(84,5,1),(87,6,1),(81,7,1),(89,8,1),(104,8,2),(83,9,1),(78,10,1),(112,10,2),(99,11,1),(109,11,2),(38,11,3),(121,11,4),(90,12,1),(105,12,2),(37,12,3),(114,12,4),(86,13,1),(80,14,1),(100,15,1),(110,15,2),(122,15,4),(82,16,1),(92,17,1),(106,17,2),(117,17,4),(93,18,1),(107,18,2),(118,18,4),(113,19,1),(116,19,4),(85,20,1),(88,21,1),(91,22,1),(108,22,2),(119,22,4),(101,23,1),(123,23,4),(95,24,1),(120,24,4),(96,25,1),(103,27,1),(115,27,4),(124,28,1),(151,29,1);
 /*!40000 ALTER TABLE `crm_page_role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -606,17 +612,17 @@ DROP TABLE IF EXISTS `crm_profile`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_profile` (
   `id` decimal(19,0) NOT NULL,
-  `code` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
-  `description` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `sales_org` varchar(4) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `distr_chan` varchar(4) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `division` varchar(4) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `society` varchar(4) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `account` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `payment_term` varchar(4) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `formula` varchar(4) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `state` int(11) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
+  `code` varchar(45) collate latin1_spanish_ci NOT NULL,
+  `description` varchar(255) collate latin1_spanish_ci default NULL,
+  `sales_org` varchar(4) collate latin1_spanish_ci default NULL,
+  `distr_chan` varchar(4) collate latin1_spanish_ci default NULL,
+  `division` varchar(4) collate latin1_spanish_ci default NULL,
+  `society` varchar(4) collate latin1_spanish_ci default NULL,
+  `account` varchar(45) collate latin1_spanish_ci default NULL,
+  `payment_term` varchar(4) collate latin1_spanish_ci default NULL,
+  `formula` varchar(4) collate latin1_spanish_ci default NULL,
+  `state` int(11) NOT NULL default '1',
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -627,7 +633,7 @@ CREATE TABLE `crm_profile` (
 
 LOCK TABLES `crm_profile` WRITE;
 /*!40000 ALTER TABLE `crm_profile` DISABLE KEYS */;
-INSERT INTO `crm_profile` VALUES (1,'Finders  - Canal 10','Finders  - Canal 10','4000','10','10','4000','1305050000','Z001','ZHD2',1),(2,'Finders  - Canal 20','Finders  - Canal 20','4000','20','10','4000','1305050000','Z001','ZHD2',1),(3,'Finders  - Canal 30','Finders  - Canal 30','1000','10','10','1000','1305050000','Z001','ZHD2',1),(4,'Finders  - Canal 31','Finders  - Canal 31','1000','31','10','1000','1305050000','Z001','ZHD2',1),(5,'Finders  - Canal 40','Finders  - Canal 40','1000','40','10','1000','1305050000','Z001','ZHD2',1),(6,'Finders  - Canal 50','Finders  - Canal 50','1000','50','10','1000','1305050000','Z001','ZHD2',1),(7,'Finders  - Canal 70','Finders  - Canal 70','1000','70','10','1000','1305050000','Z001','ZHD2',1),(8,'Affinity  - Canal 10','Affinity  - Canal 10','1000','10','10','1000','1305050000','Z001','ZHD2',1),(9,'Affinity  - Canal 20','Affinity  - Canal 20','1000','20','10','1000','1305050000','Z001','ZHD2',1),(10,'Affinity  - Canal 30','Affinity  - Canal 30','1000','30','10','1000','1305050000','Z001','ZHD2',1),(11,'Affinity  - Canal 31','Affinity  - Canal 31','1000','31','10','1000','1305050000','Z001','ZHD2',1),(12,'Affinity  - Canal 40','Affinity  - Canal 40','1000','40','10','1000','1305050000','Z001','ZHD2',1),(13,'Affinity  - Canal 50','Affinity  - Canal 50','1000','50','10','1000','1305050000','Z001','ZHD2',1),(14,'Affinity  - Canal 70','Affinity  - Canal 70','1000','70','10','1000','1305050000','Z001','ZHD2',1);
+INSERT INTO `crm_profile` VALUES (1,'Finders  - Canal 10','Finders  - Canal 10','4000','10','10','4000','1305050000','Z001','ZHD2',1),(2,'Finders  - Canal 20','Finders  - Canal 20','4000','20','10','4000','1305050000','Z001','ZHD2',1),(3,'Finders  - Canal 30','Finders  - Canal 30','1000','30','10','1000','1305050000','Z001','ZHD2',1),(4,'Finders  - Canal 31','Finders  - Canal 31','1000','31','10','1000','1305050000','Z001','ZHD2',1),(5,'Finders  - Canal 40','Finders  - Canal 40','1000','40','10','1000','1305050000','Z001','ZHD2',1),(6,'Finders  - Canal 50','Finders  - Canal 50','1000','50','10','1000','1305050000','Z001','ZHD2',1),(7,'Finders  - Canal 70','Finders  - Canal 70','1000','70','10','1000','1305050000','Z001','ZHD2',1),(8,'Affinity  - Canal 10','Affinity  - Canal 10','1000','10','10','1000','1305050000','Z001','ZHD2',1),(9,'Affinity  - Canal 20','Affinity  - Canal 20','1000','20','10','1000','1305050000','Z001','ZHD2',1),(10,'Affinity  - Canal 30','Affinity  - Canal 30','1000','30','10','1000','1305050000','Z001','ZHD2',1),(11,'Affinity  - Canal 31','Affinity  - Canal 31','1000','31','10','1000','1305050000','Z001','ZHD2',1),(12,'Affinity  - Canal 40','Affinity  - Canal 40','1000','40','10','1000','1305050000','Z001','ZHD2',1),(13,'Affinity  - Canal 50','Affinity  - Canal 50','1000','50','10','1000','1305050000','Z001','ZHD2',1),(14,'Affinity  - Canal 70','Affinity  - Canal 70','1000','70','10','1000','1305050000','Z001','ZHD2',1),(15,'Solsalud - Mexico','Solsalud - Mexico','3000','10','00','3000','1305050000','Z001','ZHD2',1);
 /*!40000 ALTER TABLE `crm_profile` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -640,12 +646,12 @@ DROP TABLE IF EXISTS `crm_doctor`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_doctor` (
   `id` decimal(19,0) NOT NULL,
-  `code` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
-  `names` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
-  `id_speciality` decimal(19,0) DEFAULT NULL,
+  `code` varchar(45) collate latin1_spanish_ci NOT NULL,
+  `names` varchar(45) collate latin1_spanish_ci NOT NULL,
+  `id_speciality` decimal(19,0) default NULL,
   `id_user` decimal(19,0) NOT NULL,
-  `state` int(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
+  `state` int(1) NOT NULL default '1',
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`),
   KEY `fk_crm_doctor_1` (`id_speciality`),
   KEY `fk_crm_doctor_2` (`id_user`),
@@ -660,7 +666,7 @@ CREATE TABLE `crm_doctor` (
 
 LOCK TABLES `crm_doctor` WRITE;
 /*!40000 ALTER TABLE `crm_doctor` DISABLE KEYS */;
-INSERT INTO `crm_doctor` VALUES (5,'00000082','GOMEZ ALEXANDER',1,5,1),(6,'00000086','HERNANDEZ DIANA',1,6,1),(7,'00000089','ESPITIA EVANGELINA',1,7,1),(8,'00000090','ESCOBAR GUILLERMO',1,8,1),(9,'22734930','FUENTE ADRIANA',2,9,1);
+INSERT INTO `crm_doctor` VALUES (5,'00000082','GOMEZ ALEXANDER',1,5,1),(6,'00000086','HERNANDEZ DIANA',1,6,1),(7,'00000089','ESPITIA EVANGELINA',1,7,1),(8,'00000090','ESCOBAR GUILLERMO',1,8,1),(9,'22734930','FUENTE ADRIANA',2,9,1),(10,'7154543','ROMERO PAULINA',1,31,1),(11,'7164416','URBAN RODRIGO',1,32,1),(12,'4386759','CALERÓN RICARDO',1,33,1),(13,'6186189','TORRES DANIEL',1,34,1);
 /*!40000 ALTER TABLE `crm_doctor` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -674,59 +680,59 @@ DROP TABLE IF EXISTS `crm_history_record`;
 CREATE TABLE `crm_history_record` (
   `id` decimal(19,0) NOT NULL,
   `id_patient` decimal(19,0) NOT NULL,
-  `arthritis` tinyint(1) DEFAULT NULL,
-  `arthritis_time` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `arthritis_medication` text COLLATE latin1_spanish_ci,
-  `cancer` tinyint(1) DEFAULT NULL,
-  `cancer_time` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `cancer_medication` text COLLATE latin1_spanish_ci,
-  `pulmonary` tinyint(1) DEFAULT NULL,
-  `pulmonary_time` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `pulmonary_medication` text COLLATE latin1_spanish_ci,
-  `diabetes` tinyint(1) DEFAULT NULL,
-  `diabetes_time` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `diabetes_medication` text COLLATE latin1_spanish_ci,
-  `hypertension` tinyint(1) DEFAULT NULL,
-  `hypertension_time` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `hypertension_medication` text COLLATE latin1_spanish_ci,
-  `hospitalizations` tinyint(1) DEFAULT NULL,
-  `hospitalizations_time` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `hospitalizations_medication` text COLLATE latin1_spanish_ci,
-  `allergy` tinyint(1) DEFAULT NULL,
-  `allergy_time` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `allergy_medication` text COLLATE latin1_spanish_ci,
-  `infections` tinyint(1) DEFAULT NULL,
-  `infections_time` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `infections_medication` text COLLATE latin1_spanish_ci,
-  `occupational` text COLLATE latin1_spanish_ci,
-  `toxic` text COLLATE latin1_spanish_ci,
-  `blood_type` text COLLATE latin1_spanish_ci,
-  `pregnancy` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `parity` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `abortions` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `family_history` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `stillbirths` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `caesarean` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `menarche` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `sexarca` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `fur` date DEFAULT NULL,
-  `bleeding` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `fuc` date DEFAULT NULL,
-  `fuep` date DEFAULT NULL,
-  `psa` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `psa_date` date DEFAULT NULL,
-  `neonatal` text COLLATE latin1_spanish_ci,
-  `perinatal` text COLLATE latin1_spanish_ci,
-  `vaccination` text COLLATE latin1_spanish_ci,
-  `growth` text COLLATE latin1_spanish_ci,
-  `hypertension_parent` text COLLATE latin1_spanish_ci,
-  `epoc_parent` text COLLATE latin1_spanish_ci,
-  `heart_disease_parent` text COLLATE latin1_spanish_ci,
-  `asthma_parent` text COLLATE latin1_spanish_ci,
-  `acv_parent` text COLLATE latin1_spanish_ci,
-  `cancer_parent` text COLLATE latin1_spanish_ci,
-  `diabetes_parent` text COLLATE latin1_spanish_ci,
-  PRIMARY KEY (`id`),
+  `arthritis` tinyint(1) default NULL,
+  `arthritis_time` varchar(45) collate latin1_spanish_ci default NULL,
+  `arthritis_medication` text collate latin1_spanish_ci,
+  `cancer` tinyint(1) default NULL,
+  `cancer_time` varchar(45) collate latin1_spanish_ci default NULL,
+  `cancer_medication` text collate latin1_spanish_ci,
+  `pulmonary` tinyint(1) default NULL,
+  `pulmonary_time` varchar(45) collate latin1_spanish_ci default NULL,
+  `pulmonary_medication` text collate latin1_spanish_ci,
+  `diabetes` tinyint(1) default NULL,
+  `diabetes_time` varchar(45) collate latin1_spanish_ci default NULL,
+  `diabetes_medication` text collate latin1_spanish_ci,
+  `hypertension` tinyint(1) default NULL,
+  `hypertension_time` varchar(45) collate latin1_spanish_ci default NULL,
+  `hypertension_medication` text collate latin1_spanish_ci,
+  `hospitalizations` tinyint(1) default NULL,
+  `hospitalizations_time` varchar(45) collate latin1_spanish_ci default NULL,
+  `hospitalizations_medication` text collate latin1_spanish_ci,
+  `allergy` tinyint(1) default NULL,
+  `allergy_time` varchar(45) collate latin1_spanish_ci default NULL,
+  `allergy_medication` text collate latin1_spanish_ci,
+  `infections` tinyint(1) default NULL,
+  `infections_time` varchar(45) collate latin1_spanish_ci default NULL,
+  `infections_medication` text collate latin1_spanish_ci,
+  `occupational` text collate latin1_spanish_ci,
+  `toxic` text collate latin1_spanish_ci,
+  `blood_type` text collate latin1_spanish_ci,
+  `pregnancy` varchar(45) collate latin1_spanish_ci default NULL,
+  `parity` varchar(45) collate latin1_spanish_ci default NULL,
+  `abortions` varchar(45) collate latin1_spanish_ci default NULL,
+  `family_history` varchar(45) collate latin1_spanish_ci default NULL,
+  `stillbirths` varchar(45) collate latin1_spanish_ci default NULL,
+  `caesarean` varchar(45) collate latin1_spanish_ci default NULL,
+  `menarche` varchar(45) collate latin1_spanish_ci default NULL,
+  `sexarca` varchar(45) collate latin1_spanish_ci default NULL,
+  `fur` date default NULL,
+  `bleeding` varchar(1000) collate latin1_spanish_ci default NULL,
+  `fuc` date default NULL,
+  `fuep` date default NULL,
+  `psa` varchar(45) collate latin1_spanish_ci default NULL,
+  `psa_date` date default NULL,
+  `neonatal` text collate latin1_spanish_ci,
+  `perinatal` text collate latin1_spanish_ci,
+  `vaccination` text collate latin1_spanish_ci,
+  `growth` text collate latin1_spanish_ci,
+  `hypertension_parent` text collate latin1_spanish_ci,
+  `epoc_parent` text collate latin1_spanish_ci,
+  `heart_disease_parent` text collate latin1_spanish_ci,
+  `asthma_parent` text collate latin1_spanish_ci,
+  `acv_parent` text collate latin1_spanish_ci,
+  `cancer_parent` text collate latin1_spanish_ci,
+  `diabetes_parent` text collate latin1_spanish_ci,
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `id_patient_UNIQUE` (`id_patient`),
   KEY `fk_crm_history_record_1` (`id_patient`),
   CONSTRAINT `fk_crm_history_record_1` FOREIGN KEY (`id_patient`) REFERENCES `crm_patient` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -739,7 +745,7 @@ CREATE TABLE `crm_history_record` (
 
 LOCK TABLES `crm_history_record` WRITE;
 /*!40000 ALTER TABLE `crm_history_record` DISABLE KEYS */;
-INSERT INTO `crm_history_record` VALUES (1,1,1,'1','2',1,'3','4',1,'5','6',1,'7','8',1,'9','10',1,'11','12',1,'13','14',1,'15','16','17','18','19','20','21','22',NULL,'24','23','25','26','2012-06-01','','2012-06-10',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1','1','1','1','1','1','1'),(2,5,0,NULL,NULL,0,NULL,NULL,0,NULL,NULL,0,NULL,NULL,0,NULL,NULL,0,NULL,NULL,0,NULL,NULL,0,NULL,NULL,'','','',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'','','','','','','','','','','');
+INSERT INTO `crm_history_record` VALUES (1,1,1,'1','2',1,'3','4',1,'5','6',1,'7','8',1,'9','10',1,'11','12',1,'13','14',1,'15','16','17','18','19','20','21','22',NULL,'24','23','25','26','2012-06-01','','2012-06-10',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1','1','1','1','1','1','1');
 /*!40000 ALTER TABLE `crm_history_record` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -752,38 +758,38 @@ DROP TABLE IF EXISTS `crm_patient`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_patient` (
   `id` decimal(19,0) NOT NULL,
-  `doc` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
-  `code_sap` varchar(45) COLLATE latin1_spanish_ci NOT NULL,
-  `firstnames` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `surnames` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `born_date` date DEFAULT NULL,
-  `gender` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `id_occupation` decimal(19,0) DEFAULT NULL,
-  `address` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `neighborhood` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `phone_number` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `cell_number` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `email` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `type_housing` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `country` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `region` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `city` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `guardian` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `guardian_address` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `guardian_relationship` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `guardian_telephone` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `obs` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `cycle` tinyint(1) DEFAULT NULL,
-  `send_phone` tinyint(1) DEFAULT NULL,
-  `send_email` tinyint(1) DEFAULT NULL,
-  `send_postal` tinyint(1) DEFAULT NULL,
-  `send_sms` tinyint(1) DEFAULT NULL,
-  `sales_org` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  PRIMARY KEY (`id`),
+  `doc` varchar(45) collate latin1_spanish_ci NOT NULL,
+  `code_sap` varchar(45) collate latin1_spanish_ci NOT NULL,
+  `firstnames` varchar(45) collate latin1_spanish_ci default NULL,
+  `surnames` varchar(45) collate latin1_spanish_ci default NULL,
+  `born_date` date default NULL,
+  `gender` varchar(45) collate latin1_spanish_ci default NULL,
+  `id_occupation` decimal(19,0) default NULL,
+  `address` varchar(255) collate latin1_spanish_ci default NULL,
+  `neighborhood` varchar(45) collate latin1_spanish_ci default NULL,
+  `phone_number` varchar(45) collate latin1_spanish_ci default NULL,
+  `cell_number` varchar(45) collate latin1_spanish_ci default NULL,
+  `email` varchar(1000) collate latin1_spanish_ci default NULL,
+  `type_housing` varchar(45) collate latin1_spanish_ci default NULL,
+  `country` varchar(45) collate latin1_spanish_ci default NULL,
+  `region` varchar(45) collate latin1_spanish_ci default NULL,
+  `city` varchar(45) collate latin1_spanish_ci default NULL,
+  `guardian` varchar(255) collate latin1_spanish_ci default NULL,
+  `guardian_address` varchar(255) collate latin1_spanish_ci default NULL,
+  `guardian_relationship` varchar(255) collate latin1_spanish_ci default NULL,
+  `guardian_telephone` varchar(255) collate latin1_spanish_ci default NULL,
+  `obs` varchar(1000) collate latin1_spanish_ci default NULL,
+  `cycle` tinyint(1) default NULL,
+  `send_phone` tinyint(1) default NULL,
+  `send_email` tinyint(1) default NULL,
+  `send_postal` tinyint(1) default NULL,
+  `send_sms` tinyint(1) default NULL,
+  `sales_org` varchar(45) collate latin1_spanish_ci default NULL,
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `doc_UNIQUE` (`doc`),
   UNIQUE KEY `code_sap_UNIQUE` (`code_sap`),
   KEY `fk_crm_patient_1` (`id_occupation`),
-  CONSTRAINT `fk_crm_patient_1` FOREIGN KEY (`id_occupation`) REFERENCES `crm_occupation` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_crm_patient_1` FOREIGN KEY (`id_occupation`) REFERENCES `crm_patient` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -793,7 +799,7 @@ CREATE TABLE `crm_patient` (
 
 LOCK TABLES `crm_patient` WRITE;
 /*!40000 ALTER TABLE `crm_patient` DISABLE KEYS */;
-INSERT INTO `crm_patient` VALUES (1,'P1','0000765476','P1','P1','1982-06-03','W',1,'P1','Britalia Norte','P1','','','U','CO','11','3','','','','','',0,0,0,0,0,'1000'),(2,'P2','0000765485','P2','P2','2007-06-02','M',1,'P2','2','P2','','','U','CO','91','29','3','4','5','6','7',0,0,0,0,0,'4000'),(3,'P4','0000765486','P4','P4','2000-06-02','M',1,'P4',NULL,'P4','','',NULL,'CO','91','29',NULL,NULL,NULL,NULL,NULL,0,0,0,0,0,'4000'),(4,'9988776655','0000765491','Carlos Arturo','Sarmiento','1982-11-03','M',1,'Carrera 55A 163 35',NULL,'6501550','3003044115','carlossarmientor@gmail.com',NULL,'CO','11','3',NULL,NULL,NULL,NULL,NULL,0,1,0,1,0,'1025'),(5,'11554477','0000765504','N11554477','A11554477','2012-03-06','M',2,'DIR','BRITALIA','11554477','11554477','DIR@DIR.COM','U','CO','8','2','','','','','',0,0,0,0,0,'4000');
+INSERT INTO `crm_patient` VALUES (1,'P1','0000765476','P1','P1','1982-06-03','W',1,'P1','Britalia Norte','P1','','','U','CO','11','3','','','','','',0,0,0,0,0,'1000'),(2,'P2','0000765485','P2','P2','2007-06-02','M',1,'P2','2','P2','','','U','CO','91','29','3','4','5','6','7',0,0,0,0,0,'4000'),(3,'P4','0000765486','P4','P4','2000-06-02','M',1,'P4',NULL,'P4','','',NULL,'CO','91','29',NULL,NULL,NULL,NULL,NULL,0,0,0,0,0,'4000'),(4,'79797111','0000765516','Andres','Pulido','1990-07-04','M',NULL,'CRA 15 NO 91-30 PISO 2',NULL,'6231629','3112510963','lizberdugo@affinitycolombia.com',NULL,'CO','91','29',NULL,NULL,NULL,NULL,NULL,1,1,1,1,1,'4000'),(5,'NI','0000765517','SARA','QUIJANO ACEVEDO','1960-02-16','W',NULL,'CRA 15 NO. 91-30',NULL,'6231629','3003554518','SARA@GMAIL.COM',NULL,'CO','91','29',NULL,NULL,NULL,NULL,NULL,1,1,1,0,1,'4000'),(6,'1032377032','0000765518','DIANA PAOLA','GARCIA MARTINEZ','2012-07-19','W',NULL,'CRA 15 NO. 91 - 30',NULL,'6231629','3138176067','DIANA@AFFINITYCOLOMBIA.COM',NULL,'CO','91','29',NULL,NULL,NULL,NULL,NULL,1,1,1,1,1,'4000'),(7,'22465189','0000257557','LIZ ELENA ','BERDUGO QUIJANO','2012-07-13','W',NULL,'K 50 82 - 97 ALTO PRADO',NULL,'3775019','3138176067','lizberdugo@affinitycolombia.com',NULL,'CO','11','3',NULL,NULL,NULL,NULL,NULL,1,1,1,1,1,'4000'),(8,'1019056252','0000765519','MARIA PAULA','PEREZ NEIRA','1990-11-20','W',NULL,'CRA 15 N0. 91-30',NULL,'525546244566','3103316256','MARIAPA@GMAIL.COM',NULL,'CO','91','29',NULL,NULL,NULL,NULL,NULL,1,1,1,1,1,'4000'),(9,'52734655','0000137537','JENNY PAOLA','ALVAREZ DIMAS','1982-07-01','W',NULL,'CRA 9 N 38 - 28 Sur',NULL,'2781621','123','jennyalvarez@affinitycolombia.com',NULL,'CO','11','3',NULL,NULL,NULL,NULL,NULL,0,0,0,0,0,'4000'),(10,'771935941','0000765520','Gerardo','Solórzano','1978-07-08','M',NULL,'CRA 15 NO 91-30 PISO 2',NULL,'6231629','3112510963','asda@vvv.com',NULL,'MX','MEX','MEX',NULL,NULL,NULL,NULL,NULL,0,0,0,0,0,'4000'),(11,'09072012','0000765521','julio 09','julio 09','2012-06-05','W',NULL,'cra 9 n ',NULL,'5261235','320122','a@a.com',NULL,'MX','DF','DF',NULL,NULL,NULL,NULL,NULL,0,0,0,0,0,'1000'),(12,'771935942','0000765522','GERARDO','SOLORZANO','2012-07-03','M',NULL,'CRA 15 NO 91-30 PISO 2',NULL,'444','444','WQEQ@FDFAWE.COM',NULL,'MX','MEX','MEX',NULL,NULL,NULL,NULL,NULL,0,0,0,0,0,'1000'),(13,'51891536','0000765523','ANNA PAOLA ','NEIRA MARMOLEJO','1968-01-11','W',NULL,'CL 172 58 96',NULL,'6967165','3205698745','NOTIENE@GMAIL.COM',NULL,'MX','AGS','AGS',NULL,NULL,NULL,NULL,NULL,1,1,0,0,1,'1000'),(14,'1010215250','0000765524','DANIEL FELIPE','HERNANDEZ LADINO','1994-06-05','M',NULL,'TRVS 35 BIS N 30 32 ',NULL,'7137712','3202479893','FELIPELADINO05@HOTMAIL.ES',NULL,'MX','CHS','CHS',NULL,NULL,NULL,NULL,NULL,1,1,1,0,0,'1000'),(15,'1010181985','0000765525','CINTHYA MABEL','CASTAÑEDA MANCERA','1989-03-24','W',NULL,'CLL 38C SUR N 72M 86',NULL,'5634360','3004471211','cinthya.castaneda@hotmail.com',NULL,'CO','11','3',NULL,NULL,NULL,NULL,NULL,1,1,1,0,0,'1000'),(16,'1022375387','0000765526','RUTH ALEJANDRA ','CONTRERAS HURTADO','2012-05-28','W',NULL,'CLL 78 SUR',NULL,'2659201','3133631493','RUTH.ALEJANDRA-82@HOTMAIL.COM',NULL,'MX','QRO','QRO',NULL,NULL,NULL,NULL,NULL,1,1,1,0,0,'1000'),(17,'52100083','0000765527','luz','soba','2012-07-11','W',NULL,'av142int501',NULL,'4562132','3114532256','notiene@hotmail.com',NULL,'MX','AGS','AGS',NULL,NULL,NULL,NULL,NULL,0,1,0,0,0,'1000'),(18,'1015412378','0000765528','DANIEL FELIPE ','RAMOS','1989-06-11','M',NULL,'CRR 65 N 97 - 76 ',NULL,'2532039','320 377 99 21 ','DAFERA5-55@HOTMAIL.COM',NULL,'CO','11','3',NULL,NULL,NULL,NULL,NULL,1,1,0,0,0,'1000'),(19,'1024540349','0000765529','PAOLA','AGUIRRE RAMIREZ','2012-05-14','W',NULL,'CALLE 54 A 56',NULL,'7456981','3144805156','NOTIENE@HOTMAIL.COM',NULL,'MX','AGS','AGS',NULL,NULL,NULL,NULL,NULL,1,0,0,0,1,'1000'),(20,'52100084','0000765530','naty','lopez','1982-07-07','W',NULL,'queretaro 145',NULL,'4562132','3114532256','notiene@hotmail.com',NULL,'MX','AGS','AGS',NULL,NULL,NULL,NULL,NULL,0,1,0,0,0,'1000'),(21,'52762236','0000765531','karol','peralta casiano','2010-01-14','W',NULL,'dg 7 c bis asu n 77g 60',NULL,'7757383','3005207187','notiene@hotmail.com',NULL,'MX','AGS','AGS',NULL,NULL,NULL,NULL,NULL,0,1,0,0,0,'1000'),(22,'1077084784','0000765532','yeidi lizeth','perez salazar','1990-09-23','W',NULL,'CR114 140 50',NULL,'6545585','316607085','NOTIENE@HOTMAIL.COM',NULL,'MX','AGS','AGS',NULL,NULL,NULL,NULL,NULL,1,1,0,0,0,'1000'),(23,'80067586','0000765533','JHON','ALAVARADO SANTOS','2012-07-13','M',NULL,'CRA 80 F N 42 04 SUR',NULL,'5706347','3134951612','NOTIENE@HOTMAIL.COM',NULL,'MX','AGS','AGS',NULL,NULL,NULL,NULL,NULL,1,1,1,0,1,'1000'),(24,'AESL590717','0000765534','LETICIA ','ARREMILLA SANCHEZ','1959-07-17','W',NULL,'CERRDA DE DURAZNO 25',NULL,'12855984','5522547464','LETYARSAN@HOTMAIL.COM',NULL,'MX','AGS','AGS',NULL,NULL,NULL,NULL,NULL,0,1,0,0,1,'1000'),(25,'5302622','0000765535','JOSE ABADIA','HERNANDEZ CALZADA','1960-02-29','M',NULL,'QUERETARO 147 INTERIOR 501',NULL,'6787241','3158481542','notengocorreo@gmail.com',NULL,'MX','AGS','AGS',NULL,NULL,NULL,NULL,NULL,1,0,1,0,0,'1000'),(26,'1024514350','0000765536','JULIETH  TATIANA','AGUDELO BARBOSA','1991-02-09','W',NULL,'TRANV 2 ESTE 20 17',NULL,'3639061','3132793943','NOTIENE@HOTMAIL.COM',NULL,'MX','DF','DF',NULL,NULL,NULL,NULL,NULL,1,1,0,0,0,'1000'),(27,'1001282152','0000765537','PAULA ','CASTRO ','1993-01-04','W',NULL,'CLL 42 42-15',NULL,'56748778','3104868628','NOTIENE@HOTMAIL.COM',NULL,'MX','QRO','QRO',NULL,NULL,NULL,NULL,NULL,1,1,0,0,0,'1000'),(28,'1013614926','0000765538','DIANA CAROLINA','GOMEZ DIAS','2012-07-11','W',NULL,'CALLE N 25-01',NULL,'2654057','3215482135','JIRAJUANK88@HOTMAIAL.COM',NULL,'MX','AGS','AGS',NULL,NULL,NULL,NULL,NULL,1,1,0,0,0,'1000'),(29,'RORR680319','0000765539','RUBEN ROJAS','ROMERO','1968-03-19','M',NULL,'BRAVO 86 301',NULL,'2331124','5535108472','NOTIENE@HOTMAIL.COM',NULL,'MX','DF','DF',NULL,NULL,NULL,NULL,NULL,0,0,0,0,1,'1000'),(30,'54212154','0000765540','JUAN','BOLAÑOZ','1983-07-06','M',NULL,'CLL 54 11 25',NULL,'54645321','321321315','NOTIENE@GMAIL.COM',NULL,'MX','CHI','CHI',NULL,NULL,NULL,NULL,NULL,1,1,0,0,0,'1000'),(31,'1030556980','0000765541','YURANI','BENITEZ','1989-03-13','W',NULL,'CR 66A 31 30',NULL,'4503527','3214454016','KAREN_271107@HOTMAIL.COM',NULL,'MX','QRO','QRO',NULL,NULL,NULL,NULL,NULL,1,1,1,0,1,'1000'),(32,'ueuc280413','0000765542','clemencia ','cuenca unzueta','1928-04-13','W',NULL,'matamoros 162 tlalpan',NULL,'5556551169','5500000000','notiene@hotmail.com',NULL,'MX','GRO','GRO',NULL,NULL,NULL,NULL,NULL,1,1,0,0,0,'1000'),(33,'1010167441','0000765543','maria','marin','1995-07-13','W',NULL,'CLL80 25 26',NULL,'2281794','3205600072','NOTIENE@HOTMAIL.COM',NULL,'MX','AGS','AGS',NULL,NULL,NULL,NULL,NULL,1,1,0,0,0,'1000'),(34,'4512589','0000765544','prueba45','prueba45','2012-06-06','M',NULL,'fjkfkfkg',NULL,'4521555','45465789','a@a.com',NULL,'MX','DF','DF',NULL,NULL,NULL,NULL,NULL,0,0,0,0,0,'4000'),(35,'1030636481','0000765545','YENNY CAROLINA','PRIETO VILLAMIL','1994-02-09','W',NULL,'CRA 92 42 39',NULL,'4519668','3142186519','YENNYK19-@HOTMAIL.COM',NULL,'MX','AGS','AGS',NULL,NULL,NULL,NULL,NULL,1,1,1,0,0,'1000'),(36,'ACD45123','0000765546','prueba46','prueba46','2012-05-16','W',NULL,'dlfllf',NULL,'4589641','32045213','a@a.com',NULL,'MX','DF','DF',NULL,NULL,NULL,NULL,NULL,0,0,0,0,0,'1000'),(37,'1001','0000765547','ANDRES','ESCORZA','1963-12-30','M',NULL,'APASTO 26 OEA631230CL9',NULL,'51110971','004432609000','ESCOR@MEXICO.CO',NULL,'MX','MEX','MEX',NULL,NULL,NULL,NULL,NULL,1,1,1,0,1,'1000'),(38,'OE3422MNC9','0000765548','PRUEBA','PRUEBA','1988-07-06','W',NULL,'CRA 15 91 - 30',NULL,'6231629','3103138787','LIZ@GMAIL.COM',NULL,'MX','CHS','CHS',NULL,NULL,NULL,NULL,NULL,1,1,0,0,1,'4000'),(39,'10223568','0000765549','MARIA ESTER','DIAZ HERNANDEZ','1978-02-02','W',NULL,'PLANTA  24 AL LADO CONVENTO ALBIDE',NULL,'526598','5414529215','PEPE_DIHE@HOTMAIL.COM',NULL,'MX','AGS','AGS',NULL,NULL,NULL,NULL,NULL,1,0,1,0,0,'1000'),(40,'MOSR490316','0000765550','MA ROSA','MORENO SANCHEZ','1949-03-16','W',NULL,'SUPERMANZA 1 MANZANA 63LOTE 19',NULL,'57441579','5549167035','notiene@hotmail.com',NULL,'MX','DF','DF',NULL,NULL,NULL,NULL,NULL,1,1,0,0,0,'1000'),(41,'4','0000765551','LEYDI YURANI ','BENITES BENITEZ','1989-03-13','W',NULL,'CR 66A 31 30 1030556980',NULL,'4503527','3214454016','KAREN_271107@HOTMAIL.COM',NULL,'MX','QRO','QRO',NULL,NULL,NULL,NULL,NULL,1,1,1,0,1,'1000'),(42,'1070590907','0000765552','SARA','MARTINEZ','1983-01-04','W',NULL,'CLL 51-53-53 SUR',NULL,'56454785','3107923592','YENNY06@HOTMAIL.COM',NULL,'MX','QRO','QRO',NULL,NULL,NULL,NULL,NULL,1,1,1,0,0,'1000'),(43,'5','0000765553','JULIETH  TATIANA','AGUDELO BARBOSA','1991-02-09','W',NULL,'TRANV 2 ESTE 20 17 1024514350',NULL,'3695621','3132793943','NOTIENE@HOTMAIL.COM',NULL,'MX','QRO','QRO',NULL,NULL,NULL,NULL,NULL,1,1,0,0,0,'1000'),(44,'1478526562','0000765554','juan','gacha','1993-07-01','M',NULL,'CLL80 25 26',NULL,'36958523','32584652544','NOTIENE@HOTMAIL.COM',NULL,'MX','AGS','AGS',NULL,NULL,NULL,NULL,NULL,1,1,0,0,0,'1000'),(45,'WER454545','0000765555','GERAR','PREUBA','2012-07-01','M',NULL,'CALLA 4',NULL,'44','44','FEFE@CD.COM',NULL,'MX','DF','DF',NULL,NULL,NULL,NULL,NULL,0,0,0,0,0,'1000'),(46,'3','0000765556','ANTONIO','PEREZ LIZARAZO','1971-05-12','M',NULL,'CERRADA DE DURAZNO 147 SEFE591205',NULL,'5245215','5521542152','NOTIENE@HOTMAIL.COM',NULL,'MX','QRO','QRO',NULL,NULL,NULL,NULL,NULL,0,1,0,0,0,'1000'),(47,'WEA5563','0000765557','MARIA','NEIRA','1993-07-01','W',NULL,'av gerardo 56 78',NULL,'2918956','3123065458','MIN@HOTMil.xom',NULL,'CO','91','29',NULL,NULL,NULL,NULL,NULL,1,1,0,0,0,'1000'),(48,'1070325199','0000765558','HEIDY JHOANA','FERNANDEZ GONZALEZ','2012-07-07','W',NULL,'CAR 66AN 23B 4',NULL,'3214589','3214973885','JHOANA2556@HOTMAIL.COM',NULL,'CO','25','11',NULL,NULL,NULL,NULL,NULL,1,1,0,0,0,'1000'),(49,'1010209329','0000765559','KATHERINE','HURTADO SUAREZ','1993-06-05','W',NULL,'QUERETARO 147 INT 501',NULL,'73194455','3138258542','NOTIENE@GMAIL.COM',NULL,'MX','CHS','CHS',NULL,NULL,NULL,NULL,NULL,1,1,0,0,0,'1000'),(50,'fgh432','0000765560','YURANI','BENITEZ','1989-03-13','W',NULL,'CR 66A 3 30',NULL,'4503527','3214454016','NOTIENE@HOTMAIL.XOM',NULL,'MX','QRO','QRO',NULL,NULL,NULL,NULL,NULL,1,1,1,0,1,'1000'),(51,'WER78954','0000765561','MATTIA','NEIRA','1993-07-01','W',NULL,'CRA 75 22 85',NULL,'29546898','31254875','MAISANWEIRA@GMAIL.COM',NULL,'CO','91','29',NULL,NULL,NULL,NULL,NULL,1,1,0,0,0,'1000'),(52,'2020595421','0000765562','CAMILO ','LEON','1993-04-06','M',NULL,'CL 90 30',NULL,'44255474','3258987441','NOTIENE@HOTMAIL.COM',NULL,'MX','AGS','AGS',NULL,NULL,NULL,NULL,NULL,1,1,1,0,0,'1000'),(53,'51585758','0000765563','HERMINIA','SUAREZ TORRES','1992-04-26','W',NULL,'QUERETARO 147 INT 502',NULL,'73194455','3138258542','NOTIENE@GMAIL.COM',NULL,'MX','DF','DF',NULL,NULL,NULL,NULL,NULL,1,1,0,0,0,'1000'),(54,'52312569','0000765564','luis','lopez','1989-03-13','M',NULL,'clle 1 41 02',NULL,'5230000','31000000','NOTIENE@GMAIL.COM',NULL,'MX','BC','BC',NULL,NULL,NULL,NULL,NULL,1,1,0,0,0,'1000'),(55,'LOAI801214','0000765565','RICARDO ','LOPEZ NAVARRO','1980-12-14','M',NULL,'AV QUERETARO CALLE DE LOS NIÑOS',NULL,'5555568560','5526074589','NOTIENE@HOTMAIL.COM',NULL,'MX','DF','DF',NULL,NULL,NULL,NULL,NULL,1,1,0,0,1,'1000'),(56,'AHGJ230605','0000765566','YURANI ','BENITEZ','1989-03-13','W',NULL,'CR 66A 3 30',NULL,'666666141','3214454016','NOTIENE@HOTMAIL.COM',NULL,'MX','QRO','QRO',NULL,NULL,NULL,NULL,NULL,1,1,1,0,1,'1000'),(57,'26','0000765567','CARLOS ','CARREÑO MONTERPO','1989-05-26','M',NULL,'AV TLAHUAN 1250 CMC890526',NULL,'5525412','0445512541524','NOTIENE@HOTMAIL.COM',NULL,'MX','MEX','MEX',NULL,NULL,NULL,NULL,NULL,1,1,0,0,1,'1000'),(58,'02','0000765568','MARTHA ','JASINTO ANTONIO','1968-12-11','W',NULL,'3 DE ABRIL # 56 JCANMR6812115M400',NULL,'53485102','5512974866','NOTIENE@HOTMAIL.COM',NULL,'MX','DF','DF',NULL,NULL,NULL,NULL,NULL,1,0,0,0,1,'1000'),(59,'52312563','0000765569','luis','lopez','1966-04-18','M',NULL,'clle 41 12 5',NULL,'523000','3102200000','NOTIENE@GMAIL.COM',NULL,'MX','AGS','AGS',NULL,NULL,NULL,NULL,NULL,0,0,0,0,0,'1000'),(60,'HUGO256314','0000765570','HEIDY JHOANA','FERNANDEZ GONZALEZ','1997-07-23','W',NULL,'CAR 66AN 23B 4',NULL,'44525258','3214973885','JHOANA2556@HOTMAIL.COM',NULL,'MX','QRO','QRO',NULL,NULL,NULL,NULL,NULL,1,1,1,0,1,'1000'),(61,'5555555','0000765571','MARIA LISA ','TORRES PERES','1985-07-05','W',NULL,'AV RIOS 12 15 ',NULL,'888555666','25556668888','NOTIENE@HOTMAIL.COM',NULL,'MX','DF','DF',NULL,NULL,NULL,NULL,NULL,1,1,0,0,0,'1000'),(62,'ACDF632542','0000765572','ANGIE  KATHERINE','HURTADO SUAREZ','1993-06-05','W',NULL,'CL 34C 3 32',NULL,'73194455','3138258542','NOTIENE@GMAIL.COM',NULL,'MX','QRO','QRO',NULL,NULL,NULL,NULL,NULL,1,1,1,0,1,'1000'),(63,'SERA920528','0000765573','ALEJANDRA','CONTRERAS HURTADO','1992-05-28','W',NULL,'AV TLAHUAV 1520 SERA920528',NULL,'5521452','0445521365521','NOTIENE@HOTMAIL.COM',NULL,'MX','DF','DF',NULL,NULL,NULL,NULL,NULL,1,1,0,0,1,'1000'),(64,'1030556987','0000765574','LUISAFERNANDA','PINEDA GONZALEZ','2000-07-25','W',NULL,'CAR 80 I N 57 14',NULL,'26174658','31322569874','LUISAFERNANDA.P@HOTMAIL.COM',NULL,'MX','QRO','QRO',NULL,NULL,NULL,NULL,NULL,1,1,1,0,1,'1000'),(65,'51875284','0000765575','AMANDITA ','NARANJITO','1975-03-20','W',NULL,'GAG 12 522',NULL,'55704702','25556668888','NOTIENE@HOTMAIL.COM',NULL,'MX','DF','DF',NULL,NULL,NULL,NULL,NULL,1,1,0,0,0,'1000'),(66,'91161424','0000765576','JAIR','RODRIGUEZ','1999-07-14','W',NULL,'CALLE N 25-01',NULL,'2772887','31154844623','JIRAJUANK88@HOTMAIAL.COM',NULL,'MX','QRO','QRO',NULL,NULL,NULL,NULL,NULL,1,1,1,0,1,'1000'),(67,'1023898604','0000765577','SANDRA PATRICIA ','ARANGI PIÑEROS','1990-03-20','W',NULL,'cll 77 SUR # 67 65 ',NULL,'7154781','3132676240','NOTIENE@HOTMAIL.COM',NULL,'CO','25','11',NULL,NULL,NULL,NULL,NULL,1,1,0,0,0,'1000'),(68,'102222222','0000765578','yenny','oprjuela','1987-07-25','W',NULL,'CALLE 56 -52-51',NULL,'54647887','3107454545','YENNY06@HOTMAIL.COM',NULL,'MX','QRO','QRO',NULL,NULL,NULL,NULL,NULL,1,1,0,0,0,'1000'),(69,'GCDE800903','0000765579','DENISSE ENGGY ','GARAVITO CRISTANCHO','1980-03-09','W',NULL,'CALLE 1 DE MAYO 125',NULL,'5898788','558999999','ENGGYSANTI@HOTMAIL.COM',NULL,'MX','AGS','AGS',NULL,NULL,NULL,NULL,NULL,1,0,1,0,0,'1000'),(70,'ANRI910611','0000765580','ANDREA','RIOS OVALLE','1991-06-11','W',NULL,'CLL 2 31 4',NULL,'66224235','66224256891012','NOTIENE@GMAIL.COM',NULL,'MX','CHI','CHI',NULL,NULL,NULL,NULL,NULL,1,1,0,0,1,'1000'),(71,'45895','0000765581','ANDREA','DUQUE ANZOLA','1996-03-08','W',NULL,'CLL 24 N 32 SUR',NULL,'5623435','3123648952','NOTIENE@HOTMAIL.COM',NULL,'MX','DF','DF',NULL,NULL,NULL,NULL,NULL,1,1,1,0,0,'1000'),(72,'52857913','0000765582','JOANA','ESPINEL','2000-07-12','W',NULL,'CLL10 SUR N 37-61',NULL,'2094563','3143525134','JOHANA-82@HOTMAIL.COM',NULL,'MX','QRO','QRO',NULL,NULL,NULL,NULL,NULL,1,1,1,0,1,'1000'),(73,'53050123','0000765583','ELIANA CAROLINA','RODRIGUEZ MARTINEZ','1983-04-20','W',NULL,'CARR 69 H #63 A 31',NULL,'557497119','553106697423','NOTIENE@HOTMAIL.COM',NULL,'MX','DF','DF',NULL,NULL,NULL,NULL,NULL,1,0,0,0,1,'1000'),(74,'MUGE903110','0000765584','STEPHANNIE','MUÑOZ GARAY','1990-10-31','W',NULL,'CALLE 1 DE MAYO 125',NULL,'5526498565','5500000000','TIFANNYMG@HOTMAIL.COM',NULL,'MX','AGS','AGS',NULL,NULL,NULL,NULL,NULL,1,0,1,0,0,'1000'),(75,'SERA860301','0000765585','XIMENA','BOBADILLA CALDERON','1986-03-01','W',NULL,'PRIVADA DE SAN PEDRO 1452',NULL,'5542158','0445212365214','notiene@hotmail.com',NULL,'MX','VER','VER',NULL,NULL,NULL,NULL,NULL,1,1,0,0,1,'1000'),(76,'SERA720808','0000765586','MARCELA','MONTEALEGRE','2012-07-07','W',NULL,'queretaro 145',NULL,'5565325','04456623654','notiene@hotmail.com',NULL,'MX','DF','DF',NULL,NULL,NULL,NULL,NULL,1,1,0,0,1,'1000'),(77,'33333335','0000765587','SARA','ORJUELA','1986-07-16','W',NULL,'CALLE 56 -52-51',NULL,'5645454','3102787878','YENNY@HIOTMAIL.COM',NULL,'MX','QRO','QRO',NULL,NULL,NULL,NULL,NULL,1,1,0,0,0,'1000'),(78,'41719526','0000765588','ISABEL','HURTADO HERNANDEZ','2012-07-11','W',NULL,'CLL 26 SUR 40 B',NULL,'2653987','3142659825','NOTIENE@HOTMAIL.COM',NULL,'MX','DF','DF',NULL,NULL,NULL,NULL,NULL,1,1,0,0,0,'1000'),(79,'MEDR960805','0000765589','MARIA','PEREZ','1996-08-05','W',NULL,'queretaro 145',NULL,'6532894','044562345821','notiene@hotmail.com',NULL,'MX','MEX','MEX',NULL,NULL,NULL,NULL,NULL,1,1,0,0,1,'1000'),(80,'BLMO681010','0000765590','BLANCA ISABEL','MOLINA GORDILLO','1968-10-10','W',NULL,'3 DE ABRIL 56 COLONIA PRADERA',NULL,'3548565','55518356775','NOTIENE@GMAIL.COM',NULL,'MX','CHI','CHI',NULL,NULL,NULL,NULL,NULL,1,1,0,0,1,'1000'),(81,'7528965','0000765591','DIANA ','NIETO PEREZ','1957-07-04','W',NULL,'CLL 41 SUR CHIPOSTU',NULL,'2659580','3152658956','NOTIENE@GMAIL.COM',NULL,'MX','DF','DF',NULL,NULL,NULL,NULL,NULL,1,0,1,1,0,'1000'),(82,'JHJU125263','0000765592','VICTOR','TORRES','2012-06-17','M',NULL,'CALLE 24 N.13',NULL,'2258965','0448996324','notiene@hotmail.com',NULL,'MX','AGS','AGS',NULL,NULL,NULL,NULL,NULL,1,1,0,0,1,'1000'),(83,'256895','0000765593','ERNESTO','DUQUE RICO ','1969-01-26','W',NULL,'CLL 75 SUR B - 14',NULL,'2675895','3143568952','NOTIENE@GMAIL.COM',NULL,'MX','DF','DF',NULL,NULL,NULL,NULL,NULL,1,0,0,1,0,'1000'),(84,'MARF940215','0000765594','DAVID','LOPEZ','1994-02-02','M',NULL,'queretaro 145',NULL,'5569854','04456326532','notiene@hotmail.com',NULL,'MX','DF','DF',NULL,NULL,NULL,NULL,NULL,1,1,0,0,0,'1000'),(85,'SERA860305','0000765595','JENI','CASIANO TOVAR','2012-07-12','W',NULL,'DG 71',NULL,'7757983','0442536598523','notiene@hotmail.com',NULL,'MX','AGS','AGS',NULL,NULL,NULL,NULL,NULL,1,1,0,0,1,'1000'),(86,'79812252','0000765596','LUIS ALBERTO','SUAREZ','1994-09-15','M',NULL,'AV 45 C 8 63A',NULL,'73194455','3138258542','NOTIENE@GMAIL.COM',NULL,'MX','QRO','QRO',NULL,NULL,NULL,NULL,NULL,1,1,1,0,1,'1000'),(87,'BNHF486331','0000765597','JEISON','CARVAJAL ERAZO','1994-02-09','M',NULL,'CL 45 D 36 8B',NULL,'73194456','3138258548','NOTIENE@GMAIL.COM',NULL,'MX','QRO','QRO',NULL,NULL,NULL,NULL,NULL,1,1,1,0,1,'1000'),(88,'JULF760209','0000765598','CARLOS','LOPEZ','1976-02-02','M',NULL,'queretaro 145',NULL,'5565984','044522354865','notiene@hotmail.com',NULL,'MX','DF','DF',NULL,NULL,NULL,NULL,NULL,1,1,0,0,0,'1000'),(89,'986598','0000765599','MERCEDES ','GUERRA GUPACHAN','1961-04-13','W',NULL,'TRANS 24 - 45 SUR',NULL,'7898475','3215689563','LISGUITU@HOTMAIL.COM',NULL,'MX','AGS','AGS',NULL,NULL,NULL,NULL,NULL,1,0,1,1,1,'1000'),(90,'1024479497','0000765600','JEFFERSON STEVEN','FONSECA RIVEROS','1989-06-07','M',NULL,'CLL 2 31 4',NULL,'7285974','3202117143','STEVEN.1951@HOTMAIL.COM',NULL,'MX','BC','BC',NULL,NULL,NULL,NULL,NULL,1,1,0,0,1,'1000'),(91,'MIBA568932','0000765601','OLGA PATRICIA','PERALTA DIAZ','1979-01-04','W',NULL,'CALLE DE QRERETANO',NULL,'5586978','0445869875','NOTIENE@HOTMAIL.COM',NULL,'MX','QRO','QRO',NULL,NULL,NULL,NULL,NULL,1,1,0,0,1,'1000'),(92,'4832940','0000765602','JUAN ALEJANDRO ','CARVAJAL ERAZO','1994-02-10','M',NULL,'CL 45 D 36 8B',NULL,'1755506','3138258546','NOTIENE@GMAIL.COM',NULL,'MX','MCH','MCH',NULL,NULL,NULL,NULL,NULL,1,1,1,0,1,'1000'),(93,'BNHF486337','0000765603','CAMILO','SANCHEZ','1993-03-26','M',NULL,'CL 45 D 36 8Z',NULL,'8569210','3138258545','NOTIENE@GMAIL.COM',NULL,'MX','DF','DF',NULL,NULL,NULL,NULL,NULL,1,1,1,0,1,'1000'),(94,'1070590901','0000765604','SARA  VALENTINA','MARTINEZ','1988-07-13','W',NULL,'CLL 41 B ESTE  11-52',NULL,'56454789','3107959595','SARA@HOTMAIL.COM',NULL,'MX','QRO','QRO',NULL,NULL,NULL,NULL,NULL,1,1,0,0,0,'1000'),(95,'8956895','0000765605','ALBERTO ','HUMBERTO RAMIREZ','1932-07-15','M',NULL,'CLL 36 EXT ',NULL,'7896593','324568958','SLBERTGRR@GMAIL.COM',NULL,'MX','DF','DF',NULL,NULL,NULL,NULL,NULL,1,0,1,0,0,'1000'),(96,'JHPA632589','0000765606','BRAYAN CAMILO','ALVARADO PERALTA','2000-04-08','M',NULL,'AV VELODROMO',NULL,'5528796','0448963254','NOTIENE@HOTMAIL.COM',NULL,'MX','AGS','AGS',NULL,NULL,NULL,NULL,NULL,1,0,0,0,1,'1000'),(97,'HLIJ632145','0000765607','CARLOS ALBERTO','CABALLERO RUBIO','1990-09-06','M',NULL,'CL 34C 3 39A',NULL,'73194454','3138258543','NOTIENE@HOTMAIL.COM',NULL,'MX','PUE','PUE',NULL,NULL,NULL,NULL,NULL,1,1,1,0,1,'1000'),(98,'1070590902','0000765608','JUNIOR','MARTINEZ','1988-07-06','W',NULL,'CLL 42 ESTE 54-89',NULL,'6899898','3102585858','SARAE@HOTMAIL.COM',NULL,'MX','QRO','QRO',NULL,NULL,NULL,NULL,NULL,1,1,0,0,0,'1000'),(99,'1201254155','0000765609','PAOLA ','BERNAL','1994-07-08','W',NULL,'CR100# 45 125 ',NULL,'5555555','3214524251','CHICA@HOTMAIL.COM',NULL,'MX','QRO','QRO',NULL,NULL,NULL,NULL,NULL,1,0,1,0,0,'1000'),(100,'JV79300012','0000765610','JUAN CAMILO','PORRAS CALDERON','1953-06-10','W',NULL,'CALLE 68 # 45 A 21 ',NULL,'7158323','3134139664','NOTIENE@GMAIL.COM',NULL,'MX','AGS','AGS',NULL,NULL,NULL,NULL,NULL,1,1,0,0,0,'1000'),(101,'39780030','0000765611','ISABEL','MOLINA LINARES','2012-07-10','W',NULL,'AVE CARACA #45 - 21 ',NULL,'74025663','3113921582','NOTIENE@GMAIL.COM',NULL,'CO','91','29',NULL,NULL,NULL,NULL,NULL,1,1,0,0,0,'1000'),(102,'RP10124530','0000765612','SANDRA ','COLMENARES','1932-07-13','W',NULL,'CHIGUAGUA 5 -05',NULL,'526302510','55518356775','NOTIENE@HOTMAIL.COM',NULL,'MX','BC','BC',NULL,NULL,NULL,NULL,NULL,1,1,0,0,0,'1000'),(103,'1122335588','0000765615','CARLOS','SARMIENTO','2012-07-04','M',NULL,'HY',NULL,'HY','HY','A@A.COM',NULL,'MX','JAL','JAL',NULL,NULL,NULL,NULL,NULL,0,0,0,0,0,'3000');
 /*!40000 ALTER TABLE `crm_patient` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -806,10 +812,10 @@ DROP TABLE IF EXISTS `crm_speciality`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_speciality` (
   `id` decimal(19,0) NOT NULL,
-  `code` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `description` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
-  `state` int(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
+  `code` varchar(45) collate latin1_spanish_ci default NULL,
+  `description` varchar(255) collate latin1_spanish_ci NOT NULL,
+  `state` int(1) NOT NULL default '1',
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -835,7 +841,7 @@ CREATE TABLE `crm_user_role` (
   `id` decimal(19,0) NOT NULL,
   `id_user` decimal(19,0) NOT NULL,
   `id_role` decimal(19,0) NOT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY  (`id`),
   KEY `fk_crm_user_role_1` (`id_user`),
   KEY `fk_crm_user_role_2` (`id_role`),
   CONSTRAINT `fk_crm_user_role_1` FOREIGN KEY (`id_user`) REFERENCES `crm_user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -849,7 +855,7 @@ CREATE TABLE `crm_user_role` (
 
 LOCK TABLES `crm_user_role` WRITE;
 /*!40000 ALTER TABLE `crm_user_role` DISABLE KEYS */;
-INSERT INTO `crm_user_role` VALUES (3,3,4),(4,4,2),(6,5,4),(7,7,4),(8,6,4),(9,8,4),(10,9,4),(12,1,1),(13,2,1);
+INSERT INTO `crm_user_role` VALUES (3,3,4),(4,4,2),(6,5,4),(7,7,4),(8,6,4),(9,8,4),(10,9,4),(11,2,1),(13,10,1),(27,18,2),(28,19,2),(29,20,2),(30,21,2),(31,22,2),(32,23,2),(33,24,2),(34,25,2),(35,26,2),(36,27,2),(37,28,2),(38,29,2),(39,30,2),(45,35,2),(47,37,2),(48,38,2),(50,40,2),(51,41,2),(54,44,2),(55,42,2),(56,43,2),(57,39,2),(58,36,2),(59,45,2),(60,46,2),(61,47,2),(62,48,2),(63,1,1),(65,12,2),(66,13,2),(67,14,2),(68,15,2),(69,16,2),(70,17,2),(71,49,2),(72,31,4),(73,32,4),(74,33,4),(75,34,4),(76,11,2);
 /*!40000 ALTER TABLE `crm_user_role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -878,14 +884,14 @@ DROP TABLE IF EXISTS `crm_branch`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_branch` (
   `id` decimal(19,0) NOT NULL,
-  `code` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `name` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `society` varchar(4) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `doctors` int(11) DEFAULT NULL,
-  `nurses` int(11) DEFAULT NULL,
-  `stretchers` int(11) DEFAULT NULL,
-  `state` int(11) DEFAULT '1',
-  PRIMARY KEY (`id`),
+  `code` varchar(45) collate latin1_spanish_ci default NULL,
+  `name` varchar(1000) collate latin1_spanish_ci default NULL,
+  `society` varchar(4) collate latin1_spanish_ci default NULL,
+  `doctors` int(11) default NULL,
+  `nurses` int(11) default NULL,
+  `stretchers` int(11) default NULL,
+  `state` int(11) default '1',
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -896,7 +902,7 @@ CREATE TABLE `crm_branch` (
 
 LOCK TABLES `crm_branch` WRITE;
 /*!40000 ALTER TABLE `crm_branch` DISABLE KEYS */;
-INSERT INTO `crm_branch` VALUES (1,'1202','AD Neiva','1000',NULL,NULL,NULL,1),(2,'1401','Affinity Bogotá','1000',NULL,NULL,NULL,1),(3,'3009','Axihoma','3000',NULL,NULL,NULL,1),(4,'2000','Axioma Bogotá','2000',NULL,NULL,NULL,1),(5,'1500','BS Bogotá','1000',NULL,NULL,NULL,1),(6,'1502','BS Bucaramanga','1000',NULL,NULL,NULL,1),(7,'1503','BS Cali','1000',NULL,NULL,NULL,1),(8,'1501','BS Itagui','1000',NULL,NULL,NULL,1),(9,'1131','Botica Armenia','1000',NULL,NULL,NULL,1),(10,'1139','Botica Barranca','1000',NULL,NULL,NULL,1),(11,'1111','Botica Barranquilla','1000',NULL,NULL,NULL,1),(12,'1125','Botica Bucaramanga','1000',NULL,NULL,NULL,1),(13,'1119','Botica Buga','1000',NULL,NULL,NULL,1),(14,'1114','Botica Cali','1000',NULL,NULL,NULL,1),(15,'1110','Botica Cartagena','1000',NULL,NULL,NULL,1),(16,'1104','Botica Centro Viejo','1000',NULL,NULL,NULL,1),(17,'1107','Botica Chapinero','1000',NULL,NULL,NULL,1),(18,'1127','Botica Chiquinquira','1000',NULL,NULL,NULL,1),(19,'1124','Botica Cúcuta','1000',NULL,NULL,NULL,1),(20,'1133','Botica Duitama','1000',NULL,NULL,NULL,1),(21,'1132','Botica Girardot','1000',NULL,NULL,NULL,1),(22,'1120','Botica Ibagué','1000',NULL,NULL,NULL,1),(23,'1135','Botica Leticia','1000',NULL,NULL,NULL,1),(24,'1130','Botica Manizales','1000',NULL,NULL,NULL,1),(25,'1128','Botica Medellín','1000',NULL,NULL,NULL,1),(26,'1140','Botica Mompos','1000',NULL,NULL,NULL,1),(27,'1108','Botica Montería','1000',NULL,NULL,NULL,1),(28,'1121','Botica Neiva','1000',NULL,NULL,NULL,1),(29,'1100','Botica Norte','1000',NULL,NULL,NULL,1),(30,'1118','Botica Palmira','1000',NULL,NULL,NULL,1),(31,'1134','Botica Pamplona','1000',NULL,NULL,NULL,1),(32,'1116','Botica Pasto','1000',NULL,NULL,NULL,1),(33,'1129','Botica Pereira','1000',NULL,NULL,NULL,1),(34,'1141','Botica Pie De Cuesta','1000',NULL,NULL,NULL,1),(35,'1138','Botica Pitalito','1000',NULL,NULL,NULL,1),(36,'1115','Botica Popayán','1000',NULL,NULL,NULL,1),(37,'1137','Botica Riohacha','1000',NULL,NULL,NULL,1),(38,'1136','Botica San Andres','1000',NULL,NULL,NULL,1),(39,'1112','Botica Santamarta','1000',NULL,NULL,NULL,1),(40,'1109','Botica Sincelejo','1000',NULL,NULL,NULL,1),(41,'1117','Botica Tulúa','1000',NULL,NULL,NULL,1),(42,'1126','Botica Tunja','1000',NULL,NULL,NULL,1),(43,'1122','Botica V/cencio','1000',NULL,NULL,NULL,1),(44,'1123','Botica Villeta','1000',NULL,NULL,NULL,1),(45,'1400','CC-BOGOTA','1000',NULL,NULL,NULL,1),(46,'4025','CC-BOGOTA','4000',NULL,NULL,NULL,1),(47,'3400','Call Mexico DF','3000',NULL,NULL,NULL,1),(48,'3003','Clinica Cuernavaca','3000',NULL,NULL,NULL,1),(49,'3007','Clinica Guadalajara','3000',NULL,NULL,NULL,1),(50,'3008','Clinica Iztapalapa','3000',NULL,NULL,NULL,1),(51,'3002','Clinica Puebla','3000',NULL,NULL,NULL,1),(52,'3005','Clinica Queretaro','3000',NULL,NULL,NULL,1),(53,'3004','Clinica Toluca','3000',NULL,NULL,NULL,1),(54,'3000','Clinica Valle Nueva','3000',NULL,NULL,NULL,1),(55,'3006','Clinica Xalapa','3000',NULL,NULL,NULL,1),(56,'1026','Clínica Armenia','1000',NULL,NULL,NULL,1),(57,'1028','Clínica Duitama','1000',NULL,NULL,NULL,1),(58,'1027','Clínica Girardot','1000',NULL,NULL,NULL,1),(59,'1030','Clínica Leticia','1000',NULL,NULL,NULL,1),(60,'1025','Clínica Manizales','1000',NULL,NULL,NULL,1),(61,'1035','Clínica Mompos','1000',NULL,NULL,NULL,1),(62,'1029','Clínica Pamplona','1000',NULL,NULL,NULL,1),(63,'1033','Clínica Pitalito','1000',NULL,NULL,NULL,1),(64,'1032','Clínica Riohacha','1000',NULL,NULL,NULL,1),(65,'1031','Clínica San Andres','1000',NULL,NULL,NULL,1),(66,'1146','N. Express  Soledad','1000',NULL,NULL,NULL,1),(67,'1142','N. Express Americas','1000',NULL,NULL,NULL,1),(68,'1144','N. Express Itagui','1000',NULL,NULL,NULL,1),(69,'1152','N. Express Quibdo','1000',NULL,NULL,NULL,1),(70,'1101','NX-BTA ALCAZARES','1000',NULL,NULL,NULL,1),(71,'4029','NX-BTA ALCAZARES','4000',NULL,NULL,NULL,1),(72,'1103','NX-BTA CENTRO','1000',NULL,NULL,NULL,1),(73,'4030','NX-BTA CENTRO','4000',NULL,NULL,NULL,1),(74,'1106','NX-BTA FONTIBON','1000',NULL,NULL,NULL,1),(75,'4031','NX-BTA FONTIBON','4000',NULL,NULL,NULL,1),(76,'1105','NX-BTA RESTREPO','1000',NULL,NULL,NULL,1),(77,'4032','NX-BTA RESTREPO','4000',NULL,NULL,NULL,1),(78,'1102','NX-BTA SUBA','1000',NULL,NULL,NULL,1),(79,'4033','NX-BTA SUBA','4000',NULL,NULL,NULL,1),(80,'1011','NX-BUGA','1000',NULL,NULL,NULL,1),(81,'4034','NX-BUGA','4000',NULL,NULL,NULL,1),(82,'1148','NX-ESPINAL','1000',NULL,NULL,NULL,1),(83,'4035','NX-ESPINAL','4000',NULL,NULL,NULL,1),(84,'1149','NX-MAGANGUE','1000',NULL,NULL,NULL,1),(85,'4036','NX-MAGANGUE','4000',NULL,NULL,NULL,1),(86,'1145','NX-OCANA','1000',NULL,NULL,NULL,1),(87,'4037','NX-OCANA','4000',NULL,NULL,NULL,1),(88,'1155','NX-PIE DE CUESTA','1000',NULL,NULL,NULL,1),(89,'4038','NX-PIE DE CUESTA','4000',NULL,NULL,NULL,1),(90,'1153','NX-RIOHACHA','1000',NULL,NULL,NULL,1),(91,'4039','NX-RIOHACHA','4000',NULL,NULL,NULL,1),(92,'1154','NX-SAN JOSE GUAV','1000',NULL,NULL,NULL,1),(93,'4040','NX-SAN JOSE GUAV','4000',NULL,NULL,NULL,1),(94,'1001','NX-SINCELEJO','1000',NULL,NULL,NULL,1),(95,'4041','NX-SINCELEJO','4000',NULL,NULL,NULL,1),(96,'1147','NX-STDER QUILICH','1000',NULL,NULL,NULL,1),(97,'4042','NX-STDER QUILICH','4000',NULL,NULL,NULL,1),(98,'1151','NX-TUMACO','1000',NULL,NULL,NULL,1),(99,'4043','NX-TUMACO','4000',NULL,NULL,NULL,1),(100,'1113','NX-VALLEDUPAR','1000',NULL,NULL,NULL,1),(101,'4026','NX-VALLEDUPAR','4000',NULL,NULL,NULL,1),(102,'1018','NX-VILLETA','1000',NULL,NULL,NULL,1),(103,'2250','NX-VILLETA','2000',NULL,NULL,NULL,1),(104,'1037','NZ-7 DE AGOSTO','1000',NULL,NULL,NULL,1),(105,'4001','NZ-7 DE AGOSTO','4000',NULL,NULL,NULL,1),(106,'1150','NZ-APARTADO','1000',NULL,NULL,NULL,1),(107,'4028','NZ-APARTADO','4000',NULL,NULL,NULL,1),(108,'1034','NZ-BARRANCA','1000',NULL,NULL,NULL,1),(109,'4000','NZ-BARRANCA','4000',NULL,NULL,NULL,1),(110,'1003','NZ-BARRANQUILLA','1000',NULL,NULL,NULL,1),(111,'4002','NZ-BARRANQUILLA','4000',NULL,NULL,NULL,1),(112,'1013','NZ-BTA. CALLE 75','1000',NULL,NULL,NULL,1),(113,'4003','NZ-BTA. CALLE 75','4000',NULL,NULL,NULL,1),(114,'1012','NZ-BTA. CALLE 94','1000',NULL,NULL,NULL,1),(115,'4004','NZ-BTA. CALLE 94','4000',NULL,NULL,NULL,1),(116,'1014','NZ-BTA. VENECIA','1000',NULL,NULL,NULL,1),(117,'4005','NZ-BTA. VENECIA','4000',NULL,NULL,NULL,1),(118,'1020','NZ-BUCARAMANGA','1000',NULL,NULL,NULL,1),(119,'4006','NZ-BUCARAMANGA','4000',NULL,NULL,NULL,1),(120,'1006','NZ-CALI','1000',NULL,NULL,NULL,1),(121,'4007','NZ-CALI','4000',NULL,NULL,NULL,1),(122,'1002','NZ-CARTAGENA','1000',NULL,NULL,NULL,1),(123,'4008','NZ-CARTAGENA','4000',NULL,NULL,NULL,1),(124,'1022','NZ-CHIQUINQUIRA','1000',NULL,NULL,NULL,1),(125,'4009','NZ-CHIQUINQUIRA','4000',NULL,NULL,NULL,1),(126,'1019','NZ-CUCUTA','1000',NULL,NULL,NULL,1),(127,'2110','NZ-CUCUTA','2000',NULL,NULL,NULL,1),(128,'4010','NZ-CUCUTA','4000',NULL,NULL,NULL,1),(129,'1015','NZ-IBAGUE','1000',NULL,NULL,NULL,1),(130,'4011','NZ-IBAGUE','4000',NULL,NULL,NULL,1),(131,'1023','NZ-MEDELLIN','1000',NULL,NULL,NULL,1),(132,'4012','NZ-MEDELLIN','4000',NULL,NULL,NULL,1),(133,'1000','NZ-MONTERIA','1000',NULL,NULL,NULL,1),(134,'4013','NZ-MONTERIA','4000',NULL,NULL,NULL,1),(135,'1016','NZ-NEIVA','1000',NULL,NULL,NULL,1),(136,'4014','NZ-NEIVA','4000',NULL,NULL,NULL,1),(137,'1010','NZ-PALMIRA','1000',NULL,NULL,NULL,1),(138,'4015','NZ-PALMIRA','4000',NULL,NULL,NULL,1),(139,'1008','NZ-PASTO','1000',NULL,NULL,NULL,1),(140,'4016','NZ-PASTO','4000',NULL,NULL,NULL,1),(141,'1024','NZ-PEREIRA','1000',NULL,NULL,NULL,1),(142,'4017','NZ-PEREIRA','4000',NULL,NULL,NULL,1),(143,'1007','NZ-POPAYAN','1000',NULL,NULL,NULL,1),(144,'4018','NZ-POPAYAN','4000',NULL,NULL,NULL,1),(145,'1036','NZ-RIONEGRO','1000',NULL,NULL,NULL,1),(146,'4027','NZ-RIONEGRO','4000',NULL,NULL,NULL,1),(147,'1004','NZ-SANTA MARTA','1000',NULL,NULL,NULL,1),(148,'4019','NZ-SANTA MARTA','4000',NULL,NULL,NULL,1),(149,'1009','NZ-TULUA','1000',NULL,NULL,NULL,1),(150,'4020','NZ-TULUA','4000',NULL,NULL,NULL,1),(151,'1021','NZ-TUNJA','1000',NULL,NULL,NULL,1),(152,'4021','NZ-TUNJA','4000',NULL,NULL,NULL,1),(153,'1005','NZ-VALLEDUPAR','1000',NULL,NULL,NULL,1),(154,'4022','NZ-VALLEDUPAR','4000',NULL,NULL,NULL,1),(155,'1017','NZ-VILLAVICENCIO','1000',NULL,NULL,NULL,1),(156,'4023','NZ-VILLAVICENCIO','4000',NULL,NULL,NULL,1),(157,'4024','NZ-VILLETA','4000',NULL,NULL,NULL,1),(158,'0001','Oficina ventas sur','0000',NULL,NULL,NULL,1),(159,'1999','Otras Vtas Affinity','1000',NULL,NULL,NULL,1),(160,'2999','Otras Vtas Axioma','2000',NULL,NULL,NULL,1),(161,'3999','Otras Vtas Mexico','3000',NULL,NULL,NULL,1),(162,'3001','Productos OTC','3000',NULL,NULL,NULL,1),(163,'1200','VD-BARRANQUILLA','1000',NULL,NULL,NULL,1),(164,'4044','VD-BARRANQUILLA','4000',NULL,NULL,NULL,1),(165,'1204','VD-BOGOTA','1000',NULL,NULL,NULL,1),(166,'4045','VD-BOGOTA','4000',NULL,NULL,NULL,1),(167,'1201','VD-BUCARAMANGA','1000',NULL,NULL,NULL,1),(168,'4046','VD-BUCARAMANGA','4000',NULL,NULL,NULL,1),(169,'1203','VD-CALI','1000',NULL,NULL,NULL,1),(170,'4047','VD-CALI','4000',NULL,NULL,NULL,1),(171,'1205','VD-MEDELLIN','1000',NULL,NULL,NULL,1),(172,'4048','VD-MEDELLIN','4000',NULL,NULL,NULL,1),(173,'1300','VN-BOGOTA','1000',NULL,NULL,NULL,1),(174,'4049','VN-BOGOTA','4000',NULL,NULL,NULL,1),(175,'1301','VN-CALI','1000',NULL,NULL,NULL,1),(176,'4050','VN-CALI','4000',NULL,NULL,NULL,1);
+INSERT INTO `crm_branch` VALUES (1,'1202','AD Neiva','1000',NULL,NULL,NULL,1),(2,'1401','Affinity Bogotá','1000',NULL,NULL,NULL,1),(3,'3009','Axihoma','3000',NULL,NULL,NULL,1),(4,'2000','Axioma Bogotá','2000',NULL,NULL,NULL,1),(5,'1500','BS Bogotá','1000',NULL,NULL,NULL,1),(6,'1502','BS Bucaramanga','1000',NULL,NULL,NULL,1),(7,'1503','BS Cali','1000',NULL,NULL,NULL,1),(8,'1501','BS Itagui','1000',NULL,NULL,NULL,1),(9,'1131','Botica Armenia','1000',NULL,NULL,NULL,1),(10,'1139','Botica Barranca','1000',NULL,NULL,NULL,1),(11,'1111','Botica Barranquilla','1000',NULL,NULL,NULL,1),(12,'1125','Botica Bucaramanga','1000',NULL,NULL,NULL,1),(13,'1119','Botica Buga','1000',NULL,NULL,NULL,1),(14,'1114','Botica Cali','1000',NULL,NULL,NULL,1),(15,'1110','Botica Cartagena','1000',NULL,NULL,NULL,1),(16,'1104','Botica Centro Viejo','1000',NULL,NULL,NULL,1),(17,'1107','Botica Chapinero','1000',NULL,NULL,NULL,1),(18,'1127','Botica Chiquinquira','1000',NULL,NULL,NULL,1),(19,'1124','Botica Cúcuta','1000',NULL,NULL,NULL,1),(20,'1133','Botica Duitama','1000',NULL,NULL,NULL,1),(21,'1132','Botica Girardot','1000',NULL,NULL,NULL,1),(22,'1120','Botica Ibagué','1000',NULL,NULL,NULL,1),(23,'1135','Botica Leticia','1000',NULL,NULL,NULL,1),(24,'1130','Botica Manizales','1000',NULL,NULL,NULL,1),(25,'1128','Botica Medellín','1000',NULL,NULL,NULL,1),(26,'1140','Botica Mompos','1000',NULL,NULL,NULL,1),(27,'1108','Botica Montería','1000',NULL,NULL,NULL,1),(28,'1121','Botica Neiva','1000',NULL,NULL,NULL,1),(29,'1100','Botica Norte','1000',NULL,NULL,NULL,1),(30,'1118','Botica Palmira','1000',NULL,NULL,NULL,1),(31,'1134','Botica Pamplona','1000',NULL,NULL,NULL,1),(32,'1116','Botica Pasto','1000',NULL,NULL,NULL,1),(33,'1129','Botica Pereira','1000',NULL,NULL,NULL,1),(34,'1141','Botica Pie De Cuesta','1000',NULL,NULL,NULL,1),(35,'1138','Botica Pitalito','1000',NULL,NULL,NULL,1),(36,'1115','Botica Popayán','1000',NULL,NULL,NULL,1),(37,'1137','Botica Riohacha','1000',NULL,NULL,NULL,1),(38,'1136','Botica San Andres','1000',NULL,NULL,NULL,1),(39,'1112','Botica Santamarta','1000',NULL,NULL,NULL,1),(40,'1109','Botica Sincelejo','1000',NULL,NULL,NULL,1),(41,'1117','Botica Tulúa','1000',NULL,NULL,NULL,1),(42,'1126','Botica Tunja','1000',NULL,NULL,NULL,1),(43,'1122','Botica V/cencio','1000',NULL,NULL,NULL,1),(44,'1123','Botica Villeta','1000',NULL,NULL,NULL,1),(45,'1400','CC-BOGOTA','1000',NULL,NULL,NULL,1),(46,'4025','CC-BOGOTA','4000',NULL,NULL,NULL,1),(47,'3400','Call Mexico DF','3000',NULL,NULL,NULL,1),(48,'3003','Clinica Cuernavaca','3000',NULL,NULL,NULL,1),(49,'3007','Clinica Guadalajara','3000',NULL,NULL,NULL,1),(50,'3008','Clinica Iztapalapa','3000',NULL,NULL,NULL,1),(51,'3002','Clinica Puebla','3000',NULL,NULL,NULL,1),(52,'3005','Clinica Queretaro','3000',NULL,NULL,NULL,1),(53,'3004','Clinica Toluca','3000',NULL,NULL,NULL,1),(54,'3000','Nucleo ROMA','3000',NULL,NULL,NULL,1),(55,'3006','Clinica Xalapa','3000',NULL,NULL,NULL,1),(56,'1026','Clínica Armenia','1000',NULL,NULL,NULL,1),(57,'1028','Clínica Duitama','1000',NULL,NULL,NULL,1),(58,'1027','Clínica Girardot','1000',NULL,NULL,NULL,1),(59,'1030','Clínica Leticia','1000',NULL,NULL,NULL,1),(60,'1025','Clínica Manizales','1000',NULL,NULL,NULL,1),(61,'1035','Clínica Mompos','1000',NULL,NULL,NULL,1),(62,'1029','Clínica Pamplona','1000',NULL,NULL,NULL,1),(63,'1033','Clínica Pitalito','1000',NULL,NULL,NULL,1),(64,'1032','Clínica Riohacha','1000',NULL,NULL,NULL,1),(65,'1031','Clínica San Andres','1000',NULL,NULL,NULL,1),(66,'1146','N. Express  Soledad','1000',NULL,NULL,NULL,1),(67,'1142','N. Express Americas','1000',NULL,NULL,NULL,1),(68,'1144','N. Express Itagui','1000',NULL,NULL,NULL,1),(69,'1152','N. Express Quibdo','1000',NULL,NULL,NULL,1),(70,'1101','NX-BTA ALCAZARES','1000',NULL,NULL,NULL,1),(71,'4029','NX-BTA ALCAZARES','4000',NULL,NULL,NULL,1),(72,'1103','NX-BTA CENTRO','1000',NULL,NULL,NULL,1),(73,'4030','NX-BTA CENTRO','4000',NULL,NULL,NULL,1),(74,'1106','NX-BTA FONTIBON','1000',NULL,NULL,NULL,1),(75,'4031','NX-BTA FONTIBON','4000',NULL,NULL,NULL,1),(76,'1105','NX-BTA RESTREPO','1000',NULL,NULL,NULL,1),(77,'4032','NX-BTA RESTREPO','4000',NULL,NULL,NULL,1),(78,'1102','NX-BTA SUBA','1000',NULL,NULL,NULL,1),(79,'4033','NX-BTA SUBA','4000',NULL,NULL,NULL,1),(80,'1011','NX-BUGA','1000',NULL,NULL,NULL,1),(81,'4034','NX-BUGA','4000',NULL,NULL,NULL,1),(82,'1148','NX-ESPINAL','1000',NULL,NULL,NULL,1),(83,'4035','NX-ESPINAL','4000',NULL,NULL,NULL,1),(84,'1149','NX-MAGANGUE','1000',NULL,NULL,NULL,1),(85,'4036','NX-MAGANGUE','4000',NULL,NULL,NULL,1),(86,'1145','NX-OCANA','1000',NULL,NULL,NULL,1),(87,'4037','NX-OCANA','4000',NULL,NULL,NULL,1),(88,'1155','NX-PIE DE CUESTA','1000',NULL,NULL,NULL,1),(89,'4038','NX-PIE DE CUESTA','4000',NULL,NULL,NULL,1),(90,'1153','NX-RIOHACHA','1000',NULL,NULL,NULL,1),(91,'4039','NX-RIOHACHA','4000',NULL,NULL,NULL,1),(92,'1154','NX-SAN JOSE GUAV','1000',NULL,NULL,NULL,1),(93,'4040','NX-SAN JOSE GUAV','4000',NULL,NULL,NULL,1),(94,'1001','NX-SINCELEJO','1000',NULL,NULL,NULL,1),(95,'4041','NX-SINCELEJO','4000',NULL,NULL,NULL,1),(96,'1147','NX-STDER QUILICH','1000',NULL,NULL,NULL,1),(97,'4042','NX-STDER QUILICH','4000',NULL,NULL,NULL,1),(98,'1151','NX-TUMACO','1000',NULL,NULL,NULL,1),(99,'4043','NX-TUMACO','4000',NULL,NULL,NULL,1),(100,'1113','NX-VALLEDUPAR','1000',NULL,NULL,NULL,1),(101,'4026','NX-VALLEDUPAR','4000',NULL,NULL,NULL,1),(102,'1018','NX-VILLETA','1000',NULL,NULL,NULL,1),(103,'2250','NX-VILLETA','2000',NULL,NULL,NULL,1),(104,'1037','NZ-7 DE AGOSTO','1000',NULL,NULL,NULL,1),(105,'4001','NZ-7 DE AGOSTO','4000',NULL,NULL,NULL,1),(106,'1150','NZ-APARTADO','1000',NULL,NULL,NULL,1),(107,'4028','NZ-APARTADO','4000',NULL,NULL,NULL,1),(108,'1034','NZ-BARRANCA','1000',NULL,NULL,NULL,1),(109,'4000','NZ-BARRANCA','4000',NULL,NULL,NULL,1),(110,'1003','NZ-BARRANQUILLA','1000',NULL,NULL,NULL,1),(111,'4002','NZ-BARRANQUILLA','4000',NULL,NULL,NULL,1),(112,'1013','NZ-BTA. CALLE 75','1000',NULL,NULL,NULL,1),(113,'4003','NZ-BTA. CALLE 75','4000',NULL,NULL,NULL,1),(114,'1012','NZ-BTA. CALLE 94','1000',NULL,NULL,NULL,1),(115,'4004','NZ-BTA. CALLE 94','4000',NULL,NULL,NULL,1),(116,'1014','NZ-BTA. VENECIA','1000',NULL,NULL,NULL,1),(117,'4005','NZ-BTA. VENECIA','4000',NULL,NULL,NULL,1),(118,'1020','NZ-BUCARAMANGA','1000',NULL,NULL,NULL,1),(119,'4006','NZ-BUCARAMANGA','4000',NULL,NULL,NULL,1),(120,'1006','NZ-CALI','1000',NULL,NULL,NULL,1),(121,'4007','NZ-CALI','4000',NULL,NULL,NULL,1),(122,'1002','NZ-CARTAGENA','1000',NULL,NULL,NULL,1),(123,'4008','NZ-CARTAGENA','4000',NULL,NULL,NULL,1),(124,'1022','NZ-CHIQUINQUIRA','1000',NULL,NULL,NULL,1),(125,'4009','NZ-CHIQUINQUIRA','4000',NULL,NULL,NULL,1),(126,'1019','NZ-CUCUTA','1000',NULL,NULL,NULL,1),(127,'2110','NZ-CUCUTA','2000',NULL,NULL,NULL,1),(128,'4010','NZ-CUCUTA','4000',NULL,NULL,NULL,1),(129,'1015','NZ-IBAGUE','1000',NULL,NULL,NULL,1),(130,'4011','NZ-IBAGUE','4000',NULL,NULL,NULL,1),(131,'1023','NZ-MEDELLIN','1000',NULL,NULL,NULL,1),(132,'4012','NZ-MEDELLIN','4000',NULL,NULL,NULL,1),(133,'1000','NZ-MONTERIA','1000',NULL,NULL,NULL,1),(134,'4013','NZ-MONTERIA','4000',NULL,NULL,NULL,1),(135,'1016','NZ-NEIVA','1000',NULL,NULL,NULL,1),(136,'4014','NZ-NEIVA','4000',NULL,NULL,NULL,1),(137,'1010','NZ-PALMIRA','1000',NULL,NULL,NULL,1),(138,'4015','NZ-PALMIRA','4000',NULL,NULL,NULL,1),(139,'1008','NZ-PASTO','1000',NULL,NULL,NULL,1),(140,'4016','NZ-PASTO','4000',NULL,NULL,NULL,1),(141,'1024','NZ-PEREIRA','1000',NULL,NULL,NULL,1),(142,'4017','NZ-PEREIRA','4000',NULL,NULL,NULL,1),(143,'1007','NZ-POPAYAN','1000',NULL,NULL,NULL,1),(144,'4018','NZ-POPAYAN','4000',NULL,NULL,NULL,1),(145,'1036','NZ-RIONEGRO','1000',NULL,NULL,NULL,1),(146,'4027','NZ-RIONEGRO','4000',NULL,NULL,NULL,1),(147,'1004','NZ-SANTA MARTA','1000',NULL,NULL,NULL,1),(148,'4019','NZ-SANTA MARTA','4000',NULL,NULL,NULL,1),(149,'1009','NZ-TULUA','1000',NULL,NULL,NULL,1),(150,'4020','NZ-TULUA','4000',NULL,NULL,NULL,1),(151,'1021','NZ-TUNJA','1000',NULL,NULL,NULL,1),(152,'4021','NZ-TUNJA','4000',NULL,NULL,NULL,1),(153,'1005','NZ-VALLEDUPAR','1000',NULL,NULL,NULL,1),(154,'4022','NZ-VALLEDUPAR','4000',NULL,NULL,NULL,1),(155,'1017','NZ-VILLAVICENCIO','1000',NULL,NULL,NULL,1),(156,'4023','NZ-VILLAVICENCIO','4000',NULL,NULL,NULL,1),(157,'4024','NZ-VILLETA','4000',NULL,NULL,NULL,1),(158,'0001','Oficina ventas sur','0000',NULL,NULL,NULL,1),(159,'1999','Otras Vtas Affinity','1000',NULL,NULL,NULL,1),(160,'2999','Otras Vtas Axioma','2000',NULL,NULL,NULL,1),(161,'3999','Otras Vtas Mexico','3000',NULL,NULL,NULL,1),(162,'3001','Productos OTC','3000',NULL,NULL,NULL,1),(163,'1200','VD-BARRANQUILLA','1000',NULL,NULL,NULL,1),(164,'4044','VD-BARRANQUILLA','4000',NULL,NULL,NULL,1),(165,'1204','VD-BOGOTA','1000',NULL,NULL,NULL,1),(166,'4045','VD-BOGOTA','4000',NULL,NULL,NULL,1),(167,'1201','VD-BUCARAMANGA','1000',NULL,NULL,NULL,1),(168,'4046','VD-BUCARAMANGA','4000',NULL,NULL,NULL,1),(169,'1203','VD-CALI','1000',NULL,NULL,NULL,1),(170,'4047','VD-CALI','4000',NULL,NULL,NULL,1),(171,'1205','VD-MEDELLIN','1000',NULL,NULL,NULL,1),(172,'4048','VD-MEDELLIN','4000',NULL,NULL,NULL,1),(173,'1300','VN-BOGOTA','1000',NULL,NULL,NULL,1),(174,'4049','VN-BOGOTA','4000',NULL,NULL,NULL,1),(175,'1301','VN-CALI','1000',NULL,NULL,NULL,1),(176,'4050','VN-CALI','4000',NULL,NULL,NULL,1);
 /*!40000 ALTER TABLE `crm_branch` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -914,7 +920,7 @@ CREATE TABLE `crm_doctor_schedule` (
   `start_hour` time NOT NULL,
   `end_hour` time NOT NULL,
   `id_branch` decimal(19,0) NOT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY  (`id`),
   KEY `fk_crm_doctor_schedule_1` (`id_doctor`),
   KEY `fk_crm_doctor_schedule_2` (`id_branch`),
   CONSTRAINT `fk_crm_doctor_schedule_1` FOREIGN KEY (`id_doctor`) REFERENCES `crm_doctor` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -928,7 +934,7 @@ CREATE TABLE `crm_doctor_schedule` (
 
 LOCK TABLES `crm_doctor_schedule` WRITE;
 /*!40000 ALTER TABLE `crm_doctor_schedule` DISABLE KEYS */;
-INSERT INTO `crm_doctor_schedule` VALUES (6,5,2,'08:00:00','17:00:00',112),(7,5,3,'08:00:00','17:00:00',112),(8,5,4,'08:00:00','17:00:00',112),(9,5,7,'08:00:00','12:00:00',112),(10,5,7,'13:00:00','18:00:00',112),(11,8,7,'08:00:00','12:00:00',112),(12,7,2,'08:00:00','17:00:00',112),(13,7,3,'08:00:00','17:00:00',112),(14,7,7,'10:00:00','12:00:00',112);
+INSERT INTO `crm_doctor_schedule` VALUES (1,5,2,'08:00:00','17:00:00',112),(2,5,3,'08:00:00','17:00:00',112),(3,5,4,'08:00:00','17:00:00',112),(4,7,2,'08:00:00','17:00:00',112),(5,7,3,'08:00:00','17:00:00',112),(6,10,2,'08:00:00','18:00:00',54),(7,10,3,'08:00:00','18:00:00',54),(8,10,4,'08:00:00','18:00:00',54),(9,10,5,'08:00:00','18:00:00',54),(10,10,6,'08:00:00','18:00:00',54),(11,10,7,'08:00:00','18:00:00',54),(12,11,2,'08:00:00','18:00:00',54),(13,11,3,'08:00:00','18:00:00',54),(14,11,4,'08:00:00','18:00:00',54),(15,11,5,'08:00:00','18:00:00',54),(16,11,6,'08:00:00','18:00:00',54),(17,11,7,'08:00:00','18:00:00',54),(18,12,2,'08:00:00','18:00:00',54),(19,12,3,'08:00:00','18:00:00',54),(20,12,4,'08:00:00','18:00:00',54),(21,12,5,'08:00:00','18:00:00',54),(22,12,6,'08:00:00','18:00:00',54),(23,12,7,'08:00:00','18:00:00',54),(24,13,2,'08:00:00','18:00:00',54),(25,13,3,'08:00:00','18:00:00',54),(26,13,4,'08:00:00','18:00:00',54),(27,13,5,'08:00:00','18:00:00',54),(28,13,6,'08:00:00','18:00:00',54),(29,13,7,'08:00:00','18:00:00',54);
 /*!40000 ALTER TABLE `crm_doctor_schedule` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -944,7 +950,7 @@ CREATE TABLE `crm_doctor_exception` (
   `id_doctor` decimal(19,0) NOT NULL,
   `start_hour` datetime NOT NULL,
   `end_hour` datetime NOT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY  (`id`),
   KEY `fk_crm_doctor_exception_1` (`id_doctor`),
   CONSTRAINT `fk_crm_doctor_exception_1` FOREIGN KEY (`id_doctor`) REFERENCES `crm_doctor` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
@@ -969,11 +975,11 @@ DROP TABLE IF EXISTS `crm_procedure`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_procedure` (
   `id` decimal(19,0) NOT NULL,
-  `name` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
-  `description` varchar(1000) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `cod_publicity` varchar(4) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `state` int(11) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
+  `name` varchar(255) collate latin1_spanish_ci NOT NULL,
+  `description` varchar(1000) collate latin1_spanish_ci default NULL,
+  `cod_publicity` varchar(4) collate latin1_spanish_ci default NULL,
+  `state` int(11) NOT NULL default '1',
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -984,7 +990,7 @@ CREATE TABLE `crm_procedure` (
 
 LOCK TABLES `crm_procedure` WRITE;
 /*!40000 ALTER TABLE `crm_procedure` DISABLE KEYS */;
-INSERT INTO `crm_procedure` VALUES (1,'Primera Cita','Primera Cita',NULL,1),(2,'Control','Control','P16',1),(3,'Terapias','Terapias','-1',1);
+INSERT INTO `crm_procedure` VALUES (1,'Primera Cita','Primera Cita','-1',1),(2,'Control','Control','P16',1),(3,'Terapias','Terapias','-1',1);
 /*!40000 ALTER TABLE `crm_procedure` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -997,11 +1003,11 @@ DROP TABLE IF EXISTS `crm_occupation`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_occupation` (
   `id` decimal(19,0) NOT NULL,
-  `name` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
-  `state` int(11) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
+  `name` varchar(255) collate latin1_spanish_ci NOT NULL,
+  `state` int(11) NOT NULL default '1',
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1010,7 +1016,7 @@ CREATE TABLE `crm_occupation` (
 
 LOCK TABLES `crm_occupation` WRITE;
 /*!40000 ALTER TABLE `crm_occupation` DISABLE KEYS */;
-INSERT INTO `crm_occupation` VALUES (1,'INGENIERO',1),(2,'AMA DE CASA',1),(3,'ADMINISTRADORA',0);
+INSERT INTO `crm_occupation` VALUES (1,'INGENIERO',1);
 /*!40000 ALTER TABLE `crm_occupation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1023,10 +1029,10 @@ DROP TABLE IF EXISTS `crm_domain`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_domain` (
   `id` decimal(19,0) NOT NULL,
-  `code` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `item_value` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `group` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  PRIMARY KEY (`id`),
+  `code` varchar(45) collate latin1_spanish_ci default NULL,
+  `item_value` varchar(255) collate latin1_spanish_ci default NULL,
+  `group` varchar(45) collate latin1_spanish_ci default NULL,
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `uk_crm_domain_1` (`code`,`group`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1050,9 +1056,9 @@ DROP TABLE IF EXISTS `crm_holiday`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_holiday` (
   `id` decimal(19,0) NOT NULL,
-  `description` varchar(1000) COLLATE latin1_spanish_ci NOT NULL,
+  `description` varchar(1000) collate latin1_spanish_ci NOT NULL,
   `holiday` date NOT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `uk_crm_holiday_1` (`holiday`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1063,7 +1069,7 @@ CREATE TABLE `crm_holiday` (
 
 LOCK TABLES `crm_holiday` WRITE;
 /*!40000 ALTER TABLE `crm_holiday` DISABLE KEYS */;
-INSERT INTO `crm_holiday` VALUES (1,'Festivo','2012-06-18'),(2,'Festivo 11/06','2012-06-11');
+INSERT INTO `crm_holiday` VALUES (1,'Festivo','2012-06-18'),(2,'Festivo 11/06','2012-06-11'),(3,'Festivo 20 Julio','2012-07-20');
 /*!40000 ALTER TABLE `crm_holiday` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1092,10 +1098,10 @@ DROP TABLE IF EXISTS `crm_region`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_region` (
   `id` decimal(19,0) NOT NULL,
-  `code` varchar(3) COLLATE latin1_spanish_ci NOT NULL,
-  `name` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
+  `code` varchar(3) collate latin1_spanish_ci NOT NULL,
+  `name` varchar(255) collate latin1_spanish_ci NOT NULL,
   `id_country` decimal(19,0) NOT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `uk_crm_region_1` (`code`),
   KEY `fk_crm_region_1` (`id_country`),
   CONSTRAINT `fk_crm_state_1` FOREIGN KEY (`id_country`) REFERENCES `crm_country` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -1108,7 +1114,7 @@ CREATE TABLE `crm_region` (
 
 LOCK TABLES `crm_region` WRITE;
 /*!40000 ALTER TABLE `crm_region` DISABLE KEYS */;
-INSERT INTO `crm_region` VALUES (1,'5','ANTIOQUIA',1),(2,'8','ATLÁNTICO',1),(3,'11','BOGOTÁ',1),(4,'13','BOLÍVAR',1),(5,'15','BOYACA',1),(6,'17','CALDAS',1),(7,'18','CAQUETA',1),(8,'19','CAUCA',1),(9,'20','CESAR',1),(10,'23','CÓRDOBA',1),(11,'25','CUNDINAMARCA',1),(12,'27','CHOCO',1),(13,'41','HUILA',1),(14,'44','LA GUAJIRA',1),(15,'47','MAGDALENA',1),(16,'50','META',1),(17,'52','NARIÑO',1),(18,'54','NORTE SANTANDER',1),(19,'63','QUINDIO',1),(20,'66','RISARALDA',1),(21,'68','SANTANDER',1),(22,'70','SUCRE',1),(23,'73','TOLIMA',1),(24,'76','VALLE',1),(25,'81','ARAUCA',1),(26,'85','CASANARE',1),(27,'86','PUTUMAYO',1),(28,'88','SAN ANDRÉS',1),(29,'91','AMAZONAS',1),(30,'94','GUAINIA',1),(31,'95','GUAVIARE',1),(32,'97','VAUPES',1),(33,'99','VICHADA',1);
+INSERT INTO `crm_region` VALUES (1,'5','ANTIOQUIA',1),(2,'8','ATLÁNTICO',1),(3,'11','BOGOTÁ',1),(4,'13','BOLÍVAR',1),(5,'15','BOYACA',1),(6,'17','CALDAS',1),(7,'18','CAQUETA',1),(8,'19','CAUCA',1),(9,'20','CESAR',1),(10,'23','CÓRDOBA',1),(11,'25','CUNDINAMARCA',1),(12,'27','CHOCO',1),(13,'41','HUILA',1),(14,'44','LA GUAJIRA',1),(15,'47','MAGDALENA',1),(16,'50','META',1),(17,'52','NARIÑO',1),(18,'54','NORTE SANTANDER',1),(19,'63','QUINDIO',1),(20,'66','RISARALDA',1),(21,'68','SANTANDER',1),(22,'70','SUCRE',1),(23,'73','TOLIMA',1),(24,'76','VALLE',1),(25,'81','ARAUCA',1),(26,'85','CASANARE',1),(27,'86','PUTUMAYO',1),(28,'88','SAN ANDRÉS',1),(29,'91','AMAZONAS',1),(30,'94','GUAINIA',1),(31,'95','GUAVIARE',1),(32,'97','VAUPES',1),(33,'99','VICHADA',1),(34,'AGS','Aguascalientes',2),(35,'BC','Baja California',2),(36,'BCS','Baja California S',2),(37,'CHI','Chihuahua',2),(38,'CHS','Chiapas',2),(39,'CMP','Campeche',2),(40,'COA','Coahuila',2),(41,'COL','Colima',2),(42,'DF','Distrito Federal',2),(43,'DGO','Durango',2),(44,'GRO','Guerrero',2),(45,'GTO','Guanajuato',2),(46,'HGO','Hidalgo',2),(47,'JAL','Jalisco',2),(48,'MCH','Michoacán',2),(49,'MEX','Estado de México',2),(50,'MOR','Morelos',2),(51,'NAY','Nayarit',2),(52,'NL','Nuevo León',2),(53,'OAX','Oaxaca',2),(54,'PUE','Puebla',2),(55,'QR','Quintana Roo',2),(56,'QRO','Querétaro',2),(57,'SIN','Sinaloa',2),(58,'SLP','San Luis Potosí',2),(59,'SON','Sonora',2),(60,'TAB','Tabasco',2),(61,'TLX','Tlaxcala',2),(62,'TMS','Tamaulipas',2),(63,'VER','Veracruz',2),(64,'YUC','Yucatán',2),(65,'ZAC','Zacatecas',2);
 /*!40000 ALTER TABLE `crm_region` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1122,12 +1128,12 @@ DROP TABLE IF EXISTS `crm_history_homeopathic`;
 CREATE TABLE `crm_history_homeopathic` (
   `id` decimal(19,0) NOT NULL,
   `id_patient` decimal(19,0) NOT NULL,
-  `biotypology` varchar(45) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `mental` text COLLATE latin1_spanish_ci,
-  `special` text COLLATE latin1_spanish_ci,
-  `general` text COLLATE latin1_spanish_ci,
-  `miasm` text COLLATE latin1_spanish_ci,
-  PRIMARY KEY (`id`),
+  `biotypology` varchar(45) collate latin1_spanish_ci default NULL,
+  `mental` text collate latin1_spanish_ci,
+  `special` text collate latin1_spanish_ci,
+  `general` text collate latin1_spanish_ci,
+  `miasm` text collate latin1_spanish_ci,
+  PRIMARY KEY  (`id`),
   KEY `fk_crm_homeopathic_1` (`id_patient`),
   CONSTRAINT `fk_crm_homeopathic_1` FOREIGN KEY (`id_patient`) REFERENCES `crm_patient` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
@@ -1139,7 +1145,7 @@ CREATE TABLE `crm_history_homeopathic` (
 
 LOCK TABLES `crm_history_homeopathic` WRITE;
 /*!40000 ALTER TABLE `crm_history_homeopathic` DISABLE KEYS */;
-INSERT INTO `crm_history_homeopathic` VALUES (1,1,'C','1','2','3','4'),(2,5,'','','','','');
+INSERT INTO `crm_history_homeopathic` VALUES (1,1,'C','1','2','3','4');
 /*!40000 ALTER TABLE `crm_history_homeopathic` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1152,12 +1158,12 @@ DROP TABLE IF EXISTS `crm_page`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `crm_page` (
   `id` decimal(19,0) NOT NULL,
-  `name` varchar(255) COLLATE latin1_spanish_ci NOT NULL,
-  `page` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `icon` varchar(255) COLLATE latin1_spanish_ci DEFAULT NULL,
-  `parent` decimal(19,0) DEFAULT NULL,
+  `name` varchar(255) collate latin1_spanish_ci NOT NULL,
+  `page` varchar(255) collate latin1_spanish_ci default NULL,
+  `icon` varchar(255) collate latin1_spanish_ci default NULL,
+  `parent` decimal(19,0) default NULL,
   `orderby` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1181,18 +1187,18 @@ DROP TABLE IF EXISTS `crm_history_history`;
 CREATE TABLE `crm_history_history` (
   `id` decimal(19,0) NOT NULL,
   `id_patient` decimal(19,0) NOT NULL,
-  `reason` text COLLATE latin1_spanish_ci,
-  `disease` text COLLATE latin1_spanish_ci,
-  `results` text COLLATE latin1_spanish_ci,
-  `head` text COLLATE latin1_spanish_ci,
-  `orl` text COLLATE latin1_spanish_ci,
-  `cr` text COLLATE latin1_spanish_ci,
-  `gi` text COLLATE latin1_spanish_ci,
-  `neuromuscular` text COLLATE latin1_spanish_ci,
-  `gu` text COLLATE latin1_spanish_ci,
-  `psychiatric` text COLLATE latin1_spanish_ci,
-  `skin` text COLLATE latin1_spanish_ci,
-  PRIMARY KEY (`id`),
+  `reason` text collate latin1_spanish_ci,
+  `disease` text collate latin1_spanish_ci,
+  `results` text collate latin1_spanish_ci,
+  `head` text collate latin1_spanish_ci,
+  `orl` text collate latin1_spanish_ci,
+  `cr` text collate latin1_spanish_ci,
+  `gi` text collate latin1_spanish_ci,
+  `neuromuscular` text collate latin1_spanish_ci,
+  `gu` text collate latin1_spanish_ci,
+  `psychiatric` text collate latin1_spanish_ci,
+  `skin` text collate latin1_spanish_ci,
+  PRIMARY KEY  (`id`),
   UNIQUE KEY `id_patient_UNIQUE` (`id_patient`),
   KEY `fk_crm_history_history_1` (`id_patient`),
   CONSTRAINT `fk_crm_history_history_1` FOREIGN KEY (`id_patient`) REFERENCES `crm_patient` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -1205,7 +1211,7 @@ CREATE TABLE `crm_history_history` (
 
 LOCK TABLES `crm_history_history` WRITE;
 /*!40000 ALTER TABLE `crm_history_history` DISABLE KEYS */;
-INSERT INTO `crm_history_history` VALUES (1,1,'1','2','3','4','6','8','10','5','7','9','11'),(2,5,'1','2','3','','','','','','','','');
+INSERT INTO `crm_history_history` VALUES (1,1,'1','2','3','4','6','8','10','5','7','9','11');
 /*!40000 ALTER TABLE `crm_history_history` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1215,18 +1221,7 @@ UNLOCK TABLES;
 
 /*!50001 DROP TABLE IF EXISTS `vw_doctor_hour_preview`*/;
 /*!50001 DROP VIEW IF EXISTS `vw_doctor_hour_preview`*/;
-/*!50001 SET @saved_cs_client          = @@character_set_client */;
-/*!50001 SET @saved_cs_results         = @@character_set_results */;
-/*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8 */;
-/*!50001 SET character_set_results     = utf8 */;
-/*!50001 SET collation_connection      = utf8_general_ci */;
-/*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `vw_doctor_hour_preview` AS select `crm_appointment`.`id_branch` AS `id_branch`,`crm_appointment`.`id_doctor` AS `id_doctor`,cast(`crm_appointment`.`start_appointment_date` as date) AS `only_date`,timediff(`crm_appointment`.`end_appointment_date`,`crm_appointment`.`start_appointment_date`) AS `hours` from `crm_appointment` where (`crm_appointment`.`state` in (1,3,4)) */;
-/*!50001 SET character_set_client      = @saved_cs_client */;
-/*!50001 SET character_set_results     = @saved_cs_results */;
-/*!50001 SET collation_connection      = @saved_col_connection */;
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_doctor_hour_preview` AS select `crm_appointment`.`id_branch` AS `id_branch`,`crm_appointment`.`id_doctor` AS `id_doctor`,cast(`crm_appointment`.`start_appointment_date` as date) AS `only_date`,timediff(`crm_appointment`.`end_appointment_date`,`crm_appointment`.`start_appointment_date`) AS `hours` from `crm_appointment` where (`crm_appointment`.`state` in (1,3,4)) */;
 
 --
 -- Final view structure for view `vw_doctor_hour`
@@ -1234,18 +1229,7 @@ UNLOCK TABLES;
 
 /*!50001 DROP TABLE IF EXISTS `vw_doctor_hour`*/;
 /*!50001 DROP VIEW IF EXISTS `vw_doctor_hour`*/;
-/*!50001 SET @saved_cs_client          = @@character_set_client */;
-/*!50001 SET @saved_cs_results         = @@character_set_results */;
-/*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8 */;
-/*!50001 SET character_set_results     = utf8 */;
-/*!50001 SET collation_connection      = utf8_general_ci */;
-/*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `vw_doctor_hour` AS select `x`.`id_branch` AS `id_branch`,`x`.`id_doctor` AS `id_doctor`,`x`.`only_date` AS `only_date`,sum(`x`.`hours`) AS `hours` from `vw_doctor_hour_preview` `x` group by `x`.`id_branch`,`x`.`id_doctor`,`x`.`only_date` order by sum(`x`.`hours`) */;
-/*!50001 SET character_set_client      = @saved_cs_client */;
-/*!50001 SET character_set_results     = @saved_cs_results */;
-/*!50001 SET collation_connection      = @saved_col_connection */;
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_doctor_hour` AS select `x`.`id_branch` AS `id_branch`,`x`.`id_doctor` AS `id_doctor`,`x`.`only_date` AS `only_date`,sum(`x`.`hours`) AS `hours` from `vw_doctor_hour_preview` `x` group by `x`.`id_branch`,`x`.`id_doctor`,`x`.`only_date` order by sum(`x`.`hours`) */;
 
 --
 -- Final view structure for view `vw_doctor_schedule`
@@ -1253,18 +1237,7 @@ UNLOCK TABLES;
 
 /*!50001 DROP TABLE IF EXISTS `vw_doctor_schedule`*/;
 /*!50001 DROP VIEW IF EXISTS `vw_doctor_schedule`*/;
-/*!50001 SET @saved_cs_client          = @@character_set_client */;
-/*!50001 SET @saved_cs_results         = @@character_set_results */;
-/*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8 */;
-/*!50001 SET character_set_results     = utf8 */;
-/*!50001 SET collation_connection      = utf8_general_ci */;
-/*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `vw_doctor_schedule` AS select distinct `a`.`id` AS `id_doctor`,`a`.`names` AS `names`,`b`.`id_branch` AS `id_branch`,`b`.`day` AS `day` from (`crm_doctor` `a` join `crm_doctor_schedule` `b` on((`b`.`id_doctor` = `a`.`id`))) where (`a`.`state` = 1) */;
-/*!50001 SET character_set_client      = @saved_cs_client */;
-/*!50001 SET character_set_results     = @saved_cs_results */;
-/*!50001 SET collation_connection      = @saved_col_connection */;
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_doctor_schedule` AS select distinct `a`.`id` AS `id_doctor`,`a`.`names` AS `names`,`b`.`id_branch` AS `id_branch`,`b`.`day` AS `day` from (`crm_doctor` `a` join `crm_doctor_schedule` `b` on((`b`.`id_doctor` = `a`.`id`))) where (`a`.`state` = 1) */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -1275,4 +1248,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-07-08 21:09:31
+-- Dump completed on 2012-07-10  7:31:23

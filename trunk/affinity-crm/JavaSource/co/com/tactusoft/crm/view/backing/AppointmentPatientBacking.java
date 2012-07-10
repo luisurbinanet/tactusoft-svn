@@ -76,6 +76,7 @@ public class AppointmentPatientBacking extends BaseBacking {
 		listAppointment = new LinkedList<CrmAppointment>();
 		appointmentModel = new AppointmentDataModel(listAppointment);
 		selectedsAppointment = null;
+		selectedAppointment = new CrmAppointment();
 
 		selectedPatient = new CrmPatient();
 		listPatient = new LinkedList<CrmPatient>();
@@ -94,6 +95,9 @@ public class AppointmentPatientBacking extends BaseBacking {
 			listAppointment = processService.listAppointmentByPatient(
 					selectedPatient.getCodeSap(), Constant.APP_STATE_CONFIRMED);
 			appointmentModel = new AppointmentDataModel(listAppointment);
+			if (listAppointment.size() > 0) {
+				selectedAppointment = listAppointment.get(0);
+			}
 		}
 	}
 
@@ -105,17 +109,14 @@ public class AppointmentPatientBacking extends BaseBacking {
 	}
 
 	public void cancelAppointmentAction(ActionEvent actionEvent) {
-		String codes = "";
-		for (CrmAppointment row : selectedsAppointment) {
-			row.setState(Constant.APP_STATE_CANCELED);
-			processService.saveAppointment(row);
-			codes = codes + row.getCode() + ",";
-		}
+		String code = "";
+		selectedAppointment.setState(Constant.APP_STATE_CANCELED);
+		processService.saveAppointment(selectedAppointment);
+		code = selectedAppointment.getCode();
 
-		codes = codes.substring(0, codes.length() - 1);
 		searchAppoinmnetConfirmedAction();
 
-		String message = FacesUtil.getMessage("app_msg_cancel", codes);
+		String message = FacesUtil.getMessage("app_msg_cancel", code);
 		FacesUtil.addInfo(message);
 
 	}
