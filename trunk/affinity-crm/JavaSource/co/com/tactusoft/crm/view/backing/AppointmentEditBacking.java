@@ -551,7 +551,10 @@ public class AppointmentEditBacking extends BaseBacking {
 				selected.setEndAppointmentDate(selectedCandidate.getEndDate());
 
 				selected.setState(Constant.STATE_APP_ACTIVE);
-
+				
+				selected.setIdUserModified(FacesUtil.getCurrentIdUsuario());
+				selected.setDateModified(new Date());
+				
 				CrmAppointment crmAppointment = processService
 						.saveAppointment(selected);
 

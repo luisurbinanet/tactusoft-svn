@@ -39,6 +39,7 @@ public class CrmPatient implements java.io.Serializable {
 	private Date bornDate;
 	private String gender;
 	private String address;
+	private String zipCode;
 	private String neighborhood;
 	private String phoneNumber;
 	private String cellNumber;
@@ -58,6 +59,10 @@ public class CrmPatient implements java.io.Serializable {
 	private Boolean sendPostal;
 	private Boolean sendSms;
 	private String salesOrg;
+	private BigDecimal idUserCreate;
+	private Date dateCreate;
+	private BigDecimal idUserModified;
+	private Date dateModified;
 	private Set<CrmHistoryPhysique> crmHistoryPhysiques = new HashSet<CrmHistoryPhysique>(
 			0);
 	private Set<CrmHistoryHomeopathic> crmHistoryHomeopathics = new HashSet<CrmHistoryHomeopathic>(
@@ -84,13 +89,15 @@ public class CrmPatient implements java.io.Serializable {
 
 	public CrmPatient(BigDecimal id, CrmOccupation crmOccupation, String doc,
 			String codeSap, String firstnames, String surnames, Date bornDate,
-			String gender, String address, String neighborhood,
+			String gender, String address, String zipCode, String neighborhood,
 			String phoneNumber, String cellNumber, String email,
 			String typeHousing, String country, String region, String city,
 			String guardian, String guardianAddress,
 			String guardianRelationship, String guardianTelephone, String obs,
 			Boolean cycle, Boolean sendPhone, Boolean sendEmail,
 			Boolean sendPostal, Boolean sendSms, String salesOrg,
+			BigDecimal idUserCreate, Date dateCreate,
+			BigDecimal idUserModified, Date dateModified,
 			Set<CrmHistoryPhysique> crmHistoryPhysiques,
 			Set<CrmHistoryHomeopathic> crmHistoryHomeopathics,
 			Set<CrmHistoryOrganometry> crmHistoryOrganometries,
@@ -106,6 +113,7 @@ public class CrmPatient implements java.io.Serializable {
 		this.bornDate = bornDate;
 		this.gender = gender;
 		this.address = address;
+		this.zipCode = zipCode;
 		this.neighborhood = neighborhood;
 		this.phoneNumber = phoneNumber;
 		this.cellNumber = cellNumber;
@@ -125,6 +133,10 @@ public class CrmPatient implements java.io.Serializable {
 		this.sendPostal = sendPostal;
 		this.sendSms = sendSms;
 		this.salesOrg = salesOrg;
+		this.idUserCreate = idUserCreate;
+		this.dateCreate = dateCreate;
+		this.idUserModified = idUserModified;
+		this.dateModified = dateModified;
 		this.crmHistoryPhysiques = crmHistoryPhysiques;
 		this.crmHistoryHomeopathics = crmHistoryHomeopathics;
 		this.crmHistoryOrganometries = crmHistoryOrganometries;
@@ -215,6 +227,15 @@ public class CrmPatient implements java.io.Serializable {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	@Column(name = "zip_code", length = 45)
+	public String getZipCode() {
+		return this.zipCode;
+	}
+
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
 	}
 
 	@Column(name = "neighborhood", length = 45)
@@ -388,6 +409,44 @@ public class CrmPatient implements java.io.Serializable {
 		this.salesOrg = salesOrg;
 	}
 
+	@Column(name = "id_user_create", scale = 0)
+	public BigDecimal getIdUserCreate() {
+		return this.idUserCreate;
+	}
+
+	public void setIdUserCreate(BigDecimal idUserCreate) {
+		this.idUserCreate = idUserCreate;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "date_create", length = 19)
+	public Date getDateCreate() {
+		return this.dateCreate;
+	}
+
+	public void setDateCreate(Date dateCreate) {
+		this.dateCreate = dateCreate;
+	}
+
+	@Column(name = "id_user_modified", scale = 0)
+	public BigDecimal getIdUserModified() {
+		return this.idUserModified;
+	}
+
+	public void setIdUserModified(BigDecimal idUserModified) {
+		this.idUserModified = idUserModified;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "date_modified", length = 19)
+	public Date getDateModified() {
+		return this.dateModified;
+	}
+
+	public void setDateModified(Date dateModified) {
+		this.dateModified = dateModified;
+	}
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmPatient")
 	public Set<CrmHistoryPhysique> getCrmHistoryPhysiques() {
 		return this.crmHistoryPhysiques;
@@ -445,7 +504,7 @@ public class CrmPatient implements java.io.Serializable {
 	public void setCrmAppointments(Set<CrmAppointment> crmAppointments) {
 		this.crmAppointments = crmAppointments;
 	}
-	
+
 	@Transient
 	public String getNames() {
 		if (FacesUtil.isEmptyOrBlank(this.names)) {

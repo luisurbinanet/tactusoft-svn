@@ -48,13 +48,13 @@
 					<h:outputLabel value="#{msg['pat_sap_code']}"
 						rendered="#{appointmentBacking.selectedPatient eq null?false:true}"/>
 					<p:inputText value="#{appointmentBacking.selectedPatient.codeSap}"
-						style="width:700px;background-color:#FFFF80;" readonly="true"
+						style="width:700px;background-color:#FFFF80;font-weight:bold;" readonly="true"
 						rendered="#{appointmentBacking.selectedPatient eq null?false:true}" />
 
 					<h:outputLabel value="#{msg['pat_names']}"
 						rendered="#{appointmentBacking.selectedPatient eq null?false:true}" />
 					<p:inputText value="#{appointmentBacking.selectedPatient.names}"
-						style="width:700px;background-color:#FFFF80;" readonly="true"
+						style="width:700px;background-color:#FFFF80;font-weight:bold;" readonly="true"
 						rendered="#{appointmentBacking.selectedPatient eq null?false:true}" />
 
 					<h:outputLabel value="#{msg['app_branch']}" />

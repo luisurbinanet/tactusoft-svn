@@ -44,7 +44,8 @@
 
 				<p:spacer height="5" />
 
-				<p:fieldset legend="#{msg['app_edit_current']}" style="width:1000px">
+				<p:fieldset legend="#{msg['app_edit_current']}" style="width:1000px"
+					collapsed="false" toggleable="true" toggleSpeed="350">
 					<h:panelGrid id="pnlDetailInfo" columns="4" width="100%">
 
 						<h:outputLabel value="#{msg['app_date']}" />
@@ -202,7 +203,7 @@
 
 				<p:dialog id="conffirmation" widgetVar="dlg"
 					header="#{msg['app_title']}" width="450" resizable="false"
-					showEffect="clip" hideEffect="clip" modal="true">
+					showEffect="clip" hideEffect="clip" modal="true" closable="false">
 
 					<h:panelGrid width="100%">
 						<h:outputLabel value="#{appointmentEditBacking.infoMessage}"

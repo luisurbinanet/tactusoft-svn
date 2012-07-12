@@ -9,7 +9,7 @@
 
 	<ui:define name="body">
 
-		<p:panel style="width:100%;height:600px;"
+		<p:panel style="width:100%;height:700px;"
 			header="#{msg['title_patient']}">
 
 			<p:spacer height="5" />
@@ -22,106 +22,123 @@
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
 							actionListener="#{patientBacking.newAction}"
-							update="pnlDetail btnSavePatient" process="@this" />
+							update="pnlDetail pnlDetail2 btnSavePatient" process="@this" />
 						<p:commandButton value="#{msg['btn_search']}"
 							icon="ui-icon-search" action="#{patientBacking.searchAction}"
-							update="growl btnSavePatient pnlDetail" process="@this,txtDoc" />
+							update="growl btnSavePatient pnlDetail pnlDetail2"
+							process="@this,txtDoc" />
 						<p:commandButton id="btnSavePatient" value="#{msg['btn_save']}"
 							icon="ui-icon-disk" action="#{patientBacking.saveAction}"
-							update="growl btnSavePatient pnlDetail"
+							update="growl btnSavePatient pnlDetail pnlDetail2"
 							disabled="#{patientBacking.disabledSaveButton}" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
-				<p:spacer height="10" />
+				<p:spacer height="5" />
 
-				<h:panelGrid id="pnlDetail" columns="4" cellpadding="4"
-					style="margin:0 auto;" width="100%">
+				<h:panelGrid id="pnlDetail" columns="4" cellspacing="5" width="100%"
+					columnClasses="width20per,width60per,width20per,width60per">
 
-					<h:outputLabel value="#{msg['pat_code']}" />
-					<p:inputText id="txtDoc" value="#{patientBacking.selected.doc}"
-						style="width:230px;" label="#{msg['pat_code']}" required="true"
-						maxlength="10" />
-
-					<h:outputLabel value="#{msg['pat_sap_code']}"
-						rendered="#{patientBacking.disabledSaveButton}" />
-					<p:inputText value="#{patientBacking.selected.codeSap}"
-						style="color:Red;width:230px;font-weight:bold;"
-						label="#{msg['pat_sap_code']}" readonly="true"
-						rendered="#{patientBacking.disabledSaveButton}" />
-
-					<h:outputText rendered="#{!patientBacking.disabledSaveButton}" />
-					<h:outputText rendered="#{!patientBacking.disabledSaveButton}" />
-
-					<h:outputLabel value="#{msg['pat_names']}" />
-					<p:inputText value="#{patientBacking.selected.firstnames}"
-						style="width:230px" label="#{msg['pat_names']}" required="true" />
-
-					<h:outputLabel value="#{msg['pat_surnames']}" />
-					<p:inputText value="#{patientBacking.selected.surnames}"
-						style="width:230px" label="#{msg['pat_surnames']}" required="true" />
-
-					<h:outputText value="#{msg['glb_gender']}" />
-					<p:selectOneMenu value="#{patientBacking.selected.gender}"
-						style="width:230px" label="#{msg['glb_gender']}" required="true">
-						<f:selectItem itemLabel="#{msg['glb_all_value']}" itemValue="" />
-						<f:selectItem itemLabel="#{msg['glb_gender_woman']}" itemValue="W" />
-						<f:selectItem itemLabel="#{msg['glb_gender_man']}" itemValue="M" />
-					</p:selectOneMenu>
-
-					<h:outputLabel value="#{msg['pat_born_date']}" />
-					<p:calendar value="#{patientBacking.selected.bornDate}"
-						label="#{msg['pat_born_date']}" readonlyInput="true"
-						pattern="dd/MM/yyyy" showOn="button" navigator="true" locale="es"
-						required="true" yearRange="-100:+0" />
-
-					<h:outputText value="#{msg['pat_country']}" />
+					<h:outputText value="#{msg['pat_country']}" style="width:100%" />
 					<p:selectOneMenu value="#{patientBacking.idCountry}"
-						style="width:230px" required="true" label="#{msg['pat_country']}">
-						<f:selectItem itemLabel="#{msg['glb_all_value']}" itemValue="" />
+						style="width:300px" required="true" label="#{msg['pat_country']}">
 						<f:selectItems value="#{patientBacking.listCountry}" />
-						<p:ajax update="selRegion selCity"
+						<p:ajax update="selRegion selCity pnlDetail2"
 							listener="#{patientBacking.handleCountryChange}" />
 					</p:selectOneMenu>
 
-					<h:outputText value="#{msg['pat_region']}" />
+					<h:outputText value="#{msg['pat_region']}" style="width:100%" />
 					<p:selectOneMenu id="selRegion" value="#{patientBacking.idRegion}"
-						style="width:230px" required="true" label="#{msg['pat_region']}">
-						<f:selectItem itemLabel="#{msg['glb_all_value']}" itemValue="" />
+						style="width:300px" required="true" label="#{msg['pat_region']}">
 						<f:selectItems value="#{patientBacking.listRegion}" />
 						<p:ajax update="selCity"
 							listener="#{patientBacking.handleRegionChange}" />
 					</p:selectOneMenu>
 
-					<h:outputText value="#{msg['pat_city']}" />
+					<h:outputText value="#{msg['pat_city']}" style="width:100%" />
 					<p:selectOneMenu id="selCity" value="#{patientBacking.idCity}"
-						style="width:230px" required="true" label="#{msg['pat_city']}">
-						<f:selectItem itemLabel="#{msg['glb_all_value']}" itemValue="" />
+						style="width:300px" required="true" label="#{msg['pat_city']}">
 						<f:selectItems value="#{patientBacking.listCity}" />
+					</p:selectOneMenu>
+
+					<h:outputText style="width:100%" />
+					<h:outputText style="width:300px" />
+
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlDetail2" columns="4" cellspacing="5"
+					columnClasses="width20per,width60per,width20per,width60per"
+					width="100%">
+
+					<h:outputLabel id="lblDoc" value="#{msg['pat_code']}"
+						rendered="#{not patientBacking.automatic}" />
+					<p:inputText id="txtDoc" value="#{patientBacking.selected.doc}"
+						style="width:300px;" label="#{msg['pat_code']}" required="true"
+						maxlength="10" rendered="#{not patientBacking.automatic}" />
+
+					<h:outputLabel id="lblDocAutomatic"
+						value="#{msg['pat_autonumeric']}"
+						rendered="#{patientBacking.automatic and patientBacking.disabledSaveButton}" />
+					<p:inputText id="txtDocAutomatic"
+						value="#{patientBacking.selected.doc}"
+						style="width:300px;background-color:#FFFF80;font-weight:bold;"
+						label="#{msg['pat_code']}" maxlength="10"
+						rendered="#{patientBacking.automatic and patientBacking.disabledSaveButton}" />
+
+					<h:outputLabel value="#{msg['pat_sap_code']}"
+						rendered="#{patientBacking.disabledSaveButton}" />
+					<p:inputText value="#{patientBacking.selected.codeSap}"
+						style="width:300px;background-color:#FFFF80;font-weight:bold;"
+						label="#{msg['pat_sap_code']}" readonly="true"
+						rendered="#{patientBacking.disabledSaveButton}" />
+
+					<h:outputText
+						rendered="#{!patientBacking.automatic and !patientBacking.disabledSaveButton}" />
+					<h:outputText
+						rendered="#{!patientBacking.automatic and !patientBacking.disabledSaveButton}" />
+
+					<h:outputLabel value="#{msg['pat_names']}" />
+					<p:inputText value="#{patientBacking.selected.firstnames}"
+						style="width:300px" label="#{msg['pat_names']}" required="true" />
+
+					<h:outputLabel value="#{msg['pat_surnames']}" />
+					<p:inputText value="#{patientBacking.selected.surnames}"
+						style="width:300px" label="#{msg['pat_surnames']}" required="true" />
+
+					<h:outputText value="#{msg['glb_gender']}" />
+					<p:selectOneMenu value="#{patientBacking.selected.gender}"
+						style="width:300px" label="#{msg['glb_gender']}" required="true">
+						<f:selectItem itemLabel="#{msg['glb_default_value']}" itemValue="" />
+						<f:selectItem itemLabel="#{msg['glb_gender_woman']}" itemValue="W" />
+						<f:selectItem itemLabel="#{msg['glb_gender_man']}" itemValue="M" />
 					</p:selectOneMenu>
 
 					<h:outputText value="#{msg['pat_address']}" />
 					<p:inputText value="#{patientBacking.selected.address}"
-						style="width:230px" label="#{msg['pat_address']}" required="true" />
+						style="width:300px" label="#{msg['pat_address']}" required="true" />
+
+					<h:outputText value="#{msg['pat_zip_code']}" />
+					<p:inputText value="#{patientBacking.selected.zipCode}"
+						style="width:300px" label="#{msg['pat_zip_code']}" />
 
 					<h:outputText value="#{msg['pat_phone_number']}" />
 					<p:inputText value="#{patientBacking.selected.phoneNumber}"
-						style="width:230px" label="#{msg['pat_phone_number']}"
+						style="width:300px" label="#{msg['pat_phone_number']}"
 						required="true" />
 
 					<h:outputText value="#{msg['pat_email']}" />
 					<p:inputText value="#{patientBacking.selected.email}"
-						style="width:230px" label="#{msg['pat_email']}"
-						validator="emailValidator" required="true" />
+						style="width:300px" label="#{msg['pat_email']}"
+						validator="emailValidator" />
 
 					<h:outputText value="#{msg['pat_cell_number']}" />
 					<p:inputText value="#{patientBacking.selected.cellNumber}"
-						style="width:230px" label="#{msg['pat_cell_number']}"
+						style="width:300px" label="#{msg['pat_cell_number']}"
 						required="true" />
 
 					<h:outputLabel value="#{msg['pat_sales_off']}" style="width:40%" />
 					<p:selectOneMenu value="#{patientBacking.salesOff}"
-						style="width:230px">
+						style="width:300px">
 						<f:selectItems value="#{patientBacking.listBranch}" />
 					</p:selectOneMenu>
 

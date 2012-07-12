@@ -470,7 +470,12 @@ public class AppointmentBacking extends BaseBacking {
 		String result = "";
 		if (selectedAppointment != null) {
 			String message = FacesUtil.getMessage("app_msg_selected");
-			result = message + " " + selectedAppointment.getDoctorDetail();
+			if (this.idSearch.intValue() == Constant.APP_TYPE_FOR_DATE_VALUE
+					.intValue()) {
+				result = message + " " + selectedAppointment.getDateDetail();
+			} else {
+				result = message + " " + selectedAppointment.getDoctorDetail();
+			}
 		}
 		return result;
 	}
@@ -515,6 +520,10 @@ public class AppointmentBacking extends BaseBacking {
 		// validar Selección Paciente
 		if (this.selectedPatient == null) {
 			infoMessage = FacesUtil.getMessage("app_msg_error_pat");
+		} else {
+			if (this.selectedPatient.getId() == null) {
+				infoMessage = FacesUtil.getMessage("app_msg_error_pat_sap");
+			}
 		}
 
 		// validar Selección Cita
@@ -587,6 +596,9 @@ public class AppointmentBacking extends BaseBacking {
 					selected.setUntimely(true);
 					selected.setState(Constant.APP_STATE_CHECKED);
 				}
+				
+				selected.setIdUserCreate(FacesUtil.getCurrentIdUsuario());
+				selected.setDateCreate(new Date());
 
 				CrmAppointment crmAppointment = processService
 						.saveAppointment(selected);

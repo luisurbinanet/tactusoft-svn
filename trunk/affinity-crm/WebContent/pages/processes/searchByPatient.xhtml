@@ -132,6 +132,9 @@
 							icon="ui-icon-clipboard"
 							disabled="#{searchByPatientBacking.selectedAppointment.state eq 1?false:true}"
 							action="#{searchByPatientBacking.editAppoinmnetAction}" />
+						<p:commandButton value="#{msg['btn_cancel_appointment']}"
+							icon="ui-icon-closethick" onclick="cancelDlg.show()"
+							disabled="#{searchByPatientBacking.selectedAppointment.state eq 1?false:true}" />
 					</f:facet>
 
 				</p:dataTable>
@@ -208,17 +211,25 @@
 
 				</p:dialog>
 
-				<p:confirmDialog id="confirmDialog" message="#{msg['glb_question']}"
-					header="#{msg['title_app']}" severity="alert"
-					widgetVar="confirmation">
+				<p:confirmDialog id="cancelDialog" message="#{msg['glb_question']}"
+					header="#{msg['title_app']}" severity="alert" widgetVar="cancelDlg">
 
-					<p:commandButton id="confirm" value="#{msg['glb_state_yes']}"
-						update=":form:selectedTable :form:growl"
-						oncomplete="confirmation.hide()"
-						actionListener="#{searchByPatientBacking.checkAppointmentAction}" />
-					<p:commandButton id="decline" value="#{msg['glb_state_no']}"
-						onclick="confirmation.hide()" type="button" />
+					<h:panelGrid columns="1">
 
+						<h:outputLabel value="#{msg['app_obs']}" />
+						<h:inputTextarea rows="3" style="width:400px"
+							rendered="#{searchByPatientBacking.selectedAppointment eq null?false:true}"
+							value="#{searchByPatientBacking.selectedAppointment.obs}" />
+
+						<f:facet name="footer">
+							<p:commandButton id="confirm" value="#{msg['glb_state_yes']}"
+								update=":form:selectedTable :form:growl"
+								oncomplete="cancelDlg.hide()"
+								actionListener="#{searchByPatientBacking.cancelAppointmentAction}" />
+							<p:commandButton id="decline" value="#{msg['glb_state_no']}"
+								onclick="cancelDlg.hide()" type="button" />
+						</f:facet>
+					</h:panelGrid>
 				</p:confirmDialog>
 
 				<p:dialog header="#{msg['app_obs']}" widgetVar="obsDialog"

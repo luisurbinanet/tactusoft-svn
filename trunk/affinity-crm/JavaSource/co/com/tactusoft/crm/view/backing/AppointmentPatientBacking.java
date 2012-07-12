@@ -1,5 +1,6 @@
 package co.com.tactusoft.crm.view.backing;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -110,6 +111,8 @@ public class AppointmentPatientBacking extends BaseBacking {
 
 	public void cancelAppointmentAction(ActionEvent actionEvent) {
 		String code = "";
+		selectedAppointment.setIdUserCanceled(FacesUtil.getCurrentIdUsuario());
+		selectedAppointment.setDateCanceled(new Date());
 		selectedAppointment.setState(Constant.APP_STATE_CANCELED);
 		processService.saveAppointment(selectedAppointment);
 		code = selectedAppointment.getCode();
@@ -123,6 +126,8 @@ public class AppointmentPatientBacking extends BaseBacking {
 
 	public void checkAppointmentAction(ActionEvent actionEvent) {
 		String code = "";
+		selectedAppointment.setIdUserChecked(FacesUtil.getCurrentIdUsuario());
+		selectedAppointment.setDateChecked(new Date());
 		selectedAppointment.setState(Constant.APP_STATE_CHECKED);
 		processService.saveAppointment(selectedAppointment);
 		code = selectedAppointment.getCode();

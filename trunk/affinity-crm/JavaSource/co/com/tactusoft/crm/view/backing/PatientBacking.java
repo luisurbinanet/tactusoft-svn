@@ -1,6 +1,7 @@
 package co.com.tactusoft.crm.view.backing;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -54,6 +55,7 @@ public class PatientBacking extends BaseBacking {
 
 	private boolean disabledSaveButton;
 	private boolean exitSAP;
+	private boolean automatic;
 
 	public PatientBacking() {
 		newAction(null);
@@ -186,21 +188,47 @@ public class PatientBacking extends BaseBacking {
 		this.disabledSaveButton = disabledSaveButton;
 	}
 
-	public void handleCountryChange() {
-		CrmCountry crmCountry = mapCountry.get(idCountry);
-		listRegion = new LinkedList<SelectItem>();
-		mapRegion = new HashMap<BigDecimal, CrmRegion>();
-		for (CrmRegion row : crmCountry.getCrmRegions()) {
-			listRegion.add(new SelectItem(row.getId(), row.getName()));
-			mapRegion.put(row.getId(), row);
-		}
+	public boolean isExitSAP() {
+		return exitSAP;
+	}
 
-		if (listRegion.size() > 0) {
-			idRegion = (BigDecimal) listRegion.get(0).getValue();
-			handleRegionChange();
+	public void setExitSAP(boolean exitSAP) {
+		this.exitSAP = exitSAP;
+	}
+
+	public boolean isAutomatic() {
+		return automatic;
+	}
+
+	public void setAutomatic(boolean automatic) {
+		this.automatic = automatic;
+	}
+
+	public void handleCountryChange() {
+		if (idCountry != null) {
+			CrmCountry crmCountry = mapCountry.get(idCountry);
+			automatic = crmCountry.getAutomatic();
+
+			listRegion = new LinkedList<SelectItem>();
+			mapRegion = new HashMap<BigDecimal, CrmRegion>();
+			for (CrmRegion row : crmCountry.getCrmRegions()) {
+				listRegion.add(new SelectItem(row.getId(), row.getName()));
+				mapRegion.put(row.getId(), row);
+			}
+
+			if (listRegion.size() > 0) {
+				idRegion = (BigDecimal) listRegion.get(0).getValue();
+				handleRegionChange();
+			} else {
+				idRegion = null;
+				idCity = null;
+				listRegion = new LinkedList<SelectItem>();
+				listCity = new LinkedList<SelectItem>();
+			}
 		} else {
 			idRegion = null;
 			idCity = null;
+			listRegion = new LinkedList<SelectItem>();
 			listCity = new LinkedList<SelectItem>();
 		}
 	}
@@ -319,12 +347,14 @@ public class PatientBacking extends BaseBacking {
 			SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
 			CrmProfile profile = FacesUtil.getCurrentUser().getCrmProfile();
 
-			List<WSBean> customer = CustomerExecute.findByDoc(
-					sap.getUrlCustomer2(), sap.getUsername(),
-					sap.getPassword(), profile.getSociety(), selected.getDoc(),
-					0);
+			List<WSBean> customer = new LinkedList<WSBean>();
+			if (exitSAP || automatic) {
+				customer = CustomerExecute.findByDoc(sap.getUrlCustomer2(),
+						sap.getUsername(), sap.getPassword(),
+						profile.getSociety(), selected.getDoc(), 0);
+			}
 
-			if (customer.size() == 0 || exitSAP) {
+			if (exitSAP || automatic || customer.size() == 0) {
 				String names = null;
 
 				names = selected.getFirstnames() + " " + selected.getSurnames();
@@ -337,6 +367,14 @@ public class PatientBacking extends BaseBacking {
 				CrmCountry crmCountry = mapCountry.get(idCountry);
 				CrmRegion crmRegion = mapRegion.get(idRegion);
 				CrmCity crmCity = mapCity.get(idCity);
+
+				if (automatic) {
+					Long autonumeric = processService
+							.getDocAutomatic(crmCountry.getCode());
+					String doc = crmCountry.getCode()
+							+ FacesUtil.lpad(autonumeric.toString(), '0', 8);
+					selected.setDoc(doc);
+				}
 
 				String codeSap = null;
 				if (!exitSAP) {
@@ -381,6 +419,8 @@ public class PatientBacking extends BaseBacking {
 						}
 					}
 
+					selected.setIdUserCreate(FacesUtil.getCurrentIdUsuario());
+					selected.setDateCreate(new Date());
 					processService.savePatient(selected);
 
 					disabledSaveButton = true;

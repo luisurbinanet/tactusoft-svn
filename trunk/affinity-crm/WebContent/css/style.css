@@ -132,6 +132,16 @@ input,select,textarea {
 	float: none !important;
 }
 /* end Button */
+.width15per {
+	padding: 4px;
+	width: 15%;
+}
+
+.width20per {
+	padding: 4px;
+	width: 20%;
+}
+
 .width25per {
 	padding: 4px;
 	width: 25%;
@@ -147,9 +157,19 @@ input,select,textarea {
 	width: 50%;
 }
 
+.width60per {
+	padding: 4px;
+	width: 60%;
+}
+
 .width65per {
 	padding: 4px;
 	width: 65%;
+}
+
+.width70per {
+	padding: 4px;
+	width: 70%;
 }
 
 .width75per {
