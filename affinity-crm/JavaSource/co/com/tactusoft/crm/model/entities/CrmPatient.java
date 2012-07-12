@@ -346,7 +346,7 @@ public class CrmPatient implements java.io.Serializable {
 		this.guardianTelephone = guardianTelephone;
 	}
 
-	@Column(name = "obs", length = 1000)
+	@Column(name = "obs", length = 65535)
 	public String getObs() {
 		return this.obs;
 	}

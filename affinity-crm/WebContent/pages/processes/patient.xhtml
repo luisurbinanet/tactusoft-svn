@@ -115,16 +115,17 @@
 
 					<h:outputText value="#{msg['pat_address']}" />
 					<p:inputText value="#{patientBacking.selected.address}"
-						style="width:300px" label="#{msg['pat_address']}" required="true" />
+						maxlength="255" style="width:300px" label="#{msg['pat_address']}"
+						required="true" />
 
 					<h:outputText value="#{msg['pat_zip_code']}" />
 					<p:inputText value="#{patientBacking.selected.zipCode}"
-						style="width:300px" label="#{msg['pat_zip_code']}" />
+						style="width:300px" label="#{msg['pat_zip_code']}" maxlength="10" />
 
 					<h:outputText value="#{msg['pat_phone_number']}" />
 					<p:inputText value="#{patientBacking.selected.phoneNumber}"
 						style="width:300px" label="#{msg['pat_phone_number']}"
-						required="true" />
+						required="true" maxlength="16" />
 
 					<h:outputText value="#{msg['pat_email']}" />
 					<p:inputText value="#{patientBacking.selected.email}"
@@ -134,7 +135,7 @@
 					<h:outputText value="#{msg['pat_cell_number']}" />
 					<p:inputText value="#{patientBacking.selected.cellNumber}"
 						style="width:300px" label="#{msg['pat_cell_number']}"
-						required="true" />
+						required="true" maxlength="16" />
 
 					<h:outputLabel value="#{msg['pat_sales_off']}" style="width:40%" />
 					<p:selectOneMenu value="#{patientBacking.salesOff}"
@@ -157,6 +158,10 @@
 						<f:selectItem itemLabel="#{msg['pat_send_postal']}" itemValue="3" />
 						<f:selectItem itemLabel="#{msg['pat_send_sms']}" itemValue="4" />
 					</p:selectManyCheckbox>
+
+					<h:outputText value="#{msg['pat_type_obs']}" />
+					<p:inputTextarea value="#{patientBacking.selected.obs}"
+						style="width:300px" rows="4" />
 				</h:panelGrid>
 
 			</h:form>
