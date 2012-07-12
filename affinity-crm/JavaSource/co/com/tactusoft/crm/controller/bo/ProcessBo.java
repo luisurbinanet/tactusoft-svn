@@ -46,15 +46,20 @@ public class ProcessBo implements Serializable {
 		return dao.find("from CrmAppointment o where o.crmDoctor.id = "
 				+ idDoctor + "order by o.startAppointmentDate");
 	}
-	
-	public List<CrmAppointment> getListAppointmentByDoctorWithOutUntimely(BigDecimal idDoctor) {
+
+	public List<CrmAppointment> getListAppointmentByDoctorWithOutUntimely(
+			BigDecimal idDoctor) {
 		return dao.find("from CrmAppointment o where o.crmDoctor.id = "
-				+ idDoctor + "and o.untimely = 0 order by o.startAppointmentDate");
+				+ idDoctor
+				+ "and o.untimely = 0 order by o.startAppointmentDate");
 	}
-	
-	public List<CrmAppointment> getListAppointmentByDoctorWithUntimely(BigDecimal idDoctor) {
-		return dao.find("from CrmAppointment o where o.crmDoctor.id = "
-				+ idDoctor + " and o.untimely = 1 and o.state = 3 order by o.startAppointmentDate");
+
+	public List<CrmAppointment> getListAppointmentByDoctorWithUntimely(
+			BigDecimal idDoctor) {
+		return dao
+				.find("from CrmAppointment o where o.crmDoctor.id = "
+						+ idDoctor
+						+ " and o.untimely = 1 and o.state = 3 order by o.startAppointmentDate");
 	}
 
 	public List<CrmAppointment> getListAppointmentByDoctorConfirmed(
@@ -327,7 +332,9 @@ public class ProcessBo implements Serializable {
 							if (numapp < numInteractions) {
 								Date time = FacesUtil.addHourToDate(
 										currentDate, scheduleInitHour);
-								result.add(time);
+								if (time.compareTo(new Date()) > 0) {
+									result.add(time);
+								}
 							}
 						}
 
@@ -950,7 +957,8 @@ public class ProcessBo implements Serializable {
 
 	public int savePatient(CrmPatient entity) {
 		if (entity.getId() == null) {
-			entity.setId(getId(CrmPatient.class));
+			BigDecimal id = getId(CrmPatient.class);
+			entity.setId(id);
 		}
 		return dao.persist(entity);
 	}
@@ -1041,6 +1049,17 @@ public class ProcessBo implements Serializable {
 			return list.get(0);
 		} else {
 			return new CrmHistoryOrganometry();
+		}
+	}
+
+	public Long getDocAutomatic(String country) {
+		List<Long> list = null;
+		list = dao.find("select count(*) from CrmPatient o where o.country = '"
+				+ country + "'");
+		if (list.size() > 0) {
+			return list.get(0) + 1;
+		} else {
+			return 1L;
 		}
 	}
 

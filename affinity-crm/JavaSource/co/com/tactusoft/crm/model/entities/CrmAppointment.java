@@ -36,6 +36,14 @@ public class CrmAppointment implements java.io.Serializable {
 	private String obs;
 	private Boolean untimely;
 	private int state;
+	private BigDecimal idUserCreate;
+	private Date dateCreate;
+	private BigDecimal idUserModified;
+	private Date dateModified;
+	private BigDecimal idUserChecked;
+	private Date dateChecked;
+	private BigDecimal idUserCanceled;
+	private Date dateCanceled;
 
 	public CrmAppointment() {
 	}
@@ -60,7 +68,10 @@ public class CrmAppointment implements java.io.Serializable {
 			String code, String patientNames, String patientSap,
 			Date startAppointmentDate, Date endAppointmentDate,
 			String codPublicity, String namePublicity, String obs,
-			Boolean untimely, int state) {
+			Boolean untimely, int state, BigDecimal idUserCreate,
+			Date dateCreate, BigDecimal idUserModified, Date dateModified,
+			BigDecimal idUserChecked, Date dateChecked,
+			BigDecimal idUserCanceled, Date dateCanceled) {
 		this.id = id;
 		this.crmProcedureDetail = crmProcedureDetail;
 		this.crmPatient = crmPatient;
@@ -76,6 +87,14 @@ public class CrmAppointment implements java.io.Serializable {
 		this.obs = obs;
 		this.untimely = untimely;
 		this.state = state;
+		this.idUserCreate = idUserCreate;
+		this.dateCreate = dateCreate;
+		this.idUserModified = idUserModified;
+		this.dateModified = dateModified;
+		this.idUserChecked = idUserChecked;
+		this.dateChecked = dateChecked;
+		this.idUserCanceled = idUserCanceled;
+		this.dateCanceled = dateCanceled;
 	}
 
 	@Id
@@ -218,6 +237,82 @@ public class CrmAppointment implements java.io.Serializable {
 
 	public void setState(int state) {
 		this.state = state;
+	}
+
+	@Column(name = "id_user_create", scale = 0)
+	public BigDecimal getIdUserCreate() {
+		return this.idUserCreate;
+	}
+
+	public void setIdUserCreate(BigDecimal idUserCreate) {
+		this.idUserCreate = idUserCreate;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "date_create", length = 19)
+	public Date getDateCreate() {
+		return this.dateCreate;
+	}
+
+	public void setDateCreate(Date dateCreate) {
+		this.dateCreate = dateCreate;
+	}
+
+	@Column(name = "id_user_modified", scale = 0)
+	public BigDecimal getIdUserModified() {
+		return this.idUserModified;
+	}
+
+	public void setIdUserModified(BigDecimal idUserModified) {
+		this.idUserModified = idUserModified;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "date_modified", length = 19)
+	public Date getDateModified() {
+		return this.dateModified;
+	}
+
+	public void setDateModified(Date dateModified) {
+		this.dateModified = dateModified;
+	}
+
+	@Column(name = "id_user_checked", scale = 0)
+	public BigDecimal getIdUserChecked() {
+		return this.idUserChecked;
+	}
+
+	public void setIdUserChecked(BigDecimal idUserChecked) {
+		this.idUserChecked = idUserChecked;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "date_checked", length = 19)
+	public Date getDateChecked() {
+		return this.dateChecked;
+	}
+
+	public void setDateChecked(Date dateChecked) {
+		this.dateChecked = dateChecked;
+	}
+
+	@Column(name = "id_user_canceled", scale = 0)
+	public BigDecimal getIdUserCanceled() {
+		return this.idUserCanceled;
+	}
+
+	public void setIdUserCanceled(BigDecimal idUserCanceled) {
+		this.idUserCanceled = idUserCanceled;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "date_canceled", length = 19)
+	public Date getDateCanceled() {
+		return this.dateCanceled;
+	}
+
+	public void setDateCanceled(Date dateCanceled) {
+		this.dateCanceled = dateCanceled;
 	}
 
 }

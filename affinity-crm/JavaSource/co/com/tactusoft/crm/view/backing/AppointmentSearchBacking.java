@@ -1,5 +1,6 @@
 package co.com.tactusoft.crm.view.backing;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
@@ -12,20 +13,28 @@ import javax.inject.Named;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
-import co.com.tactusoft.crm.model.entities.CrmPatient;
+import co.com.tactusoft.crm.model.entities.CrmBranch;
+import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.datamodel.AppointmentDataModel;
-import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 
 @Named
-@Scope("session")
-public class SearchByPatientBacking extends BaseBacking {
+@Scope("view")
+public class AppointmentSearchBacking extends BaseBacking {
 
 	private static final long serialVersionUID = 1L;
 
+	private String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL_ALL);
+
+	private List<SelectItem> listBranch;
+	private List<SelectItem> listDoctor;
+	private List<SelectItem> listProcedure;
 	private List<SelectItem> listStates;
 
+	private BigDecimal idBranch;
+	private BigDecimal idDoctor;
+	private BigDecimal idProcedure;
 	private Date startDate;
 	private Date endDate;
 	private int state;
@@ -36,8 +45,42 @@ public class SearchByPatientBacking extends BaseBacking {
 
 	private boolean disabledSaveButton;
 
-	public SearchByPatientBacking() {
+	public AppointmentSearchBacking() {
 		newAction(null);
+	}
+
+	public List<SelectItem> getListBranch() {
+		if (listBranch == null) {
+			listBranch = new LinkedList<SelectItem>();
+			listBranch.add(new SelectItem(Constant.DEFAULT_VALUE, label));
+			for (CrmBranch row : FacesUtil.getCurrentUserData().getListBranch()) {
+				listBranch.add(new SelectItem(row.getId(), row.getName()));
+			}
+
+			idBranch = Constant.DEFAULT_VALUE;
+			handleBranchChange();
+		}
+		return listBranch;
+	}
+
+	public void setListBranch(List<SelectItem> listBranch) {
+		this.listBranch = listBranch;
+	}
+
+	public List<SelectItem> getListDoctor() {
+		return listDoctor;
+	}
+
+	public void setListDoctor(List<SelectItem> listDoctor) {
+		this.listDoctor = listDoctor;
+	}
+
+	public List<SelectItem> getListProcedure() {
+		return listProcedure;
+	}
+
+	public void setListProcedure(List<SelectItem> listProcedure) {
+		this.listProcedure = listProcedure;
 	}
 
 	public List<SelectItem> getListStates() {
@@ -46,6 +89,30 @@ public class SearchByPatientBacking extends BaseBacking {
 
 	public void setListStates(List<SelectItem> listStates) {
 		this.listStates = listStates;
+	}
+
+	public BigDecimal getIdBranch() {
+		return idBranch;
+	}
+
+	public void setIdBranch(BigDecimal idBranch) {
+		this.idBranch = idBranch;
+	}
+
+	public BigDecimal getIdDoctor() {
+		return idDoctor;
+	}
+
+	public void setIdDoctor(BigDecimal idDoctor) {
+		this.idDoctor = idDoctor;
+	}
+
+	public BigDecimal getIdProcedure() {
+		return idProcedure;
+	}
+
+	public void setIdProcedure(BigDecimal idProcedure) {
+		this.idProcedure = idProcedure;
 	}
 
 	public Date getStartDate() {
@@ -109,14 +176,6 @@ public class SearchByPatientBacking extends BaseBacking {
 		appointmentModel = new AppointmentDataModel(listAppointment);
 		selectedAppointment = new CrmAppointment();
 
-		selectedPatient = new CrmPatient();
-		listPatient = new LinkedList<CrmPatient>();
-		patientModel = new PatientDataModel(listPatient);
-		disabledSaveButton = false;
-
-		optionSearchPatient = 1;
-		docPatient = "";
-		namePatient = "";
 		startDate = new Date();
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(startDate);
@@ -124,7 +183,6 @@ public class SearchByPatientBacking extends BaseBacking {
 		endDate = calendar.getTime();
 
 		listStates = new LinkedList<SelectItem>();
-
 		String message = FacesUtil.getMessage(Constant.ALL_LABEL);
 		listStates.add(new SelectItem(Constant.DEFAULT_VALUE, message));
 		message = FacesUtil.getMessage(Constant.APP_STATE_CONFIRMED_LABEL);
@@ -139,67 +197,40 @@ public class SearchByPatientBacking extends BaseBacking {
 		listStates.add(new SelectItem(Constant.APP_STATE_NOATTENDED, message));
 	}
 
-	public void searchAppoinmnetConfirmedAction() {
-		if (selectedPatient.getCodeSap() == null) {
-			String message = FacesUtil.getMessage("sal_msg_error_pat");
-			FacesUtil.addError(message);
-		} else {
-			listAppointment = processService.listAppointmentByPatient(
-					selectedPatient.getCodeSap(), this.state, startDate,
-					endDate);
-			appointmentModel = new AppointmentDataModel(listAppointment);
+	public void handleBranchChange() {
+		listDoctor = new LinkedList<SelectItem>();
+		listDoctor.add(new SelectItem(Constant.DEFAULT_VALUE, label));
 
-			if (listAppointment.size() > 0) {
-				selectedAppointment = listAppointment.get(0);
+		listProcedure = new LinkedList<SelectItem>();
+		listProcedure.add(new SelectItem(Constant.DEFAULT_VALUE, label));
+
+		idDoctor = Constant.DEFAULT_VALUE;
+		idProcedure = Constant.DEFAULT_VALUE;
+
+		if (idBranch.intValue() != -1) {
+			for (CrmDoctor row : tablesService.getListDoctorByBranch(idBranch)) {
+				listDoctor.add(new SelectItem(row.getId(), row.getNames()));
 			}
 		}
 	}
 
-	public boolean isDisabledAppointment() {
-		if (this.listAppointment.size() == 0) {
-			return true;
+	public void searchAppoinmentAction(ActionEvent event) {
+		if (idBranch.intValue() == -1) {
+
+		} else {
+			if (idDoctor.intValue() == -1) {
+
+			} else {
+
+			}
+
+			if (idProcedure.intValue() == -1) {
+
+			} else {
+
+			}
 		}
-		return false;
-	}
 
-	public String editAppoinmnetAction() {
-		AppointmentEditBacking appointmentEditBacking = FacesUtil
-				.findBean("appointmentEditBacking");
-
-		appointmentEditBacking.editAction(null);
-		appointmentEditBacking.setSelected(selectedAppointment);
-		appointmentEditBacking.setSelectedPatient(selectedAppointment
-				.getCrmPatient());
-		appointmentEditBacking.setCurrentDate(selectedAppointment
-				.getStartAppointmentDate());
-		appointmentEditBacking.setIdBranch(selectedAppointment.getCrmBranch()
-				.getId());
-		appointmentEditBacking.handleBranchChange();
-		appointmentEditBacking.setIdProcedure(selectedAppointment
-				.getCrmProcedureDetail().getCrmProcedure().getId());
-		appointmentEditBacking.handleProcedureChange();
-		appointmentEditBacking.setIdProcedureDetail(selectedAppointment
-				.getCrmProcedureDetail().getId());
-		appointmentEditBacking.handleProcedureDetailChange();
-		appointmentEditBacking.setSelectedWSGroupSellers(selectedAppointment
-				.getCodPublicity());
-
-		return "/pages/processes/appointmentEdit.jsf?faces-redirect=true";
-	}
-
-	public void cancelAppointmentAction(ActionEvent actionEvent) {
-		String code = "";
-		
-		selectedAppointment.setIdUserCanceled(FacesUtil.getCurrentIdUsuario());
-		selectedAppointment.setDateCanceled(new Date());
-		selectedAppointment.setState(Constant.APP_STATE_CANCELED);
-		processService.saveAppointment(selectedAppointment);
-		code = selectedAppointment.getCode();
-
-		searchAppoinmnetConfirmedAction();
-
-		String message = FacesUtil.getMessage("app_msg_cancel", code);
-		FacesUtil.addInfo(message);
 	}
 
 }

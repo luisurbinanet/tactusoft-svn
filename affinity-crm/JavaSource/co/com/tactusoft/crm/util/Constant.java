@@ -10,6 +10,7 @@ public class Constant {
 	public static String DEFAULT_VALUE_STRING = "-1";
 	public static BigDecimal DEFAULT_VALUE = new BigDecimal(-1);
 	public static String DEFAULT_LABEL = "glb_default_value";
+	public static String DEFAULT_LABEL_ALL = "glb_all_value";
 	public static String ALL_LABEL = "glb_all_value";
 
 	public static final Integer SEND_PHONE = 1;

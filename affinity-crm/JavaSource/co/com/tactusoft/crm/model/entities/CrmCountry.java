@@ -23,6 +23,7 @@ public class CrmCountry implements java.io.Serializable {
 	private String code;
 	private String name;
 	private String currencyIso;
+	private Boolean automatic;
 	private Set<CrmRegion> crmRegions = new HashSet<CrmRegion>(0);
 
 	public CrmCountry() {
@@ -35,11 +36,12 @@ public class CrmCountry implements java.io.Serializable {
 	}
 
 	public CrmCountry(BigDecimal id, String code, String name,
-			String currencyIso, Set<CrmRegion> crmRegions) {
+			String currencyIso, Boolean automatic, Set<CrmRegion> crmRegions) {
 		this.id = id;
 		this.code = code;
 		this.name = name;
 		this.currencyIso = currencyIso;
+		this.automatic = automatic;
 		this.crmRegions = crmRegions;
 	}
 
@@ -78,6 +80,15 @@ public class CrmCountry implements java.io.Serializable {
 
 	public void setCurrencyIso(String currencyIso) {
 		this.currencyIso = currencyIso;
+	}
+
+	@Column(name = "automatic")
+	public Boolean getAutomatic() {
+		return this.automatic;
+	}
+
+	public void setAutomatic(Boolean automatic) {
+		this.automatic = automatic;
 	}
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "crmCountry")
