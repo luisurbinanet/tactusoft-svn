@@ -25,7 +25,6 @@ import co.com.tactusoft.crm.model.entities.CrmHoliday;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
 import co.com.tactusoft.crm.model.entities.VwDoctorHour;
-import co.com.tactusoft.crm.model.entities.VwDoctorSchedule;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.beans.Candidate;
@@ -89,7 +88,7 @@ public class ProcessBo implements Serializable {
 				.find("from CrmAppointment o where o.startAppointmentDate >= '"
 						+ startDateString
 						+ "T00:00:00.000+05:00' and o.crmDoctor.id = '"
-						+ doctor.getId() + "' and o.state in (1,3) "
+						+ doctor.getId() + "' and o.state in (1,3,4,5) "
 						+ " order by o.startAppointmentDate desc");
 
 		return list;
@@ -250,7 +249,7 @@ public class ProcessBo implements Serializable {
 						+ dateString
 						+ "T00:00:00.000+05:00' and '"
 						+ dateString
-						+ "T23:59:59.999+05:00') and o.state in (1,3) "
+						+ "T23:59:59.999+05:00') and o.state in (1,3,4,5) "
 						+ "order by o.startAppointmentDate");
 
 		// Validar Festivo
@@ -401,7 +400,7 @@ public class ProcessBo implements Serializable {
 							+ endDate
 							+ "T23:59:59.999+05:00') and o.crmDoctor.id = "
 							+ doctor.getId()
-							+ " and o.state in (1,3) "
+							+ " and o.state in (1,3,4,5) "
 							+ "order by o.startAppointmentDate");
 
 			// Buscar los festivos
@@ -565,7 +564,7 @@ public class ProcessBo implements Serializable {
 									+ row.getId().getIdDoctor()
 									+ " and o.crmBranch.id = "
 									+ idBranch
-									+ " and o.state in (1,3) "
+									+ " and o.state in (1,3,4,5) "
 									+ "order by o.startAppointmentDate");
 
 					if (listApp.size() == 0) {
@@ -602,137 +601,6 @@ public class ProcessBo implements Serializable {
 		return result;
 	}
 
-	public List<Candidate> getScheduleAppointmentForDate1(CrmBranch branch,
-			Date date, CrmProcedureDetail procedureDetail) {
-		List<Candidate> result = new ArrayList<Candidate>();
-		int id = 1;
-		BigDecimal idBranch = branch.getId();
-
-		// Buscar los festivos
-		List<CrmHoliday> listHoliday = this.getListHoliday(idBranch);
-
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date);
-
-		Date currentDate = FacesUtil.getDateWithoutTime(calendar.getTime());
-		int currentDay = calendar.get(Calendar.DAY_OF_WEEK);
-
-		if ((currentDay != 1) && (this.validateHoliday(listHoliday, date))) {
-
-			String dateString = FacesUtil.formatDate(date, "yyyy-MM-dd");
-
-			// Buscar citas x doctor y sucursal
-			List<VwDoctorSchedule> listVwDoctorSchedule = dao
-					.find("from VwDoctorSchedule o where o.id.idBranch = "
-							+ idBranch + " and o.id.day = " + currentDay);
-
-			for (VwDoctorSchedule vwDoctorSchedule : listVwDoctorSchedule) {
-				BigDecimal idDoctor = vwDoctorSchedule.getId().getIdDoctor();
-
-				// Buscar horarios Doctor
-				List<CrmDoctorSchedule> listDoctorSchedule = dao
-						.find("from CrmDoctorSchedule o where o.crmDoctor.id = "
-								+ idDoctor
-								+ " and o.crmBranch.id = "
-								+ idBranch + " order by o.day, o.startHour");
-
-				// Validar si Doctor tiene Horario
-				if (listDoctorSchedule.size() > 0) {
-
-					List<CrmAppointment> listApp = dao
-							.find("from CrmAppointment o where (o.startAppointmentDate between '"
-									+ dateString
-									+ "T00:00:00.000+05:00' and '"
-									+ dateString
-									+ "T23:59:59.999+05:00') and o.crmDoctor.id = "
-									+ idDoctor
-									+ " and o.state in (1,3) "
-									+ "order by o.startAppointmentDate");
-
-					List<CrmDoctorException> listDoctorException = dao
-							.find("from CrmDoctorException o where o.crmDoctor.id = "
-									+ idDoctor
-									+ " and startHour >= '"
-									+ dateString
-									+ "T00:00:00.000+05:00' and startHour <= '"
-									+ currentDate + "T23:59:59.999+05:00'");
-
-					for (CrmDoctorSchedule schedule : listDoctorSchedule) {
-						if (currentDay == schedule.getDay()) {
-
-							Date scheduleInitHour = FacesUtil.addHourToDate(
-									date, schedule.getStartHour());
-
-							Date scheduleEndHour = FacesUtil.addHourToDate(
-									date, schedule.getEndHour());
-
-							Date initHour = new Date(scheduleInitHour.getTime());
-
-							boolean endIterate = true;
-							while (endIterate) {
-
-								Calendar calendar2 = Calendar.getInstance();
-								calendar2.setTime(initHour);
-								calendar2.add(Calendar.MINUTE,
-										procedureDetail.getTimeDoctor());
-								Date endHour = calendar2.getTime();
-
-								// Si la hora final candidata es mayor al tiempo
-								// de
-								// atencion
-								// del doctor salir
-								if (endHour.getTime() > scheduleEndHour
-										.getTime()) {
-									endIterate = false;
-									break;
-								}
-
-								// Iterar Horas Candidatas
-								List<Date> candidatesHours = getListcandidatesHours(
-										initHour, endHour);
-
-								// Validar Disponibilidad
-								boolean validate = validateAvailabilitySchedule(
-										candidatesHours, listApp, date);
-
-								if (validate) {
-									validate = validateException(
-											listDoctorException, currentDate,
-											candidatesHours);
-								}
-
-								if (FacesUtil.getDateWithoutTime(new Date())
-										.compareTo(currentDate) == 0) {
-									if (new Date().compareTo(initHour) > 0) {
-										validate = false;
-									}
-								}
-
-								if (validate) {
-									CrmDoctor crmDoctor = new CrmDoctor();
-									crmDoctor.setId(idDoctor);
-									crmDoctor.setNames(vwDoctorSchedule.getId()
-											.getNames());
-
-									result.add(new Candidate(id, crmDoctor,
-											initHour, endHour,
-											branch.getName(), procedureDetail
-													.getName()));
-									id++;
-								}
-
-								initHour = new Date(endHour.getTime());
-							}
-
-						}
-					}
-				}
-			}
-		}
-
-		return result;
-	}
-
 	private int validateDuplicated(String patient, Date startDate, Date endDate) {
 		String dateString = FacesUtil.formatDate(startDate, "yyyy-MM-dd");
 		String startHourString = FacesUtil.formatDate(startDate, "HH:mm:ss");
@@ -744,7 +612,7 @@ public class ProcessBo implements Serializable {
 						+ ".000+05:00' and o.startAppointmentDate <= '"
 						+ dateString + "T" + endHourString
 						+ ".000+05:00' and o.patientSap = '" + patient
-						+ "' and o.state = 1 "
+						+ "' and o.state in (1,3,4,5)"
 						+ "order by o.startAppointmentDate");
 
 		return listApp.size();
@@ -881,7 +749,7 @@ public class ProcessBo implements Serializable {
 									+ idBranch
 									+ " and o.crmDoctor.id = "
 									+ idDoctor
-									+ " and o. state = 1 "
+									+ " and o. state in (1,3,4,5) "
 									+ "order by o.startAppointmentDate");
 
 					// Validar Disponibilidad
@@ -940,6 +808,13 @@ public class ProcessBo implements Serializable {
 						+ "' and o.state = "
 						+ stateString
 						+ " order by o.startAppointmentDate desc");
+
+		return list;
+	}
+
+	public List<CrmAppointment> getListAppointmentByCriteria(String where) {
+		List<CrmAppointment> list = dao.find(where
+				+ " order by o.startAppointmentDate asc");
 
 		return list;
 	}

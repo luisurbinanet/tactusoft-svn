@@ -177,6 +177,11 @@ input,select,textarea {
 	width: 75%;
 }
 
+.width80per {
+	padding: 4px;
+	width: 80%;
+}
+
 .width50perLeft {
 	padding: 4px;
 	width: 50%;

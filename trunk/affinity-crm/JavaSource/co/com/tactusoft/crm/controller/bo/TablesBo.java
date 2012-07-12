@@ -162,6 +162,18 @@ public class TablesBo implements Serializable {
 						+ idBranch);
 	}
 
+	public List<CrmProcedureDetail> getListProcedureDetailByBranch(BigDecimal idBranch) {
+		String complementary = "(";
+		List<CrmProcedure> list = getListProcedureByBranch(idBranch);
+		for (CrmProcedure item : list) {
+			complementary = complementary + item.getId() + ",";
+		}
+		complementary = complementary.substring(0, complementary.length() - 1)
+				+ ")";
+		return dao.find("from CrmProcedureDetail o where o.crmProcedure.id in "
+				+ complementary + " order by o.name");
+	}
+
 	public List<CrmProcedureDetail> getListProcedureDetailByProcedure(
 			BigDecimal idProcedure) {
 		return dao.find("from CrmProcedureDetail o where o.crmProcedure.id = "

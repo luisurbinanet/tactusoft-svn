@@ -9,7 +9,7 @@
 
 	<ui:define name="body">
 
-		<p:panel style="width:100%;height:800px;"
+		<p:panel style="width:100%;height:900px;"
 			header="#{msg['title_search_by_patient']}">
 
 			<p:spacer height="5" />
@@ -22,8 +22,11 @@
 					<p:toolbarGroup align="left">
 						<p:commandButton id="btnSearchPatient"
 							value="#{msg['btn_search_app']}" icon="ui-icon-search"
-							update="selectedTable growl"
+							update="selectedTable growl btnExport"
 							actionListener="#{appointmentSearchBacking.searchAppoinmentAction}" />
+						<p:commandButton id="btnExport" oncomplete="exportDlg.show();"
+							value="#{msg['btn_export']}" icon="ui-icon-disk"
+							disabled="#{appointmentSearchBacking.disabledExport}" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -75,20 +78,15 @@
 
 				<p:dataTable id="selectedTable" var="rec"
 					value="#{appointmentSearchBacking.appointmentModel}"
-					rowKey="#{rec.code}" style="width:100%"
-					selection="#{appointmentSearchBacking.selectedAppointment}"
-					paginator="true" rows="20"
+					rowKey="#{rec.code}" style="width:100%" paginator="true" rows="20"
 					emptyMessage="#{msg['glb_no_records_found']}">
 
-					<p:ajax event="rowSelectRadio" update="selectedTable">
-						<f:setPropertyActionListener value="#{rec}"
-							target="#{appointmentSearchBacking.selectedAppointment}" />
-					</p:ajax>
+					<p:column headerText="#{msg['pat_code']}">
+						<h:outputLabel value="#{rec.crmPatient.doc}" />
+					</p:column>
 
-					<p:column selectionMode="single" style="width:18px" />
-
-					<p:column headerText="#{msg['app_code']}">
-						<h:outputLabel value="#{rec.code}" />
+					<p:column headerText="#{msg['pat_names']}">
+						<h:outputLabel value="#{rec.crmPatient.names}" />
 					</p:column>
 
 					<p:column headerText="#{msg['app_date']}">
@@ -99,12 +97,6 @@
 
 					<p:column headerText="#{msg['app_start_hour']}">
 						<h:outputLabel value="#{rec.startAppointmentDate}">
-							<f:convertDateTime pattern="HH:mm" />
-						</h:outputLabel>
-					</p:column>
-
-					<p:column headerText="#{msg['app_end_hour']}">
-						<h:outputLabel value="#{rec.endAppointmentDate}">
 							<f:convertDateTime pattern="HH:mm" />
 						</h:outputLabel>
 					</p:column>
@@ -126,34 +118,42 @@
 							value="#{rec.state eq 1?'Agendada':rec.state eq 2?'Cancelada':rec.state eq 3?'Chequeada':rec.state eq 4?'Asistió a Consulta':'No Asistió a Consulta'}" />
 					</p:column>
 
-					<p:column style="width:8%">
-						<p:commandButton update=":editForm:display"
-							oncomplete="obsDialog.show()" icon="ui-icon-search"
-							title="#{msg['btn_view']}">
-							<f:setPropertyActionListener value="#{rec}"
-								target="#{appointmentSearchBacking.selectedAppointment}" />
-						</p:commandButton>
-					</p:column>
-
 				</p:dataTable>
 
-			</h:form>
+				<p:dialog id="exportDialog" widgetVar="exportDlg" modal="true"
+					closable="true" header="#{msg['btn_export']}">
 
-			<h:form id="editForm">
+					<h:outputLabel value="#{msg['app_src_format']}"
+						style="font-size:medium;" />
 
-				<p:dialog header="#{msg['app_obs']}" widgetVar="obsDialog"
-					resizable="false" id="obsDlg" showEffect="fade"
-					hideEffect="explode" modal="true">
+					<h:panelGrid width="100%" columns="3">
 
-					<h:panelGrid id="display" columns="1" cellpadding="4"
-						style="margin:0 auto;" width="100%">
+						<h:commandLink>
+							<p:graphicImage id="imgExcel" value="../../images/excel.png"
+								alt="Excel" />
+							<p:dataExporter type="xls" target="selectedTable"
+								fileName="citas" />
+							<p:tooltip for="imgExcel" value="#{msg['btn_export_excel']}"
+								showEffect="fade" hideEffect="fade" />
+						</h:commandLink>
 
-						<h:inputTextarea style="width:500px;"
-							value="#{appointmentSearchBacking.selectedAppointment.obs}"
-							readonly="true" rows="5" />
+						<h:commandLink>
+							<p:graphicImage id="imgCSV" value="../../images/csv.png" />
+							<p:dataExporter type="csv" target="selectedTable"
+								fileName="citas" />
+							<p:tooltip for="imgCSV" value="#{msg['btn_export_csv']}"
+								showEffect="fade" hideEffect="fade" />
+						</h:commandLink>
+
+						<h:commandLink>
+							<p:graphicImage id="imgXML" value="../../images/xml.png" />
+							<p:dataExporter type="xml" target="selectedTable"
+								fileName="citas" />
+							<p:tooltip for="imgXML" value="#{msg['btn_export_xml']}"
+								showEffect="fade" hideEffect="fade" />
+						</h:commandLink>
 
 					</h:panelGrid>
-
 				</p:dialog>
 
 			</h:form>

@@ -376,13 +376,18 @@ public class PatientBacking extends BaseBacking {
 					selected.setDoc(doc);
 				}
 
+				String direccion = selected.getAddress();
+				if (direccion.length() > 35) {
+					direccion = direccion.substring(0, 34);
+				}
+
 				String codeSap = null;
 				if (!exitSAP) {
 					codeSap = CustomerExecute.excecute(
 							sap.getUrlCustomerMaintainAll(), sap.getUsername(),
 							sap.getPassword(), sap.getEnvironment(), "13",
-							selected.getDoc(), tratamiento, names,
-							selected.getAddress(), selected.getPhoneNumber(),
+							selected.getDoc(), tratamiento, names, direccion,
+							selected.getZipCode(), selected.getPhoneNumber(),
 							selected.getCellNumber(), selected.getEmail(),
 							crmCountry.getCode(), crmCity.getName(),
 							crmRegion.getCode(), "D001", profile.getSalesOrg(),

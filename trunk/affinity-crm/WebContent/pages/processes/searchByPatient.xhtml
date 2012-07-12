@@ -36,15 +36,21 @@
 				<h:panelGrid id="pnlDetail" columns="4" cellpadding="4"
 					style="margin:0 auto;" width="100%">
 
-					<h:outputLabel value="#{msg['pat_sap_code']}" style="width:40%" />
+					<h:outputLabel value="#{msg['pat_sap_code']}"
+						rendered="#{searchByPatientBacking.selectedPatient.id eq null?false:true}" />
 					<p:inputText
 						value="#{searchByPatientBacking.selectedPatient.codeSap}"
-						style="width:350px" readonly="true" />
+						style="width:350px;background-color:#FFFF80;font-weight:bold;"
+						readonly="true"
+						rendered="#{searchByPatientBacking.selectedPatient.id eq null?false:true}" />
 
-					<h:outputLabel value="#{msg['pat_names']}" style="width:40%" />
+					<h:outputLabel value="#{msg['pat_names']}"
+						rendered="#{searchByPatientBacking.selectedPatient.id eq null?false:true}" />
 					<p:inputText
 						value="#{searchByPatientBacking.selectedPatient.names}"
-						style="width:350px" readonly="true" />
+						style="width:350px;background-color:#FFFF80;font-weight:bold;"
+						readonly="true"
+						rendered="#{searchByPatientBacking.selectedPatient.id eq null?false:true}" />
 
 					<h:outputLabel value="#{msg['src_star_date']}" style="width:40%" />
 					<p:calendar value="#{searchByPatientBacking.startDate}"
