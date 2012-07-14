@@ -9,8 +9,8 @@
 
 	<ui:define name="body">
 
-		<p:panel style="width:100%;height:900px;"
-			header="#{msg['title_search_by_patient']}">
+		<p:panel style="width:100%;height:100%"
+			header="#{msg['title_appointment_search']}">
 
 			<p:spacer height="5" />
 
@@ -80,6 +80,10 @@
 					value="#{appointmentSearchBacking.appointmentModel}"
 					rowKey="#{rec.code}" style="width:100%" paginator="true" rows="20"
 					emptyMessage="#{msg['glb_no_records_found']}">
+
+					<p:column headerText="#{msg['app_num']}">
+						<h:outputLabel value="#{rec.code}" />
+					</p:column>
 
 					<p:column headerText="#{msg['pat_code']}">
 						<h:outputLabel value="#{rec.crmPatient.doc}" />

@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -89,6 +90,7 @@ public class CrmRegion implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "crmRegion")
+	@OrderBy("name")
 	public Set<CrmCity> getCrmCities() {
 		return this.crmCities;
 	}

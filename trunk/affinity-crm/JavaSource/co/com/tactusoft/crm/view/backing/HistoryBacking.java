@@ -2,6 +2,8 @@ package co.com.tactusoft.crm.view.backing;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,6 +13,7 @@ import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.inject.Named;
 
+import org.primefaces.event.DateSelectEvent;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
@@ -54,6 +57,7 @@ public class HistoryBacking extends BaseBacking {
 	private Map<BigDecimal, CrmOccupation> mapOccupation;
 	private BigDecimal idOccupation;
 
+	public int age;
 	private double imc;
 	private String descImc;
 
@@ -224,6 +228,14 @@ public class HistoryBacking extends BaseBacking {
 		this.idOccupation = idOccupation;
 	}
 
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
 	public double getImc() {
 		return imc;
 	}
@@ -250,17 +262,18 @@ public class HistoryBacking extends BaseBacking {
 		listAppointment = new ArrayList<CrmAppointment>();
 		appointmentModel = new AppointmentDataModel(listAppointment);
 		selectedAppointment = new CrmAppointment();
-		
+
 		selected = new CrmPatient();
 		selected.setCrmOccupation(new CrmOccupation());
 		selected.getCrmOccupation().setId(Constant.DEFAULT_VALUE);
-		
+
 		selectedPatient = new CrmPatient();
 		selectedPatient.setCrmOccupation(new CrmOccupation());
 		selectedPatient.getCrmOccupation().setId(Constant.DEFAULT_VALUE);
 
 		disabledSaveButton = true;
 		optionSearchPatient = 1;
+		age = 0;
 
 		readOnlySelectedHistoryHistory = true;
 		readOnlySelectedHistoryRecord = true;
@@ -280,6 +293,9 @@ public class HistoryBacking extends BaseBacking {
 
 			selected = processService.getPatientByCodeSap(selectedPatient
 					.getCodeSap());
+			if (selected.getCrmOccupation() == null) {
+				selected.setCrmOccupation(new CrmOccupation());
+			}
 
 			listAppointment = processService.listAppointmentByPatient(
 					selectedPatient.getCodeSap(), 3);
@@ -585,6 +601,35 @@ public class HistoryBacking extends BaseBacking {
 		} else {
 			imc = 0;
 		}
+
+		descImc = "Prueba";
+	}
+
+	public void handleBornDateSelect(DateSelectEvent event) {
+		Date bornDate = event.getDate();
+		age = calculateAge(bornDate);
+	}
+
+	private int calculateAge(Date bornDate) {
+		int age = 0;
+		if (bornDate != null) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(bornDate);
+
+			Calendar currentDate = Calendar.getInstance();
+			currentDate.setTime(new Date());
+
+			age = currentDate.get(Calendar.YEAR) - calendar.get(Calendar.YEAR);
+
+			if ((calendar.get(Calendar.MONTH) > currentDate.get(Calendar.MONTH))
+					|| (calendar.get(Calendar.MONTH) == currentDate
+							.get(Calendar.MONTH) && calendar
+							.get(Calendar.DAY_OF_MONTH) > currentDate
+							.get(Calendar.DAY_OF_MONTH))) {
+				age--;
+			}
+		}
+		return age;
 	}
 
 }

@@ -22,13 +22,10 @@
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
 							actionListener="#{historyBacking.newAction}"
-							update="pnlDetail tabView toolBar" process="@this" />
+							update="pnlPatient tabView toolBar" process="@this" />
 						<p:commandButton value="#{msg['btn_add_patient']}"
 							icon="ui-icon-circle-check" oncomplete="dlg2.show()"
-							update=":editForm:dialog2" />
-						<p:commandButton value="#{msg['btn_search']}"
-							icon="ui-icon-search" update="toolBar tabView growl"
-							actionListener="#{historyBacking.searchAction}" />
+							update="dialog2" />
 						<p:commandButton id="btnSaveHistory"
 							value="#{msg['btn_save_history']}" icon="ui-icon-disk"
 							actionListener="#{historyBacking.saveAction}"
@@ -39,62 +36,125 @@
 
 				<p:spacer height="5" />
 
-				<h:panelGrid id="pnlDetail" columns="4" width="100%">
-					<h:outputLabel value="#{msg['pat_sap_code']}" />
+				<h:panelGrid id="pnlPatient" columns="4" width="100%">
+
+					<h:outputLabel value="#{msg['pat_sap_code']}"
+						rendered="#{historyBacking.selectedPatient.id eq null?false:true}" />
 					<p:inputText value="#{historyBacking.selectedPatient.codeSap}"
-						style="width:400px" readonly="true" />
+						style="width:400px;background-color:#FFFF80;font-weight:bold;"
+						readonly="true"
+						rendered="#{historyBacking.selectedPatient.id eq null?false:true}" />
 
-					<h:outputLabel value="#{msg['pat_code']}" />
+					<h:outputLabel value="#{msg['pat_code']}"
+						rendered="#{historyBacking.selectedPatient.id eq null?false:true}" />
 					<p:inputText value="#{historyBacking.selectedPatient.doc}"
-						style="width:400px" readonly="true" />
+						style="width:400px;background-color:#FFFF80;font-weight:bold;"
+						readonly="true"
+						rendered="#{historyBacking.selectedPatient.id eq null?false:true}" />
 
-					<h:outputLabel value="#{msg['pat_names']}" />
+					<h:outputLabel value="#{msg['pat_names']}"
+						rendered="#{historyBacking.selectedPatient.id eq null?false:true}" />
 					<p:inputText value="#{historyBacking.selectedPatient.names}"
-						style="width:400px" readonly="true" />
+						style="width:400px;background-color:#FFFF80;font-weight:bold;"
+						readonly="true"
+						rendered="#{historyBacking.selectedPatient.id eq null?false:true}" />
 
-					<h:outputLabel value="#{msg['glb_gender']}" />
-					<p:inputText style="width:400px" readonly="true"
+					<h:outputLabel value="#{msg['glb_gender']}"
+						rendered="#{historyBacking.selectedPatient.id eq null?false:true}" />
+					<p:inputText
+						style="width:400px;background-color:#FFFF80;font-weight:bold;"
+						readonly="true"
+						rendered="#{historyBacking.selectedPatient.id eq null?false:true}"
 						value="#{historyBacking.selectedPatient.gender eq 'W'?msg['glb_gender_woman']:historyBacking.selectedPatient.gender eq 'M'?msg['glb_gender_man']:''}" />
 
-					<h:outputLabel value="#{msg['pat_born_date']}" />
-					<p:inputText value="#{historyBacking.selectedPatient.bornDate}"
-						style="width:400px" readonly="true">
-						<f:convertDateTime pattern="dd/MM/yyyy" />
-					</p:inputText>
+					<p:spacer height="5"
+						rendered="#{historyBacking.selectedPatient.id eq null?false:true}" />
+					<p:spacer height="5"
+						rendered="#{historyBacking.selectedPatient.id eq null?false:true}" />
 
-					<h:outputLabel value="#{msg['pat_age']}" />
-					<p:inputText
-						value="#{historyBacking.selectedPatient.age} #{msg['glb_age']}"
-						style="width:400px" readonly="true" />
 				</h:panelGrid>
 
-				<p:spacer height="5" />
-
 				<p:tabView id="tabView" style="height:100%">
+
+					<p:tab id="tab10" title="#{msg['his_history']}">
+
+						<p:dataTable id="selectedTable" var="rec"
+							value="#{historyBacking.appointmentModel}" rowKey="#{rec.code}"
+							style="width:100%"
+							selection="#{historyBacking.selectedAppointment}"
+							paginator="true" rows="10"
+							emptyMessage="#{msg['glb_no_records_found']}">
+
+							<p:column headerText="#{msg['app_code']}">
+								<h:outputLabel value="#{rec.code}" />
+							</p:column>
+
+							<p:column headerText="#{msg['app_date']}">
+								<h:outputLabel value="#{rec.startAppointmentDate}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputLabel>
+							</p:column>
+
+							<p:column headerText="#{msg['app_procedure_type']}">
+								<h:outputLabel value="#{rec.crmProcedureDetail.name}" />
+							</p:column>
+
+							<p:column headerText="#{msg['app_branch']}">
+								<h:outputLabel value="#{rec.crmBranch.name}" />
+							</p:column>
+
+							<p:column headerText="#{msg['app_doctor']}">
+								<h:outputLabel value="#{rec.crmDoctor.names}" />
+							</p:column>
+
+							<p:column headerText="#{msg['app_procedure']}">
+								<h:outputLabel value="#{rec.crmProcedureDetail.name}" />
+							</p:column>
+
+						</p:dataTable>
+
+					</p:tab>
 
 					<p:tab id="tab1" title="#{msg['title_patient_complementary']}">
 						<p:fieldset legend="#{msg['pat_personal_data']}">
 							<h:panelGrid id="pnlDetail" columns="4" style="margin:0 auto;"
 								width="100%">
 
+								<h:outputLabel value="#{msg['pat_born_date']}" />
+								<p:calendar value="#{patientBacking.selected.bornDate}"
+									label="#{msg['pat_born_date']}" readonlyInput="true"
+									pattern="dd/MM/yyyy" showOn="button" navigator="true"
+									locale="es" required="true" yearRange="-100:+0"
+									readonly="#{historyBacking.readOnlySelectedHistoryHistory}">
+									<p:ajax event="dateSelect"
+										listener="#{historyBacking.handleBornDateSelect}"
+										update="txtAge" />
+								</p:calendar>
+
+								<h:outputLabel value="#{msg['pat_age']}" />
+								<p:inputText id="txtAge"
+									style="width:400px;background-color:#FFFF80;font-weight:bold;"
+									readonly="true"
+									value="#{historyBacking.age} #{msg['glb_age']}" />
+
 								<h:outputLabel value="#{msg['pat_occupation']}" />
 								<p:selectOneMenu
 									value="#{historyBacking.selected.crmOccupation.id}"
 									style="width:400px" label="#{msg['pat_occupation']}"
-									disabled="##{historyBacking.readOnlySelectedHistoryHistory}">
+									disabled="#{historyBacking.readOnlySelectedHistoryHistory}">
 									<f:selectItems value="#{historyBacking.listOccupation}" />
 								</p:selectOneMenu>
 
 								<h:outputLabel value="#{msg['pat_neighborhood']}" />
 								<p:inputText value="#{historyBacking.selected.neighborhood}"
 									style="width:400px" label="#{msg['pat_neighborhood']}"
-									readonly="##{historyBacking.readOnlySelectedHistoryHistory}"
+									readonly="#{historyBacking.readOnlySelectedHistoryHistory}"
 									maxlength="45" />
 
 								<h:outputLabel value="#{msg['pat_type_housing']}" />
 								<p:selectOneMenu value="#{historyBacking.selected.typeHousing}"
 									style="width:400px" label="#{msg['pat_type_housing']}"
-									disabled="##{historyBacking.readOnlySelectedHistoryHistory}">
+									disabled="#{historyBacking.readOnlySelectedHistoryHistory}">
 									<f:selectItem itemLabel="#{msg['glb_default_value']}"
 										itemValue="-1" />
 									<f:selectItem itemLabel="#{msg['pat_type_housing_u']}"
@@ -115,13 +175,13 @@
 								<h:outputLabel value="#{msg['pat_guardian']}" />
 								<p:inputText value="#{historyBacking.selected.guardian}"
 									style="width:400px" label="#{msg['pat_guardian']}"
-									readonly="##{historyBacking.readOnlySelectedHistoryHistory}"
+									readonly="#{historyBacking.readOnlySelectedHistoryHistory}"
 									maxlength="255" />
 
 								<h:outputLabel value="#{msg['pat_guardian_address']}" />
 								<p:inputText value="#{historyBacking.selected.guardianAddress}"
 									style="width:400px" label="#{msg['pat_guardian_address']}"
-									readonly="##{historyBacking.readOnlySelectedHistoryHistory}"
+									readonly="#{historyBacking.readOnlySelectedHistoryHistory}"
 									maxlength="255" />
 
 								<h:outputLabel value="#{msg['pat_guardian_relationship']}" />
@@ -603,44 +663,45 @@
 
 							<h:outputLabel value="#{msg['his_physique_heart_rate']}" />
 							<pe:inputNumber symbol="   puls" symbolPosition="s"
-								decimalPlaces="0" style="width:100px" maxValue="200"
+								decimalPlaces="0" style="width:300px" maxValue="200"
 								value="#{historyBacking.selectedHistoryPhysique.heartRate}"
 								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}" />
 
 							<h:outputLabel value="#{msg['his_physique_respiratory_rate']}" />
 							<pe:inputNumber symbol="   resp/min" symbolPosition="s"
-								decimalPlaces="0" style="width:100px" maxValue="70"
+								decimalPlaces="0" style="width:300px" maxValue="70"
 								value="#{historyBacking.selectedHistoryPhysique.respiratoryRate}"
 								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}" />
 
 							<h:outputLabel value="#{msg['his_physique_height']}" />
 							<pe:inputNumber symbol="   cm" symbolPosition="s"
-								decimalPlaces="0" style="width:100px" maxValue="250"
+								decimalPlaces="0" style="width:300px" maxValue="250"
 								value="#{historyBacking.selectedHistoryPhysique.height}"
 								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}" />
 
 							<h:outputLabel value="#{msg['his_physique_weight']}" />
 							<pe:inputNumber symbol="   kg" symbolPosition="s"
-								decimalPlaces="2" style="width:100px" maxValue="999"
+								decimalPlaces="2" style="width:300px" maxValue="999"
 								value="#{historyBacking.selectedHistoryPhysique.weight}"
 								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}" />
 
 							<h:outputLabel value="#{msg['his_physique_blood_pressure']}" />
-							<p:inputText maxlength="7"
+							<p:inputText maxlength="7" style="width:300px"
 								value="#{historyBacking.selectedHistoryPhysique.bloodPressure}"
 								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}" />
 						</h:panelGrid>
 
-						<h:panelGrid id="pnlIMC" columns="2" width="100%"
-							columnClasses="width25per,width75per">
+						<h:panelGrid id="pnlIMC" columns="4" width="100%"
+							columnClasses="width25per,width25per,width25per,width25per">
 
 							<h:outputLabel value="#{msg['his_physique_imc']}" />
 							<pe:inputNumber symbol="  Kg/m2" symbolPosition="s"
-								decimalPlaces="2" style="width:100px" maxValue="999"
+								decimalPlaces="2" style="width:300px" maxValue="999"
 								value="#{historyBacking.imc}" readonly="true" />
 
 							<h:outputLabel value="#{msg['his_physique_imc']}" />
-							<p:inputText value="#{historyBacking.descImc}" />
+							<p:inputText value="#{historyBacking.descImc}"
+								style="width:300px" />
 
 							<p:commandButton action="#{historyBacking.calculateIMC}"
 								update="pnlIMC" value="#{msg['btn_calculate_imc']}" />
@@ -794,50 +855,8 @@
 						</h:panelGrid>
 					</p:tab>
 
-					<p:tab id="tab10" title="#{msg['his_history']}">
-
-						<p:dataTable id="selectedTable" var="rec"
-							value="#{historyBacking.appointmentModel}" rowKey="#{rec.code}"
-							style="width:100%"
-							selection="#{historyBacking.selectedAppointment}"
-							paginator="true" rows="10"
-							emptyMessage="#{msg['glb_no_records_found']}">
-
-							<p:column headerText="#{msg['app_code']}">
-								<h:outputLabel value="#{rec.code}" />
-							</p:column>
-
-							<p:column headerText="#{msg['app_date']}">
-								<h:outputLabel value="#{rec.startAppointmentDate}">
-									<f:convertDateTime pattern="dd/MM/yyyy" />
-								</h:outputLabel>
-							</p:column>
-
-							<p:column headerText="#{msg['app_procedure_type']}">
-								<h:outputLabel value="#{rec.crmProcedureDetail.name}" />
-							</p:column>
-
-							<p:column headerText="#{msg['app_branch']}">
-								<h:outputLabel value="#{rec.crmBranch.name}" />
-							</p:column>
-
-							<p:column headerText="#{msg['app_doctor']}">
-								<h:outputLabel value="#{rec.crmDoctor.names}" />
-							</p:column>
-
-							<p:column headerText="#{msg['app_procedure']}">
-								<h:outputLabel value="#{rec.crmProcedureDetail.name}" />
-							</p:column>
-
-						</p:dataTable>
-
-					</p:tab>
-
 				</p:tabView>
 
-			</h:form>
-
-			<h:form id="editForm">
 				<p:dialog header="#{msg['sal_patient']}" widgetVar="dlg2"
 					resizable="false" id="dialog2" showEffect="fade"
 					hideEffect="explode" modal="true" width="600">
@@ -875,13 +894,15 @@
 								update="pnlTable2 recordTable2 btnAddPatient"
 								action="#{historyBacking.searchPatientAction}" />
 							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
-								icon="ui-icon-plusthick" update=":form:pnlDetail :form:toolBar"
-								oncomplete="dlg2.hide()"
-								disabled="#{historyBacking.disabledAddPatient}" />
+								icon="ui-icon-plusthick" update="pnlPatient toolBar tabView"
+								actionListener="#{historyBacking.searchAction}"
+								disabled="#{historyBacking.disabledAddPatient}"
+								oncomplete="dlg2.hide()"/>
 						</f:facet>
 					</h:panelGrid>
 
 					<p:spacer height="10" />
+
 					<p:scrollPanel id="pnlTable2" style="width:580px;height:400px">
 						<p:dataTable id="recordTable2" var="rec"
 							value="#{historyBacking.patientModel}" rowKey="#{rec.codeSap}"
@@ -903,6 +924,7 @@
 					</p:scrollPanel>
 
 				</p:dialog>
+
 			</h:form>
 
 		</p:panel>

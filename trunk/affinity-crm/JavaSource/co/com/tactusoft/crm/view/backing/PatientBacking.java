@@ -355,9 +355,6 @@ public class PatientBacking extends BaseBacking {
 			}
 
 			if (exitSAP || automatic || customer.size() == 0) {
-				String names = null;
-
-				names = selected.getFirstnames() + " " + selected.getSurnames();
 
 				String tratamiento = "Señor";
 				if (selected.getGender().equals("W")) {
@@ -386,8 +383,10 @@ public class PatientBacking extends BaseBacking {
 					codeSap = CustomerExecute.excecute(
 							sap.getUrlCustomerMaintainAll(), sap.getUsername(),
 							sap.getPassword(), sap.getEnvironment(), "13",
-							selected.getDoc(), tratamiento, names, direccion,
-							selected.getZipCode(), selected.getPhoneNumber(),
+							selected.getDoc(), tratamiento,
+							selected.getFirstnames(), selected.getSurnames(),
+							direccion, selected.getZipCode(),
+							selected.getPhoneNumber(),
 							selected.getCellNumber(), selected.getEmail(),
 							crmCountry.getCode(), crmCity.getName(),
 							crmRegion.getCode(), "D001", profile.getSalesOrg(),

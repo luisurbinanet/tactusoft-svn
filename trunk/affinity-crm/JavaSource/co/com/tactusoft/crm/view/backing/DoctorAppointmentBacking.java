@@ -383,6 +383,7 @@ public class DoctorAppointmentBacking extends BaseBacking {
 	public void onEventSelect(ScheduleEntrySelectEvent selectEvent) {
 		event = (DefaultScheduleEvent) selectEvent.getScheduleEvent();
 		selectedAppointment = (CrmAppointment) event.getData();
+		System.out.println("");
 	}
 
 }

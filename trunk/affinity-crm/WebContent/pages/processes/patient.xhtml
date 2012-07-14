@@ -99,11 +99,13 @@
 
 					<h:outputLabel value="#{msg['pat_names']}" />
 					<p:inputText value="#{patientBacking.selected.firstnames}"
-						style="width:300px" label="#{msg['pat_names']}" required="true" />
+						maxlength="35" style="width:300px" label="#{msg['pat_names']}"
+						required="true" />
 
 					<h:outputLabel value="#{msg['pat_surnames']}" />
 					<p:inputText value="#{patientBacking.selected.surnames}"
-						style="width:300px" label="#{msg['pat_surnames']}" required="true" />
+						maxlength="35" style="width:300px" label="#{msg['pat_surnames']}"
+						required="true" />
 
 					<h:outputText value="#{msg['glb_gender']}" />
 					<p:selectOneMenu value="#{patientBacking.selected.gender}"
