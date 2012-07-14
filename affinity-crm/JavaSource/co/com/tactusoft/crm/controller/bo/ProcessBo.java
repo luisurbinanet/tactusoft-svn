@@ -473,12 +473,13 @@ public class ProcessBo implements Serializable {
 									validate = validateException(
 											listDoctorException, currentDate,
 											candidatesHours);
-								}
 
-								if (FacesUtil.getDateWithoutTime(new Date())
-										.compareTo(currentDate) == 0) {
-									if (new Date().compareTo(initHour) > 0) {
-										validate = false;
+									if (FacesUtil
+											.getDateWithoutTime(new Date())
+											.compareTo(currentDate) == 0) {
+										if (new Date().compareTo(initHour) > 0) {
+											validate = false;
+										}
 									}
 								}
 
