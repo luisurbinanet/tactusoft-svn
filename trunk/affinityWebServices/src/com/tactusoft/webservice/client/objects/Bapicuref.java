@@ -7,8 +7,14 @@
 
 package com.tactusoft.webservice.client.objects;
 
+@SuppressWarnings({ "rawtypes", "unused" })
 public class Bapicuref  implements java.io.Serializable {
-    private java.lang.String posex;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private java.lang.String posex;
 
     private java.lang.String configId;
 

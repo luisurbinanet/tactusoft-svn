@@ -7,8 +7,14 @@
 
 package com.tactusoft.webservice.client.objects;
 
+@SuppressWarnings({ "rawtypes", "unused" })
 public class Bapikna105X  implements java.io.Serializable {
-    private java.lang.String transpzone;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private java.lang.String transpzone;
 
     private java.lang.String controlAccount;
 

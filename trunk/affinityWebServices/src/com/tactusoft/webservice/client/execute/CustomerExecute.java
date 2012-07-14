@@ -12,6 +12,10 @@ import com.tactusoft.webservice.client.beans.WSBeanComparator;
 import com.tactusoft.webservice.client.holders.Bapicustomer04Holder;
 import com.tactusoft.webservice.client.holders.Bapicustomer05Holder;
 import com.tactusoft.webservice.client.holders.BapicustomerKna1Holder;
+import com.tactusoft.webservice.client.holders.Bapikna1011Holder;
+import com.tactusoft.webservice.client.holders.Bapikna105Holder;
+import com.tactusoft.webservice.client.holders.Bapikna106Holder;
+import com.tactusoft.webservice.client.holders.Bapikna109Holder;
 import com.tactusoft.webservice.client.holders.Bapiret1Holder;
 import com.tactusoft.webservice.client.holders.Bapireturn1Holder;
 import com.tactusoft.webservice.client.holders.Kna1Holder;
@@ -40,6 +44,10 @@ import com.tactusoft.webservice.client.objects.Bapiaddr2;
 import com.tactusoft.webservice.client.objects.Bapicustomer04;
 import com.tactusoft.webservice.client.objects.BapicustomerAddressdata;
 import com.tactusoft.webservice.client.objects.BapicustomerIdrange;
+import com.tactusoft.webservice.client.objects.Bapikna1011;
+import com.tactusoft.webservice.client.objects.Bapikna1011X;
+import com.tactusoft.webservice.client.objects.Bapikna105X;
+import com.tactusoft.webservice.client.objects.Bapikna106X;
 import com.tactusoft.webservice.client.objects.Bapikna110;
 import com.tactusoft.webservice.client.objects.Bapikna111;
 import com.tactusoft.webservice.client.objects.Bapireturn1;
@@ -53,13 +61,14 @@ public class CustomerExecute {
 
 	public static String excecute(String url, String user, String password,
 			String ambiente, String tipoDocumento, String nroDocumento,
-			String tratamiento, String nombre, String direccion,
-			String telefono, String celular, String correoElectronico,
-			String pais, String ciudad, String region, String grupoCuenta,
-			String orgVentas, String canalDistribucion, String division,
-			String sociedad, String oficinaVentas, String grupoCliente,
-			String condicionPago, String cuenta, String grupoPrecios,
-			String esquemaClientes, String estadoCliente, String moneda) {
+			String tratamiento, String nombres, String apellidos,
+			String direccion, String codigoPostal, String telefono,
+			String celular, String correoElectronico, String pais,
+			String ciudad, String region, String grupoCuenta, String orgVentas,
+			String canalDistribucion, String division, String sociedad,
+			String oficinaVentas, String grupoCliente, String condicionPago,
+			String cuenta, String grupoPrecios, String esquemaClientes,
+			String estadoCliente, String moneda) {
 
 		// CREAR CLIENTES
 		String ziCustomerIsConsumer = new String();
@@ -70,7 +79,9 @@ public class CustomerExecute {
 		String ziMaintainAddressByKna1 = null;
 		String ziNoBankMasterUpdate = null;
 		String ziRaiseNoBte = null;
+
 		CustAddOnData zpiAddOnData = new CustAddOnData();
+
 		String zpiCamChanged = null;
 		String zpiPostflag = null;
 		TableOfFkuntxtHolder ztUpdTxt = new TableOfFkuntxtHolder();
@@ -100,7 +111,8 @@ public class CustomerExecute {
 		Kna1 ziKna1 = new Kna1();
 		ziKna1.setMandt(ambiente);
 		ziKna1.setAnred(tratamiento);
-		ziKna1.setName1(nombre);
+		ziKna1.setName1(apellidos);
+		ziKna1.setName2(nombres);
 		ziKna1.setSortl(nroDocumento);
 		ziKna1.setKtokd(grupoCuenta);
 		ziKna1.setLand1(pais);
@@ -109,17 +121,25 @@ public class CustomerExecute {
 		ziKna1.setStcdt(tipoDocumento);
 		ziKna1.setStcd1(nroDocumento);
 		ziKna1.setStras(direccion);
+		ziKna1.setPstlz(codigoPostal);
 		ziKna1.setTelf1(telefono);
-		ziKna1.setTelf2(celular);
+		ziKna1.setTelfx(celular);
 		ziKna1.setSpras("S");// IDIOMA
 		ziKna1.setStkzn("X");// Persona Física
 		ziKna1.setFityp("05");// Clase Impuesto Persona Natural
-		
+
 		Bapiaddr1 ziBapiaddr1 = new Bapiaddr1();
-		
+		// ziBapiaddr1.setName(direccion);
+		// ziBapiaddr1.setStrSuppl1("direccion");
+		// ziBapiaddr1.setStrSuppl2("direccion");
+		// ziBapiaddr1.setStrSuppl3("direccion");
+		// ziBapiaddr1.setLocation("direccion");
+
 		Bapiaddr2 ziBapiaddr2 = new Bapiaddr2();
-		ziBapiaddr2.setTel1Numbr(telefono);
-		ziBapiaddr2.setEMail(correoElectronico);
+		/*
+		 * ziBapiaddr2.setTel1Numbr(telefono);
+		 * ziBapiaddr2.setEMail(correoElectronico);
+		 */
 
 		TableOfFknvkHolder ztXknvk = new TableOfFknvkHolder();
 
@@ -130,7 +150,6 @@ public class CustomerExecute {
 		ziKnvv.setSpart(division);
 		ziKnvv.setVkbur(oficinaVentas);
 		ziKnvv.setKdgrp(grupoCliente);
-		//ziKnvv.setZterm(sociedad);
 		ziKnvv.setBzirk("COFC05");
 		ziKnvv.setWaers(moneda);
 		ziKnvv.setKonda(grupoPrecios);// GRUPO DE PRECIOS 01
@@ -143,7 +162,7 @@ public class CustomerExecute {
 
 		Knb1 ziKnb1 = new Knb1();
 		ziKnb1.setMandt(ambiente);
-		ziKnb1.setBukrs(orgVentas);
+		ziKnb1.setBukrs(sociedad);
 		ziKnb1.setAkont(cuenta);// cuenta asociada
 		ziKnb1.setZterm(condicionPago);
 
@@ -157,11 +176,11 @@ public class CustomerExecute {
 		fknviArray[0] = fknvi;
 		TableOfFknviHolder ztXknvi = new TableOfFknviHolder(fknviArray);
 
-		ziMaintainAddressByKna1 = "X";
-		
+		// ziMaintainAddressByKna1 = "X";
+
 		ZSD_CUSTOMER_MAINTAIN_ALLProxy execute = new ZSD_CUSTOMER_MAINTAIN_ALLProxy(
 				url, user, password);
-		
+
 		try {
 			execute.zsdCustomerMaintainAll(ziBapiaddr1, ziBapiaddr2,
 					ziCustomerIsConsumer, ziForceExternalNumberRange,
@@ -250,7 +269,7 @@ public class CustomerExecute {
 		Collections.sort(result, new WSBeanComparator());
 		return result;
 	}
-	
+
 	public static List<WSBean> findByName(String url, String user,
 			String password, String society, String names) {
 		return findByName(url, user, password, society, names, 0);
@@ -287,7 +306,7 @@ public class CustomerExecute {
 		Collections.sort(result, new WSBeanComparator());
 		return result;
 	}
-	
+
 	public static List<WSBean> findByDoc(String url, String user,
 			String password, String society, String doc) {
 		return findByDoc(url, user, password, society, doc, 0);
@@ -346,22 +365,91 @@ public class CustomerExecute {
 		}
 	}
 
+	public static void getDetail2(String url, String user, String password,
+			String distributionChannel, String division,
+			String salesOrganisation, String customerNo) {
+		Zfi_customers2Proxy Zfi_customers2Proxy = new Zfi_customers2Proxy(url,
+				user, password);
+
+		try {
+			Bapikna109Holder addressTypeNo = new Bapikna109Holder();
+			Bapikna106Holder companyData = new Bapikna106Holder();
+			StringHolder consumerFlag = new StringHolder();
+			Bapikna105Holder optionalCompanyData = new Bapikna105Holder();
+			Bapikna105Holder optionalPersonalData = new Bapikna105Holder();
+			Bapikna105Holder optionalPersonalDataNew = new Bapikna105Holder();
+			Bapikna1011Holder personalData = new Bapikna1011Holder();
+			Bapikna1011Holder personalDataNew = new Bapikna1011Holder();
+			Bapireturn1Holder _return = new Bapireturn1Holder();
+
+			Zfi_customers2Proxy.customerGetDetail1(customerNo,
+					distributionChannel, division, salesOrganisation,
+					addressTypeNo, companyData, consumerFlag,
+					optionalCompanyData, optionalPersonalData,
+					optionalPersonalDataNew, personalData, personalDataNew,
+					_return);
+
+			Bapikna106X companyDataX = new Bapikna106X();
+			Bapikna105X optionalCompanyDataX = new Bapikna105X();
+			Bapikna105X optionalPersonalDataX = new Bapikna105X();
+
+			Bapikna1011 bapikna1011 = null;
+			if (personalData.value.getLastname().isEmpty()) {
+				bapikna1011 = personalDataNew.value;
+			} else {
+				bapikna1011 = personalData.value;
+			}
+			
+			bapikna1011.setFirstname("Carlos Arturo");
+			bapikna1011.setLastname("Sarmiento Royero");
+			bapikna1011.setCurrency("MXN");
+			bapikna1011.setStreet("Carrera 55A 163 35Carrera 55A 163 355555");
+			//bapikna1011.setHouseNo("H123456789");
+			//bapikna1011.setBuilding("B123456789");
+			//bapikna1011.setFloor("F123456789");
+			bapikna1011.setTel1Numbr("3003044115");
+			bapikna1011.setEMail("tactusoft@hotmail.com");
+
+			Bapikna1011X personalDataX = new Bapikna1011X();
+			personalDataX.setOnlyChangeComaddress("X");
+			personalDataX.setFirstname("X");
+			personalDataX.setLastname("X");
+			personalDataX.setEMail("X");
+			personalDataX.setStreet("X");
+			//personalDataX.setHouseNo("X");
+			//personalDataX.setBuilding("X");
+			//personalDataX.setFloor("X");
+			personalDataX.setTel1Numbr("X");
+
+			Bapireturn1 result = Zfi_customers2Proxy.customerChangeFromData1(
+					null, null, customerNo, distributionChannel,
+					division, null, null, null, null, bapikna1011,
+					personalDataX, salesOrganisation);
+
+			System.out.println("PRUEBA");
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static void main(String args[]) {
 
 		// CREAR CLIENTES
-		String url = "http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zsd_customer_maintain_all/300/zsd_customer_maintain_all/zsd_customer_maintain_all";
+		String url = "http://ansrvsap2.affinity.net:8001/sap/bc/srt/rfc/sap/z_sd_customer_maintain_all/300/z_sd_customer_maintain_all/z_sd_customer_maintain_all";
 		String username = "TACTUSOFT";
 		String password = "AFFINITY";
-		
+
 		String ambiente = "300";
 		String tipoDocumento = "1";
-		String nroDocumento = "00551166";
+		String nroDocumento = "MX00000121";
 		String tratamiento = "Señor";
-		String nombre = "Carlos Arturo Sarmiento";
-		String direccion = "Carrera 55A 163 35";
-		String telefono = "6501550";
-		String celular = "3003044115";
-		String correoElectronico = "carlossarmientor@gmail.com";
+		String nombres = "Carlos Arturo ";
+		String apellidos = "Sarmiento Royero";
+		String direccion = "PRUEBA1207111";
+		String telefono = "PRUEBA1207111";
+		String codigoPostal = "12345";
+		String celular = "PRUEBA1207111";
+		String correoElectronico = "";
 		String pais = "MX";
 		String ciudad = "Distrito Federal";
 		String region = "DF";
@@ -374,33 +462,37 @@ public class CustomerExecute {
 		String grupoCliente = "01";
 		String condicionPago = "Z001";
 		String cuenta = "1305050000";
-		String grupoPrecios = "01"; 
-		String esquemaClientes = "1"; 
+		String grupoPrecios = "01";
+		String esquemaClientes = "1";
 		String estadoCliente = "1";
 		String moneda = "MXN";
-		
-		String code = CustomerExecute.excecute(url, username, password, ambiente,
-				tipoDocumento, nroDocumento, tratamiento, nombre, direccion,
-				telefono, celular, correoElectronico, pais, ciudad, region,
-				grupoCuenta, orgVentas, canalDistribucion, division, sociedad,
-				oficinaVentas, grupoCliente, condicionPago, cuenta, grupoPrecios,
-				esquemaClientes, estadoCliente, moneda);
-		
-		System.out.println(code);
 
-		
-		/*url = "http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zcustomer2/300/zcustomer2/zcustomer2";
-		List<WSBean> result = findByDoc(url, username, password, "4000",
-				"A0224466", 0);
-		for (WSBean row : result) {
-			System.out.println(row.getCode());
-		}*/
+		/*
+		 * String code = CustomerExecute.excecute(url, username, password,
+		 * ambiente, tipoDocumento, nroDocumento, tratamiento, nombres,
+		 * apellidos, direccion, codigoPostal, telefono, celular,
+		 * correoElectronico, pais, ciudad, region, grupoCuenta, orgVentas,
+		 * canalDistribucion, division, sociedad, oficinaVentas, grupoCliente,
+		 * condicionPago, cuenta, grupoPrecios, esquemaClientes, estadoCliente,
+		 * moneda);
+		 * 
+		 * System.out.println(code);
+		 */
 
-		//url = "http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zcustomer2/300/zcustomer2/zcustomer2";
-		//0000765491
-		//Bapicustomer04 detail = getDetail(url, username, password, "1000",
-		//		"0000765439");
-		//System.out.println("PRUEBA");
+		/*
+		 * url =
+		 * "http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zcustomer2/300/zcustomer2/zcustomer2"
+		 * ; List<WSBean> result = findByDoc(url, username, password, "4000",
+		 * "A0224466", 0); for (WSBean row : result) {
+		 * System.out.println(row.getCode()); }
+		 */
+
+		url = "http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zcustomer2/300/zcustomer2/zcustomer2";
+		Bapicustomer04 detail = getDetail(url, username, password, "3000",
+				"0000765694");
+		getDetail2(url, username, password, canalDistribucion, division,
+				orgVentas, "0000765693");
+		System.out.println("PRUEBA");
 
 		/*
 		 * BapicustomerAddressdata[] add = CustomerExecute
