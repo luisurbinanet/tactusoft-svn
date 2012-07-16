@@ -7,8 +7,14 @@
 
 package com.tactusoft.webservice.client.objects;
 
+@SuppressWarnings({ "rawtypes", "unused" })
 public class Bapikna1011X  implements java.io.Serializable {
-    private java.lang.String titleP;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private java.lang.String titleP;
 
     private java.lang.String firstname;
 
