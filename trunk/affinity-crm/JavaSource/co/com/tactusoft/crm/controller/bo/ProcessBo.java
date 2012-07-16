@@ -370,20 +370,19 @@ public class ProcessBo implements Serializable {
 	}
 
 	public List<Candidate> getScheduleAppointmentForDoctor(CrmBranch branch,
-			CrmDoctor doctor, int numApp, CrmProcedureDetail procedureDetail) {
+			CrmDoctor doctor, int numApp, CrmProcedureDetail procedureDetail, Date selectedDate) {
 
 		List<Candidate> result = new ArrayList<Candidate>();
 		int id = 1;
 
 		BigDecimal idBranch = branch.getId();
-		String initDate = FacesUtil.formatDate(new Date(), "yyyy-MM-dd");
+		String initDate = FacesUtil.formatDate(selectedDate, "yyyy-MM-dd");
 
 		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(new Date());
+		calendar.setTime(selectedDate);
 		calendar.add(Calendar.DATE, 60); // 60 Días
 		String endDate = FacesUtil.formatDate(calendar.getTime(), "yyyy-MM-dd");
 
-		// String hourString = FacesUtil.formatDate(new Date(), "HH:mm");
 		List<CrmDoctorSchedule> listDoctorSchedule = dao
 				.find("from CrmDoctorSchedule o where o.crmDoctor.id = "
 						+ doctor.getId() + " and o.crmBranch.id = " + idBranch
@@ -407,7 +406,7 @@ public class ProcessBo implements Serializable {
 			List<CrmHoliday> listHoliday = this.getListHoliday(idBranch);
 
 			// Revisar Día a Día disponibilidad de Citas
-			Date currentDate = new Date();
+			Date currentDate = selectedDate;
 			calendar = Calendar.getInstance();
 			calendar.setTime(currentDate);
 			calendar.add(Calendar.DATE, -1);

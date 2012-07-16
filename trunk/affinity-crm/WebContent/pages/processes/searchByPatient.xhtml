@@ -141,6 +141,9 @@
 						<p:commandButton value="#{msg['btn_cancel_appointment']}"
 							icon="ui-icon-closethick" onclick="cancelDlg.show()"
 							disabled="#{searchByPatientBacking.selectedAppointment.state eq 1?false:true}" />
+						<p:commandButton value="#{msg['btn_check_appointment']}"
+							icon="ui-icon-check" onclick="checkedDlg.show()"
+							disabled="#{searchByPatientBacking.selectedAppointment.state eq 1?false:true}" />
 					</f:facet>
 
 				</p:dataTable>
@@ -236,6 +239,19 @@
 								onclick="cancelDlg.hide()" type="button" />
 						</f:facet>
 					</h:panelGrid>
+				</p:confirmDialog>
+
+				<p:confirmDialog id="checkedDialog" message="#{msg['glb_question']}"
+					header="#{msg['title_app']}" severity="alert"
+					widgetVar="checkedDlg">
+
+					<p:commandButton value="#{msg['glb_state_yes']}"
+						update=":form:selectedTable :form:growl"
+						oncomplete="checkedDlg.hide()"
+						actionListener="#{searchByPatientBacking.checkAppointmentAction}" />
+					<p:commandButton value="#{msg['glb_state_no']}"
+						onclick="checkedDlg.hide()" type="button" />
+
 				</p:confirmDialog>
 
 				<p:dialog header="#{msg['app_obs']}" widgetVar="obsDialog"
