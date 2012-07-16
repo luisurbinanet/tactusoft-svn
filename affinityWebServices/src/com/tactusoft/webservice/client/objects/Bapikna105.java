@@ -7,6 +7,7 @@
 
 package com.tactusoft.webservice.client.objects;
 
+@SuppressWarnings({ "rawtypes", "unused" })
 public class Bapikna105  implements java.io.Serializable {
     /**
 	 * 
