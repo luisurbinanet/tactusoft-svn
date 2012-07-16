@@ -140,12 +140,13 @@
 					columnClasses="width25per,width75per">
 
 					<h:outputLabel id="lblCurrentDate" value="#{msg['app_date']}"
-						rendered="#{appointmentEditBacking.renderedForDate}" />
+						rendered="#{appointmentEditBacking.renderedForDate or appointmentEditBacking.renderedForDoctor}" />
 					<p:calendar value="#{appointmentEditBacking.currentDate}"
 						id="calCurrentDate" showOn="button" navigator="true"
 						pattern="dd/MM/yyyy" readonlyInput="true"
 						mindate="#{appointmentEditBacking.currentDate}"
-						rendered="#{appointmentEditBacking.renderedForDate}" locale="es">
+						rendered="#{appointmentEditBacking.renderedForDate or appointmentEditBacking.renderedForDoctor}"
+						locale="es">
 						<p:ajax event="dateSelect"
 							listener="#{appointmentEditBacking.handleDateSelect}"
 							update="selHours" />

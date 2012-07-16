@@ -201,5 +201,19 @@ public class SearchByPatientBacking extends BaseBacking {
 		String message = FacesUtil.getMessage("app_msg_cancel", code);
 		FacesUtil.addInfo(message);
 	}
+	
+	public void checkAppointmentAction(ActionEvent actionEvent) {
+		String code = "";
+		selectedAppointment.setIdUserChecked(FacesUtil.getCurrentIdUsuario());
+		selectedAppointment.setDateChecked(new Date());
+		selectedAppointment.setState(Constant.APP_STATE_CHECKED);
+		processService.saveAppointment(selectedAppointment);
+		code = selectedAppointment.getCode();
+
+		searchAppoinmnetConfirmedAction();
+
+		String message = FacesUtil.getMessage("app_msg_check", code);
+		FacesUtil.addInfo(message);
+	}
 
 }

@@ -482,7 +482,7 @@ public class AppointmentEditBacking extends BaseBacking {
 			CrmDoctor doctor = mapDoctor.get(selected.getCrmDoctor().getId());
 			listAppointment = processService.getScheduleAppointmentForDoctor(
 					mapBranch.get(idBranch), doctor, this.appointmentsNumber,
-					procedureDetail);
+					procedureDetail, this.currentDate);
 		}
 
 		modelAppointment = new CandidateDataModel(listAppointment);
