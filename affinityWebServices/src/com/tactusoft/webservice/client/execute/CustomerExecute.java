@@ -9,6 +9,7 @@ import javax.xml.rpc.holders.StringHolder;
 
 import com.tactusoft.webservice.client.beans.WSBean;
 import com.tactusoft.webservice.client.beans.WSBeanComparator;
+import com.tactusoft.webservice.client.beans.WSBeanPatient;
 import com.tactusoft.webservice.client.holders.Bapicustomer04Holder;
 import com.tactusoft.webservice.client.holders.Bapicustomer05Holder;
 import com.tactusoft.webservice.client.holders.BapicustomerKna1Holder;
@@ -59,10 +60,10 @@ public class CustomerExecute {
 
 	public static String excecute(String url, String user, String password,
 			String ambiente, String tipoDocumento, String nroDocumento,
-			String tratamiento, String nombres, String direccion,
-			String codigoPostal, String telefono, String celular,
-			String correoElectronico, String pais, String ciudad,
-			String region, String grupoCuenta, String orgVentas,
+			String tratamiento, String apellidos, String nombres,
+			String direccion, String codigoPostal, String telefono,
+			String celular, String correoElectronico, String pais,
+			String ciudad, String region, String grupoCuenta, String orgVentas,
 			String canalDistribucion, String division, String sociedad,
 			String oficinaVentas, String grupoCliente, String condicionPago,
 			String cuenta, String grupoPrecios, String esquemaClientes,
@@ -106,10 +107,22 @@ public class CustomerExecute {
 		StringHolder zeKunnr = new StringHolder();
 		Kna1Holder zoKna1 = new Kna1Holder();
 
+		String apellidos17 = apellidos;
+		if (apellidos17.length() > 35) {
+			apellidos17 = apellidos17.substring(0, 17);
+		}
+
+		String nombres17 = nombres;
+		if (nombres17.length() > 35) {
+			nombres17 = nombres17.substring(0, 17);
+		}
+
+		String names = apellidos17 + " " + nombres17;
+
 		Kna1 ziKna1 = new Kna1();
 		ziKna1.setMandt(ambiente);
 		ziKna1.setAnred(tratamiento);
-		ziKna1.setName1(nombres);
+		ziKna1.setName1(names);
 		ziKna1.setSortl(nroDocumento);
 		ziKna1.setKtokd(grupoCuenta);
 		ziKna1.setLand1(pais);
@@ -163,7 +176,7 @@ public class CustomerExecute {
 		fknviArray[0] = fknvi;
 		TableOfFknviHolder ztXknvi = new TableOfFknviHolder(fknviArray);
 
-		// ziMaintainAddressByKna1 = "X";
+		ziMaintainAddressByKna1 = "X";
 
 		ZSD_CUSTOMER_MAINTAIN_ALLProxy execute = new ZSD_CUSTOMER_MAINTAIN_ALLProxy(
 				url, user, password);
@@ -187,10 +200,10 @@ public class CustomerExecute {
 	}
 
 	public static String update(String customerNo, String url, String user,
-			String password, String tratamiento, String nombres,
-			String direccion, String codigoPostal, String telefono,
-			String celular, String correoElectronico, String pais,
-			String ciudad, String region, String grupoCuenta, String orgVentas,
+			String password, String tratamiento, String apellidos,
+			String nombres, String direccion, String codigoPostal,
+			String telefono, String celular, String correoElectronico,
+			String pais, String ciudad, String region, String orgVentas,
 			String canalDistribucion, String division, String moneda) {
 
 		Bapireturn1 result = new Bapireturn1();
@@ -221,9 +234,22 @@ public class CustomerExecute {
 				bapikna1011 = personalData.value;
 			}
 
+			String apellidos17 = apellidos;
+			if (apellidos17.length() > 35) {
+				apellidos17 = apellidos17.substring(0, 17);
+			}
+
+			String nombres17 = nombres;
+			if (nombres17.length() > 35) {
+				nombres17 = nombres17.substring(0, 17);
+			}
+
 			bapikna1011.setCurrency(moneda);
 
-			bapikna1011.setFirstname(nombres);
+			bapikna1011.setTitleP(tratamiento);
+			bapikna1011.setOnlyChangeComaddress("X");
+			bapikna1011.setLastname(apellidos17);
+			bapikna1011.setFirstname(nombres17);
 			bapikna1011.setStreet(direccion);
 			bapikna1011.setPostlCod1(codigoPostal);
 			bapikna1011.setTel1Numbr(telefono);
@@ -233,6 +259,8 @@ public class CustomerExecute {
 			bapikna1011.setEMail(correoElectronico);
 
 			Bapikna1011X personalDataX = new Bapikna1011X();
+			personalDataX.setTitleP("X");
+			personalDataX.setLastname("X");
 			personalDataX.setFirstname("X");
 			personalDataX.setStreet("X");
 			personalDataX.setPostlCod1("X");
@@ -242,9 +270,9 @@ public class CustomerExecute {
 			personalDataX.setCity("X");
 			personalDataX.setEMail("X");
 
-			result = Zfi_customers2Proxy.customerChangeFromData1(null, null,
-					customerNo, canalDistribucion, division, null, null, null,
-					null, bapikna1011, personalDataX, orgVentas);
+			result = Zfi_customers2Proxy.customerChangeFromData1(null,
+					null, customerNo, canalDistribucion, division, null,
+					null, null, null, bapikna1011, personalDataX, orgVentas);
 
 		} catch (RemoteException e) {
 			e.printStackTrace();
@@ -272,12 +300,11 @@ public class CustomerExecute {
 		TableOfBapikna110Holder seloptTab = new TableOfBapikna110Holder(
 				arrayBapikna110);
 
-		Bapireturn1 bapireturn1 = null;
 		try {
-			bapireturn1 = zBAPI_CUSTOMER_FINDProxy.customerFind(maxCnt, plHold,
-					resultTab, seloptTab);
+			zBAPI_CUSTOMER_FINDProxy.customerFind(maxCnt, plHold, resultTab,
+					seloptTab);
 
-			if (!bapireturn1.getType().equals("S")) {
+			if (resultTab.value[0].getCustomer().isEmpty()) {
 				return null;
 			} else {
 				return resultTab.value;
@@ -333,7 +360,7 @@ public class CustomerExecute {
 			String password, String society, String doc, int maxCnt) {
 		List<WSBean> result = new ArrayList<WSBean>();
 
-		Bapikna111[] list = find(url, user, password, "SORTL", doc, maxCnt);
+		Bapikna111[] list = find(url, user, password, "STCD1", doc, maxCnt);
 		if (list != null && !list[0].getType().equals("E")) {
 			Bapikna111 row = list[0];
 			Bapicustomer04 bapicustomer04 = getDetail(url, user, password,
@@ -417,5 +444,64 @@ public class CustomerExecute {
 		} else {
 			return customerAddress.value;
 		}
+	}
+
+	public static WSBeanPatient getDetailcomplete(String url, String user,
+			String password, String customerNo, String orgVentas,
+			String canalDistribucion, String division, String moneda) {
+
+		WSBeanPatient result = null;
+		Zfi_customers2Proxy Zfi_customers2Proxy = new Zfi_customers2Proxy(url,
+				user, password);
+
+		try {
+			Bapikna109Holder addressTypeNo = new Bapikna109Holder();
+			Bapikna106Holder companyData = new Bapikna106Holder();
+			StringHolder consumerFlag = new StringHolder();
+			Bapikna105Holder optionalCompanyData = new Bapikna105Holder();
+			Bapikna105Holder optionalPersonalData = new Bapikna105Holder();
+			Bapikna105Holder optionalPersonalDataNew = new Bapikna105Holder();
+			Bapikna1011Holder personalData = new Bapikna1011Holder();
+			Bapikna1011Holder personalDataNew = new Bapikna1011Holder();
+			Bapireturn1Holder _return = new Bapireturn1Holder();
+
+			Zfi_customers2Proxy.customerGetDetail1(customerNo,
+					canalDistribucion, division, orgVentas, addressTypeNo,
+					companyData, consumerFlag, optionalCompanyData,
+					optionalPersonalData, optionalPersonalDataNew,
+					personalData, personalDataNew, _return);
+
+			if (!_return.value.getType().equals("E")) {
+				Bapikna1011 bapikna1011 = null;
+				if (personalData.value.getLastname().isEmpty()) {
+					bapikna1011 = personalDataNew.value;
+				} else {
+					bapikna1011 = personalData.value;
+				}
+
+				result = new WSBeanPatient();
+				result.setCodeSap(customerNo);
+				result.setLastname(bapikna1011.getLastname());
+				result.setFirstname(bapikna1011.getFirstname());
+				result.setCountry(bapikna1011.getCountry());
+				result.setRegion(bapikna1011.getRegion());
+				result.setCity(bapikna1011.getCity());
+				result.setAddress(bapikna1011.getStreet());
+				result.setZipCode(bapikna1011.getPostlCod1());
+				result.setPhoneNumber(bapikna1011.getTel1Numbr());
+				result.setEmail(bapikna1011.getEMail());
+
+				if (bapikna1011.getTitleP().equals("Señor")) {
+					result.setGender("M");
+				} else {
+					result.setGender("W");
+				}
+			}
+
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+
+		return result;
 	}
 }
