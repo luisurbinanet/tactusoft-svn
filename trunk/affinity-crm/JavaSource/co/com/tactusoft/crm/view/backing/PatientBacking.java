@@ -432,8 +432,12 @@ public class PatientBacking extends BaseBacking {
 					direccion = direccion.substring(0, 34);
 				}
 
+				if (FacesUtil.isEmptyOrBlank(selected.getZipCode())) {
+					selected.setZipCode("00000");
+				}
+
 				String codeSap = null;
-				if (!exitsSAP) {
+				if (!exitsSAP || newRecord) {
 					codeSap = CustomerExecute.excecute(
 							sap.getUrlCustomerMaintainAll(), sap.getUsername(),
 							sap.getPassword(), sap.getEnvironment(), "13",
@@ -494,7 +498,6 @@ public class PatientBacking extends BaseBacking {
 						selected.setDateCreate(new Date());
 						processService.savePatient(selected);
 
-						disabledSaveButton = true;
 						if (newRecord) {
 							message = FacesUtil.getMessage("pat_msg_ok",
 									codeSap);
@@ -503,6 +506,10 @@ public class PatientBacking extends BaseBacking {
 									codeSap);
 						}
 						FacesUtil.addInfo(message);
+
+						disabledSaveButton = true;
+						newRecord = false;
+						exitsSAP = true;
 					} else {
 						message = FacesUtil.getMessage("msg_record_config");
 						FacesUtil.addError(message);
