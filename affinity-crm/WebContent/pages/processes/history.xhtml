@@ -95,10 +95,6 @@
 								</h:outputLabel>
 							</p:column>
 
-							<p:column headerText="#{msg['app_procedure_type']}">
-								<h:outputLabel value="#{rec.crmProcedureDetail.name}" />
-							</p:column>
-
 							<p:column headerText="#{msg['app_branch']}">
 								<h:outputLabel value="#{rec.crmBranch.name}" />
 							</p:column>
@@ -124,7 +120,7 @@
 								<p:calendar value="#{patientBacking.selected.bornDate}"
 									label="#{msg['pat_born_date']}" readonlyInput="true"
 									pattern="dd/MM/yyyy" showOn="button" navigator="true"
-									locale="es" required="true" yearRange="-100:+0"
+									locale="es" yearRange="-100:+0"
 									readonly="#{historyBacking.readOnlySelectedHistoryHistory}">
 									<p:ajax event="dateSelect"
 										listener="#{historyBacking.handleBornDateSelect}"
@@ -134,34 +130,25 @@
 								<h:outputLabel value="#{msg['pat_age']}" />
 								<p:inputText id="txtAge"
 									style="width:400px;background-color:#FFFF80;font-weight:bold;"
-									readonly="true"
-									value="#{historyBacking.age} #{msg['glb_age']}" />
+									readonly="true" value="#{historyBacking.age} #{msg['glb_age']}" />
 
 								<h:outputLabel value="#{msg['pat_occupation']}" />
-								<p:selectOneMenu
-									value="#{historyBacking.selected.crmOccupation.id}"
-									style="width:400px" label="#{msg['pat_occupation']}"
-									disabled="#{historyBacking.readOnlySelectedHistoryHistory}">
-									<f:selectItems value="#{historyBacking.listOccupation}" />
-								</p:selectOneMenu>
+								<p:inputText
+									style="width:400px;background-color:#FFFF80;font-weight:bold;"
+									readonly="true"
+									value="#{historyBacking.selectedPatient.crmOccupation.name}" />
 
 								<h:outputLabel value="#{msg['pat_neighborhood']}" />
-								<p:inputText value="#{historyBacking.selected.neighborhood}"
-									style="width:400px" label="#{msg['pat_neighborhood']}"
-									readonly="#{historyBacking.readOnlySelectedHistoryHistory}"
-									maxlength="45" />
+								<p:inputText
+									style="width:400px;background-color:#FFFF80;font-weight:bold;"
+									readonly="true"
+									value="#{historyBacking.selectedPatient.neighborhood}" />
 
 								<h:outputLabel value="#{msg['pat_type_housing']}" />
-								<p:selectOneMenu value="#{historyBacking.selected.typeHousing}"
-									style="width:400px" label="#{msg['pat_type_housing']}"
-									disabled="#{historyBacking.readOnlySelectedHistoryHistory}">
-									<f:selectItem itemLabel="#{msg['glb_default_value']}"
-										itemValue="-1" />
-									<f:selectItem itemLabel="#{msg['pat_type_housing_u']}"
-										itemValue="U" />
-									<f:selectItem itemLabel="#{msg['pat_type_housing_r']}"
-										itemValue="R" />
-								</p:selectOneMenu>
+								<p:inputText
+									style="width:400px;background-color:#FFFF80;font-weight:bold;"
+									readonly="true"
+									value="#{historyBacking.selectedPatient.typeHousing eq 'U'?msg['pat_type_housing_u']:msg['pat_type_housing_r']}" />
 
 							</h:panelGrid>
 						</p:fieldset>
@@ -890,14 +877,14 @@
 							<p:spacer height="10" />
 
 							<p:commandButton value="#{msg['btn_search']}"
-								icon="ui-icon-search"
+								icon="ui-icon-search" 
 								update="pnlTable2 recordTable2 btnAddPatient"
 								action="#{historyBacking.searchPatientAction}" />
 							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
 								icon="ui-icon-plusthick" update="pnlPatient toolBar tabView"
 								actionListener="#{historyBacking.searchAction}"
 								disabled="#{historyBacking.disabledAddPatient}"
-								oncomplete="dlg2.hide()"/>
+								oncomplete="dlg2.hide()" />
 						</f:facet>
 					</h:panelGrid>
 
