@@ -36,7 +36,7 @@ import com.tactusoft.webservice.client.beans.WSBean;
 @Scope("session")
 public class AppointmentBacking extends BaseBacking {
 
-	private static final long serialVersionUID = -7936516411298237407L;
+	private static final long serialVersionUID = 1L;
 
 	private CrmAppointment selected;
 
