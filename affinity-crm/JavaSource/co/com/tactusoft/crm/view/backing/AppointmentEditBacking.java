@@ -560,7 +560,7 @@ public class AppointmentEditBacking extends BaseBacking {
 
 				SearchByPatientBacking searchByPatientBacking = FacesUtil
 						.findBean("searchByPatientBacking");
-				searchByPatientBacking.searchAppoinmnetConfirmedAction();
+				searchByPatientBacking.searchAppoinmentAction();
 
 				infoMessage = FacesUtil.getMessage("app_msg_update_ok",
 						crmAppointment.getCode());

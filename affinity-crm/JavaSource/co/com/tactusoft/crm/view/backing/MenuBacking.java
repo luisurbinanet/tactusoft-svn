@@ -1,8 +1,11 @@
 package co.com.tactusoft.crm.view.backing;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 
 import org.primefaces.component.menuitem.MenuItem;
@@ -38,8 +41,14 @@ public class MenuBacking implements Serializable {
 						MenuItem menuItem = new MenuItem();
 						menuItem.setValue(children.getName());
 						menuItem.setIcon(children.getIcon());
-						menuItem.setUrl(children.getPage());
-						menuItem.setOnstart("refreshBacking();");
+						menuItem.getAttributes()
+								.put("page", children.getPage());
+						menuItem.setAjax(true);
+						menuItem.addActionListener(FacesUtil
+								.createMethodActionListener(
+										"#{menuBacking.actionPage}", Void.TYPE,
+										new Class[] { ActionEvent.class }));
+						// menuItem.setUrl(children.getPage());
 						submenu.getChildren().add(menuItem);
 					}
 				}
@@ -66,13 +75,35 @@ public class MenuBacking implements Serializable {
 		this.model = model;
 	}
 
-	public void refreshBacking() {
+	private void refreshBackings() {
+		PatientBacking patientBacking = FacesUtil.findBean("patientBacking");
+		patientBacking.newAction(null);
+		
 		HistoryBacking historyBacking = FacesUtil.findBean("historyBacking");
 		historyBacking.newAction(null);
 
 		AppointmentBacking appointmentBacking = FacesUtil
 				.findBean("appointmentBacking");
 		appointmentBacking.newAction(null);
+		
+		SearchByPatientBacking searchByPatientBacking = FacesUtil
+				.findBean("searchByPatientBacking");
+		searchByPatientBacking.newAction(null);
+	}
+
+	public void actionPage(ActionEvent event) {
+		refreshBackings();
+
+		MenuItem menuItem = (MenuItem) event.getSource();
+		String page = (String) menuItem.getAttributes().get("page");
+		if (page != null) {
+			try {
+				FacesContext.getCurrentInstance().getExternalContext()
+						.redirect("../.." + page);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public String actionPage() {

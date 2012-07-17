@@ -24,10 +24,11 @@ import co.com.tactusoft.crm.util.SAPEnvironment;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 
 import com.tactusoft.webservice.client.beans.WSBean;
+import com.tactusoft.webservice.client.beans.WSBeanPatient;
 import com.tactusoft.webservice.client.execute.CustomerExecute;
 
 @Named
-@Scope("view")
+@Scope("session")
 public class PatientBacking extends BaseBacking {
 
 	private static final long serialVersionUID = 1L;
@@ -54,8 +55,12 @@ public class PatientBacking extends BaseBacking {
 	private List<String> selectedSendOptions;
 
 	private boolean disabledSaveButton;
-	private boolean exitSAP;
+	private boolean exitsSAP;
 	private boolean automatic;
+
+	private String docSearch;
+	private BigDecimal idCountrySearch;
+	private boolean newRecord;
 
 	public PatientBacking() {
 		newAction(null);
@@ -188,12 +193,12 @@ public class PatientBacking extends BaseBacking {
 		this.disabledSaveButton = disabledSaveButton;
 	}
 
-	public boolean isExitSAP() {
-		return exitSAP;
+	public boolean isExitsSAP() {
+		return exitsSAP;
 	}
 
-	public void setExitSAP(boolean exitSAP) {
-		this.exitSAP = exitSAP;
+	public void setExitsSAP(boolean exitsSAP) {
+		this.exitsSAP = exitsSAP;
 	}
 
 	public boolean isAutomatic() {
@@ -202,6 +207,46 @@ public class PatientBacking extends BaseBacking {
 
 	public void setAutomatic(boolean automatic) {
 		this.automatic = automatic;
+	}
+
+	public String getDocSearch() {
+		return docSearch;
+	}
+
+	public void setDocSearch(String docSearch) {
+		this.docSearch = docSearch;
+	}
+
+	public BigDecimal getIdCountrySearch() {
+		return idCountrySearch;
+	}
+
+	public void setIdCountrySearch(BigDecimal idCountrySearch) {
+		this.idCountrySearch = idCountrySearch;
+	}
+
+	public Map<BigDecimal, CrmCountry> getMapCountry() {
+		return mapCountry;
+	}
+
+	public void setMapCountry(Map<BigDecimal, CrmCountry> mapCountry) {
+		this.mapCountry = mapCountry;
+	}
+
+	public Map<BigDecimal, CrmRegion> getMapRegion() {
+		return mapRegion;
+	}
+
+	public void setMapRegion(Map<BigDecimal, CrmRegion> mapRegion) {
+		this.mapRegion = mapRegion;
+	}
+
+	public Map<BigDecimal, CrmCity> getMapCity() {
+		return mapCity;
+	}
+
+	public void setMapCity(Map<BigDecimal, CrmCity> mapCity) {
+		this.mapCity = mapCity;
 	}
 
 	public void handleCountryChange() {
@@ -255,7 +300,9 @@ public class PatientBacking extends BaseBacking {
 		selected.setGender("-1");
 		selected.setCycle(false);
 		disabledSaveButton = false;
-		exitSAP = false;
+		exitsSAP = false;
+		newRecord = true;
+		docSearch = null;
 	}
 
 	private void searchIdCountry(String countryCode) {
@@ -294,50 +341,67 @@ public class PatientBacking extends BaseBacking {
 	}
 
 	public void searchAction() {
-		String doc = selected.getDoc();
-		selected = processService.getPatientByDoc(doc);
-		exitSAP = false;
+		String message = null;
+		selected = processService.getPatientByDoc(this.docSearch);
+		exitsSAP = false;
 		if (selected.getId() == null) {
-			selected.setDoc(doc);
 			SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
 			CrmProfile profile = FacesUtil.getCurrentUser().getCrmProfile();
 
-			List<WSBean> customer = CustomerExecute.findByDoc(
+			List<WSBean> listPatient = CustomerExecute.findByDoc(
 					sap.getUrlCustomer2(), sap.getUsername(),
-					sap.getPassword(), profile.getSociety(), selected.getDoc(),
-					0);
+					sap.getPassword(), profile.getSociety(), this.docSearch);
 
-			String message = null;
-			if (customer.size() == 0) {
+			if (listPatient.size() > 0) {
+				CrmCountry crmCountry = mapCountry.get(this.idCountrySearch);
+				String codeSap = listPatient.get(0).getCode();
+
+				WSBeanPatient customer = CustomerExecute.getDetailcomplete(
+						sap.getUrlCustomer2(), sap.getUsername(),
+						sap.getPassword(), codeSap, profile.getSalesOrg(),
+						profile.getDistrChan(), profile.getDivision(),
+						crmCountry.getCurrencyIso());
+
+				if (customer == null) {
+					newRecord = true;
+					message = FacesUtil.getMessage("pat_msg_no_exists");
+					FacesUtil.addWarn(message);
+				} else {
+					exitsSAP = true;
+					selected.setDoc(this.docSearch);
+					selected.setCodeSap(customer.getCodeSap());
+					selected.setFirstnames(customer.getFirstname());
+					selected.setSurnames(customer.getLastname());
+					selected.setAddress(customer.getAddress());
+					selected.setPhoneNumber(customer.getPhoneNumber());
+					selected.setEmail(customer.getEmail());
+					selected.setZipCode(customer.getZipCode());
+
+					try {
+						searchIdCountry(customer.getCountry());
+						searchIdRegion(customer.getRegion());
+						searchIdCity(customer.getCity());
+					} catch (Exception ex) {
+						idCountry = null;
+						idRegion = null;
+						idCity = null;
+					}
+
+					newRecord = false;
+					message = FacesUtil.getMessage("pat_msg_exists_sap");
+					FacesUtil.addWarn(message);
+				}
+			} else {
+				newRecord = true;
 				message = FacesUtil.getMessage("pat_msg_no_exists");
 				FacesUtil.addWarn(message);
-			} else {
-				exitSAP = true;
-				WSBean bean = customer.get(0);
-				selected.setCodeSap(bean.getCode());
-				selected.setFirstnames(bean.getNames());
-				selected.setAddress(bean.getAddress());
-				selected.setPhoneNumber(bean.getTelephone1());
-
-				try {
-					searchIdCountry(bean.getCountry());
-					searchIdRegion(bean.getRegion());
-					searchIdCity(bean.getCity());
-				} catch (Exception ex) {
-					idCountry = null;
-					idRegion = null;
-					idCity = null;
-				}
-
-				message = FacesUtil.getMessage("pat_msg_exists_sap");
-				FacesUtil.addWarn(message);
 			}
-			disabledSaveButton = false;
 		} else {
+			exitsSAP = true;
+			newRecord = false;
 			searchIdCountry(selected.getCountry());
 			searchIdRegion(selected.getRegion());
-			idCity = new BigDecimal(selected.getCity());
-			disabledSaveButton = true;
+			searchIdCity(selected.getCity());
 		}
 	}
 
@@ -346,18 +410,17 @@ public class PatientBacking extends BaseBacking {
 		try {
 			SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
 			CrmProfile profile = FacesUtil.getCurrentUser().getCrmProfile();
-
 			List<WSBean> customer = new LinkedList<WSBean>();
-			if (exitSAP || automatic) {
-				customer = CustomerExecute.findByDoc(sap.getUrlCustomer2(),
-						sap.getUsername(), sap.getPassword(),
-						profile.getSociety(), selected.getDoc(), 0);
+
+			if (newRecord) {
+				if (!exitsSAP || !automatic) {
+					customer = CustomerExecute.findByDoc(sap.getUrlCustomer2(),
+							sap.getUsername(), sap.getPassword(),
+							profile.getSociety(), selected.getDoc(), 0);
+				}
 			}
 
-			if (exitSAP || automatic || customer.size() == 0) {
-				String names = null;
-				names = selected.getSurnames() + selected.getFirstnames();
-
+			if (exitsSAP || automatic || customer.size() == 0) {
 				String tratamiento = "Señor";
 				if (selected.getGender().equals("W")) {
 					tratamiento = "Señora";
@@ -367,7 +430,7 @@ public class PatientBacking extends BaseBacking {
 				CrmRegion crmRegion = mapRegion.get(idRegion);
 				CrmCity crmCity = mapCity.get(idCity);
 
-				if (automatic) {
+				if (automatic && newRecord) {
 					Long autonumeric = processService
 							.getDocAutomatic(crmCountry.getCode());
 					String doc = crmCountry.getCode()
@@ -381,12 +444,14 @@ public class PatientBacking extends BaseBacking {
 				}
 
 				String codeSap = null;
-				if (!exitSAP) {
+				if (!exitsSAP) {
 					codeSap = CustomerExecute.excecute(
 							sap.getUrlCustomerMaintainAll(), sap.getUsername(),
 							sap.getPassword(), sap.getEnvironment(), "13",
-							selected.getDoc(), tratamiento, names, direccion,
-							selected.getZipCode(), selected.getPhoneNumber(),
+							selected.getDoc(), tratamiento,
+							selected.getSurnames(), selected.getFirstnames(),
+							direccion, selected.getZipCode(),
+							selected.getPhoneNumber(),
 							selected.getCellNumber(), selected.getEmail(),
 							crmCountry.getCode(), crmCity.getName(),
 							crmRegion.getCode(), "D001", profile.getSalesOrg(),
@@ -398,38 +463,61 @@ public class PatientBacking extends BaseBacking {
 					codeSap = selected.getCodeSap();
 				}
 
-				if (!FacesUtil.isEmptyOrBlank(codeSap)) {
+				String errorCode = CustomerExecute.update(codeSap,
+						sap.getUrlCustomer2(), sap.getUsername(),
+						sap.getPassword(), tratamiento, selected.getSurnames(),
+						selected.getFirstnames(), direccion,
+						selected.getZipCode(), selected.getPhoneNumber(),
+						selected.getCellNumber(), selected.getEmail(),
+						crmCountry.getCode(), crmCity.getName(),
+						crmRegion.getCode(), profile.getSalesOrg(),
+						profile.getDistrChan(), profile.getDivision(),
+						crmCountry.getCurrencyIso());
 
-					selected.setCodeSap(codeSap);
-					selected.setSalesOrg(profile.getSalesOrg());
-					selected.setCountry(crmCountry.getCode());
-					selected.setRegion(crmRegion.getCode());
-					selected.setCity(crmCity.getCode());
+				if (errorCode.equals("000")) {
+					if (!FacesUtil.isEmptyOrBlank(codeSap)) {
 
-					selected.setSendPhone(false);
-					selected.setSendEmail(false);
-					selected.setSendPostal(false);
-					selected.setSendSms(false);
+						selected.setCodeSap(codeSap);
+						selected.setSalesOrg(profile.getSalesOrg());
+						selected.setCountry(crmCountry.getCode());
+						selected.setRegion(crmRegion.getCode());
+						selected.setCity(crmCity.getCode());
 
-					for (String send : selectedSendOptions) {
-						if (send.equals("1")) {
-							selected.setSendPhone(true);
-						} else if (send.equals("2")) {
-							selected.setSendEmail(true);
-						} else if (send.equals("3")) {
-							selected.setSendPostal(true);
-						} else if (send.equals("4")) {
-							selected.setSendSms(true);
+						selected.setSendPhone(false);
+						selected.setSendEmail(false);
+						selected.setSendPostal(false);
+						selected.setSendSms(false);
+
+						for (String send : selectedSendOptions) {
+							if (send.equals("1")) {
+								selected.setSendPhone(true);
+							} else if (send.equals("2")) {
+								selected.setSendEmail(true);
+							} else if (send.equals("3")) {
+								selected.setSendPostal(true);
+							} else if (send.equals("4")) {
+								selected.setSendSms(true);
+							}
 						}
+
+						selected.setIdUserCreate(FacesUtil
+								.getCurrentIdUsuario());
+						selected.setDateCreate(new Date());
+						processService.savePatient(selected);
+
+						disabledSaveButton = true;
+						if (newRecord) {
+							message = FacesUtil.getMessage("pat_msg_ok",
+									codeSap);
+						} else {
+							message = FacesUtil.getMessage("pat_msg_update_ok",
+									codeSap);
+						}
+						FacesUtil.addInfo(message);
+					} else {
+						message = FacesUtil.getMessage("msg_record_config");
+						FacesUtil.addError(message);
 					}
-
-					selected.setIdUserCreate(FacesUtil.getCurrentIdUsuario());
-					selected.setDateCreate(new Date());
-					processService.savePatient(selected);
-
-					disabledSaveButton = true;
-					message = FacesUtil.getMessage("pat_msg_ok", codeSap);
-					FacesUtil.addInfo(message);
 				} else {
 					message = FacesUtil.getMessage("msg_record_config");
 					FacesUtil.addError(message);
@@ -444,5 +532,20 @@ public class PatientBacking extends BaseBacking {
 			message = FacesUtil.getMessage("pat_msg_error_cnx");
 			FacesUtil.addError(message);
 		}
+	}
+
+	public String goAppointment() {
+		AppointmentBacking appointmentBacking = FacesUtil
+				.findBean("appointmentBacking");
+		appointmentBacking.setSelectedPatient(selected);
+		return "/pages/processes/appointment.jsf?faces-redirect=true";
+	}
+
+	public String goSearchByPatient() {
+		SearchByPatientBacking searchByPatientBacking = FacesUtil
+				.findBean("searchByPatientBacking");
+		searchByPatientBacking.setSelectedPatient(selected);
+		searchByPatientBacking.searchAppoinmentAction();
+		return "/pages/processes/searchByPatient.jsf?faces-redirect=true";
 	}
 }
