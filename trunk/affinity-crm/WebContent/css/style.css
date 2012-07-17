@@ -131,6 +131,11 @@ input,select,textarea {
 .rco-button-wrapper input {
 	float: none !important;
 }
+
+.width250per {
+	width: 250px;
+}
+
 /* end Button */
 .width15per {
 	padding: 4px;

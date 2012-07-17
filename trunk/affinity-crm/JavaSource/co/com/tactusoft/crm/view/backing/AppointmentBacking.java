@@ -33,7 +33,7 @@ import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 import com.tactusoft.webservice.client.beans.WSBean;
 
 @Named
-@Scope("view")
+@Scope("session")
 public class AppointmentBacking extends BaseBacking {
 
 	private static final long serialVersionUID = -7936516411298237407L;

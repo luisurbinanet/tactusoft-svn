@@ -139,7 +139,7 @@ public class SearchByPatientBacking extends BaseBacking {
 		listStates.add(new SelectItem(Constant.APP_STATE_NOATTENDED, message));
 	}
 
-	public void searchAppoinmnetConfirmedAction() {
+	public void searchAppoinmentAction() {
 		if (selectedPatient.getCodeSap() == null) {
 			String message = FacesUtil.getMessage("sal_msg_error_pat");
 			FacesUtil.addError(message);
@@ -196,7 +196,7 @@ public class SearchByPatientBacking extends BaseBacking {
 		processService.saveAppointment(selectedAppointment);
 		code = selectedAppointment.getCode();
 
-		searchAppoinmnetConfirmedAction();
+		searchAppoinmentAction();
 
 		String message = FacesUtil.getMessage("app_msg_cancel", code);
 		FacesUtil.addInfo(message);
@@ -210,7 +210,7 @@ public class SearchByPatientBacking extends BaseBacking {
 		processService.saveAppointment(selectedAppointment);
 		code = selectedAppointment.getCode();
 
-		searchAppoinmnetConfirmedAction();
+		searchAppoinmentAction();
 
 		String message = FacesUtil.getMessage("app_msg_check", code);
 		FacesUtil.addInfo(message);
