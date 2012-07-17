@@ -38,17 +38,21 @@
 
 				<h:panelGrid id="pnlDetail" columns="4" cellpadding="4"
 					style="margin:0 auto;" width="100%">
-
-					<h:outputLabel value="#{msg['pat_sap_code']}" style="width:40%" />
+					<h:outputLabel value="#{msg['pat_sap_code']}"
+						rendered="#{appointmentPatientBacking.selectedPatient eq null?false:true}" />
 					<p:inputText
 						value="#{appointmentPatientBacking.selectedPatient.codeSap}"
-						style="width:350px" readonly="true" />
+						style="width:350px;background-color:#FFFF80;font-weight:bold;"
+						readonly="true"
+						rendered="#{appointmentPatientBacking.selectedPatient eq null?false:true}" />
 
-					<h:outputLabel value="#{msg['pat_names']}" style="width:40%" />
+					<h:outputLabel value="#{msg['pat_names']}"
+						rendered="#{appointmentPatientBacking.selectedPatient eq null?false:true}" />
 					<p:inputText
 						value="#{appointmentPatientBacking.selectedPatient.names}"
-						style="width:350px" readonly="true" />
-
+						style="width:350px;background-color:#FFFF80;font-weight:bold;"
+						readonly="true"
+						rendered="#{appointmentPatientBacking.selectedPatient eq null?false:true}" />
 				</h:panelGrid>
 
 				<p:spacer height="15" />
@@ -106,8 +110,10 @@
 
 					<f:facet name="footer">
 						<p:commandButton value="#{msg['btn_check_appointment']}"
-							icon="ui-icon-check" onclick="confirmation.show()"
-							disabled="#{appointmentPatientBacking.disabledAppointment}" />
+							icon="ui-icon-check" onclick="confirmDlg.show()"
+							actionListener="#{appointmentPatientBacking.generateListDoctor}"
+							disabled="#{appointmentPatientBacking.disabledAppointment}"
+							update=":editForm:confirmPanel" />
 					</f:facet>
 
 				</p:dataTable>
@@ -149,7 +155,7 @@
 							<p:spacer height="10" />
 
 							<p:commandButton value="#{msg['btn_search']}"
-								icon="ui-icon-search"
+								icon="ui-icon-search" process="dialog2"
 								update="pnlTable2 recordTable2 btnAddPatient"
 								action="#{appointmentPatientBacking.searchPatientAction}" />
 							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
@@ -184,18 +190,63 @@
 
 				</p:dialog>
 
-				<p:confirmDialog id="confirmDialog" message="#{msg['glb_question']}"
-					header="#{msg['title_app']}" severity="alert"
-					widgetVar="confirmation">
+				<p:dialog id="confirmDialog" modal="true" resizable="false"
+					header="#{msg['title_app']}" widgetVar="confirmDlg">
 
-					<p:commandButton id="confirm" value="#{msg['glb_state_yes']}"
-						update=":form:selectedTable :form:growl"
-						oncomplete="confirmation.hide()"
-						actionListener="#{appointmentPatientBacking.checkAppointmentAction}" />
-					<p:commandButton id="decline" value="#{msg['glb_state_no']}"
-						onclick="confirmation.hide()" type="button" />
+					<h:panelGrid id="confirmPanel" width="100%">
 
-				</p:confirmDialog>
+						<p:fieldset legend="#{msg['title_patient_complementary']}"
+							rendered="#{appointmentPatientBacking.renderedFields}">
+							<h:panelGrid columns="2" width="100%" cellspacing="5">
+								<h:outputLabel value="#{msg['pat_occupation']}" />
+								<p:selectOneMenu
+									value="#{appointmentPatientBacking.idOccupation}"
+									style="width:408px" label="#{msg['pat_occupation']}">
+									<f:selectItems
+										value="#{appointmentPatientBacking.listOccupation}" />
+								</p:selectOneMenu>
+
+								<h:outputLabel value="#{msg['pat_neighborhood']}" />
+								<p:inputText maxlength="45"
+									value="#{appointmentPatientBacking.selectedPatient.neighborhood}"
+									style="width:400px" label="#{msg['pat_neighborhood']}" />
+
+								<h:outputLabel value="#{msg['pat_type_housing']}" />
+								<p:selectOneMenu
+									
+									style="width:408px" label="#{msg['pat_type_housing']}">
+									<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										itemValue="" />
+									<f:selectItem itemLabel="#{msg['pat_type_housing_u']}"
+										itemValue="U" />
+									<f:selectItem itemLabel="#{msg['pat_type_housing_r']}"
+										itemValue="R" />
+								</p:selectOneMenu>
+							</h:panelGrid>
+						</p:fieldset>
+
+						<p:spacer />
+
+						<p:fieldset legend="#{msg['doc_confir']}">
+							<p:selectOneMenu style="width:520px"
+								value="#{appointmentPatientBacking.idDoctor}">
+								<f:selectItems value="#{appointmentPatientBacking.listDoctor}" />
+							</p:selectOneMenu>
+						</p:fieldset>
+
+						<p:spacer />
+
+						<h:panelGrid columns="2">
+							<p:commandButton value="#{msg['btn_ok']}"
+								update=":form:selectedTable :form:growl"
+								oncomplete="handleSaveRequest(xhr, status, args)"
+								actionListener="#{appointmentPatientBacking.checkAppointmentAction}" />
+							<p:commandButton value="#{msg['btn_close']}"
+								onclick="confirmDlg.hide()" type="button" process="@this" />
+						</h:panelGrid>
+					</h:panelGrid>
+
+				</p:dialog>
 
 				<p:dialog header="#{msg['app_obs']}" widgetVar="obsDialog"
 					resizable="false" id="obsDlg" showEffect="fade"
@@ -211,6 +262,16 @@
 					</h:panelGrid>
 
 				</p:dialog>
+
+				<script type="text/javascript">
+					function handleSaveRequest(xhr, status, args) {
+						if(args.validationFailed || !args.saved) {
+							jQuery('#confirmDialog').effect("shake", { times:3 }, 100);
+						} else {
+							confirmDlg.hide();
+						}
+					}
+				</script>
 
 			</h:form>
 

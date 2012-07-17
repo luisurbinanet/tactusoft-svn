@@ -1,16 +1,11 @@
 package co.com.tactusoft.crm.view.backing;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import javax.faces.event.ActionEvent;
-import javax.faces.model.SelectItem;
 import javax.inject.Named;
 
 import org.primefaces.event.DateSelectEvent;
@@ -52,10 +47,6 @@ public class HistoryBacking extends BaseBacking {
 	private boolean readOnlySelectedHistoryHomeopathic;
 	private boolean readOnlySelectedHistoryPhysique;
 	private boolean readOnlySelectedHistoryOrganometry;
-
-	private List<SelectItem> listOccupation;
-	private Map<BigDecimal, CrmOccupation> mapOccupation;
-	private BigDecimal idOccupation;
 
 	public int age;
 	private double imc;
@@ -192,40 +183,6 @@ public class HistoryBacking extends BaseBacking {
 	public void setReadOnlySelectedHistoryOrganometry(
 			boolean readOnlySelectedHistoryOrganometry) {
 		this.readOnlySelectedHistoryOrganometry = readOnlySelectedHistoryOrganometry;
-	}
-
-	public List<SelectItem> getListOccupation() {
-		if (listOccupation == null) {
-			listOccupation = new LinkedList<SelectItem>();
-			mapOccupation = new HashMap<BigDecimal, CrmOccupation>();
-			String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
-			listOccupation.add(new SelectItem(Constant.DEFAULT_VALUE, label));
-			for (CrmOccupation row : tablesService.getListOccupationActive()) {
-				mapOccupation.put(row.getId(), row);
-				listOccupation.add(new SelectItem(row.getId(), row.getName()));
-			}
-		}
-		return listOccupation;
-	}
-
-	public void setListOccupation(List<SelectItem> listOccupation) {
-		this.listOccupation = listOccupation;
-	}
-
-	public Map<BigDecimal, CrmOccupation> getMapOccupation() {
-		return mapOccupation;
-	}
-
-	public void setMapOccupation(Map<BigDecimal, CrmOccupation> mapOccupation) {
-		this.mapOccupation = mapOccupation;
-	}
-
-	public BigDecimal getIdOccupation() {
-		return idOccupation;
-	}
-
-	public void setIdOccupation(BigDecimal idOccupation) {
-		this.idOccupation = idOccupation;
 	}
 
 	public int getAge() {
