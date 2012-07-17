@@ -50,7 +50,8 @@
 
 					<h:outputText value="#{msg['pat_country']}" style="width:100%" />
 					<p:selectOneMenu value="#{patientBacking.idCountry}"
-						style="width:248px" required="true" label="#{msg['pat_country']}">
+						disabled="#{patientBacking.exitsSAP}" style="width:248px"
+						required="true" label="#{msg['pat_country']}">
 						<f:selectItems value="#{patientBacking.listCountry}" />
 						<p:ajax update="selRegion selCity pnlDetail2"
 							listener="#{patientBacking.handleCountryChange}" />
@@ -80,11 +81,11 @@
 					width="100%">
 
 					<h:outputLabel id="lblDoc" value="#{msg['pat_code']}"
-						rendered="#{!patientBacking.automatic or patientBacking.exitsSAP}" />
+						rendered="#{!patientBacking.automatic or (!patientBacking.automatic and patientBacking.exitsSAP)}" />
 					<p:inputText id="txtDoc" value="#{patientBacking.selected.doc}"
 						style="width:240px;" label="#{msg['pat_code']}" required="true"
 						readonly="#{patientBacking.exitsSAP}" maxlength="10"
-						rendered="#{!patientBacking.automatic or patientBacking.exitsSAP}" />
+						rendered="#{!patientBacking.automatic or (!patientBacking.automatic and patientBacking.exitsSAP)}" />
 
 					<h:outputLabel id="lblDocAutomatic"
 						value="#{msg['pat_autonumeric']}"
