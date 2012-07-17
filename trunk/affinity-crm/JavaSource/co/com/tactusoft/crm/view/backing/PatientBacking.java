@@ -59,7 +59,6 @@ public class PatientBacking extends BaseBacking {
 	private boolean automatic;
 
 	private String docSearch;
-	private BigDecimal idCountrySearch;
 	private boolean newRecord;
 
 	public PatientBacking() {
@@ -217,14 +216,6 @@ public class PatientBacking extends BaseBacking {
 		this.docSearch = docSearch;
 	}
 
-	public BigDecimal getIdCountrySearch() {
-		return idCountrySearch;
-	}
-
-	public void setIdCountrySearch(BigDecimal idCountrySearch) {
-		this.idCountrySearch = idCountrySearch;
-	}
-
 	public Map<BigDecimal, CrmCountry> getMapCountry() {
 		return mapCountry;
 	}
@@ -353,14 +344,12 @@ public class PatientBacking extends BaseBacking {
 					sap.getPassword(), profile.getSociety(), this.docSearch);
 
 			if (listPatient.size() > 0) {
-				CrmCountry crmCountry = mapCountry.get(this.idCountrySearch);
 				String codeSap = listPatient.get(0).getCode();
 
 				WSBeanPatient customer = CustomerExecute.getDetailcomplete(
 						sap.getUrlCustomer2(), sap.getUsername(),
 						sap.getPassword(), codeSap, profile.getSalesOrg(),
-						profile.getDistrChan(), profile.getDivision(),
-						crmCountry.getCurrencyIso());
+						profile.getDistrChan(), profile.getDivision());
 
 				if (customer == null) {
 					newRecord = true;
