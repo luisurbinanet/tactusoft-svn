@@ -22,16 +22,17 @@
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
 							actionListener="#{patientBacking.newAction}"
-							update="pnlDetail pnlDetail2 pnlDetail3 btnSavePatient"
-							process="@this" />
+							update="pnlDetail pnlDetail2 pnlDetail3 toolBar" process="@this" />
 						<p:commandButton value="#{msg['btn_search']}" process="@this"
-							icon="ui-icon-search" oncomplete="searchDlg.show()" />
+							icon="ui-icon-search" oncomplete="searchDlg.show()"
+							update="searchDialog" />
 						<p:commandButton id="btnSavePatient" value="#{msg['btn_save']}"
 							icon="ui-icon-disk" action="#{patientBacking.saveAction}"
-							update="growl btnSavePatient pnlDetail pnlDetail2 pnlDetail3"
+							update="growl toolBar pnlDetail pnlDetail2 pnlDetail3"
 							process="toolBar pnlDetail pnlDetail2 pnlDetail3" />
 						<p:splitButton icon="ui-icon-arrowrefresh-1-w"
-							value="#{msg['btn_actions']}">
+							value="#{msg['btn_actions']}"
+							disabled="#{patientBacking.selected.id == null?true:false}">
 							<p:menuitem value="#{msg['title_appointment']}"
 								action="#{patientBacking.goAppointment}" immediate="true" />
 							<p:menuitem value="#{msg['title_search_by_patient']}"
@@ -187,13 +188,6 @@
 					<h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;"
 						width="100%">
 
-						<h:outputText value="#{msg['pat_country']}" style="width:100%" />
-						<p:selectOneMenu id="selCountrySearch"
-							value="#{patientBacking.idCountrySearch}" style="width:240px"
-							required="true" label="#{msg['pat_country']}">
-							<f:selectItems value="#{patientBacking.listCountry}" />
-						</p:selectOneMenu>
-
 						<h:outputLabel value="#{msg['pat_code']}" />
 						<p:inputText id="txtDocSearch" value="#{patientBacking.docSearch}"
 							style="width:240px;" label="#{msg['pat_code']}" required="true"
@@ -202,9 +196,8 @@
 						<f:facet name="footer">
 							<p:commandButton value="#{msg['btn_search']}"
 								icon="ui-icon-search" action="#{patientBacking.searchAction}"
-								update="growl pnlDetail pnlDetail2 pnlDetail3"
-								oncomplete="searchDlg.hide();"
-								process="@this,selCountrySearch,txtDocSearch" />
+								update="growl pnlDetail pnlDetail2 pnlDetail3 toolBar"
+								oncomplete="searchDlg.hide();" process="@this,txtDocSearch" />
 						</f:facet>
 
 					</h:panelGrid>
