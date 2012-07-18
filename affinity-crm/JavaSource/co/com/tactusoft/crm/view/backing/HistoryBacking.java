@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmCie;
+import co.com.tactusoft.crm.model.entities.CrmDiagnosis;
 import co.com.tactusoft.crm.model.entities.CrmHistoryHistory;
 import co.com.tactusoft.crm.model.entities.CrmHistoryHomeopathic;
 import co.com.tactusoft.crm.model.entities.CrmHistoryOrganometry;
@@ -24,6 +25,7 @@ import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.datamodel.AppointmentDataModel;
 import co.com.tactusoft.crm.view.datamodel.CieDataModel;
+import co.com.tactusoft.crm.view.datamodel.DiagnosisDataModel;
 
 @Named
 @Scope("session")
@@ -61,6 +63,10 @@ public class HistoryBacking extends BaseBacking {
 	private String codeCIE;
 	private String descCIE;
 	private boolean disabledAddCie;
+
+	private List<CrmDiagnosis> listDiagnosis;
+	private DiagnosisDataModel diagnosisDataModel;
+	private CrmDiagnosis selectedDiagnosis;
 
 	public HistoryBacking() {
 		newAction(null);
@@ -275,6 +281,30 @@ public class HistoryBacking extends BaseBacking {
 		this.disabledAddCie = disabledAddCie;
 	}
 
+	public List<CrmDiagnosis> getListDiagnosis() {
+		return listDiagnosis;
+	}
+
+	public void setListDiagnosis(List<CrmDiagnosis> listDiagnosis) {
+		this.listDiagnosis = listDiagnosis;
+	}
+
+	public DiagnosisDataModel getDiagnosisDataModel() {
+		return diagnosisDataModel;
+	}
+
+	public void setDiagnosisDataModel(DiagnosisDataModel diagnosisDataModel) {
+		this.diagnosisDataModel = diagnosisDataModel;
+	}
+
+	public CrmDiagnosis getSelectedDiagnosis() {
+		return selectedDiagnosis;
+	}
+
+	public void setSelectedDiagnosis(CrmDiagnosis selectedDiagnosis) {
+		this.selectedDiagnosis = selectedDiagnosis;
+	}
+
 	public void newAction(ActionEvent event) {
 		selectedHistoryHistory = new CrmHistoryHistory();
 		selectedHistoryRecord = new CrmHistoryRecord();
@@ -364,6 +394,9 @@ public class HistoryBacking extends BaseBacking {
 				calculateIMC();
 			}
 		}
+
+		listDiagnosis = new ArrayList<CrmDiagnosis>();
+		diagnosisDataModel = new DiagnosisDataModel(listDiagnosis);
 	}
 
 	public void saveAction(ActionEvent event) {
@@ -935,6 +968,11 @@ public class HistoryBacking extends BaseBacking {
 	}
 
 	public void addCieAction(ActionEvent event) {
+		CrmDiagnosis diagnosis = new CrmDiagnosis();
+		diagnosis.setCrmAppointment(selectedAppointment);
+		diagnosis.setCrmCie(selectedCie);
+		listDiagnosis.add(diagnosis);
+		diagnosisDataModel = new DiagnosisDataModel(listDiagnosis);
 	}
 
 }
