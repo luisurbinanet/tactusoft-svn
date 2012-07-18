@@ -310,7 +310,6 @@ public class DoctorAppointmentBacking extends BaseBacking {
 
 		HistoryBacking historyBacking = FacesUtil.findBean("historyBacking");
 		historyBacking.newAction(null);
-		historyBacking.setSelected(selectedAppointment.getCrmPatient());
 		historyBacking.setSelectedPatient(selectedAppointment.getCrmPatient());
 		historyBacking.searchAction(null);
 
@@ -362,7 +361,6 @@ public class DoctorAppointmentBacking extends BaseBacking {
 				HistoryBacking historyBacking = FacesUtil
 						.findBean("historyBacking");
 				historyBacking.newAction(null);
-				historyBacking.setSelected(selectedAppointment.getCrmPatient());
 				historyBacking.setSelectedPatient(selectedAppointment
 						.getCrmPatient());
 				historyBacking.searchAction(null);

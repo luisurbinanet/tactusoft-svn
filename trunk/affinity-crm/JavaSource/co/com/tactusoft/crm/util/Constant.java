@@ -44,4 +44,5 @@ public class Constant {
 	public static final String APP_STATE_ATTENDED_LABEL = "glb_app_attended";
 	public static final String APP_STATE_NOATTENDED_LABEL = "glb_app_no_attended";
 
+	public static final String HISTORY_NOT_REFER = "NO REFERIDO";
 }

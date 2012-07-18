@@ -53,9 +53,11 @@
 						style="width:350px;background-color:#FFFF80;font-weight:bold;"
 						readonly="true"
 						rendered="#{appointmentPatientBacking.selectedPatient eq null?false:true}" />
+
+					<p:spacer height="10"
+						rendered="#{appointmentPatientBacking.selectedPatient eq null?false:true}" />
 				</h:panelGrid>
 
-				<p:spacer height="15" />
 				<p:dataTable id="selectedTable" var="rec"
 					value="#{appointmentPatientBacking.appointmentModel}"
 					rowKey="#{rec.code}" style="width:100%"
@@ -208,12 +210,12 @@
 
 								<h:outputLabel value="#{msg['pat_neighborhood']}" />
 								<p:inputText maxlength="45"
-									value="#{appointmentPatientBacking.selectedPatient.neighborhood}"
+									value="#{appointmentPatientBacking.neighborhood}"
 									style="width:400px" label="#{msg['pat_neighborhood']}" />
 
 								<h:outputLabel value="#{msg['pat_type_housing']}" />
 								<p:selectOneMenu
-									
+									value="#{appointmentPatientBacking.typeHousing}"
 									style="width:408px" label="#{msg['pat_type_housing']}">
 									<f:selectItem itemLabel="#{msg['glb_default_value']}"
 										itemValue="" />

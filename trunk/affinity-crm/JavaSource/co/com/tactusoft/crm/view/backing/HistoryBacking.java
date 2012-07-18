@@ -38,7 +38,6 @@ public class HistoryBacking extends BaseBacking {
 	private List<CrmAppointment> listAppointment;
 	private AppointmentDataModel appointmentModel;
 	private CrmAppointment selectedAppointment;
-	private CrmPatient selected;
 
 	private Boolean disabledSaveButton;
 
@@ -51,6 +50,8 @@ public class HistoryBacking extends BaseBacking {
 	public int age;
 	private double imc;
 	private String descImc;
+
+	private Date maxDate;
 
 	public HistoryBacking() {
 		newAction(null);
@@ -122,14 +123,6 @@ public class HistoryBacking extends BaseBacking {
 
 	public void setSelectedAppointment(CrmAppointment selectedAppointment) {
 		this.selectedAppointment = selectedAppointment;
-	}
-
-	public CrmPatient getSelected() {
-		return selected;
-	}
-
-	public void setSelected(CrmPatient selected) {
-		this.selected = selected;
 	}
 
 	public Boolean getDisabledSaveButton() {
@@ -209,6 +202,14 @@ public class HistoryBacking extends BaseBacking {
 		this.descImc = descImc;
 	}
 
+	public Date getMaxDate() {
+		return maxDate;
+	}
+
+	public void setMaxDate(Date maxDate) {
+		this.maxDate = maxDate;
+	}
+
 	public void newAction(ActionEvent event) {
 		selectedHistoryHistory = new CrmHistoryHistory();
 		selectedHistoryRecord = new CrmHistoryRecord();
@@ -219,10 +220,6 @@ public class HistoryBacking extends BaseBacking {
 		listAppointment = new ArrayList<CrmAppointment>();
 		appointmentModel = new AppointmentDataModel(listAppointment);
 		selectedAppointment = new CrmAppointment();
-
-		selected = new CrmPatient();
-		selected.setCrmOccupation(new CrmOccupation());
-		selected.getCrmOccupation().setId(Constant.DEFAULT_VALUE);
 
 		selectedPatient = new CrmPatient();
 		selectedPatient.setCrmOccupation(new CrmOccupation());
@@ -237,6 +234,8 @@ public class HistoryBacking extends BaseBacking {
 		readOnlySelectedHistoryHomeopathic = true;
 		readOnlySelectedHistoryPhysique = true;
 		readOnlySelectedHistoryOrganometry = true;
+
+		maxDate = new Date();
 	}
 
 	public void searchAction(ActionEvent event) {
@@ -248,30 +247,28 @@ public class HistoryBacking extends BaseBacking {
 			FacesUtil.addError(message);
 		} else {
 
-			selected = processService.getPatientByCodeSap(selectedPatient
-					.getCodeSap());
-			if (selected.getCrmOccupation() == null) {
-				selected.setCrmOccupation(new CrmOccupation());
+			if (selectedPatient.getCrmOccupation() == null) {
+				selectedPatient.setCrmOccupation(new CrmOccupation());
 			}
 
 			listAppointment = processService.listAppointmentByPatient(
 					selectedPatient.getCodeSap(), 3);
 			appointmentModel = new AppointmentDataModel(listAppointment);
 
-			selectedHistoryHistory = processService.getHistoryHistory(selected
-					.getId());
-			selectedHistoryRecord = processService.getHistoryRecord(selected
-					.getId());
+			selectedHistoryHistory = processService
+					.getHistoryHistory(selectedPatient.getId());
+			selectedHistoryRecord = processService
+					.getHistoryRecord(selectedPatient.getId());
 			selectedHistoryHomeopathic = processService
-					.getHistoryHomeopathic(selected.getId());
+					.getHistoryHomeopathic(selectedPatient.getId());
 			selectedHistoryPhysique = processService
-					.getHistoryPhysique(selected.getId());
+					.getHistoryPhysique(selectedPatient.getId());
 			selectedHistoryOrganometry = processService
-					.getHistoryOrganometry(selected.getId());
+					.getHistoryOrganometry(selectedPatient.getId());
 
 			getRenderedRecord();
 
-			if (selected.getId() == null) {
+			if (selectedPatient.getId() == null) {
 				disabledSaveButton = true;
 			} else {
 				disabledSaveButton = false;
@@ -294,29 +291,13 @@ public class HistoryBacking extends BaseBacking {
 		String field = null;
 		String message = null;
 
-		if (selected == null || selected.getId() == null) {
+		if (selectedPatient == null || selectedPatient.getId() == null) {
 			message = FacesUtil.getMessage("his_msg_error_1");
 			FacesUtil.addError(message);
 		}
 
-		if (selected.getCrmOccupation().getId().intValue() == -1) {
-			field = FacesUtil.getMessage("pat_occupation");
-			message = FacesUtil.getMessage("title_patient_complementary");
-			message = message + " - "
-					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addError(message);
-		}
-
-		if (FacesUtil.isEmptyOrBlank(selected.getNeighborhood())) {
-			field = FacesUtil.getMessage("pat_neighborhood");
-			message = FacesUtil.getMessage("title_patient_complementary");
-			message = message + " - "
-					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addError(message);
-		}
-
-		if (selected.getTypeHousing().equals(Constant.DEFAULT_VALUE_STRING)) {
-			field = FacesUtil.getMessage("pat_type_housing");
+		if (selectedPatient.getBornDate() == null) {
+			field = FacesUtil.getMessage("pat_born_date");
 			message = FacesUtil.getMessage("title_patient_complementary");
 			message = message + " - "
 					+ FacesUtil.getMessage("glb_required", field);
@@ -484,16 +465,160 @@ public class HistoryBacking extends BaseBacking {
 			FacesUtil.addError(message);
 		}
 
+		if (selectedHistoryOrganometry.getOrganometryCheck()) {
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryOrganometry
+					.getOrganometryAnalysis())) {
+				field = FacesUtil.getMessage("his_organometry_analysis");
+				message = FacesUtil.getMessage("his_organometry", field);
+				message = message + " - "
+						+ FacesUtil.getMessage("glb_required", field);
+				FacesUtil.addError(message);
+			}
+		}
+
 		if (message == null) {
 
-			selectedHistoryHistory.setCrmPatient(selected);
-			selectedHistoryRecord.setCrmPatient(selected);
-			selectedHistoryHomeopathic.setCrmPatient(selected);
-			selectedHistoryPhysique.setCrmPatient(selected);
-			selectedHistoryOrganometry.setCrmPatient(selected);
+			selectedHistoryHistory.setCrmPatient(selectedPatient);
+			selectedHistoryRecord.setCrmPatient(selectedPatient);
+			selectedHistoryHomeopathic.setCrmPatient(selectedPatient);
+			selectedHistoryPhysique.setCrmPatient(selectedPatient);
+			selectedHistoryOrganometry.setCrmPatient(selectedPatient);
 
-			int result = processService.savePatient(selected);
+			int result = processService.savePatient(selectedPatient);
 			if (result == 0) {
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getHead())) {
+					selectedHistoryHistory.setHead(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory
+						.getNeuromuscular())) {
+					selectedHistoryHistory
+							.setNeuromuscular(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getOrl())) {
+					selectedHistoryHistory.setOrl(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getGu())) {
+					selectedHistoryHistory.setGu(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getCr())) {
+					selectedHistoryHistory.setCr(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory
+						.getPsychiatric())) {
+					selectedHistoryHistory
+							.setPsychiatric(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getGi())) {
+					selectedHistoryHistory.setGi(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getSkin())) {
+					selectedHistoryHistory.setSkin(Constant.HISTORY_NOT_REFER);
+				}
+
+				// HOMEOPATHIC
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryHomeopathic
+						.getMental())) {
+					selectedHistoryHomeopathic
+							.setMental(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryHomeopathic
+						.getSpecial())) {
+					selectedHistoryHomeopathic
+							.setSpecial(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryHomeopathic
+						.getGeneral())) {
+					selectedHistoryHomeopathic
+							.setGeneral(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryHomeopathic
+						.getMiasm())) {
+					selectedHistoryHomeopathic
+							.setMiasm(Constant.HISTORY_NOT_REFER);
+				}
+
+				// PHYSIQUE
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique
+						.getGeneralState())) {
+					selectedHistoryPhysique
+							.setGeneralState(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique
+						.getHeadNeck())) {
+					selectedHistoryPhysique
+							.setHeadNeck(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil
+						.isEmptyOrBlank(selectedHistoryPhysique.getChest())) {
+					selectedHistoryPhysique
+							.setChest(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil
+						.isEmptyOrBlank(selectedHistoryPhysique.getLungs())) {
+					selectedHistoryPhysique
+							.setLungs(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil
+						.isEmptyOrBlank(selectedHistoryPhysique.getHeart())) {
+					selectedHistoryPhysique
+							.setHeart(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique
+						.getAbdomen())) {
+					selectedHistoryPhysique
+							.setAbdomen(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique
+						.getGenitals())) {
+					selectedHistoryPhysique
+							.setGenitals(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil
+						.isEmptyOrBlank(selectedHistoryPhysique.getOsteo())) {
+					selectedHistoryPhysique
+							.setOsteo(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique.getTips())) {
+					selectedHistoryPhysique.setTips(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique
+						.getHighlights())) {
+					selectedHistoryPhysique
+							.setGeneralState(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique.getSkin())) {
+					selectedHistoryPhysique.setSkin(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique.getObs())) {
+					selectedHistoryPhysique.setObs(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (selectedHistoryOrganometry.getOrganometryCheck()) {
+
+				}
+
 				result = processService
 						.saveHistoryHistory(selectedHistoryHistory);
 				if (result == 0) {
@@ -533,13 +658,15 @@ public class HistoryBacking extends BaseBacking {
 
 	public int getRenderedRecord() {
 		int result = 0;
-		if (selected.getId() == null) {
+		if (selectedPatient == null) {
+			result = 0;
+		} else if (selectedPatient.getId() == null) {
 			result = 0;
 		} else {
-			if (selected.getAge() <= 5) {
+			if (selectedPatient.getAge() <= 5) {
 				result = 1;
 			} else {
-				if (selected.getGender().equals("W")) {
+				if (selectedPatient.getGender().equals("W")) {
 					result = 2;
 				} else {
 					result = 3;
