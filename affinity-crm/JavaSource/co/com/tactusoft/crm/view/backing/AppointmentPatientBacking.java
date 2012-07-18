@@ -38,6 +38,8 @@ public class AppointmentPatientBacking extends BaseBacking {
 	private List<SelectItem> listOccupation;
 	private Map<BigDecimal, CrmOccupation> mapOccupation;
 	private BigDecimal idOccupation;
+	private String typeHousing;
+	private String neighborhood;
 
 	private List<SelectItem> listDoctor;
 	private Map<BigDecimal, CrmDoctor> mapDoctor;
@@ -123,6 +125,22 @@ public class AppointmentPatientBacking extends BaseBacking {
 		this.idOccupation = idOccupation;
 	}
 
+	public String getTypeHousing() {
+		return typeHousing;
+	}
+
+	public void setTypeHousing(String typeHousing) {
+		this.typeHousing = typeHousing;
+	}
+
+	public String getNeighborhood() {
+		return neighborhood;
+	}
+
+	public void setNeighborhood(String neighborhood) {
+		this.neighborhood = neighborhood;
+	}
+
 	public List<SelectItem> getListDoctor() {
 		return listDoctor;
 	}
@@ -195,7 +213,6 @@ public class AppointmentPatientBacking extends BaseBacking {
 
 		String message = FacesUtil.getMessage("app_msg_cancel", code);
 		FacesUtil.addInfo(message);
-
 	}
 
 	public void checkAppointmentAction(ActionEvent actionEvent) {
@@ -204,13 +221,18 @@ public class AppointmentPatientBacking extends BaseBacking {
 		boolean saved = false;
 
 		if (idOccupation == null || idOccupation.intValue() == 0
-				|| FacesUtil.isEmptyOrBlank(selectedPatient.getNeighborhood())
-				|| FacesUtil.isEmptyOrBlank(selectedPatient.getTypeHousing())) {
+				|| FacesUtil.isEmptyOrBlank(neighborhood)
+				|| FacesUtil.isEmptyOrBlank(typeHousing)) {
 			message = FacesUtil.getMessage("glb_required_all");
 			FacesUtil.addWarn(message);
 		} else {
+			selectedPatient.setTypeHousing(typeHousing);
+			selectedPatient.setNeighborhood(neighborhood);
 			selectedPatient.setCrmOccupation(mapOccupation.get(idOccupation));
 			processService.savePatient(selectedPatient);
+
+			CrmDoctor doctor = mapDoctor.get(idDoctor);
+			selectedAppointment.setCrmDoctor(doctor);
 
 			selectedAppointment.setIdUserChecked(FacesUtil
 					.getCurrentIdUsuario());
@@ -253,5 +275,10 @@ public class AppointmentPatientBacking extends BaseBacking {
 		}
 
 		idDoctor = selectedAppointment.getCrmDoctor().getId();
+		if (selectedPatient.getCrmOccupation() != null) {
+			idOccupation = selectedPatient.getCrmOccupation().getId();
+		}
+		typeHousing = selectedPatient.getTypeHousing();
+		neighborhood = selectedPatient.getNeighborhood();
 	}
 }

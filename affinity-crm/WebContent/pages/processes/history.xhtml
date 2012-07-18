@@ -117,14 +117,15 @@
 								width="100%">
 
 								<h:outputLabel value="#{msg['pat_born_date']}" />
-								<p:calendar value="#{patientBacking.selected.bornDate}"
+								<p:calendar value="#{historyBacking.selectedPatient.bornDate}"
 									label="#{msg['pat_born_date']}" readonlyInput="true"
 									pattern="dd/MM/yyyy" showOn="button" navigator="true"
 									locale="es" yearRange="-100:+0"
+									maxdate="#{historyBacking.maxDate}"
 									readonly="#{historyBacking.readOnlySelectedHistoryHistory}">
 									<p:ajax event="dateSelect"
 										listener="#{historyBacking.handleBornDateSelect}"
-										update="txtAge" />
+										update="txtAge pnlGender" />
 								</p:calendar>
 
 								<h:outputLabel value="#{msg['pat_age']}" />
@@ -148,7 +149,7 @@
 								<p:inputText
 									style="width:400px;background-color:#FFFF80;font-weight:bold;"
 									readonly="true"
-									value="#{historyBacking.selectedPatient.typeHousing eq 'U'?msg['pat_type_housing_u']:msg['pat_type_housing_r']}" />
+									value="#{historyBacking.selectedPatient.typeHousing eq 'U'?msg['pat_type_housing_u']:historyBacking.selectedPatient.typeHousing eq 'R'?msg['pat_type_housing_r']:''}" />
 
 							</h:panelGrid>
 						</p:fieldset>
@@ -160,42 +161,30 @@
 								width="100%">
 
 								<h:outputLabel value="#{msg['pat_guardian']}" />
-								<p:inputText value="#{historyBacking.selected.guardian}"
+								<p:inputText value="#{historyBacking.selectedPatient.guardian}"
 									style="width:400px" label="#{msg['pat_guardian']}"
 									readonly="#{historyBacking.readOnlySelectedHistoryHistory}"
 									maxlength="255" />
 
 								<h:outputLabel value="#{msg['pat_guardian_address']}" />
-								<p:inputText value="#{historyBacking.selected.guardianAddress}"
+								<p:inputText
+									value="#{historyBacking.selectedPatient.guardianAddress}"
 									style="width:400px" label="#{msg['pat_guardian_address']}"
 									readonly="#{historyBacking.readOnlySelectedHistoryHistory}"
 									maxlength="255" />
 
 								<h:outputLabel value="#{msg['pat_guardian_relationship']}" />
 								<p:inputText maxlength="255"
-									value="#{historyBacking.selected.guardianRelationship}"
+									value="#{historyBacking.selectedPatient.guardianRelationship}"
 									style="width:400px" label="#{msg['pat_guardian_relationship']}"
 									readonly="#{historyBacking.readOnlySelectedHistoryHistory}" />
 
 								<h:outputLabel value="#{msg['pat_guardian_telephone']}" />
 								<p:inputText
-									value="#{historyBacking.selected.guardianTelephone}"
+									value="#{historyBacking.selectedPatient.guardianTelephone}"
 									style="width:400px" label="#{msg['pat_guardian_telephone']}"
 									readonly="#{historyBacking.readOnlySelectedHistoryHistory}"
 									maxlength="30" />
-
-							</h:panelGrid>
-						</p:fieldset>
-
-						<p:spacer height="8" />
-
-						<p:fieldset legend="#{msg['pat_type_obs']}">
-							<h:panelGrid id="pnlDetail3" style="margin:0 auto;" width="100%">
-
-								<p:inputTextarea value="#{historyBacking.selected.obs}"
-									maxlength="1000" style="width:100%"
-									label="#{historyBacking.selected.obs}"
-									readonly="#{historyBacking.readOnlySelectedHistoryHistory}" />
 
 							</h:panelGrid>
 						</p:fieldset>
@@ -229,19 +218,9 @@
 										value="#{historyBacking.selectedHistoryHistory.head}"
 										readonly="#{historyBacking.readOnlySelectedHistoryHistory}" />
 
-									<h:outputLabel value="#{msg['his_history_neuromuscular']}" />
-									<p:inputTextarea style="width:750px"
-										value="#{historyBacking.selectedHistoryHistory.neuromuscular}"
-										readonly="#{historyBacking.readOnlySelectedHistoryHistory}" />
-
 									<h:outputLabel value="#{msg['his_history_orl']}" />
 									<p:inputTextarea style="width:750px"
 										value="#{historyBacking.selectedHistoryHistory.orl}"
-										readonly="#{historyBacking.readOnlySelectedHistoryHistory}" />
-
-									<h:outputLabel value="#{msg['his_history_gu']}" />
-									<p:inputTextarea style="width:750px"
-										value="#{historyBacking.selectedHistoryHistory.gu}"
 										readonly="#{historyBacking.readOnlySelectedHistoryHistory}" />
 
 									<h:outputLabel value="#{msg['his_history_cr']}" />
@@ -249,14 +228,25 @@
 										value="#{historyBacking.selectedHistoryHistory.cr}"
 										readonly="#{historyBacking.readOnlySelectedHistoryHistory}" />
 
-									<h:outputLabel value="#{msg['his_history_psychiatric']}" />
-									<p:inputTextarea style="width:750px"
-										value="#{historyBacking.selectedHistoryHistory.psychiatric}"
-										readonly="#{historyBacking.readOnlySelectedHistoryHistory}" />
-
 									<h:outputLabel value="#{msg['his_history_gi']}" />
 									<p:inputTextarea style="width:750px"
 										value="#{historyBacking.selectedHistoryHistory.gi}"
+										readonly="#{historyBacking.readOnlySelectedHistoryHistory}" />
+
+
+									<h:outputLabel value="#{msg['his_history_neuromuscular']}" />
+									<p:inputTextarea style="width:750px"
+										value="#{historyBacking.selectedHistoryHistory.neuromuscular}"
+										readonly="#{historyBacking.readOnlySelectedHistoryHistory}" />
+
+									<h:outputLabel value="#{msg['his_history_gu']}" />
+									<p:inputTextarea style="width:750px"
+										value="#{historyBacking.selectedHistoryHistory.gu}"
+										readonly="#{historyBacking.readOnlySelectedHistoryHistory}" />
+
+									<h:outputLabel value="#{msg['his_history_psychiatric']}" />
+									<p:inputTextarea style="width:750px"
+										value="#{historyBacking.selectedHistoryHistory.psychiatric}"
 										readonly="#{historyBacking.readOnlySelectedHistoryHistory}" />
 
 									<h:outputLabel value="#{msg['his_history_skin']}" />
@@ -280,11 +270,13 @@
 									itemLabel="#{msg['his_rec_per_arthritis']}">
 									<p:ajax update="pnlPersonal" />
 								</p:selectBooleanCheckbox>
+
 								<p:inputTextarea style="width:300px" rows="3"
 									label="#{msg['his_record_clic_time']}"
 									disabled="#{not historyBacking.selectedHistoryRecord.arthritis}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.arthritisTime}" />
+
 								<p:inputTextarea style="width:450px" rows="3"
 									label="#{msg['his_record_clic_medi']}"
 									disabled="#{not historyBacking.selectedHistoryRecord.arthritis}"
@@ -297,10 +289,12 @@
 									itemLabel="#{msg['his_rec_per_cancer']}">
 									<p:ajax update="pnlPersonal" />
 								</p:selectBooleanCheckbox>
+
 								<p:inputTextarea style="width:300px" rows="3"
 									disabled="#{not historyBacking.selectedHistoryRecord.cancer}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.cancerTime}" />
+
 								<p:inputTextarea style="width:450px" rows="3"
 									disabled="#{not historyBacking.selectedHistoryRecord.cancer}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
@@ -312,10 +306,12 @@
 									itemLabel="#{msg['his_rec_per_pulmonary']}">
 									<p:ajax update="pnlPersonal" />
 								</p:selectBooleanCheckbox>
+
 								<p:inputTextarea style="width:300px" rows="3"
 									disabled="#{not historyBacking.selectedHistoryRecord.pulmonary}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.pulmonaryTime}" />
+
 								<p:inputTextarea style="width:450px" rows="3"
 									disabled="#{not historyBacking.selectedHistoryRecord.pulmonary}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
@@ -327,10 +323,12 @@
 									itemLabel="#{msg['his_rec_per_diabetes']}">
 									<p:ajax update="pnlPersonal" />
 								</p:selectBooleanCheckbox>
+
 								<p:inputTextarea style="width:300px" rows="3"
 									disabled="#{not historyBacking.selectedHistoryRecord.diabetes}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.diabetesTime}" />
+
 								<p:inputTextarea style="width:450px" rows="3"
 									disabled="#{not historyBacking.selectedHistoryRecord.diabetes}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
@@ -342,10 +340,12 @@
 									itemLabel="#{msg['his_rec_per_hypertension']}">
 									<p:ajax update="pnlPersonal" />
 								</p:selectBooleanCheckbox>
+
 								<p:inputTextarea style="width:300px" rows="3"
 									disabled="#{not historyBacking.selectedHistoryRecord.hypertension}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.hypertensionTime}" />
+
 								<p:inputTextarea style="width:450px" rows="3"
 									disabled="#{not historyBacking.selectedHistoryRecord.hypertension}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
@@ -357,10 +357,12 @@
 									itemLabel="#{msg['his_rec_per_hospitalizations']}">
 									<p:ajax update="pnlPersonal" />
 								</p:selectBooleanCheckbox>
+
 								<p:inputTextarea style="width:300px" rows="3"
 									disabled="#{not historyBacking.selectedHistoryRecord.hospitalizations}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.hospitalizationsTime}" />
+
 								<p:inputTextarea style="width:450px" rows="3"
 									disabled="#{not historyBacking.selectedHistoryRecord.hospitalizations}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
@@ -372,10 +374,12 @@
 									itemLabel="#{msg['his_rec_per_allergy']}">
 									<p:ajax update="pnlPersonal" />
 								</p:selectBooleanCheckbox>
+
 								<p:inputTextarea style="width:300px" rows="3"
 									disabled="#{not historyBacking.selectedHistoryRecord.allergy}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.allergyTime}" />
+
 								<p:inputTextarea style="width:450px" rows="3"
 									disabled="#{not historyBacking.selectedHistoryRecord.allergy}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
@@ -387,10 +391,12 @@
 									itemLabel="#{msg['his_rec_per_infections']}">
 									<p:ajax update="pnlPersonal" />
 								</p:selectBooleanCheckbox>
+
 								<p:inputTextarea style="width:300px" rows="3"
 									disabled="#{not historyBacking.selectedHistoryRecord.infections}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.infectionsTime}" />
+
 								<p:inputTextarea style="width:450px" rows="3"
 									disabled="#{not historyBacking.selectedHistoryRecord.infections}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
@@ -419,133 +425,136 @@
 							</h:panelGrid>
 						</p:fieldset>
 
-						<p:spacer height="5"
-							rendered="#{historyBacking.renderedRecord eq 2?true:false}" />
+						<h:panelGrid id="pnlGender" width="100%">
 
-						<p:fieldset legend="#{msg['his_record_men']}"
-							rendered="#{historyBacking.renderedRecord eq 3?true:false}">
-							<h:panelGrid columns="2" width="100%"
-								columnClasses="width25per,width75per">
+							<p:spacer height="5"
+								rendered="#{historyBacking.renderedRecord eq 2?true:false}" />
 
-								<h:outputLabel value="#{msg['his_rec_fuep']}" />
-								<p:calendar
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.fuep}"
-									readonlyInput="true" pattern="dd/MM/yyyy" showOn="button"
-									navigator="true" locale="es" yearRange="-100:+0" />
+							<p:fieldset legend="#{msg['his_record_men']}"
+								rendered="#{historyBacking.renderedRecord eq 3?true:false}">
+								<h:panelGrid columns="2" width="100%"
+									columnClasses="width25per,width75per">
 
-								<h:outputText value="#{msg['his_rec_psa']}" />
-								<p:inputText
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.psa}" />
+									<h:outputLabel value="#{msg['his_rec_fuep']}" />
+									<p:calendar
+										readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+										value="#{historyBacking.selectedHistoryRecord.fuep}"
+										readonlyInput="true" pattern="dd/MM/yyyy" showOn="button"
+										navigator="true" locale="es" yearRange="-100:+0" />
 
-								<h:outputLabel value="#{msg['his_rec_psa_date']}" />
-								<p:calendar
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.psaDate}"
-									readonlyInput="true" pattern="dd/MM/yyyy" showOn="button"
-									navigator="true" locale="es" yearRange="-100:+0" />
-							</h:panelGrid>
-						</p:fieldset>
+									<h:outputText value="#{msg['his_rec_psa']}" />
+									<p:inputText
+										readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+										value="#{historyBacking.selectedHistoryRecord.psa}" />
 
-						<p:spacer height="5"
-							rendered="#{historyBacking.renderedRecord eq 2?true:false}" />
+									<h:outputLabel value="#{msg['his_rec_psa_date']}" />
+									<p:calendar
+										readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+										value="#{historyBacking.selectedHistoryRecord.psaDate}"
+										readonlyInput="true" pattern="dd/MM/yyyy" showOn="button"
+										navigator="true" locale="es" yearRange="-100:+0" />
+								</h:panelGrid>
+							</p:fieldset>
 
-						<p:fieldset legend="#{msg['his_record_women']}"
-							rendered="#{historyBacking.renderedRecord eq 2?true:false}">
-							<h:panelGrid columns="4" width="100%"
-								columnClasses="width25per,width75per">
+							<p:spacer height="5"
+								rendered="#{historyBacking.renderedRecord eq 2?true:false}" />
 
-								<h:outputText value="#{msg['his_rec_pregnancy']}" />
-								<p:inputText style="width:350px"
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.pregnancy}" />
+							<p:fieldset legend="#{msg['his_record_women']}"
+								rendered="#{historyBacking.renderedRecord eq 2?true:false}">
+								<h:panelGrid columns="4" width="100%"
+									columnClasses="width25per,width75per">
 
-								<h:outputText value="#{msg['his_rec_parity']}" />
-								<p:inputText style="width:350px"
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.parity}" />
+									<h:outputText value="#{msg['his_rec_pregnancy']}" />
+									<p:inputText style="width:350px"
+										readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+										value="#{historyBacking.selectedHistoryRecord.pregnancy}" />
 
-								<h:outputText value="#{msg['his_rec_abortions']}" />
-								<p:inputText style="width:350px"
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.abortions}" />
+									<h:outputText value="#{msg['his_rec_parity']}" />
+									<p:inputText style="width:350px"
+										readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+										value="#{historyBacking.selectedHistoryRecord.parity}" />
 
-								<h:outputText value="#{msg['his_rec_caesarean']}" />
-								<p:inputText style="width:350px"
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.caesarean}" />
+									<h:outputText value="#{msg['his_rec_abortions']}" />
+									<p:inputText style="width:350px"
+										readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+										value="#{historyBacking.selectedHistoryRecord.abortions}" />
 
-								<h:outputText value="#{msg['his_rec_stillbirths']}" />
-								<p:inputText style="width:350px"
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.stillbirths}" />
+									<h:outputText value="#{msg['his_rec_caesarean']}" />
+									<p:inputText style="width:350px"
+										readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+										value="#{historyBacking.selectedHistoryRecord.caesarean}" />
 
-								<h:outputLabel />
-								<h:outputLabel />
+									<h:outputText value="#{msg['his_rec_stillbirths']}" />
+									<p:inputText style="width:350px"
+										readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+										value="#{historyBacking.selectedHistoryRecord.stillbirths}" />
 
-								<h:outputText value="#{msg['his_rec_menarche']}" />
-								<p:inputText style="width:350px"
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.menarche}" />
+									<h:outputLabel />
+									<h:outputLabel />
 
-								<h:outputText value="#{msg['his_rec_sexarca']}" />
-								<p:inputText style="width:350px"
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.sexarca}" />
+									<h:outputText value="#{msg['his_rec_menarche']}" />
+									<p:inputText style="width:350px"
+										readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+										value="#{historyBacking.selectedHistoryRecord.menarche}" />
 
-								<h:outputLabel value="#{msg['his_rec_fur']}" />
-								<p:calendar
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.fur}"
-									readonlyInput="true" pattern="dd/MM/yyyy" showOn="button"
-									navigator="true" locale="es" yearRange="-100:+0" />
+									<h:outputText value="#{msg['his_rec_sexarca']}" />
+									<p:inputText style="width:350px"
+										readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+										value="#{historyBacking.selectedHistoryRecord.sexarca}" />
 
-								<h:outputText value="#{msg['his_rec_bleeding']}" />
-								<p:inputText style="width:350px"
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.bleeding}" />
+									<h:outputLabel value="#{msg['his_rec_fur']}" />
+									<p:calendar
+										readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+										value="#{historyBacking.selectedHistoryRecord.fur}"
+										readonlyInput="true" pattern="dd/MM/yyyy" showOn="button"
+										navigator="true" locale="es" yearRange="-100:+0" />
 
-								<h:outputLabel value="#{msg['his_rec_fuc']}" />
-								<p:calendar
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.fuc}"
-									readonlyInput="true" pattern="dd/MM/yyyy" showOn="button"
-									navigator="true" locale="es" yearRange="-100:+0" />
+									<h:outputText value="#{msg['his_rec_bleeding']}" />
+									<p:inputText style="width:350px"
+										readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+										value="#{historyBacking.selectedHistoryRecord.bleeding}" />
 
-							</h:panelGrid>
-						</p:fieldset>
+									<h:outputLabel value="#{msg['his_rec_fuc']}" />
+									<p:calendar
+										readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+										value="#{historyBacking.selectedHistoryRecord.fuc}"
+										readonlyInput="true" pattern="dd/MM/yyyy" showOn="button"
+										navigator="true" locale="es" yearRange="-100:+0" />
 
-						<p:spacer height="5"
-							rendered="#{historyBacking.renderedRecord eq 1?true:false}" />
+								</h:panelGrid>
+							</p:fieldset>
 
-						<p:fieldset legend="#{msg['his_record_children']}"
-							rendered="#{historyBacking.renderedRecord eq 1?true:false}">
-							<h:panelGrid columns="2" width="100%"
-								columnClasses="width25per,width75per">
+							<p:spacer height="5"
+								rendered="#{historyBacking.renderedRecord eq 1?true:false}" />
 
-								<h:outputText value="#{msg['his_rec_neonatal']}" />
-								<p:inputTextarea style="width:950px" rows="3"
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.neonatal}" />
+							<p:fieldset legend="#{msg['his_record_children']}"
+								rendered="#{historyBacking.renderedRecord eq 1?true:false}">
+								<h:panelGrid columns="2" width="100%"
+									columnClasses="width25per,width75per">
 
-								<h:outputText value="#{msg['his_rec_perinatal']}" />
-								<p:inputTextarea style="width:950px" rows="3"
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.perinatal}" />
+									<h:outputText value="#{msg['his_rec_neonatal']}" />
+									<p:inputTextarea style="width:950px" rows="3"
+										readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+										value="#{historyBacking.selectedHistoryRecord.neonatal}" />
 
-								<h:outputText value="#{msg['his_rec_vaccination']}" />
-								<p:inputTextarea style="width:950px" rows="3"
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.vaccination}" />
+									<h:outputText value="#{msg['his_rec_perinatal']}" />
+									<p:inputTextarea style="width:950px" rows="3"
+										readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+										value="#{historyBacking.selectedHistoryRecord.perinatal}" />
 
-								<h:outputText value="#{msg['his_rec_growth']}" />
-								<p:inputTextarea style="width:950px" rows="3"
-									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
-									value="#{historyBacking.selectedHistoryRecord.growth}" />
+									<h:outputText value="#{msg['his_rec_vaccination']}" />
+									<p:inputTextarea style="width:950px" rows="3"
+										readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+										value="#{historyBacking.selectedHistoryRecord.vaccination}" />
 
-							</h:panelGrid>
-						</p:fieldset>
+									<h:outputText value="#{msg['his_rec_growth']}" />
+									<p:inputTextarea style="width:950px" rows="3"
+										readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
+										value="#{historyBacking.selectedHistoryRecord.growth}" />
+
+								</h:panelGrid>
+							</p:fieldset>
+						</h:panelGrid>
 
 						<p:spacer height="5" />
 
@@ -877,7 +886,7 @@
 							<p:spacer height="10" />
 
 							<p:commandButton value="#{msg['btn_search']}"
-								icon="ui-icon-search" 
+								icon="ui-icon-search"
 								update="pnlTable2 recordTable2 btnAddPatient"
 								action="#{historyBacking.searchPatientAction}" />
 							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
