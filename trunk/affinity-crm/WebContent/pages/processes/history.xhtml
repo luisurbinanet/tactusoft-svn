@@ -931,6 +931,45 @@
 
 				</p:dialog>
 
+				<p:dialog header="#{msg['sal_patient']}" widgetVar="attendedDlg"
+					resizable="false" id="attendedDialog" showEffect="fade"
+					hideEffect="explode" modal="true" width="800">
+
+					<p:toolbar id="toolBar2" style="width:100%">
+						<p:toolbarGroup align="left">
+							<p:commandButton value="#{msg['btn_select_diagnosis']}"
+								icon="ui-icon-search" oncomplete="dlgCIE.show()"
+								update="dialogCIE" process="@this" />
+						</p:toolbarGroup>
+					</p:toolbar>
+
+					<h:panelGrid id="pnlAttended" width="100%">
+
+						<p:tabView id="tabEdit" style="height:100%">
+
+							<p:tab id="tabEdit1" title="#{msg['his_history_ip']}">
+								<p:dataTable id="dtbDiagnosis" var="rec"
+									value="#{historyBacking.diagnosisModel}" rowKey="#{rec.id}"
+									paginator="true" rows="15" style="width:100%"
+									emptyMessage="#{msg['glb_no_records_found']}">
+
+									<p:column selectionMode="multiple" style="width:18px" />
+
+									<p:column headerText="#{msg['cie_code']}">
+										<h:outputLabel value="#{rec.crmCie.code}" />
+									</p:column>
+
+									<p:column headerText="#{msg['cie_desc']}">
+										<h:outputLabel value="#{rec.crmCie.description}" />
+									</p:column>
+								</p:dataTable>
+							</p:tab>
+
+						</p:tabView>
+					</h:panelGrid>
+
+				</p:dialog>
+
 				<p:dialog header="#{msg['title_cie']}" widgetVar="dlgCIE"
 					resizable="false" id="dialogCIE" showEffect="fade"
 					hideEffect="explode" modal="true" width="600">
@@ -964,7 +1003,7 @@
 								icon="ui-icon-search" update="pnlTable3 recordTable3 btnAddCIE"
 								actionListener="#{historyBacking.searchCIEAction}" />
 							<p:commandButton id="btnAddCIE" value="#{msg['btn_add']}"
-								icon="ui-icon-plusthick" update="dtbDiagnosis"
+								icon="ui-icon-plusthick" update=":form:dtbDiagnosis"
 								actionListener="#{historyBacking.addCieAction}"
 								disabled="#{historyBacking.disabledAddCie}"
 								oncomplete="dlgCIE.hide()" />
@@ -992,48 +1031,6 @@
 
 						</p:dataTable>
 					</p:scrollPanel>
-
-				</p:dialog>
-
-				<p:dialog header="#{msg['sal_patient']}" widgetVar="attendedDlg"
-					resizable="false" id="attendedDialog" showEffect="fade"
-					hideEffect="explode" modal="true" width="800">
-
-					<p:toolbar id="toolBar2" style="width:100%">
-						<p:toolbarGroup align="left">
-							<p:commandButton value="#{msg['btn_select_diagnosis']}"
-								icon="ui-icon-search" oncomplete="dlgCIE.show()"
-								update="dialogCIE" process="@this" />
-						</p:toolbarGroup>
-					</p:toolbar>
-
-					<h:panelGrid id="pnlAttended" width="100%">
-
-						<p:tabView id="tabEdit" style="height:100%">
-
-							<p:tab id="tabEdit1" title="#{msg['his_history_ip']}">
-
-								<p:dataTable id="dtbDiagnosis" var="rec"
-									value="#{historyBacking.diagnosisModel}" rowKey="#{rec.id}"
-									paginator="true" rows="15" style="width:100%"
-									emptyMessage="#{msg['glb_no_records_found']}">
-
-									<p:column selectionMode="multiple" style="width:18px" />
-
-									<p:column headerText="#{msg['cie_code']}">
-										<h:outputLabel value="#{rec.crmCie.code}" />
-									</p:column>
-
-									<p:column headerText="#{msg['cie_desc']}">
-										<h:outputLabel value="#{rec.crmCie.description}" />
-									</p:column>
-
-								</p:dataTable>
-
-							</p:tab>
-
-						</p:tabView>
-					</h:panelGrid>
 
 				</p:dialog>
 

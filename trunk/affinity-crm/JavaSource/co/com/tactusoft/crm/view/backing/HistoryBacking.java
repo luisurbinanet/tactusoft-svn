@@ -65,7 +65,7 @@ public class HistoryBacking extends BaseBacking {
 	private boolean disabledAddCie;
 
 	private List<CrmDiagnosis> listDiagnosis;
-	private DiagnosisDataModel diagnosisDataModel;
+	private DiagnosisDataModel diagnosisModel;
 	private CrmDiagnosis selectedDiagnosis;
 
 	public HistoryBacking() {
@@ -289,12 +289,12 @@ public class HistoryBacking extends BaseBacking {
 		this.listDiagnosis = listDiagnosis;
 	}
 
-	public DiagnosisDataModel getDiagnosisDataModel() {
-		return diagnosisDataModel;
+	public DiagnosisDataModel getDiagnosisModel() {
+		return diagnosisModel;
 	}
 
-	public void setDiagnosisDataModel(DiagnosisDataModel diagnosisDataModel) {
-		this.diagnosisDataModel = diagnosisDataModel;
+	public void setDiagnosisModel(DiagnosisDataModel diagnosisModel) {
+		this.diagnosisModel = diagnosisModel;
 	}
 
 	public CrmDiagnosis getSelectedDiagnosis() {
@@ -396,7 +396,7 @@ public class HistoryBacking extends BaseBacking {
 		}
 
 		listDiagnosis = new ArrayList<CrmDiagnosis>();
-		diagnosisDataModel = new DiagnosisDataModel(listDiagnosis);
+		diagnosisModel = new DiagnosisDataModel(listDiagnosis);
 	}
 
 	public void saveAction(ActionEvent event) {
@@ -972,7 +972,7 @@ public class HistoryBacking extends BaseBacking {
 		diagnosis.setCrmAppointment(selectedAppointment);
 		diagnosis.setCrmCie(selectedCie);
 		listDiagnosis.add(diagnosis);
-		diagnosisDataModel = new DiagnosisDataModel(listDiagnosis);
+		diagnosisModel = new DiagnosisDataModel(listDiagnosis);
 	}
 
 }
