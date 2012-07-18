@@ -420,8 +420,7 @@ public class PatientBacking extends BaseBacking {
 				CrmCity crmCity = mapCity.get(idCity);
 
 				if (automatic && newRecord) {
-					Long autonumeric = processService
-							.getDocAutomatic(crmCountry.getCode());
+					BigDecimal autonumeric = processService.getId(CrmPatient.class);
 					String doc = crmCountry.getCode()
 							+ FacesUtil.lpad(autonumeric.toString(), '0', 8);
 					selected.setDoc(doc);
