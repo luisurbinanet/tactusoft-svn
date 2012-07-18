@@ -12,6 +12,7 @@ import org.primefaces.event.DateSelectEvent;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
+import co.com.tactusoft.crm.model.entities.CrmCie;
 import co.com.tactusoft.crm.model.entities.CrmHistoryHistory;
 import co.com.tactusoft.crm.model.entities.CrmHistoryHomeopathic;
 import co.com.tactusoft.crm.model.entities.CrmHistoryOrganometry;
@@ -22,6 +23,7 @@ import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.datamodel.AppointmentDataModel;
+import co.com.tactusoft.crm.view.datamodel.CieDataModel;
 
 @Named
 @Scope("session")
@@ -50,8 +52,15 @@ public class HistoryBacking extends BaseBacking {
 	public int age;
 	private double imc;
 	private String descImc;
-
 	private Date maxDate;
+
+	protected int optionSearchCie;
+	private List<CrmCie> listCie;
+	private CieDataModel cieModel;
+	private CrmCie selectedCie;
+	private String codeCIE;
+	private String descCIE;
+	private boolean disabledAddCie;
 
 	public HistoryBacking() {
 		newAction(null);
@@ -210,6 +219,62 @@ public class HistoryBacking extends BaseBacking {
 		this.maxDate = maxDate;
 	}
 
+	public int getOptionSearchCie() {
+		return optionSearchCie;
+	}
+
+	public void setOptionSearchCie(int optionSearchCie) {
+		this.optionSearchCie = optionSearchCie;
+	}
+
+	public List<CrmCie> getListCie() {
+		return listCie;
+	}
+
+	public void setListCie(List<CrmCie> listCie) {
+		this.listCie = listCie;
+	}
+
+	public CieDataModel getCieModel() {
+		return cieModel;
+	}
+
+	public void setCieModel(CieDataModel cieModel) {
+		this.cieModel = cieModel;
+	}
+
+	public CrmCie getSelectedCie() {
+		return selectedCie;
+	}
+
+	public void setSelectedCie(CrmCie selectedCie) {
+		this.selectedCie = selectedCie;
+	}
+
+	public String getCodeCIE() {
+		return codeCIE;
+	}
+
+	public void setCodeCIE(String codeCIE) {
+		this.codeCIE = codeCIE;
+	}
+
+	public String getDescCIE() {
+		return descCIE;
+	}
+
+	public void setDescCIE(String descCIE) {
+		this.descCIE = descCIE;
+	}
+
+	public boolean isDisabledAddCie() {
+		return disabledAddCie;
+	}
+
+	public void setDisabledAddCie(boolean disabledAddCie) {
+		this.disabledAddCie = disabledAddCie;
+	}
+
 	public void newAction(ActionEvent event) {
 		selectedHistoryHistory = new CrmHistoryHistory();
 		selectedHistoryRecord = new CrmHistoryRecord();
@@ -228,6 +293,8 @@ public class HistoryBacking extends BaseBacking {
 		disabledSaveButton = true;
 		optionSearchPatient = 1;
 		age = 0;
+		imc = 0;
+		descImc = null;
 
 		readOnlySelectedHistoryHistory = true;
 		readOnlySelectedHistoryRecord = true;
@@ -236,6 +303,14 @@ public class HistoryBacking extends BaseBacking {
 		readOnlySelectedHistoryOrganometry = true;
 
 		maxDate = new Date();
+
+		optionSearchCie = 1;
+		listCie = new ArrayList<CrmCie>();
+		cieModel = new CieDataModel(listCie);
+		selectedCie = new CrmCie();
+		codeCIE = null;
+		descCIE = null;
+		disabledAddCie = true;
 	}
 
 	public void searchAction(ActionEvent event) {
@@ -284,6 +359,10 @@ public class HistoryBacking extends BaseBacking {
 					: false;
 			readOnlySelectedHistoryOrganometry = selectedHistoryOrganometry
 					.getId() != null ? true : false;
+
+			if (selectedHistoryPhysique.getId() != null) {
+				calculateIMC();
+			}
 		}
 	}
 
@@ -523,6 +602,119 @@ public class HistoryBacking extends BaseBacking {
 					selectedHistoryHistory.setSkin(Constant.HISTORY_NOT_REFER);
 				}
 
+				// RECORD
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getArthritisMedication())) {
+					selectedHistoryRecord
+							.setArthritisMedication(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getArthritisTime())) {
+					selectedHistoryRecord
+							.setArthritisTime(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getCancerMedication())) {
+					selectedHistoryRecord
+							.setCancerMedication(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getCancerTime())) {
+					selectedHistoryRecord
+							.setCancerTime(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getPulmonaryMedication())) {
+					selectedHistoryRecord
+							.setPulmonaryMedication(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getPulmonaryTime())) {
+					selectedHistoryRecord
+							.setPulmonaryTime(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getDiabetesMedication())) {
+					selectedHistoryRecord
+							.setDiabetesMedication(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getDiabetesTime())) {
+					selectedHistoryRecord
+							.setDiabetesTime(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getHypertensionMedication())) {
+					selectedHistoryRecord
+							.setHypertensionMedication(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getHypertensionTime())) {
+					selectedHistoryRecord
+							.setHypertensionTime(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getHospitalizationsMedication())) {
+					selectedHistoryRecord
+							.setHospitalizationsMedication(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getHospitalizationsTime())) {
+					selectedHistoryRecord
+							.setHospitalizationsTime(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getAllergyMedication())) {
+					selectedHistoryRecord
+							.setAllergyMedication(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getAllergyTime())) {
+					selectedHistoryRecord
+							.setAllergyTime(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getInfectionsMedication())) {
+					selectedHistoryRecord
+							.setInfectionsMedication(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getInfectionsTime())) {
+					selectedHistoryRecord
+							.setInfectionsTime(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getOccupational())) {
+					selectedHistoryRecord
+							.setOccupational(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord.getToxic())) {
+					selectedHistoryRecord.setToxic(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getBloodType())) {
+					selectedHistoryRecord
+							.setBloodType(Constant.HISTORY_NOT_REFER);
+				}
+
 				// HOMEOPATHIC
 				if (FacesUtil.isEmptyOrBlank(selectedHistoryHomeopathic
 						.getMental())) {
@@ -604,7 +796,7 @@ public class HistoryBacking extends BaseBacking {
 				if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique
 						.getHighlights())) {
 					selectedHistoryPhysique
-							.setGeneralState(Constant.HISTORY_NOT_REFER);
+							.setHighlights(Constant.HISTORY_NOT_REFER);
 				}
 
 				if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique.getSkin())) {
@@ -613,10 +805,6 @@ public class HistoryBacking extends BaseBacking {
 
 				if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique.getObs())) {
 					selectedHistoryPhysique.setObs(Constant.HISTORY_NOT_REFER);
-				}
-
-				if (selectedHistoryOrganometry.getOrganometryCheck()) {
-
 				}
 
 				result = processService
@@ -686,7 +874,15 @@ public class HistoryBacking extends BaseBacking {
 			imc = 0;
 		}
 
-		descImc = "Prueba";
+		if (imc < 185) {
+			descImc = "INFERIOR";
+		} else if (imc >= 185 && imc <= 249) {
+			descImc = "NORMAL";
+		} else if (imc >= 250 && imc <= 299) {
+			descImc = "SOBREPESO";
+		} else if (imc >= 300) {
+			descImc = "OBESIDAD";
+		}
 	}
 
 	public void handleBornDateSelect(DateSelectEvent event) {
@@ -714,6 +910,31 @@ public class HistoryBacking extends BaseBacking {
 			}
 		}
 		return age;
+	}
+
+	public void searchCIEAction(ActionEvent event) {
+		if ((optionSearchPatient == 1 && this.docPatient.isEmpty())
+				|| (optionSearchPatient == 2 && this.namePatient.isEmpty())) {
+			this.listCie = new ArrayList<CrmCie>();
+			disabledAddCie = true;
+		} else {
+			if (optionSearchPatient == 1) {
+				this.listCie = processService.getListCieByCode(codeCIE);
+			} else {
+				this.listCie = processService.getListCieByName(descCIE);
+			}
+
+			if (listCie.size() > 0) {
+				selectedCie = listCie.get(0);
+				disabledAddCie = false;
+			} else {
+				disabledAddCie = true;
+			}
+		}
+		this.cieModel = new CieDataModel(listCie);
+	}
+
+	public void addCieAction(ActionEvent event) {
 	}
 
 }
