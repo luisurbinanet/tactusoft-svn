@@ -80,9 +80,7 @@
 
 						<p:dataTable id="selectedTable" var="rec"
 							value="#{historyBacking.appointmentModel}" rowKey="#{rec.code}"
-							style="width:100%"
-							selection="#{historyBacking.selectedAppointment}"
-							paginator="true" rows="10"
+							style="width:100%" paginator="true" rows="10"
 							emptyMessage="#{msg['glb_no_records_found']}">
 
 							<p:column headerText="#{msg['app_code']}">
@@ -105,6 +103,16 @@
 
 							<p:column headerText="#{msg['app_procedure']}">
 								<h:outputLabel value="#{rec.crmProcedureDetail.name}" />
+							</p:column>
+
+							<p:column style="width:4%">
+								<p:commandButton update=":form:pnlAttended"
+									disabled="#{rec.closeAppointment}"
+									oncomplete="attendedDlg.show()" icon="ui-icon-check"
+									title="#{msg['btn_edit']}">
+									<f:setPropertyActionListener value="#{rec}"
+										target="#{historyBacking.selectedAppointment}" />
+								</p:commandButton>
 							</p:column>
 
 						</p:dataTable>
@@ -700,6 +708,7 @@
 								style="width:300px" />
 
 							<p:commandButton action="#{historyBacking.calculateIMC}"
+								rendered="#{not historyBacking.readOnlySelectedHistoryPhysique}"
 								update="pnlIMC" value="#{msg['btn_calculate_imc']}" />
 
 						</h:panelGrid>
@@ -830,6 +839,7 @@
 
 							<h:outputLabel value="#{msg['his_history_obs']}" />
 							<p:inputTextarea style="width:950px" rows="3"
+								disabled="#{historyBacking.readOnlySelectedHistoryPhysique}"
 								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}"
 								value="#{historyBacking.selectedHistoryPhysique.obs}" />
 						</h:panelGrid>
@@ -918,6 +928,89 @@
 
 						</p:dataTable>
 					</p:scrollPanel>
+
+				</p:dialog>
+
+				<p:dialog header="#{msg['title_cie']}" widgetVar="dlgCIE"
+					resizable="false" id="dialogCIE" showEffect="fade"
+					hideEffect="explode" modal="true" width="600">
+
+					<h:panelGrid columns="2" width="100%">
+
+						<p:outputPanel>
+							<p:selectOneRadio id="sorCIE"
+								value="#{historyBacking.optionSearchCie}" layout="custom">
+								<f:selectItem itemLabel="#{msg['cie_code']}"
+									itemValue="1" />
+								<f:selectItem itemLabel="#{msg['cie_desc']}"
+									itemValue="2" />
+							</p:selectOneRadio>
+
+							<h:panelGrid columns="3" width="100%">
+								<p:radioButton id="rdbCIE1" for="sorCIE" itemIndex="0" />
+								<h:outputLabel for="rdbCIE1" value="#{msg['cie_code']}" />
+								<p:inputText value="#{historyBacking.codeCIE}"
+									style="width:100%" />
+
+								<p:radioButton id="rdbCIE2" for="sorCIE" itemIndex="1" />
+								<h:outputLabel for="rdbCIE2" value="#{msg['cie_desc']}" />
+								<p:inputText value="#{historyBacking.descCIE}"
+									style="width:100%" />
+							</h:panelGrid>
+						</p:outputPanel>
+
+						<f:facet name="footer">
+							<p:spacer height="10" />
+
+							<p:commandButton value="#{msg['btn_search']}"
+								icon="ui-icon-search" update="pnlTable3 recordTable3 btnAddCIE"
+								actionListener="#{historyBacking.searchCIEAction}" />
+							<p:commandButton id="btnAddCIE" value="#{msg['btn_add']}"
+								icon="ui-icon-plusthick" update="pnlPatient toolBar tabView"
+								actionListener="#{historyBacking.addCieAction}"
+								disabled="#{historyBacking.disabledAddCie}"
+								oncomplete="dlgCIE.hide()" />
+						</f:facet>
+					</h:panelGrid>
+
+					<p:spacer height="10" />
+
+					<p:scrollPanel id="pnlTable3" style="width:580px;height:400px">
+						<p:dataTable id="recordTable3" var="rec"
+							value="#{historyBacking.cieModel}" rowKey="#{rec.id}"
+							selection="#{historyBacking.selectedCie}" paginator="true"
+							rows="15" style="width:570px"
+							emptyMessage="#{msg['glb_no_records_found']}">
+
+							<p:column selectionMode="single" style="width:18px" />
+
+							<p:column headerText="#{msg['cie_code']}">
+								<h:outputLabel value="#{rec.code}" />
+							</p:column>
+
+							<p:column headerText="#{msg['cie_desc']}">
+								<h:outputLabel value="#{rec.description}" />
+							</p:column>
+
+						</p:dataTable>
+					</p:scrollPanel>
+
+				</p:dialog>
+
+				<p:dialog header="#{msg['sal_patient']}" widgetVar="attendedDlg"
+					resizable="false" id="attendedDialog" showEffect="fade"
+					hideEffect="explode" modal="true" width="800">
+
+					<h:panelGrid id="pnlAttended" width="100%">
+
+						<p:tabView id="tabEdit" style="height:100%">
+
+							<p:tab id="tabEdit1" title="#{msg['his_history_ip']}">
+							<p:commandButton value="Seleccionar Diagnostico" oncomplete="dlgCIE.show()"/>
+							</p:tab>
+
+						</p:tabView>
+					</h:panelGrid>
 
 				</p:dialog>
 

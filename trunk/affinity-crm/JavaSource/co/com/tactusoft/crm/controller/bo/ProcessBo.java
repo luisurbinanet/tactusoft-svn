@@ -13,6 +13,7 @@ import javax.inject.Named;
 import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
+import co.com.tactusoft.crm.model.entities.CrmCie;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmDoctorException;
 import co.com.tactusoft.crm.model.entities.CrmDoctorSchedule;
@@ -92,6 +93,16 @@ public class ProcessBo implements Serializable {
 						+ " order by o.startAppointmentDate desc");
 
 		return list;
+	}
+
+	public List<CrmCie> getListCieByCode(String code) {
+		return dao.find("from CrmCie o where o.code like '%" + code
+				+ "%' order by o.description");
+	}
+
+	public List<CrmCie> getListCieByName(String name) {
+		return dao.find("from CrmCie o where o.description like '%" + name
+				+ "%' order by o.description");
 	}
 
 	public CrmAppointment saveAppointment(CrmAppointment entity) {
@@ -370,7 +381,8 @@ public class ProcessBo implements Serializable {
 	}
 
 	public List<Candidate> getScheduleAppointmentForDoctor(CrmBranch branch,
-			CrmDoctor doctor, int numApp, CrmProcedureDetail procedureDetail, Date selectedDate) {
+			CrmDoctor doctor, int numApp, CrmProcedureDetail procedureDetail,
+			Date selectedDate) {
 
 		List<Candidate> result = new ArrayList<Candidate>();
 		int id = 1;

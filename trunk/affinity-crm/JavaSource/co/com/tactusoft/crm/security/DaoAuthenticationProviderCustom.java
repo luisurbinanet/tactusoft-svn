@@ -111,12 +111,12 @@ public class DaoAuthenticationProviderCustom extends
 			try {
 
 				List<WSBean> result = new ArrayList<WSBean>();
-				try {
+				/*try {
 					result = CustomListsExecute.getBranchs(sap.getUrlWebList(),
 							sap.getUsername(), sap.getPassword());
 				} catch (Exception ex) {
 					result = new ArrayList<WSBean>();
-				}
+				}*/
 
 				for (WSBean row : result) {
 					boolean notExists = true;
@@ -139,15 +139,19 @@ public class DaoAuthenticationProviderCustom extends
 			} catch (Exception ex) {
 				user.setListBranchAll(listBranch);
 			}
+			
+			List<WSBean> result = new ArrayList<WSBean>();
+			result.add(new WSBean("P16", "Canales Nacionales","3000"));
+			user.setListWSGroupSellers(result);
 
-			try {
+			/*try {
 				List<WSBean> result = CustomListsExecute.getGroupSellers(
 						sap.getUrlWebList(), sap.getUsername(),
 						sap.getPassword());
 				user.setListWSGroupSellers(result);
 			} catch (Exception ex) {
 				user.setListWSGroupSellers(new ArrayList<WSBean>());
-			}
+			}*/
 		}
 	}
 
