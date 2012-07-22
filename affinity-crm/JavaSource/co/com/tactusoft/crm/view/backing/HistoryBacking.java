@@ -1,5 +1,6 @@
 package co.com.tactusoft.crm.view.backing;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -26,6 +27,7 @@ import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.datamodel.AppointmentDataModel;
 import co.com.tactusoft.crm.view.datamodel.CieDataModel;
 import co.com.tactusoft.crm.view.datamodel.DiagnosisDataModel;
+import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 
 @Named
 @Scope("session")
@@ -66,7 +68,9 @@ public class HistoryBacking extends BaseBacking {
 
 	private List<CrmDiagnosis> listDiagnosis;
 	private DiagnosisDataModel diagnosisModel;
-	private CrmDiagnosis selectedDiagnosis;
+	private CrmDiagnosis[] selectedDiagnosis;
+
+	private boolean viewMode;
 
 	public HistoryBacking() {
 		newAction(null);
@@ -297,12 +301,20 @@ public class HistoryBacking extends BaseBacking {
 		this.diagnosisModel = diagnosisModel;
 	}
 
-	public CrmDiagnosis getSelectedDiagnosis() {
+	public CrmDiagnosis[] getSelectedDiagnosis() {
 		return selectedDiagnosis;
 	}
 
-	public void setSelectedDiagnosis(CrmDiagnosis selectedDiagnosis) {
+	public void setSelectedDiagnosis(CrmDiagnosis[] selectedDiagnosis) {
 		this.selectedDiagnosis = selectedDiagnosis;
+	}
+
+	public boolean isViewMode() {
+		return viewMode;
+	}
+
+	public void setViewMode(boolean viewMode) {
+		this.viewMode = viewMode;
 	}
 
 	public void newAction(ActionEvent event) {
@@ -316,6 +328,11 @@ public class HistoryBacking extends BaseBacking {
 		appointmentModel = new AppointmentDataModel(listAppointment);
 		selectedAppointment = new CrmAppointment();
 
+		docPatient = null;
+		namePatient = null;
+
+		listPatient = new ArrayList<CrmPatient>();
+		patientModel = new PatientDataModel(listPatient);
 		selectedPatient = new CrmPatient();
 		selectedPatient.setCrmOccupation(new CrmOccupation());
 		selectedPatient.getCrmOccupation().setId(Constant.DEFAULT_VALUE);
@@ -341,6 +358,10 @@ public class HistoryBacking extends BaseBacking {
 		codeCIE = null;
 		descCIE = null;
 		disabledAddCie = true;
+
+		listDiagnosis = new ArrayList<CrmDiagnosis>();
+		diagnosisModel = new DiagnosisDataModel(listDiagnosis);
+		viewMode = true;
 	}
 
 	public void searchAction(ActionEvent event) {
@@ -946,12 +967,12 @@ public class HistoryBacking extends BaseBacking {
 	}
 
 	public void searchCIEAction(ActionEvent event) {
-		if ((optionSearchPatient == 1 && this.docPatient.isEmpty())
-				|| (optionSearchPatient == 2 && this.namePatient.isEmpty())) {
+		if ((optionSearchCie == 1 && this.codeCIE.isEmpty())
+				|| (optionSearchCie == 2 && this.descCIE.isEmpty())) {
 			this.listCie = new ArrayList<CrmCie>();
 			disabledAddCie = true;
 		} else {
-			if (optionSearchPatient == 1) {
+			if (optionSearchCie == 1) {
 				this.listCie = processService.getListCieByCode(codeCIE);
 			} else {
 				this.listCie = processService.getListCieByName(descCIE);
@@ -964,15 +985,59 @@ public class HistoryBacking extends BaseBacking {
 				disabledAddCie = true;
 			}
 		}
-		this.cieModel = new CieDataModel(listCie);
+		refreshListCie();
 	}
 
 	public void addCieAction(ActionEvent event) {
+		BigDecimal id = new BigDecimal(listDiagnosis.size() + 1);
 		CrmDiagnosis diagnosis = new CrmDiagnosis();
+		diagnosis.setId(id);
 		diagnosis.setCrmAppointment(selectedAppointment);
 		diagnosis.setCrmCie(selectedCie);
 		listDiagnosis.add(diagnosis);
 		diagnosisModel = new DiagnosisDataModel(listDiagnosis);
+		refreshListCie();
+	}
+
+	public void searchDiagnosisAction(ActionEvent event) {
+		optionSearchCie = 1;
+	}
+
+	private void refreshListCie() {
+		List<CrmCie> listCieFilter = new ArrayList<CrmCie>();
+		for (CrmCie row : listCie) {
+			boolean filter = true;
+			for (CrmDiagnosis dig : listDiagnosis) {
+				if (row.getId().intValue() == dig.getCrmCie().getId()
+						.intValue()) {
+					filter = false;
+					break;
+				}
+			}
+
+			if (filter) {
+				listCieFilter.add(row);
+			}
+		}
+
+		this.cieModel = new CieDataModel(listCieFilter);
+		if (listCie.size() > 0) {
+			selectedCie = listCieFilter.get(0);
+			disabledAddCie = false;
+		} else {
+			disabledAddCie = true;
+		}
+	}
+
+	public void removeDiagnosisAction(ActionEvent event) {
+		for (CrmDiagnosis row : selectedDiagnosis) {
+			listDiagnosis.remove(row);
+		}
+		diagnosisModel = new DiagnosisDataModel(listDiagnosis);
+	}
+
+	public boolean isDisabledDiagnosis() {
+		return listDiagnosis.size() == 0 ? true : false;
 	}
 
 }

@@ -226,10 +226,14 @@ public class AppointmentPatientBacking extends BaseBacking {
 			message = FacesUtil.getMessage("glb_required_all");
 			FacesUtil.addWarn(message);
 		} else {
-			selectedPatient.setTypeHousing(typeHousing);
-			selectedPatient.setNeighborhood(neighborhood);
-			selectedPatient.setCrmOccupation(mapOccupation.get(idOccupation));
-			processService.savePatient(selectedPatient);
+			
+			if (selectedPatient.getCrmOccupation() == null) {
+				selectedPatient.setTypeHousing(typeHousing);
+				selectedPatient.setNeighborhood(neighborhood);
+				selectedPatient.setCrmOccupation(mapOccupation
+						.get(idOccupation));
+				processService.savePatient(selectedPatient);
+			}			
 
 			CrmDoctor doctor = mapDoctor.get(idDoctor);
 			selectedAppointment.setCrmDoctor(doctor);

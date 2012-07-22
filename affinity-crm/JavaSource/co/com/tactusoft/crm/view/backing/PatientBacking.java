@@ -455,7 +455,7 @@ public class PatientBacking extends BaseBacking {
 					codeSap = selected.getCodeSap();
 				}
 
-				String errorCode = CustomerExecute.update(codeSap,
+				String errorCode = "000";/*CustomerExecute.update(codeSap,
 						sap.getUrlCustomer2(), sap.getUsername(),
 						sap.getPassword(), tratamiento, selected.getSurnames(),
 						selected.getFirstnames(), direccion,
@@ -464,7 +464,7 @@ public class PatientBacking extends BaseBacking {
 						crmCountry.getCode(), crmCity.getName(),
 						crmRegion.getCode(), profile.getSalesOrg(),
 						profile.getDistrChan(), profile.getDivision(),
-						crmCountry.getCurrencyIso());
+						crmCountry.getCurrencyIso());*/
 
 				if (errorCode.equals("000")) {
 					if (!FacesUtil.isEmptyOrBlank(codeSap)) {

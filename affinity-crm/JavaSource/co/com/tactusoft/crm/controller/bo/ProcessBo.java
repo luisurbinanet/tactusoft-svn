@@ -14,6 +14,7 @@ import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmCie;
+import co.com.tactusoft.crm.model.entities.CrmDiagnosis;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmDoctorException;
 import co.com.tactusoft.crm.model.entities.CrmDoctorSchedule;
@@ -983,6 +984,20 @@ public class ProcessBo implements Serializable {
 			entity.setId(getId(CrmHistoryOrganometry.class));
 		}
 		return dao.persist(entity);
+	}
+
+	public Integer saveDiagnosis(CrmAppointment entity, List<CrmDiagnosis> list) {
+		int i = 0;
+
+		dao.executeHQL("delete from CrmDiagnosis o where o.crmAppointment.id = "
+				+ entity.getId());
+
+		for (CrmDiagnosis row : list) {
+			row.setId(getId(CrmDiagnosis.class));
+			dao.persist(row);
+		}
+
+		return i;
 	}
 
 }
