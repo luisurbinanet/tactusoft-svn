@@ -14,9 +14,6 @@ import javax.inject.Named;
 import org.primefaces.event.DateSelectEvent;
 import org.springframework.context.annotation.Scope;
 
-import com.tactusoft.webservice.client.beans.WSBean;
-import com.tactusoft.webservice.client.execute.CustomListsExecute;
-
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmCie;
 import co.com.tactusoft.crm.model.entities.CrmDiagnosis;
@@ -27,6 +24,7 @@ import co.com.tactusoft.crm.model.entities.CrmHistoryPhysique;
 import co.com.tactusoft.crm.model.entities.CrmHistoryRecord;
 import co.com.tactusoft.crm.model.entities.CrmMaterialRange;
 import co.com.tactusoft.crm.model.entities.CrmMedication;
+import co.com.tactusoft.crm.model.entities.CrmNote;
 import co.com.tactusoft.crm.model.entities.CrmOccupation;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.util.Constant;
@@ -38,6 +36,9 @@ import co.com.tactusoft.crm.view.datamodel.DiagnosisDataModel;
 import co.com.tactusoft.crm.view.datamodel.MedicationDataModel;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 import co.com.tactusoft.crm.view.datamodel.WSBeanDataModel;
+
+import com.tactusoft.webservice.client.beans.WSBean;
+import com.tactusoft.webservice.client.execute.CustomListsExecute;
 
 @Named
 @Scope("session")
@@ -109,13 +110,10 @@ public class HistoryBacking extends BaseBacking {
 	private Map<String, CrmMaterialRange> mapRanges;
 
 	private List<CrmDiagnosis> listDiagnosisView;
-	private DiagnosisDataModel diagnosisModelView;
 	private List<CrmMedication> listMedicationView;
-	private MedicationDataModel medicationModelView;
 	private List<CrmMedication> listTherapyView;
-	private MedicationDataModel therapyModelView;
 	private List<CrmMedication> listExamView;
-	private MedicationDataModel examModelView;
+	private List<CrmNote> listNoteView;
 
 	public HistoryBacking() {
 		newAction(null);
@@ -545,28 +543,12 @@ public class HistoryBacking extends BaseBacking {
 		this.listDiagnosisView = listDiagnosisView;
 	}
 
-	public DiagnosisDataModel getDiagnosisModelView() {
-		return diagnosisModelView;
-	}
-
-	public void setDiagnosisModelView(DiagnosisDataModel diagnosisModelView) {
-		this.diagnosisModelView = diagnosisModelView;
-	}
-
 	public List<CrmMedication> getListMedicationView() {
 		return listMedicationView;
 	}
 
 	public void setListMedicationView(List<CrmMedication> listMedicationView) {
 		this.listMedicationView = listMedicationView;
-	}
-
-	public MedicationDataModel getMedicationModelView() {
-		return medicationModelView;
-	}
-
-	public void setMedicationModelView(MedicationDataModel medicationModelView) {
-		this.medicationModelView = medicationModelView;
 	}
 
 	public List<CrmMedication> getListTherapyView() {
@@ -577,14 +559,6 @@ public class HistoryBacking extends BaseBacking {
 		this.listTherapyView = listTherapyView;
 	}
 
-	public MedicationDataModel getTherapyModelView() {
-		return therapyModelView;
-	}
-
-	public void setTherapyModelView(MedicationDataModel therapyModelView) {
-		this.therapyModelView = therapyModelView;
-	}
-
 	public List<CrmMedication> getListExamView() {
 		return listExamView;
 	}
@@ -593,12 +567,12 @@ public class HistoryBacking extends BaseBacking {
 		this.listExamView = listExamView;
 	}
 
-	public MedicationDataModel getExamModelView() {
-		return examModelView;
+	public List<CrmNote> getListNoteView() {
+		return listNoteView;
 	}
 
-	public void setExamModelView(MedicationDataModel examModelView) {
-		this.examModelView = examModelView;
+	public void setListNoteView(List<CrmNote> listNoteView) {
+		this.listNoteView = listNoteView;
 	}
 
 	public void newAction(ActionEvent event) {
@@ -655,17 +629,18 @@ public class HistoryBacking extends BaseBacking {
 		typeMedication = Constant.MATERIAL_TYPE_MEDICINE;
 
 		listDiagnosisView = new ArrayList<CrmDiagnosis>();
-		diagnosisModelView = new DiagnosisDataModel(listDiagnosisView);
 		listMedicationView = new ArrayList<CrmMedication>();
-		medicationModelView = new MedicationDataModel(listMedicationView);
 		listTherapyView = new ArrayList<CrmMedication>();
-		therapyModelView = new MedicationDataModel(listTherapyView);
 		listExamView = new ArrayList<CrmMedication>();
-		examModelView = new MedicationDataModel(listExamView);
+		listNoteView = new ArrayList<CrmNote>();
 
 		SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
-		listAllMaterial = CustomListsExecute.getMaterials(sap.getUrlWebList(),
-				sap.getUsername(), sap.getPassword());
+		try {
+			listAllMaterial = CustomListsExecute.getMaterials(
+					sap.getUrlWebList(), sap.getUsername(), sap.getPassword());
+		} catch (Exception ex) {
+			listAllMaterial = new ArrayList<WSBean>();
+		}
 
 		refreshMaterialFields();
 	}
@@ -707,11 +682,29 @@ public class HistoryBacking extends BaseBacking {
 
 			listDiagnosisView = processService
 					.getListDiagnosisByPatient(selectedPatient.getId());
-			diagnosisModelView = new DiagnosisDataModel(listDiagnosisView);
 
-			listMedicationView = processService
+			listMedicationView = new ArrayList<CrmMedication>();
+			listTherapyView = new ArrayList<CrmMedication>();
+			listExamView = new ArrayList<CrmMedication>();
+
+			List<CrmMedication> listAllMedication = processService
 					.getListMedicationByPatient(selectedPatient.getId());
-			medicationModelView = new MedicationDataModel(listMedicationView);
+
+			for (CrmMedication row : listAllMedication) {
+				if (row.getMaterialType().equals(
+						Constant.MATERIAL_TYPE_MEDICINE)) {
+					listMedicationView.add(row);
+				} else if (row.getMaterialType().equals(
+						Constant.MATERIAL_TYPE_THERAPY)) {
+					listTherapyView.add(row);
+				} else if (row.getMaterialType().equals(
+						Constant.MATERIAL_TYPE_EXAMS)) {
+					listExamView.add(row);
+				}
+			}
+
+			listNoteView = processService.getListNoteByPatient(selectedPatient
+					.getId());
 
 			getRenderedRecord();
 
