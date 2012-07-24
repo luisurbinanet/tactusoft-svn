@@ -26,6 +26,7 @@ import co.com.tactusoft.crm.model.entities.CrmHistoryRecord;
 import co.com.tactusoft.crm.model.entities.CrmHoliday;
 import co.com.tactusoft.crm.model.entities.CrmMaterialRange;
 import co.com.tactusoft.crm.model.entities.CrmMedication;
+import co.com.tactusoft.crm.model.entities.CrmNote;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
 import co.com.tactusoft.crm.model.entities.VwDoctorHour;
@@ -861,6 +862,10 @@ public class ProcessBo implements Serializable {
 		return dao.persist(entity);
 	}
 
+	public void removePatient(BigDecimal id) {
+		dao.executeHQL("delete from CrmPatient o where o.id = " + id);
+	}
+
 	public List<CrmPatient> getListPatientByNameOrDoc(String field, String value) {
 		List<CrmPatient> list = null;
 
@@ -1026,6 +1031,32 @@ public class ProcessBo implements Serializable {
 		}
 
 		return i;
+	}
+
+	public Integer saveNotes(CrmAppointment appointment, String note,
+			String noteType) {
+		CrmNote entity = new CrmNote();
+		entity.setId(getId(CrmNote.class));
+		entity.setCrmAppointment(appointment);
+		entity.setNote(note);
+		entity.setNoteType(noteType);
+		return dao.persist(entity);
+	}
+
+	public List<CrmDiagnosis> getListDiagnosisByPatient(BigDecimal idPatient) {
+		List<CrmDiagnosis> list = dao
+				.find("from CrmDiagnosis o where o.crmAppointment.crmPatient.id = "
+						+ idPatient
+						+ " order by o.crmAppointment.startAppointmentDate desc");
+		return list;
+	}
+
+	public List<CrmMedication> getListMedicationByPatient(BigDecimal idPatient) {
+		List<CrmMedication> list = dao
+				.find("from CrmMedication o where o.crmAppointment.crmPatient.id = "
+						+ idPatient
+						+ " order by o.crmAppointment.startAppointmentDate desc");
+		return list;
 	}
 
 }
