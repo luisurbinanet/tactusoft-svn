@@ -1058,5 +1058,13 @@ public class ProcessBo implements Serializable {
 						+ " order by o.crmAppointment.startAppointmentDate desc");
 		return list;
 	}
+	
+	public List<CrmNote> getListNoteByPatient(BigDecimal idPatient) {
+		List<CrmNote> list = dao
+				.find("from CrmNote o where o.crmAppointment.crmPatient.id = "
+						+ idPatient
+						+ " order by o.crmAppointment.startAppointmentDate desc");
+		return list;
+	}
 
 }

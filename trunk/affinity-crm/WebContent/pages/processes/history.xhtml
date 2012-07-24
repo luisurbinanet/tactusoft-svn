@@ -76,7 +76,7 @@
 
 				<p:tabView id="tabView" style="height:100%">
 
-					<p:tab id="tab10" title="#{msg['his_history']}">
+					<p:tab id="tab0" title="#{msg['his_history']}">
 
 						<h:panelGrid columns="1" rendered="#{historyBacking.viewMode}"
 							width="100%">
@@ -84,10 +84,6 @@
 								value="#{historyBacking.appointmentModel}" rowKey="#{rec.code}"
 								style="width:100%" paginator="true" rows="10"
 								emptyMessage="#{msg['glb_no_records_found']}">
-
-								<p:column headerText="#{msg['app_code']}">
-									<h:outputLabel value="#{rec.code}" />
-								</p:column>
 
 								<p:column headerText="#{msg['app_date']}">
 									<h:outputLabel value="#{rec.startAppointmentDate}">
@@ -1062,8 +1058,7 @@
 					</p:tab>
 
 					<p:tab id="tab7" title="#{msg['his_history_ip']}">
-						<p:dataTable var="rec"
-							value="#{historyBacking.diagnosisModelView}" rowKey="#{rec.id}"
+						<p:dataTable var="rec" value="#{historyBacking.listDiagnosisView}"
 							paginator="true" rows="15" style="width:100%"
 							emptyMessage="#{msg['glb_no_records_found']}">
 
@@ -1088,7 +1083,34 @@
 
 					<p:tab id="tab8" title="#{msg['his_history_medicaction']}">
 						<p:dataTable var="rec"
-							value="#{historyBacking.medicationModelView}" rowKey="#{rec.id}"
+							value="#{historyBacking.listMedicationView}" paginator="true"
+							rows="15" style="width:100%"
+							emptyMessage="#{msg['glb_no_records_found']}">
+
+							<p:column headerText="#{msg['app_date']}">
+								<h:outputLabel
+									value="#{rec.crmAppointment.startAppointmentDate}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputLabel>
+							</p:column>
+
+							<p:column headerText="#{msg['app_doctor']}">
+								<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+							</p:column>
+
+							<p:column headerText="#{msg['sal_material_descr']}">
+								<h:outputLabel value="#{rec.descMaterial}" />
+							</p:column>
+
+							<p:column headerText="#{msg['sal_material_amount']}"
+								style="width:100px">
+								<h:outputLabel value="#{rec.unit}" />
+							</p:column>
+						</p:dataTable>
+					</p:tab>
+
+					<p:tab id="tab9" title="#{msg['his_history_therapy']}">
+						<p:dataTable var="rec" value="#{historyBacking.listTherapyView}"
 							paginator="true" rows="15" style="width:100%"
 							emptyMessage="#{msg['glb_no_records_found']}">
 
@@ -1113,7 +1135,62 @@
 							</p:column>
 						</p:dataTable>
 					</p:tab>
+
+					<p:tab id="tab10" title="#{msg['his_history_examinations']}">
+						<p:dataTable var="rec" value="#{historyBacking.listExamView}"
+							paginator="true" rows="15" style="width:100%"
+							emptyMessage="#{msg['glb_no_records_found']}">
+
+							<p:column headerText="#{msg['app_date']}">
+								<h:outputLabel
+									value="#{rec.crmAppointment.startAppointmentDate}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputLabel>
+							</p:column>
+
+							<p:column headerText="#{msg['app_doctor']}">
+								<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+							</p:column>
+
+							<p:column headerText="#{msg['sal_material_descr']}">
+								<h:outputLabel value="#{rec.descMaterial}" />
+							</p:column>
+
+							<p:column headerText="#{msg['sal_material_amount']}"
+								style="width:100px">
+								<h:outputLabel value="#{rec.unit}" />
+							</p:column>
+						</p:dataTable>
+					</p:tab>
+
+					<p:tab id="tab11" title="#{msg['his_history_note']}">
+						<p:dataTable var="rec" value="#{historyBacking.listNoteView}"
+							paginator="true" rows="15" style="width:100%"
+							emptyMessage="#{msg['glb_no_records_found']}">
+
+							<p:column headerText="#{msg['app_date']}">
+								<h:outputLabel
+									value="#{rec.crmAppointment.startAppointmentDate}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputLabel>
+							</p:column>
+
+							<p:column headerText="#{msg['app_doctor']}">
+								<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+							</p:column>
+
+							<p:column headerText="#{msg['his_history_note_type']}">
+								<h:outputLabel value="#{rec.noteType}" />
+							</p:column>
+
+							<p:column headerText="#{msg['his_history_note']}"
+								style="width:600px">
+								<h:outputLabel value="#{rec.note}" />
+							</p:column>
+						</p:dataTable>
+					</p:tab>
 				</p:tabView>
+
 
 				<p:dialog header="#{msg['sal_patient']}" widgetVar="dlg2"
 					resizable="false" id="dialog2" showEffect="fade"
