@@ -108,12 +108,12 @@ public class CustomerExecute {
 		Kna1Holder zoKna1 = new Kna1Holder();
 
 		String apellidos17 = apellidos;
-		if (apellidos17.length() > 35) {
+		if (apellidos17.length() >= 35) {
 			apellidos17 = apellidos17.substring(0, 17);
 		}
 
 		String nombres17 = nombres;
-		if (nombres17.length() > 35) {
+		if (nombres17.length() >= 35) {
 			nombres17 = nombres17.substring(0, 17);
 		}
 
@@ -235,12 +235,12 @@ public class CustomerExecute {
 			}
 
 			String apellidos17 = apellidos;
-			if (apellidos17.length() > 35) {
+			if (apellidos17.length() >= 35) {
 				apellidos17 = apellidos17.substring(0, 17);
 			}
 
 			String nombres17 = nombres;
-			if (nombres17.length() > 35) {
+			if (nombres17.length() >= 35) {
 				nombres17 = nombres17.substring(0, 17);
 			}
 
@@ -448,7 +448,7 @@ public class CustomerExecute {
 
 	public static WSBeanPatient getDetailcomplete(String url, String user,
 			String password, String customerNo, String orgVentas,
-			String canalDistribucion, String division, String moneda) {
+			String canalDistribucion, String division) {
 
 		WSBeanPatient result = null;
 		Zfi_customers2Proxy Zfi_customers2Proxy = new Zfi_customers2Proxy(url,
