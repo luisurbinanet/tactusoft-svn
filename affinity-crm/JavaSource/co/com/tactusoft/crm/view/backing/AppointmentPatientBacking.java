@@ -203,7 +203,7 @@ public class AppointmentPatientBacking extends BaseBacking {
 
 	public void cancelAppointmentAction(ActionEvent actionEvent) {
 		String code = "";
-		selectedAppointment.setIdUserCanceled(FacesUtil.getCurrentIdUsuario());
+		selectedAppointment.setCrmUserByIdUserCanceled(FacesUtil.getCurrentUser());
 		selectedAppointment.setDateCanceled(new Date());
 		selectedAppointment.setState(Constant.APP_STATE_CANCELED);
 		processService.saveAppointment(selectedAppointment);
@@ -232,14 +232,14 @@ public class AppointmentPatientBacking extends BaseBacking {
 				selectedPatient.setNeighborhood(neighborhood);
 				selectedPatient.setCrmOccupation(mapOccupation
 						.get(idOccupation));
-				processService.savePatient(selectedPatient);
+				processService.savePatient(selectedPatient, false);
 			}			
 
 			CrmDoctor doctor = mapDoctor.get(idDoctor);
 			selectedAppointment.setCrmDoctor(doctor);
 
-			selectedAppointment.setIdUserChecked(FacesUtil
-					.getCurrentIdUsuario());
+			selectedAppointment.setCrmUserByIdUserChecked(FacesUtil
+					.getCurrentUser());
 			selectedAppointment.setDateChecked(new Date());
 			selectedAppointment.setState(Constant.APP_STATE_CHECKED);
 			processService.saveAppointment(selectedAppointment);

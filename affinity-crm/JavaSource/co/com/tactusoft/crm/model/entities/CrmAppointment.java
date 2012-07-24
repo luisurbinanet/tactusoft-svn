@@ -26,8 +26,12 @@ public class CrmAppointment implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
 	private CrmProcedureDetail crmProcedureDetail;
+	private CrmUser crmUserByIdUserChecked;
 	private CrmPatient crmPatient;
+	private CrmUser crmUserByIdUserModified;
+	private CrmUser crmUserByIdUserCreate;
 	private CrmBranch crmBranch;
+	private CrmUser crmUserByIdUserCanceled;
 	private CrmDoctor crmDoctor;
 	private String code;
 	private String patientNames;
@@ -40,15 +44,12 @@ public class CrmAppointment implements java.io.Serializable {
 	private Boolean untimely;
 	private Boolean closeAppointment;
 	private int state;
-	private BigDecimal idUserCreate;
 	private Date dateCreate;
-	private BigDecimal idUserModified;
 	private Date dateModified;
-	private BigDecimal idUserChecked;
 	private Date dateChecked;
-	private BigDecimal idUserCanceled;
 	private Date dateCanceled;
 	private Set<CrmDiagnosis> crmDiagnosises = new HashSet<CrmDiagnosis>(0);
+	private Set<CrmMedication> crmMedications = new HashSet<CrmMedication>(0);
 
 	public CrmAppointment() {
 	}
@@ -69,20 +70,24 @@ public class CrmAppointment implements java.io.Serializable {
 	}
 
 	public CrmAppointment(BigDecimal id, CrmProcedureDetail crmProcedureDetail,
-			CrmPatient crmPatient, CrmBranch crmBranch, CrmDoctor crmDoctor,
-			String code, String patientNames, String patientSap,
-			Date startAppointmentDate, Date endAppointmentDate,
-			String codPublicity, String namePublicity, String obs,
-			Boolean untimely, Boolean closeAppointment, int state,
-			BigDecimal idUserCreate, Date dateCreate,
-			BigDecimal idUserModified, Date dateModified,
-			BigDecimal idUserChecked, Date dateChecked,
-			BigDecimal idUserCanceled, Date dateCanceled,
-			Set<CrmDiagnosis> crmDiagnosises) {
+			CrmUser crmUserByIdUserChecked, CrmPatient crmPatient,
+			CrmUser crmUserByIdUserModified, CrmUser crmUserByIdUserCreate,
+			CrmBranch crmBranch, CrmUser crmUserByIdUserCanceled,
+			CrmDoctor crmDoctor, String code, String patientNames,
+			String patientSap, Date startAppointmentDate,
+			Date endAppointmentDate, String codPublicity, String namePublicity,
+			String obs, Boolean untimely, Boolean closeAppointment, int state,
+			Date dateCreate, Date dateModified, Date dateChecked,
+			Date dateCanceled, Set<CrmDiagnosis> crmDiagnosises,
+			Set<CrmMedication> crmMedications) {
 		this.id = id;
 		this.crmProcedureDetail = crmProcedureDetail;
+		this.crmUserByIdUserChecked = crmUserByIdUserChecked;
 		this.crmPatient = crmPatient;
+		this.crmUserByIdUserModified = crmUserByIdUserModified;
+		this.crmUserByIdUserCreate = crmUserByIdUserCreate;
 		this.crmBranch = crmBranch;
+		this.crmUserByIdUserCanceled = crmUserByIdUserCanceled;
 		this.crmDoctor = crmDoctor;
 		this.code = code;
 		this.patientNames = patientNames;
@@ -95,15 +100,12 @@ public class CrmAppointment implements java.io.Serializable {
 		this.untimely = untimely;
 		this.closeAppointment = closeAppointment;
 		this.state = state;
-		this.idUserCreate = idUserCreate;
 		this.dateCreate = dateCreate;
-		this.idUserModified = idUserModified;
 		this.dateModified = dateModified;
-		this.idUserChecked = idUserChecked;
 		this.dateChecked = dateChecked;
-		this.idUserCanceled = idUserCanceled;
 		this.dateCanceled = dateCanceled;
 		this.crmDiagnosises = crmDiagnosises;
+		this.crmMedications = crmMedications;
 	}
 
 	@Id
@@ -126,6 +128,16 @@ public class CrmAppointment implements java.io.Serializable {
 		this.crmProcedureDetail = crmProcedureDetail;
 	}
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_user_checked")
+	public CrmUser getCrmUserByIdUserChecked() {
+		return this.crmUserByIdUserChecked;
+	}
+
+	public void setCrmUserByIdUserChecked(CrmUser crmUserByIdUserChecked) {
+		this.crmUserByIdUserChecked = crmUserByIdUserChecked;
+	}
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_patient", nullable = false)
 	public CrmPatient getCrmPatient() {
@@ -136,6 +148,26 @@ public class CrmAppointment implements java.io.Serializable {
 		this.crmPatient = crmPatient;
 	}
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_user_modified")
+	public CrmUser getCrmUserByIdUserModified() {
+		return this.crmUserByIdUserModified;
+	}
+
+	public void setCrmUserByIdUserModified(CrmUser crmUserByIdUserModified) {
+		this.crmUserByIdUserModified = crmUserByIdUserModified;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_user_create")
+	public CrmUser getCrmUserByIdUserCreate() {
+		return this.crmUserByIdUserCreate;
+	}
+
+	public void setCrmUserByIdUserCreate(CrmUser crmUserByIdUserCreate) {
+		this.crmUserByIdUserCreate = crmUserByIdUserCreate;
+	}
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_branch", nullable = false)
 	public CrmBranch getCrmBranch() {
@@ -144,6 +176,16 @@ public class CrmAppointment implements java.io.Serializable {
 
 	public void setCrmBranch(CrmBranch crmBranch) {
 		this.crmBranch = crmBranch;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_user_canceled")
+	public CrmUser getCrmUserByIdUserCanceled() {
+		return this.crmUserByIdUserCanceled;
+	}
+
+	public void setCrmUserByIdUserCanceled(CrmUser crmUserByIdUserCanceled) {
+		this.crmUserByIdUserCanceled = crmUserByIdUserCanceled;
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -257,15 +299,6 @@ public class CrmAppointment implements java.io.Serializable {
 		this.state = state;
 	}
 
-	@Column(name = "id_user_create", scale = 0)
-	public BigDecimal getIdUserCreate() {
-		return this.idUserCreate;
-	}
-
-	public void setIdUserCreate(BigDecimal idUserCreate) {
-		this.idUserCreate = idUserCreate;
-	}
-
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "date_create", length = 19)
 	public Date getDateCreate() {
@@ -274,15 +307,6 @@ public class CrmAppointment implements java.io.Serializable {
 
 	public void setDateCreate(Date dateCreate) {
 		this.dateCreate = dateCreate;
-	}
-
-	@Column(name = "id_user_modified", scale = 0)
-	public BigDecimal getIdUserModified() {
-		return this.idUserModified;
-	}
-
-	public void setIdUserModified(BigDecimal idUserModified) {
-		this.idUserModified = idUserModified;
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -295,15 +319,6 @@ public class CrmAppointment implements java.io.Serializable {
 		this.dateModified = dateModified;
 	}
 
-	@Column(name = "id_user_checked", scale = 0)
-	public BigDecimal getIdUserChecked() {
-		return this.idUserChecked;
-	}
-
-	public void setIdUserChecked(BigDecimal idUserChecked) {
-		this.idUserChecked = idUserChecked;
-	}
-
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "date_checked", length = 19)
 	public Date getDateChecked() {
@@ -312,15 +327,6 @@ public class CrmAppointment implements java.io.Serializable {
 
 	public void setDateChecked(Date dateChecked) {
 		this.dateChecked = dateChecked;
-	}
-
-	@Column(name = "id_user_canceled", scale = 0)
-	public BigDecimal getIdUserCanceled() {
-		return this.idUserCanceled;
-	}
-
-	public void setIdUserCanceled(BigDecimal idUserCanceled) {
-		this.idUserCanceled = idUserCanceled;
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -340,6 +346,15 @@ public class CrmAppointment implements java.io.Serializable {
 
 	public void setCrmDiagnosises(Set<CrmDiagnosis> crmDiagnosises) {
 		this.crmDiagnosises = crmDiagnosises;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmAppointment")
+	public Set<CrmMedication> getCrmMedications() {
+		return this.crmMedications;
+	}
+
+	public void setCrmMedications(Set<CrmMedication> crmMedications) {
+		this.crmMedications = crmMedications;
 	}
 
 }

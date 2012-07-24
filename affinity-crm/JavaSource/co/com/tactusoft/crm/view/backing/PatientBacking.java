@@ -419,13 +419,6 @@ public class PatientBacking extends BaseBacking {
 				CrmRegion crmRegion = mapRegion.get(idRegion);
 				CrmCity crmCity = mapCity.get(idCity);
 
-				if (automatic && newRecord) {
-					BigDecimal autonumeric = processService.getId(CrmPatient.class);
-					String doc = crmCountry.getCode()
-							+ FacesUtil.lpad(autonumeric.toString(), '0', 8);
-					selected.setDoc(doc);
-				}
-
 				String direccion = selected.getAddress();
 				if (direccion.length() > 35) {
 					direccion = direccion.substring(0, 34);
@@ -434,6 +427,43 @@ public class PatientBacking extends BaseBacking {
 				if (FacesUtil.isEmptyOrBlank(selected.getZipCode())) {
 					selected.setZipCode("00000");
 				}
+				
+				/*CustomerExecute.update(codeSap,
+				sap.getUrlCustomer2(), sap.getUsername(),
+				sap.getPassword(), tratamiento, selected.getSurnames(),
+				selected.getFirstnames(), direccion,
+				selected.getZipCode(), selected.getPhoneNumber(),
+				selected.getCellNumber(), selected.getEmail(),
+				crmCountry.getCode(), crmCity.getName(),
+				crmRegion.getCode(), profile.getSalesOrg(),
+				profile.getDistrChan(), profile.getDivision(),
+				crmCountry.getCurrencyIso());*/
+
+				selected.setSalesOrg(profile.getSalesOrg());
+				selected.setCountry(crmCountry.getCode());
+				selected.setRegion(crmRegion.getCode());
+				selected.setCity(crmCity.getCode());
+
+				selected.setSendPhone(false);
+				selected.setSendEmail(false);
+				selected.setSendPostal(false);
+				selected.setSendSms(false);
+
+				for (String send : selectedSendOptions) {
+					if (send.equals("1")) {
+						selected.setSendPhone(true);
+					} else if (send.equals("2")) {
+						selected.setSendEmail(true);
+					} else if (send.equals("3")) {
+						selected.setSendPostal(true);
+					} else if (send.equals("4")) {
+						selected.setSendSms(true);
+					}
+				}
+
+				selected.setIdUserCreate(FacesUtil.getCurrentIdUsuario());
+				selected.setDateCreate(new Date());
+				processService.savePatient(selected, automatic && newRecord);
 
 				String codeSap = null;
 				if (!exitsSAP || newRecord) {
@@ -455,68 +485,21 @@ public class PatientBacking extends BaseBacking {
 					codeSap = selected.getCodeSap();
 				}
 
-				String errorCode = "000";/*CustomerExecute.update(codeSap,
-						sap.getUrlCustomer2(), sap.getUsername(),
-						sap.getPassword(), tratamiento, selected.getSurnames(),
-						selected.getFirstnames(), direccion,
-						selected.getZipCode(), selected.getPhoneNumber(),
-						selected.getCellNumber(), selected.getEmail(),
-						crmCountry.getCode(), crmCity.getName(),
-						crmRegion.getCode(), profile.getSalesOrg(),
-						profile.getDistrChan(), profile.getDivision(),
-						crmCountry.getCurrencyIso());*/
+				selected.setCodeSap(codeSap);
+				processService.savePatient(selected, automatic);
 
-				if (errorCode.equals("000")) {
-					if (!FacesUtil.isEmptyOrBlank(codeSap)) {
-
-						selected.setCodeSap(codeSap);
-						selected.setSalesOrg(profile.getSalesOrg());
-						selected.setCountry(crmCountry.getCode());
-						selected.setRegion(crmRegion.getCode());
-						selected.setCity(crmCity.getCode());
-
-						selected.setSendPhone(false);
-						selected.setSendEmail(false);
-						selected.setSendPostal(false);
-						selected.setSendSms(false);
-
-						for (String send : selectedSendOptions) {
-							if (send.equals("1")) {
-								selected.setSendPhone(true);
-							} else if (send.equals("2")) {
-								selected.setSendEmail(true);
-							} else if (send.equals("3")) {
-								selected.setSendPostal(true);
-							} else if (send.equals("4")) {
-								selected.setSendSms(true);
-							}
-						}
-
-						selected.setIdUserCreate(FacesUtil
-								.getCurrentIdUsuario());
-						selected.setDateCreate(new Date());
-						processService.savePatient(selected);
-
-						if (newRecord) {
-							message = FacesUtil.getMessage("pat_msg_ok",
-									codeSap);
-						} else {
-							message = FacesUtil.getMessage("pat_msg_update_ok",
-									codeSap);
-						}
-						FacesUtil.addInfo(message);
-
-						disabledSaveButton = true;
-						newRecord = false;
-						exitsSAP = true;
-					} else {
-						message = FacesUtil.getMessage("msg_record_config");
-						FacesUtil.addError(message);
-					}
+				if (newRecord) {
+					message = FacesUtil.getMessage("pat_msg_ok", codeSap);
 				} else {
-					message = FacesUtil.getMessage("msg_record_config");
-					FacesUtil.addError(message);
+					message = FacesUtil
+							.getMessage("pat_msg_update_ok", codeSap);
 				}
+				FacesUtil.addInfo(message);
+
+				disabledSaveButton = true;
+				newRecord = false;
+				exitsSAP = true;
+
 			} else {
 				String field = FacesUtil.getMessage("pat");
 				message = FacesUtil.getMessage("msg_record_unique_exception",

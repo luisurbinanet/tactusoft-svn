@@ -4,13 +4,18 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 
 import org.primefaces.event.DateSelectEvent;
 import org.springframework.context.annotation.Scope;
+
+import com.tactusoft.webservice.client.beans.WSBean;
+import com.tactusoft.webservice.client.execute.CustomListsExecute;
 
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmCie;
@@ -20,14 +25,19 @@ import co.com.tactusoft.crm.model.entities.CrmHistoryHomeopathic;
 import co.com.tactusoft.crm.model.entities.CrmHistoryOrganometry;
 import co.com.tactusoft.crm.model.entities.CrmHistoryPhysique;
 import co.com.tactusoft.crm.model.entities.CrmHistoryRecord;
+import co.com.tactusoft.crm.model.entities.CrmMaterialRange;
+import co.com.tactusoft.crm.model.entities.CrmMedication;
 import co.com.tactusoft.crm.model.entities.CrmOccupation;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
+import co.com.tactusoft.crm.util.SAPEnvironment;
 import co.com.tactusoft.crm.view.datamodel.AppointmentDataModel;
 import co.com.tactusoft.crm.view.datamodel.CieDataModel;
 import co.com.tactusoft.crm.view.datamodel.DiagnosisDataModel;
+import co.com.tactusoft.crm.view.datamodel.MedicationDataModel;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
+import co.com.tactusoft.crm.view.datamodel.WSBeanDataModel;
 
 @Named
 @Scope("session")
@@ -58,7 +68,7 @@ public class HistoryBacking extends BaseBacking {
 	private String descImc;
 	private Date maxDate;
 
-	protected int optionSearchCie;
+	private int optionSearchCie;
 	private List<CrmCie> listCie;
 	private CieDataModel cieModel;
 	private CrmCie selectedCie;
@@ -70,7 +80,34 @@ public class HistoryBacking extends BaseBacking {
 	private DiagnosisDataModel diagnosisModel;
 	private CrmDiagnosis[] selectedDiagnosis;
 
+	private List<WSBean> listAllMaterial;
+	private int optionSearchMaterial;
+	private List<WSBean> listMaterial;
+	private WSBeanDataModel materialModel;
+	private WSBean selectedMaterial;
+	private String codeMaterial;
+	private String descMaterial;
+	private boolean disabledAddMaterial;
+
+	private List<CrmMedication> listMedication;
+	private MedicationDataModel medicationModel;
+	private CrmMedication[] selectedMedication;
+
+	private List<CrmMedication> listExam;
+	private MedicationDataModel examModel;
+	private CrmMedication[] selectedExam;
+
+	private List<CrmMedication> listTherapy;
+	private MedicationDataModel therapyModel;
+	private CrmMedication[] selectedTherapy;
+
+	private String typeMedication;
+	private String titleMedication;
+	private int amount;
+
 	private boolean viewMode;
+
+	private Map<String, CrmMaterialRange> mapRanges;
 
 	public HistoryBacking() {
 		newAction(null);
@@ -309,6 +346,173 @@ public class HistoryBacking extends BaseBacking {
 		this.selectedDiagnosis = selectedDiagnosis;
 	}
 
+	public int getOptionSearchMaterial() {
+		return optionSearchMaterial;
+	}
+
+	public void setOptionSearchMaterial(int optionSearchMaterial) {
+		this.optionSearchMaterial = optionSearchMaterial;
+	}
+
+	public List<WSBean> getListMaterial() {
+		return listMaterial;
+	}
+
+	public void setListMaterial(List<WSBean> listMaterial) {
+		this.listMaterial = listMaterial;
+	}
+
+	public WSBeanDataModel getMaterialModel() {
+		return materialModel;
+	}
+
+	public void setMaterialModel(WSBeanDataModel materialModel) {
+		this.materialModel = materialModel;
+	}
+
+	public WSBean getSelectedMaterial() {
+		return selectedMaterial;
+	}
+
+	public void setSelectedMaterial(WSBean selectedMaterial) {
+		this.selectedMaterial = selectedMaterial;
+	}
+
+	public String getCodeMaterial() {
+		return codeMaterial;
+	}
+
+	public void setCodeMaterial(String codeMaterial) {
+		this.codeMaterial = codeMaterial;
+	}
+
+	public String getDescMaterial() {
+		return descMaterial;
+	}
+
+	public void setDescMaterial(String descMaterial) {
+		this.descMaterial = descMaterial;
+	}
+
+	public boolean isDisabledAddMaterial() {
+		return disabledAddMaterial;
+	}
+
+	public void setDisabledAddMaterial(boolean disabledAddMaterial) {
+		this.disabledAddMaterial = disabledAddMaterial;
+	}
+
+	public List<CrmMedication> getListMedication() {
+		return listMedication;
+	}
+
+	public void setListMedication(List<CrmMedication> listMedication) {
+		this.listMedication = listMedication;
+	}
+
+	public MedicationDataModel getMedicationModel() {
+		return medicationModel;
+	}
+
+	public void setMedicationModel(MedicationDataModel medicationModel) {
+		this.medicationModel = medicationModel;
+	}
+
+	public CrmMedication[] getSelectedMedication() {
+		return selectedMedication;
+	}
+
+	public void setSelectedMedication(CrmMedication[] selectedMedication) {
+		this.selectedMedication = selectedMedication;
+	}
+
+	public List<CrmMedication> getListTherapy() {
+		return listTherapy;
+	}
+
+	public void setListTherapy(List<CrmMedication> listTherapy) {
+		this.listTherapy = listTherapy;
+	}
+
+	public MedicationDataModel getTherapyModel() {
+		return therapyModel;
+	}
+
+	public void setTherapyModel(MedicationDataModel therapyModel) {
+		this.therapyModel = therapyModel;
+	}
+
+	public CrmMedication[] getSelectedTherapy() {
+		return selectedTherapy;
+	}
+
+	public void setSelectedTherapy(CrmMedication[] selectedTherapy) {
+		this.selectedTherapy = selectedTherapy;
+	}
+
+	public List<WSBean> getListAllMaterial() {
+		return listAllMaterial;
+	}
+
+	public void setListAllMaterial(List<WSBean> listAllMaterial) {
+		this.listAllMaterial = listAllMaterial;
+	}
+
+	public List<CrmMedication> getListExam() {
+		return listExam;
+	}
+
+	public void setListExam(List<CrmMedication> listExam) {
+		this.listExam = listExam;
+	}
+
+	public MedicationDataModel getExamModel() {
+		return examModel;
+	}
+
+	public void setExamModel(MedicationDataModel examModel) {
+		this.examModel = examModel;
+	}
+
+	public CrmMedication[] getSelectedExam() {
+		return selectedExam;
+	}
+
+	public void setSelectedExam(CrmMedication[] selectedExam) {
+		this.selectedExam = selectedExam;
+	}
+
+	public String getTypeMedication() {
+		return typeMedication;
+	}
+
+	public void setTypeMedication(String typeMedication) {
+		this.typeMedication = typeMedication;
+	}
+
+	public String getTitleMedication() {
+		if (typeMedication.equals(Constant.MATERIAL_TYPE_MEDICINE)) {
+			titleMedication = FacesUtil.getMessage("his_history_medicaction");
+		} else if (typeMedication.equals(Constant.MATERIAL_TYPE_THERAPY)) {
+			titleMedication = FacesUtil.getMessage("his_history_therapy");
+		} else if (typeMedication.equals(Constant.MATERIAL_TYPE_EXAMS)) {
+			titleMedication = FacesUtil.getMessage("his_history_examinations");
+		}
+		return titleMedication;
+	}
+
+	public void setTitleMedication(String titleMedication) {
+		this.titleMedication = titleMedication;
+	}
+
+	public int getAmount() {
+		return amount;
+	}
+
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
+
 	public boolean isViewMode() {
 		return viewMode;
 	}
@@ -361,7 +565,21 @@ public class HistoryBacking extends BaseBacking {
 
 		listDiagnosis = new ArrayList<CrmDiagnosis>();
 		diagnosisModel = new DiagnosisDataModel(listDiagnosis);
+
+		refreshMaterialFields();
+
+		listMedication = new ArrayList<CrmMedication>();
+		medicationModel = new MedicationDataModel(listMedication);
+		listTherapy = new ArrayList<CrmMedication>();
+		therapyModel = new MedicationDataModel(listTherapy);
+		listExam = new ArrayList<CrmMedication>();
+		examModel = new MedicationDataModel(listExam);
 		viewMode = true;
+		typeMedication = Constant.MATERIAL_TYPE_MEDICINE;
+
+		SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
+		listAllMaterial = CustomListsExecute.getMaterials(sap.getUrlWebList(),
+				sap.getUsername(), sap.getPassword());
 	}
 
 	public void searchAction(ActionEvent event) {
@@ -372,6 +590,13 @@ public class HistoryBacking extends BaseBacking {
 			message = FacesUtil.getMessage("his_msg_error_1");
 			FacesUtil.addError(message);
 		} else {
+
+			List<CrmMaterialRange> listMaterialRange = processService
+					.getListMaterialRange();
+			mapRanges = new HashMap<String, CrmMaterialRange>();
+			for (CrmMaterialRange range : listMaterialRange) {
+				mapRanges.put(range.getMaterialType(), range);
+			}
 
 			if (selectedPatient.getCrmOccupation() == null) {
 				selectedPatient.setCrmOccupation(new CrmOccupation());
@@ -617,7 +842,7 @@ public class HistoryBacking extends BaseBacking {
 			selectedHistoryPhysique.setCrmPatient(selectedPatient);
 			selectedHistoryOrganometry.setCrmPatient(selectedPatient);
 
-			int result = processService.savePatient(selectedPatient);
+			int result = processService.savePatient(selectedPatient, false);
 			if (result == 0) {
 
 				if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getHead())) {
@@ -1021,7 +1246,7 @@ public class HistoryBacking extends BaseBacking {
 		}
 
 		this.cieModel = new CieDataModel(listCieFilter);
-		if (listCie.size() > 0) {
+		if (listCieFilter.size() > 0) {
 			selectedCie = listCieFilter.get(0);
 			disabledAddCie = false;
 		} else {
@@ -1038,6 +1263,202 @@ public class HistoryBacking extends BaseBacking {
 
 	public boolean isDisabledDiagnosis() {
 		return listDiagnosis.size() == 0 ? true : false;
+	}
+
+	// Medication
+	public void searchMaterialAction(ActionEvent event) {
+		if ((optionSearchMaterial == 1 && this.codeMaterial.isEmpty())
+				|| (optionSearchMaterial == 2 && this.descMaterial.isEmpty())) {
+			this.listMaterial = new ArrayList<WSBean>();
+			disabledAddMaterial = true;
+		} else {
+			this.listMaterial = new ArrayList<WSBean>();
+			for (WSBean material : listAllMaterial) {
+				CrmMaterialRange ranges = mapRanges.get(typeMedication);
+				try {
+					long longCode = Long.parseLong(material.getCode());
+					if (longCode >= ranges.getRangeInit()
+							&& longCode <= ranges.getRangeEnd()) {
+						if (optionSearchMaterial == 1) {
+							if (material.getCode().toUpperCase()
+									.contains(codeMaterial.toUpperCase())) {
+								this.listMaterial.add(material);
+							}
+						} else {
+							if (material.getNames().toUpperCase()
+									.contains(descMaterial.toUpperCase())) {
+								this.listMaterial.add(material);
+							}
+						}
+					}
+				} catch (NumberFormatException ex) {
+
+				}
+			}
+
+			if (listMaterial.size() > 0) {
+				selectedMaterial = listMaterial.get(0);
+				disabledAddMaterial = false;
+			} else {
+				disabledAddMaterial = true;
+			}
+		}
+		refreshListMedication();
+	}
+
+	public void addMaterialAction(ActionEvent event) {
+		BigDecimal id = new BigDecimal(listMedication.size() + 1);
+		CrmMedication medication = new CrmMedication();
+		medication.setId(id);
+		medication.setCrmAppointment(selectedAppointment);
+		medication.setCodMaterial(Integer.parseInt(selectedMaterial.getCode()));
+		medication.setDescMaterial(selectedMaterial.getNames());
+		medication.setMaterialType(typeMedication);
+		medication.setUnit(amount);
+
+		if (typeMedication.equals(Constant.MATERIAL_TYPE_MEDICINE)) {
+			listMedication.add(medication);
+			medicationModel = new MedicationDataModel(listMedication);
+		} else if (typeMedication.equals(Constant.MATERIAL_TYPE_THERAPY)) {
+			listTherapy.add(medication);
+			therapyModel = new MedicationDataModel(listTherapy);
+		} else if (typeMedication.equals(Constant.MATERIAL_TYPE_EXAMS)) {
+			listExam.add(medication);
+			examModel = new MedicationDataModel(listExam);
+		}
+
+		refreshListMedication();
+	}
+
+	public void searchMedicationAction(ActionEvent event) {
+		optionSearchCie = 1;
+	}
+
+	private void refreshListMedication() {
+		List<WSBean> listFilter = new ArrayList<WSBean>();
+		for (WSBean row : listMaterial) {
+			boolean filter = true;
+			if (typeMedication.equals(Constant.MATERIAL_TYPE_MEDICINE)) {
+				for (CrmMedication med : listMedication) {
+					if (Long.parseLong(row.getCode()) == med.getCodMaterial()) {
+						filter = false;
+						break;
+					}
+				}
+			} else if (typeMedication.equals(Constant.MATERIAL_TYPE_THERAPY)) {
+				for (CrmMedication med : listTherapy) {
+					if (Long.parseLong(row.getCode()) == med.getCodMaterial()) {
+						filter = false;
+						break;
+					}
+				}
+			} else if (typeMedication.equals(Constant.MATERIAL_TYPE_EXAMS)) {
+				for (CrmMedication med : listExam) {
+					if (Long.parseLong(row.getCode()) == med.getCodMaterial()) {
+						filter = false;
+						break;
+					}
+				}
+			}
+
+			if (filter) {
+				listFilter.add(row);
+			}
+		}
+
+		this.materialModel = new WSBeanDataModel(listFilter);
+		if (listFilter.size() > 0) {
+			selectedMaterial = listFilter.get(0);
+			disabledAddMaterial = false;
+		} else {
+			disabledAddMaterial = true;
+		}
+	}
+
+	public void removeMedicationAction(ActionEvent event) {
+		for (CrmMedication row : selectedMedication) {
+			listMedication.remove(row);
+		}
+		medicationModel = new MedicationDataModel(listMedication);
+	}
+
+	public void removeTherapyAction(ActionEvent event) {
+		for (CrmMedication row : selectedTherapy) {
+			listTherapy.remove(row);
+		}
+		therapyModel = new MedicationDataModel(listTherapy);
+		selectedTherapy = null;
+	}
+
+	public void removeExamAction(ActionEvent event) {
+		for (CrmMedication row : selectedExam) {
+			listExam.remove(row);
+		}
+		examModel = new MedicationDataModel(listExam);
+		selectedExam = null;
+	}
+
+	public void refreshMaterialFields() {
+		optionSearchMaterial = 1;
+		listMaterial = new ArrayList<WSBean>();
+		materialModel = new WSBeanDataModel(listMaterial);
+		selectedMaterial = new WSBean();
+		codeMaterial = null;
+		descMaterial = null;
+		disabledAddMaterial = true;
+		amount = 1;
+	}
+
+	public void selectMedicationAction(ActionEvent event) {
+		this.typeMedication = Constant.MATERIAL_TYPE_MEDICINE;
+		refreshMaterialFields();
+	}
+
+	public void selectTherapyAction(ActionEvent event) {
+		this.typeMedication = Constant.MATERIAL_TYPE_THERAPY;
+		refreshMaterialFields();
+	}
+
+	public void selectExamsAction(ActionEvent event) {
+		this.typeMedication = Constant.MATERIAL_TYPE_EXAMS;
+		refreshMaterialFields();
+	}
+
+	public void closeAppointmentAction(ActionEvent event) {
+		String message = null;
+		if (listDiagnosis.size() < 2) {
+			message = FacesUtil.getMessage("his_msg_message_dig_1");
+			FacesUtil.addWarn(message);
+		} else if (listMedication.size() == 0) {
+			message = FacesUtil.getMessage("his_msg_message_med_1");
+			FacesUtil.addWarn(message);
+		} else {
+			processService.saveDiagnosis(selectedAppointment, listDiagnosis);
+			processService.saveMedication(selectedAppointment, listMedication,
+					Constant.MATERIAL_TYPE_MEDICINE);
+			processService.saveMedication(selectedAppointment, listTherapy,
+					Constant.MATERIAL_TYPE_THERAPY);
+			processService.saveMedication(selectedAppointment, listExam,
+					Constant.MATERIAL_TYPE_EXAMS);
+
+			viewMode = true;
+			selectedAppointment.setCloseAppointment(true);
+			processService.saveAppointment(selectedAppointment);
+			message = FacesUtil.getMessage("his_msg_message_med_ok");
+			FacesUtil.addInfo(message);
+		}
+	}
+
+	public boolean isDisabledMedication() {
+		return listMedication.size() == 0 ? true : false;
+	}
+
+	public boolean isDisabledTherapy() {
+		return listTherapy.size() == 0 ? true : false;
+	}
+
+	public boolean isDisabledExam() {
+		return listExam.size() == 0 ? true : false;
 	}
 
 }
