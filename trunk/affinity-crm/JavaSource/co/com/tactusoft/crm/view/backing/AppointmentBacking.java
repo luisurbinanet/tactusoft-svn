@@ -597,7 +597,7 @@ public class AppointmentBacking extends BaseBacking {
 					selected.setState(Constant.APP_STATE_CHECKED);
 				}
 				
-				selected.setIdUserCreate(FacesUtil.getCurrentIdUsuario());
+				selected.setCrmUserByIdUserCreate(FacesUtil.getCurrentUser());
 				selected.setDateCreate(new Date());
 
 				CrmAppointment crmAppointment = processService

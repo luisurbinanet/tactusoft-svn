@@ -24,6 +24,8 @@ import co.com.tactusoft.crm.model.entities.CrmHistoryOrganometry;
 import co.com.tactusoft.crm.model.entities.CrmHistoryPhysique;
 import co.com.tactusoft.crm.model.entities.CrmHistoryRecord;
 import co.com.tactusoft.crm.model.entities.CrmHoliday;
+import co.com.tactusoft.crm.model.entities.CrmMaterialRange;
+import co.com.tactusoft.crm.model.entities.CrmMedication;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
 import co.com.tactusoft.crm.model.entities.VwDoctorHour;
@@ -104,6 +106,10 @@ public class ProcessBo implements Serializable {
 	public List<CrmCie> getListCieByName(String name) {
 		return dao.find("from CrmCie o where o.description like '%" + name
 				+ "%' order by o.description");
+	}
+
+	public List<CrmMaterialRange> getListMaterialRange() {
+		return dao.find(CrmMaterialRange.class);
 	}
 
 	public CrmAppointment saveAppointment(CrmAppointment entity) {
@@ -843,9 +849,13 @@ public class ProcessBo implements Serializable {
 		}
 	}
 
-	public int savePatient(CrmPatient entity) {
+	public int savePatient(CrmPatient entity, boolean automatic) {
 		if (entity.getId() == null) {
 			BigDecimal id = getId(CrmPatient.class);
+			String doc = entity.getCountry()
+					+ FacesUtil.lpad(id.toString(), '0', 8);
+			entity.setDoc(doc);
+			entity.setCodeSap(doc);
 			entity.setId(id);
 		}
 		return dao.persist(entity);
@@ -994,6 +1004,24 @@ public class ProcessBo implements Serializable {
 
 		for (CrmDiagnosis row : list) {
 			row.setId(getId(CrmDiagnosis.class));
+			dao.persist(row);
+		}
+
+		return i;
+	}
+
+	public Integer saveMedication(CrmAppointment entity,
+			List<CrmMedication> list, String materialType) {
+		int i = 0;
+
+		dao.executeHQL("delete from CrmMedication o where o.crmAppointment.id = "
+				+ entity.getId()
+				+ " and o.materialType = '"
+				+ materialType
+				+ "'");
+
+		for (CrmMedication row : list) {
+			row.setId(getId(CrmMedication.class));
 			dao.persist(row);
 		}
 

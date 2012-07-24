@@ -190,7 +190,7 @@ public class SearchByPatientBacking extends BaseBacking {
 	public void cancelAppointmentAction(ActionEvent actionEvent) {
 		String code = "";
 		
-		selectedAppointment.setIdUserCanceled(FacesUtil.getCurrentIdUsuario());
+		selectedAppointment.setCrmUserByIdUserCanceled(FacesUtil.getCurrentUser());
 		selectedAppointment.setDateCanceled(new Date());
 		selectedAppointment.setState(Constant.APP_STATE_CANCELED);
 		processService.saveAppointment(selectedAppointment);
@@ -204,7 +204,8 @@ public class SearchByPatientBacking extends BaseBacking {
 	
 	public void checkAppointmentAction(ActionEvent actionEvent) {
 		String code = "";
-		selectedAppointment.setIdUserChecked(FacesUtil.getCurrentIdUsuario());
+		selectedAppointment.setCrmUserByIdUserChecked(FacesUtil
+				.getCurrentUser());
 		selectedAppointment.setDateChecked(new Date());
 		selectedAppointment.setState(Constant.APP_STATE_CHECKED);
 		processService.saveAppointment(selectedAppointment);
