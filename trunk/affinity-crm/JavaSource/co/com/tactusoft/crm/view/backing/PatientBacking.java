@@ -427,17 +427,17 @@ public class PatientBacking extends BaseBacking {
 				if (FacesUtil.isEmptyOrBlank(selected.getZipCode())) {
 					selected.setZipCode("00000");
 				}
-				
-				/*CustomerExecute.update(codeSap,
-				sap.getUrlCustomer2(), sap.getUsername(),
-				sap.getPassword(), tratamiento, selected.getSurnames(),
-				selected.getFirstnames(), direccion,
-				selected.getZipCode(), selected.getPhoneNumber(),
-				selected.getCellNumber(), selected.getEmail(),
-				crmCountry.getCode(), crmCity.getName(),
-				crmRegion.getCode(), profile.getSalesOrg(),
-				profile.getDistrChan(), profile.getDivision(),
-				crmCountry.getCurrencyIso());*/
+
+				/*
+				 * CustomerExecute.update(codeSap, sap.getUrlCustomer2(),
+				 * sap.getUsername(), sap.getPassword(), tratamiento,
+				 * selected.getSurnames(), selected.getFirstnames(), direccion,
+				 * selected.getZipCode(), selected.getPhoneNumber(),
+				 * selected.getCellNumber(), selected.getEmail(),
+				 * crmCountry.getCode(), crmCity.getName(), crmRegion.getCode(),
+				 * profile.getSalesOrg(), profile.getDistrChan(),
+				 * profile.getDivision(), crmCountry.getCurrencyIso());
+				 */
 
 				selected.setSalesOrg(profile.getSalesOrg());
 				selected.setCountry(crmCountry.getCode());
@@ -485,20 +485,26 @@ public class PatientBacking extends BaseBacking {
 					codeSap = selected.getCodeSap();
 				}
 
-				selected.setCodeSap(codeSap);
-				processService.savePatient(selected, automatic);
-
-				if (newRecord) {
-					message = FacesUtil.getMessage("pat_msg_ok", codeSap);
+				if (codeSap.isEmpty()) {
+					processService.removePatient(selected.getId());
+					message = FacesUtil.getMessage("pat_msg_error_cnx");
+					FacesUtil.addError(message);
 				} else {
-					message = FacesUtil
-							.getMessage("pat_msg_update_ok", codeSap);
-				}
-				FacesUtil.addInfo(message);
+					selected.setCodeSap(codeSap);
+					processService.savePatient(selected, automatic);
 
-				disabledSaveButton = true;
-				newRecord = false;
-				exitsSAP = true;
+					if (newRecord) {
+						message = FacesUtil.getMessage("pat_msg_ok", codeSap);
+					} else {
+						message = FacesUtil.getMessage("pat_msg_update_ok",
+								codeSap);
+					}
+					FacesUtil.addInfo(message);
+
+					disabledSaveButton = true;
+					newRecord = false;
+					exitsSAP = true;
+				}
 
 			} else {
 				String field = FacesUtil.getMessage("pat");
@@ -507,6 +513,7 @@ public class PatientBacking extends BaseBacking {
 				FacesUtil.addError(message);
 			}
 		} catch (Exception ex) {
+			processService.removePatient(selected.getId());
 			message = FacesUtil.getMessage("pat_msg_error_cnx");
 			FacesUtil.addError(message);
 		}

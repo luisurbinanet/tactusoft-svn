@@ -45,8 +45,11 @@ public class Constant {
 	public static final String APP_STATE_NOATTENDED_LABEL = "glb_app_no_attended";
 
 	public static final String HISTORY_NOT_REFER = "NO REFERIDO";
-	
+
 	public static final String MATERIAL_TYPE_MEDICINE = "MEDICAMENTO";
 	public static final String MATERIAL_TYPE_THERAPY = "TERAPIA";
 	public static final String MATERIAL_TYPE_EXAMS = "EXAMENES_COMPLEMENTARIOS";
+
+	public static final String NOTE_TYPE_DOCTOR = "MEDICO";
+	public static final String NOTE_TYPE_NURSE = "ENFERMERA";
 }

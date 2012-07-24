@@ -45,7 +45,7 @@ public class CrmDiagnosis implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_appointment")
 	public CrmAppointment getCrmAppointment() {
 		return this.crmAppointment;

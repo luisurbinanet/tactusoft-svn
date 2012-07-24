@@ -309,7 +309,8 @@
 								<p:spacer />
 
 								<p:fieldset legend="#{msg['his_history_note']}">
-									<p:inputTextarea rows="5" style="width:1000px;" />
+									<p:inputTextarea rows="5" style="width:1100px;"
+										value="#{historyBacking.noteDoctor}" />
 								</p:fieldset>
 
 							</h:panelGrid>
@@ -1060,6 +1061,58 @@
 						</h:panelGrid>
 					</p:tab>
 
+					<p:tab id="tab7" title="#{msg['his_history_ip']}">
+						<p:dataTable var="rec"
+							value="#{historyBacking.diagnosisModelView}" rowKey="#{rec.id}"
+							paginator="true" rows="15" style="width:100%"
+							emptyMessage="#{msg['glb_no_records_found']}">
+
+							<p:column headerText="#{msg['app_date']}">
+								<h:outputLabel
+									value="#{rec.crmAppointment.startAppointmentDate}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputLabel>
+							</p:column>
+
+							<p:column headerText="#{msg['app_doctor']}">
+								<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+							</p:column>
+
+							<p:column headerText="#{msg['cie_desc']}">
+								<h:outputLabel value="#{rec.crmCie.description}" />
+							</p:column>
+
+						</p:dataTable>
+
+					</p:tab>
+
+					<p:tab id="tab8" title="#{msg['his_history_medicaction']}">
+						<p:dataTable var="rec"
+							value="#{historyBacking.medicationModelView}" rowKey="#{rec.id}"
+							paginator="true" rows="15" style="width:100%"
+							emptyMessage="#{msg['glb_no_records_found']}">
+
+							<p:column headerText="#{msg['app_date']}">
+								<h:outputLabel
+									value="#{rec.crmAppointment.startAppointmentDate}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputLabel>
+							</p:column>
+
+							<p:column headerText="#{msg['app_doctor']}">
+								<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+							</p:column>
+
+							<p:column headerText="#{msg['sal_material_descr']}">
+								<h:outputLabel value="#{rec.descMaterial}" />
+							</p:column>
+
+							<p:column headerText="#{msg['sal_material_amount']}"
+								style="width:100px">
+								<h:outputLabel value="#{rec.unit}" />
+							</p:column>
+						</p:dataTable>
+					</p:tab>
 				</p:tabView>
 
 				<p:dialog header="#{msg['sal_patient']}" widgetVar="dlg2"

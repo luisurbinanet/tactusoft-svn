@@ -104,10 +104,18 @@ public class HistoryBacking extends BaseBacking {
 	private String typeMedication;
 	private String titleMedication;
 	private int amount;
-
+	private String noteDoctor;
 	private boolean viewMode;
-
 	private Map<String, CrmMaterialRange> mapRanges;
+
+	private List<CrmDiagnosis> listDiagnosisView;
+	private DiagnosisDataModel diagnosisModelView;
+	private List<CrmMedication> listMedicationView;
+	private MedicationDataModel medicationModelView;
+	private List<CrmMedication> listTherapyView;
+	private MedicationDataModel therapyModelView;
+	private List<CrmMedication> listExamView;
+	private MedicationDataModel examModelView;
 
 	public HistoryBacking() {
 		newAction(null);
@@ -513,12 +521,84 @@ public class HistoryBacking extends BaseBacking {
 		this.amount = amount;
 	}
 
+	public String getNoteDoctor() {
+		return noteDoctor;
+	}
+
+	public void setNoteDoctor(String noteDoctor) {
+		this.noteDoctor = noteDoctor;
+	}
+
 	public boolean isViewMode() {
 		return viewMode;
 	}
 
 	public void setViewMode(boolean viewMode) {
 		this.viewMode = viewMode;
+	}
+
+	public List<CrmDiagnosis> getListDiagnosisView() {
+		return listDiagnosisView;
+	}
+
+	public void setListDiagnosisView(List<CrmDiagnosis> listDiagnosisView) {
+		this.listDiagnosisView = listDiagnosisView;
+	}
+
+	public DiagnosisDataModel getDiagnosisModelView() {
+		return diagnosisModelView;
+	}
+
+	public void setDiagnosisModelView(DiagnosisDataModel diagnosisModelView) {
+		this.diagnosisModelView = diagnosisModelView;
+	}
+
+	public List<CrmMedication> getListMedicationView() {
+		return listMedicationView;
+	}
+
+	public void setListMedicationView(List<CrmMedication> listMedicationView) {
+		this.listMedicationView = listMedicationView;
+	}
+
+	public MedicationDataModel getMedicationModelView() {
+		return medicationModelView;
+	}
+
+	public void setMedicationModelView(MedicationDataModel medicationModelView) {
+		this.medicationModelView = medicationModelView;
+	}
+
+	public List<CrmMedication> getListTherapyView() {
+		return listTherapyView;
+	}
+
+	public void setListTherapyView(List<CrmMedication> listTherapyView) {
+		this.listTherapyView = listTherapyView;
+	}
+
+	public MedicationDataModel getTherapyModelView() {
+		return therapyModelView;
+	}
+
+	public void setTherapyModelView(MedicationDataModel therapyModelView) {
+		this.therapyModelView = therapyModelView;
+	}
+
+	public List<CrmMedication> getListExamView() {
+		return listExamView;
+	}
+
+	public void setListExamView(List<CrmMedication> listExamView) {
+		this.listExamView = listExamView;
+	}
+
+	public MedicationDataModel getExamModelView() {
+		return examModelView;
+	}
+
+	public void setExamModelView(MedicationDataModel examModelView) {
+		this.examModelView = examModelView;
 	}
 
 	public void newAction(ActionEvent event) {
@@ -565,9 +645,6 @@ public class HistoryBacking extends BaseBacking {
 
 		listDiagnosis = new ArrayList<CrmDiagnosis>();
 		diagnosisModel = new DiagnosisDataModel(listDiagnosis);
-
-		refreshMaterialFields();
-
 		listMedication = new ArrayList<CrmMedication>();
 		medicationModel = new MedicationDataModel(listMedication);
 		listTherapy = new ArrayList<CrmMedication>();
@@ -577,9 +654,20 @@ public class HistoryBacking extends BaseBacking {
 		viewMode = true;
 		typeMedication = Constant.MATERIAL_TYPE_MEDICINE;
 
+		listDiagnosisView = new ArrayList<CrmDiagnosis>();
+		diagnosisModelView = new DiagnosisDataModel(listDiagnosisView);
+		listMedicationView = new ArrayList<CrmMedication>();
+		medicationModelView = new MedicationDataModel(listMedicationView);
+		listTherapyView = new ArrayList<CrmMedication>();
+		therapyModelView = new MedicationDataModel(listTherapyView);
+		listExamView = new ArrayList<CrmMedication>();
+		examModelView = new MedicationDataModel(listExamView);
+
 		SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
 		listAllMaterial = CustomListsExecute.getMaterials(sap.getUrlWebList(),
 				sap.getUsername(), sap.getPassword());
+
+		refreshMaterialFields();
 	}
 
 	public void searchAction(ActionEvent event) {
@@ -616,6 +704,14 @@ public class HistoryBacking extends BaseBacking {
 					.getHistoryPhysique(selectedPatient.getId());
 			selectedHistoryOrganometry = processService
 					.getHistoryOrganometry(selectedPatient.getId());
+
+			listDiagnosisView = processService
+					.getListDiagnosisByPatient(selectedPatient.getId());
+			diagnosisModelView = new DiagnosisDataModel(listDiagnosisView);
+
+			listMedicationView = processService
+					.getListMedicationByPatient(selectedPatient.getId());
+			medicationModelView = new MedicationDataModel(listMedicationView);
 
 			getRenderedRecord();
 
@@ -1426,13 +1522,21 @@ public class HistoryBacking extends BaseBacking {
 
 	public void closeAppointmentAction(ActionEvent event) {
 		String message = null;
+
 		if (listDiagnosis.size() < 2) {
 			message = FacesUtil.getMessage("his_msg_message_dig_1");
 			FacesUtil.addWarn(message);
-		} else if (listMedication.size() == 0) {
+		}
+		if (listMedication.size() == 0) {
 			message = FacesUtil.getMessage("his_msg_message_med_1");
 			FacesUtil.addWarn(message);
-		} else {
+		}
+		if (FacesUtil.isEmptyOrBlank(noteDoctor)) {
+			String field = FacesUtil.getMessage("his_history_note");
+			message = FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		}
+		if (message == null) {
 			processService.saveDiagnosis(selectedAppointment, listDiagnosis);
 			processService.saveMedication(selectedAppointment, listMedication,
 					Constant.MATERIAL_TYPE_MEDICINE);
@@ -1440,6 +1544,8 @@ public class HistoryBacking extends BaseBacking {
 					Constant.MATERIAL_TYPE_THERAPY);
 			processService.saveMedication(selectedAppointment, listExam,
 					Constant.MATERIAL_TYPE_EXAMS);
+			processService.saveNotes(selectedAppointment, noteDoctor,
+					Constant.NOTE_TYPE_DOCTOR);
 
 			viewMode = true;
 			selectedAppointment.setCloseAppointment(true);
