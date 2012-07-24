@@ -49,6 +49,7 @@ public class CrmAppointment implements java.io.Serializable {
 	private Date dateChecked;
 	private Date dateCanceled;
 	private Set<CrmDiagnosis> crmDiagnosises = new HashSet<CrmDiagnosis>(0);
+	private Set<CrmNote> crmNotes = new HashSet<CrmNote>(0);
 	private Set<CrmMedication> crmMedications = new HashSet<CrmMedication>(0);
 
 	public CrmAppointment() {
@@ -79,7 +80,7 @@ public class CrmAppointment implements java.io.Serializable {
 			String obs, Boolean untimely, Boolean closeAppointment, int state,
 			Date dateCreate, Date dateModified, Date dateChecked,
 			Date dateCanceled, Set<CrmDiagnosis> crmDiagnosises,
-			Set<CrmMedication> crmMedications) {
+			Set<CrmNote> crmNotes, Set<CrmMedication> crmMedications) {
 		this.id = id;
 		this.crmProcedureDetail = crmProcedureDetail;
 		this.crmUserByIdUserChecked = crmUserByIdUserChecked;
@@ -105,6 +106,7 @@ public class CrmAppointment implements java.io.Serializable {
 		this.dateChecked = dateChecked;
 		this.dateCanceled = dateCanceled;
 		this.crmDiagnosises = crmDiagnosises;
+		this.crmNotes = crmNotes;
 		this.crmMedications = crmMedications;
 	}
 
@@ -346,6 +348,15 @@ public class CrmAppointment implements java.io.Serializable {
 
 	public void setCrmDiagnosises(Set<CrmDiagnosis> crmDiagnosises) {
 		this.crmDiagnosises = crmDiagnosises;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmAppointment")
+	public Set<CrmNote> getCrmNotes() {
+		return this.crmNotes;
+	}
+
+	public void setCrmNotes(Set<CrmNote> crmNotes) {
+		this.crmNotes = crmNotes;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmAppointment")
