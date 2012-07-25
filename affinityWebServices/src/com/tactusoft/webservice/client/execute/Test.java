@@ -1,10 +1,49 @@
 package com.tactusoft.webservice.client.execute;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.primefaces.json.JSONException;
+
 import com.tactusoft.webservice.client.objects.Bapicustomer04;
+import com.tactusoft.webservice.client.vtiger.CustomH;
+import com.tactusoft.webservice.client.vtiger.VTLogin;
 
 public class Test {
-	
+
+	public static String getMD5(String text) {
+		String md5 = null;
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			md.update(text.getBytes("UTF-8"), 0, text.length());
+			byte[] bt = md.digest();
+			BigInteger bi = new BigInteger(1, bt);
+			md5 = bi.toString(16);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return md5;
+	}
+
+	public static String md5Hex(String input) throws Exception {
+		MessageDigest md = MessageDigest.getInstance("MD5");
+		byte[] hash = md.digest(input.getBytes());
+		return new BigInteger(1, hash).toString(16);
+	}
+
 	public static void main(String args[]) {
+
+		getJson();
 
 		// CREAR CLIENTES
 		String url = "http://ansrvsap2.affinity.net:8001/sap/bc/srt/rfc/sap/z_sd_customer_maintain_all/300/z_sd_customer_maintain_all/z_sd_customer_maintain_all";
@@ -15,12 +54,12 @@ public class Test {
 		String tipoDocumento = "1";
 		String nroDocumento = "MX00000121";
 		String tratamiento = "Señor";
-		String nombres = "Carlos Arturo ";
-		String apellidos = "Sarmiento Royero";
-		String direccion = "PRUEBA1207111";
-		String telefono = "PRUEBA1207111";
+		String nombres = "Prueba 24 de julio 2012 ";
+		String apellidos = "Prueba 24 de julio 2012";
+		String direccion = "Prueba 24 de julio 2012";
+		String telefono = "Prueba 24 de jul";
 		String codigoPostal = "12345";
-		String celular = "PRUEBA1207111";
+		String celular = "Prueba 24 de jul";
 		String correoElectronico = "";
 		String pais = "MX";
 		String ciudad = "Distrito Federal";
@@ -60,8 +99,8 @@ public class Test {
 		 */
 
 		url = "http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zcustomer2/300/zcustomer2/zcustomer2";
-		Bapicustomer04 detail = CustomerExecute.getDetail(url, username, password, "3000",
-				"0000765694");
+		Bapicustomer04 detail = CustomerExecute.getDetail(url, username,
+				password, "3000", "0000765694");
 		System.out.println("PRUEBA");
 
 		/*
@@ -107,8 +146,59 @@ public class Test {
 		 * System.out.println(customerData.value.getKunnr()); } catch
 		 * (RemoteException e) { e.printStackTrace(); }
 		 */
-
 	}
 
+	public static void getJson() {
+		CustomH customH = new CustomH("http://192.168.1.42/vtigercrm");
+		VTLogin login;
+		try {
+			login = customH.login("admin", "ADXdOCL86knRsTC");
+			if (login != null) {
+				Map<String, Object> valueMap = new HashMap<String, Object>();
+				valueMap.put("contact_no", "8647362");
+				valueMap.put("lastname", "Sarmiento Royero");
+				valueMap.put("firstname", "Carlos Arturo");
+				valueMap.put("mobile", "3003044115");
+				valueMap.put("otherphone", "3003044115");
+				valueMap.put("phone", "6501550");
+				valueMap.put("homephone", "6501550");
+				valueMap.put("mailingstreet", "Carrera 55A 163 35");
+				valueMap.put("otherstreet", "Carrera 55A 163 35");
+				valueMap.put("mailingcountry", "Colombia");
+				valueMap.put("othercountry", "Colombia");
+				valueMap.put("otherstate", "Cundinamarca");
+				valueMap.put("mailingstate", "Cundinamarca");
+				valueMap.put("otherstate", "Cundinamarca");
+				valueMap.put("mailingcity", "Bogotá");
+				valueMap.put("othercity", "Bogotá");
+				valueMap.put("mailingzip", "00000");
+				valueMap.put("otherzip", "00000");
+				valueMap.put("email", "tactusoft@hotmail.com");
+				
+				customH.create("Contacts", valueMap);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static String convertStreamToString(InputStream is) {
+		// The incoming input stream is accumulated in a String to be returned
+		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+		StringBuilder sb = new StringBuilder();
+		String line = null;
+		try {
+			while ((line = reader.readLine()) != null) {
+				sb.append(line).append("\n");
+			}
+		} catch (IOException e) {
+		} finally {
+			try {
+				is.close();
+			} catch (IOException e) {
+			}
+		}
+		return sb.toString();
+	}
 
 }
