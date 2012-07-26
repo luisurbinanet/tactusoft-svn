@@ -34,7 +34,21 @@ public class CrmUser implements java.io.Serializable {
 	private String extension;
 	private int state;
 	private Set<CrmUserBranch> crmUserBranchs = new HashSet<CrmUserBranch>(0);
+	private Set<CrmDoctor> crmDoctors = new HashSet<CrmDoctor>(0);
+	private Set<CrmAppointment> crmAppointmentsForIdUserChecked = new HashSet<CrmAppointment>(
+			0);
+	private Set<CrmAppointment> crmAppointmentsForIdUserCanceled = new HashSet<CrmAppointment>(
+			0);
+	private Set<CrmAppointment> crmAppointmentsForIdUserCreate = new HashSet<CrmAppointment>(
+			0);
+	private Set<CrmPatient> crmPatientsForIdUserModified = new HashSet<CrmPatient>(
+			0);
+	private Set<CrmNurse> crmNurses = new HashSet<CrmNurse>(0);
+	private Set<CrmAppointment> crmAppointmentsForIdUserModified = new HashSet<CrmAppointment>(
+			0);
 	private Set<CrmUserRole> crmUserRoles = new HashSet<CrmUserRole>(0);
+	private Set<CrmPatient> crmPatientsForIdUserCreate = new HashSet<CrmPatient>(
+			0);
 
 	public CrmUser() {
 	}
@@ -58,7 +72,15 @@ public class CrmUser implements java.io.Serializable {
 			CrmProfile crmProfile, String username, String password,
 			String doc, String names, String surnames, String email,
 			String phone, String extension, int state,
-			Set<CrmUserBranch> crmUserBranchs, Set<CrmUserRole> crmUserRoles) {
+			Set<CrmUserBranch> crmUserBranchs, Set<CrmDoctor> crmDoctors,
+			Set<CrmAppointment> crmAppointmentsForIdUserChecked,
+			Set<CrmAppointment> crmAppointmentsForIdUserCanceled,
+			Set<CrmAppointment> crmAppointmentsForIdUserCreate,
+			Set<CrmPatient> crmPatientsForIdUserModified,
+			Set<CrmNurse> crmNurses,
+			Set<CrmAppointment> crmAppointmentsForIdUserModified,
+			Set<CrmUserRole> crmUserRoles,
+			Set<CrmPatient> crmPatientsForIdUserCreate) {
 		this.id = id;
 		this.crmDepartment = crmDepartment;
 		this.crmProfile = crmProfile;
@@ -72,7 +94,15 @@ public class CrmUser implements java.io.Serializable {
 		this.extension = extension;
 		this.state = state;
 		this.crmUserBranchs = crmUserBranchs;
+		this.crmDoctors = crmDoctors;
+		this.crmAppointmentsForIdUserChecked = crmAppointmentsForIdUserChecked;
+		this.crmAppointmentsForIdUserCanceled = crmAppointmentsForIdUserCanceled;
+		this.crmAppointmentsForIdUserCreate = crmAppointmentsForIdUserCreate;
+		this.crmPatientsForIdUserModified = crmPatientsForIdUserModified;
+		this.crmNurses = crmNurses;
+		this.crmAppointmentsForIdUserModified = crmAppointmentsForIdUserModified;
 		this.crmUserRoles = crmUserRoles;
+		this.crmPatientsForIdUserCreate = crmPatientsForIdUserCreate;
 	}
 
 	@Id
@@ -125,7 +155,7 @@ public class CrmUser implements java.io.Serializable {
 
 	@Column(name = "doc", nullable = false, length = 45)
 	public String getDoc() {
-		return doc;
+		return this.doc;
 	}
 
 	public void setDoc(String doc) {
@@ -196,12 +226,90 @@ public class CrmUser implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmUser")
+	public Set<CrmDoctor> getCrmDoctors() {
+		return this.crmDoctors;
+	}
+
+	public void setCrmDoctors(Set<CrmDoctor> crmDoctors) {
+		this.crmDoctors = crmDoctors;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmUserByIdUserChecked")
+	public Set<CrmAppointment> getCrmAppointmentsForIdUserChecked() {
+		return this.crmAppointmentsForIdUserChecked;
+	}
+
+	public void setCrmAppointmentsForIdUserChecked(
+			Set<CrmAppointment> crmAppointmentsForIdUserChecked) {
+		this.crmAppointmentsForIdUserChecked = crmAppointmentsForIdUserChecked;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmUserByIdUserCanceled")
+	public Set<CrmAppointment> getCrmAppointmentsForIdUserCanceled() {
+		return this.crmAppointmentsForIdUserCanceled;
+	}
+
+	public void setCrmAppointmentsForIdUserCanceled(
+			Set<CrmAppointment> crmAppointmentsForIdUserCanceled) {
+		this.crmAppointmentsForIdUserCanceled = crmAppointmentsForIdUserCanceled;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmUserByIdUserCreate")
+	public Set<CrmAppointment> getCrmAppointmentsForIdUserCreate() {
+		return this.crmAppointmentsForIdUserCreate;
+	}
+
+	public void setCrmAppointmentsForIdUserCreate(
+			Set<CrmAppointment> crmAppointmentsForIdUserCreate) {
+		this.crmAppointmentsForIdUserCreate = crmAppointmentsForIdUserCreate;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmUserByIdUserModified")
+	public Set<CrmPatient> getCrmPatientsForIdUserModified() {
+		return this.crmPatientsForIdUserModified;
+	}
+
+	public void setCrmPatientsForIdUserModified(
+			Set<CrmPatient> crmPatientsForIdUserModified) {
+		this.crmPatientsForIdUserModified = crmPatientsForIdUserModified;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmUser")
+	public Set<CrmNurse> getCrmNurses() {
+		return this.crmNurses;
+	}
+
+	public void setCrmNurses(Set<CrmNurse> crmNurses) {
+		this.crmNurses = crmNurses;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmUserByIdUserModified")
+	public Set<CrmAppointment> getCrmAppointmentsForIdUserModified() {
+		return this.crmAppointmentsForIdUserModified;
+	}
+
+	public void setCrmAppointmentsForIdUserModified(
+			Set<CrmAppointment> crmAppointmentsForIdUserModified) {
+		this.crmAppointmentsForIdUserModified = crmAppointmentsForIdUserModified;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmUser")
 	public Set<CrmUserRole> getCrmUserRoles() {
 		return this.crmUserRoles;
 	}
 
 	public void setCrmUserRoles(Set<CrmUserRole> crmUserRoles) {
 		this.crmUserRoles = crmUserRoles;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmUserByIdUserCreate")
+	public Set<CrmPatient> getCrmPatientsForIdUserCreate() {
+		return this.crmPatientsForIdUserCreate;
+	}
+
+	public void setCrmPatientsForIdUserCreate(
+			Set<CrmPatient> crmPatientsForIdUserCreate) {
+		this.crmPatientsForIdUserCreate = crmPatientsForIdUserCreate;
 	}
 
 }
