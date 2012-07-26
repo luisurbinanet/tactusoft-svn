@@ -405,7 +405,8 @@
 						</p:fieldset>
 					</p:tab>
 
-					<p:tab id="tab2" title="#{msg['his_history_history']}">
+					<p:tab id="tab2" title="#{msg['his_history_history']}"
+						rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
 
 						<h:panelGrid width="100%">
 							<h:outputText value="#{msg['his_history_reason']}" />
@@ -474,7 +475,8 @@
 
 					</p:tab>
 
-					<p:tab id="tab3" title="#{msg['his_history_record']}">
+					<p:tab id="tab3" title="#{msg['his_history_record']}"
+						rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
 
 						<p:fieldset legend="#{msg['his_record_personal']}">
 							<h:panelGrid id="pnlPersonal" columns="3" width="100%">
@@ -816,7 +818,8 @@
 
 					</p:tab>
 
-					<p:tab id="tab4" title="#{msg['his_history_homeopathic']}">
+					<p:tab id="tab4" title="#{msg['his_history_homeopathic']}"
+						rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
 
 						<p:fieldset legend="#{msg['his_homeopathic_biotipology']}">
 							<h:panelGrid width="100%">
@@ -868,7 +871,8 @@
 
 					</p:tab>
 
-					<p:tab id="tab5" title="#{msg['his_history_physique']}">
+					<p:tab id="tab5" title="#{msg['his_history_physique']}"
+						rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
 						<h:panelGrid columns="4" width="100%"
 							columnClasses="width25per,width25per,width25per,width25per">
 
@@ -1052,7 +1056,8 @@
 						</h:panelGrid>
 					</p:tab>
 
-					<p:tab id="tab6" title="#{msg['his_organometry']}">
+					<p:tab id="tab6" title="#{msg['his_organometry']}"
+						rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
 						<h:panelGrid id="pnlOrganometry" columns="1" width="100%">
 							<p:selectBooleanCheckbox
 								disabled="#{historyBacking.readOnlySelectedHistoryOrganometry}"
@@ -1068,7 +1073,8 @@
 						</h:panelGrid>
 					</p:tab>
 
-					<p:tab id="tab7" title="#{msg['his_history_ip']}">
+					<p:tab id="tab7" title="#{msg['his_history_ip']}"
+						rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
 						<p:dataTable var="rec" value="#{historyBacking.listDiagnosisView}"
 							paginator="true" rows="15" style="width:100%"
 							emptyMessage="#{msg['glb_no_records_found']}">
@@ -1092,7 +1098,8 @@
 
 					</p:tab>
 
-					<p:tab id="tab8" title="#{msg['his_history_medicaction']}">
+					<p:tab id="tab8" title="#{msg['his_history_medicaction']}"
+						rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
 						<p:dataTable var="rec"
 							value="#{historyBacking.listMedicationView}" paginator="true"
 							rows="15" style="width:100%"
@@ -1147,7 +1154,8 @@
 						</p:dataTable>
 					</p:tab>
 
-					<p:tab id="tab10" title="#{msg['his_history_examinations']}">
+					<p:tab id="tab10" title="#{msg['his_history_examinations']}"
+						rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
 						<p:dataTable var="rec" value="#{historyBacking.listExamView}"
 							paginator="true" rows="15" style="width:100%"
 							emptyMessage="#{msg['glb_no_records_found']}">
