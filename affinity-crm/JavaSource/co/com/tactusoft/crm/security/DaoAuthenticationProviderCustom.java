@@ -20,6 +20,8 @@ import co.com.tactusoft.crm.controller.bo.ParameterBo;
 import co.com.tactusoft.crm.controller.bo.SecurityBo;
 import co.com.tactusoft.crm.controller.bo.TablesBo;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
+import co.com.tactusoft.crm.model.entities.CrmDoctor;
+import co.com.tactusoft.crm.model.entities.CrmNurse;
 import co.com.tactusoft.crm.model.entities.CrmPage;
 import co.com.tactusoft.crm.model.entities.CrmParameter;
 import co.com.tactusoft.crm.model.entities.CrmRole;
@@ -147,6 +149,20 @@ public class DaoAuthenticationProviderCustom extends
 				user.setListWSGroupSellers(result);
 			} catch (Exception ex) {
 				user.setListWSGroupSellers(new ArrayList<WSBean>());
+			}
+
+			CrmDoctor doctor = tableService
+					.getCrmDoctor(user.getUser().getId());
+			if (doctor != null) {
+				user.setRolePrincipal(Constant.ROLE_DOCTOR);
+			} else {
+				CrmNurse nurse = tableService.getCrmNurse(user.getUser()
+						.getId());
+				if (nurse != null) {
+					user.setRolePrincipal(Constant.ROLE_NURSE);
+				} else {
+					user.setRolePrincipal(Constant.ROLE_USER);
+				}
 			}
 		}
 	}
