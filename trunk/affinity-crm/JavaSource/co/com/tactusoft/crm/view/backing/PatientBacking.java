@@ -461,7 +461,7 @@ public class PatientBacking extends BaseBacking {
 					}
 				}
 
-				selected.setIdUserCreate(FacesUtil.getCurrentIdUsuario());
+				selected.setCrmUserByIdUserCreate(FacesUtil.getCurrentUser());
 				selected.setDateCreate(new Date());
 				processService.savePatient(selected, automatic && newRecord);
 
@@ -491,14 +491,17 @@ public class PatientBacking extends BaseBacking {
 					FacesUtil.addError(message);
 				} else {
 					selected.setCodeSap(codeSap);
-					processService.savePatient(selected, automatic);
 
 					if (newRecord) {
 						message = FacesUtil.getMessage("pat_msg_ok", codeSap);
 					} else {
+						selected.setCrmUserByIdUserModified(FacesUtil
+								.getCurrentUser());
 						message = FacesUtil.getMessage("pat_msg_update_ok",
 								codeSap);
 					}
+
+					processService.savePatient(selected, automatic);
 					FacesUtil.addInfo(message);
 
 					disabledSaveButton = true;
