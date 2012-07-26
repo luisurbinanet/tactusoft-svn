@@ -19,7 +19,9 @@ public class Constant {
 	public static final Integer SEND_SMS = 4;
 
 	public static final String ROLE_ADMIN = "ADMINISTRADOR";
-	public static final String ROLE_USER = "USUARIO";
+	public static final String ROLE_USER = "USER";
+	public static final String ROLE_DOCTOR = "DOCTOR";
+	public static final String ROLE_NURSE = "NURSE";
 
 	public static BigDecimal APP_TYPE_FOR_DATE_VALUE = new BigDecimal(1);
 	public static BigDecimal APP_TYPE_FOR_DOCTOR_VALUE = new BigDecimal(2);

@@ -370,4 +370,8 @@ public class BaseBacking implements Serializable {
 		this.selectedWSGroupSellers = selectedWSGroupSellers;
 	}
 
+	public String getRolePrincipal() {
+		return FacesUtil.getCurrentUserData().getRolePrincipal();
+	}
+
 }

@@ -34,6 +34,7 @@ public class UserData implements UserDetails {
 	private List<CrmParameter> listParameter;
 	private List<WSBean> listWSGroupSellers;
 	private CrmPatient selectedPatient;
+	private String rolePrincipal;
 
 	public void setUsername(String username) {
 		this.username = username;
@@ -137,6 +138,14 @@ public class UserData implements UserDetails {
 
 	public void setSelectedPatient(CrmPatient selectedPatient) {
 		this.selectedPatient = selectedPatient;
+	}
+
+	public String getRolePrincipal() {
+		return rolePrincipal;
+	}
+
+	public void setRolePrincipal(String rolePrincipal) {
+		this.rolePrincipal = rolePrincipal;
 	}
 
 	public boolean isAccountNonExpired() {

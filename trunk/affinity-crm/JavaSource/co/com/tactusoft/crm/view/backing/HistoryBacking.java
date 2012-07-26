@@ -666,7 +666,7 @@ public class HistoryBacking extends BaseBacking {
 			}
 
 			listAppointment = processService.listAppointmentByPatient(
-					selectedPatient.getCodeSap(), 3);
+					selectedPatient.getCodeSap(), "3,4");
 			appointmentModel = new AppointmentDataModel(listAppointment);
 
 			selectedHistoryHistory = processService
@@ -680,32 +680,8 @@ public class HistoryBacking extends BaseBacking {
 			selectedHistoryOrganometry = processService
 					.getHistoryOrganometry(selectedPatient.getId());
 
-			listDiagnosisView = processService
-					.getListDiagnosisByPatient(selectedPatient.getId());
-
-			listMedicationView = new ArrayList<CrmMedication>();
-			listTherapyView = new ArrayList<CrmMedication>();
-			listExamView = new ArrayList<CrmMedication>();
-
-			List<CrmMedication> listAllMedication = processService
-					.getListMedicationByPatient(selectedPatient.getId());
-
-			for (CrmMedication row : listAllMedication) {
-				if (row.getMaterialType().equals(
-						Constant.MATERIAL_TYPE_MEDICINE)) {
-					listMedicationView.add(row);
-				} else if (row.getMaterialType().equals(
-						Constant.MATERIAL_TYPE_THERAPY)) {
-					listTherapyView.add(row);
-				} else if (row.getMaterialType().equals(
-						Constant.MATERIAL_TYPE_EXAMS)) {
-					listExamView.add(row);
-				}
-			}
-
-			listNoteView = processService.getListNoteByPatient(selectedPatient
-					.getId());
-
+			
+			refreshLists();
 			getRenderedRecord();
 
 			if (selectedPatient.getId() == null) {
@@ -732,6 +708,33 @@ public class HistoryBacking extends BaseBacking {
 
 		listDiagnosis = new ArrayList<CrmDiagnosis>();
 		diagnosisModel = new DiagnosisDataModel(listDiagnosis);
+	}
+
+	private void refreshLists() {
+		listDiagnosisView = processService
+				.getListDiagnosisByPatient(selectedPatient.getId());
+
+		listMedicationView = new ArrayList<CrmMedication>();
+		listTherapyView = new ArrayList<CrmMedication>();
+		listExamView = new ArrayList<CrmMedication>();
+
+		List<CrmMedication> listAllMedication = processService
+				.getListMedicationByPatient(selectedPatient.getId());
+
+		for (CrmMedication row : listAllMedication) {
+			if (row.getMaterialType().equals(Constant.MATERIAL_TYPE_MEDICINE)) {
+				listMedicationView.add(row);
+			} else if (row.getMaterialType().equals(
+					Constant.MATERIAL_TYPE_THERAPY)) {
+				listTherapyView.add(row);
+			} else if (row.getMaterialType().equals(
+					Constant.MATERIAL_TYPE_EXAMS)) {
+				listExamView.add(row);
+			}
+		}
+
+		listNoteView = processService.getListNoteByPatient(selectedPatient
+				.getId());
 	}
 
 	public void saveAction(ActionEvent event) {
@@ -1516,35 +1519,57 @@ public class HistoryBacking extends BaseBacking {
 	public void closeAppointmentAction(ActionEvent event) {
 		String message = null;
 
-		if (listDiagnosis.size() < 2) {
-			message = FacesUtil.getMessage("his_msg_message_dig_1");
-			FacesUtil.addWarn(message);
-		}
-		if (listMedication.size() == 0) {
-			message = FacesUtil.getMessage("his_msg_message_med_1");
-			FacesUtil.addWarn(message);
-		}
-		if (FacesUtil.isEmptyOrBlank(noteDoctor)) {
-			String field = FacesUtil.getMessage("his_history_note");
-			message = FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addWarn(message);
-		}
-		if (message == null) {
-			processService.saveDiagnosis(selectedAppointment, listDiagnosis);
-			processService.saveMedication(selectedAppointment, listMedication,
-					Constant.MATERIAL_TYPE_MEDICINE);
-			processService.saveMedication(selectedAppointment, listTherapy,
-					Constant.MATERIAL_TYPE_THERAPY);
-			processService.saveMedication(selectedAppointment, listExam,
-					Constant.MATERIAL_TYPE_EXAMS);
-			processService.saveNotes(selectedAppointment, noteDoctor,
-					Constant.NOTE_TYPE_DOCTOR);
+		if (this.getRolePrincipal().equals(Constant.ROLE_DOCTOR)) {
+			if (listDiagnosis.size() < 2) {
+				message = FacesUtil.getMessage("his_msg_message_dig_1");
+				FacesUtil.addWarn(message);
+			}
+			if (listMedication.size() == 0) {
+				message = FacesUtil.getMessage("his_msg_message_med_1");
+				FacesUtil.addWarn(message);
+			}
+			if (FacesUtil.isEmptyOrBlank(noteDoctor)) {
+				String field = FacesUtil.getMessage("his_history_note");
+				message = FacesUtil.getMessage("glb_required", field);
+				FacesUtil.addWarn(message);
+			}
+			if (message == null) {
+				processService
+						.saveDiagnosis(selectedAppointment, listDiagnosis);
+				processService.saveMedication(selectedAppointment,
+						listMedication, Constant.MATERIAL_TYPE_MEDICINE);
+				processService.saveMedication(selectedAppointment, listTherapy,
+						Constant.MATERIAL_TYPE_THERAPY);
+				processService.saveMedication(selectedAppointment, listExam,
+						Constant.MATERIAL_TYPE_EXAMS);
+				processService.saveNotes(selectedAppointment, noteDoctor,
+						Constant.NOTE_TYPE_DOCTOR);
 
-			viewMode = true;
-			selectedAppointment.setCloseAppointment(true);
-			processService.saveAppointment(selectedAppointment);
-			message = FacesUtil.getMessage("his_msg_message_med_ok");
-			FacesUtil.addInfo(message);
+				viewMode = true;
+				selectedAppointment.setCloseAppointment(true);
+				selectedAppointment.setState(Constant.APP_STATE_ATTENDED);
+				processService.saveAppointment(selectedAppointment);
+				message = FacesUtil.getMessage("his_msg_message_med_ok");
+				FacesUtil.addInfo(message);
+				refreshLists();
+			}
+		} else if (this.getRolePrincipal().equals(Constant.ROLE_NURSE)) {
+			if (FacesUtil.isEmptyOrBlank(noteDoctor)) {
+				String field = FacesUtil.getMessage("his_history_note");
+				message = FacesUtil.getMessage("glb_required", field);
+				FacesUtil.addWarn(message);
+			} else {
+				processService.saveNotes(selectedAppointment, noteDoctor,
+						Constant.NOTE_TYPE_NURSE);
+
+				viewMode = true;
+				selectedAppointment.setCloseAppointment(true);
+				selectedAppointment.setState(Constant.APP_STATE_ATTENDED);
+				processService.saveAppointment(selectedAppointment);
+				message = FacesUtil.getMessage("his_msg_message_med_ok");
+				FacesUtil.addInfo(message);
+				refreshLists();
+			}
 		}
 	}
 

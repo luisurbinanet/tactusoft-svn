@@ -17,6 +17,7 @@ import co.com.tactusoft.crm.model.entities.CrmDoctorSchedule;
 import co.com.tactusoft.crm.model.entities.CrmDomain;
 import co.com.tactusoft.crm.model.entities.CrmHoliday;
 import co.com.tactusoft.crm.model.entities.CrmHolidayBranch;
+import co.com.tactusoft.crm.model.entities.CrmNurse;
 import co.com.tactusoft.crm.model.entities.CrmOccupation;
 import co.com.tactusoft.crm.model.entities.CrmPage;
 import co.com.tactusoft.crm.model.entities.CrmPageRole;
@@ -91,6 +92,10 @@ public class TablesBo implements Serializable {
 		return dao.find("from CrmDoctor o where o.crmUser.id = " + idUser);
 	}
 
+	public List<CrmNurse> getNurseByUser(BigDecimal idUser) {
+		return dao.find("from CrmNurse o where o.crmUser.id = " + idUser);
+	}
+
 	public List<CrmRole> getListRole() {
 		return dao.find("from CrmRole o");
 	}
@@ -162,7 +167,8 @@ public class TablesBo implements Serializable {
 						+ idBranch);
 	}
 
-	public List<CrmProcedureDetail> getListProcedureDetailByBranch(BigDecimal idBranch) {
+	public List<CrmProcedureDetail> getListProcedureDetailByBranch(
+			BigDecimal idBranch) {
 		String complementary = "(";
 		List<CrmProcedure> list = getListProcedureByBranch(idBranch);
 		for (CrmProcedure item : list) {
@@ -206,6 +212,28 @@ public class TablesBo implements Serializable {
 				+ idDoctor + " order by o.startHour");
 	}
 
+	public CrmDoctor getCrmDoctor(BigDecimal idUser) {
+		List<CrmDoctor> list = dao
+				.find("from CrmDoctor o where o.state = 1 and o.crmUser.id = "
+						+ idUser);
+		if (list.size() > 0) {
+			return list.get(0);
+		} else {
+			return null;
+		}
+	}
+
+	public CrmNurse getCrmNurse(BigDecimal idUser) {
+		List<CrmNurse> list = dao
+				.find("from CrmNurse o where o.state = 1 and o.crmUser.id = "
+						+ idUser);
+		if (list.size() > 0) {
+			return list.get(0);
+		} else {
+			return null;
+		}
+	}
+
 	public Integer saveDoctor(CrmDoctor entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmDoctor.class));
@@ -220,6 +248,13 @@ public class TablesBo implements Serializable {
 		return dao.persist(entity);
 	}
 
+	public Integer saveNurse(CrmNurse entity) {
+		if (entity.getId() == null) {
+			entity.setId(getId(CrmNurse.class));
+		}
+		return dao.persist(entity);
+	}
+
 	public Integer saveProfile(CrmProfile entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmProfile.class));
@@ -227,7 +262,7 @@ public class TablesBo implements Serializable {
 		return dao.persist(entity);
 	}
 
-	public Integer saveUser(CrmUser entity, CrmDoctor doctor) {
+	public Integer saveUser(CrmUser entity, CrmDoctor doctor, CrmNurse nurse) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmUser.class));
 		}
@@ -237,6 +272,11 @@ public class TablesBo implements Serializable {
 		if (doctor != null) {
 			doctor.setCrmUser(entity);
 			saveDoctor(doctor);
+		}
+
+		if (nurse != null) {
+			nurse.setCrmUser(entity);
+			saveNurse(nurse);
 		}
 
 		return result;
