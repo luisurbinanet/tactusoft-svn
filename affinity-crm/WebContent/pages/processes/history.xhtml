@@ -30,7 +30,8 @@
 							value="#{msg['btn_save_history']}" icon="ui-icon-disk"
 							actionListener="#{historyBacking.saveAction}"
 							update="toolBar growl tabView"
-							disabled="#{historyBacking.disabledSaveButton}" />
+							disabled="#{historyBacking.disabledSaveButton}"
+							rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -106,6 +107,7 @@
 								<p:column style="width:4%">
 									<p:commandButton update=":form:tabView"
 										disabled="#{rec.closeAppointment}" icon="ui-icon-check"
+										rendered="#{historyBacking.rolePrincipal eq 'DOCTOR' or historyBacking.rolePrincipal eq 'NURSE'}"
 										title="#{msg['btn_edit']}">
 										<f:setPropertyActionListener value="#{rec}"
 											target="#{historyBacking.selectedAppointment}" />
@@ -137,7 +139,8 @@
 
 							<p:spacer height="10" />
 
-							<h:panelGrid id="pnlAttended" width="100%">
+							<h:panelGrid id="pnlAttendedDoctor" width="100%"
+								rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
 
 								<p:fieldset legend="#{msg['his_history_ip']}">
 
@@ -309,6 +312,14 @@
 										value="#{historyBacking.noteDoctor}" />
 								</p:fieldset>
 
+							</h:panelGrid>
+
+							<h:panelGrid id="pnlAttendedNurse" width="100%"
+								rendered="#{historyBacking.rolePrincipal eq 'NURSE'}">
+								<p:fieldset legend="#{msg['his_history_note']}">
+									<p:inputTextarea rows="5" style="width:1100px;"
+										value="#{historyBacking.noteDoctor}" />
+								</p:fieldset>
 							</h:panelGrid>
 
 						</h:panelGrid>

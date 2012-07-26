@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Scope;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmDepartment;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
+import co.com.tactusoft.crm.model.entities.CrmNurse;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
 import co.com.tactusoft.crm.model.entities.CrmRole;
 import co.com.tactusoft.crm.model.entities.CrmUser;
@@ -44,7 +45,8 @@ public class UserBacking extends BaseBacking {
 
 	private String password;
 	private CrmDoctor crmDoctor;
-	private Boolean doctor;
+	private CrmNurse crmNurse;
+	private String rolePrincipal;
 
 	public UserBacking() {
 		newAction();
@@ -80,7 +82,9 @@ public class UserBacking extends BaseBacking {
 
 	public void setSelected(CrmUser selected) {
 		this.selected = selected;
-		password = this.selected.getPassword();
+		if (selected != null) {
+			password = this.selected.getPassword();
+		}
 	}
 
 	public List<SelectItem> getListProfile() {
@@ -139,12 +143,12 @@ public class UserBacking extends BaseBacking {
 		this.password = password;
 	}
 
-	public Boolean getDoctor() {
-		return doctor;
+	public String getRolePrincipal() {
+		return rolePrincipal;
 	}
 
-	public void setDoctor(Boolean doctor) {
-		this.doctor = doctor;
+	public void setRolePrincipal(String rolePrincipal) {
+		this.rolePrincipal = rolePrincipal;
 	}
 
 	public void newAction() {
@@ -157,7 +161,7 @@ public class UserBacking extends BaseBacking {
 		listRole = new DualListModel<CrmRole>();
 		generateListAction(null);
 
-		doctor = false;
+		rolePrincipal = Constant.ROLE_USER;
 		idSpeciality = Constant.DEFAULT_VALUE;
 	}
 
@@ -188,7 +192,8 @@ public class UserBacking extends BaseBacking {
 			FacesUtil.addError(message);
 		}
 
-		if (doctor && idSpeciality.intValue() == -1) {
+		if (rolePrincipal.equals(Constant.ROLE_DOCTOR)
+				&& idSpeciality.intValue() == -1) {
 			message = FacesUtil.getMessage("usr_msg_error_speciality");
 			FacesUtil.addError(message);
 		}
@@ -204,7 +209,8 @@ public class UserBacking extends BaseBacking {
 			selected.setCrmDepartment(mapDepartment.get(selected
 					.getCrmDepartment().getId()));
 
-			if (selected.getId() == null && doctor) {
+			if (selected.getId() == null
+					&& rolePrincipal.equals(Constant.ROLE_DOCTOR)) {
 				crmDoctor = new CrmDoctor();
 				crmDoctor.setCode(selected.getDoc());
 				crmDoctor.setNames(selected.getSurnames().toUpperCase() + " "
@@ -216,11 +222,27 @@ public class UserBacking extends BaseBacking {
 				crmDoctor.setNames(selected.getSurnames().toUpperCase() + " "
 						+ selected.getNames().toUpperCase());
 				crmDoctor.setCrmSpeciality(mapCrmSpeciality.get(idSpeciality));
-				crmDoctor.setState(doctor ? Constant.STATE_ACTIVE
+				crmDoctor
+						.setState(rolePrincipal.equals(Constant.ROLE_DOCTOR) ? Constant.STATE_ACTIVE
+								: Constant.STATE_INACTIVE);
+			}
+
+			if (selected.getId() == null
+					&& rolePrincipal.equals(Constant.ROLE_NURSE)) {
+				crmNurse = new CrmNurse();
+				crmNurse.setCode(selected.getDoc());
+				crmNurse.setNames(selected.getSurnames().toUpperCase() + " "
+						+ selected.getNames().toUpperCase());
+				crmNurse.setState(Constant.STATE_ACTIVE);
+			} else if (crmNurse != null) {
+				crmNurse.setCode(selected.getDoc());
+				crmNurse.setNames(selected.getSurnames().toUpperCase() + " "
+						+ selected.getNames().toUpperCase());
+				crmNurse.setState(rolePrincipal.equals(Constant.ROLE_NURSE) ? Constant.STATE_ACTIVE
 						: Constant.STATE_INACTIVE);
 			}
 
-			int result = tablesService.saveUser(selected, crmDoctor);
+			int result = tablesService.saveUser(selected, crmDoctor, crmNurse);
 
 			if (result == 0) {
 				tablesService.saveUserBranch(selected, listBranch.getTarget());
@@ -252,13 +274,25 @@ public class UserBacking extends BaseBacking {
 				crmDoctor = listDoctor.get(0);
 				idSpeciality = crmDoctor.getCrmSpeciality().getId();
 				if (crmDoctor.getState() == Constant.STATE_ACTIVE) {
-					doctor = true;
+					rolePrincipal = Constant.ROLE_DOCTOR;
 				} else {
-					doctor = false;
+					rolePrincipal = Constant.ROLE_USER;
 				}
 			} else {
-				crmDoctor = null;
-				doctor = false;
+				List<CrmNurse> listNurse = tablesService
+						.getNurseByUser(selected.getId());
+				if (listNurse.size() > 0) {
+					crmNurse = listNurse.get(0);
+					if (crmNurse.getState() == Constant.STATE_ACTIVE) {
+						rolePrincipal = Constant.ROLE_NURSE;
+					} else {
+						rolePrincipal = Constant.ROLE_USER;
+					}
+				} else {
+					crmDoctor = null;
+					crmNurse = null;
+					rolePrincipal = Constant.ROLE_USER;
+				}
 			}
 
 			listTargetBranch = tablesService.getListBranchByUser(selected
@@ -309,7 +343,7 @@ public class UserBacking extends BaseBacking {
 		String message = null;
 		selected = FacesUtil.getCurrentUser();
 		selected.setPassword(FacesUtil.getMD5(this.password));
-		int result = tablesService.saveUser(selected, null);
+		int result = tablesService.saveUser(selected, null, null);
 
 		if (result == 0) {
 			model = new UserDataModel(list);

@@ -35,7 +35,8 @@
 
 					<p:column selectionMode="single" style="width:18px" />
 
-					<p:column headerText="#{msg['usr_username']}">
+					<p:column headerText="#{msg['usr_username']}"
+						filterBy="#{rec.username}" filterMatchMode="contains">
 						<h:outputLabel value="#{rec.username}" />
 					</p:column>
 
@@ -136,15 +137,22 @@
 						<f:selectItems value="#{userBacking.listProfile}" />
 					</p:selectOneMenu>
 
-					<h:outputLabel value="#{msg['usr_doctor']}" />
-					<p:selectBooleanCheckbox value="#{userBacking.doctor}" >
-						<p:ajax update="lblSpeciality cmbSpeciality"/>
-					</p:selectBooleanCheckbox>
+					<h:outputLabel value="#{msg['usr_role_principal']}" />
+					<p:selectOneMenu value="#{userBacking.rolePrincipal}">
+						<p:ajax update="lblSpeciality cmbSpeciality" />
+						<f:selectItem itemValue="USER"
+							itemLabel="#{msg['user_role_principal_user']}" />
+						<f:selectItem itemValue="DOCTOR"
+							itemLabel="#{msg['user_role_principal_doctor']}" />
+						<f:selectItem itemValue="NURSE"
+							itemLabel="#{msg['user_role_principal_nurse']}" />
+					</p:selectOneMenu>
 
 					<h:outputLabel id="lblSpeciality" value="#{msg['doc_speciality']}"
-						disabled="#{not userBacking.doctor}" />
-					<p:selectOneMenu id="cmbSpeciality" value="#{userBacking.idSpeciality}"
-						style="width:250px" disabled="#{not userBacking.doctor}">
+						disabled="#{userBacking.rolePrincipal ne 'DOCTOR'?true:false}" />
+					<p:selectOneMenu id="cmbSpeciality"
+						value="#{userBacking.idSpeciality}" style="width:250px"
+						disabled="#{userBacking.rolePrincipal ne 'DOCTOR'?true:false}">
 						<f:selectItems value="#{userBacking.listCrmSpeciality}" />
 					</p:selectOneMenu>
 

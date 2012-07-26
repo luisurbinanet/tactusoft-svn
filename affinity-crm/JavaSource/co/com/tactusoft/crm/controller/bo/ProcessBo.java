@@ -27,6 +27,7 @@ import co.com.tactusoft.crm.model.entities.CrmHoliday;
 import co.com.tactusoft.crm.model.entities.CrmMaterialRange;
 import co.com.tactusoft.crm.model.entities.CrmMedication;
 import co.com.tactusoft.crm.model.entities.CrmNote;
+import co.com.tactusoft.crm.model.entities.CrmNurse;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
 import co.com.tactusoft.crm.model.entities.VwDoctorHour;
@@ -804,6 +805,15 @@ public class ProcessBo implements Serializable {
 				+ " order by o.startAppointmentDate desc");
 		return list;
 	}
+	
+	public List<CrmAppointment> listAppointmentByPatient(String patient,
+			String state) {
+		List<CrmAppointment> list = new ArrayList<CrmAppointment>();
+		list = dao.find("from CrmAppointment o where o.patientSap = '"
+				+ patient + "' and o.state in (" + state
+				+ ") order by o.startAppointmentDate desc");
+		return list;
+	}
 
 	public List<CrmAppointment> listAppointmentByPatient(String patient,
 			int state, Date startDate, Date endDate) {
@@ -842,7 +852,20 @@ public class ProcessBo implements Serializable {
 	public CrmDoctor getCrmDoctor() {
 		BigDecimal idUser = FacesUtil.getCurrentUser().getId();
 		List<CrmDoctor> list = dao
-				.find("from CrmDoctor o where o.crmUser.id = " + idUser);
+				.find("from CrmDoctor o where o.state = 1 and o.crmUser.id = "
+						+ idUser);
+		if (list.size() > 0) {
+			return list.get(0);
+		} else {
+			return null;
+		}
+	}
+	
+	public CrmNurse getCrmNurse() {
+		BigDecimal idUser = FacesUtil.getCurrentUser().getId();
+		List<CrmNurse> list = dao
+				.find("from CrmNurse o where o.state = 1 and o.crmUser.id = "
+						+ idUser);
 		if (list.size() > 0) {
 			return list.get(0);
 		} else {
@@ -1058,7 +1081,7 @@ public class ProcessBo implements Serializable {
 						+ " order by o.crmAppointment.startAppointmentDate desc");
 		return list;
 	}
-	
+
 	public List<CrmNote> getListNoteByPatient(BigDecimal idPatient) {
 		List<CrmNote> list = dao
 				.find("from CrmNote o where o.crmAppointment.crmPatient.id = "
