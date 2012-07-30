@@ -71,7 +71,7 @@
 					<p:selectOneMenu style="width:700px"
 						value="#{appointmentBacking.idProcedure}">
 						<f:selectItems value="#{appointmentBacking.listProcedure}" />
-						<p:ajax update="pnlDetail pnlDetail2"
+						<p:ajax update="pnlDetail pnlDetail2 btnSearch"
 							listener="#{appointmentBacking.handleProcedureChange}" />
 					</p:selectOneMenu>
 
@@ -79,7 +79,7 @@
 					<p:selectOneMenu id="selProcedureDetail" style="width:700px"
 						value="#{appointmentBacking.idProcedureDetail}">
 						<f:selectItems value="#{appointmentBacking.listProcedureDetail}" />
-						<p:ajax update="pnlDetail pnlDetail2"
+						<p:ajax update="pnlDetail pnlDetail2 btnSearch"
 							listener="#{appointmentBacking.handleProcedureDetailChange}" />
 					</p:selectOneMenu>
 
@@ -89,9 +89,11 @@
 						<f:selectItems value="#{appointmentBacking.listWSGroupSellers}" />
 					</p:selectOneMenu>
 
-					<h:outputLabel value="#{msg['app_procedure_search']}" />
+					<h:outputLabel value="#{msg['app_procedure_search']}"
+						rendered="#{appointmentBacking.renderedDoctorWithoutTime}" />
 					<p:selectOneMenu id="selSearch" style="width:700px"
-						value="#{appointmentBacking.idSearch}">
+						value="#{appointmentBacking.idSearch}"
+						rendered="#{appointmentBacking.renderedDoctorWithoutTime}">
 						<f:selectItems value="#{appointmentBacking.listSearch}" />
 						<p:ajax update="pnlDetail2 btnSearch"
 							listener="#{appointmentBacking.handleSearchChange}" />

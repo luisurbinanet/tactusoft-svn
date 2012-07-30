@@ -40,17 +40,25 @@ public class TablesBo implements Serializable {
 	private CustomHibernateDao dao;
 
 	public List<CrmDoctor> getListDoctor() {
-		return dao.find(CrmDoctor.class);
+		return dao.find("from CrmDoctor o");
 	}
 
 	public List<CrmDoctor> getListDoctorActive() {
-		return dao.find("from CrmDoctor o where o.state = 1");
+		return dao.find("from CrmDoctor o where o.state = 1 and o.id <> 0");
+	}
+
+	public List<CrmNurse> getListNurse() {
+		return dao.find(CrmNurse.class);
+	}
+
+	public List<CrmNurse> getListNurseActive() {
+		return dao.find("from CrmNurse o where o.state = 1");
 	}
 
 	public List<CrmDoctor> getListDoctorByBranch(BigDecimal idBranch) {
 		return dao
 				.find("select distinct o.crmDoctor from CrmDoctorSchedule o where o.crmBranch.id = "
-						+ idBranch + " and o.crmDoctor.state = 1");
+						+ idBranch + " and o.crmDoctor.id <> 0 and o.crmDoctor.state = 1");
 	}
 
 	public List<CrmDoctorSchedule> getListScheduleByDoctor(BigDecimal idDoctor) {
@@ -75,11 +83,11 @@ public class TablesBo implements Serializable {
 	}
 
 	public List<CrmUser> getListUser() {
-		return dao.find("from CrmUser o");
+		return dao.find("from CrmUser o where o.id <> 0");
 	}
 
 	public List<CrmUser> getListUserActive() {
-		return dao.find("from CrmUser o where o.state = 1");
+		return dao.find("from CrmUser o where o.id <> 0 and o.state = 1");
 	}
 
 	public List<CrmUser> getListUserActiveByBranch(BigDecimal idBranch) {
