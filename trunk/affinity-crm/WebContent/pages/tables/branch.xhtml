@@ -9,7 +9,7 @@
 
 	<ui:define name="body">
 
-		<p:panel style="width:100%;height:600px;"
+		<p:panel style="width:100%;height:100%;"
 			header="#{msg['title_branch']}">
 
 			<p:spacer height="5" />
@@ -30,7 +30,7 @@
 
 				<p:dataTable id="recordTable" var="rec"
 					value="#{branchBacking.model}" rowKey="#{rec.id}"
-					selection="#{branchBacking.selected}" paginator="true" rows="10"
+					selection="#{branchBacking.selected}" paginator="true" rows="15"
 					style="width:100%">
 
 					<p:column selectionMode="single" style="width:18px" />
@@ -39,12 +39,16 @@
 						<h:outputLabel value="#{rec.code}" />
 					</p:column>
 
-					<p:column headerText="#{msg['bra_name']}">
+					<p:column headerText="#{msg['bra_name']}" filterBy="#{rec.name}">
 						<h:outputLabel value="#{rec.name}" />
 					</p:column>
 
 					<p:column headerText="#{msg['bra_society']}">
 						<h:outputLabel value="#{rec.society}" />
+					</p:column>
+
+					<p:column headerText="#{msg['bra_stretchers']}">
+						<h:outputLabel value="#{rec.stretchers}" />
 					</p:column>
 
 					<p:column headerText="#{msg['glb_state']}">#{rec.state eq 1?msg['glb_state_active']:msg['glb_state_inactive']}</p:column>
@@ -93,6 +97,10 @@
 					<h:inputText value="#{branchBacking.selected.society}"
 						style="width:100%" label="#{msg['bra_society']}" required="true"
 						maxlength="4" />
+
+					<h:outputLabel value="#{msg['bra_stretchers']}" />
+					<pe:inputNumber value="#{branchBacking.selected.stretchers}"
+						decimalPlaces="0" style="width:100%" minValue="1" />
 
 					<h:outputLabel value="#{msg['glb_state']}"
 						rendered="#{branchBacking.selected.id!=null?true:false}" />

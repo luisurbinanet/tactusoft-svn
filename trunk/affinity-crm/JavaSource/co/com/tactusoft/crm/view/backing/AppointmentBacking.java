@@ -70,6 +70,7 @@ public class AppointmentBacking extends BaseBacking {
 
 	private boolean renderedForDate;
 	private boolean renderedForDoctor;
+	private boolean renderedDoctorWithoutTime;
 	private boolean disabledSearch;
 
 	private String infoMessage;
@@ -286,6 +287,14 @@ public class AppointmentBacking extends BaseBacking {
 		this.renderedForDoctor = renderedForDoctor;
 	}
 
+	public boolean isRenderedDoctorWithoutTime() {
+		return renderedDoctorWithoutTime;
+	}
+
+	public void setRenderedDoctorWithoutTime(boolean renderedDoctorWithoutTime) {
+		this.renderedDoctorWithoutTime = renderedDoctorWithoutTime;
+	}
+
 	public boolean isDisabledSearch() {
 		return disabledSearch;
 	}
@@ -338,6 +347,14 @@ public class AppointmentBacking extends BaseBacking {
 
 		infoMessage = null;
 		saved = false;
+
+		if (listProcedureDetail != null) {
+			if (listProcedureDetail.size() > 0) {
+				idProcedureDetail = (BigDecimal) listProcedureDetail.get(0)
+						.getValue();
+				handleProcedureDetailChange();
+			}
+		}
 	}
 
 	public void handleBranchChange() {
@@ -433,7 +450,17 @@ public class AppointmentBacking extends BaseBacking {
 	}
 
 	public void handleProcedureDetailChange() {
-		idSearch = Constant.DEFAULT_VALUE;
+		CrmProcedureDetail procedureDetail = mapProcedureDetail
+				.get(idProcedureDetail);
+
+		if (procedureDetail.getTimeDoctor() == 0) {
+			idSearch = Constant.APP_TYPE_FOR_DATE_VALUE;
+			renderedDoctorWithoutTime = false;
+		} else {
+			idSearch = Constant.DEFAULT_VALUE;
+			renderedDoctorWithoutTime = true;
+		}
+
 		handleSearchChange();
 	}
 
@@ -596,7 +623,7 @@ public class AppointmentBacking extends BaseBacking {
 					selected.setUntimely(true);
 					selected.setState(Constant.APP_STATE_CHECKED);
 				}
-				
+
 				selected.setCrmUserByIdUserCreate(FacesUtil.getCurrentUser());
 				selected.setDateCreate(new Date());
 
@@ -618,8 +645,26 @@ public class AppointmentBacking extends BaseBacking {
 
 		CrmProcedureDetail procedureDetail = mapProcedureDetail
 				.get(idProcedureDetail);
+		int minutes = 0;
+		String timeType = null;
+		if ((procedureDetail.getTimeDoctor() > procedureDetail.getTimeNurses())
+				&& (procedureDetail.getTimeDoctor() > procedureDetail
+						.getTimeStretchers())) {
+			minutes = procedureDetail.getTimeDoctor();
+			timeType = Constant.TIME_TYPE_DOCTOR;
+		} else if ((procedureDetail.getTimeNurses() > procedureDetail
+				.getTimeDoctor())
+				&& (procedureDetail.getTimeNurses() > procedureDetail
+						.getTimeStretchers())) {
+			minutes = procedureDetail.getTimeNurses();
+			timeType = Constant.TIME_TYPE_NURSE;
+		} else {
+			minutes = procedureDetail.getTimeStretchers();
+			timeType = Constant.TIME_TYPE_STRETCHERS;
+		}
+
 		List<Date> list = processService.getListcandidatesHours(date,
-				mapBranch.get(idBranch), procedureDetail.getTimeDoctor());
+				mapBranch.get(idBranch), minutes, timeType);
 
 		listTimes = new ArrayList<SelectItem>();
 		String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);

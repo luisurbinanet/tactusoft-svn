@@ -577,8 +577,26 @@ public class AppointmentEditBacking extends BaseBacking {
 
 		CrmProcedureDetail procedureDetail = mapProcedureDetail
 				.get(idProcedureDetail);
+		int minutes = 0;
+		String timeType = null;
+		if ((procedureDetail.getTimeDoctor() > procedureDetail.getTimeNurses())
+				&& (procedureDetail.getTimeDoctor() > procedureDetail
+						.getTimeStretchers())) {
+			minutes = procedureDetail.getTimeDoctor();
+			timeType = Constant.TIME_TYPE_DOCTOR;
+		} else if ((procedureDetail.getTimeNurses() > procedureDetail
+				.getTimeDoctor())
+				&& (procedureDetail.getTimeNurses() > procedureDetail
+						.getTimeStretchers())) {
+			minutes = procedureDetail.getTimeNurses();
+			timeType = Constant.TIME_TYPE_NURSE;
+		} else {
+			minutes = procedureDetail.getTimeStretchers();
+			timeType = Constant.TIME_TYPE_STRETCHERS;
+		}
+
 		List<Date> list = processService.getListcandidatesHours(date,
-				mapBranch.get(idBranch), procedureDetail.getTimeDoctor());
+				mapBranch.get(idBranch), minutes, timeType);
 
 		listTimes = new ArrayList<SelectItem>();
 		String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);

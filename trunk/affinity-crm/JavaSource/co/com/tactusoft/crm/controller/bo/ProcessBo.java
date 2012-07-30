@@ -258,7 +258,7 @@ public class ProcessBo implements Serializable {
 	}
 
 	public List<Date> getListcandidatesHours(Date currentDate,
-			CrmBranch branch, int minutes) {
+			CrmBranch branch, int minutes, String timeType) {
 		List<Date> result = new ArrayList<Date>();
 		BigDecimal idBranch = branch.getId();
 
@@ -281,10 +281,24 @@ public class ProcessBo implements Serializable {
 			int currentDay = calendar.get(Calendar.DAY_OF_WEEK);
 
 			if (currentDay != 1) {// Si no es domingo
+
 				// Buscar citas x doctor y sucursal
-				List<CrmDoctorSchedule> listCrmDoctorSchedule = dao
-						.find("from CrmDoctorSchedule o where o.crmBranch.id = "
-								+ idBranch + " and o.day = " + currentDay);
+				List<CrmDoctorSchedule> listCrmDoctorSchedule = null;
+				if (timeType.equals(Constant.TIME_TYPE_DOCTOR)) {
+					listCrmDoctorSchedule = dao
+							.find("from CrmDoctorSchedule o where o.crmBranch.id = "
+									+ idBranch
+									+ " and o.day = "
+									+ currentDay
+									+ " and o.crmDoctor.id <> 0");
+				} else {
+					listCrmDoctorSchedule = dao
+							.find("from CrmDoctorSchedule o where o.crmBranch.id = "
+									+ idBranch
+									+ " and o.day = "
+									+ currentDay
+									+ " and o.crmDoctor.id = 0");
+				}
 
 				if (listCrmDoctorSchedule.size() > 0) {
 
@@ -396,6 +410,20 @@ public class ProcessBo implements Serializable {
 		List<Candidate> result = new ArrayList<Candidate>();
 		int id = 1;
 
+		int minutes = 0;
+		if ((procedureDetail.getTimeDoctor() > procedureDetail.getTimeNurses())
+				&& (procedureDetail.getTimeDoctor() > procedureDetail
+						.getTimeStretchers())) {
+			minutes = procedureDetail.getTimeDoctor();
+		} else if ((procedureDetail.getTimeNurses() > procedureDetail
+				.getTimeDoctor())
+				&& (procedureDetail.getTimeNurses() > procedureDetail
+						.getTimeStretchers())) {
+			minutes = procedureDetail.getTimeNurses();
+		} else {
+			minutes = procedureDetail.getTimeStretchers();
+		}
+
 		BigDecimal idBranch = branch.getId();
 		String initDate = FacesUtil.formatDate(selectedDate, "yyyy-MM-dd");
 
@@ -469,8 +497,7 @@ public class ProcessBo implements Serializable {
 							while (endIterate) {
 								Calendar calendar2 = Calendar.getInstance();
 								calendar2.setTime(initHour);
-								calendar2.add(Calendar.MINUTE,
-										procedureDetail.getTimeDoctor());
+								calendar2.add(Calendar.MINUTE, minutes);
 								Date endHour = calendar2.getTime();
 
 								// Si la hora final candidata es mayor al tiempo
@@ -532,33 +559,70 @@ public class ProcessBo implements Serializable {
 			Date selectedDate, CrmProcedureDetail procedureDetail) {
 		List<Candidate> result = new ArrayList<Candidate>();
 
+		int minutes = 0;
+		String timeType = null;
+		if ((procedureDetail.getTimeDoctor() > procedureDetail.getTimeNurses())
+				&& (procedureDetail.getTimeDoctor() > procedureDetail
+						.getTimeStretchers())) {
+			minutes = procedureDetail.getTimeDoctor();
+			timeType = Constant.TIME_TYPE_DOCTOR;
+		} else if ((procedureDetail.getTimeNurses() > procedureDetail
+				.getTimeDoctor())
+				&& (procedureDetail.getTimeNurses() > procedureDetail
+						.getTimeStretchers())) {
+			minutes = procedureDetail.getTimeNurses();
+			timeType = Constant.TIME_TYPE_NURSE;
+		} else {
+			minutes = procedureDetail.getTimeStretchers();
+			timeType = Constant.TIME_TYPE_STRETCHERS;
+		}
+
 		String dateString = FacesUtil.formatDate(selectedDate, "yyyy-MM-dd");
 		String timeString = FacesUtil.formatDate(selectedDate, "HH:mm:ss");
 		String dateTimeString = FacesUtil.formatDate(selectedDate,
 				"yyyy-MM-dd HH:mm:ss");
 		BigDecimal idBranch = branch.getId();
 
-		List<VwDoctorHour> listDoctorHour = dao
-				.find("from VwDoctorHour o where o.id.idBranch = " + idBranch
-						+ " and o.id.onlyDate = '" + dateString + "'");
-
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(selectedDate);
 		int currentDay = calendar.get(Calendar.DAY_OF_WEEK);
 
-		calendar.add(Calendar.MINUTE, procedureDetail.getTimeDoctor());
+		calendar.add(Calendar.MINUTE, minutes);
 		Date endTime = calendar.getTime();
 
-		List<CrmDoctor> listCrmDoctorWithoutApp = dao
-				.find("select distinct c from CrmDoctorSchedule a inner join a.crmDoctor as c where a.day = "
-						+ currentDay
-						+ " and ('"
-						+ timeString
-						+ "' between a.startHour and a.endHour) "
-						+ " and a.crmBranch.id = "
-						+ idBranch
-						+ " and a.crmDoctor.id not in (select b.crmDoctor.id from CrmAppointment b where cast(b.startAppointmentDate as date) = '"
-						+ dateString + "')");
+		List<VwDoctorHour> listDoctorHour = null;
+		List<CrmDoctor> listCrmDoctorWithoutApp = null;
+		if (timeType.equals(Constant.TIME_TYPE_DOCTOR)) {
+			listDoctorHour = dao
+					.find("from VwDoctorHour o where o.id.idBranch = "
+							+ idBranch + " and o.id.onlyDate = '" + dateString
+							+ "' and o.id.idDoctor <> 0");
+			listCrmDoctorWithoutApp = dao
+					.find("select distinct c from CrmDoctorSchedule a inner join a.crmDoctor as c where a.crmDoctor.id <> 0 and a.day = "
+							+ currentDay
+							+ " and ('"
+							+ timeString
+							+ "' between a.startHour and a.endHour) "
+							+ " and a.crmBranch.id = "
+							+ idBranch
+							+ " and a.crmDoctor.id not in (select b.crmDoctor.id from CrmAppointment b where cast(b.startAppointmentDate as date) = '"
+							+ dateString + "')");
+		} else {
+			listDoctorHour = dao
+					.find("from VwDoctorHour o where o.id.idBranch = "
+							+ idBranch + " and o.id.onlyDate = '" + dateString
+							+ "' and o.id.idDoctor = 0");
+			listCrmDoctorWithoutApp = dao
+					.find("select distinct c from CrmDoctorSchedule a inner join a.crmDoctor as c where a.crmDoctor.id = 0 and a.day = "
+							+ currentDay
+							+ " and ('"
+							+ timeString
+							+ "' between a.startHour and a.endHour) "
+							+ " and a.crmBranch.id = "
+							+ idBranch
+							+ " and a.crmDoctor.id not in (select b.crmDoctor.id from CrmAppointment b where cast(b.startAppointmentDate as date) = '"
+							+ dateString + "')");
+		}
 
 		if (listCrmDoctorWithoutApp.size() > 0) {
 			CrmDoctor doctor = listCrmDoctorWithoutApp.get(0);
@@ -805,7 +869,7 @@ public class ProcessBo implements Serializable {
 				+ " order by o.startAppointmentDate desc");
 		return list;
 	}
-	
+
 	public List<CrmAppointment> listAppointmentByPatient(String patient,
 			String state) {
 		List<CrmAppointment> list = new ArrayList<CrmAppointment>();
@@ -860,7 +924,7 @@ public class ProcessBo implements Serializable {
 			return null;
 		}
 	}
-	
+
 	public CrmNurse getCrmNurse() {
 		BigDecimal idUser = FacesUtil.getCurrentUser().getId();
 		List<CrmNurse> list = dao
