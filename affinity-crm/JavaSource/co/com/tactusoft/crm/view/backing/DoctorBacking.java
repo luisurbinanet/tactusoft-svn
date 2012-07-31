@@ -324,4 +324,21 @@ public class DoctorBacking extends BaseBacking {
 		}
 	}
 
+	public void removeAction(ActionEvent event) {
+		String message = null;
+		int result = tablesService.remove(selected);
+		if (result == 0) {
+			list.remove(selected);
+			model = new DoctorDataModel(list);
+			if (list.size() > 0) {
+				selected = list.get(0);
+			}
+			message = FacesUtil.getMessage("msg_record_ok");
+			FacesUtil.addInfo(message);
+		} else {
+			message = FacesUtil.getMessage("doc_msg_error_fk");
+			FacesUtil.addError(message);
+		}
+	}
+
 }

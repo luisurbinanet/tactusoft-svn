@@ -65,8 +65,14 @@ public class CustomHibernateDaoImpl extends HibernateDaoSupport implements
 	}
 
 	@Override
-	public void delete(Object entity) {
-		getHibernateTemplate().delete(entity);
+	public int delete(Object entity) {
+		int result = 0;
+		try {
+			getHibernateTemplate().delete(entity);
+		} catch (Exception ex) {
+			result = -1;
+		}
+		return result;
 	}
 
 	@Transactional(readOnly = false)

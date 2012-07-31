@@ -21,19 +21,21 @@
 						<p:commandButton value="#{msg['btn_edit']}" icon="ui-icon-pencil"
 							oncomplete="dlg.show()" update=":editForm:dialog"
 							actionListener="#{doctorBacking.generateListAction}" />
+						<p:commandButton value="#{msg['btn_delete']}"
+							icon="ui-icon-closethick" oncomplete="confirmDlg.show()" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
 				<p:spacer height="10" />
 
-				<p:dataTable id="recordTable" var="rec"
+				<p:dataTable id="recordTable" var="rec" widgetVar="recordTbl"
 					value="#{doctorBacking.model}" rowKey="#{rec.id}"
-					selection="#{doctorBacking.selected}" paginator="true" rows="10"
+					selection="#{doctorBacking.selected}" paginator="true" rows="15"
 					style="width:100%" emptyMessage="#{msg['glb_no_records_found']}">
 
 					<p:column selectionMode="single" style="width:18px" />
 
-					<p:column headerText="#{msg['doc_names']}">
+					<p:column headerText="#{msg['doc_names']}" filterBy="#{rec.names}">
 						<h:outputLabel value="#{rec.names}" />
 					</p:column>
 
@@ -47,6 +49,19 @@
 					</p:column>
 
 				</p:dataTable>
+
+				<p:confirmDialog id="confirmDialog" message="#{msg['glb_question']}"
+					header="#{msg['title_app']}" severity="alert"
+					widgetVar="confirmDlg">
+
+					<p:commandButton id="confirm" value="#{msg['glb_state_yes']}"
+						oncomplete="confirmDlg.hide()" update="recordTable :editForm:growl"
+						actionListener="#{doctorBacking.removeAction}"
+						style="font-weight:bold;" />
+					<p:commandButton id="decline" value="#{msg['glb_state_no']}"
+						onclick="confirmDlg.hide()" type="button" />
+
+				</p:confirmDialog>
 
 			</h:form>
 
@@ -193,6 +208,7 @@
 				</p:dataTable>
 
 			</p:dialog>
+
 		</h:form>
 
 	</ui:define>

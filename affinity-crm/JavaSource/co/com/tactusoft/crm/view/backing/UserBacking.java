@@ -209,8 +209,7 @@ public class UserBacking extends BaseBacking {
 			selected.setCrmDepartment(mapDepartment.get(selected
 					.getCrmDepartment().getId()));
 
-			if (selected.getId() == null
-					&& rolePrincipal.equals(Constant.ROLE_DOCTOR)) {
+			if (crmDoctor == null && rolePrincipal.equals(Constant.ROLE_DOCTOR)) {
 				crmDoctor = new CrmDoctor();
 				crmDoctor.setCode(selected.getDoc());
 				crmDoctor.setNames(selected.getSurnames().toUpperCase() + " "
@@ -227,8 +226,7 @@ public class UserBacking extends BaseBacking {
 								: Constant.STATE_INACTIVE);
 			}
 
-			if (selected.getId() == null
-					&& rolePrincipal.equals(Constant.ROLE_NURSE)) {
+			if (crmNurse == null && rolePrincipal.equals(Constant.ROLE_NURSE)) {
 				crmNurse = new CrmNurse();
 				crmNurse.setCode(selected.getDoc());
 				crmNurse.setNames(selected.getSurnames().toUpperCase() + " "

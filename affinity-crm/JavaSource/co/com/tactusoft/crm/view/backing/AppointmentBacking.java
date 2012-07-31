@@ -320,6 +320,8 @@ public class AppointmentBacking extends BaseBacking {
 	}
 
 	public void newAction(ActionEvent event) {
+		listBranch = null;
+
 		listPatient = new LinkedList<CrmPatient>();
 		patientModel = new PatientDataModel(listPatient);
 		idSearch = Constant.DEFAULT_VALUE;
@@ -512,7 +514,6 @@ public class AppointmentBacking extends BaseBacking {
 				.get(idProcedureDetail);
 
 		if (this.renderedForDate) {
-
 			if (currentTime == null) {
 				String field = FacesUtil.getMessage("app_start_hour");
 				infoMessage = FacesUtil.getMessage("glb_required", field);
