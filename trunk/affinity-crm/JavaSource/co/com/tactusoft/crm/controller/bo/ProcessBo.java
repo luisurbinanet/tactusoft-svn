@@ -327,19 +327,54 @@ public class ProcessBo implements Serializable {
 
 					boolean end = false;
 					do {
-						// Validar Hora
-						int numInteractions = 0;
 						int numapp = 0;
+						if (timeType.equals(Constant.TIME_TYPE_DOCTOR)) {
+							// Validar Hora
+							int numInteractions = 0;
 
-						for (CrmDoctorSchedule row : listCrmDoctorSchedule) {
-							if ((scheduleInitHour.compareTo(row.getStartHour()) >= 0)
-									&& (scheduleInitHour.compareTo(row
-											.getEndHour()) < 0)) {
-								numInteractions++;
+							for (CrmDoctorSchedule row : listCrmDoctorSchedule) {
+								if ((scheduleInitHour.compareTo(row
+										.getStartHour()) >= 0)
+										&& (scheduleInitHour.compareTo(row
+												.getEndHour()) < 0)) {
+									numInteractions++;
+								}
 							}
-						}
 
-						if (numInteractions > 0) {
+							if (numInteractions > 0) {
+								calendar = Calendar.getInstance();
+								calendar.setTime(scheduleInitHour);
+								calendar.add(Calendar.MINUTE, minutes);
+								Date scheduleEndHour = calendar.getTime();
+								scheduleEndHour = FacesUtil.addHourToDate(
+										currentDate, scheduleEndHour);
+
+								List<Date> candidatesHours = getListcandidatesHours(
+										FacesUtil.addHourToDate(currentDate,
+												scheduleInitHour),
+										scheduleEndHour);
+
+								for (CrmAppointment row : listApp) {
+									boolean validate = validateAvailabilitySchedule(
+											candidatesHours,
+											row.getStartAppointmentDate(),
+											row.getEndAppointmentDate());
+									if (!validate) {
+										numapp++;
+									}
+								}
+
+								if (numapp < numInteractions) {
+									Date time = FacesUtil.addHourToDate(
+											currentDate, scheduleInitHour);
+									if (time.compareTo(new Date()) > 0) {
+										result.add(time);
+									}
+								}
+							}
+						} else if (timeType
+								.equals(Constant.TIME_TYPE_STRETCHERS)) {
+
 							calendar = Calendar.getInstance();
 							calendar.setTime(scheduleInitHour);
 							calendar.add(Calendar.MINUTE, minutes);
@@ -359,16 +394,17 @@ public class ProcessBo implements Serializable {
 								if (!validate) {
 									numapp++;
 								}
-
 							}
 
-							if (numapp < numInteractions) {
+							if ((branch.getStretchers() > 0)
+									&& (numapp < branch.getStretchers())) {
 								Date time = FacesUtil.addHourToDate(
 										currentDate, scheduleInitHour);
 								if (time.compareTo(new Date()) > 0) {
 									result.add(time);
 								}
 							}
+
 						}
 
 						calendar = Calendar.getInstance();

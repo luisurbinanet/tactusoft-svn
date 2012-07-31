@@ -475,8 +475,8 @@ public class TablesBo implements Serializable {
 				+ "' where code = '" + code + "'");
 	}
 
-	public void remove(Object entity) {
-		dao.delete(entity);
+	public int remove(Object entity) {
+		return dao.delete(entity);
 	}
 
 	public <T> BigDecimal getId(Class<T> clasz) {

@@ -8,7 +8,7 @@ public interface CustomHibernateDao {
 
 	public Integer persist(Object entity);
 	
-	public void delete(Object entity);
+	public int delete(Object entity);
 
 	public void persist(Object[] entities);
 
