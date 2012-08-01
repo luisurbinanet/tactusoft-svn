@@ -616,6 +616,7 @@ public class AppointmentBacking extends BaseBacking {
 				selected.setStartAppointmentDate(selectedAppointment
 						.getStartDate());
 				selected.setEndAppointmentDate(selectedAppointment.getEndDate());
+				selected.setCloseAppointment(false);
 
 				if (appType.equals("ORDINARY")) {
 					selected.setUntimely(false);

@@ -702,7 +702,8 @@ public class ProcessBo implements Serializable {
 								selectedDate, endTime);
 
 						boolean validate = validateAvailabilitySchedule(
-								candidatesHours, listApp, selectedDate);
+								candidatesHours, listApp,
+								FacesUtil.getDateWithoutTime(selectedDate));
 
 						if (validate) {
 							CrmDoctor doctor = (CrmDoctor) dao.find(
