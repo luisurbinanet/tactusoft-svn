@@ -113,7 +113,7 @@ public class CustomListsExecute {
 		Collections.sort(list, new WSBeanComparator());
 		return list;
 	}
-	
+
 	public static List<WSBean> getClientGroup(String url, String user,
 			String password) {
 		List<WSBean> list = new ArrayList<WSBean>();
@@ -190,6 +190,7 @@ public class CustomListsExecute {
 				WSBean bean = new WSBean();
 				bean.setCode(row.getText2().toString());
 				bean.setNames(row.getText3().toString());
+				bean.setType(row.getText4().toString());
 				list.add(bean);
 			}
 		}
@@ -201,7 +202,8 @@ public class CustomListsExecute {
 	public static List<WSBean> getCenters(String url, String user,
 			String password) {
 		List<WSBean> list = new ArrayList<WSBean>();
-		Zweblistline[] result = getCustomLists(url, user, password, "GRUPOS_CUENTA");
+		Zweblistline[] result = getCustomLists(url, user, password,
+				"GRUPOS_CUENTA");
 
 		for (Zweblistline row : result) {
 			if (row.getText1().toString().equals("S")
@@ -247,7 +249,7 @@ public class CustomListsExecute {
 				"TACTUSOFT", "AFFINITY");
 		for (WSBean row : list) {
 			System.out.println(row.getCode() + " - " + row.getNames() + " - "
-					+ row.getSociety());
+					+ row.getType());
 		}
 	}
 
