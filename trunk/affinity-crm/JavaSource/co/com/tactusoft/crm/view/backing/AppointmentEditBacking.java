@@ -70,10 +70,14 @@ public class AppointmentEditBacking extends BaseBacking {
 
 	private boolean renderedForDate;
 	private boolean renderedForDoctor;
+	private boolean renderedDoctorWithoutTime;
 	private boolean disabledSearch;
 
 	private String infoMessage;
 	private boolean saved;
+
+	private int minutes = 0;
+	private String timeType = null;
 
 	public AppointmentEditBacking() {
 		editAction(null);
@@ -264,6 +268,14 @@ public class AppointmentEditBacking extends BaseBacking {
 		this.renderedForDoctor = renderedForDoctor;
 	}
 
+	public boolean isRenderedDoctorWithoutTime() {
+		return renderedDoctorWithoutTime;
+	}
+
+	public void setRenderedDoctorWithoutTime(boolean renderedDoctorWithoutTime) {
+		this.renderedDoctorWithoutTime = renderedDoctorWithoutTime;
+	}
+
 	public boolean isDisabledSearch() {
 		return disabledSearch;
 	}
@@ -422,7 +434,33 @@ public class AppointmentEditBacking extends BaseBacking {
 	}
 
 	public void handleProcedureDetailChange() {
-		idSearch = Constant.DEFAULT_VALUE;
+		CrmProcedureDetail procedureDetail = mapProcedureDetail
+				.get(idProcedureDetail);
+
+		if (procedureDetail.getTimeDoctor() == 0) {
+			idSearch = Constant.APP_TYPE_FOR_DATE_VALUE;
+			renderedDoctorWithoutTime = false;
+		} else {
+			idSearch = Constant.DEFAULT_VALUE;
+			renderedDoctorWithoutTime = true;
+		}
+
+		if ((procedureDetail.getTimeDoctor() > procedureDetail.getTimeNurses())
+				&& (procedureDetail.getTimeDoctor() > procedureDetail
+						.getTimeStretchers())) {
+			minutes = procedureDetail.getTimeDoctor();
+			timeType = Constant.TIME_TYPE_DOCTOR;
+		} else if ((procedureDetail.getTimeNurses() > procedureDetail
+				.getTimeDoctor())
+				&& (procedureDetail.getTimeNurses() > procedureDetail
+						.getTimeStretchers())) {
+			minutes = procedureDetail.getTimeNurses();
+			timeType = Constant.TIME_TYPE_NURSE;
+		} else {
+			minutes = procedureDetail.getTimeStretchers();
+			timeType = Constant.TIME_TYPE_STRETCHERS;
+		}
+
 		handleSearchChange();
 	}
 
@@ -519,7 +557,7 @@ public class AppointmentEditBacking extends BaseBacking {
 					selectedCandidate.getStartDate(),
 					selectedCandidate.getEndDate(), procedureDetail,
 					selectedCandidate.getDoctor().getId(),
-					selectedPatient.getCodeSap());
+					selectedPatient.getCodeSap(), timeType);
 
 			if (validateApp != 0) {
 				switch (validateApp) {
@@ -551,10 +589,10 @@ public class AppointmentEditBacking extends BaseBacking {
 				selected.setEndAppointmentDate(selectedCandidate.getEndDate());
 
 				selected.setState(Constant.STATE_APP_ACTIVE);
-				
+
 				selected.setCrmUserByIdUserModified(FacesUtil.getCurrentUser());
 				selected.setDateModified(new Date());
-				
+
 				CrmAppointment crmAppointment = processService
 						.saveAppointment(selected);
 
@@ -573,26 +611,6 @@ public class AppointmentEditBacking extends BaseBacking {
 		Date date = FacesUtil.getDateWithoutTime(new Date());
 		if (event != null) {
 			date = event.getDate();
-		}
-
-		CrmProcedureDetail procedureDetail = mapProcedureDetail
-				.get(idProcedureDetail);
-		int minutes = 0;
-		String timeType = null;
-		if ((procedureDetail.getTimeDoctor() > procedureDetail.getTimeNurses())
-				&& (procedureDetail.getTimeDoctor() > procedureDetail
-						.getTimeStretchers())) {
-			minutes = procedureDetail.getTimeDoctor();
-			timeType = Constant.TIME_TYPE_DOCTOR;
-		} else if ((procedureDetail.getTimeNurses() > procedureDetail
-				.getTimeDoctor())
-				&& (procedureDetail.getTimeNurses() > procedureDetail
-						.getTimeStretchers())) {
-			minutes = procedureDetail.getTimeNurses();
-			timeType = Constant.TIME_TYPE_NURSE;
-		} else {
-			minutes = procedureDetail.getTimeStretchers();
-			timeType = Constant.TIME_TYPE_STRETCHERS;
 		}
 
 		List<Date> list = processService.getListcandidatesHours(date,

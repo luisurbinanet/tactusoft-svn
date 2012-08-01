@@ -4,9 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
@@ -16,13 +14,14 @@ import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmCie;
+import co.com.tactusoft.crm.model.entities.CrmCieMaterial;
 import co.com.tactusoft.crm.model.entities.CrmDiagnosis;
 import co.com.tactusoft.crm.model.entities.CrmHistoryHistory;
 import co.com.tactusoft.crm.model.entities.CrmHistoryHomeopathic;
 import co.com.tactusoft.crm.model.entities.CrmHistoryOrganometry;
 import co.com.tactusoft.crm.model.entities.CrmHistoryPhysique;
 import co.com.tactusoft.crm.model.entities.CrmHistoryRecord;
-import co.com.tactusoft.crm.model.entities.CrmMaterialRange;
+import co.com.tactusoft.crm.model.entities.CrmMaterialGroup;
 import co.com.tactusoft.crm.model.entities.CrmMedication;
 import co.com.tactusoft.crm.model.entities.CrmNote;
 import co.com.tactusoft.crm.model.entities.CrmOccupation;
@@ -79,7 +78,8 @@ public class HistoryBacking extends BaseBacking {
 
 	private List<CrmDiagnosis> listDiagnosis;
 	private DiagnosisDataModel diagnosisModel;
-	private CrmDiagnosis[] selectedDiagnosis;
+	private CrmDiagnosis[] selectedsDiagnosis;
+	private CrmDiagnosis selectedDiagnosis;
 
 	private List<WSBean> listAllMaterial;
 	private int optionSearchMaterial;
@@ -107,7 +107,8 @@ public class HistoryBacking extends BaseBacking {
 	private int amount;
 	private String noteDoctor;
 	private boolean viewMode;
-	private Map<String, CrmMaterialRange> mapRanges;
+	private List<CrmMaterialGroup> listMaterialGroup;
+	private List<CrmCieMaterial> listCieMaterial;
 
 	private List<CrmDiagnosis> listDiagnosisView;
 	private List<CrmMedication> listMedicationView;
@@ -344,11 +345,19 @@ public class HistoryBacking extends BaseBacking {
 		this.diagnosisModel = diagnosisModel;
 	}
 
-	public CrmDiagnosis[] getSelectedDiagnosis() {
+	public CrmDiagnosis[] getSelectedsDiagnosis() {
+		return selectedsDiagnosis;
+	}
+
+	public void setSelectedsDiagnosis(CrmDiagnosis[] selectedsDiagnosis) {
+		this.selectedsDiagnosis = selectedsDiagnosis;
+	}
+
+	public CrmDiagnosis getSelectedDiagnosis() {
 		return selectedDiagnosis;
 	}
 
-	public void setSelectedDiagnosis(CrmDiagnosis[] selectedDiagnosis) {
+	public void setSelectedDiagnosis(CrmDiagnosis selectedDiagnosis) {
 		this.selectedDiagnosis = selectedDiagnosis;
 	}
 
@@ -588,6 +597,8 @@ public class HistoryBacking extends BaseBacking {
 
 		docPatient = null;
 		namePatient = null;
+		selectedDiagnosis = new CrmDiagnosis();
+		selectedsDiagnosis = null;
 
 		listPatient = new ArrayList<CrmPatient>();
 		patientModel = new PatientDataModel(listPatient);
@@ -600,6 +611,10 @@ public class HistoryBacking extends BaseBacking {
 		age = 0;
 		imc = 0;
 		descImc = null;
+
+		codeMaterial = null;
+		descMaterial = null;
+		optionSearchMaterial = 1;
 
 		readOnlySelectedHistoryHistory = true;
 		readOnlySelectedHistoryRecord = true;
@@ -654,12 +669,8 @@ public class HistoryBacking extends BaseBacking {
 			FacesUtil.addError(message);
 		} else {
 
-			List<CrmMaterialRange> listMaterialRange = processService
-					.getListMaterialRange();
-			mapRanges = new HashMap<String, CrmMaterialRange>();
-			for (CrmMaterialRange range : listMaterialRange) {
-				mapRanges.put(range.getMaterialType(), range);
-			}
+			listMaterialGroup = processService.getListMaterialGroup();
+			listCieMaterial = processService.getListCieMaterial();
 
 			if (selectedPatient.getCrmOccupation() == null) {
 				selectedPatient.setCrmOccupation(new CrmOccupation());
@@ -680,7 +691,6 @@ public class HistoryBacking extends BaseBacking {
 			selectedHistoryOrganometry = processService
 					.getHistoryOrganometry(selectedPatient.getId());
 
-			
 			refreshLists();
 			getRenderedRecord();
 
@@ -1347,7 +1357,7 @@ public class HistoryBacking extends BaseBacking {
 	}
 
 	public void removeDiagnosisAction(ActionEvent event) {
-		for (CrmDiagnosis row : selectedDiagnosis) {
+		for (CrmDiagnosis row : selectedsDiagnosis) {
 			listDiagnosis.remove(row);
 		}
 		diagnosisModel = new DiagnosisDataModel(listDiagnosis);
@@ -1366,25 +1376,38 @@ public class HistoryBacking extends BaseBacking {
 		} else {
 			this.listMaterial = new ArrayList<WSBean>();
 			for (WSBean material : listAllMaterial) {
-				CrmMaterialRange ranges = mapRanges.get(typeMedication);
-				try {
-					long longCode = Long.parseLong(material.getCode());
-					if (longCode >= ranges.getRangeInit()
-							&& longCode <= ranges.getRangeEnd()) {
-						if (optionSearchMaterial == 1) {
-							if (material.getCode().toUpperCase()
-									.contains(codeMaterial.toUpperCase())) {
-								this.listMaterial.add(material);
-							}
-						} else {
-							if (material.getNames().toUpperCase()
-									.contains(descMaterial.toUpperCase())) {
-								this.listMaterial.add(material);
-							}
+
+				boolean validateGroup = false;
+				for (CrmMaterialGroup row : listMaterialGroup) {
+					if (row.getMaterialType().equals(typeMedication)
+							&& material.getType().equals(row.getGroup())) {
+						validateGroup = true;
+						break;
+					}
+				}
+
+				if (typeMedication.equals(Constant.MATERIAL_TYPE_MEDICINE)) {
+					for (CrmCieMaterial row : listCieMaterial) {
+						if (selectedDiagnosis.getCrmCie().getId().intValue() == row
+								.getCrmCie().getId().intValue()) {
+							validateGroup = true;
+							break;
 						}
 					}
-				} catch (NumberFormatException ex) {
+				}
 
+				if (validateGroup) {
+					if (optionSearchMaterial == 1) {
+						if (material.getCode().toUpperCase()
+								.contains(codeMaterial.toUpperCase())) {
+							this.listMaterial.add(material);
+						}
+					} else {
+						if (material.getNames().toUpperCase()
+								.contains(descMaterial.toUpperCase())) {
+							this.listMaterial.add(material);
+						}
+					}
 				}
 			}
 

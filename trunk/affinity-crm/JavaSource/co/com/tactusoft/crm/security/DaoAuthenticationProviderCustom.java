@@ -113,12 +113,12 @@ public class DaoAuthenticationProviderCustom extends
 			try {
 
 				List<WSBean> result = new ArrayList<WSBean>();
-				try {
+				/*try {
 					result = CustomListsExecute.getBranchs(sap.getUrlWebList(),
 							sap.getUsername(), sap.getPassword());
 				} catch (Exception ex) {
 					result = new ArrayList<WSBean>();
-				}
+				}*/
 
 				for (WSBean row : result) {
 					boolean notExists = true;
@@ -142,14 +142,14 @@ public class DaoAuthenticationProviderCustom extends
 				user.setListBranchAll(listBranch);
 			}
 
-			try {
+			/*try {
 				List<WSBean> result = CustomListsExecute.getGroupSellers(
 						sap.getUrlWebList(), sap.getUsername(),
 						sap.getPassword());
 				user.setListWSGroupSellers(result);
 			} catch (Exception ex) {
 				user.setListWSGroupSellers(new ArrayList<WSBean>());
-			}
+			}*/
 
 			CrmDoctor doctor = tableService
 					.getCrmDoctor(user.getUser().getId());

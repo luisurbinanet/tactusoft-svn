@@ -49,7 +49,7 @@ public class CrmCieMaterial implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_cie", nullable = false)
 	public CrmCie getCrmCie() {
 		return this.crmCie;
