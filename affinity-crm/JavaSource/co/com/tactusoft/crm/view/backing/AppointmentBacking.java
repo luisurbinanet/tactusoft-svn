@@ -76,6 +76,9 @@ public class AppointmentBacking extends BaseBacking {
 	private String infoMessage;
 	private boolean saved;
 
+	private int minutes = 0;
+	private String timeType = null;
+
 	public AppointmentBacking() {
 		newAction(null);
 	}
@@ -463,6 +466,22 @@ public class AppointmentBacking extends BaseBacking {
 			renderedDoctorWithoutTime = true;
 		}
 
+		if ((procedureDetail.getTimeDoctor() > procedureDetail.getTimeNurses())
+				&& (procedureDetail.getTimeDoctor() > procedureDetail
+						.getTimeStretchers())) {
+			minutes = procedureDetail.getTimeDoctor();
+			timeType = Constant.TIME_TYPE_DOCTOR;
+		} else if ((procedureDetail.getTimeNurses() > procedureDetail
+				.getTimeDoctor())
+				&& (procedureDetail.getTimeNurses() > procedureDetail
+						.getTimeStretchers())) {
+			minutes = procedureDetail.getTimeNurses();
+			timeType = Constant.TIME_TYPE_NURSE;
+		} else {
+			minutes = procedureDetail.getTimeStretchers();
+			timeType = Constant.TIME_TYPE_STRETCHERS;
+		}
+
 		handleSearchChange();
 	}
 
@@ -571,7 +590,7 @@ public class AppointmentBacking extends BaseBacking {
 						selectedAppointment.getStartDate(),
 						selectedAppointment.getEndDate(), procedureDetail,
 						selectedAppointment.getDoctor().getId(),
-						selectedPatient.getCodeSap());
+						selectedPatient.getCodeSap(), timeType);
 			} else {
 				CrmDoctor doctor = mapDoctor.get(selected.getCrmDoctor()
 						.getId());
@@ -643,26 +662,6 @@ public class AppointmentBacking extends BaseBacking {
 		Date date = FacesUtil.getDateWithoutTime(new Date());
 		if (event != null) {
 			date = event.getDate();
-		}
-
-		CrmProcedureDetail procedureDetail = mapProcedureDetail
-				.get(idProcedureDetail);
-		int minutes = 0;
-		String timeType = null;
-		if ((procedureDetail.getTimeDoctor() > procedureDetail.getTimeNurses())
-				&& (procedureDetail.getTimeDoctor() > procedureDetail
-						.getTimeStretchers())) {
-			minutes = procedureDetail.getTimeDoctor();
-			timeType = Constant.TIME_TYPE_DOCTOR;
-		} else if ((procedureDetail.getTimeNurses() > procedureDetail
-				.getTimeDoctor())
-				&& (procedureDetail.getTimeNurses() > procedureDetail
-						.getTimeStretchers())) {
-			minutes = procedureDetail.getTimeNurses();
-			timeType = Constant.TIME_TYPE_NURSE;
-		} else {
-			minutes = procedureDetail.getTimeStretchers();
-			timeType = Constant.TIME_TYPE_STRETCHERS;
 		}
 
 		List<Date> list = processService.getListcandidatesHours(date,

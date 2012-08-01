@@ -14,6 +14,7 @@ import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmCie;
+import co.com.tactusoft.crm.model.entities.CrmCieMaterial;
 import co.com.tactusoft.crm.model.entities.CrmDiagnosis;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmDoctorException;
@@ -24,7 +25,7 @@ import co.com.tactusoft.crm.model.entities.CrmHistoryOrganometry;
 import co.com.tactusoft.crm.model.entities.CrmHistoryPhysique;
 import co.com.tactusoft.crm.model.entities.CrmHistoryRecord;
 import co.com.tactusoft.crm.model.entities.CrmHoliday;
-import co.com.tactusoft.crm.model.entities.CrmMaterialRange;
+import co.com.tactusoft.crm.model.entities.CrmMaterialGroup;
 import co.com.tactusoft.crm.model.entities.CrmMedication;
 import co.com.tactusoft.crm.model.entities.CrmNote;
 import co.com.tactusoft.crm.model.entities.CrmNurse;
@@ -110,8 +111,12 @@ public class ProcessBo implements Serializable {
 				+ "%' order by o.description");
 	}
 
-	public List<CrmMaterialRange> getListMaterialRange() {
-		return dao.find(CrmMaterialRange.class);
+	public List<CrmMaterialGroup> getListMaterialGroup() {
+		return dao.find(CrmMaterialGroup.class);
+	}
+	
+	public List<CrmCieMaterial> getListCieMaterial() {
+		return dao.find(CrmCieMaterial.class);
 	}
 
 	public CrmAppointment saveAppointment(CrmAppointment entity) {
@@ -162,9 +167,10 @@ public class ProcessBo implements Serializable {
 	}
 
 	private boolean validateAvailabilitySchedule(List<Date> candidatesHours,
-			List<CrmAppointment> listApp, Date currentDate) {
+			List<CrmAppointment> listApp, Date currentDate, String timeType) {
 
 		boolean result = true;
+		int numApp = 0;
 
 		// Iterar Horas No Disponibles
 		int count = 0;
@@ -203,8 +209,16 @@ public class ProcessBo implements Serializable {
 			}
 
 			if (contValidate > 1) {
-				result = false;
-				break;
+				if (timeType.equals(Constant.TIME_TYPE_DOCTOR)) {
+					result = false;
+					break;
+				} else {
+					numApp++;
+					if (numApp == app.getCrmBranch().getStretchers()) {
+						result = false;
+						break;
+					}
+				}
 			}
 
 			// Si la fecha
@@ -550,7 +564,8 @@ public class ProcessBo implements Serializable {
 
 								// Validar Disponibilidad
 								boolean validate = validateAvailabilitySchedule(
-										candidatesHours, listApp, currentDate);
+										candidatesHours, listApp, currentDate,
+										Constant.TIME_TYPE_DOCTOR);
 
 								if (validate) {
 									validate = validateException(
@@ -701,9 +716,11 @@ public class ProcessBo implements Serializable {
 						List<Date> candidatesHours = getListcandidatesHours(
 								selectedDate, endTime);
 
+						// tactu
 						boolean validate = validateAvailabilitySchedule(
 								candidatesHours, listApp,
-								FacesUtil.getDateWithoutTime(selectedDate));
+								FacesUtil.getDateWithoutTime(selectedDate),
+								timeType);
 
 						if (validate) {
 							CrmDoctor doctor = (CrmDoctor) dao.find(
@@ -791,7 +808,7 @@ public class ProcessBo implements Serializable {
 
 	public int validateAppointmentForDate(BigDecimal idBranch, Date starDate,
 			Date endDate, CrmProcedureDetail procedureDetail,
-			BigDecimal idDoctor, String patient) {
+			BigDecimal idDoctor, String patient, String timeType) {
 
 		int result = 0;
 
@@ -876,7 +893,7 @@ public class ProcessBo implements Serializable {
 
 					// Validar Disponibilidad
 					boolean validate = validateAvailabilitySchedule(
-							candidatesHours, listApp, currentDate);
+							candidatesHours, listApp, currentDate, timeType);
 
 					if (!validate) {
 						// Cita no disponible
