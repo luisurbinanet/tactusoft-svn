@@ -1,6 +1,5 @@
 package co.com.tactusoft.crm.view.converter;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -10,11 +9,12 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 
-import co.com.tactusoft.crm.model.entities.CrmRole;
 import co.com.tactusoft.crm.util.FacesUtil;
 
-@FacesConverter(value="roleConverter")
-public class RoleConverter implements Converter {
+import com.tactusoft.webservice.client.beans.WSBean;
+
+@FacesConverter(value = "materialConverter")
+public class MaterialConverter implements Converter {
 
 	@Override
 	public Object getAsObject(FacesContext facesContext, UIComponent component,
@@ -23,11 +23,11 @@ public class RoleConverter implements Converter {
 			return null;
 		} else {
 			try {
-				int id = new BigDecimal(submittedValue).intValue();
-				List<CrmRole> list = FacesUtil.getCurrentUserData().getListRoleAll();
+				List<WSBean> list = FacesUtil.getCurrentUserData()
+						.getListWSMaterials();
 
-				for (CrmRole data : list) {
-					if (data.getId().intValue() == id) {
+				for (WSBean data : list) {
+					if (data.getCode().equals(submittedValue)) {
 						return data;
 					}
 				}
@@ -35,7 +35,7 @@ public class RoleConverter implements Converter {
 			} catch (NumberFormatException exception) {
 				throw new ConverterException(new FacesMessage(
 						FacesMessage.SEVERITY_ERROR, "Conversion Error",
-						"Not a valid role"));
+						"Not a valid material"));
 			}
 		}
 		return null;
@@ -47,7 +47,7 @@ public class RoleConverter implements Converter {
 		if (value == null || value.equals("")) {
 			return "";
 		} else {
-			return String.valueOf(((CrmRole) value).getId());
+			return ((WSBean) value).getCode();
 		}
 	}
 

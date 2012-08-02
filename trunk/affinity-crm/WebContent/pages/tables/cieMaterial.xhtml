@@ -1,0 +1,163 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="../templates/common.xhtml">
+
+	<ui:define name="body">
+
+		<p:panel style="width:100%;height:600px;"
+			header="#{msg['title_medication_groups']}">
+
+			<p:spacer height="10" />
+
+			<h:form id="form">
+
+				<p:toolbar style="width:100%">
+					<p:toolbarGroup id="toolBar" align="left">
+						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
+							action="#{cieMaterialBacking.newAction}" oncomplete="dlg.show()"
+							update=":editForm:pnlDetail" />
+						<p:commandButton value="#{msg['btn_edit']}" icon="ui-icon-pencil"
+							oncomplete="dlg.show()" update=":editForm:pnlDetail"
+							actionListener="#{cieMaterialBacking.editAction}"
+							disabled="#{cieMaterialBacking.disabled}" />
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="10" />
+
+				<p:dataTable id="recordTable" var="rec"
+					value="#{cieMaterialBacking.model}" rowKey="#{rec.id}"
+					selection="#{cieMaterialBacking.selected}" paginator="true"
+					rows="10" style="width:100%">
+
+					<p:column selectionMode="single" style="width:18px" />
+
+					<p:column headerText="#{msg['cie_grp_diagnosis']}">
+						<h:outputLabel value="#{rec.description}" />
+					</p:column>
+
+				</p:dataTable>
+
+			</h:form>
+
+		</p:panel>
+
+		<h:form id="editForm">
+
+			<p:growl id="growl" showDetail="true" />
+
+			<p:dialog header="#{msg['msg_detail']}" widgetVar="dlg"
+				resizable="false" id="dialog" showEffect="fade" hideEffect="explode"
+				modal="true" width="500">
+
+				<p:toolbar style="width:100%">
+					<p:toolbarGroup align="left">
+						<p:commandButton id="btnSelCie" oncomplete="dlgCie.show()"
+							value="#{msg['btn_select_diagnosis']}" icon="ui-icon-search" />
+						<p:commandButton value="#{msg['btn_save']}" icon="ui-icon-disk"
+							action="#{cieMaterialBacking.saveAction}"
+							update="growl :form:recordTable :form:toolBar"
+							oncomplete="dlg.hide()" />
+						<p:commandButton value="#{msg['btn_close']}"
+							icon="ui-icon-closethick" update="growl :form:recordTable"
+							process="@none" oncomplete="dlg.hide()" />
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="10" />
+
+				<h:panelGrid id="pnlDetail" columns="1" cellpadding="4"
+					style="margin:0 auto;" width="100%">
+
+					<h:outputLabel
+						value="#{cieMaterialBacking.selected.description}" />
+
+					<p:pickList id="picRole" var="row"
+						value="#{cieMaterialBacking.listMedication}"
+						converter="materialConverter" itemValue="#{row}"
+						itemLabel="#{row.names}" showTargetFilter="true"
+						filterMatchMode="contains">
+
+						<f:facet name="sourceCaption">#{msg['glb_source_caption']}</f:facet>
+						<f:facet name="targetCaption">#{msg['glb_target_caption']}</f:facet>
+					</p:pickList>
+
+
+				</h:panelGrid>
+
+			</p:dialog>
+
+			<p:dialog header="#{msg['his_history_ip']}" widgetVar="dlgCie"
+				resizable="false" id="dialogCie" showEffect="fade"
+				hideEffect="explode" modal="true" width="600">
+
+				<h:panelGrid columns="2" width="100%">
+
+					<p:outputPanel>
+						<p:selectOneRadio id="sorCIE"
+							value="#{cieMaterialBacking.optionSearchCie}" layout="custom">
+							<f:selectItem itemLabel="#{msg['cie_code']}" itemValue="1" />
+							<f:selectItem itemLabel="#{msg['cie_desc']}" itemValue="2" />
+						</p:selectOneRadio>
+
+						<h:panelGrid columns="3" width="100%">
+							<p:radioButton id="rdbCIE1" for="sorCIE" itemIndex="0" />
+							<h:outputLabel for="rdbCIE1" value="#{msg['cie_code']}" />
+							<p:inputText value="#{cieMaterialBacking.codeCIE}"
+								style="width:100%" />
+
+							<p:radioButton id="rdbCIE2" for="sorCIE" itemIndex="1" />
+							<h:outputLabel for="rdbCIE2" value="#{msg['cie_desc']}" />
+							<p:inputText value="#{cieMaterialBacking.descCIE}"
+								style="width:100%" />
+						</h:panelGrid>
+					</p:outputPanel>
+
+					<f:facet name="footer">
+						<p:spacer height="10" />
+
+						<p:commandButton value="#{msg['btn_search']}"
+							icon="ui-icon-search" update="pnlTable3 recordTable3 btnAddCIE"
+							actionListener="#{cieMaterialBacking.searchCIEAction}" />
+						<p:commandButton id="btnAddCIE" value="#{msg['btn_add']}"
+							icon="ui-icon-plusthick" update="recordTable3 pnlDetail"
+							actionListener="#{cieMaterialBacking.addCieAction}"
+							oncomplete="dlgCie.hide()"
+							disabled="#{cieMaterialBacking.disabledAddCie}" />
+					</f:facet>
+				</h:panelGrid>
+
+				<p:spacer height="10" />
+
+				<p:scrollPanel id="pnlTable3" style="width:580px;height:400px">
+					<p:dataTable id="recordTable3" var="rec"
+						value="#{cieMaterialBacking.cieModel}" rowKey="#{rec.id}"
+						selection="#{cieMaterialBacking.selectedCie}" paginator="true"
+						rows="15" style="width:570px"
+						emptyMessage="#{msg['glb_no_records_found']}">
+
+						<p:column selectionMode="single" style="width:18px" />
+
+						<p:column headerText="#{msg['cie_code']}">
+							<h:outputLabel value="#{rec.code}" />
+						</p:column>
+
+						<p:column headerText="#{msg['cie_desc']}">
+							<h:outputLabel value="#{rec.description}" />
+						</p:column>
+
+					</p:dataTable>
+				</p:scrollPanel>
+
+			</p:dialog>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

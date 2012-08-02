@@ -35,7 +35,7 @@ public class BranchConverter implements Converter {
 			} catch (NumberFormatException exception) {
 				throw new ConverterException(new FacesMessage(
 						FacesMessage.SEVERITY_ERROR, "Conversion Error",
-						"Not a valid player"));
+						"Not a valid branch"));
 			}
 		}
 		return null;

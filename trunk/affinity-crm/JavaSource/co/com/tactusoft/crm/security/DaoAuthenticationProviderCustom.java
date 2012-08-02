@@ -151,6 +151,15 @@ public class DaoAuthenticationProviderCustom extends
 				user.setListWSGroupSellers(new ArrayList<WSBean>());
 			}
 
+			try {
+				List<WSBean> result = CustomListsExecute.getMaterials(
+						sap.getUrlWebList(), sap.getUsername(),
+						sap.getPassword());
+				user.setListWSMaterials(result);
+			} catch (Exception ex) {
+				user.setListWSMaterials(new ArrayList<WSBean>());
+			}
+
 			CrmDoctor doctor = tableService
 					.getCrmDoctor(user.getUser().getId());
 			if (doctor != null) {

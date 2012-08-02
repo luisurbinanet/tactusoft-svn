@@ -33,6 +33,7 @@ public class UserData implements UserDetails {
 	private List<CrmBranch> listBranchAll;
 	private List<CrmParameter> listParameter;
 	private List<WSBean> listWSGroupSellers;
+	private List<WSBean> listWSMaterials;
 	private CrmPatient selectedPatient;
 	private String rolePrincipal;
 
@@ -130,6 +131,14 @@ public class UserData implements UserDetails {
 
 	public void setListWSGroupSellers(List<WSBean> listWSGroupSellers) {
 		this.listWSGroupSellers = listWSGroupSellers;
+	}
+
+	public List<WSBean> getListWSMaterials() {
+		return listWSMaterials;
+	}
+
+	public void setListWSMaterials(List<WSBean> listWSMaterials) {
+		this.listWSMaterials = listWSMaterials;
 	}
 
 	public CrmPatient getSelectedPatient() {

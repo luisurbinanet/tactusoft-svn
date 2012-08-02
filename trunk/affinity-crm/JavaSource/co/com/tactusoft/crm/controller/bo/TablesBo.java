@@ -7,8 +7,12 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.tactusoft.webservice.client.beans.WSBean;
+
 import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
+import co.com.tactusoft.crm.model.entities.CrmCie;
+import co.com.tactusoft.crm.model.entities.CrmCieMaterial;
 import co.com.tactusoft.crm.model.entities.CrmCountry;
 import co.com.tactusoft.crm.model.entities.CrmDepartment;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
@@ -58,7 +62,8 @@ public class TablesBo implements Serializable {
 	public List<CrmDoctor> getListDoctorByBranch(BigDecimal idBranch) {
 		return dao
 				.find("select distinct o.crmDoctor from CrmDoctorSchedule o where o.crmBranch.id = "
-						+ idBranch + " and o.crmDoctor.id <> 0 and o.crmDoctor.state = 1");
+						+ idBranch
+						+ " and o.crmDoctor.id <> 0 and o.crmDoctor.state = 1");
 	}
 
 	public List<CrmDoctorSchedule> getListScheduleByDoctor(BigDecimal idDoctor) {
@@ -240,6 +245,16 @@ public class TablesBo implements Serializable {
 		} else {
 			return null;
 		}
+	}
+
+	public List<CrmCie> getListCieMaterial() {
+		return dao.find("select distinct o.crmCie from CrmCieMaterial o");
+	}
+
+	public List<CrmCieMaterial> getListMaterialbyDiagnosis(
+			BigDecimal idDiagnosis) {
+		return dao.find("from CrmCieMaterial o where o.crmCie.id = "
+				+ idDiagnosis);
 	}
 
 	public Integer saveDoctor(CrmDoctor entity) {
@@ -468,6 +483,25 @@ public class TablesBo implements Serializable {
 		}
 
 		return i;
+	}
+
+	public Integer saveCieMaterial(CrmCie entity, List<WSBean> listMaterial) {
+		dao.executeHQL("delete from CrmCieMaterial o where o.crmCie.id = "
+				+ entity.getId());
+
+		for (WSBean data : listMaterial) {
+			CrmCieMaterial row = new CrmCieMaterial();
+			row.setId(getId(CrmCieMaterial.class));
+			row.setCrmCie(entity);
+			row.setMaterial(data.getCode());
+			row.setDescription(data.getNames());
+			dao.persist(row);
+		}
+
+		if (entity.getId() == null) {
+			entity.setId(getId(CrmCieMaterial.class));
+		}
+		return dao.persist(entity);
 	}
 
 	public void udpateBranch(String code, String society) {
