@@ -20,11 +20,10 @@
 					<p:toolbarGroup id="toolBar" align="left">
 						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
 							action="#{cieMaterialBacking.newAction}" oncomplete="dlg.show()"
-							update=":editForm:pnlDetail" />
+							update=":editForm:pnlDetail :editForm:dialog" />
 						<p:commandButton value="#{msg['btn_edit']}" icon="ui-icon-pencil"
-							oncomplete="dlg.show()" update=":editForm:pnlDetail"
-							actionListener="#{cieMaterialBacking.editAction}"
-							disabled="#{cieMaterialBacking.disabled}" />
+							oncomplete="dlg.show()" update=":editForm:dialog"
+							actionListener="#{cieMaterialBacking.editAction}" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -53,12 +52,16 @@
 
 			<p:dialog header="#{msg['msg_detail']}" widgetVar="dlg"
 				resizable="false" id="dialog" showEffect="fade" hideEffect="explode"
-				modal="true" width="500">
+				modal="true" width="700">
 
 				<p:toolbar style="width:100%">
 					<p:toolbarGroup align="left">
 						<p:commandButton id="btnSelCie" oncomplete="dlgCie.show()"
-							value="#{msg['btn_select_diagnosis']}" icon="ui-icon-search" />
+							value="#{msg['btn_select_diagnosis']}" icon="ui-icon-search"
+							rendered="#{cieMaterialBacking.newRecord}" />
+						<p:commandButton oncomplete="dlgMedicine.show()"
+							update="dialogMedicine" value="#{msg['btn_select_medication']}"
+							icon="ui-icon-search" />
 						<p:commandButton value="#{msg['btn_save']}" icon="ui-icon-disk"
 							action="#{cieMaterialBacking.saveAction}"
 							update="growl :form:recordTable :form:toolBar"
@@ -74,19 +77,37 @@
 				<h:panelGrid id="pnlDetail" columns="1" cellpadding="4"
 					style="margin:0 auto;" width="100%">
 
-					<h:outputLabel
-						value="#{cieMaterialBacking.selected.description}" />
+					<h:outputLabel value="#{cieMaterialBacking.selected.description}"
+						style="font-size:medium;font-weight:bold;" />
+					<p:spacer />
 
-					<p:pickList id="picRole" var="row"
-						value="#{cieMaterialBacking.listMedication}"
-						converter="materialConverter" itemValue="#{row}"
-						itemLabel="#{row.names}" showTargetFilter="true"
-						filterMatchMode="contains">
+					<p:dataTable id="recordTable" var="rec" rowKey="#{rec.code}"
+						value="#{cieMaterialBacking.modelMedication}" paginator="true"
+						selection="#{cieMaterialBacking.selectedsMedication}" rows="10"
+						style="width:100%;">
 
-						<f:facet name="sourceCaption">#{msg['glb_source_caption']}</f:facet>
-						<f:facet name="targetCaption">#{msg['glb_target_caption']}</f:facet>
-					</p:pickList>
+						<f:facet name="header">
+							<h:outputLabel value="#{msg['cie_grp_medication']}" />
+						</f:facet>
 
+						<p:column selectionMode="multiple" style="width:18px" />
+
+						<p:column headerText="#{msg['cie_code']}">
+							<h:outputLabel value="#{rec.code}" />
+						</p:column>
+
+						<p:column headerText="#{msg['cie_desc']}">
+							<h:outputLabel value="#{rec.names}" />
+						</p:column>
+
+						<f:facet name="footer">
+							<p:commandButton value="#{msg['btn_delete']}"
+								disabled="#{cieMaterialBacking.disabledMedication}"
+								action="#{cieMaterialBacking.removeMedicationAction}"
+								update="recordTable" />
+						</f:facet>
+
+					</p:dataTable>
 
 				</h:panelGrid>
 
@@ -149,6 +170,72 @@
 
 						<p:column headerText="#{msg['cie_desc']}">
 							<h:outputLabel value="#{rec.description}" />
+						</p:column>
+
+					</p:dataTable>
+				</p:scrollPanel>
+
+			</p:dialog>
+
+			<p:dialog header="#{msg['cie_grp_medication']}"
+				widgetVar="dlgMedicine" resizable="false" id="dialogMedicine"
+				showEffect="fade" hideEffect="explode" modal="true" width="600">
+
+				<h:panelGrid columns="2" width="100%">
+
+					<p:outputPanel>
+						<p:selectOneRadio id="sorMedicine"
+							value="#{cieMaterialBacking.optionSearchMaterial}"
+							layout="custom">
+							<f:selectItem itemLabel="#{msg['cie_code']}" itemValue="1" />
+							<f:selectItem itemLabel="#{msg['cie_desc']}" itemValue="2" />
+						</p:selectOneRadio>
+
+						<h:panelGrid columns="3" width="100%">
+							<p:radioButton id="rdbMedicine1" for="sorMedicine" itemIndex="0" />
+							<h:outputLabel for="rdbMedicine1" value="#{msg['cie_code']}" />
+							<p:inputText value="#{cieMaterialBacking.codeMaterial}"
+								style="width:100%" />
+
+							<p:radioButton id="rdbMedicine2" for="sorMedicine" itemIndex="1" />
+							<h:outputLabel for="rdbMedicine2" value="#{msg['cie_desc']}" />
+							<p:inputText value="#{cieMaterialBacking.descMaterial}"
+								style="width:100%" />
+						</h:panelGrid>
+					</p:outputPanel>
+
+					<f:facet name="footer">
+						<p:spacer height="10" />
+
+						<p:commandButton value="#{msg['btn_search']}"
+							icon="ui-icon-search"
+							update="pnlTable4 recordTable4 btnAddMaterial"
+							actionListener="#{cieMaterialBacking.searchMaterialAction}" />
+						<p:commandButton id="btnAddMaterial" value="#{msg['btn_add']}"
+							icon="ui-icon-plusthick"
+							update="recordTable recordTable4 pnlTable4"
+							actionListener="#{cieMaterialBacking.addMaterialAction}"
+							disabled="#{cieMaterialBacking.disabledAddMaterial}" />
+					</f:facet>
+				</h:panelGrid>
+
+				<p:spacer height="10" />
+
+				<p:scrollPanel id="pnlTable4" style="width:580px;height:400px">
+					<p:dataTable id="recordTable4" var="rec"
+						value="#{cieMaterialBacking.materialModel}" rowKey="#{rec.code}"
+						selection="#{cieMaterialBacking.selectedMaterial}"
+						paginator="true" rows="15" style="width:570px"
+						emptyMessage="#{msg['glb_no_records_found']}">
+
+						<p:column selectionMode="single" style="width:18px" />
+
+						<p:column headerText="#{msg['cie_code']}">
+							<h:outputLabel value="#{rec.code}" />
+						</p:column>
+
+						<p:column headerText="#{msg['cie_desc']}">
+							<h:outputLabel value="#{rec.names}" />
 						</p:column>
 
 					</p:dataTable>
