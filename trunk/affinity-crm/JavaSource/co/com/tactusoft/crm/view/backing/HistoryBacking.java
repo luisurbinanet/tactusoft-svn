@@ -81,6 +81,7 @@ public class HistoryBacking extends BaseBacking {
 	private CrmDiagnosis[] selectedsDiagnosis;
 	private CrmDiagnosis selectedDiagnosis;
 
+	private List<WSBean> listAllBackupMaterial;
 	private List<WSBean> listAllMaterial;
 	private int optionSearchMaterial;
 	private List<WSBean> listMaterial;
@@ -624,14 +625,6 @@ public class HistoryBacking extends BaseBacking {
 
 		maxDate = new Date();
 
-		optionSearchCie = 1;
-		listCie = new ArrayList<CrmCie>();
-		cieModel = new CieDataModel(listCie);
-		selectedCie = new CrmCie();
-		codeCIE = null;
-		descCIE = null;
-		disabledAddCie = true;
-
 		listDiagnosis = new ArrayList<CrmDiagnosis>();
 		diagnosisModel = new DiagnosisDataModel(listDiagnosis);
 		listMedication = new ArrayList<CrmMedication>();
@@ -651,12 +644,13 @@ public class HistoryBacking extends BaseBacking {
 
 		SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
 		try {
-			listAllMaterial = CustomListsExecute.getMaterials(
+			listAllBackupMaterial = CustomListsExecute.getMaterials(
 					sap.getUrlWebList(), sap.getUsername(), sap.getPassword());
 		} catch (Exception ex) {
-			listAllMaterial = new ArrayList<WSBean>();
+			listAllBackupMaterial = new ArrayList<WSBean>();
 		}
 
+		refreshCieFields();
 		refreshMaterialFields();
 	}
 
@@ -1359,6 +1353,18 @@ public class HistoryBacking extends BaseBacking {
 	public void removeDiagnosisAction(ActionEvent event) {
 		for (CrmDiagnosis row : selectedsDiagnosis) {
 			listDiagnosis.remove(row);
+
+			List<CrmMedication> listDelete = new ArrayList<CrmMedication>();
+			for (CrmMedication med : listMedication) {
+				if (med.getCrmCie().getId().intValue() == row.getCrmCie()
+						.getId().intValue()) {
+					listDelete.add(med);
+				}
+			}
+
+			for (CrmMedication med : listDelete) {
+				listMedication.remove(med);
+			}
 		}
 		diagnosisModel = new DiagnosisDataModel(listDiagnosis);
 	}
@@ -1376,37 +1382,15 @@ public class HistoryBacking extends BaseBacking {
 		} else {
 			this.listMaterial = new ArrayList<WSBean>();
 			for (WSBean material : listAllMaterial) {
-
-				boolean validateGroup = false;
-				for (CrmMaterialGroup row : listMaterialGroup) {
-					if (row.getMaterialType().equals(typeMedication)
-							&& material.getType().equals(row.getGroup())) {
-						validateGroup = true;
-						break;
+				if (optionSearchMaterial == 1) {
+					if (material.getCode().toUpperCase()
+							.contains(codeMaterial.toUpperCase())) {
+						this.listMaterial.add(material);
 					}
-				}
-
-				if (typeMedication.equals(Constant.MATERIAL_TYPE_MEDICINE)) {
-					for (CrmCieMaterial row : listCieMaterial) {
-						if (selectedDiagnosis.getCrmCie().getId().intValue() == row
-								.getCrmCie().getId().intValue()) {
-							validateGroup = true;
-							break;
-						}
-					}
-				}
-
-				if (validateGroup) {
-					if (optionSearchMaterial == 1) {
-						if (material.getCode().toUpperCase()
-								.contains(codeMaterial.toUpperCase())) {
-							this.listMaterial.add(material);
-						}
-					} else {
-						if (material.getNames().toUpperCase()
-								.contains(descMaterial.toUpperCase())) {
-							this.listMaterial.add(material);
-						}
+				} else {
+					if (material.getNames().toUpperCase()
+							.contains(descMaterial.toUpperCase())) {
+						this.listMaterial.add(material);
 					}
 				}
 			}
@@ -1426,6 +1410,7 @@ public class HistoryBacking extends BaseBacking {
 		CrmMedication medication = new CrmMedication();
 		medication.setId(id);
 		medication.setCrmAppointment(selectedAppointment);
+		medication.setCrmCie(selectedDiagnosis.getCrmCie());
 		medication.setCodMaterial(Integer.parseInt(selectedMaterial.getCode()));
 		medication.setDescMaterial(selectedMaterial.getNames());
 		medication.setMaterialType(typeMedication);
@@ -1513,6 +1498,16 @@ public class HistoryBacking extends BaseBacking {
 		selectedExam = null;
 	}
 
+	public void refreshCieFields() {
+		optionSearchCie = 1;
+		listCie = new ArrayList<CrmCie>();
+		cieModel = new CieDataModel(listCie);
+		selectedCie = new CrmCie();
+		codeCIE = null;
+		descCIE = null;
+		disabledAddCie = true;
+	}
+
 	public void refreshMaterialFields() {
 		optionSearchMaterial = 1;
 		listMaterial = new ArrayList<WSBean>();
@@ -1524,18 +1519,81 @@ public class HistoryBacking extends BaseBacking {
 		amount = 1;
 	}
 
-	public void selectMedicationAction(ActionEvent event) {
+	public void selectDiagnosisAction(ActionEvent event) {
+		refreshCieFields();
+	}
+
+	public void selectMedicationAction() {
 		this.typeMedication = Constant.MATERIAL_TYPE_MEDICINE;
 		refreshMaterialFields();
+
+		listAllMaterial = new ArrayList<WSBean>();
+		for (CrmCieMaterial row : listCieMaterial) {
+			if (selectedDiagnosis.getCrmCie().getId().intValue() == row
+					.getCrmCie().getId().intValue()) {
+				listMaterial.add(new WSBean(row.getMaterial(), row
+						.getDescription()));
+				listAllMaterial.add(new WSBean(row.getMaterial(), row
+						.getDescription()));
+			}
+		}
+
+		if (listMaterial.size() == 0) {
+			for (WSBean material : listAllBackupMaterial) {
+				boolean validateGroup = false;
+				for (CrmMaterialGroup row : listMaterialGroup) {
+					if (row.getMaterialType().equals(typeMedication)
+							&& material.getType().equals(row.getGroup())) {
+						validateGroup = true;
+						break;
+					}
+				}
+
+				if (validateGroup) {
+					listMaterial.add(material);
+					listAllMaterial.add(material);
+				}
+			}
+		}
+
+		refreshListMedication();
 	}
 
 	public void selectTherapyAction(ActionEvent event) {
 		this.typeMedication = Constant.MATERIAL_TYPE_THERAPY;
+		for (WSBean material : listAllBackupMaterial) {
+			boolean validateGroup = false;
+			for (CrmMaterialGroup row : listMaterialGroup) {
+				if (row.getMaterialType().equals(typeMedication)
+						&& material.getType().equals(row.getGroup())) {
+					validateGroup = true;
+					break;
+				}
+			}
+
+			if (validateGroup) {
+				listAllMaterial.add(material);
+			}
+		}
 		refreshMaterialFields();
 	}
 
 	public void selectExamsAction(ActionEvent event) {
 		this.typeMedication = Constant.MATERIAL_TYPE_EXAMS;
+		for (WSBean material : listAllBackupMaterial) {
+			boolean validateGroup = false;
+			for (CrmMaterialGroup row : listMaterialGroup) {
+				if (row.getMaterialType().equals(typeMedication)
+						&& material.getType().equals(row.getGroup())) {
+					validateGroup = true;
+					break;
+				}
+			}
+
+			if (validateGroup) {
+				listAllMaterial.add(material);
+			}
+		}
 		refreshMaterialFields();
 	}
 

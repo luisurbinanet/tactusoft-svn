@@ -9,7 +9,7 @@
 
 	<ui:define name="body">
 
-		<p:panel style="width:100%;height:2000px;"
+		<p:panel style="width:100%;height:100%;"
 			header="#{msg['title_view_history']}">
 
 			<p:spacer height="5" />
@@ -167,7 +167,7 @@
 												<p:commandButton oncomplete="dlgMedicine.show()"
 													update=":form:dialogMedicine" icon="ui-icon-plusthick"
 													title="#{msg['btn_select_medication']}"
-													actionListener="#{historyBacking.selectMedicationAction}">
+													action="#{historyBacking.selectMedicationAction}">
 													<f:setPropertyActionListener value="#{rec}"
 														target="#{historyBacking.selectedDiagnosis}" />
 												</p:commandButton>
@@ -182,7 +182,13 @@
 
 										<f:facet name="footer">
 											<p:commandButton id="btnSelCie" oncomplete="dlgCie.show()"
-												value="#{msg['btn_select_diagnosis']}" icon="ui-icon-search" />
+												value="#{msg['btn_select_diagnosis']}" icon="ui-icon-search"
+												actionListener="#{historyBacking.selectDiagnosisAction}"
+												update=":form:dialogCie" />
+											<p:commandButton oncomplete="dlgMedicationPreview.show()"
+												value="#{msg['btn_view_medication']}" icon="ui-icon-search"
+												disabled="#{historyBacking.disabledMedication}"
+												update=":form:dialogMedicationPreview" />
 											<p:commandButton value="#{msg['btn_delete']}"
 												disabled="#{historyBacking.disabledDiagnosis}"
 												icon="ui-icon-closethick"
@@ -460,16 +466,16 @@
 									disabled="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.arthritis}"
 									itemLabel="#{msg['his_rec_per_arthritis']}">
-									<p:ajax update="pnlPersonal" />
+									<p:ajax update="txtPersonal1 txtPersonal2" />
 								</p:selectBooleanCheckbox>
 
-								<p:inputTextarea style="width:300px" rows="3"
+								<p:inputTextarea id="txtPersonal1" style="width:300px" rows="3"
 									label="#{msg['his_record_clic_time']}"
 									disabled="#{not historyBacking.selectedHistoryRecord.arthritis}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.arthritisTime}" />
 
-								<p:inputTextarea style="width:450px" rows="3"
+								<p:inputTextarea id="txtPersonal2" style="width:450px" rows="3"
 									label="#{msg['his_record_clic_medi']}"
 									disabled="#{not historyBacking.selectedHistoryRecord.arthritis}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
@@ -479,15 +485,15 @@
 									disabled="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.cancer}"
 									itemLabel="#{msg['his_rec_per_cancer']}">
-									<p:ajax update="pnlPersonal" />
+									<p:ajax update="txtPersonal3 txtPersonal4" />
 								</p:selectBooleanCheckbox>
 
-								<p:inputTextarea style="width:300px" rows="3"
+								<p:inputTextarea id="txtPersonal3" style="width:300px" rows="3"
 									disabled="#{not historyBacking.selectedHistoryRecord.cancer}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.cancerTime}" />
 
-								<p:inputTextarea style="width:450px" rows="3"
+								<p:inputTextarea id="txtPersonal4" style="width:450px" rows="3"
 									disabled="#{not historyBacking.selectedHistoryRecord.cancer}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.cancerMedication}" />
@@ -496,15 +502,15 @@
 									disabled="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.pulmonary}"
 									itemLabel="#{msg['his_rec_per_pulmonary']}">
-									<p:ajax update="pnlPersonal" />
+									<p:ajax update="txtPersonal5 txtPersonal6" />
 								</p:selectBooleanCheckbox>
 
-								<p:inputTextarea style="width:300px" rows="3"
+								<p:inputTextarea id="txtPersonal5" style="width:300px" rows="3"
 									disabled="#{not historyBacking.selectedHistoryRecord.pulmonary}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.pulmonaryTime}" />
 
-								<p:inputTextarea style="width:450px" rows="3"
+								<p:inputTextarea id="txtPersonal6" style="width:450px" rows="3"
 									disabled="#{not historyBacking.selectedHistoryRecord.pulmonary}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.pulmonaryMedication}" />
@@ -513,15 +519,15 @@
 									disabled="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.diabetes}"
 									itemLabel="#{msg['his_rec_per_diabetes']}">
-									<p:ajax update="pnlPersonal" />
+									<p:ajax update="txtPersonal7 txtPersonal8" />
 								</p:selectBooleanCheckbox>
 
-								<p:inputTextarea style="width:300px" rows="3"
+								<p:inputTextarea id="txtPersonal7" style="width:300px" rows="3"
 									disabled="#{not historyBacking.selectedHistoryRecord.diabetes}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.diabetesTime}" />
 
-								<p:inputTextarea style="width:450px" rows="3"
+								<p:inputTextarea id="txtPersonal8" style="width:450px" rows="3"
 									disabled="#{not historyBacking.selectedHistoryRecord.diabetes}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.diabetesMedication}" />
@@ -530,15 +536,15 @@
 									disabled="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.hypertension}"
 									itemLabel="#{msg['his_rec_per_hypertension']}">
-									<p:ajax update="pnlPersonal" />
+									<p:ajax update="txtPersonal9 txtPersonal10" />
 								</p:selectBooleanCheckbox>
 
-								<p:inputTextarea style="width:300px" rows="3"
+								<p:inputTextarea id="txtPersonal9" style="width:300px" rows="3"
 									disabled="#{not historyBacking.selectedHistoryRecord.hypertension}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.hypertensionTime}" />
 
-								<p:inputTextarea style="width:450px" rows="3"
+								<p:inputTextarea id="txtPersonal10" style="width:450px" rows="3"
 									disabled="#{not historyBacking.selectedHistoryRecord.hypertension}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.hypertensionMedication}" />
@@ -547,15 +553,15 @@
 									disabled="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.hospitalizations}"
 									itemLabel="#{msg['his_rec_per_hospitalizations']}">
-									<p:ajax update="pnlPersonal" />
+									<p:ajax update="txtPersonal11 txtPersonal12" />
 								</p:selectBooleanCheckbox>
 
-								<p:inputTextarea style="width:300px" rows="3"
+								<p:inputTextarea id="txtPersonal11" style="width:300px" rows="3"
 									disabled="#{not historyBacking.selectedHistoryRecord.hospitalizations}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.hospitalizationsTime}" />
 
-								<p:inputTextarea style="width:450px" rows="3"
+								<p:inputTextarea id="txtPersonal12" style="width:450px" rows="3"
 									disabled="#{not historyBacking.selectedHistoryRecord.hospitalizations}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.hospitalizationsMedication}" />
@@ -564,15 +570,15 @@
 									disabled="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.allergy}"
 									itemLabel="#{msg['his_rec_per_allergy']}">
-									<p:ajax update="pnlPersonal" />
+									<p:ajax update="txtPersonal13 txtPersonal14" />
 								</p:selectBooleanCheckbox>
 
-								<p:inputTextarea style="width:300px" rows="3"
+								<p:inputTextarea id="txtPersonal13" style="width:300px" rows="3"
 									disabled="#{not historyBacking.selectedHistoryRecord.allergy}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.allergyTime}" />
 
-								<p:inputTextarea style="width:450px" rows="3"
+								<p:inputTextarea id="txtPersonal14" style="width:450px" rows="3"
 									disabled="#{not historyBacking.selectedHistoryRecord.allergy}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.allergyMedication}" />
@@ -581,15 +587,15 @@
 									disabled="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.infections}"
 									itemLabel="#{msg['his_rec_per_infections']}">
-									<p:ajax update="pnlPersonal" />
+									<p:ajax update="txtPersonal15 txtPersonal16" />
 								</p:selectBooleanCheckbox>
 
-								<p:inputTextarea style="width:300px" rows="3"
+								<p:inputTextarea id="txtPersonal15" style="width:300px" rows="3"
 									disabled="#{not historyBacking.selectedHistoryRecord.infections}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.infectionsTime}" />
 
-								<p:inputTextarea style="width:450px" rows="3"
+								<p:inputTextarea id="txtPersonal16" style="width:450px" rows="3"
 									disabled="#{not historyBacking.selectedHistoryRecord.infections}"
 									readonly="#{historyBacking.readOnlySelectedHistoryRecord}"
 									value="#{historyBacking.selectedHistoryRecord.infectionsMedication}" />
@@ -1358,7 +1364,7 @@
 								actionListener="#{historyBacking.searchMaterialAction}" />
 							<p:commandButton id="btnAddMaterial" value="#{msg['btn_add']}"
 								icon="ui-icon-plusthick"
-								update="recordTable4 :form:tabView:dtbTherapy :form:tabView:dtbExamns"
+								update="recordTable4 :form:tabView:dtbDiagnosis :form:tabView:dtbTherapy :form:tabView:dtbExamns"
 								actionListener="#{historyBacking.addMaterialAction}"
 								disabled="#{historyBacking.disabledAddMaterial}" />
 						</f:facet>
@@ -1394,6 +1400,53 @@
 
 					<p:inputTextarea rows="7" style="width:560px"
 						value="#{historyBacking.selectedDiagnosis.posology}" />
+
+				</p:dialog>
+
+				<p:dialog header="#{msg['cie_grp_medication']}"
+					widgetVar="dlgMedicationPreview" resizable="false"
+					id="dialogMedicationPreview" showEffect="fade" hideEffect="explode"
+					modal="true" width="800">
+
+					<p:dataTable id="dtbMedication" var="rec"
+						value="#{historyBacking.medicationModel}"
+						selection="#{historyBacking.selectedMedication}"
+						rowKey="#{rec.id}" paginator="true" rows="15" style="width:100%"
+						emptyMessage="#{msg['glb_no_records_found']}">
+
+						<p:column selectionMode="multiple" style="width:18px" />
+
+						<p:column headerText="#{msg['cie_grp_diagnosis']}">
+							<h:outputLabel value="#{rec.crmCie.description}" />
+						</p:column>
+
+						<p:column headerText="#{msg['sal_material_code']}">
+							<h:outputLabel value="#{rec.codMaterial}" />
+						</p:column>
+
+						<p:column headerText="#{msg['sal_material_descr']}">
+							<h:outputLabel value="#{rec.descMaterial}" />
+						</p:column>
+
+						<p:column headerText="#{msg['sal_material_amount']}"
+							style="width:100px">
+							<pe:inputNumber value="#{rec.unit}" symbolPosition="s"
+								decimalPlaces="0" style="width:100px" minValue="1" maxValue="99" />
+						</p:column>
+
+						<f:facet name="footer">
+							<p:commandButton id="btnSelMaterial"
+								oncomplete="dlgMedicine.show()" update=":form:dialogMedicine"
+								disabled="#{historyBacking.disabledDiagnosis}"
+								value="#{msg['btn_select']}" icon="ui-icon-search"
+								actionListener="#{historyBacking.selectMedicationAction}" />
+							<p:commandButton value="#{msg['btn_delete']}"
+								disabled="#{historyBacking.disabledMedication}"
+								icon="ui-icon-closethick" update="dtbMedication"
+								actionListener="#{historyBacking.removeMedicationAction}" />
+						</f:facet>
+
+					</p:dataTable>
 
 				</p:dialog>
 
