@@ -32,10 +32,15 @@
 				<p:dataTable id="recordTable" var="rec"
 					value="#{cieMaterialBacking.model}" rowKey="#{rec.id}"
 					selection="#{cieMaterialBacking.selected}" paginator="true"
-					rows="10" style="width:100%">
+					rows="10" style="width:100%"
+					emptyMessage="#{msg['glb_no_records_found']}">
 
 					<p:column selectionMode="single" style="width:18px" />
 
+					<p:column headerText="#{msg['cie_grp_diagnosis_code']}">
+						<h:outputLabel value="#{rec.code}" />
+					</p:column>
+					
 					<p:column headerText="#{msg['cie_grp_diagnosis']}">
 						<h:outputLabel value="#{rec.description}" />
 					</p:column>
@@ -52,7 +57,7 @@
 
 			<p:dialog header="#{msg['msg_detail']}" widgetVar="dlg"
 				resizable="false" id="dialog" showEffect="fade" hideEffect="explode"
-				modal="true" width="700">
+				modal="true" width="800">
 
 				<p:toolbar style="width:100%">
 					<p:toolbarGroup align="left">
@@ -84,7 +89,7 @@
 					<p:dataTable id="recordTable" var="rec" rowKey="#{rec.code}"
 						value="#{cieMaterialBacking.modelMedication}" paginator="true"
 						selection="#{cieMaterialBacking.selectedsMedication}" rows="10"
-						style="width:100%;">
+						style="width:100%;" emptyMessage="#{msg['glb_no_records_found']}">
 
 						<f:facet name="header">
 							<h:outputLabel value="#{msg['cie_grp_medication']}" />
@@ -103,7 +108,7 @@
 						<f:facet name="footer">
 							<p:commandButton value="#{msg['btn_delete']}"
 								disabled="#{cieMaterialBacking.disabledMedication}"
-								action="#{cieMaterialBacking.removeMedicationAction}"
+								actionListener="#{cieMaterialBacking.removeMedicationAction}"
 								update="recordTable" />
 						</f:facet>
 

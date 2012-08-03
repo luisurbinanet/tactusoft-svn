@@ -24,6 +24,7 @@ public class CrmCie implements java.io.Serializable {
 	private String description;
 	private Set<CrmDiagnosis> crmDiagnosises = new HashSet<CrmDiagnosis>(0);
 	private Set<CrmCieMaterial> crmCieMaterials = new HashSet<CrmCieMaterial>(0);
+	private Set<CrmMedication> crmMedications = new HashSet<CrmMedication>(0);
 
 	public CrmCie() {
 	}
@@ -34,12 +35,14 @@ public class CrmCie implements java.io.Serializable {
 
 	public CrmCie(BigDecimal id, String code, String description,
 			Set<CrmDiagnosis> crmDiagnosises,
-			Set<CrmCieMaterial> crmCieMaterials) {
+			Set<CrmCieMaterial> crmCieMaterials,
+			Set<CrmMedication> crmMedications) {
 		this.id = id;
 		this.code = code;
 		this.description = description;
 		this.crmDiagnosises = crmDiagnosises;
 		this.crmCieMaterials = crmCieMaterials;
+		this.crmMedications = crmMedications;
 	}
 
 	@Id
@@ -86,6 +89,15 @@ public class CrmCie implements java.io.Serializable {
 
 	public void setCrmCieMaterials(Set<CrmCieMaterial> crmCieMaterials) {
 		this.crmCieMaterials = crmCieMaterials;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmCie")
+	public Set<CrmMedication> getCrmMedications() {
+		return this.crmMedications;
+	}
+
+	public void setCrmMedications(Set<CrmMedication> crmMedications) {
+		this.crmMedications = crmMedications;
 	}
 
 }

@@ -18,10 +18,12 @@ import co.com.tactusoft.crm.model.entities.CrmCieMaterial;
 import co.com.tactusoft.crm.model.entities.CrmMaterialGroup;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
+import co.com.tactusoft.crm.util.SAPEnvironment;
 import co.com.tactusoft.crm.view.datamodel.CieDataModel;
 import co.com.tactusoft.crm.view.datamodel.WSBeanDataModel;
 
 import com.tactusoft.webservice.client.beans.WSBean;
+import com.tactusoft.webservice.client.execute.CustomListsExecute;
 
 @Named
 @Scope("view")
@@ -255,7 +257,13 @@ public class CieMaterialBacking implements Serializable {
 	}
 
 	public void newAction() {
-		listAllMedication = FacesUtil.getCurrentUserData().getListWSMaterials();
+		SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
+		try {
+			listAllMedication = CustomListsExecute.getMaterials(
+					sap.getUrlWebList(), sap.getUsername(), sap.getPassword());
+		} catch (Exception ex) {
+			listAllMedication = new ArrayList<WSBean>();
+		}
 
 		selected = new CrmCie();
 
@@ -277,9 +285,15 @@ public class CieMaterialBacking implements Serializable {
 		codeMaterial = null;
 		descMaterial = null;
 		disabledAddMaterial = true;
+		newRecord = true;
+
+		if (list != null) {
+			if (list.size() > 0) {
+				selected = list.get(0);
+			}
+		}
 
 		refreshListCie();
-		newRecord = true;
 	}
 
 	public void saveAction() {

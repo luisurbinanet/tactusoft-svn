@@ -15,10 +15,11 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "crm_medication", catalog = "crm_db")
 public class CrmMedication implements java.io.Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
 	private CrmAppointment crmAppointment;
+	private CrmCie crmCie;
 	private long codMaterial;
 	private String descMaterial;
 	private int unit;
@@ -28,9 +29,11 @@ public class CrmMedication implements java.io.Serializable {
 	}
 
 	public CrmMedication(BigDecimal id, CrmAppointment crmAppointment,
-			long codMaterial, String descMaterial, int unit, String materialType) {
+			CrmCie crmCie, long codMaterial, String descMaterial, int unit,
+			String materialType) {
 		this.id = id;
 		this.crmAppointment = crmAppointment;
+		this.crmCie = crmCie;
 		this.codMaterial = codMaterial;
 		this.descMaterial = descMaterial;
 		this.unit = unit;
@@ -55,6 +58,16 @@ public class CrmMedication implements java.io.Serializable {
 
 	public void setCrmAppointment(CrmAppointment crmAppointment) {
 		this.crmAppointment = crmAppointment;
+	}
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "id_cie", nullable = false)
+	public CrmCie getCrmCie() {
+		return this.crmCie;
+	}
+
+	public void setCrmCie(CrmCie crmCie) {
+		this.crmCie = crmCie;
 	}
 
 	@Column(name = "cod_material", nullable = false)
