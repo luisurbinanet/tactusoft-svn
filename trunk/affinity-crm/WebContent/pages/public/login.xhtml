@@ -38,7 +38,7 @@
 					<h:panelGrid id="pnlMessages"
 						rendered="#{loginBacking.visibleBadCredentials}"
 						style="align:center">
-						<h:outputLabel value="#{msg['log_msg_validate_credentials']}"
+						<h:outputLabel value="#{loginBacking.message}"
 							style="color:Red;font-weight:bold;" />
 					</h:panelGrid>
 
