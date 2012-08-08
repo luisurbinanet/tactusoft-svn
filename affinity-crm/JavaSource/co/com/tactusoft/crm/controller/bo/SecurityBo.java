@@ -22,8 +22,7 @@ public class SecurityBo {
 		CrmUser object = null;
 		try {
 			object = (CrmUser) dao.find(
-					"from CrmUser o where o.username = '" + userName
-							+ "' and o.state = 1").get(0);
+					"from CrmUser o where o.username = '" + userName + "'").get(0);
 		} catch (IndexOutOfBoundsException ex) {
 			object = null;
 		}
