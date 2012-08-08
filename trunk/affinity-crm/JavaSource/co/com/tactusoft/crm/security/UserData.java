@@ -1,11 +1,10 @@
 package co.com.tactusoft.crm.security;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import co.com.tactusoft.crm.model.entities.CrmBranch;
@@ -23,7 +22,7 @@ public class UserData implements UserDetails {
 
 	private String username;
 	private String password;
-	private List<CrmRole> roles;
+	private List<SimpleGrantedAuthority> roles;
 	private List<CrmRole> listRoleAll;
 	private CrmUser user;
 	private List<CrmPage> listPage;
@@ -53,11 +52,11 @@ public class UserData implements UserDetails {
 		return password;
 	}
 
-	public List<CrmRole> getRoles() {
+	public List<SimpleGrantedAuthority> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(List<CrmRole> roles) {
+	public void setRoles(List<SimpleGrantedAuthority> roles) {
 		this.roles = roles;
 	}
 
@@ -174,11 +173,7 @@ public class UserData implements UserDetails {
 	}
 
 	@Override
-	public Collection<GrantedAuthority> getAuthorities() {
-		List<GrantedAuthority> list = new ArrayList<GrantedAuthority>();
-		for (CrmRole role : roles) {
-			list.add(new GrantedAuthorityImpl(role.getName()));
-		}
-		return list;
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return roles;
 	}
 }
