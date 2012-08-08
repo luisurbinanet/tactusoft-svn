@@ -14,6 +14,7 @@ import org.springframework.security.authentication.dao.SaltSource;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.security.authentication.encoding.PlaintextPasswordEncoder;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import co.com.tactusoft.crm.controller.bo.ParameterBo;
@@ -69,7 +70,11 @@ public class DaoAuthenticationProviderCustom extends
 			// get Roles
 			List<CrmRole> listRole = securityService.getListCrmRoleByUser(user
 					.getUser().getId());
-			user.setRoles(listRole);
+			List<SimpleGrantedAuthority> listGrantedAuthority = new ArrayList<SimpleGrantedAuthority>();
+			for (CrmRole role : listRole) {
+				listGrantedAuthority.add(new SimpleGrantedAuthority(role.getName()));
+			}
+			user.setRoles(listGrantedAuthority);
 
 			String idRoles = "";
 			for (CrmRole row : listRole) {
@@ -113,12 +118,12 @@ public class DaoAuthenticationProviderCustom extends
 			try {
 
 				List<WSBean> result = new ArrayList<WSBean>();
-				try {
+				/*try {
 					result = CustomListsExecute.getBranchs(sap.getUrlWebList(),
 							sap.getUsername(), sap.getPassword());
 				} catch (Exception ex) {
 					result = new ArrayList<WSBean>();
-				}
+				}*/
 
 				for (WSBean row : result) {
 					boolean notExists = true;
@@ -159,6 +164,33 @@ public class DaoAuthenticationProviderCustom extends
 			} catch (Exception ex) {
 				user.setListWSMaterials(new ArrayList<WSBean>());
 			}
+			
+			/*List<WSBean> result = new ArrayList<WSBean>();
+			WSBean bean = new WSBean();
+			bean.setCode("001");
+			bean.setNames("MEDICAMENTO 1");
+			bean.setType("01");
+			result.add(bean);
+			bean = new WSBean();
+			bean.setCode("002");
+			bean.setNames("MEDICAMENTO 2");
+			bean.setType("01");
+			result.add(bean);bean = new WSBean();
+			bean.setCode("003");
+			bean.setNames("MEDICAMENTO 3");
+			bean.setType("05");
+			result.add(bean);
+			bean = new WSBean();
+			bean.setCode("004");
+			bean.setNames("MEDICAMENTO 4");
+			bean.setType("01");
+			result.add(bean);
+			bean = new WSBean();
+			bean.setCode("005");
+			bean.setNames("MEDICAMENTO 5");
+			bean.setType("05");
+			result.add(bean);
+			user.setListWSMaterials(result);*/
 
 			CrmDoctor doctor = tableService
 					.getCrmDoctor(user.getUser().getId());
