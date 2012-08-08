@@ -7,19 +7,17 @@
 
 	<http auto-config="false" entry-point-ref="authenticationEntryPoint"
 		access-denied-page="/pages/public/accessDenied.jsf"
-		access-decision-manager-ref="affirmativeBased" create-session="always">
+		access-decision-manager-ref="affirmativeBased">
 
-		
+
+		<custom-filter position="CONCURRENT_SESSION_FILTER" ref="concurrencyFilter" />
 		<custom-filter position="FORM_LOGIN_FILTER"
 			ref="usernamePasswordAuthenticationFilter" />
-
 		<custom-filter before="ANONYMOUS_FILTER" ref="anonymousAuthFilter" />
 		<custom-filter before="FILTER_SECURITY_INTERCEPTOR" ref="filterSecurityInterceptor" />
 
-		<session-management>
-			<concurrency-control error-if-maximum-exceeded="true"
-				max-sessions="1" />
-		</session-management>
+		<session-management
+			session-authentication-strategy-ref="sas" />
 
 	</http>
 
@@ -41,10 +39,18 @@
 		<beans:property name="loginFormUrl" value="/pages/public/login.jsf" />
 	</beans:bean>
 
+	<beans:bean id="customSuccessRedirection"
+		class="co.com.tactusoft.crm.security.CustomSuccessRedirection">
+		
+	</beans:bean>
+
 	<beans:bean id="concurrencyFilter"
 		class="org.springframework.security.web.session.ConcurrentSessionFilter">
-		<beans:property name="sessionRegistry" ref="sessionRegistry" />
-		<beans:property name="expiredUrl" value="/pages/public/expired.jsf" />
+		<beans:constructor-arg name="sessionRegistry"
+			ref="sessionRegistry" />
+		<beans:constructor-arg name="expiredUrl"
+			value="/pages/public/expired.jsf" />
+		<beans:property name="redirectStrategy" ref="customSuccessRedirection" />
 	</beans:bean>
 
 	<beans:bean id="sas"
