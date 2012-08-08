@@ -24,6 +24,7 @@ public class LoginBacking {
 	private String password;
 	private boolean visibleBadCredentials;
 	private boolean authenticated;
+	private String message;
 
 	public LoginBacking() {
 		this.init();
@@ -68,8 +69,15 @@ public class LoginBacking {
 		this.authenticated = authenticated;
 	}
 
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
 	public String doLogin() throws Exception {
-		String message = null;
 		String page = null;
 
 		this.visibleBadCredentials = false;
@@ -105,7 +113,7 @@ public class LoginBacking {
 			FacesUtil.addWarn(message);
 		} catch (DisabledException disabledException) {
 			this.visibleBadCredentials = true;
-			message = FacesUtil.getMessage("log_msg_validate_credentials");
+			message = FacesUtil.getMessage("log_msg_enabled");
 			FacesUtil.addWarn(message);
 		}
 
