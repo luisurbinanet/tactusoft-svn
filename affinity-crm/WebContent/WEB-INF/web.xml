@@ -73,4 +73,8 @@
 	<session-config>
 		<session-timeout>1</session-timeout>
 	</session-config>
+	<error-page>
+		<exception-type>javax.faces.application.ViewExpiredException</exception-type>
+		<location>/pages/public/expired.xhtml</location>
+	</error-page>
 </web-app>
