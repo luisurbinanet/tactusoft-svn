@@ -15,7 +15,4 @@
 		</resource-bundle>
 		<message-bundle>co.com.tactusoft.crm.view.messages.messages</message-bundle>
 	</application>
-	<factory>
-		<exception-handler-factory>co.com.tactusoft.crm.security.ExpiredExceptionHandlerFactory</exception-handler-factory>
-	</factory>
 </faces-config>
