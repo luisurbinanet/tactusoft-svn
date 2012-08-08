@@ -31,10 +31,10 @@ import javax.faces.event.MethodExpressionActionListener;
 import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import co.com.tactusoft.crm.model.entities.CrmParameter;
-import co.com.tactusoft.crm.model.entities.CrmRole;
 import co.com.tactusoft.crm.model.entities.CrmUser;
 import co.com.tactusoft.crm.security.UserData;
 
@@ -155,8 +155,8 @@ public class FacesUtil {
 		try {
 			userData = (UserData) SecurityContextHolder.getContext()
 					.getAuthentication().getPrincipal();
-			for (CrmRole role : userData.getRoles()) {
-				list.add(role.getName());
+			for (SimpleGrantedAuthority role : userData.getRoles()) {
+				list.add(role.getAuthority());
 			}
 		} catch (Exception ex) {
 			userData = new UserData();

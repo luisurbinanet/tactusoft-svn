@@ -1,157 +1,119 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:security="http://www.springframework.org/schema/security"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/security
+           http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
-	<bean id="filterChainProxy" class="org.springframework.security.web.FilterChainProxy">
-		<security:filter-chain-map path-type="ant">
-			<security:filter-chain pattern="/**"
-				filters="httpSessionContextIntegrationFilter,logoutFilter,usernamePasswordAuthenticationFilter,securityContextHolderAwareRequestFilter,rememberMeFilter,anonymousAuthFilter,exceptionTranslationFilter,filterSecurityInterceptor" />
-		</security:filter-chain-map>
-	</bean>
+	<http auto-config="false" entry-point-ref="authenticationEntryPoint"
+		access-denied-page="/pages/public/accessDenied.jsf"
+		access-decision-manager-ref="affirmativeBased" create-session="always">
 
-	<bean id="httpSessionContextIntegrationFilter"
-		class="org.springframework.security.web.context.HttpSessionContextIntegrationFilter" />
+		
+		<custom-filter position="FORM_LOGIN_FILTER"
+			ref="usernamePasswordAuthenticationFilter" />
 
-	<bean id="logoutFilter"
-		class="org.springframework.security.web.authentication.logout.LogoutFilter">
-		<constructor-arg value="/pages/public/login.jsf" />
-		<!-- URL redirected to after logout -->
-		<constructor-arg>
-			<list>
-				<ref bean="rememberMeServices" />
-				<bean
-					class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler" />
-			</list>
-		</constructor-arg>
-	</bean>
+		<custom-filter before="ANONYMOUS_FILTER" ref="anonymousAuthFilter" />
+		<custom-filter before="FILTER_SECURITY_INTERCEPTOR" ref="filterSecurityInterceptor" />
 
-	<bean id="sessionRegistry"
+		<session-management>
+			<concurrency-control error-if-maximum-exceeded="true"
+				max-sessions="1" />
+		</session-management>
+
+	</http>
+
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider ref="daoAuthenticationProvider" />
+	</authentication-manager>
+
+	<beans:bean id="daoAuthenticationProvider"
+		class="co.com.tactusoft.crm.security.DaoAuthenticationProviderCustom">
+		<beans:property name="userDetailsService" ref="userDetailsService" />
+		<beans:property name="passwordEncoder" ref="passwordEncoder" />
+	</beans:bean>
+
+	<beans:bean id="userDetailsService"
+		class="co.com.tactusoft.crm.security.UserDetailsServiceCustom" />
+
+	<beans:bean id="authenticationEntryPoint"
+		class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+		<beans:property name="loginFormUrl" value="/pages/public/login.jsf" />
+	</beans:bean>
+
+	<beans:bean id="concurrencyFilter"
+		class="org.springframework.security.web.session.ConcurrentSessionFilter">
+		<beans:property name="sessionRegistry" ref="sessionRegistry" />
+		<beans:property name="expiredUrl" value="/pages/public/expired.jsf" />
+	</beans:bean>
+
+	<beans:bean id="sas"
+		class="org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy">
+		<beans:constructor-arg name="sessionRegistry"
+			ref="sessionRegistry" />
+		<beans:property name="maximumSessions" value="1" />
+		<beans:property name="exceptionIfMaximumExceeded"
+			value="true" />
+	</beans:bean>
+
+	<beans:bean id="sessionRegistry"
 		class="org.springframework.security.core.session.SessionRegistryImpl" />
 
-	<bean id="concurrencyFilter"
-		class="org.springframework.security.web.session.ConcurrentSessionFilter">
-		<property name="sessionRegistry" ref="sessionRegistry" />
-		<property name="expiredUrl" value="/pages/public/expired.jsf" />
-	</bean>
-
-	<bean id="usernamePasswordAuthenticationFilter"
+	<beans:bean id="usernamePasswordAuthenticationFilter"
 		class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
-		<property name="authenticationManager" ref="authenticationManager" />
-		<property name="filterProcessesUrl" value="/j_spring_security_check" />
-		<property name="rememberMeServices" ref="rememberMeServices" />
-		<property name="authenticationFailureHandler" ref="failureHandler" />
-		<property name="authenticationSuccessHandler" ref="successHandler" />
-	</bean>
+		<beans:property name="sessionAuthenticationStrategy"
+			ref="sas" />
+		<beans:property name="authenticationManager" ref="authenticationManager" />
+	</beans:bean>
 
-	<bean id="sas"
-		class="org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy">
-		<constructor-arg name="sessionRegistry" ref="sessionRegistry" />
-		<property name="maximumSessions" value="1" />
-	</bean>
-
-	<bean id="successHandler"
-		class="co.com.tactusoft.crm.security.AuthenticationSuccessHandlerCustom" />
-
-	<bean id="failureHandler"
-		class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
-		<property name="defaultFailureUrl" value="/pages/public/login.jsf" />
-	</bean>
-
-	<bean id="securityContextHolderAwareRequestFilter"
-		class="org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter" />
-
-	<bean id="rememberMeFilter"
+	<beans:bean id="rememberMeFilter"
 		class="org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter">
-		<property name="rememberMeServices" ref="rememberMeServices" />
-		<property name="authenticationManager" ref="authenticationManager" />
-	</bean>
+		<beans:property name="rememberMeServices" ref="rememberMeServices" />
+		<beans:property name="authenticationManager" ref="authenticationManager" />
+	</beans:bean>
 
-	<bean id="anonymousAuthFilter"
+	<beans:bean id="anonymousAuthFilter"
 		class="org.springframework.security.web.authentication.AnonymousAuthenticationFilter">
-		<property name="key" value="crm123" />
-		<property name="userAttribute" value="anonymousUser,ROL_ANONYMOUS" />
-	</bean>
+		<beans:property name="key" value="crm123" />
+		<beans:property name="userAttribute" value="anonymousUser,ROL_ANONYMOUS" />
+	</beans:bean>
 
-	<bean id="exceptionTranslationFilter"
-		class="org.springframework.security.web.access.ExceptionTranslationFilter">
-		<property name="authenticationEntryPoint" ref="loginUrlAuthenticationEntryPoint" />
-		<property name="accessDeniedHandler" ref="accessDeniedHandler" />
-	</bean>
-
-	<bean id="loginUrlAuthenticationEntryPoint"
-		class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
-		<property name="loginFormUrl" value="/pages/public/login.jsf" />
-	</bean>
-
-	<bean id="accessDeniedHandler"
-		class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
-		<property name="errorPage" value="/pages/public/accessDenied.jsf" />
-	</bean>
-
-	<bean id="affirmativeBased"
+	<beans:bean id="affirmativeBased"
 		class="org.springframework.security.access.vote.AffirmativeBased">
-		<property name="allowIfAllAbstainDecisions" value="false" />
-		<property name="decisionVoters">
-			<list>
-				<bean class="org.springframework.security.access.vote.RoleVoter">
-					<property name="rolePrefix">
-						<value></value>
-					</property>
-				</bean>
-				<bean class="org.springframework.security.access.vote.AuthenticatedVoter" />
-			</list>
-		</property>
-	</bean>
+		<beans:property name="allowIfAllAbstainDecisions"
+			value="false" />
+		<beans:property name="decisionVoters">
+			<beans:list>
+				<beans:bean class="org.springframework.security.access.vote.RoleVoter">
+					<beans:property name="rolePrefix">
+						<beans:value></beans:value>
+					</beans:property>
+				</beans:bean>
+				<beans:bean
+					class="org.springframework.security.access.vote.AuthenticatedVoter" />
+			</beans:list>
+		</beans:property>
+	</beans:bean>
 
-	<bean id="securityMetadataSourceCustom"
+	<beans:bean id="securityMetadataSourceCustom"
 		class="co.com.tactusoft.crm.security.SecurityMetadataSourceCustom" />
 
-	<bean id="filterSecurityInterceptor"
+	<beans:bean id="filterSecurityInterceptor"
 		class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
-		<property name="authenticationManager" ref="authenticationManager" />
-		<property name="accessDecisionManager" ref="affirmativeBased" />
-		<property name="securityMetadataSource" ref="securityMetadataSourceCustom" />
-	</bean>
+		<beans:property name="authenticationManager" ref="authenticationManager" />
+		<beans:property name="accessDecisionManager" ref="affirmativeBased" />
+		<beans:property name="securityMetadataSource" ref="securityMetadataSourceCustom" />
+	</beans:bean>
 
-	<bean id="rememberMeServices"
+	<beans:bean id="rememberMeServices"
 		class="org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices">
-		<property name="userDetailsService" ref="userDetailsService" />
-		<property name="key" value="crm123" />
-		<property name="tokenValiditySeconds" value="0" />
-	</bean>
+		<beans:property name="userDetailsService" ref="userDetailsService" />
+		<beans:property name="key" value="crm123" />
+		<beans:property name="tokenValiditySeconds" value="0" />
+	</beans:bean>
 
-	<bean id="authenticationManager"
-		class="org.springframework.security.authentication.ProviderManager">
-		<property name="providers">
-			<list>
-				<ref local="daoAuthenticationProvider" />
-				<bean
-					class="org.springframework.security.authentication.AnonymousAuthenticationProvider">
-					<property name="key" value="crm123" />
-				</bean>
-				<bean
-					class="org.springframework.security.authentication.RememberMeAuthenticationProvider">
-					<property name="key" value="crm123" />
-				</bean>
-			</list>
-		</property>
-	</bean>
-
-	<bean id="passwordEncoder"
+	<beans:bean id="passwordEncoder"
 		class="org.springframework.security.authentication.encoding.Md5PasswordEncoder">
-	</bean>
+	</beans:bean>
 
-	<bean id="daoAuthenticationProvider"
-		class="co.com.tactusoft.crm.security.DaoAuthenticationProviderCustom">
-		<property name="userDetailsService" ref="userDetailsService" />
-		<property name="passwordEncoder" ref="passwordEncoder" />
-	</bean>
-
-	<bean id="userDetailsService" class="co.com.tactusoft.crm.security.UserDetailsServiceCustom" />
-
-	<bean id="loggerListener"
-		class="org.springframework.security.access.event.LoggerListener" />
-
-</beans>
+</beans:beans>

@@ -2,15 +2,18 @@ package co.com.tactusoft.crm.view.backing;
 
 import java.util.List;
 
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
 import org.springframework.context.annotation.Scope;
-import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.web.WebAttributes;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
+import co.com.tactusoft.crm.security.UserData;
 import co.com.tactusoft.crm.util.FacesUtil;
 
 @Named
@@ -65,39 +68,48 @@ public class LoginBacking {
 		this.authenticated = authenticated;
 	}
 
-	public void doLogin() throws Exception {
+	public String doLogin() throws Exception {
 		String message = null;
-		final FacesContext context = FacesContext.getCurrentInstance();
-		ExternalContext externalContext = context.getExternalContext();
+		String page = null;
 
 		this.visibleBadCredentials = false;
 		this.authenticated = false;
 
-		externalContext.dispatch("/j_spring_security_check?j_username="
-				+ this.userName.toLowerCase() + "&j_password=" + this.password);
+		AuthenticationManager authenticationManager = (AuthenticationManager) FacesUtil
+				.findBean("authenticationManager");
 
-		if (externalContext.getRemoteUser() == null) {
-			Exception loginError = (Exception) externalContext.getSessionMap()
-					.get(WebAttributes.AUTHENTICATION_EXCEPTION);
+		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+				this.userName, this.password);
 
-			if (loginError instanceof BadCredentialsException) {
-				this.visibleBadCredentials = true;
+		try {
+			Authentication authenticationResponseToken = authenticationManager
+					.authenticate(usernamePasswordAuthenticationToken);
+			SecurityContextHolder.getContext().setAuthentication(
+					authenticationResponseToken);
+
+			if (authenticationResponseToken.isAuthenticated()) {
+				this.password = null;
+				this.visibleBadCredentials = false;
+				this.authenticated = true;
+				page = ((UserData) authenticationResponseToken.getPrincipal())
+						.getPageDefault() + "?faces-redirect=true";
 			}
 
-			if (loginError instanceof AuthenticationServiceException) {
-				this.visibleBadCredentials = true;
-			}
-
+		} catch (BadCredentialsException badCredentialsException) {
+			this.visibleBadCredentials = true;
 			message = FacesUtil.getMessage("log_msg_validate_credentials");
 			FacesUtil.addWarn(message);
-
-		} else {
-			this.password = null;
-			this.visibleBadCredentials = false;
-			this.authenticated = true;
+		} catch (LockedException lockedException) {
+			this.visibleBadCredentials = true;
+			message = FacesUtil.getMessage("log_msg_validate_credentials");
+			FacesUtil.addWarn(message);
+		} catch (DisabledException disabledException) {
+			this.visibleBadCredentials = true;
+			message = FacesUtil.getMessage("log_msg_validate_credentials");
+			FacesUtil.addWarn(message);
 		}
 
-		context.renderResponse();
+		return page;
 	}
 
 	public String logout() {
