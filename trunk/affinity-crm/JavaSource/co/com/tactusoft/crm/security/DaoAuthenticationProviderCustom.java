@@ -156,16 +156,16 @@ public class DaoAuthenticationProviderCustom extends
 				user.setListWSGroupSellers(new ArrayList<WSBean>());
 			}
 
-			try {
+			/*try {
 				List<WSBean> result = CustomListsExecute.getMaterials(
 						sap.getUrlWebList(), sap.getUsername(),
 						sap.getPassword());
 				user.setListWSMaterials(result);
 			} catch (Exception ex) {
 				user.setListWSMaterials(new ArrayList<WSBean>());
-			}
+			}*/
 			
-			/*List<WSBean> result = new ArrayList<WSBean>();
+			List<WSBean> result = new ArrayList<WSBean>();
 			WSBean bean = new WSBean();
 			bean.setCode("001");
 			bean.setNames("MEDICAMENTO 1");
@@ -190,7 +190,7 @@ public class DaoAuthenticationProviderCustom extends
 			bean.setNames("MEDICAMENTO 5");
 			bean.setType("05");
 			result.add(bean);
-			user.setListWSMaterials(result);*/
+			user.setListWSMaterials(result);
 
 			CrmDoctor doctor = tableService
 					.getCrmDoctor(user.getUser().getId());

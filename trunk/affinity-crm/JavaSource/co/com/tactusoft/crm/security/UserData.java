@@ -36,10 +36,15 @@ public class UserData implements UserDetails {
 	private CrmPatient selectedPatient;
 	private String rolePrincipal;
 
+	private boolean accountNonExpired = true;
+	private boolean credentialsNonExpired = true;
+	private boolean enabled;
+
 	public void setUsername(String username) {
 		this.username = username;
 	}
 
+	@Override
 	public String getUsername() {
 		return username;
 	}
@@ -99,7 +104,7 @@ public class UserData implements UserDetails {
 	public void setPageDefault(String pageDefault) {
 		this.pageDefault = pageDefault;
 	}
-	
+
 	public List<CrmBranch> getListBranch() {
 		return listBranch;
 	}
@@ -156,24 +161,63 @@ public class UserData implements UserDetails {
 		this.rolePrincipal = rolePrincipal;
 	}
 
+	@Override
 	public boolean isAccountNonExpired() {
-		return true;
+		return accountNonExpired;
 	}
 
+	public void setAccountNonExpired(boolean accountNonExpired) {
+		this.accountNonExpired = accountNonExpired;
+	}
+
+	@Override
 	public boolean isAccountNonLocked() {
 		return true;
 	}
 
+	@Override
 	public boolean isCredentialsNonExpired() {
-		return true;
+		return credentialsNonExpired;
 	}
 
+	public void setCredentialsNonExpired(boolean credentialsNonExpired) {
+		this.credentialsNonExpired = credentialsNonExpired;
+	}
+
+	@Override
 	public boolean isEnabled() {
-		return true;
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return roles;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null)
+			return false;
+		if (o == this)
+			return true;
+		if (!(o instanceof UserData))
+			return false;
+		UserData p = (UserData) o;
+		if ((username == null) ? (p.username != null) : !username
+				.equals(p.username))
+			return false;
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = 17;
+		result = 31 * result + (username != null ? username.hashCode() : 0);
+		result = 31 * result + (password != null ? password.hashCode() : 0);
+		return result;
 	}
 }

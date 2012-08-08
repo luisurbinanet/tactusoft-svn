@@ -27,6 +27,7 @@ public class UserDetailsServiceCustom implements UserDetailsService {
 				user = new UserData();
 				user.setUsername(object.getUsername());
 				user.setPassword(object.getPassword());
+				user.setEnabled(object.getState() == 1);
 				user.setUser(object);
 			}
 		} catch (HibernateException e) {
