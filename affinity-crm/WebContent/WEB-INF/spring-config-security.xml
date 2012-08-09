@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns="http://www.springframework.org/schema/security"
 	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
@@ -5,19 +6,22 @@
            http://www.springframework.org/schema/security
            http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
+	<debug />
+
 	<http auto-config="false" entry-point-ref="authenticationEntryPoint"
 		access-denied-page="/pages/public/accessDenied.jsf"
 		access-decision-manager-ref="affirmativeBased">
 
 
-		<custom-filter position="CONCURRENT_SESSION_FILTER" ref="concurrencyFilter" />
 		<custom-filter position="FORM_LOGIN_FILTER"
 			ref="usernamePasswordAuthenticationFilter" />
 		<custom-filter before="ANONYMOUS_FILTER" ref="anonymousAuthFilter" />
 		<custom-filter before="FILTER_SECURITY_INTERCEPTOR" ref="filterSecurityInterceptor" />
 
-		<session-management
-			session-authentication-strategy-ref="sas" />
+		<session-management>
+			<concurrency-control max-sessions="1"
+				error-if-maximum-exceeded="true" expired-url="/pages/public/expired.jsf" />
+		</session-management>
 
 	</http>
 
@@ -39,18 +43,19 @@
 		<beans:property name="loginFormUrl" value="/pages/public/login.jsf" />
 	</beans:bean>
 
-	<beans:bean id="customSuccessRedirection"
-		class="co.com.tactusoft.crm.security.CustomSuccessRedirection">
-		
-	</beans:bean>
-
 	<beans:bean id="concurrencyFilter"
 		class="org.springframework.security.web.session.ConcurrentSessionFilter">
 		<beans:constructor-arg name="sessionRegistry"
 			ref="sessionRegistry" />
 		<beans:constructor-arg name="expiredUrl"
 			value="/pages/public/expired.jsf" />
-		<beans:property name="redirectStrategy" ref="customSuccessRedirection" />
+	</beans:bean>
+
+	<beans:bean id="usernamePasswordAuthenticationFilter"
+		class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
+		<beans:property name="sessionAuthenticationStrategy"
+			ref="sas" />
+		<beans:property name="authenticationManager" ref="authenticationManager" />
 	</beans:bean>
 
 	<beans:bean id="sas"
@@ -64,13 +69,6 @@
 
 	<beans:bean id="sessionRegistry"
 		class="org.springframework.security.core.session.SessionRegistryImpl" />
-
-	<beans:bean id="usernamePasswordAuthenticationFilter"
-		class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
-		<beans:property name="sessionAuthenticationStrategy"
-			ref="sas" />
-		<beans:property name="authenticationManager" ref="authenticationManager" />
-	</beans:bean>
 
 	<beans:bean id="rememberMeFilter"
 		class="org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter">
