@@ -20,10 +20,11 @@
 
 				<p:toolbar id="toolBar" style="width:100%">
 					<p:toolbarGroup align="left">
-						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
+						<p:commandButton id="btnNew" value="#{msg['btn_new']}"
+							icon="ui-icon-document"
 							actionListener="#{historyBacking.newAction}" update="form"
-							process="@this" />
-						<p:commandButton value="#{msg['btn_add_patient']}"
+							process="@this" onkeypress="return false;" />
+						<p:commandButton id="btnSelectPatient" value="#{msg['btn_add_patient']}"
 							icon="ui-icon-circle-check" oncomplete="dlg2.show()"
 							update="dialog2" />
 						<p:commandButton id="btnSaveHistory"
@@ -1449,6 +1450,8 @@
 					</p:dataTable>
 
 				</p:dialog>
+
+				<p:defaultCommand target="btnSaveHistory" />
 
 			</h:form>
 
