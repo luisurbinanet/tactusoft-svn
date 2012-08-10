@@ -24,9 +24,9 @@
 							icon="ui-icon-document"
 							actionListener="#{historyBacking.newAction}" update="form"
 							process="@this" onkeypress="return false;" />
-						<p:commandButton id="btnSelectPatient" value="#{msg['btn_add_patient']}"
-							icon="ui-icon-circle-check" oncomplete="dlg2.show()"
-							update="dialog2" />
+						<p:commandButton id="btnSelectPatient"
+							value="#{msg['btn_add_patient']}" icon="ui-icon-circle-check"
+							oncomplete="dlg2.show()" update="dialog2" />
 						<p:commandButton id="btnSaveHistory"
 							value="#{msg['btn_save_history']}" icon="ui-icon-disk"
 							actionListener="#{historyBacking.saveAction}"
@@ -913,9 +913,9 @@
 								disabled="#{historyBacking.readOnlySelectedHistoryPhysique}"
 								value="#{historyBacking.selectedHistoryPhysique.generalStateCheck}"
 								itemLabel="#{msg['his_physique_general_state']}">
-								<p:ajax update="pnlPhysique" />
+								<p:ajax update="txtPersonal17" />
 							</p:selectBooleanCheckbox>
-							<p:inputTextarea style="width:950px" rows="3"
+							<p:inputTextarea id="txtPersonal17" style="width:950px" rows="3"
 								disabled="#{not historyBacking.selectedHistoryPhysique.generalStateCheck}"
 								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}"
 								value="#{historyBacking.selectedHistoryPhysique.generalState}" />
@@ -924,9 +924,9 @@
 								disabled="#{historyBacking.readOnlySelectedHistoryPhysique}"
 								value="#{historyBacking.selectedHistoryPhysique.headNeckCheck}"
 								itemLabel="#{msg['his_physique_head_neck']}">
-								<p:ajax update="pnlPhysique" />
+								<p:ajax update="txtPersonal18" />
 							</p:selectBooleanCheckbox>
-							<p:inputTextarea style="width:950px" rows="3"
+							<p:inputTextarea id="txtPersonal18" style="width:950px" rows="3"
 								disabled="#{not historyBacking.selectedHistoryPhysique.headNeckCheck}"
 								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}"
 								value="#{historyBacking.selectedHistoryPhysique.headNeck}" />
@@ -935,9 +935,9 @@
 								disabled="#{historyBacking.readOnlySelectedHistoryPhysique}"
 								value="#{historyBacking.selectedHistoryPhysique.chestCheck}"
 								itemLabel="#{msg['his_physique_chest']}">
-								<p:ajax update="pnlPhysique" />
+								<p:ajax update="txtPersonal19" />
 							</p:selectBooleanCheckbox>
-							<p:inputTextarea style="width:950px" rows="3"
+							<p:inputTextarea id="txtPersonal19" style="width:950px" rows="3"
 								disabled="#{not historyBacking.selectedHistoryPhysique.chestCheck}"
 								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}"
 								value="#{historyBacking.selectedHistoryPhysique.chest}" />
@@ -946,9 +946,9 @@
 								disabled="#{historyBacking.readOnlySelectedHistoryPhysique}"
 								value="#{historyBacking.selectedHistoryPhysique.lungsCheck}"
 								itemLabel="#{msg['his_physique_lungs']}">
-								<p:ajax update="pnlPhysique" />
+								<p:ajax update="txtPersonal20" />
 							</p:selectBooleanCheckbox>
-							<p:inputTextarea style="width:950px" rows="3"
+							<p:inputTextarea id="txtPersonal20" style="width:950px" rows="3"
 								disabled="#{not historyBacking.selectedHistoryPhysique.lungsCheck}"
 								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}"
 								value="#{historyBacking.selectedHistoryPhysique.lungs}" />
@@ -957,9 +957,9 @@
 								disabled="#{historyBacking.readOnlySelectedHistoryPhysique}"
 								value="#{historyBacking.selectedHistoryPhysique.heartCheck}"
 								itemLabel="#{msg['his_physique_heart']}">
-								<p:ajax update="pnlPhysique" />
+								<p:ajax update="txtPersonal21" />
 							</p:selectBooleanCheckbox>
-							<p:inputTextarea style="width:950px" rows="3"
+							<p:inputTextarea id="txtPersonal21" style="width:950px" rows="3"
 								disabled="#{not historyBacking.selectedHistoryPhysique.heartCheck}"
 								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}"
 								value="#{historyBacking.selectedHistoryPhysique.heart}" />
@@ -968,9 +968,9 @@
 								disabled="#{historyBacking.readOnlySelectedHistoryPhysique}"
 								value="#{historyBacking.selectedHistoryPhysique.abdomenCheck}"
 								itemLabel="#{msg['his_physique_abdomen']}">
-								<p:ajax update="pnlPhysique" />
+								<p:ajax update="txtPersonal22" />
 							</p:selectBooleanCheckbox>
-							<p:inputTextarea style="width:950px" rows="3"
+							<p:inputTextarea id="txtPersonal22" style="width:950px" rows="3"
 								disabled="#{not historyBacking.selectedHistoryPhysique.abdomenCheck}"
 								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}"
 								value="#{historyBacking.selectedHistoryPhysique.abdomen}" />
@@ -979,9 +979,9 @@
 								disabled="#{historyBacking.readOnlySelectedHistoryPhysique}"
 								value="#{historyBacking.selectedHistoryPhysique.genitalsCheck}"
 								itemLabel="#{msg['his_physique_genitals']}">
-								<p:ajax update="pnlPhysique" />
+								<p:ajax update="txtPersonal23" />
 							</p:selectBooleanCheckbox>
-							<p:inputTextarea style="width:950px" rows="3"
+							<p:inputTextarea id="txtPersonal23" style="width:950px" rows="3"
 								disabled="#{not historyBacking.selectedHistoryPhysique.genitalsCheck}"
 								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}"
 								value="#{historyBacking.selectedHistoryPhysique.genitals}" />
@@ -990,9 +990,9 @@
 								disabled="#{historyBacking.readOnlySelectedHistoryPhysique}"
 								value="#{historyBacking.selectedHistoryPhysique.osteoCheck}"
 								itemLabel="#{msg['his_physique_osteo']}">
-								<p:ajax update="pnlPhysique" />
+								<p:ajax update="txtPersonal24" />
 							</p:selectBooleanCheckbox>
-							<p:inputTextarea style="width:950px" rows="3"
+							<p:inputTextarea id="txtPersonal24" style="width:950px" rows="3"
 								disabled="#{not historyBacking.selectedHistoryPhysique.osteoCheck}"
 								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}"
 								value="#{historyBacking.selectedHistoryPhysique.osteo}" />
@@ -1001,9 +1001,9 @@
 								disabled="#{historyBacking.readOnlySelectedHistoryPhysique}"
 								value="#{historyBacking.selectedHistoryPhysique.tipsCheck}"
 								itemLabel="#{msg['his_physique_tips']}">
-								<p:ajax update="pnlPhysique" />
+								<p:ajax update="txtPersonal25" />
 							</p:selectBooleanCheckbox>
-							<p:inputTextarea style="width:950px" rows="3"
+							<p:inputTextarea id="txtPersonal25" style="width:950px" rows="3"
 								disabled="#{not historyBacking.selectedHistoryPhysique.tipsCheck}"
 								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}"
 								value="#{historyBacking.selectedHistoryPhysique.tips}" />
@@ -1012,9 +1012,9 @@
 								disabled="#{historyBacking.readOnlySelectedHistoryPhysique}"
 								value="#{historyBacking.selectedHistoryPhysique.highlightsCheck}"
 								itemLabel="#{msg['his_physique_highlights']}">
-								<p:ajax update="pnlPhysique" />
+								<p:ajax update="txtPersonal26" />
 							</p:selectBooleanCheckbox>
-							<p:inputTextarea style="width:950px" rows="3"
+							<p:inputTextarea id="txtPersonal26" style="width:950px" rows="3"
 								disabled="#{not historyBacking.selectedHistoryPhysique.highlightsCheck}"
 								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}"
 								value="#{historyBacking.selectedHistoryPhysique.highlights}" />
@@ -1023,15 +1023,15 @@
 								disabled="#{historyBacking.readOnlySelectedHistoryPhysique}"
 								value="#{historyBacking.selectedHistoryPhysique.skinCheck}"
 								itemLabel="#{msg['his_physique_skin']}">
-								<p:ajax update="pnlPhysique" />
+								<p:ajax update="txtPersonal27" />
 							</p:selectBooleanCheckbox>
-							<p:inputTextarea style="width:950px" rows="3"
+							<p:inputTextarea id="txtPersonal27" style="width:950px" rows="3"
 								disabled="#{not historyBacking.selectedHistoryPhysique.skinCheck}"
 								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}"
 								value="#{historyBacking.selectedHistoryPhysique.skin}" />
 
 							<h:outputLabel value="#{msg['his_history_obs']}" />
-							<p:inputTextarea style="width:950px" rows="3"
+							<p:inputTextarea id="txtPersonal28" style="width:950px" rows="3"
 								disabled="#{historyBacking.readOnlySelectedHistoryPhysique}"
 								readonly="#{historyBacking.readOnlySelectedHistoryPhysique}"
 								value="#{historyBacking.selectedHistoryPhysique.obs}" />

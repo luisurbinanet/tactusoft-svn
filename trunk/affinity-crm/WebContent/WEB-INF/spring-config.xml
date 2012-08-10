@@ -12,7 +12,7 @@
 	<tx:annotation-driven transaction-manager="transactionManager" />
 
 	<!-- Datasource -->
-	 <bean id="dataSourceDefault1" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+	 <bean id="dataSourceDefault" class="com.mchange.v2.c3p0.ComboPooledDataSource"
 		destroy-method="close">
 		<property name="driverClass" value="com.mysql.jdbc.Driver" />
 		<property name="jdbcUrl" value="jdbc:mysql://192.168.1.29/crm_db" />
@@ -40,7 +40,7 @@
 		<property name="checkoutTimeout" value="60000" />
 	</bean>
 	
-	<bean id="dataSourceDefault" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+	<bean id="dataSourceDefault1" class="com.mchange.v2.c3p0.ComboPooledDataSource"
 		destroy-method="close">
 		<property name="driverClass" value="com.mysql.jdbc.Driver" />
 		<property name="jdbcUrl" value="jdbc:mysql://localhost/crm_db" />
