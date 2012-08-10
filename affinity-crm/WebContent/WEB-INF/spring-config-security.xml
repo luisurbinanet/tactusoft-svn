@@ -6,8 +6,6 @@
            http://www.springframework.org/schema/security
            http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
-	<debug />
-
 	<http auto-config="false" entry-point-ref="authenticationEntryPoint"
 		access-denied-page="/pages/public/accessDenied.jsf"
 		access-decision-manager-ref="affirmativeBased">
@@ -20,7 +18,7 @@
 
 		<session-management>
 			<concurrency-control max-sessions="1"
-				error-if-maximum-exceeded="true" expired-url="/pages/public/expired.jsf" />
+				error-if-maximum-exceeded="false" expired-url="/pages/public/expired.jsf" />
 		</session-management>
 
 	</http>
