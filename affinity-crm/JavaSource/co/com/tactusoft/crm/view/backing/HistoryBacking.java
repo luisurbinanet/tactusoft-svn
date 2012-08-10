@@ -656,6 +656,7 @@ public class HistoryBacking extends BaseBacking {
 
 	public void searchAction(ActionEvent event) {
 		String message = null;
+		age = 0;
 
 		if (selectedPatient == null
 				|| FacesUtil.isEmptyOrBlank(selectedPatient.getCodeSap())) {
@@ -668,6 +669,8 @@ public class HistoryBacking extends BaseBacking {
 
 			if (selectedPatient.getCrmOccupation() == null) {
 				selectedPatient.setCrmOccupation(new CrmOccupation());
+			} else {
+				age = calculateAge(selectedPatient.getBornDate());
 			}
 
 			listAppointment = processService.listAppointmentByPatient(
@@ -1604,16 +1607,27 @@ public class HistoryBacking extends BaseBacking {
 			if (listDiagnosis.size() < 2) {
 				message = FacesUtil.getMessage("his_msg_message_dig_1");
 				FacesUtil.addWarn(message);
+			} else {
+				for (CrmDiagnosis row : listDiagnosis) {
+					if (FacesUtil.isEmptyOrBlank(row.getPosology())) {
+						message = FacesUtil.getMessage("his_msg_message_dig_2");
+						FacesUtil.addWarn(message);
+						break;
+					}
+				}
 			}
+
 			if (listMedication.size() == 0) {
 				message = FacesUtil.getMessage("his_msg_message_med_1");
 				FacesUtil.addWarn(message);
 			}
+
 			if (FacesUtil.isEmptyOrBlank(noteDoctor)) {
 				String field = FacesUtil.getMessage("his_history_note");
 				message = FacesUtil.getMessage("glb_required", field);
 				FacesUtil.addWarn(message);
 			}
+
 			if (message == null) {
 				processService
 						.saveDiagnosis(selectedAppointment, listDiagnosis);
