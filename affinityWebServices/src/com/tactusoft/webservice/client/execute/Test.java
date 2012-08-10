@@ -1,4 +1,4 @@
-package com.tactusoft.webservice.client.execute;
+	package com.tactusoft.webservice.client.execute;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -149,37 +149,10 @@ public class Test {
 	}
 
 	public static void getJson() {
-		CustomH customH = new CustomH("http://192.168.1.42/vtigercrm");
-		VTLogin login;
-		try {
-			login = customH.login("admin", "ADXdOCL86knRsTC");
-			if (login != null) {
-				Map<String, Object> valueMap = new HashMap<String, Object>();
-				valueMap.put("contact_no", "8647362");
-				valueMap.put("lastname", "Sarmiento Royero");
-				valueMap.put("firstname", "Carlos Arturo");
-				valueMap.put("mobile", "3003044115");
-				valueMap.put("otherphone", "3003044115");
-				valueMap.put("phone", "6501550");
-				valueMap.put("homephone", "6501550");
-				valueMap.put("mailingstreet", "Carrera 55A 163 35");
-				valueMap.put("otherstreet", "Carrera 55A 163 35");
-				valueMap.put("mailingcountry", "Colombia");
-				valueMap.put("othercountry", "Colombia");
-				valueMap.put("otherstate", "Cundinamarca");
-				valueMap.put("mailingstate", "Cundinamarca");
-				valueMap.put("otherstate", "Cundinamarca");
-				valueMap.put("mailingcity", "Bogotá");
-				valueMap.put("othercity", "Bogotá");
-				valueMap.put("mailingzip", "00000");
-				valueMap.put("otherzip", "00000");
-				valueMap.put("email", "tactusoft@hotmail.com");
-				
-				customH.create("Contacts", valueMap);
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+		String result = CreateSugarContact.createContact("http://192.168.1.42/vtigercrm", "admin", "ADXdOCL86knRsTC", "8647362", "Sarmiento Royero",
+				"Carlos Arturo", "Colombia", "Cundinamarca", "Bogot‡", "Carrera 55A 163 35", "00000", "6501550",
+				"3003044115", "tactusoft@hotmail.com");
+		System.out.println(result);
 	}
 
 	public static String convertStreamToString(InputStream is) {
