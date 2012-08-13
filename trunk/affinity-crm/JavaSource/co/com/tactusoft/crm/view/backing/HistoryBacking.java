@@ -1,6 +1,8 @@
 package co.com.tactusoft.crm.view.backing;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -9,9 +11,12 @@ import java.util.List;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 
+import net.sf.jasperreports.engine.JRException;
+
 import org.primefaces.event.DateSelectEvent;
 import org.springframework.context.annotation.Scope;
 
+import co.com.tactusoft.crm.controller.bo.GenerateFormulaPDF;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmCie;
 import co.com.tactusoft.crm.model.entities.CrmCieMaterial;
@@ -1665,6 +1670,18 @@ public class HistoryBacking extends BaseBacking {
 				FacesUtil.addInfo(message);
 				refreshLists();
 			}
+		}
+	}
+
+	public void printFormulaAction() {
+		try {
+			GenerateFormulaPDF.PDF(selectedAppointment.getId());
+		} catch (JRException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 

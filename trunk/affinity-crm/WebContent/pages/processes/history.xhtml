@@ -115,6 +115,13 @@
 										<f:setPropertyActionListener value="false"
 											target="#{historyBacking.viewMode}" />
 									</p:commandButton>
+									<p:commandButton disabled="#{not rec.closeAppointment}" icon="ui-icon-print"
+										rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}"
+										title="#{msg['btn_print']}"
+										action="#{historyBacking.printFormulaAction}">
+										<f:setPropertyActionListener value="#{rec}"
+											target="#{historyBacking.selectedAppointment}" />
+									</p:commandButton>
 								</p:column>
 							</p:dataTable>
 						</h:panelGrid>
