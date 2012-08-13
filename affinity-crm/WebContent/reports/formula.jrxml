@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="formula" language="groovy" pageWidth="612" pageHeight="792" whenNoDataType="BlankPage" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c92dc5a0-c2d1-42d0-bc28-ff2011c41d76">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="formula" language="groovy" pageWidth="396" pageHeight="612" whenNoDataType="BlankPage" columnWidth="368" leftMargin="14" rightMargin="14" topMargin="14" bottomMargin="14" uuid="c92dc5a0-c2d1-42d0-bc28-ff2011c41d76">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -97,17 +97,19 @@ order by a.id]]>
 		<field name="description" class="java.lang.String"/>
 		<field name="posology" class="java.lang.String"/>
 	</subDataset>
-	<parameter name="p_appointment" class="java.lang.Integer">
-		<defaultValueExpression><![CDATA[195]]></defaultValueExpression>
+	<parameter name="P_APPOINTMENT" class="java.lang.Integer" isForPrompting="false">
+		<defaultValueExpression><![CDATA[196]]></defaultValueExpression>
 	</parameter>
+	<parameter name="P_IMAGE" class="java.lang.String" isForPrompting="false"/>
 	<queryString>
 		<![CDATA[select a.id_appointment,
 		b.description desc_cie,
 		a.id_cie,
+    c.unit,
 		c.desc_material,
 		a.posology,
 		e.doc,
-		cast(d.start_appointment_date as Date) as appointment_date,
+		cast(d.start_appointment_date as Date) appointment_date,
 		concat(e.firstnames,' ', e.surnames) as name_patient,
 		f.names as name_doctor,
 		concat(g.code, ' - ',g.name) as name_branch
@@ -117,12 +119,13 @@ join crm_appointment d on a.id_appointment = d.id
 join crm_patient e on d.id_patient = e.id
 join crm_doctor f on d.id_doctor = f.id
 join crm_branch g on d.id_branch = g.id
-where a.id_appointment = $P{p_appointment}
+where a.id_appointment = $P{P_APPOINTMENT}
 order by a.id]]>
 	</queryString>
 	<field name="id_appointment" class="java.math.BigDecimal"/>
 	<field name="desc_cie" class="java.lang.String"/>
 	<field name="id_cie" class="java.math.BigDecimal"/>
+	<field name="unit" class="java.lang.Integer"/>
 	<field name="desc_material" class="java.lang.String"/>
 	<field name="posology" class="java.lang.String"/>
 	<field name="doc" class="java.lang.String"/>
@@ -133,27 +136,27 @@ order by a.id]]>
 	<group name="group_cie">
 		<groupExpression><![CDATA[$F{id_cie}]]></groupExpression>
 		<groupHeader>
-			<band height="50">
+			<band height="34">
 				<textField>
-					<reportElement uuid="6734ef12-a28c-4963-8b42-50c6bfe9fd5a" x="0" y="0" width="184" height="50"/>
-					<textElement>
-						<font fontName="Arial"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{desc_cie}]]></textFieldExpression>
-				</textField>
-				<textField>
-					<reportElement uuid="c97e21ae-df63-46d9-97f0-3c16107d05e1" x="390" y="0" width="182" height="50"/>
+					<reportElement uuid="c97e21ae-df63-46d9-97f0-3c16107d05e1" x="235" y="0" width="133" height="34"/>
 					<textElement>
 						<font fontName="Arial"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{posology}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="6734ef12-a28c-4963-8b42-50c6bfe9fd5a" x="4" y="0" width="96" height="34"/>
+					<textElement>
+						<font fontName="Arial"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{desc_cie}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
 		<groupFooter>
 			<band height="11">
 				<line>
-					<reportElement uuid="5b7eb3e9-923b-4386-b701-f469eeef6d65" x="0" y="6" width="572" height="1" forecolor="#009999"/>
+					<reportElement uuid="5b7eb3e9-923b-4386-b701-f469eeef6d65" x="0" y="6" width="368" height="1" forecolor="#009999"/>
 					<graphicElement>
 						<pen lineWidth="2.0" lineStyle="Double"/>
 					</graphicElement>
@@ -162,104 +165,104 @@ order by a.id]]>
 		</groupFooter>
 	</group>
 	<title>
-		<band height="93" splitType="Stretch">
+		<band height="78" splitType="Stretch">
 			<rectangle radius="10">
-				<reportElement uuid="883b835c-535b-478c-b606-acf200a807c0" x="198" y="22" width="374" height="71" forecolor="#009999"/>
+				<reportElement uuid="883b835c-535b-478c-b606-acf200a807c0" x="142" y="22" width="226" height="56" forecolor="#009999"/>
 			</rectangle>
-			<image>
-				<reportElement uuid="4df36437-4fc5-4365-8a13-4d820a6b3791" x="0" y="20" width="198" height="73"/>
-				<imageExpression><![CDATA["/Users/CSARMIENTO/Downloads/logo_naturizza.png"]]></imageExpression>
-			</image>
 			<staticText>
-				<reportElement uuid="b4aca9d4-ca72-4cd6-926e-a6112961b6d7" x="198" y="0" width="374" height="20"/>
+				<reportElement uuid="b4aca9d4-ca72-4cd6-926e-a6112961b6d7" x="142" y="1" width="226" height="20"/>
 				<textElement textAlignment="Center">
 					<font fontName="Arial" size="14" isBold="true" isItalic="false"/>
 				</textElement>
 				<text><![CDATA[Formula Medica]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="fb85831b-54e6-420d-bfcd-274dc2ff4fc3" x="292" y="25" width="270" height="20"/>
+				<reportElement uuid="fb85831b-54e6-420d-bfcd-274dc2ff4fc3" x="199" y="27" width="157" height="15"/>
 				<textElement>
-					<font fontName="Arial" size="12"/>
+					<font fontName="Arial" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name_doctor}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="8cec013c-5405-40ee-bd83-8b0d7c90aa2a" x="213" y="25" width="68" height="20"/>
+				<reportElement uuid="8cec013c-5405-40ee-bd83-8b0d7c90aa2a" x="153" y="27" width="46" height="15"/>
 				<textElement>
-					<font fontName="Arial" size="12"/>
+					<font fontName="Arial" size="10"/>
 				</textElement>
 				<text><![CDATA[Médico:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="bcee59eb-f594-4346-b6d0-c7866c7a1f98" x="213" y="48" width="68" height="20"/>
+				<reportElement uuid="bcee59eb-f594-4346-b6d0-c7866c7a1f98" x="153" y="44" width="46" height="15"/>
 				<textElement>
-					<font fontName="Arial" size="12"/>
+					<font fontName="Arial" size="10"/>
 				</textElement>
 				<text><![CDATA[Fecha:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="e20b962a-cf92-4234-a372-40c37b8b7381" x="213" y="71" width="69" height="20"/>
+				<reportElement uuid="e20b962a-cf92-4234-a372-40c37b8b7381" x="153" y="61" width="46" height="15"/>
 				<textElement>
-					<font fontName="Arial" size="12"/>
+					<font fontName="Arial" size="10"/>
 				</textElement>
 				<text><![CDATA[Sucursal:]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="8f0bc0ea-63f2-4dec-a63a-dccc937aaefa" x="292" y="71" width="270" height="20"/>
+				<reportElement uuid="8f0bc0ea-63f2-4dec-a63a-dccc937aaefa" x="199" y="61" width="157" height="15"/>
 				<textElement>
-					<font fontName="Arial" size="12"/>
+					<font fontName="Arial" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name_branch}]]></textFieldExpression>
 			</textField>
 			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement uuid="61702f48-9bba-4e85-b708-edbce66e3d79" x="292" y="47" width="270" height="20"/>
+				<reportElement uuid="61702f48-9bba-4e85-b708-edbce66e3d79" x="199" y="44" width="157" height="15"/>
 				<textElement>
-					<font fontName="Arial" size="12"/>
+					<font fontName="Arial" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{appointment_date}]]></textFieldExpression>
 			</textField>
+			<image>
+				<reportElement uuid="da432f78-d87a-4002-a482-a63906fe4d24" positionType="Float" x="4" y="30" width="131" height="48"/>
+				<imageExpression><![CDATA["C:\\tmp\\logo-naturizza-2.png"]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="73" splitType="Stretch">
+		<band height="60" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="4fecec29-edfb-43b7-a3b5-68630a905c95" x="0" y="46" width="184" height="22"/>
+				<reportElement uuid="4fecec29-edfb-43b7-a3b5-68630a905c95" x="0" y="27" width="96" height="22"/>
 				<textElement textAlignment="Center">
-					<font fontName="Arial" size="12" isBold="true"/>
+					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Diagósticos]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="535a5a5f-6fb6-4495-8f88-4ab2f31902bf" x="198" y="46" width="176" height="22"/>
+				<reportElement uuid="535a5a5f-6fb6-4495-8f88-4ab2f31902bf" x="105" y="27" width="120" height="22"/>
 				<textElement textAlignment="Center">
-					<font fontName="Arial" size="12" isBold="true"/>
+					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Medicamentos]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="5cc47441-d4fb-4934-883a-6b5a18f2758d" x="390" y="46" width="182" height="22"/>
+				<reportElement uuid="5cc47441-d4fb-4934-883a-6b5a18f2758d" x="235" y="28" width="133" height="22"/>
 				<textElement textAlignment="Center">
-					<font fontName="Arial" size="12" isBold="true"/>
+					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Posología]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="79a8848e-910c-4361-999f-df34709a3d55" x="0" y="11" width="60" height="20"/>
+				<reportElement uuid="79a8848e-910c-4361-999f-df34709a3d55" x="0" y="4" width="60" height="20"/>
 				<textElement>
-					<font fontName="Arial" size="12"/>
+					<font fontName="Arial" size="10"/>
 				</textElement>
 				<text><![CDATA[Paciente:]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="4837340c-f939-4456-a360-ac9d8c2d7b62" x="60" y="11" width="502" height="20"/>
+				<reportElement uuid="4837340c-f939-4456-a360-ac9d8c2d7b62" x="60" y="4" width="308" height="20"/>
 				<textElement>
-					<font fontName="Arial" size="12" isBold="true"/>
+					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name_patient}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement uuid="5b7eb3e9-923b-4386-b701-f469eeef6d65" x="0" y="68" width="572" height="1" forecolor="#009999"/>
+				<reportElement uuid="5b7eb3e9-923b-4386-b701-f469eeef6d65" x="0" y="52" width="368" height="1" forecolor="#009999"/>
 				<graphicElement>
 					<pen lineWidth="2.0" lineStyle="Double"/>
 				</graphicElement>
@@ -267,23 +270,27 @@ order by a.id]]>
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="32" splitType="Stretch">
+		<band height="21" splitType="Stretch">
 			<textField>
-				<reportElement uuid="bb682a46-b8b7-4d50-a9ce-f2dedd3dfead" x="198" y="0" width="176" height="32"/>
+				<reportElement uuid="bb682a46-b8b7-4d50-a9ce-f2dedd3dfead" x="122" y="0" width="103" height="21"/>
 				<textElement>
 					<font fontName="Arial"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{desc_material}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement uuid="7b354bad-46ff-4ec4-97b9-87037b526d98" x="105" y="0" width="17" height="20"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{unit}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
-	<columnFooter>
-		<band height="45" splitType="Stretch"/>
-	</columnFooter>
 	<pageFooter>
 		<band height="98" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="69bb8b75-dafa-4a6b-9dee-c587388941c9" x="0" y="0" width="572" height="12"/>
+				<reportElement uuid="69bb8b75-dafa-4a6b-9dee-c587388941c9" x="0" y="0" width="368" height="12"/>
 				<textElement>
 					<font fontName="Arial" isBold="true"/>
 				</textElement>
