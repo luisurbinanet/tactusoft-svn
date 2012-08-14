@@ -29,6 +29,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.MethodExpressionActionListener;
 import javax.inject.Named;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -52,6 +53,13 @@ public class FacesUtil {
 		Map<String, String> params = FacesContext.getCurrentInstance()
 				.getExternalContext().getRequestParameterMap();
 		String result = params.get(key);
+		return result;
+	}
+
+	public static String getRealPath(String folder) {
+		ServletContext servletContext = (ServletContext) FacesContext
+				.getCurrentInstance().getExternalContext().getContext();
+		String result = servletContext.getRealPath("/" + folder + "/");
 		return result;
 	}
 

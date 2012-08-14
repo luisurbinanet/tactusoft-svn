@@ -22,15 +22,17 @@ import co.com.tactusoft.crm.util.FacesUtil;
 
 public class GenerateFormulaPDF {
 
-	public static void PDF(BigDecimal idAppointment) throws JRException, IOException,
-			SQLException {
+	public static void PDF(BigDecimal idAppointment) throws JRException,
+			IOException, SQLException {
+		String imagePath = FacesUtil.getRealPath("/images/");
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("p_appointment", idAppointment.intValue());
-		param.put("p_image", "http://localhost:8080/affinity-crm/images/logo_naturizza.png");
+		param.put("p_image", imagePath);
 
 		SessionFactoryImpl sessionFactory = FacesUtil
 				.findBean("sessionFactory");
-		Connection connection = sessionFactory.getConnectionProvider().getConnection();
+		Connection connection = sessionFactory.getConnectionProvider()
+				.getConnection();
 
 		String reportPath = FacesContext.getCurrentInstance()
 				.getExternalContext().getRealPath("/reports/formula.jasper");

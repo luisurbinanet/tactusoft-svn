@@ -198,3 +198,8 @@ input,select,textarea {
 	width: 50%;
 	text-align: right;
 }
+
+.mypanelgrid td {
+border-style: none !important;
+padding: 2px 2px;
+}
