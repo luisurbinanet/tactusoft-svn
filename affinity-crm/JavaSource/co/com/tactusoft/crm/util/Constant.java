@@ -58,4 +58,7 @@ public class Constant {
 	public static final String TIME_TYPE_DOCTOR = "MEDICO";
 	public static final String TIME_TYPE_NURSE = "ENFERMERA";
 	public static final String TIME_TYPE_STRETCHERS = "CAMILLAS";
+
+	public static final String PRINT_ORIENTATION_PORTRAIT = "PORTRAIT";
+	public static final String PRINT_ORIENTATION_LANDSCAPE = "LANDSCAPE";
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="formula" language="groovy" pageWidth="396" pageHeight="612" whenNoDataType="BlankPage" columnWidth="368" leftMargin="14" rightMargin="14" topMargin="14" bottomMargin="14" uuid="c92dc5a0-c2d1-42d0-bc28-ff2011c41d76">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="formula" pageWidth="396" pageHeight="612" whenNoDataType="BlankPage" columnWidth="368" leftMargin="14" rightMargin="14" topMargin="14" bottomMargin="14" uuid="c92dc5a0-c2d1-42d0-bc28-ff2011c41d76">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -100,7 +100,9 @@ order by a.id]]>
 	<parameter name="P_APPOINTMENT" class="java.lang.Integer" isForPrompting="false">
 		<defaultValueExpression><![CDATA[196]]></defaultValueExpression>
 	</parameter>
-	<parameter name="P_IMAGE" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_IMAGE" class="java.lang.String">
+		<defaultValueExpression><![CDATA[http://localhost:8080/affinity-crm/images/logo_naturizza.png]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[select a.id_appointment,
 		b.description desc_cie,
@@ -220,7 +222,7 @@ order by a.id]]>
 			</textField>
 			<image>
 				<reportElement uuid="da432f78-d87a-4002-a482-a63906fe4d24" positionType="Float" x="4" y="30" width="131" height="48"/>
-				<imageExpression><![CDATA["C:\\tmp\\logo-naturizza-2.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{P_IMAGE}]]></imageExpression>
 			</image>
 		</band>
 	</title>

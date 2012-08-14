@@ -106,22 +106,25 @@
 								</p:column>
 
 								<p:column style="width:4%">
-									<p:commandButton update=":form:tabView"
-										disabled="#{rec.closeAppointment}" icon="ui-icon-check"
-										rendered="#{historyBacking.rolePrincipal eq 'DOCTOR' or historyBacking.rolePrincipal eq 'NURSE'}"
-										title="#{msg['btn_edit']}">
-										<f:setPropertyActionListener value="#{rec}"
-											target="#{historyBacking.selectedAppointment}" />
-										<f:setPropertyActionListener value="false"
-											target="#{historyBacking.viewMode}" />
-									</p:commandButton>
-									<p:commandButton disabled="#{not rec.closeAppointment}" icon="ui-icon-print"
-										rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}"
-										title="#{msg['btn_print']}"
-										action="#{historyBacking.printFormulaAction}">
-										<f:setPropertyActionListener value="#{rec}"
-											target="#{historyBacking.selectedAppointment}" />
-									</p:commandButton>
+									<h:panelGrid columns="2">
+										<p:commandButton update=":form:tabView"
+											disabled="#{rec.closeAppointment}" icon="ui-icon-check"
+											rendered="#{historyBacking.rolePrincipal eq 'DOCTOR' or historyBacking.rolePrincipal eq 'NURSE'}"
+											title="#{msg['btn_edit']}">
+											<f:setPropertyActionListener value="#{rec}"
+												target="#{historyBacking.selectedAppointment}" />
+											<f:setPropertyActionListener value="false"
+												target="#{historyBacking.viewMode}" />
+										</p:commandButton>
+										<p:commandButton disabled="#{not rec.closeAppointment}"
+											icon="ui-icon-print"
+											rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}"
+											title="#{msg['btn_print']}" ajax="false"
+											action="#{historyBacking.printFormulaAction}">
+											<f:setPropertyActionListener value="#{rec}"
+												target="#{historyBacking.selectedAppointment}" />
+										</p:commandButton>
+									</h:panelGrid>
 								</p:column>
 							</p:dataTable>
 						</h:panelGrid>

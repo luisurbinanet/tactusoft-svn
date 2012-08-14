@@ -2,6 +2,7 @@ package co.com.tactusoft.crm.controller.bo;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,14 +10,13 @@ import java.util.Map;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import javax.sql.DataSource;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 
-import org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean;
+import org.hibernate.impl.SessionFactoryImpl;
 
 import co.com.tactusoft.crm.util.FacesUtil;
 
@@ -26,15 +26,16 @@ public class GenerateFormulaPDF {
 			SQLException {
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("p_appointment", idAppointment.intValue());
+		param.put("p_image", "http://localhost:8080/affinity-crm/images/logo_naturizza.png");
 
-		AnnotationSessionFactoryBean sessionFactory = FacesUtil
+		SessionFactoryImpl sessionFactory = FacesUtil
 				.findBean("sessionFactory");
-		DataSource datasource = sessionFactory.getDataSource();
+		Connection connection = sessionFactory.getConnectionProvider().getConnection();
 
 		String reportPath = FacesContext.getCurrentInstance()
 				.getExternalContext().getRealPath("/reports/formula.jasper");
 		JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath,
-				param, datasource.getConnection());
+				param, connection);
 		HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext
 				.getCurrentInstance().getExternalContext().getResponse();
 		httpServletResponse.addHeader("Content-disposition",
