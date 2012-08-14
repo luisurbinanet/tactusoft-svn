@@ -106,11 +106,11 @@
 								</p:column>
 
 								<p:column style="width:4%">
-									<h:panelGrid columns="2">
+									<h:panelGrid columns="2" styleClass="mypanelgrid">
 										<p:commandButton update=":form:tabView"
 											disabled="#{rec.closeAppointment}" icon="ui-icon-check"
 											rendered="#{historyBacking.rolePrincipal eq 'DOCTOR' or historyBacking.rolePrincipal eq 'NURSE'}"
-											title="#{msg['btn_edit']}">
+											title="#{msg['btn_edit']}" >
 											<f:setPropertyActionListener value="#{rec}"
 												target="#{historyBacking.selectedAppointment}" />
 											<f:setPropertyActionListener value="false"
