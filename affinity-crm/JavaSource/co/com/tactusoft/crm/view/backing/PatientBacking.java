@@ -337,7 +337,7 @@ public class PatientBacking extends BaseBacking {
 		exitsSAP = false;
 		if (selected.getId() == null) {
 			SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
-			CrmProfile profile = FacesUtil.getCurrentUser().getCrmProfile();
+			CrmProfile profile = mapProfile.get(idProfile);
 
 			List<WSBean> listPatient = CustomerExecute.findByDoc(
 					sap.getUrlCustomer2(), sap.getUsername(),
@@ -398,7 +398,7 @@ public class PatientBacking extends BaseBacking {
 		String message = null;
 		try {
 			SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
-			CrmProfile profile = FacesUtil.getCurrentUser().getCrmProfile();
+			CrmProfile profile = mapProfile.get(idProfile);
 			List<WSBean> customer = new LinkedList<WSBean>();
 
 			if (newRecord) {

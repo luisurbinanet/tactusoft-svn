@@ -87,6 +87,12 @@ public class TablesBo implements Serializable {
 		return dao.find("from CrmProfile o where o.state = 1");
 	}
 
+	public List<CrmProfile> getListProfileByUser(BigDecimal idUser) {
+		return dao
+				.find("select o.crmProfile from CrmUserProfile o where o.crmUser.id = "
+						+ idUser);
+	}
+
 	public List<CrmUser> getListUser() {
 		return dao.find("from CrmUser o where o.id <> 0");
 	}

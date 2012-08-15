@@ -52,10 +52,6 @@
 						<h:outputLabel value="#{rec.crmDepartment.name}" />
 					</p:column>
 
-					<p:column headerText="#{msg['usr_profile']}">
-						<h:outputLabel value="#{rec.crmProfile.code}" />
-					</p:column>
-
 					<p:column headerText="#{msg['glb_state']}">#{rec.state eq 1?msg['glb_state_active']:msg['glb_state_inactive']}</p:column>
 
 				</p:dataTable>
@@ -129,12 +125,6 @@
 					<p:selectOneMenu value="#{userBacking.selected.crmDepartment.id}"
 						style="width:250px">
 						<f:selectItems value="#{userBacking.listDepartment}" />
-					</p:selectOneMenu>
-
-					<h:outputLabel value="#{msg['usr_profile']}" />
-					<p:selectOneMenu value="#{userBacking.selected.crmProfile.id}"
-						style="width:250px">
-						<f:selectItems value="#{userBacking.listProfile}" />
 					</p:selectOneMenu>
 
 					<h:outputLabel value="#{msg['usr_role_principal']}" />

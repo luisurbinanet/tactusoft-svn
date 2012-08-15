@@ -154,7 +154,6 @@ public class UserBacking extends BaseBacking {
 	public void newAction() {
 		selected = new CrmUser();
 		selected.setState(Constant.STATE_ACTIVE);
-		selected.setCrmProfile(new CrmProfile());
 		selected.setCrmDepartment(new CrmDepartment());
 
 		listBranch = new DualListModel<CrmBranch>();
@@ -203,9 +202,7 @@ public class UserBacking extends BaseBacking {
 			if (validatePassword) {
 				selected.setPassword(FacesUtil.getMD5(selected.getPassword()));
 			}
-
-			selected.setCrmProfile(mapProfile.get(selected.getCrmProfile()
-					.getId()));
+			
 			selected.setCrmDepartment(mapDepartment.get(selected
 					.getCrmDepartment().getId()));
 

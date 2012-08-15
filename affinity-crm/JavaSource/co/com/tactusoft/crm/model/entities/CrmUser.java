@@ -19,11 +19,10 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name = "crm_user", catalog = "crm_db", uniqueConstraints = @UniqueConstraint(columnNames = "username"))
 public class CrmUser implements java.io.Serializable {
-
+	
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
 	private CrmDepartment crmDepartment;
-	private CrmProfile crmProfile;
 	private String username;
 	private String password;
 	private String doc;
@@ -35,6 +34,7 @@ public class CrmUser implements java.io.Serializable {
 	private int state;
 	private Set<CrmUserBranch> crmUserBranchs = new HashSet<CrmUserBranch>(0);
 	private Set<CrmDoctor> crmDoctors = new HashSet<CrmDoctor>(0);
+	private Set<CrmUserProfile> crmUserProfiles = new HashSet<CrmUserProfile>(0);
 	private Set<CrmAppointment> crmAppointmentsForIdUserChecked = new HashSet<CrmAppointment>(
 			0);
 	private Set<CrmAppointment> crmAppointmentsForIdUserCanceled = new HashSet<CrmAppointment>(
@@ -53,12 +53,11 @@ public class CrmUser implements java.io.Serializable {
 	public CrmUser() {
 	}
 
-	public CrmUser(BigDecimal id, CrmDepartment crmDepartment,
-			CrmProfile crmProfile, String username, String password,
-			String doc, String names, String surnames, String email, int state) {
+	public CrmUser(BigDecimal id, CrmDepartment crmDepartment, String username,
+			String password, String doc, String names, String surnames,
+			String email, int state) {
 		this.id = id;
 		this.crmDepartment = crmDepartment;
-		this.crmProfile = crmProfile;
 		this.username = username;
 		this.password = password;
 		this.doc = doc;
@@ -68,11 +67,11 @@ public class CrmUser implements java.io.Serializable {
 		this.state = state;
 	}
 
-	public CrmUser(BigDecimal id, CrmDepartment crmDepartment,
-			CrmProfile crmProfile, String username, String password,
-			String doc, String names, String surnames, String email,
-			String phone, String extension, int state,
+	public CrmUser(BigDecimal id, CrmDepartment crmDepartment, String username,
+			String password, String doc, String names, String surnames,
+			String email, String phone, String extension, int state,
 			Set<CrmUserBranch> crmUserBranchs, Set<CrmDoctor> crmDoctors,
+			Set<CrmUserProfile> crmUserProfiles,
 			Set<CrmAppointment> crmAppointmentsForIdUserChecked,
 			Set<CrmAppointment> crmAppointmentsForIdUserCanceled,
 			Set<CrmAppointment> crmAppointmentsForIdUserCreate,
@@ -83,7 +82,6 @@ public class CrmUser implements java.io.Serializable {
 			Set<CrmPatient> crmPatientsForIdUserCreate) {
 		this.id = id;
 		this.crmDepartment = crmDepartment;
-		this.crmProfile = crmProfile;
 		this.username = username;
 		this.password = password;
 		this.doc = doc;
@@ -95,6 +93,7 @@ public class CrmUser implements java.io.Serializable {
 		this.state = state;
 		this.crmUserBranchs = crmUserBranchs;
 		this.crmDoctors = crmDoctors;
+		this.crmUserProfiles = crmUserProfiles;
 		this.crmAppointmentsForIdUserChecked = crmAppointmentsForIdUserChecked;
 		this.crmAppointmentsForIdUserCanceled = crmAppointmentsForIdUserCanceled;
 		this.crmAppointmentsForIdUserCreate = crmAppointmentsForIdUserCreate;
@@ -123,16 +122,6 @@ public class CrmUser implements java.io.Serializable {
 
 	public void setCrmDepartment(CrmDepartment crmDepartment) {
 		this.crmDepartment = crmDepartment;
-	}
-
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_profile", nullable = false)
-	public CrmProfile getCrmProfile() {
-		return this.crmProfile;
-	}
-
-	public void setCrmProfile(CrmProfile crmProfile) {
-		this.crmProfile = crmProfile;
 	}
 
 	@Column(name = "username", unique = true, nullable = false, length = 45)
@@ -232,6 +221,15 @@ public class CrmUser implements java.io.Serializable {
 
 	public void setCrmDoctors(Set<CrmDoctor> crmDoctors) {
 		this.crmDoctors = crmDoctors;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmUser")
+	public Set<CrmUserProfile> getCrmUserProfiles() {
+		return this.crmUserProfiles;
+	}
+
+	public void setCrmUserProfiles(Set<CrmUserProfile> crmUserProfiles) {
+		this.crmUserProfiles = crmUserProfiles;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmUserByIdUserChecked")
