@@ -48,6 +48,12 @@
 				<h:panelGrid id="pnlDetail" columns="4" cellspacing="5" width="100%"
 					columnClasses="width250per,width250per,width250per,width250per">
 
+					<h:outputText value="#{msg['usr_profile']}" style="width:100%" />
+					<p:selectOneMenu value="#{patientBacking.idProfile}"
+						style="width:248px" required="true" label="#{msg['usr_profile']}">
+						<f:selectItems value="#{patientBacking.listProfile}" />
+					</p:selectOneMenu>
+
 					<h:outputText value="#{msg['pat_country']}" style="width:100%" />
 					<p:selectOneMenu value="#{patientBacking.idCountry}"
 						disabled="#{patientBacking.exitsSAP}" style="width:248px"

@@ -3,6 +3,7 @@ package co.com.tactusoft.crm.view.backing;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -46,6 +47,10 @@ public class BaseBacking implements Serializable {
 	protected String docPatient;
 	protected String namePatient;
 	protected int optionSearchPatient;
+	
+	protected List<SelectItem> listProfile;
+	protected BigDecimal idProfile;
+	protected Map<BigDecimal, CrmProfile> mapProfile;
 
 	protected List<SelectItem> listWSDoctor;
 	protected Map<String, String> mapWSDoctor;
@@ -113,7 +118,7 @@ public class BaseBacking implements Serializable {
 
 	public void searchPatientAction() {
 		SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
-		CrmProfile profile = FacesUtil.getCurrentUser().getCrmProfile();
+		CrmProfile profile = mapProfile.get(idProfile);
 
 		if ((optionSearchPatient == 1 && this.docPatient.isEmpty())
 				|| (optionSearchPatient == 2 && this.namePatient.isEmpty())) {
@@ -174,6 +179,43 @@ public class BaseBacking implements Serializable {
 				selectedPatient = listPatient.get(0);
 			}
 		}
+	}
+	
+	public List<SelectItem> getListProfile() {
+		if (listProfile == null) {
+			listProfile = new LinkedList<SelectItem>();
+			mapProfile = new HashMap<BigDecimal, CrmProfile>();
+			for (CrmProfile row : FacesUtil.getCurrentUserData()
+					.getListProfile()) {
+				listProfile.add(new SelectItem(row.getId(), row.getCode()));
+				mapProfile.put(row.getId(), row);
+			}
+
+			if (listProfile.size() > 0) {
+				idProfile = (BigDecimal) listProfile.get(0).getValue();
+			}
+		}
+		return listProfile;
+	}
+
+	public void setListProfile(List<SelectItem> listProfile) {
+		this.listProfile = listProfile;
+	}
+
+	public BigDecimal getIdProfile() {
+		return idProfile;
+	}
+
+	public void setIdProfile(BigDecimal idProfile) {
+		this.idProfile = idProfile;
+	}
+
+	public Map<BigDecimal, CrmProfile> getMapProfile() {
+		return mapProfile;
+	}
+
+	public void setMapProfile(Map<BigDecimal, CrmProfile> mapProfile) {
+		this.mapProfile = mapProfile;
 	}
 
 	public List<SelectItem> getListWSDoctor() {

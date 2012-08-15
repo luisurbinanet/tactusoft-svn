@@ -11,6 +11,7 @@ import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmPage;
 import co.com.tactusoft.crm.model.entities.CrmParameter;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
+import co.com.tactusoft.crm.model.entities.CrmProfile;
 import co.com.tactusoft.crm.model.entities.CrmRole;
 import co.com.tactusoft.crm.model.entities.CrmUser;
 
@@ -25,6 +26,7 @@ public class UserData implements UserDetails {
 	private List<SimpleGrantedAuthority> roles;
 	private List<CrmRole> listRoleAll;
 	private CrmUser user;
+	private List<CrmProfile> listProfile;
 	private List<CrmPage> listPage;
 	private List<CrmPage> listPageAll;
 	private String pageDefault;
@@ -79,6 +81,14 @@ public class UserData implements UserDetails {
 
 	public void setUser(CrmUser user) {
 		this.user = user;
+	}
+
+	public List<CrmProfile> getListProfile() {
+		return listProfile;
+	}
+
+	public void setListProfile(List<CrmProfile> listProfile) {
+		this.listProfile = listProfile;
 	}
 
 	public List<CrmPage> getListPage() {

@@ -17,7 +17,7 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name = "crm_profile", catalog = "crm_db", uniqueConstraints = @UniqueConstraint(columnNames = "code"))
 public class CrmProfile implements java.io.Serializable {
-
+	
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
 	private String code;
@@ -30,7 +30,7 @@ public class CrmProfile implements java.io.Serializable {
 	private String paymentTerm;
 	private String formula;
 	private int state;
-	private Set<CrmUser> crmUsers = new HashSet<CrmUser>(0);
+	private Set<CrmUserProfile> crmUserProfiles = new HashSet<CrmUserProfile>(0);
 
 	public CrmProfile() {
 	}
@@ -44,7 +44,7 @@ public class CrmProfile implements java.io.Serializable {
 	public CrmProfile(BigDecimal id, String code, String description,
 			String salesOrg, String distrChan, String division, String society,
 			String account, String paymentTerm, String formula, int state,
-			Set<CrmUser> crmUsers) {
+			Set<CrmUserProfile> crmUserProfiles) {
 		this.id = id;
 		this.code = code;
 		this.description = description;
@@ -56,7 +56,7 @@ public class CrmProfile implements java.io.Serializable {
 		this.paymentTerm = paymentTerm;
 		this.formula = formula;
 		this.state = state;
-		this.crmUsers = crmUsers;
+		this.crmUserProfiles = crmUserProfiles;
 	}
 
 	@Id
@@ -160,12 +160,12 @@ public class CrmProfile implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmProfile")
-	public Set<CrmUser> getCrmUsers() {
-		return this.crmUsers;
+	public Set<CrmUserProfile> getCrmUserProfiles() {
+		return this.crmUserProfiles;
 	}
 
-	public void setCrmUsers(Set<CrmUser> crmUsers) {
-		this.crmUsers = crmUsers;
+	public void setCrmUserProfiles(Set<CrmUserProfile> crmUserProfiles) {
+		this.crmUserProfiles = crmUserProfiles;
 	}
 
 }

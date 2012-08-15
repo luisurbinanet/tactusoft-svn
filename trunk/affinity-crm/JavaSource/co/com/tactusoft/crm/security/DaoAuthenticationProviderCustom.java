@@ -25,6 +25,7 @@ import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmNurse;
 import co.com.tactusoft.crm.model.entities.CrmPage;
 import co.com.tactusoft.crm.model.entities.CrmParameter;
+import co.com.tactusoft.crm.model.entities.CrmProfile;
 import co.com.tactusoft.crm.model.entities.CrmRole;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
@@ -67,12 +68,18 @@ public class DaoAuthenticationProviderCustom extends
 
 			UserData user = (UserData) userDetails;
 
+			// get profile
+			List<CrmProfile> listProfile = tableService
+					.getListProfileByUser(user.getUser().getId());
+			user.setListProfile(listProfile);
+
 			// get Roles
 			List<CrmRole> listRole = securityService.getListCrmRoleByUser(user
 					.getUser().getId());
 			List<SimpleGrantedAuthority> listGrantedAuthority = new ArrayList<SimpleGrantedAuthority>();
 			for (CrmRole role : listRole) {
-				listGrantedAuthority.add(new SimpleGrantedAuthority(role.getName()));
+				listGrantedAuthority.add(new SimpleGrantedAuthority(role
+						.getName()));
 			}
 			user.setRoles(listGrantedAuthority);
 
@@ -164,33 +171,21 @@ public class DaoAuthenticationProviderCustom extends
 			} catch (Exception ex) {
 				user.setListWSMaterials(new ArrayList<WSBean>());
 			}
-			
-			/*List<WSBean> result = new ArrayList<WSBean>();
-			WSBean bean = new WSBean();
-			bean.setCode("001");
-			bean.setNames("MEDICAMENTO 1");
-			bean.setType("01");
-			result.add(bean);
-			bean = new WSBean();
-			bean.setCode("002");
-			bean.setNames("MEDICAMENTO 2");
-			bean.setType("01");
-			result.add(bean);bean = new WSBean();
-			bean.setCode("003");
-			bean.setNames("MEDICAMENTO 3");
-			bean.setType("05");
-			result.add(bean);
-			bean = new WSBean();
-			bean.setCode("004");
-			bean.setNames("MEDICAMENTO 4");
-			bean.setType("01");
-			result.add(bean);
-			bean = new WSBean();
-			bean.setCode("005");
-			bean.setNames("MEDICAMENTO 5");
-			bean.setType("05");
-			result.add(bean);
-			user.setListWSMaterials(result);*/
+
+			/*
+			 * List<WSBean> result = new ArrayList<WSBean>(); WSBean bean = new
+			 * WSBean(); bean.setCode("001"); bean.setNames("MEDICAMENTO 1");
+			 * bean.setType("01"); result.add(bean); bean = new WSBean();
+			 * bean.setCode("002"); bean.setNames("MEDICAMENTO 2");
+			 * bean.setType("01"); result.add(bean);bean = new WSBean();
+			 * bean.setCode("003"); bean.setNames("MEDICAMENTO 3");
+			 * bean.setType("05"); result.add(bean); bean = new WSBean();
+			 * bean.setCode("004"); bean.setNames("MEDICAMENTO 4");
+			 * bean.setType("01"); result.add(bean); bean = new WSBean();
+			 * bean.setCode("005"); bean.setNames("MEDICAMENTO 5");
+			 * bean.setType("05"); result.add(bean);
+			 * user.setListWSMaterials(result);
+			 */
 
 			CrmDoctor doctor = tableService
 					.getCrmDoctor(user.getUser().getId());

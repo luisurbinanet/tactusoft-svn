@@ -299,7 +299,7 @@ public class SalesOrderBacking extends BaseBacking {
 
 		if (FacesUtil.isEmptyOrBlank(message)) {
 			SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
-			CrmProfile profile = FacesUtil.getCurrentUser().getCrmProfile();
+			CrmProfile profile = mapProfile.get(idProfile);
 
 			String orgVentas = profile.getSalesOrg();
 			String canalDistribucion = profile.getDistrChan();

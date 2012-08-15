@@ -1,5 +1,6 @@
 package co.com.tactusoft.crm.controller.bo;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -13,7 +14,9 @@ import co.com.tactusoft.crm.model.entities.CrmRole;
 import co.com.tactusoft.crm.model.entities.CrmUser;
 
 @Named
-public class SecurityBo {
+public class SecurityBo implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Inject
 	private CustomHibernateDao dao;
