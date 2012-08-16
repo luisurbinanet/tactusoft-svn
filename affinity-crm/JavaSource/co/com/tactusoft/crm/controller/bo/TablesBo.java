@@ -7,12 +7,11 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.tactusoft.webservice.client.beans.WSBean;
-
 import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmCie;
 import co.com.tactusoft.crm.model.entities.CrmCieMaterial;
+import co.com.tactusoft.crm.model.entities.CrmCity;
 import co.com.tactusoft.crm.model.entities.CrmCountry;
 import co.com.tactusoft.crm.model.entities.CrmDepartment;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
@@ -29,11 +28,15 @@ import co.com.tactusoft.crm.model.entities.CrmProcedure;
 import co.com.tactusoft.crm.model.entities.CrmProcedureBranch;
 import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
+import co.com.tactusoft.crm.model.entities.CrmRegion;
 import co.com.tactusoft.crm.model.entities.CrmRole;
 import co.com.tactusoft.crm.model.entities.CrmSpeciality;
 import co.com.tactusoft.crm.model.entities.CrmUser;
 import co.com.tactusoft.crm.model.entities.CrmUserBranch;
+import co.com.tactusoft.crm.model.entities.CrmUserProfile;
 import co.com.tactusoft.crm.model.entities.CrmUserRole;
+
+import com.tactusoft.webservice.client.beans.WSBean;
 
 @Named
 public class TablesBo implements Serializable {
@@ -93,6 +96,16 @@ public class TablesBo implements Serializable {
 						+ idUser);
 	}
 
+	public CrmProfile getProfileById(BigDecimal idProfile) {
+		List<CrmProfile> list = dao.find("from CrmProfile o where o.id = "
+				+ idProfile);
+		if (list == null || list.size() == 0) {
+			return null;
+		} else {
+			return list.get(0);
+		}
+	}
+
 	public List<CrmUser> getListUser() {
 		return dao.find("from CrmUser o where o.id <> 0");
 	}
@@ -141,6 +154,14 @@ public class TablesBo implements Serializable {
 
 	public List<CrmCountry> getListCountry() {
 		return dao.find("from CrmCountry o");
+	}
+
+	public List<CrmRegion> getListRegion() {
+		return dao.find("from CrmRegion o");
+	}
+
+	public List<CrmCity> getListCity() {
+		return dao.find("from CrmCity o");
 	}
 
 	public List<CrmBranch> getListBranchByUser(BigDecimal idUser) {
@@ -406,6 +427,23 @@ public class TablesBo implements Serializable {
 			cmUserRole.setCrmUser(entity);
 			cmUserRole.setCrmRole(role);
 			dao.persist(cmUserRole);
+		}
+
+		return i;
+	}
+
+	public Integer saveUserProfile(CrmUser entity, List<CrmProfile> listProfile) {
+		int i = 0;
+
+		dao.executeHQL("delete from CrmUserProfile o where o.crmUser.id = "
+				+ entity.getId());
+
+		for (CrmProfile profile : listProfile) {
+			CrmUserProfile row = new CrmUserProfile();
+			row.setId(getId(CrmUserProfile.class));
+			row.setCrmUser(entity);
+			row.setCrmProfile(profile);
+			dao.persist(row);
 		}
 
 		return i;

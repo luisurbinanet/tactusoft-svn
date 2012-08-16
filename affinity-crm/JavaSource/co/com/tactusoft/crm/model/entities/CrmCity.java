@@ -52,7 +52,7 @@ public class CrmCity implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_region")
 	public CrmRegion getCrmRegion() {
 		return this.crmRegion;

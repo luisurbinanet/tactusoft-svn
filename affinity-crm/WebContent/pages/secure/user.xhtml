@@ -178,6 +178,14 @@
 						<f:facet name="sourceCaption">#{msg['usr_roles']}</f:facet>
 						<f:facet name="targetCaption">#{msg['glb_target_caption']}</f:facet>
 					</p:pickList>
+					
+					<p:pickList var="row" value="#{userBacking.listUserProfile}"
+						converter="profileConverter" itemValue="#{row}"
+						itemLabel="#{row.code}">
+
+						<f:facet name="sourceCaption">#{msg['usr_profile']}</f:facet>
+						<f:facet name="targetCaption">#{msg['glb_target_caption']}</f:facet>
+					</p:pickList>
 				</h:panelGrid>
 			</p:dialog>
 		</h:form>

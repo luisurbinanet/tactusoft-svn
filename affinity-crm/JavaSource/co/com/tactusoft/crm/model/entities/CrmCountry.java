@@ -93,7 +93,7 @@ public class CrmCountry implements java.io.Serializable {
 		this.automatic = automatic;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "crmCountry")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmCountry")
 	@OrderBy("name")
 	public Set<CrmRegion> getCrmRegions() {
 		return this.crmRegions;
