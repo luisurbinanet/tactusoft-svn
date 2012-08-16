@@ -138,6 +138,15 @@
 								<f:selectItem itemLabel="#{msg['sal_key_press_nom']}"
 									itemValue="2" />
 							</p:selectOneRadio>
+							
+							<h:panelGrid columns="2" width="100%" cellspacing="10">
+								<h:outputText value="#{msg['usr_profile']}" />
+								<p:selectOneMenu value="#{appointmentPatientBacking.idProfile}"
+									style="width:500px" required="true"
+									label="#{msg['usr_profile']}">
+									<f:selectItems value="#{appointmentPatientBacking.listProfile}" />
+								</p:selectOneMenu>
+							</h:panelGrid>
 
 							<h:panelGrid columns="3" width="100%">
 								<p:radioButton id="opt1" for="customRadio" itemIndex="0" />

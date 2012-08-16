@@ -51,7 +51,7 @@
 					<h:outputText value="#{msg['usr_profile']}" style="width:100%" />
 					<p:selectOneMenu value="#{patientBacking.idProfile}"
 						style="width:248px" required="true" label="#{msg['usr_profile']}">
-						<f:selectItems value="#{patientBacking.listProfile}" />
+						<f:selectItems value="#{patientBacking.listProfile}" var="pat" />
 					</p:selectOneMenu>
 
 					<h:outputText value="#{msg['pat_country']}" style="width:100%" />
@@ -110,9 +110,9 @@
 						rendered="#{patientBacking.disabledSaveButton}" />
 
 					<h:outputText
-						rendered="#{(!patientBacking.automatic and !patientBacking.disabledSaveButton) or (!patientBacking.automatic and patientBacking.exitsSAP)}" />
+						rendered="#{(!patientBacking.automatic and !patientBacking.disabledSaveButton) or (patientBacking.exitsSAP)}" />
 					<h:outputText
-						rendered="#{(!patientBacking.automatic and !patientBacking.disabledSaveButton) or (!patientBacking.automatic and patientBacking.exitsSAP)}" />
+						rendered="#{(!patientBacking.automatic and !patientBacking.disabledSaveButton) or (patientBacking.exitsSAP)}" />
 				</h:panelGrid>
 
 				<h:panelGrid id="pnlDetail3" columns="4" cellspacing="5"

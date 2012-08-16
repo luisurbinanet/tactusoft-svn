@@ -82,7 +82,7 @@
 					<p:calendar value="#{appointmentBacking.currentDate}"
 						id="calCurrentDate" showOn="button" navigator="true"
 						pattern="dd/MM/yyyy" readonlyInput="true"
-						mindate="#{appointmentBacking.currentDate}" locale="es"/>
+						mindate="#{appointmentBacking.currentDate}" locale="es" />
 
 					<h:outputLabel value="#{msg['app_doctor']}" />
 					<p:selectOneMenu id="selDoctor" style="width:700px"
@@ -92,7 +92,7 @@
 
 					<h:outputLabel value="#{msg['app_obs']}" />
 					<p:inputTextarea value="#{appointmentBacking.selected.obs}"
-						style="width:700px" rows="3" label="#{msg['app_obs']}"/>
+						style="width:700px" rows="3" label="#{msg['app_obs']}" />
 				</h:panelGrid>
 
 			</h:form>
@@ -133,6 +133,15 @@
 								<f:selectItem itemLabel="#{msg['sal_key_press_nom']}"
 									itemValue="2" />
 							</p:selectOneRadio>
+
+							<h:panelGrid columns="2" width="100%" cellspacing="10">
+								<h:outputText value="#{msg['usr_profile']}" />
+								<p:selectOneMenu value="#{searchByPatientBacking.idProfile}"
+									style="width:500px" required="true"
+									label="#{msg['usr_profile']}">
+									<f:selectItems value="#{searchByPatientBacking.listProfile}" />
+								</p:selectOneMenu>
+							</h:panelGrid>
 
 							<h:panelGrid columns="3" width="100%">
 								<p:radioButton id="opt1" for="customRadio" itemIndex="0" />
