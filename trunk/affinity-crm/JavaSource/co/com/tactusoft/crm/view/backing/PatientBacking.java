@@ -44,10 +44,12 @@ public class PatientBacking extends BaseBacking {
 	private BigDecimal idCountry;
 	private Map<BigDecimal, CrmCountry> mapCountry;
 
+	private List<CrmRegion> listAllRegion;
 	private List<SelectItem> listRegion;
 	private BigDecimal idRegion;
 	private Map<BigDecimal, CrmRegion> mapRegion;
 
+	private List<CrmCity> listAllCity;
 	private List<SelectItem> listCity;
 	private BigDecimal idCity;
 	private Map<BigDecimal, CrmCity> mapCity;
@@ -126,6 +128,8 @@ public class PatientBacking extends BaseBacking {
 
 			if (listCountry.size() > 0) {
 				idCountry = (BigDecimal) listCountry.get(0).getValue();
+				listAllRegion = tablesService.getListRegion();
+				listAllCity = tablesService.getListCity();
 				handleCountryChange();
 			}
 		}
@@ -247,9 +251,13 @@ public class PatientBacking extends BaseBacking {
 
 			listRegion = new LinkedList<SelectItem>();
 			mapRegion = new HashMap<BigDecimal, CrmRegion>();
-			for (CrmRegion row : crmCountry.getCrmRegions()) {
-				listRegion.add(new SelectItem(row.getId(), row.getName()));
-				mapRegion.put(row.getId(), row);
+
+			for (CrmRegion row : this.listAllRegion) {
+				if (row.getCrmCountry().getId().intValue() == crmCountry
+						.getId().intValue()) {
+					listRegion.add(new SelectItem(row.getId(), row.getName()));
+					mapRegion.put(row.getId(), row);
+				}
 			}
 
 			if (listRegion.size() > 0) {
@@ -273,9 +281,12 @@ public class PatientBacking extends BaseBacking {
 		CrmRegion crmRegion = mapRegion.get(idRegion);
 		listCity = new LinkedList<SelectItem>();
 		mapCity = new HashMap<BigDecimal, CrmCity>();
-		for (CrmCity row : crmRegion.getCrmCities()) {
-			listCity.add(new SelectItem(row.getId(), row.getName()));
-			mapCity.put(row.getId(), row);
+		for (CrmCity row : this.listAllCity) {
+			if (row.getCrmRegion().getId().intValue() == crmRegion.getId()
+					.intValue()) {
+				listCity.add(new SelectItem(row.getId(), row.getName()));
+				mapCity.put(row.getId(), row);
+			}
 		}
 
 		if (listRegion.size() > 0) {

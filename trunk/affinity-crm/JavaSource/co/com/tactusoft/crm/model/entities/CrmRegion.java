@@ -61,7 +61,7 @@ public class CrmRegion implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_country", nullable = false)
 	public CrmCountry getCrmCountry() {
 		return this.crmCountry;
@@ -89,7 +89,7 @@ public class CrmRegion implements java.io.Serializable {
 		this.name = name;
 	}
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "crmRegion")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmRegion")
 	@OrderBy("name")
 	public Set<CrmCity> getCrmCities() {
 		return this.crmCities;

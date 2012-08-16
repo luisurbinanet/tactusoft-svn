@@ -34,14 +34,12 @@ public class UserBacking extends BaseBacking {
 	private UserDataModel model;
 	private CrmUser selected;
 
-	private List<SelectItem> listProfile;
-	private Map<BigDecimal, CrmProfile> mapProfile;
-
 	private List<SelectItem> listDepartment;
 	private Map<BigDecimal, CrmDepartment> mapDepartment;
 
 	private DualListModel<CrmRole> listRole;
 	private DualListModel<CrmBranch> listBranch;
+	private DualListModel<CrmProfile> listUserProfile;
 
 	private String password;
 	private CrmDoctor crmDoctor;
@@ -87,22 +85,6 @@ public class UserBacking extends BaseBacking {
 		}
 	}
 
-	public List<SelectItem> getListProfile() {
-		if (listProfile == null) {
-			mapProfile = new HashMap<BigDecimal, CrmProfile>();
-			listProfile = new LinkedList<SelectItem>();
-			for (CrmProfile row : tablesService.getListProfileActive()) {
-				listProfile.add(new SelectItem(row.getId(), row.getCode()));
-				mapProfile.put(row.getId(), row);
-			}
-		}
-		return listProfile;
-	}
-
-	public void setListProfile(List<SelectItem> listProfile) {
-		this.listProfile = listProfile;
-	}
-
 	public List<SelectItem> getListDepartment() {
 		if (listDepartment == null) {
 			mapDepartment = new HashMap<BigDecimal, CrmDepartment>();
@@ -135,6 +117,14 @@ public class UserBacking extends BaseBacking {
 		this.listBranch = listBranch;
 	}
 
+	public DualListModel<CrmProfile> getListUserProfile() {
+		return listUserProfile;
+	}
+
+	public void setListUserProfile(DualListModel<CrmProfile> listUserProfile) {
+		this.listUserProfile = listUserProfile;
+	}
+
 	public String getPassword() {
 		return password;
 	}
@@ -158,6 +148,7 @@ public class UserBacking extends BaseBacking {
 
 		listBranch = new DualListModel<CrmBranch>();
 		listRole = new DualListModel<CrmRole>();
+		listUserProfile = new DualListModel<CrmProfile>();
 		generateListAction(null);
 
 		rolePrincipal = Constant.ROLE_USER;
@@ -191,6 +182,11 @@ public class UserBacking extends BaseBacking {
 			FacesUtil.addError(message);
 		}
 
+		if (listUserProfile.getTarget().size() == 0) {
+			message = FacesUtil.getMessage("usr_msg_error_profile");
+			FacesUtil.addError(message);
+		}
+
 		if (rolePrincipal.equals(Constant.ROLE_DOCTOR)
 				&& idSpeciality.intValue() == -1) {
 			message = FacesUtil.getMessage("usr_msg_error_speciality");
@@ -202,7 +198,7 @@ public class UserBacking extends BaseBacking {
 			if (validatePassword) {
 				selected.setPassword(FacesUtil.getMD5(selected.getPassword()));
 			}
-			
+
 			selected.setCrmDepartment(mapDepartment.get(selected
 					.getCrmDepartment().getId()));
 
@@ -242,6 +238,8 @@ public class UserBacking extends BaseBacking {
 			if (result == 0) {
 				tablesService.saveUserBranch(selected, listBranch.getTarget());
 				tablesService.saveUserRole(selected, listRole.getTarget());
+				tablesService.saveUserProfile(selected,
+						listUserProfile.getTarget());
 				list = tablesService.getListUser();
 				model = new UserDataModel(list);
 				message = FacesUtil.getMessage("msg_record_ok");
@@ -260,6 +258,8 @@ public class UserBacking extends BaseBacking {
 		List<CrmBranch> listSourceBranch = new LinkedList<CrmBranch>();
 		List<CrmRole> listTargetRole = new LinkedList<CrmRole>();
 		List<CrmRole> listSourceRole = new LinkedList<CrmRole>();
+		List<CrmProfile> listTargetProfile = new LinkedList<CrmProfile>();
+		List<CrmProfile> listSourceProfile = new LinkedList<CrmProfile>();
 
 		if (selected != null && selected.getId() != null) {
 
@@ -322,16 +322,35 @@ public class UserBacking extends BaseBacking {
 					listSourceRole.add(row);
 				}
 			}
+
+			listTargetProfile = tablesService.getListProfileByUser(selected
+					.getId());
+			for (CrmProfile row : tablesService.getListProfileActive()) {
+				boolean exits = false;
+				for (CrmProfile avb : listTargetProfile) {
+					if (avb.getId().intValue() == row.getId().intValue()) {
+						exits = true;
+						break;
+					}
+				}
+
+				if (!exits) {
+					listSourceProfile.add(row);
+				}
+			}
 		} else {
 			if (tablesService != null) {
 				listSourceBranch = tablesService.getListBranchActive();
 				listSourceRole = tablesService.getListRoleActive();
+				listSourceProfile = tablesService.getListProfileActive();
 			}
 		}
 
 		listBranch = new DualListModel<CrmBranch>(listSourceBranch,
 				listTargetBranch);
 		listRole = new DualListModel<CrmRole>(listSourceRole, listTargetRole);
+		listUserProfile = new DualListModel<CrmProfile>(listSourceProfile,
+				listTargetProfile);
 	}
 
 	public void updatePasswordAction() {
