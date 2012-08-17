@@ -24,6 +24,7 @@ public class CrmMedication implements java.io.Serializable {
 	private String descMaterial;
 	private int unit;
 	private String materialType;
+	private String diagnosis;
 
 	public CrmMedication() {
 	}
@@ -38,6 +39,19 @@ public class CrmMedication implements java.io.Serializable {
 		this.descMaterial = descMaterial;
 		this.unit = unit;
 		this.materialType = materialType;
+	}
+
+	public CrmMedication(BigDecimal id, CrmAppointment crmAppointment,
+			CrmCie crmCie, long codMaterial, String descMaterial, int unit,
+			String materialType, String diagnosis) {
+		this.id = id;
+		this.crmAppointment = crmAppointment;
+		this.crmCie = crmCie;
+		this.codMaterial = codMaterial;
+		this.descMaterial = descMaterial;
+		this.unit = unit;
+		this.materialType = materialType;
+		this.diagnosis = diagnosis;
 	}
 
 	@Id
@@ -104,6 +118,15 @@ public class CrmMedication implements java.io.Serializable {
 
 	public void setMaterialType(String materialType) {
 		this.materialType = materialType;
+	}
+
+	@Column(name = "diagnosis", length = 65535)
+	public String getDiagnosis() {
+		return this.diagnosis;
+	}
+
+	public void setDiagnosis(String diagnosis) {
+		this.diagnosis = diagnosis;
 	}
 
 }

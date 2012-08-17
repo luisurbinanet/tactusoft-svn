@@ -238,6 +238,10 @@
 												maxValue="99" />
 										</p:column>
 
+										<p:column headerText="#{msg['cie_grp_diagnosis']}" style="width:400px">
+											<p:inputTextarea value="#{rec.diagnosis}" rows="3" style="width:400px"/>
+										</p:column>
+
 										<f:facet name="footer">
 											<p:commandButton id="btnSelTherapy"
 												oncomplete="dlgMedicine.show()"

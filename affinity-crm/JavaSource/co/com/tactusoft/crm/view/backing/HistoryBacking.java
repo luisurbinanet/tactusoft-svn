@@ -1569,6 +1569,8 @@ public class HistoryBacking extends BaseBacking {
 
 	public void selectTherapyAction(ActionEvent event) {
 		this.typeMedication = Constant.MATERIAL_TYPE_THERAPY;
+		listAllMaterial = new ArrayList<WSBean>();
+
 		for (WSBean material : listAllBackupMaterial) {
 			boolean validateGroup = false;
 			for (CrmMaterialGroup row : listMaterialGroup) {
@@ -1588,6 +1590,8 @@ public class HistoryBacking extends BaseBacking {
 
 	public void selectExamsAction(ActionEvent event) {
 		this.typeMedication = Constant.MATERIAL_TYPE_EXAMS;
+		listAllMaterial = new ArrayList<WSBean>();
+
 		for (WSBean material : listAllBackupMaterial) {
 			boolean validateGroup = false;
 			for (CrmMaterialGroup row : listMaterialGroup) {
@@ -1625,6 +1629,16 @@ public class HistoryBacking extends BaseBacking {
 			if (listMedication.size() == 0) {
 				message = FacesUtil.getMessage("his_msg_message_med_1");
 				FacesUtil.addWarn(message);
+			}
+
+			if (listTherapy.size() > 0) {
+				for (CrmMedication row : listTherapy) {
+					if (FacesUtil.isEmptyOrBlank(row.getDiagnosis())) {
+						message = FacesUtil.getMessage("his_msg_message_med_2");
+						FacesUtil.addWarn(message);
+						break;
+					}
+				}
 			}
 
 			if (FacesUtil.isEmptyOrBlank(noteDoctor)) {
