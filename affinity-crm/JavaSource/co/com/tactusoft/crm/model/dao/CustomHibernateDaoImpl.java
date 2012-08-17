@@ -4,34 +4,40 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public class CustomHibernateDaoImpl extends HibernateDaoSupport implements
-		CustomHibernateDao, Serializable {
+public class CustomHibernateDaoImpl implements CustomHibernateDao, Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
-	@Autowired
-	public CustomHibernateDaoImpl(SessionFactory sessionFactory) {
-		super.setSessionFactory(sessionFactory);
+	@Resource
+	private SessionFactory sessionFactory;
+
+	public CustomHibernateDaoImpl() {
+
+	}
+
+	public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
 	}
 
 	@Transactional
 	public Integer persist(Object entity) {
 		int result = 0;
 		try {
-			getHibernateTemplate().saveOrUpdate(entity);
-			getHibernateTemplate().flush();
+			getSessionFactory().getCurrentSession().saveOrUpdate(entity);
+			getSessionFactory().getCurrentSession().flush();
 		} catch (DataIntegrityViolationException ex) {
 			result = -1;
 		}
@@ -45,22 +51,19 @@ public class CustomHibernateDaoImpl extends HibernateDaoSupport implements
 		}
 	}
 
-	@Transactional(readOnly = true)
-	public <T> List<T> find(Class<T> entityClass) {
-		final List<T> entities = getHibernateTemplate().loadAll(entityClass);
-		return entities;
-	}
-
+	@SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
 	public <T> T load(Class<T> entityClass, Serializable id) {
-		final T entity = (T) getHibernateTemplate().load(entityClass, id);
+		final T entity = (T) getSessionFactory().getCurrentSession().load(
+				entityClass, id);
 		return entity;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
 	public <T> List<T> find(String hql) {
-		final List<T> entities = getHibernateTemplate().find(hql);
+		final List<T> entities = getSessionFactory().getCurrentSession()
+				.createQuery(hql).list();
 		return entities;
 	}
 
@@ -68,7 +71,7 @@ public class CustomHibernateDaoImpl extends HibernateDaoSupport implements
 	public int delete(Object entity) {
 		int result = 0;
 		try {
-			getHibernateTemplate().delete(entity);
+			getSessionFactory().getCurrentSession().delete(entity);
 		} catch (Exception ex) {
 			result = -1;
 		}
@@ -77,8 +80,7 @@ public class CustomHibernateDaoImpl extends HibernateDaoSupport implements
 
 	@Transactional(readOnly = false)
 	public int executeHQL(final String hql) {
-		Query query = getHibernateTemplate().getSessionFactory()
-				.getCurrentSession().createQuery(hql);
+		Query query = getSessionFactory().getCurrentSession().createQuery(hql);
 		return query.executeUpdate();
 	}
 

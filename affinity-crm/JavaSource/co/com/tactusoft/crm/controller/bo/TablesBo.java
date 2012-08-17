@@ -55,7 +55,7 @@ public class TablesBo implements Serializable {
 	}
 
 	public List<CrmNurse> getListNurse() {
-		return dao.find(CrmNurse.class);
+		return dao.find("from CrmNurse");
 	}
 
 	public List<CrmNurse> getListNurseActive() {

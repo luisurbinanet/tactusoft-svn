@@ -97,11 +97,11 @@ order by a.id]]>
 		<field name="description" class="java.lang.String"/>
 		<field name="posology" class="java.lang.String"/>
 	</subDataset>
-	<parameter name="P_APPOINTMENT" class="java.lang.Integer">
-		<defaultValueExpression><![CDATA[198]]></defaultValueExpression>
+	<parameter name="P_APPOINTMENT" class="java.lang.Integer" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
-	<parameter name="P_IMAGE" class="java.lang.String">
-		<defaultValueExpression><![CDATA["/Users/CSARMIENTO/Downloads/"]]></defaultValueExpression>
+	<parameter name="P_IMAGE" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[select a.id_appointment,
