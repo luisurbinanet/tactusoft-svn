@@ -42,7 +42,7 @@ public class GenerateFormulaPDF {
 		HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext
 				.getCurrentInstance().getExternalContext().getResponse();
 		httpServletResponse.addHeader("Content-disposition",
-				"attachment; filename=report.pdf");
+				"attachment; filename=FormulaMedica.pdf");
 		ServletOutputStream servletOutputStream = httpServletResponse
 				.getOutputStream();
 		JasperExportManager.exportReportToPdfStream(jasperPrint,
