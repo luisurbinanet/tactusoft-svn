@@ -45,7 +45,7 @@ public class ProcessBo implements Serializable {
 	private CustomHibernateDao dao;
 
 	public List<CrmAppointment> getListAppointment() {
-		return dao.find(CrmAppointment.class);
+		return dao.find("from CrmAppointment");
 	}
 
 	public List<CrmAppointment> getListAppointmentByDoctor(BigDecimal idDoctor) {
@@ -112,11 +112,11 @@ public class ProcessBo implements Serializable {
 	}
 
 	public List<CrmMaterialGroup> getListMaterialGroup() {
-		return dao.find(CrmMaterialGroup.class);
+		return dao.find("from CrmMaterialGroup");
 	}
 	
 	public List<CrmCieMaterial> getListCieMaterial() {
-		return dao.find(CrmCieMaterial.class);
+		return dao.find("from CrmCieMaterial");
 	}
 
 	public CrmAppointment saveAppointment(CrmAppointment entity) {

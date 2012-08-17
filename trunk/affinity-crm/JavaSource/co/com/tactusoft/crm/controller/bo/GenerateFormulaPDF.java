@@ -16,7 +16,8 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 
-import org.hibernate.impl.SessionFactoryImpl;
+import org.hibernate.internal.SessionFactoryImpl;
+import org.springframework.orm.hibernate4.SessionFactoryUtils;
 
 import co.com.tactusoft.crm.util.FacesUtil;
 
@@ -26,13 +27,13 @@ public class GenerateFormulaPDF {
 			IOException, SQLException {
 		String imagePath = FacesUtil.getRealPath("/images/");
 		Map<String, Object> param = new HashMap<String, Object>();
-		param.put("p_appointment", idAppointment.intValue());
-		param.put("p_image", imagePath);
+		param.put("P_APPOINTMENT", idAppointment.intValue());
+		param.put("P_IMAGE", imagePath);
 
 		SessionFactoryImpl sessionFactory = FacesUtil
 				.findBean("sessionFactory");
-		Connection connection = sessionFactory.getConnectionProvider()
-				.getConnection();
+		Connection connection = SessionFactoryUtils.getDataSource(
+				sessionFactory).getConnection();
 
 		String reportPath = FacesContext.getCurrentInstance()
 				.getExternalContext().getRealPath("/reports/formula.jasper");
@@ -48,4 +49,5 @@ public class GenerateFormulaPDF {
 				servletOutputStream);
 		FacesContext.getCurrentInstance().responseComplete();
 	}
+
 }

@@ -12,8 +12,7 @@ public interface CustomHibernateDao {
 
 	public void persist(Object[] entities);
 
-	public <T> List<T> find(Class<T> entityClass);
-
+	
 	public <T> T load(Class<T> entityClass, Serializable id);
 
 	public <T> List<T> find(String hql);
