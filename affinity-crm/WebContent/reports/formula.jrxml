@@ -97,10 +97,10 @@ order by a.id]]>
 		<field name="description" class="java.lang.String"/>
 		<field name="posology" class="java.lang.String"/>
 	</subDataset>
-	<parameter name="P_APPOINTMENT" class="java.lang.Integer" isForPrompting="false">
+	<parameter name="P_APPOINTMENT" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
-	<parameter name="P_IMAGE" class="java.lang.String" isForPrompting="false">
+	<parameter name="P_IMAGE" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
@@ -160,7 +160,7 @@ order by a.id]]>
 				<textElement textAlignment="Center">
 					<font fontName="Arial" size="14" isBold="true" isItalic="false"/>
 				</textElement>
-				<text><![CDATA[Formula Medica]]></text>
+				<text><![CDATA[Formula Médica]]></text>
 			</staticText>
 			<textField>
 				<reportElement uuid="fb85831b-54e6-420d-bfcd-274dc2ff4fc3" x="199" y="27" width="157" height="15"/>
@@ -197,7 +197,7 @@ order by a.id]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name_branch}]]></textFieldExpression>
 			</textField>
-			<textField pattern="EEEEE dd MMMMM yyyy">
+			<textField pattern="dd/MM/yyyy">
 				<reportElement uuid="61702f48-9bba-4e85-b708-edbce66e3d79" x="199" y="44" width="157" height="15"/>
 				<textElement>
 					<font fontName="Arial" size="10"/>
@@ -211,23 +211,23 @@ order by a.id]]>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="55" splitType="Stretch">
+		<band height="52" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="4fecec29-edfb-43b7-a3b5-68630a905c95" x="0" y="27" width="96" height="22"/>
+				<reportElement uuid="4fecec29-edfb-43b7-a3b5-68630a905c95" x="0" y="27" width="96" height="15"/>
 				<textElement textAlignment="Center">
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Diagósticos]]></text>
+				<text><![CDATA[Diagnósticos]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="535a5a5f-6fb6-4495-8f88-4ab2f31902bf" x="105" y="27" width="120" height="22"/>
+				<reportElement uuid="535a5a5f-6fb6-4495-8f88-4ab2f31902bf" x="105" y="27" width="120" height="15"/>
 				<textElement textAlignment="Center">
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Medicamentos]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="5cc47441-d4fb-4934-883a-6b5a18f2758d" x="235" y="28" width="133" height="22"/>
+				<reportElement uuid="5cc47441-d4fb-4934-883a-6b5a18f2758d" x="235" y="28" width="133" height="15"/>
 				<textElement textAlignment="Center">
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
@@ -247,6 +247,12 @@ order by a.id]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name_patient}]]></textFieldExpression>
 			</textField>
+			<line>
+				<reportElement uuid="5b7eb3e9-923b-4386-b701-f469eeef6d65" x="0" y="46" width="368" height="1" forecolor="#009999"/>
+				<graphicElement>
+					<pen lineWidth="2.0" lineStyle="Double"/>
+				</graphicElement>
+			</line>
 		</band>
 	</pageHeader>
 	<detail>
