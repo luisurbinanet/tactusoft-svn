@@ -105,24 +105,23 @@ order by a.id]]>
 	</parameter>
 	<queryString>
 		<![CDATA[select a.id_appointment,
-		b.description desc_cie,
+		c.diagnosis desc_cie,
 		a.id_cie,
-    c.unit,
+		c.unit,
 		c.cod_material,
-    c.desc_material,
+		c.desc_material,
 		a.posology,
 		e.doc,
 		cast(d.start_appointment_date as Date) appointment_date,
 		concat(e.firstnames,' ', e.surnames) as name_patient,
 		f.names as name_doctor,
 		concat(g.code, ' - ',g.name) as name_branch
-from crm_diagnosis a join crm_cie b on a.id_cie = b.id
-join crm_medication c on a.id_appointment = c.id_appointment and a.id_cie = c.id_cie
+from crm_diagnosis a join crm_medication c on a.id_appointment = c.id_appointment and a.id_cie = c.id_cie
 join crm_appointment d on a.id_appointment = d.id
 join crm_patient e on d.id_patient = e.id
 join crm_doctor f on d.id_doctor = f.id
 join crm_branch g on d.id_branch = g.id
-where a.id_appointment = $P{P_APPOINTMENT} and c.material_type = 'MEDICAMENTO'
+where a.id_appointment = $P{P_APPOINTMENT}  and c.material_type = 'TERAPIA'
 order by a.id]]>
 	</queryString>
 	<field name="id_appointment" class="java.math.BigDecimal"/>
@@ -160,7 +159,7 @@ order by a.id]]>
 				<textElement textAlignment="Center">
 					<font fontName="Arial" size="14" isBold="true" isItalic="false"/>
 				</textElement>
-				<text><![CDATA[Formula Médica]]></text>
+				<text><![CDATA[Terapias]]></text>
 			</staticText>
 			<textField>
 				<reportElement uuid="fb85831b-54e6-420d-bfcd-274dc2ff4fc3" x="199" y="27" width="157" height="15"/>
@@ -213,25 +212,18 @@ order by a.id]]>
 	<pageHeader>
 		<band height="52" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="4fecec29-edfb-43b7-a3b5-68630a905c95" x="0" y="27" width="100" height="15"/>
+				<reportElement uuid="4fecec29-edfb-43b7-a3b5-68630a905c95" x="0" y="27" width="175" height="15"/>
 				<textElement textAlignment="Center">
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Diagnósticos]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="535a5a5f-6fb6-4495-8f88-4ab2f31902bf" x="105" y="27" width="120" height="15"/>
+				<reportElement uuid="535a5a5f-6fb6-4495-8f88-4ab2f31902bf" x="187" y="27" width="181" height="15"/>
 				<textElement textAlignment="Center">
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Medicamentos]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="5cc47441-d4fb-4934-883a-6b5a18f2758d" x="235" y="28" width="133" height="15"/>
-				<textElement textAlignment="Center">
-					<font fontName="Arial" size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Posología]]></text>
+				<text><![CDATA[Terapias]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="79a8848e-910c-4361-999f-df34709a3d55" x="0" y="4" width="60" height="20"/>
@@ -258,46 +250,46 @@ order by a.id]]>
 	<detail>
 		<band height="34" splitType="Stretch">
 			<textField>
-				<reportElement uuid="bb682a46-b8b7-4d50-a9ce-f2dedd3dfead" x="122" y="0" width="103" height="34"/>
+				<reportElement uuid="bb682a46-b8b7-4d50-a9ce-f2dedd3dfead" x="204" y="0" width="164" height="34"/>
 				<textElement>
 					<font fontName="Arial" size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{desc_material}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="7b354bad-46ff-4ec4-97b9-87037b526d98" x="105" y="0" width="17" height="34"/>
+				<reportElement uuid="7b354bad-46ff-4ec4-97b9-87037b526d98" x="187" y="0" width="17" height="34"/>
 				<textElement>
 					<font fontName="Arial" size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{unit}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="6734ef12-a28c-4963-8b42-50c6bfe9fd5a" isPrintRepeatedValues="false" x="4" y="0" width="96" height="34"/>
+				<reportElement uuid="6734ef12-a28c-4963-8b42-50c6bfe9fd5a" isPrintRepeatedValues="false" x="4" y="0" width="171" height="34"/>
 				<textElement>
 					<font fontName="Arial" size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{desc_cie}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="c97e21ae-df63-46d9-97f0-3c16107d05e1" isPrintRepeatedValues="false" x="235" y="0" width="133" height="34"/>
-				<textElement>
-					<font fontName="Arial" size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{posology}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 	<lastPageFooter>
 		<band height="80">
 			<staticText>
-				<reportElement uuid="2642f2bd-2ae6-4290-a2f1-dacdc96f65c6" x="0" y="0" width="87" height="16"/>
+				<reportElement uuid="2642f2bd-2ae6-4290-a2f1-dacdc96f65c6" x="1" y="0" width="87" height="16"/>
 				<textElement>
 					<font fontName="Arial" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Recomendaciones:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="3f0d2517-6e43-4779-8e9a-a67c2300dcc0" x="0" y="11" width="368" height="58"/>
+				<reportElement uuid="96e9d700-5ddb-48e5-8c30-56a3c2613dca" x="1" y="67" width="368" height="13"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Línea de Servicio Al Cliente 018000939393]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3f0d2517-6e43-4779-8e9a-a67c2300dcc0" x="1" y="11" width="368" height="58"/>
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
@@ -306,13 +298,6 @@ order by a.id]]>
 - Antes de consumir los medicamentos agitarlos, dándole golpes secos con la palma de la mano.
 - No suspender los medicamentos alopáticos recetados por su médico de la EPS.
 - Caminar diariamente 1 hora.]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="96e9d700-5ddb-48e5-8c30-56a3c2613dca" x="0" y="67" width="368" height="13"/>
-				<textElement textAlignment="Center">
-					<font fontName="Arial" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Línea de Servicio Al Cliente 018000939393]]></text>
 			</staticText>
 		</band>
 	</lastPageFooter>
