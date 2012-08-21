@@ -84,6 +84,7 @@ public class CustomHibernateDaoImpl implements CustomHibernateDao, Serializable 
 		return query.executeUpdate();
 	}
 
+	@Transactional(readOnly = true)
 	public <T> BigDecimal getId(Class<T> clasz) {
 		BigDecimal id = null;
 		try {
