@@ -144,7 +144,7 @@ public class ProcedureBacking extends BaseBacking {
 		if (listWSGroupSellers == null) {
 			List<WSBean> result = FacesUtil.getCurrentUserData()
 					.getListWSGroupSellers();
-			
+
 			mapWSGroupSellers = new LinkedHashMap<String, String>();
 			for (WSBean row : result) {
 				mapWSGroupSellers.put(row.getCode(), row.getNames());
@@ -178,7 +178,11 @@ public class ProcedureBacking extends BaseBacking {
 		this.timeNurses = 0;
 		this.timeStretchers = 0;
 
+		List<CrmBranch> listSourceBranch = FacesUtil.getCurrentUserData()
+				.getListBranchAll();
+
 		listModelBranch = new DualListModel<CrmBranch>();
+		listModelBranch.setSource(listSourceBranch);
 	}
 
 	public void saveAction() {
