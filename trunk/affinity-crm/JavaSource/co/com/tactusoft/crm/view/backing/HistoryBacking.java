@@ -1611,6 +1611,7 @@ public class HistoryBacking extends BaseBacking {
 
 	public void closeAppointmentAction(ActionEvent event) {
 		String message = null;
+		boolean medicationTherapy = false;
 
 		if (this.getRolePrincipal().equals(Constant.ROLE_DOCTOR)) {
 			if (listDiagnosis.size() < 2) {
@@ -1639,6 +1640,7 @@ public class HistoryBacking extends BaseBacking {
 						break;
 					}
 				}
+				medicationTherapy = true;
 			}
 
 			if (FacesUtil.isEmptyOrBlank(noteDoctor)) {
@@ -1660,6 +1662,7 @@ public class HistoryBacking extends BaseBacking {
 						Constant.NOTE_TYPE_DOCTOR);
 
 				viewMode = true;
+				selectedAppointment.setMedicationTherapy(medicationTherapy);
 				selectedAppointment.setCloseAppointment(true);
 				selectedAppointment.setState(Constant.APP_STATE_ATTENDED);
 				processService.saveAppointment(selectedAppointment);
@@ -1689,7 +1692,21 @@ public class HistoryBacking extends BaseBacking {
 
 	public void printFormulaAction() {
 		try {
-			GenerateFormulaPDF.PDF(selectedAppointment.getId());
+			GenerateFormulaPDF.PDF(selectedAppointment.getId(),
+					Constant.MATERIAL_TYPE_MEDICINE);
+		} catch (JRException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void printFormulaTherapyAction() {
+		try {
+			GenerateFormulaPDF.PDF(selectedAppointment.getId(),
+					Constant.MATERIAL_TYPE_THERAPY);
 		} catch (JRException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

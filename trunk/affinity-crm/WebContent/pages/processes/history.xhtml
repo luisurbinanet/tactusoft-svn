@@ -106,7 +106,7 @@
 								</p:column>
 
 								<p:column style="width:4%">
-									<h:panelGrid columns="2" styleClass="mypanelgrid">
+									<h:panelGrid columns="3" styleClass="mypanelgrid">
 										<p:commandButton update=":form:tabView"
 											disabled="#{rec.closeAppointment}" icon="ui-icon-check"
 											rendered="#{historyBacking.rolePrincipal eq 'DOCTOR' or historyBacking.rolePrincipal eq 'NURSE'}"
@@ -119,8 +119,17 @@
 										<p:commandButton disabled="#{not rec.closeAppointment}"
 											icon="ui-icon-print"
 											rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}"
-											title="#{msg['btn_print']}" ajax="false"
+											title="#{msg['btn_print_medication']}" ajax="false"
 											action="#{historyBacking.printFormulaAction}">
+											<f:setPropertyActionListener value="#{rec}"
+												target="#{historyBacking.selectedAppointment}" />
+
+										</p:commandButton>
+										<p:commandButton disabled="#{not rec.closeAppointment}"
+											icon="ui-icon-bookmark"
+											rendered="#{historyBacking.rolePrincipal eq 'DOCTOR' and rec.medicationTherapy}"
+											title="#{msg['btn_print_therapy']}" ajax="false"
+											action="#{historyBacking.printFormulaTherapyAction}">
 											<f:setPropertyActionListener value="#{rec}"
 												target="#{historyBacking.selectedAppointment}" />
 										</p:commandButton>
@@ -238,8 +247,10 @@
 												maxValue="99" />
 										</p:column>
 
-										<p:column headerText="#{msg['cie_grp_diagnosis']}" style="width:400px">
-											<p:inputTextarea value="#{rec.diagnosis}" rows="3" style="width:400px"/>
+										<p:column headerText="#{msg['cie_grp_diagnosis']}"
+											style="width:400px">
+											<p:inputTextarea value="#{rec.diagnosis}" rows="3"
+												style="width:400px" />
 										</p:column>
 
 										<f:facet name="footer">

@@ -22,7 +22,7 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name = "crm_appointment", catalog = "crm_db", uniqueConstraints = @UniqueConstraint(columnNames = "code"))
 public class CrmAppointment implements java.io.Serializable {
-
+	
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
 	private CrmProcedureDetail crmProcedureDetail;
@@ -43,6 +43,7 @@ public class CrmAppointment implements java.io.Serializable {
 	private String obs;
 	private Boolean untimely;
 	private Boolean closeAppointment;
+	private Boolean medicationTherapy;
 	private int state;
 	private Date dateCreate;
 	private Date dateModified;
@@ -77,10 +78,11 @@ public class CrmAppointment implements java.io.Serializable {
 			CrmDoctor crmDoctor, String code, String patientNames,
 			String patientSap, Date startAppointmentDate,
 			Date endAppointmentDate, String codPublicity, String namePublicity,
-			String obs, Boolean untimely, Boolean closeAppointment, int state,
-			Date dateCreate, Date dateModified, Date dateChecked,
-			Date dateCanceled, Set<CrmDiagnosis> crmDiagnosises,
-			Set<CrmNote> crmNotes, Set<CrmMedication> crmMedications) {
+			String obs, Boolean untimely, Boolean closeAppointment,
+			Boolean medicationTherapy, int state, Date dateCreate,
+			Date dateModified, Date dateChecked, Date dateCanceled,
+			Set<CrmDiagnosis> crmDiagnosises, Set<CrmNote> crmNotes,
+			Set<CrmMedication> crmMedications) {
 		this.id = id;
 		this.crmProcedureDetail = crmProcedureDetail;
 		this.crmUserByIdUserChecked = crmUserByIdUserChecked;
@@ -100,6 +102,7 @@ public class CrmAppointment implements java.io.Serializable {
 		this.obs = obs;
 		this.untimely = untimely;
 		this.closeAppointment = closeAppointment;
+		this.medicationTherapy = medicationTherapy;
 		this.state = state;
 		this.dateCreate = dateCreate;
 		this.dateModified = dateModified;
@@ -290,6 +293,15 @@ public class CrmAppointment implements java.io.Serializable {
 
 	public void setCloseAppointment(Boolean closeAppointment) {
 		this.closeAppointment = closeAppointment;
+	}
+
+	@Column(name = "medication_therapy")
+	public Boolean getMedicationTherapy() {
+		return this.medicationTherapy;
+	}
+
+	public void setMedicationTherapy(Boolean medicationTherapy) {
+		this.medicationTherapy = medicationTherapy;
 	}
 
 	@Column(name = "state", nullable = false)
