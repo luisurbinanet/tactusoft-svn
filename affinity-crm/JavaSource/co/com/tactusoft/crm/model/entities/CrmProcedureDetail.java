@@ -19,7 +19,7 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name = "crm_procedure_detail", catalog = "crm_db", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
 public class CrmProcedureDetail implements java.io.Serializable {
-
+	
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
 	private CrmProcedure crmProcedure;
@@ -27,6 +27,8 @@ public class CrmProcedureDetail implements java.io.Serializable {
 	private Integer timeDoctor;
 	private Integer timeNurses;
 	private Integer timeStretchers;
+	private Boolean noRepeat;
+	private Short noRepeatDays;
 	private int state;
 	private Set<CrmAppointment> crmAppointments = new HashSet<CrmAppointment>(0);
 
@@ -43,14 +45,16 @@ public class CrmProcedureDetail implements java.io.Serializable {
 
 	public CrmProcedureDetail(BigDecimal id, CrmProcedure crmProcedure,
 			String name, Integer timeDoctor, Integer timeNurses,
-			Integer timeStretchers, int state,
-			Set<CrmAppointment> crmAppointments) {
+			Integer timeStretchers, Boolean noRepeat, Short noRepeatDays,
+			int state, Set<CrmAppointment> crmAppointments) {
 		this.id = id;
 		this.crmProcedure = crmProcedure;
 		this.name = name;
 		this.timeDoctor = timeDoctor;
 		this.timeNurses = timeNurses;
 		this.timeStretchers = timeStretchers;
+		this.noRepeat = noRepeat;
+		this.noRepeatDays = noRepeatDays;
 		this.state = state;
 		this.crmAppointments = crmAppointments;
 	}
@@ -109,6 +113,24 @@ public class CrmProcedureDetail implements java.io.Serializable {
 
 	public void setTimeStretchers(Integer timeStretchers) {
 		this.timeStretchers = timeStretchers;
+	}
+
+	@Column(name = "no_repeat")
+	public Boolean getNoRepeat() {
+		return this.noRepeat;
+	}
+
+	public void setNoRepeat(Boolean noRepeat) {
+		this.noRepeat = noRepeat;
+	}
+
+	@Column(name = "no_repeat_days")
+	public Short getNoRepeatDays() {
+		return this.noRepeatDays;
+	}
+
+	public void setNoRepeatDays(Short noRepeatDays) {
+		this.noRepeatDays = noRepeatDays;
 	}
 
 	@Column(name = "state", nullable = false)
