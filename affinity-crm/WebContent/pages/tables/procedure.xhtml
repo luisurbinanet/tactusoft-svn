@@ -9,7 +9,7 @@
 
 	<ui:define name="body">
 
-		<p:panel style="width:100%;height:800px;"
+		<p:panel style="width:100%;height:100%;"
 			header="#{msg['title_procedure']}">
 
 			<p:spacer height="5" />
@@ -24,6 +24,10 @@
 						<p:commandButton value="#{msg['btn_edit']}" icon="ui-icon-pencil"
 							oncomplete="dlg.show()" update=":editForm:dialog"
 							actionListener="#{procedureBacking.generateListAction}" />
+						<p:commandButton value="#{msg['prc_detail']}"
+							icon="ui-icon-pencil" oncomplete="dlgProcedureDetail.show()"
+							update=":editForm:dialogProcedureDetail"
+							actionListener="#{procedureBacking.generateListDetailAction}" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -68,9 +72,6 @@
 						<p:commandButton value="#{msg['btn_save']}" icon="ui-icon-disk"
 							action="#{procedureBacking.saveAction}"
 							update="growl :form:recordTable" />
-						<p:commandButton value="#{msg['btn_close']}"
-							icon="ui-icon-closethick" update="growl :form:recordTable"
-							process="@none" oncomplete="dlg.hide()" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -121,21 +122,29 @@
 					</p:pickList>
 				</h:panelGrid>
 
-				<p:spacer height="40" />
-				<h:outputLabel value="#{msg['prc_detail']}"
-					style="text-align:left;font-size:medium;font-weight:bold;" />
-				<p:separator style="width:100%" />
+			</p:dialog>
+
+			<p:dialog header="#{msg['prc_detail']}"
+				widgetVar="dlgProcedureDetail" resizable="false"
+				id="dialogProcedureDetail" showEffect="fade" hideEffect="explode"
+				modal="true" width="1000">
+
+				<p:toolbar style="width:100%">
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{msg['btn_save']}" icon="ui-icon-disk"
+							action="#{procedureBacking.saveDetailAction}"
+							update="growl :form:recordTable" />
+					</p:toolbarGroup>
+				</p:toolbar>
+
 				<p:spacer height="5" />
 
-				<h:panelGrid id="pnlProcedureDetail" columns="8" cellpadding="4"
+				<h:panelGrid id="pnlProcedureDetail" columns="2" cellpadding="2"
 					style="margin:0 auto;" width="100%">
 
 					<h:outputLabel value="#{msg['prc_name']}" />
-					<p:inputText value="#{procedureBacking.name}" style="width:200px"
+					<p:inputText value="#{procedureBacking.name}" style="width:300px"
 						label="#{msg['prc_name']}" />
-
-					<h:outputLabel value="" />
-					<h:outputLabel value="" />
 
 					<h:outputLabel value="#{msg['prc_time_doctor']}" />
 					<pe:inputNumber value="#{procedureBacking.timeDoctor}"
@@ -152,8 +161,17 @@
 						symbol=" Min" symbolPosition="s" decimalPlaces="0"
 						style="width:80px" />
 
-					<h:outputLabel value="" />
-					<h:outputLabel value="" />
+					<h:outputText value="#{msg['prc_noRepeat']}" />
+					<h:panelGrid columns="2">
+						<p:selectBooleanCheckbox value="#{procedureBacking.noRepeat}">
+							<p:ajax update="txtNoRepeatDays" />
+						</p:selectBooleanCheckbox>
+						<pe:inputNumber id="txtNoRepeatDays"
+							disabled="#{not procedureBacking.noRepeat}"
+							value="#{procedureBacking.noRepeatDays}" symbol=" Días"
+							symbolPosition="s" decimalPlaces="0" style="width:80px"
+							minValue="0" />
+					</h:panelGrid>
 
 					<p:commandButton value="#{msg['btn_add']}"
 						action="#{procedureBacking.addProcedureDetailAction}"
@@ -192,6 +210,18 @@
 						</p:inplace>
 					</p:column>
 
+					<p:column headerText="#{msg['prc_noRepeat']}">
+						<p:selectBooleanCheckbox value="#{rec.noRepeat}" />
+					</p:column>
+
+					<p:column style="width:80px"
+						headerText="#{msg['prc_noRepeatDays']}">
+						<p:inplace>
+							<pe:inputNumber value="#{rec.noRepeatDays}" symbol=" Días"
+								symbolPosition="s" decimalPlaces="0" style="width:70px" />
+						</p:inplace>
+					</p:column>
+
 					<p:column headerText="#{msg['glb_state']}">
 						<p:selectOneMenu value="#{rec.state}">
 							<f:selectItem itemValue="1"
@@ -202,7 +232,6 @@
 					</p:column>
 
 				</p:dataTable>
-
 			</p:dialog>
 		</h:form>
 
