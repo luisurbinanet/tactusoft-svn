@@ -42,6 +42,8 @@ public class ProcedureBacking extends BaseBacking {
 	private Integer timeDoctor;
 	private Integer timeNurses;
 	private Integer timeStretchers;
+	private boolean noRepeat;
+	private Short noRepeatDays;
 
 	private DualListModel<CrmBranch> listModelBranch;
 
@@ -140,6 +142,22 @@ public class ProcedureBacking extends BaseBacking {
 		this.timeStretchers = timeStretchers;
 	}
 
+	public boolean isNoRepeat() {
+		return noRepeat;
+	}
+
+	public void setNoRepeat(boolean noRepeat) {
+		this.noRepeat = noRepeat;
+	}
+
+	public Short getNoRepeatDays() {
+		return noRepeatDays;
+	}
+
+	public void setNoRepeatDays(Short noRepeatDays) {
+		this.noRepeatDays = noRepeatDays;
+	}
+
 	public List<SelectItem> getListWSGroupSellers() {
 		if (listWSGroupSellers == null) {
 			List<WSBean> result = FacesUtil.getCurrentUserData()
@@ -166,6 +184,14 @@ public class ProcedureBacking extends BaseBacking {
 		this.listWSGroupSellers = listWSGroupSellers;
 	}
 
+	public DualListModel<CrmBranch> getListModelBranch() {
+		return listModelBranch;
+	}
+
+	public void setListModelBranch(DualListModel<CrmBranch> listModelBranch) {
+		this.listModelBranch = listModelBranch;
+	}
+
 	public void newAction() {
 		selected = new CrmProcedure();
 		selected.setState(Constant.STATE_ACTIVE);
@@ -177,47 +203,14 @@ public class ProcedureBacking extends BaseBacking {
 		this.timeDoctor = 0;
 		this.timeNurses = 0;
 		this.timeStretchers = 0;
+		this.noRepeat = false;
+		this.noRepeatDays = 0;
 
 		List<CrmBranch> listSourceBranch = FacesUtil.getCurrentUserData()
 				.getListBranchAll();
 
 		listModelBranch = new DualListModel<CrmBranch>();
 		listModelBranch.setSource(listSourceBranch);
-	}
-
-	public void saveAction() {
-		String message = null;
-
-		if (listModelBranch.getTarget().size() == 0) {
-			message = FacesUtil.getMessage("prc_msg_error_branch");
-			FacesUtil.addError(message);
-		}
-
-		if (listProcedureDetail.size() == 0) {
-			message = FacesUtil.getMessage("prc_msg_error_detail");
-			FacesUtil.addError(message);
-		}
-
-		if (message == null) {
-			int result = tablesService.saveProcedure(selected);
-			if (result == 0) {
-				tablesService
-						.saveProcedureDetail(selected, listProcedureDetail);
-
-				tablesService.saveProcedureBranch(selected,
-						listModelBranch.getTarget());
-
-				list = tablesService.getListProcedure();
-				model = new ProcedureDataModel(list);
-				message = FacesUtil.getMessage("msg_record_ok");
-				FacesUtil.addInfo(message);
-			} else if (result == -1) {
-				String paramValue = FacesUtil.getMessage("prc_name");
-				message = FacesUtil.getMessage("msg_record_unique_exception",
-						paramValue);
-				FacesUtil.addError(message);
-			}
-		}
 	}
 
 	public void addProcedureDetailAction() {
@@ -245,10 +238,16 @@ public class ProcedureBacking extends BaseBacking {
 				FacesUtil.addError(message);
 			}
 
+			if (this.noRepeat && this.noRepeatDays == 0) {
+				message = FacesUtil.getMessage("prc_msg_error_repeat");
+				FacesUtil.addError(message);
+			}
+
 			if (message == null) {
 				listProcedureDetail.add(new CrmProcedureDetail(new BigDecimal(
 						-1), selected, this.name, timeDoctor, timeNurses,
-						timeStretchers, false, (short)0, Constant.STATE_ACTIVE, null));
+						timeStretchers, false, (short) 0,
+						Constant.STATE_ACTIVE, null));
 				modelProcedureDetail = new ProcedureDetailDataModel(
 						listProcedureDetail);
 
@@ -264,10 +263,6 @@ public class ProcedureBacking extends BaseBacking {
 	}
 
 	public void generateListAction(ActionEvent event) {
-		listProcedureDetail = tablesService
-				.getListProcedureDetailByProcedure(selected.getId());
-		modelProcedureDetail = new ProcedureDetailDataModel(listProcedureDetail);
-
 		List<CrmBranch> listTargetBranch = new LinkedList<CrmBranch>();
 		List<CrmBranch> listSourceBranch = new LinkedList<CrmBranch>();
 
@@ -298,12 +293,57 @@ public class ProcedureBacking extends BaseBacking {
 				listTargetBranch);
 	}
 
-	public DualListModel<CrmBranch> getListModelBranch() {
-		return listModelBranch;
+	public void generateListDetailAction(ActionEvent event) {
+		listProcedureDetail = tablesService
+				.getListProcedureDetailByProcedure(selected.getId());
+		modelProcedureDetail = new ProcedureDetailDataModel(listProcedureDetail);
 	}
 
-	public void setListModelBranch(DualListModel<CrmBranch> listModelBranch) {
-		this.listModelBranch = listModelBranch;
+	public void saveAction() {
+		String message = null;
+
+		if (listModelBranch.getTarget().size() == 0) {
+			message = FacesUtil.getMessage("prc_msg_error_branch");
+			FacesUtil.addError(message);
+		}
+
+		if (message == null) {
+			int result = tablesService.saveProcedure(selected);
+			if (result == 0) {
+				tablesService.saveProcedureBranch(selected,
+						listModelBranch.getTarget());
+
+				list = tablesService.getListProcedure();
+				model = new ProcedureDataModel(list);
+				message = FacesUtil.getMessage("msg_record_ok");
+				FacesUtil.addInfo(message);
+			} else if (result == -1) {
+				String paramValue = FacesUtil.getMessage("prc_name");
+				message = FacesUtil.getMessage("msg_record_unique_exception",
+						paramValue);
+				FacesUtil.addError(message);
+			}
+		}
 	}
 
+	public void saveDetailAction() {
+		String message = null;
+
+		if (listProcedureDetail.size() == 0) {
+			message = FacesUtil.getMessage("prc_msg_error_detail");
+			FacesUtil.addError(message);
+		}
+
+		if (message == null) {
+			tablesService.saveProcedureDetail(selected, listProcedureDetail);
+
+			tablesService.saveProcedureBranch(selected,
+					listModelBranch.getTarget());
+
+			list = tablesService.getListProcedure();
+			model = new ProcedureDataModel(list);
+			message = FacesUtil.getMessage("msg_record_ok");
+			FacesUtil.addInfo(message);
+		}
+	}
 }

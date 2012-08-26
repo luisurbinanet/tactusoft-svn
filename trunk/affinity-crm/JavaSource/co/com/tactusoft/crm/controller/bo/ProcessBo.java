@@ -114,7 +114,7 @@ public class ProcessBo implements Serializable {
 	public List<CrmMaterialGroup> getListMaterialGroup() {
 		return dao.find("from CrmMaterialGroup");
 	}
-	
+
 	public List<CrmCieMaterial> getListCieMaterial() {
 		return dao.find("from CrmCieMaterial");
 	}
@@ -994,10 +994,14 @@ public class ProcessBo implements Serializable {
 	public int savePatient(CrmPatient entity, boolean automatic) {
 		if (entity.getId() == null) {
 			BigDecimal id = getId(CrmPatient.class);
-			String doc = entity.getCountry()
-					+ FacesUtil.lpad(id.toString(), '0', 8);
-			entity.setDoc(doc);
-			entity.setCodeSap(doc);
+			if (automatic) {
+				String doc = entity.getCountry()
+						+ FacesUtil.lpad(id.toString(), '0', 8);
+				entity.setDoc(doc);
+				entity.setCodeSap(doc);
+			} else {
+				entity.setCodeSap(entity.getDoc());
+			}
 			entity.setId(id);
 		}
 		return dao.persist(entity);
@@ -1206,6 +1210,22 @@ public class ProcessBo implements Serializable {
 						+ idPatient
 						+ " order by o.crmAppointment.startAppointmentDate desc");
 		return list;
+	}
+
+	public Date getMaxDateByProcedure(BigDecimal idPatient,
+			BigDecimal idProcedureDetail) {
+		Date result = null;
+		List<Date> list = dao
+				.find("select max(o.startAppointmentDate) from CrmAppointment o where o.crmPatient.id = "
+						+ idPatient
+						+ " and o.crmProcedureDetail.id = "
+						+ idProcedureDetail);
+
+		if (list.size() > 0) {
+			result = list.get(0);
+		}
+
+		return result;
 	}
 
 }

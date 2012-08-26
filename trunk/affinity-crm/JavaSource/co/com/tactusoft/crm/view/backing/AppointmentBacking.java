@@ -531,26 +531,71 @@ public class AppointmentBacking extends BaseBacking {
 	public void searchAppointMentAction() {
 		CrmProcedureDetail procedureDetail = mapProcedureDetail
 				.get(idProcedureDetail);
+		boolean validateNoRepeat = true;
+		infoMessage = null;
 
-		if (this.renderedForDate) {
-			if (currentTime == null) {
-				String field = FacesUtil.getMessage("app_start_hour");
-				infoMessage = FacesUtil.getMessage("glb_required", field);
-			} else {
+		if (selectedPatient == null || selectedPatient.getId() == null) {
+			infoMessage = FacesUtil.getMessage("app_msg_error_pat");
+		} else {
+
+			if (this.renderedForDate) {
+				if (currentTime == 0) {
+					String field = FacesUtil.getMessage("app_start_hour");
+					infoMessage = FacesUtil.getMessage("glb_required", field);
+				}
+			}
+
+			if (procedureDetail.getNoRepeat()
+					&& procedureDetail.getNoRepeatDays() > 0
+					&& infoMessage == null) {
+				Date maxDate = processService.getMaxDateByProcedure(
+						selectedPatient.getId(), procedureDetail.getId());
+				maxDate = FacesUtil.getDateWithoutTime(maxDate);
+
+				Date currentDate = null;
+				if (this.renderedForDate) {
+					currentDate = new Date(this.currentTime);
+				} else {
+					currentDate = new Date(this.currentDate.getTime());
+				}
+
+				currentDate = FacesUtil.getDateWithoutTime(currentDate);
+				long diff = currentDate.getTime() - maxDate.getTime();
+				diff = diff / (1000 * 60 * 60 * 24);
+				if (diff < procedureDetail.getNoRepeatDays()) {
+					validateNoRepeat = false;
+				}
+			}
+		}
+
+		if (validateNoRepeat && infoMessage == null) {
+			if (this.renderedForDate) {
 				listAppointment = processService.getScheduleAppointmentForDate(
 						mapBranch.get(idBranch), new Date(this.currentTime),
 						procedureDetail);
+			} else if (this.renderedForDoctor) {
+				CrmDoctor doctor = mapDoctor.get(selected.getCrmDoctor()
+						.getId());
+				listAppointment = processService
+						.getScheduleAppointmentForDoctor(
+								mapBranch.get(idBranch), doctor,
+								this.appointmentsNumber, procedureDetail,
+								this.currentDate);
 			}
-		} else if (this.renderedForDoctor) {
-			CrmDoctor doctor = mapDoctor.get(selected.getCrmDoctor().getId());
-			listAppointment = processService.getScheduleAppointmentForDoctor(
-					mapBranch.get(idBranch), doctor, this.appointmentsNumber,
-					procedureDetail, this.currentDate);
-		}
 
-		modelAppointment = new CandidateDataModel(listAppointment);
-		if (listAppointment.size() > 0) {
-			selectedAppointment = listAppointment.get(0);
+			modelAppointment = new CandidateDataModel(listAppointment);
+			if (listAppointment.size() > 0) {
+				selectedAppointment = listAppointment.get(0);
+			}
+		} else {
+			listAppointment = new ArrayList<Candidate>();
+			modelAppointment = new CandidateDataModel(listAppointment);
+			selectedAppointment = null;
+			if (!validateNoRepeat) {
+				String message = procedureDetail.getNoRepeatDays().toString();
+				infoMessage = FacesUtil.getMessage("app_msg_error_procedure",
+						message);
+			}
 		}
 	}
 

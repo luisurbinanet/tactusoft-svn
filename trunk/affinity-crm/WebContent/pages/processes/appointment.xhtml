@@ -27,7 +27,7 @@
 							icon="ui-icon-circle-check" oncomplete="dlg2.show()"
 							update=":editForm:dialog2" />
 						<p:commandButton id="btnSearch" value="#{msg['btn_search_app']}"
-							icon="ui-icon-search" update=":editForm:dialog3"
+							icon="ui-icon-search" update=":editForm:dialog3 pnlDetail4"
 							action="#{appointmentBacking.searchAppointMentAction}"
 							disabled="#{appointmentBacking.disabledSearch}"
 							oncomplete="dlg3.show()" />
@@ -266,6 +266,11 @@
 				<p:dialog header="#{msg['app_avalaible']}" widgetVar="dlg3"
 					resizable="false" id="dialog3" showEffect="fade"
 					hideEffect="explode" modal="true" width="700">
+
+					<h:outputText value="#{appointmentBacking.infoMessage}"
+						style="font-size:large;font-weight:bold;" />
+
+					<p:spacer rendered="#{appointmentBacking.infoMessage ne null}" />
 
 					<p:dataTable id="selectedTable" var="rec"
 						value="#{appointmentBacking.modelAppointment}" rowKey="#{rec.id}"
