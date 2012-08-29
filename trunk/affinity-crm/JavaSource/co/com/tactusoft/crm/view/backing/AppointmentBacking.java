@@ -550,20 +550,21 @@ public class AppointmentBacking extends BaseBacking {
 					&& infoMessage == null) {
 				Date maxDate = processService.getMaxDateByProcedure(
 						selectedPatient.getId(), procedureDetail.getId());
-				maxDate = FacesUtil.getDateWithoutTime(maxDate);
+				if (maxDate != null) {
+					maxDate = FacesUtil.getDateWithoutTime(maxDate);
+					Date currentDate = null;
+					if (this.renderedForDate) {
+						currentDate = new Date(this.currentTime);
+					} else {
+						currentDate = new Date(this.currentDate.getTime());
+					}
 
-				Date currentDate = null;
-				if (this.renderedForDate) {
-					currentDate = new Date(this.currentTime);
-				} else {
-					currentDate = new Date(this.currentDate.getTime());
-				}
-
-				currentDate = FacesUtil.getDateWithoutTime(currentDate);
-				long diff = currentDate.getTime() - maxDate.getTime();
-				diff = diff / (1000 * 60 * 60 * 24);
-				if (diff < procedureDetail.getNoRepeatDays()) {
-					validateNoRepeat = false;
+					currentDate = FacesUtil.getDateWithoutTime(currentDate);
+					long diff = currentDate.getTime() - maxDate.getTime();
+					diff = diff / (1000 * 60 * 60 * 24);
+					if (diff < procedureDetail.getNoRepeatDays()) {
+						validateNoRepeat = false;
+					}
 				}
 			}
 		}
