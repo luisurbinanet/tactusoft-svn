@@ -89,8 +89,12 @@
 						<h:outputLabel value="#{rec.crmPatient.doc}" />
 					</p:column>
 
+					<p:column headerText="#{msg['pat_surnames']}">
+						<h:outputLabel value="#{rec.crmPatient.surnames}" />
+					</p:column>
+					
 					<p:column headerText="#{msg['pat_names']}">
-						<h:outputLabel value="#{rec.crmPatient.names}" />
+						<h:outputLabel value="#{rec.crmPatient.firstnames}" />
 					</p:column>
 
 					<p:column headerText="#{msg['app_date']}">
