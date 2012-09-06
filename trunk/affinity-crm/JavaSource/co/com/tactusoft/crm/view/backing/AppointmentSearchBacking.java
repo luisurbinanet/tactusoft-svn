@@ -16,9 +16,10 @@ import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
+import co.com.tactusoft.crm.model.entities.VwAppointment;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
-import co.com.tactusoft.crm.view.datamodel.AppointmentDataModel;
+import co.com.tactusoft.crm.view.datamodel.VwAppointmentDataModel;
 
 @Named
 @Scope("view")
@@ -40,8 +41,8 @@ public class AppointmentSearchBacking extends BaseBacking {
 	private Date endDate;
 	private int state;
 
-	private List<CrmAppointment> listAppointment;
-	private AppointmentDataModel appointmentModel;
+	private List<VwAppointment> listAppointment;
+	private VwAppointmentDataModel appointmentModel;
 	private CrmAppointment selectedAppointment;
 
 	private boolean disabledSaveButton;
@@ -140,19 +141,19 @@ public class AppointmentSearchBacking extends BaseBacking {
 		this.state = state;
 	}
 
-	public List<CrmAppointment> getListAppointment() {
+	public List<VwAppointment> getListAppointment() {
 		return listAppointment;
 	}
 
-	public void setListAppointment(List<CrmAppointment> listAppointment) {
+	public void setListAppointment(List<VwAppointment> listAppointment) {
 		this.listAppointment = listAppointment;
 	}
 
-	public AppointmentDataModel getAppointmentModel() {
+	public VwAppointmentDataModel getAppointmentModel() {
 		return appointmentModel;
 	}
 
-	public void setAppointmentModel(AppointmentDataModel appointmentModel) {
+	public void setAppointmentModel(VwAppointmentDataModel appointmentModel) {
 		this.appointmentModel = appointmentModel;
 	}
 
@@ -173,8 +174,8 @@ public class AppointmentSearchBacking extends BaseBacking {
 	}
 
 	public void newAction(ActionEvent event) {
-		listAppointment = new LinkedList<CrmAppointment>();
-		appointmentModel = new AppointmentDataModel(listAppointment);
+		listAppointment = new LinkedList<VwAppointment>();
+		appointmentModel = new VwAppointmentDataModel(listAppointment);
 		selectedAppointment = new CrmAppointment();
 
 		startDate = new Date();
@@ -224,16 +225,16 @@ public class AppointmentSearchBacking extends BaseBacking {
 		String startDateString = FacesUtil.formatDate(startDate, "yyyy-MM-dd");
 		String endDateString = FacesUtil.formatDate(endDate, "yyyy-MM-dd");
 
-		String where = "from CrmAppointment o where (o.startAppointmentDate between '"
+		String where = "from VwAppointment o where (o.startAppointmentDate between '"
 				+ startDateString
 				+ "T00:00:00.000+05:00' and '"
 				+ endDateString + "T23:59:59.999+05:00')";
 
 		if (idBranch.intValue() != -1) {
-			where = where + " and o.crmBranch.id = " + idBranch.intValue();
+			where = where + " and o.branchId = " + idBranch.intValue();
 
 			if (idDoctor.intValue() == -1) {
-				String doctors = " and o.crmDoctor.id in (";
+				String doctors = " and o.doctorId in (";
 				for (SelectItem item : listDoctor) {
 					if (((BigDecimal) item.getValue()).intValue() != -1) {
 						doctors = doctors + item.getValue() + ",";
@@ -242,11 +243,11 @@ public class AppointmentSearchBacking extends BaseBacking {
 				doctors = doctors.substring(0, doctors.length() - 1) + ")";
 				where = where + doctors;
 			} else {
-				where = where + " and o.crmDoctor.id = " + idDoctor.intValue();
+				where = where + " and o.doctorId = " + idDoctor.intValue();
 			}
 
 			if (idProcedure.intValue() == -1) {
-				String procedures = " and o.crmProcedureDetail.id in (";
+				String procedures = " and o.prcDetId in (";
 				for (SelectItem item : listProcedure) {
 					if (((BigDecimal) item.getValue()).intValue() != -1) {
 						procedures = procedures + item.getValue() + ",";
@@ -257,11 +258,10 @@ public class AppointmentSearchBacking extends BaseBacking {
 				where = where + procedures;
 
 			} else {
-				where = where + " and o.crmProcedureDetail.id = "
-						+ idProcedure.intValue();
+				where = where + " and o.prcDetId = " + idProcedure.intValue();
 			}
 		} else {
-			String branchs = " and o.crmBranch.id in (";
+			String branchs = " and o.branchId in (";
 			for (SelectItem item : listBranch) {
 				if (((BigDecimal) item.getValue()).intValue() != -1) {
 					branchs = branchs + item.getValue() + ",";
@@ -276,7 +276,7 @@ public class AppointmentSearchBacking extends BaseBacking {
 		}
 
 		listAppointment = processService.getListAppointmentByCriteria(where);
-		appointmentModel = new AppointmentDataModel(listAppointment);
+		appointmentModel = new VwAppointmentDataModel(listAppointment);
 	}
 
 	public boolean isDisabledExport() {

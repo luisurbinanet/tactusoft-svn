@@ -85,46 +85,56 @@
 						<h:outputLabel value="#{rec.code}" />
 					</p:column>
 
-					<p:column headerText="#{msg['pat_code']}">
-						<h:outputLabel value="#{rec.crmPatient.doc}" />
+					<p:column headerText="#{msg['pat_code_1']}">
+						<h:outputLabel value="#{rec.patCode}" />
 					</p:column>
 
 					<p:column headerText="#{msg['pat_surnames']}">
-						<h:outputLabel value="#{rec.crmPatient.surnames}" />
+						<h:outputLabel value="#{rec.patSurnames}" />
 					</p:column>
-					
+
 					<p:column headerText="#{msg['pat_names']}">
-						<h:outputLabel value="#{rec.crmPatient.firstnames}" />
+						<h:outputLabel value="#{rec.patFirstnames}" />
 					</p:column>
 
 					<p:column headerText="#{msg['app_date']}">
 						<h:outputLabel value="#{rec.startAppointmentDate}">
-							<f:convertDateTime pattern="dd/MM/yyyy" />
-						</h:outputLabel>
-					</p:column>
-
-					<p:column headerText="#{msg['app_start_hour']}">
-						<h:outputLabel value="#{rec.startAppointmentDate}">
-							<f:convertDateTime pattern="HH:mm" />
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
 						</h:outputLabel>
 					</p:column>
 
 					<p:column headerText="#{msg['app_branch']}">
-						<h:outputLabel value="#{rec.crmBranch.name}" />
+						<h:outputLabel value="#{rec.branchName}" />
 					</p:column>
 
 					<p:column headerText="#{msg['app_doctor']}">
-						<h:outputLabel value="#{rec.crmDoctor.names}" />
+						<h:outputLabel value="#{rec.doctorNames}" />
 					</p:column>
 
 					<p:column headerText="#{msg['app_procedure']}">
-						<h:outputLabel value="#{rec.crmProcedureDetail.name}" />
+						<h:outputLabel value="#{rec.prcDetName}" />
 					</p:column>
 
 					<p:column headerText="#{msg['app_state']}">
 						<h:outputLabel
 							value="#{rec.state eq 1?'Agendada':rec.state eq 2?'Cancelada':rec.state eq 3?'Chequeada':rec.state eq 4?'Asistió a Consulta':'No Asistió a Consulta'}" />
 					</p:column>
+
+					<p:column headerText="#{msg['app_username_created']}">
+						<h:outputLabel value="#{rec.userCreateCode}" />
+					</p:column>
+
+					<p:column headerText="#{msg['app_username_modified']}">
+						<h:outputLabel value="#{rec.userModifiedCode}" />
+					</p:column>
+
+					<!--  <p:column headerText="#{msg['app_username_checked']}">
+						<h:outputLabel value="#{rec.userCheckedCode}" />
+					</p:column>
+
+					<p:column headerText="#{msg['app_username_canceled']}">
+						<h:outputLabel value="#{rec.userCanceledCode}" />
+					</p:column>-->
 
 				</p:dataTable>
 

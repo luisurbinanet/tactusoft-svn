@@ -13,9 +13,10 @@ INTO TABLE crm_doctor_schedule
 FIELDS TERMINATED BY ';';
 
 create or replace view vw_appointment as
-select 	a.id, 
+select a.id, 
 		a.code, 
 		a.start_appointment_date,
+		a.end_appointment_date,
 		a.state,
 		b.id pat_id,
 		b.doc pat_code,
@@ -24,6 +25,8 @@ select 	a.id,
 		b.firstnames pat_firstnames,
 		b.phone_number pat_phone_number,
 		b.cell_number pat_cell_number,
+		c.id prc_det_id,
+		c.name prc_det_name,
 		d.id branch_id,
 		d.code branch_code,
 		d.name branch_name,
