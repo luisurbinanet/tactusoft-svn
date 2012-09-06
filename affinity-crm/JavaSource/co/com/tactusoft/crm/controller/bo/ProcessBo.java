@@ -31,6 +31,7 @@ import co.com.tactusoft.crm.model.entities.CrmNote;
 import co.com.tactusoft.crm.model.entities.CrmNurse;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
+import co.com.tactusoft.crm.model.entities.VwAppointment;
 import co.com.tactusoft.crm.model.entities.VwDoctorHour;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
@@ -960,8 +961,8 @@ public class ProcessBo implements Serializable {
 		return list;
 	}
 
-	public List<CrmAppointment> getListAppointmentByCriteria(String where) {
-		List<CrmAppointment> list = dao.find(where
+	public List<VwAppointment> getListAppointmentByCriteria(String where) {
+		List<VwAppointment> list = dao.find(where
 				+ " order by o.startAppointmentDate asc");
 
 		return list;
