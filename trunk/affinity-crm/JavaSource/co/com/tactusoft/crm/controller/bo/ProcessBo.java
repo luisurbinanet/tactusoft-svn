@@ -152,7 +152,7 @@ public class ProcessBo implements Serializable {
 	private List<CrmHoliday> getListHoliday(Date date, BigDecimal idBranch) {
 		String currenDate = FacesUtil.formatDate(date, "yyyy-MM-dd");
 		return dao
-				.find("select o.crmHoliday from CrmHolidayBranch o where o.crmHoliday.holiday >= '"
+				.find("select o.crmHoliday from CrmHolidayBranch o where o.crmHoliday.holiday = '"
 						+ currenDate
 						+ "T00:00:00.000+05:00' and o.crmBranch.id = "
 						+ idBranch);
@@ -992,7 +992,8 @@ public class ProcessBo implements Serializable {
 		}
 	}
 
-	public int savePatient(CrmPatient entity, boolean automatic) {
+	public int savePatient(CrmPatient entity, boolean automatic,
+			boolean existsSAP) {
 		if (entity.getId() == null) {
 			BigDecimal id = getId(CrmPatient.class);
 			if (automatic) {
@@ -1001,7 +1002,9 @@ public class ProcessBo implements Serializable {
 				entity.setDoc(doc);
 				entity.setCodeSap(doc);
 			} else {
-				entity.setCodeSap(entity.getDoc());
+				if (!existsSAP) {
+					entity.setCodeSap(entity.getDoc());
+				}
 			}
 			entity.setId(id);
 		}

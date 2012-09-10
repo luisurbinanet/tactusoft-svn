@@ -15,9 +15,6 @@ import javax.persistence.Table;
 @Table(name = "vw_appointment", catalog = "crm_db")
 public class VwAppointment implements java.io.Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
 	private String code;
@@ -44,29 +41,33 @@ public class VwAppointment implements java.io.Serializable {
 	private String userCreateCode;
 	private String userCreateNames;
 	private String userCreateSurnames;
+	private Date dateCreate;
 	private BigDecimal userModifiedId;
 	private String userModifiedCode;
 	private String userModifiedNames;
 	private String userModifiedSurnames;
+	private Date dateModified;
 	private BigDecimal userCheckedId;
 	private String userCheckedCode;
 	private String userCheckedNames;
 	private String userCheckedSurnames;
+	private Date dateChecked;
 	private BigDecimal userCanceledId;
 	private String userCanceledCode;
 	private String userCanceledNames;
 	private String userCanceledSurnames;
+	private Date dateCanceled;
 
 	public VwAppointment() {
 	}
 
-	public VwAppointment(BigDecimal id, String code,
-			Date startAppointmentDate, Date endAppointmentDate, int state,
-			BigDecimal patId, String patCode, String patCodeSap,
-			BigDecimal prcDetId, String prcDetName, BigDecimal branchId,
-			BigDecimal doctorId, String doctorCode, String doctorNames,
-			BigDecimal userCreateId, String userCreateCode,
-			String userCreateNames, String userCreateSurnames) {
+	public VwAppointment(BigDecimal id, String code, Date startAppointmentDate,
+			Date endAppointmentDate, int state, BigDecimal patId,
+			String patCode, String patCodeSap, BigDecimal prcDetId,
+			String prcDetName, BigDecimal branchId, BigDecimal doctorId,
+			String doctorCode, String doctorNames, BigDecimal userCreateId,
+			String userCreateCode, String userCreateNames,
+			String userCreateSurnames) {
 		this.id = id;
 		this.code = code;
 		this.startAppointmentDate = startAppointmentDate;
@@ -87,21 +88,23 @@ public class VwAppointment implements java.io.Serializable {
 		this.userCreateSurnames = userCreateSurnames;
 	}
 
-	public VwAppointment(BigDecimal id, String code,
-			Date startAppointmentDate, Date endAppointmentDate, int state,
-			BigDecimal patId, String patCode, String patCodeSap,
-			String patSurnames, String patFirstnames, String patPhoneNumber,
-			String patCellNumber, BigDecimal prcDetId, String prcDetName,
-			BigDecimal branchId, String branchCode, String branchName,
-			String branchSociety, BigDecimal doctorId, String doctorCode,
-			String doctorNames, BigDecimal userCreateId, String userCreateCode,
-			String userCreateNames, String userCreateSurnames,
+	public VwAppointment(BigDecimal id, String code, Date startAppointmentDate,
+			Date endAppointmentDate, int state, BigDecimal patId,
+			String patCode, String patCodeSap, String patSurnames,
+			String patFirstnames, String patPhoneNumber, String patCellNumber,
+			BigDecimal prcDetId, String prcDetName, BigDecimal branchId,
+			String branchCode, String branchName, String branchSociety,
+			BigDecimal doctorId, String doctorCode, String doctorNames,
+			BigDecimal userCreateId, String userCreateCode,
+			String userCreateNames, String userCreateSurnames, Date dateCreate,
 			BigDecimal userModifiedId, String userModifiedCode,
 			String userModifiedNames, String userModifiedSurnames,
-			BigDecimal userCheckedId, String userCheckedCode,
-			String userCheckedNames, String userCheckedSurnames,
+			Date dateModified, BigDecimal userCheckedId,
+			String userCheckedCode, String userCheckedNames,
+			String userCheckedSurnames, Date dateChecked,
 			BigDecimal userCanceledId, String userCanceledCode,
-			String userCanceledNames, String userCanceledSurnames) {
+			String userCanceledNames, String userCanceledSurnames,
+			Date dateCanceled) {
 		this.id = id;
 		this.code = code;
 		this.startAppointmentDate = startAppointmentDate;
@@ -127,18 +130,22 @@ public class VwAppointment implements java.io.Serializable {
 		this.userCreateCode = userCreateCode;
 		this.userCreateNames = userCreateNames;
 		this.userCreateSurnames = userCreateSurnames;
+		this.dateCreate = dateCreate;
 		this.userModifiedId = userModifiedId;
 		this.userModifiedCode = userModifiedCode;
 		this.userModifiedNames = userModifiedNames;
 		this.userModifiedSurnames = userModifiedSurnames;
+		this.dateModified = dateModified;
 		this.userCheckedId = userCheckedId;
 		this.userCheckedCode = userCheckedCode;
 		this.userCheckedNames = userCheckedNames;
 		this.userCheckedSurnames = userCheckedSurnames;
+		this.dateChecked = dateChecked;
 		this.userCanceledId = userCanceledId;
 		this.userCanceledCode = userCanceledCode;
 		this.userCanceledNames = userCanceledNames;
 		this.userCanceledSurnames = userCanceledSurnames;
+		this.dateCanceled = dateCanceled;
 	}
 
 	@Id
@@ -367,6 +374,15 @@ public class VwAppointment implements java.io.Serializable {
 		this.userCreateSurnames = userCreateSurnames;
 	}
 
+	@Column(name = "date_create", length = 19)
+	public Date getDateCreate() {
+		return this.dateCreate;
+	}
+
+	public void setDateCreate(Date dateCreate) {
+		this.dateCreate = dateCreate;
+	}
+
 	@Column(name = "user_modified_id", scale = 0)
 	public BigDecimal getUserModifiedId() {
 		return this.userModifiedId;
@@ -401,6 +417,15 @@ public class VwAppointment implements java.io.Serializable {
 
 	public void setUserModifiedSurnames(String userModifiedSurnames) {
 		this.userModifiedSurnames = userModifiedSurnames;
+	}
+
+	@Column(name = "date_modified", length = 19)
+	public Date getDateModified() {
+		return this.dateModified;
+	}
+
+	public void setDateModified(Date dateModified) {
+		this.dateModified = dateModified;
 	}
 
 	@Column(name = "user_checked_id", scale = 0)
@@ -439,6 +464,15 @@ public class VwAppointment implements java.io.Serializable {
 		this.userCheckedSurnames = userCheckedSurnames;
 	}
 
+	@Column(name = "date_checked", length = 19)
+	public Date getDateChecked() {
+		return this.dateChecked;
+	}
+
+	public void setDateChecked(Date dateChecked) {
+		this.dateChecked = dateChecked;
+	}
+
 	@Column(name = "user_canceled_id", scale = 0)
 	public BigDecimal getUserCanceledId() {
 		return this.userCanceledId;
@@ -473,6 +507,364 @@ public class VwAppointment implements java.io.Serializable {
 
 	public void setUserCanceledSurnames(String userCanceledSurnames) {
 		this.userCanceledSurnames = userCanceledSurnames;
+	}
+
+	@Column(name = "date_canceled", length = 19)
+	public Date getDateCanceled() {
+		return this.dateCanceled;
+	}
+
+	public void setDateCanceled(Date dateCanceled) {
+		this.dateCanceled = dateCanceled;
+	}
+
+	public boolean equals(Object other) {
+		if ((this == other))
+			return true;
+		if ((other == null))
+			return false;
+		if (!(other instanceof VwAppointment))
+			return false;
+		VwAppointment castOther = (VwAppointment) other;
+
+		return ((this.getId() == castOther.getId()) || (this.getId() != null
+				&& castOther.getId() != null && this.getId().equals(
+				castOther.getId())))
+				&& ((this.getCode() == castOther.getCode()) || (this.getCode() != null
+						&& castOther.getCode() != null && this.getCode()
+						.equals(castOther.getCode())))
+				&& ((this.getStartAppointmentDate() == castOther
+						.getStartAppointmentDate()) || (this
+						.getStartAppointmentDate() != null
+						&& castOther.getStartAppointmentDate() != null && this
+						.getStartAppointmentDate().equals(
+								castOther.getStartAppointmentDate())))
+				&& ((this.getEndAppointmentDate() == castOther
+						.getEndAppointmentDate()) || (this
+						.getEndAppointmentDate() != null
+						&& castOther.getEndAppointmentDate() != null && this
+						.getEndAppointmentDate().equals(
+								castOther.getEndAppointmentDate())))
+				&& (this.getState() == castOther.getState())
+				&& ((this.getPatId() == castOther.getPatId()) || (this
+						.getPatId() != null && castOther.getPatId() != null && this
+						.getPatId().equals(castOther.getPatId())))
+				&& ((this.getPatCode() == castOther.getPatCode()) || (this
+						.getPatCode() != null && castOther.getPatCode() != null && this
+						.getPatCode().equals(castOther.getPatCode())))
+				&& ((this.getPatCodeSap() == castOther.getPatCodeSap()) || (this
+						.getPatCodeSap() != null
+						&& castOther.getPatCodeSap() != null && this
+						.getPatCodeSap().equals(castOther.getPatCodeSap())))
+				&& ((this.getPatSurnames() == castOther.getPatSurnames()) || (this
+						.getPatSurnames() != null
+						&& castOther.getPatSurnames() != null && this
+						.getPatSurnames().equals(castOther.getPatSurnames())))
+				&& ((this.getPatFirstnames() == castOther.getPatFirstnames()) || (this
+						.getPatFirstnames() != null
+						&& castOther.getPatFirstnames() != null && this
+						.getPatFirstnames()
+						.equals(castOther.getPatFirstnames())))
+				&& ((this.getPatPhoneNumber() == castOther.getPatPhoneNumber()) || (this
+						.getPatPhoneNumber() != null
+						&& castOther.getPatPhoneNumber() != null && this
+						.getPatPhoneNumber().equals(
+								castOther.getPatPhoneNumber())))
+				&& ((this.getPatCellNumber() == castOther.getPatCellNumber()) || (this
+						.getPatCellNumber() != null
+						&& castOther.getPatCellNumber() != null && this
+						.getPatCellNumber()
+						.equals(castOther.getPatCellNumber())))
+				&& ((this.getPrcDetId() == castOther.getPrcDetId()) || (this
+						.getPrcDetId() != null
+						&& castOther.getPrcDetId() != null && this
+						.getPrcDetId().equals(castOther.getPrcDetId())))
+				&& ((this.getPrcDetName() == castOther.getPrcDetName()) || (this
+						.getPrcDetName() != null
+						&& castOther.getPrcDetName() != null && this
+						.getPrcDetName().equals(castOther.getPrcDetName())))
+				&& ((this.getBranchId() == castOther.getBranchId()) || (this
+						.getBranchId() != null
+						&& castOther.getBranchId() != null && this
+						.getBranchId().equals(castOther.getBranchId())))
+				&& ((this.getBranchCode() == castOther.getBranchCode()) || (this
+						.getBranchCode() != null
+						&& castOther.getBranchCode() != null && this
+						.getBranchCode().equals(castOther.getBranchCode())))
+				&& ((this.getBranchName() == castOther.getBranchName()) || (this
+						.getBranchName() != null
+						&& castOther.getBranchName() != null && this
+						.getBranchName().equals(castOther.getBranchName())))
+				&& ((this.getBranchSociety() == castOther.getBranchSociety()) || (this
+						.getBranchSociety() != null
+						&& castOther.getBranchSociety() != null && this
+						.getBranchSociety()
+						.equals(castOther.getBranchSociety())))
+				&& ((this.getDoctorId() == castOther.getDoctorId()) || (this
+						.getDoctorId() != null
+						&& castOther.getDoctorId() != null && this
+						.getDoctorId().equals(castOther.getDoctorId())))
+				&& ((this.getDoctorCode() == castOther.getDoctorCode()) || (this
+						.getDoctorCode() != null
+						&& castOther.getDoctorCode() != null && this
+						.getDoctorCode().equals(castOther.getDoctorCode())))
+				&& ((this.getDoctorNames() == castOther.getDoctorNames()) || (this
+						.getDoctorNames() != null
+						&& castOther.getDoctorNames() != null && this
+						.getDoctorNames().equals(castOther.getDoctorNames())))
+				&& ((this.getUserCreateId() == castOther.getUserCreateId()) || (this
+						.getUserCreateId() != null
+						&& castOther.getUserCreateId() != null && this
+						.getUserCreateId().equals(castOther.getUserCreateId())))
+				&& ((this.getUserCreateCode() == castOther.getUserCreateCode()) || (this
+						.getUserCreateCode() != null
+						&& castOther.getUserCreateCode() != null && this
+						.getUserCreateCode().equals(
+								castOther.getUserCreateCode())))
+				&& ((this.getUserCreateNames() == castOther
+						.getUserCreateNames()) || (this.getUserCreateNames() != null
+						&& castOther.getUserCreateNames() != null && this
+						.getUserCreateNames().equals(
+								castOther.getUserCreateNames())))
+				&& ((this.getUserCreateSurnames() == castOther
+						.getUserCreateSurnames()) || (this
+						.getUserCreateSurnames() != null
+						&& castOther.getUserCreateSurnames() != null && this
+						.getUserCreateSurnames().equals(
+								castOther.getUserCreateSurnames())))
+				&& ((this.getDateCreate() == castOther.getDateCreate()) || (this
+						.getDateCreate() != null
+						&& castOther.getDateCreate() != null && this
+						.getDateCreate().equals(castOther.getDateCreate())))
+				&& ((this.getUserModifiedId() == castOther.getUserModifiedId()) || (this
+						.getUserModifiedId() != null
+						&& castOther.getUserModifiedId() != null && this
+						.getUserModifiedId().equals(
+								castOther.getUserModifiedId())))
+				&& ((this.getUserModifiedCode() == castOther
+						.getUserModifiedCode()) || (this.getUserModifiedCode() != null
+						&& castOther.getUserModifiedCode() != null && this
+						.getUserModifiedCode().equals(
+								castOther.getUserModifiedCode())))
+				&& ((this.getUserModifiedNames() == castOther
+						.getUserModifiedNames()) || (this
+						.getUserModifiedNames() != null
+						&& castOther.getUserModifiedNames() != null && this
+						.getUserModifiedNames().equals(
+								castOther.getUserModifiedNames())))
+				&& ((this.getUserModifiedSurnames() == castOther
+						.getUserModifiedSurnames()) || (this
+						.getUserModifiedSurnames() != null
+						&& castOther.getUserModifiedSurnames() != null && this
+						.getUserModifiedSurnames().equals(
+								castOther.getUserModifiedSurnames())))
+				&& ((this.getDateModified() == castOther.getDateModified()) || (this
+						.getDateModified() != null
+						&& castOther.getDateModified() != null && this
+						.getDateModified().equals(castOther.getDateModified())))
+				&& ((this.getUserCheckedId() == castOther.getUserCheckedId()) || (this
+						.getUserCheckedId() != null
+						&& castOther.getUserCheckedId() != null && this
+						.getUserCheckedId()
+						.equals(castOther.getUserCheckedId())))
+				&& ((this.getUserCheckedCode() == castOther
+						.getUserCheckedCode()) || (this.getUserCheckedCode() != null
+						&& castOther.getUserCheckedCode() != null && this
+						.getUserCheckedCode().equals(
+								castOther.getUserCheckedCode())))
+				&& ((this.getUserCheckedNames() == castOther
+						.getUserCheckedNames()) || (this.getUserCheckedNames() != null
+						&& castOther.getUserCheckedNames() != null && this
+						.getUserCheckedNames().equals(
+								castOther.getUserCheckedNames())))
+				&& ((this.getUserCheckedSurnames() == castOther
+						.getUserCheckedSurnames()) || (this
+						.getUserCheckedSurnames() != null
+						&& castOther.getUserCheckedSurnames() != null && this
+						.getUserCheckedSurnames().equals(
+								castOther.getUserCheckedSurnames())))
+				&& ((this.getDateChecked() == castOther.getDateChecked()) || (this
+						.getDateChecked() != null
+						&& castOther.getDateChecked() != null && this
+						.getDateChecked().equals(castOther.getDateChecked())))
+				&& ((this.getUserCanceledId() == castOther.getUserCanceledId()) || (this
+						.getUserCanceledId() != null
+						&& castOther.getUserCanceledId() != null && this
+						.getUserCanceledId().equals(
+								castOther.getUserCanceledId())))
+				&& ((this.getUserCanceledCode() == castOther
+						.getUserCanceledCode()) || (this.getUserCanceledCode() != null
+						&& castOther.getUserCanceledCode() != null && this
+						.getUserCanceledCode().equals(
+								castOther.getUserCanceledCode())))
+				&& ((this.getUserCanceledNames() == castOther
+						.getUserCanceledNames()) || (this
+						.getUserCanceledNames() != null
+						&& castOther.getUserCanceledNames() != null && this
+						.getUserCanceledNames().equals(
+								castOther.getUserCanceledNames())))
+				&& ((this.getUserCanceledSurnames() == castOther
+						.getUserCanceledSurnames()) || (this
+						.getUserCanceledSurnames() != null
+						&& castOther.getUserCanceledSurnames() != null && this
+						.getUserCanceledSurnames().equals(
+								castOther.getUserCanceledSurnames())))
+				&& ((this.getDateCanceled() == castOther.getDateCanceled()) || (this
+						.getDateCanceled() != null
+						&& castOther.getDateCanceled() != null && this
+						.getDateCanceled().equals(castOther.getDateCanceled())));
+	}
+
+	public int hashCode() {
+		int result = 17;
+
+		result = 37 * result + (getId() == null ? 0 : this.getId().hashCode());
+		result = 37 * result
+				+ (getCode() == null ? 0 : this.getCode().hashCode());
+		result = 37
+				* result
+				+ (getStartAppointmentDate() == null ? 0 : this
+						.getStartAppointmentDate().hashCode());
+		result = 37
+				* result
+				+ (getEndAppointmentDate() == null ? 0 : this
+						.getEndAppointmentDate().hashCode());
+		result = 37 * result + this.getState();
+		result = 37 * result
+				+ (getPatId() == null ? 0 : this.getPatId().hashCode());
+		result = 37 * result
+				+ (getPatCode() == null ? 0 : this.getPatCode().hashCode());
+		result = 37
+				* result
+				+ (getPatCodeSap() == null ? 0 : this.getPatCodeSap()
+						.hashCode());
+		result = 37
+				* result
+				+ (getPatSurnames() == null ? 0 : this.getPatSurnames()
+						.hashCode());
+		result = 37
+				* result
+				+ (getPatFirstnames() == null ? 0 : this.getPatFirstnames()
+						.hashCode());
+		result = 37
+				* result
+				+ (getPatPhoneNumber() == null ? 0 : this.getPatPhoneNumber()
+						.hashCode());
+		result = 37
+				* result
+				+ (getPatCellNumber() == null ? 0 : this.getPatCellNumber()
+						.hashCode());
+		result = 37 * result
+				+ (getPrcDetId() == null ? 0 : this.getPrcDetId().hashCode());
+		result = 37
+				* result
+				+ (getPrcDetName() == null ? 0 : this.getPrcDetName()
+						.hashCode());
+		result = 37 * result
+				+ (getBranchId() == null ? 0 : this.getBranchId().hashCode());
+		result = 37
+				* result
+				+ (getBranchCode() == null ? 0 : this.getBranchCode()
+						.hashCode());
+		result = 37
+				* result
+				+ (getBranchName() == null ? 0 : this.getBranchName()
+						.hashCode());
+		result = 37
+				* result
+				+ (getBranchSociety() == null ? 0 : this.getBranchSociety()
+						.hashCode());
+		result = 37 * result
+				+ (getDoctorId() == null ? 0 : this.getDoctorId().hashCode());
+		result = 37
+				* result
+				+ (getDoctorCode() == null ? 0 : this.getDoctorCode()
+						.hashCode());
+		result = 37
+				* result
+				+ (getDoctorNames() == null ? 0 : this.getDoctorNames()
+						.hashCode());
+		result = 37
+				* result
+				+ (getUserCreateId() == null ? 0 : this.getUserCreateId()
+						.hashCode());
+		result = 37
+				* result
+				+ (getUserCreateCode() == null ? 0 : this.getUserCreateCode()
+						.hashCode());
+		result = 37
+				* result
+				+ (getUserCreateNames() == null ? 0 : this.getUserCreateNames()
+						.hashCode());
+		result = 37
+				* result
+				+ (getUserCreateSurnames() == null ? 0 : this
+						.getUserCreateSurnames().hashCode());
+		result = 37
+				* result
+				+ (getDateCreate() == null ? 0 : this.getDateCreate()
+						.hashCode());
+		result = 37
+				* result
+				+ (getUserModifiedId() == null ? 0 : this.getUserModifiedId()
+						.hashCode());
+		result = 37
+				* result
+				+ (getUserModifiedCode() == null ? 0 : this
+						.getUserModifiedCode().hashCode());
+		result = 37
+				* result
+				+ (getUserModifiedNames() == null ? 0 : this
+						.getUserModifiedNames().hashCode());
+		result = 37
+				* result
+				+ (getUserModifiedSurnames() == null ? 0 : this
+						.getUserModifiedSurnames().hashCode());
+		result = 37
+				* result
+				+ (getDateModified() == null ? 0 : this.getDateModified()
+						.hashCode());
+		result = 37
+				* result
+				+ (getUserCheckedId() == null ? 0 : this.getUserCheckedId()
+						.hashCode());
+		result = 37
+				* result
+				+ (getUserCheckedCode() == null ? 0 : this.getUserCheckedCode()
+						.hashCode());
+		result = 37
+				* result
+				+ (getUserCheckedNames() == null ? 0 : this
+						.getUserCheckedNames().hashCode());
+		result = 37
+				* result
+				+ (getUserCheckedSurnames() == null ? 0 : this
+						.getUserCheckedSurnames().hashCode());
+		result = 37
+				* result
+				+ (getDateChecked() == null ? 0 : this.getDateChecked()
+						.hashCode());
+		result = 37
+				* result
+				+ (getUserCanceledId() == null ? 0 : this.getUserCanceledId()
+						.hashCode());
+		result = 37
+				* result
+				+ (getUserCanceledCode() == null ? 0 : this
+						.getUserCanceledCode().hashCode());
+		result = 37
+				* result
+				+ (getUserCanceledNames() == null ? 0 : this
+						.getUserCanceledNames().hashCode());
+		result = 37
+				* result
+				+ (getUserCanceledSurnames() == null ? 0 : this
+						.getUserCanceledSurnames().hashCode());
+		result = 37
+				* result
+				+ (getDateCanceled() == null ? 0 : this.getDateCanceled()
+						.hashCode());
+		return result;
 	}
 
 }

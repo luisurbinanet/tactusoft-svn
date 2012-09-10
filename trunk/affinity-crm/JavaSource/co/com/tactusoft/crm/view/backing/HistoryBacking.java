@@ -946,7 +946,7 @@ public class HistoryBacking extends BaseBacking {
 			selectedHistoryPhysique.setCrmPatient(selectedPatient);
 			selectedHistoryOrganometry.setCrmPatient(selectedPatient);
 
-			int result = processService.savePatient(selectedPatient, false);
+			int result = processService.savePatient(selectedPatient, false, false);
 			if (result == 0) {
 
 				if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getHead())) {

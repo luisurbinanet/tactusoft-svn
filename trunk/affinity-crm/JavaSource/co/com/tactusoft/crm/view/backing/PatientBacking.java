@@ -57,7 +57,7 @@ public class PatientBacking extends BaseBacking {
 	private List<String> selectedSendOptions;
 
 	private boolean disabledSaveButton;
-	private boolean exitsSAP;
+	private boolean existsSAP;
 	private boolean automatic;
 
 	private String docSearch;
@@ -196,12 +196,20 @@ public class PatientBacking extends BaseBacking {
 		this.disabledSaveButton = disabledSaveButton;
 	}
 
-	public boolean isExitsSAP() {
-		return exitsSAP;
+	public boolean isExistsSAP() {
+		return existsSAP;
 	}
 
-	public void setExitsSAP(boolean exitsSAP) {
-		this.exitsSAP = exitsSAP;
+	public void setExistsSAP(boolean existsSAP) {
+		this.existsSAP = existsSAP;
+	}
+
+	public boolean isNewRecord() {
+		return newRecord;
+	}
+
+	public void setNewRecord(boolean newRecord) {
+		this.newRecord = newRecord;
 	}
 
 	public boolean isAutomatic() {
@@ -302,7 +310,7 @@ public class PatientBacking extends BaseBacking {
 		selected.setGender("-1");
 		selected.setCycle(false);
 		disabledSaveButton = false;
-		exitsSAP = false;
+		existsSAP = false;
 		newRecord = true;
 		docSearch = null;
 	}
@@ -345,10 +353,11 @@ public class PatientBacking extends BaseBacking {
 	public void searchAction() {
 		String message = null;
 		selected = processService.getPatientByDoc(this.docSearch);
-		exitsSAP = false;
+		existsSAP = false;
 		if (selected.getId() == null) {
 			SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
-			CrmProfile profile = mapProfile.get(idProfile);
+			CrmProfile profile = mapProfile.get(this.idProfile);
+			selected.setIdProfile(profile.getId());
 
 			List<WSBean> listPatient = CustomerExecute.findByDoc(
 					sap.getUrlCustomer2(), sap.getUsername(),
@@ -367,7 +376,7 @@ public class PatientBacking extends BaseBacking {
 					message = FacesUtil.getMessage("pat_msg_no_exists");
 					FacesUtil.addWarn(message);
 				} else {
-					exitsSAP = true;
+					existsSAP = true;
 					selected.setDoc(this.docSearch);
 					selected.setCodeSap(customer.getCodeSap());
 					selected.setFirstnames(customer.getFirstname());
@@ -397,7 +406,7 @@ public class PatientBacking extends BaseBacking {
 				FacesUtil.addWarn(message);
 			}
 		} else {
-			exitsSAP = true;
+			existsSAP = true;
 			newRecord = false;
 			searchIdCountry(selected.getCountry());
 			searchIdRegion(selected.getRegion());
@@ -409,18 +418,18 @@ public class PatientBacking extends BaseBacking {
 		String message = null;
 		try {
 			SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
-			CrmProfile profile = mapProfile.get(idProfile);
+			CrmProfile profile = mapProfile.get(selected.getIdProfile());
 			List<WSBean> customer = new LinkedList<WSBean>();
 
 			if (newRecord) {
-				if (!exitsSAP || !automatic) {
+				if (!existsSAP || !automatic) {
 					customer = CustomerExecute.findByDoc(sap.getUrlCustomer2(),
 							sap.getUsername(), sap.getPassword(),
 							profile.getSociety(), selected.getDoc(), 0);
 				}
 			}
 
-			if (exitsSAP || automatic || customer.size() == 0) {
+			if (existsSAP || automatic || customer.size() == 0) {
 				String tratamiento = "Señor";
 				if (selected.getGender().equals("W")) {
 					tratamiento = "Señora";
@@ -474,10 +483,11 @@ public class PatientBacking extends BaseBacking {
 
 				selected.setCrmUserByIdUserCreate(FacesUtil.getCurrentUser());
 				selected.setDateCreate(new Date());
-				processService.savePatient(selected, automatic && newRecord);
+				processService.savePatient(selected, automatic && newRecord,
+						existsSAP);
 
 				String codeSap = null;
-				if (!exitsSAP || newRecord) {
+				if (!existsSAP || newRecord) {
 					codeSap = CustomerExecute.excecute(
 							sap.getUrlCustomerMaintainAll(), sap.getUsername(),
 							sap.getPassword(), sap.getEnvironment(), "13",
@@ -512,12 +522,15 @@ public class PatientBacking extends BaseBacking {
 								codeSap);
 					}
 
-					processService.savePatient(selected, automatic);
+					if (!existsSAP) {
+						processService.savePatient(selected, automatic,
+								existsSAP);
+					}
 					FacesUtil.addInfo(message);
 
 					disabledSaveButton = true;
 					newRecord = false;
-					exitsSAP = true;
+					existsSAP = true;
 				}
 
 			} else {
