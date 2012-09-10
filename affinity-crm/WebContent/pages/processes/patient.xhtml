@@ -49,14 +49,15 @@
 					columnClasses="width250per,width250per,width250per,width250per">
 
 					<h:outputText value="#{msg['usr_profile']}" style="width:100%" />
-					<p:selectOneMenu value="#{patientBacking.idProfile}"
-						style="width:248px" required="true" label="#{msg['usr_profile']}">
-						<f:selectItems value="#{patientBacking.listProfile}" var="pat" />
+					<p:selectOneMenu value="#{patientBacking.selected.idProfile}"
+						style="width:248px" required="true" label="#{msg['usr_profile']}"
+						disabled="#{not patientBacking.newRecord}">
+						<f:selectItems value="#{patientBacking.listProfile}" />
 					</p:selectOneMenu>
 
 					<h:outputText value="#{msg['pat_country']}" style="width:100%" />
 					<p:selectOneMenu value="#{patientBacking.idCountry}"
-						disabled="#{patientBacking.exitsSAP}" style="width:248px"
+						disabled="#{patientBacking.existsSAP}" style="width:248px"
 						required="true" label="#{msg['pat_country']}">
 						<f:selectItems value="#{patientBacking.listCountry}" />
 						<p:ajax update="selRegion selCity pnlDetail2"
@@ -87,20 +88,20 @@
 					width="100%">
 
 					<h:outputLabel id="lblDoc" value="#{msg['pat_code']}"
-						rendered="#{!patientBacking.automatic or (!patientBacking.automatic and patientBacking.exitsSAP)}" />
+						rendered="#{!patientBacking.automatic or (!patientBacking.automatic and patientBacking.existsSAP)}" />
 					<p:inputText id="txtDoc" value="#{patientBacking.selected.doc}"
 						style="width:240px;" label="#{msg['pat_code']}" required="true"
-						readonly="#{patientBacking.exitsSAP}" maxlength="10"
-						rendered="#{!patientBacking.automatic or (!patientBacking.automatic and patientBacking.exitsSAP)}" />
+						readonly="#{patientBacking.existsSAP}" maxlength="10"
+						rendered="#{!patientBacking.automatic or (!patientBacking.automatic and patientBacking.existsSAP)}" />
 
 					<h:outputLabel id="lblDocAutomatic"
 						value="#{msg['pat_autonumeric']}"
-						rendered="#{(patientBacking.automatic and patientBacking.disabledSaveButton) or (patientBacking.automatic and patientBacking.exitsSAP)}" />
+						rendered="#{(patientBacking.automatic and patientBacking.disabledSaveButton) or (patientBacking.automatic and patientBacking.existsSAP)}" />
 					<p:inputText id="txtDocAutomatic"
 						value="#{patientBacking.selected.doc}" readonly="true"
 						style="width:240px;background-color:#FFFF80;font-weight:bold;"
 						label="#{msg['pat_code']}" maxlength="10"
-						rendered="#{(patientBacking.automatic and patientBacking.disabledSaveButton) or (patientBacking.automatic and patientBacking.exitsSAP)}" />
+						rendered="#{(patientBacking.automatic and patientBacking.disabledSaveButton) or (patientBacking.automatic and patientBacking.existsSAP)}" />
 
 					<h:outputLabel value="#{msg['pat_sap_code']}"
 						rendered="#{patientBacking.disabledSaveButton}" />
@@ -110,9 +111,9 @@
 						rendered="#{patientBacking.disabledSaveButton}" />
 
 					<h:outputText
-						rendered="#{(!patientBacking.automatic and !patientBacking.disabledSaveButton) or (patientBacking.exitsSAP)}" />
+						rendered="#{(!patientBacking.automatic and !patientBacking.disabledSaveButton) or (patientBacking.existsSAP)}" />
 					<h:outputText
-						rendered="#{(!patientBacking.automatic and !patientBacking.disabledSaveButton) or (patientBacking.exitsSAP)}" />
+						rendered="#{(!patientBacking.automatic and !patientBacking.disabledSaveButton) or (patientBacking.existsSAP)}" />
 				</h:panelGrid>
 
 				<h:panelGrid id="pnlDetail3" columns="4" cellspacing="5"
@@ -195,6 +196,13 @@
 					<h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;"
 						width="100%">
 
+						<h:outputText value="#{msg['usr_profile']}" style="width:100%" />
+						<p:selectOneMenu id="selProfileSearch"
+							value="#{patientBacking.idProfile}" style="width:248px"
+							required="true" label="#{msg['usr_profile']}">
+							<f:selectItems value="#{patientBacking.listProfile}" />
+						</p:selectOneMenu>
+
 						<h:outputLabel value="#{msg['pat_code']}" />
 						<p:inputText id="txtDocSearch" value="#{patientBacking.docSearch}"
 							style="width:240px;" label="#{msg['pat_code']}" required="true"
@@ -204,7 +212,8 @@
 							<p:commandButton value="#{msg['btn_search']}"
 								icon="ui-icon-search" action="#{patientBacking.searchAction}"
 								update="growl pnlDetail pnlDetail2 pnlDetail3 toolBar"
-								oncomplete="searchDlg.hide();" process="@this,txtDocSearch" />
+								oncomplete="searchDlg.hide();"
+								process="@this,txtDocSearch,selProfileSearch" />
 						</f:facet>
 
 					</h:panelGrid>

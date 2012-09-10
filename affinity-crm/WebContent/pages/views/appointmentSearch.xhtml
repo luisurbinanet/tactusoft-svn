@@ -123,6 +123,12 @@
 					<p:column headerText="#{msg['app_username_created']}">
 						<h:outputLabel value="#{rec.userCreateCode}" />
 					</p:column>
+					
+					<p:column headerText="#{msg['app_created_date']}">
+						<h:outputLabel value="#{rec.dateCreate}">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+						</h:outputLabel>
+					</p:column>
 
 					<p:column headerText="#{msg['app_username_modified']}">
 						<h:outputLabel value="#{rec.userModifiedCode}" />
