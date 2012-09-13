@@ -119,11 +119,16 @@ public class CustomerExecute {
 
 		String names = apellidos17 + " " + nombres17;
 
+		String doc10 = nroDocumento;
+		if (doc10.length() > 10) {
+			doc10 = doc10.substring(0, 10);
+		}
+
 		Kna1 ziKna1 = new Kna1();
 		ziKna1.setMandt(ambiente);
 		ziKna1.setAnred(tratamiento);
 		ziKna1.setName1(names);
-		ziKna1.setSortl(nroDocumento);
+		ziKna1.setSortl(doc10);
 		ziKna1.setKtokd(grupoCuenta);
 		ziKna1.setLand1(pais);
 		ziKna1.setOrt01(ciudad);
@@ -270,9 +275,9 @@ public class CustomerExecute {
 			personalDataX.setCity("X");
 			personalDataX.setEMail("X");
 
-			result = Zfi_customers2Proxy.customerChangeFromData1(null,
-					null, customerNo, canalDistribucion, division, null,
-					null, null, null, bapikna1011, personalDataX, orgVentas);
+			result = Zfi_customers2Proxy.customerChangeFromData1(null, null,
+					customerNo, canalDistribucion, division, null, null, null,
+					null, bapikna1011, personalDataX, orgVentas);
 
 		} catch (RemoteException e) {
 			e.printStackTrace();
