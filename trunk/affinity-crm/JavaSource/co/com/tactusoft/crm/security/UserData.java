@@ -35,6 +35,7 @@ public class UserData implements UserDetails {
 	private List<CrmParameter> listParameter;
 	private List<WSBean> listWSGroupSellers;
 	private List<WSBean> listWSMaterials;
+	private List<WSBean> listWSDocType;
 	private CrmPatient selectedPatient;
 	private String rolePrincipal;
 
@@ -153,6 +154,14 @@ public class UserData implements UserDetails {
 
 	public void setListWSMaterials(List<WSBean> listWSMaterials) {
 		this.listWSMaterials = listWSMaterials;
+	}
+
+	public List<WSBean> getListWSDocType() {
+		return listWSDocType;
+	}
+
+	public void setListWSDocType(List<WSBean> listWSDocType) {
+		this.listWSDocType = listWSDocType;
 	}
 
 	public CrmPatient getSelectedPatient() {

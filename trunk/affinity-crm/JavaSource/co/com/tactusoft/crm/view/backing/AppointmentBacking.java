@@ -27,6 +27,8 @@ import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.beans.Candidate;
+import co.com.tactusoft.crm.view.beans.ResultSearchAppointment;
+import co.com.tactusoft.crm.view.beans.ResultSearchDate;
 import co.com.tactusoft.crm.view.datamodel.CandidateDataModel;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 
@@ -78,6 +80,7 @@ public class AppointmentBacking extends BaseBacking {
 
 	private int minutes = 0;
 	private String timeType = null;
+	private String infoMessageDate;
 
 	public AppointmentBacking() {
 		newAction(null);
@@ -320,6 +323,14 @@ public class AppointmentBacking extends BaseBacking {
 
 	public void setSaved(boolean saved) {
 		this.saved = saved;
+	}
+
+	public String getInfoMessageDate() {
+		return infoMessageDate;
+	}
+
+	public void setInfoMessageDate(String infoMessageDate) {
+		this.infoMessageDate = infoMessageDate;
 	}
 
 	public void newAction(ActionEvent event) {
@@ -571,17 +582,21 @@ public class AppointmentBacking extends BaseBacking {
 
 		if (validateNoRepeat && infoMessage == null) {
 			if (this.renderedForDate) {
-				listAppointment = processService.getScheduleAppointmentForDate(
-						mapBranch.get(idBranch), new Date(this.currentTime),
-						procedureDetail);
+				ResultSearchAppointment resultSearchAppointment = processService
+						.getScheduleAppointmentForDate(mapBranch.get(idBranch),
+								new Date(this.currentTime), procedureDetail);
+				listAppointment = resultSearchAppointment.getListCandidate();
+				infoMessage = resultSearchAppointment.getMessage();
 			} else if (this.renderedForDoctor) {
 				CrmDoctor doctor = mapDoctor.get(selected.getCrmDoctor()
 						.getId());
-				listAppointment = processService
+				ResultSearchAppointment resultSearchAppointment = processService
 						.getScheduleAppointmentForDoctor(
 								mapBranch.get(idBranch), doctor,
 								this.appointmentsNumber, procedureDetail,
 								this.currentDate);
+				listAppointment = resultSearchAppointment.getListCandidate();
+				infoMessage = resultSearchAppointment.getMessage();
 			}
 
 			modelAppointment = new CandidateDataModel(listAppointment);
@@ -710,8 +725,11 @@ public class AppointmentBacking extends BaseBacking {
 			date = event.getDate();
 		}
 
-		List<Date> list = processService.getListcandidatesHours(date,
-				mapBranch.get(idBranch), minutes, timeType);
+		ResultSearchDate resultSearchDate = processService
+				.getListcandidatesHours(date, mapBranch.get(idBranch), minutes,
+						timeType);
+		List<Date> list = resultSearchDate.getListDate();
+		infoMessageDate = resultSearchDate.getMessage();
 
 		listTimes = new ArrayList<SelectItem>();
 		String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);

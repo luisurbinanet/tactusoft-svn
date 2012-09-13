@@ -7,7 +7,7 @@
 body {
 	margin: 0 auto;
 	padding: 22px 0;
-	width: 1400px;
+	width: 1150px;
 	font: 13px/22px Helvetica, Arial, sans-serif;
 	background: white;
 }
@@ -19,7 +19,7 @@ body {
 
 #mainContent {
 	display: table-cell;
-	width: 1400px;
+	width: 1150px;
 	padding-right: 22px;
 }
 
@@ -200,6 +200,10 @@ input,select,textarea {
 }
 
 .mypanelgrid td {
-border-style: none !important;
-padding: 2px 2px;
+	border-style: none !important;
+	padding: 2px 2px;
+}
+
+.ui-widget,.ui-widget .ui-widget {
+	font-size: 90% !important;
 }

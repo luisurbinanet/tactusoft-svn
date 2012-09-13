@@ -36,6 +36,8 @@ import co.com.tactusoft.crm.model.entities.VwDoctorHour;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.beans.Candidate;
+import co.com.tactusoft.crm.view.beans.ResultSearchAppointment;
+import co.com.tactusoft.crm.view.beans.ResultSearchDate;
 
 @Named
 public class ProcessBo implements Serializable {
@@ -272,9 +274,11 @@ public class ProcessBo implements Serializable {
 		return result;
 	}
 
-	public List<Date> getListcandidatesHours(Date currentDate,
+	public ResultSearchDate getListcandidatesHours(Date currentDate,
 			CrmBranch branch, int minutes, String timeType) {
 		List<Date> result = new ArrayList<Date>();
+		String message = null;
+
 		BigDecimal idBranch = branch.getId();
 
 		String dateString = FacesUtil.formatDate(currentDate, "yyyy-MM-dd");
@@ -433,9 +437,15 @@ public class ProcessBo implements Serializable {
 					} while (!end);
 				}
 			}
-
+		} else {
+			message = FacesUtil.getMessage("app_msg_error_1");
 		}
-		return result;
+
+		ResultSearchDate resultSearchDate = new ResultSearchDate();
+		resultSearchDate.setListDate(result);
+		resultSearchDate.setMessage(message);
+
+		return resultSearchDate;
 	}
 
 	private List<Date> getListcandidatesHours(Date initHour, Date endHour) {
@@ -454,11 +464,12 @@ public class ProcessBo implements Serializable {
 		return candidatesHours;
 	}
 
-	public List<Candidate> getScheduleAppointmentForDoctor(CrmBranch branch,
-			CrmDoctor doctor, int numApp, CrmProcedureDetail procedureDetail,
-			Date selectedDate) {
+	public ResultSearchAppointment getScheduleAppointmentForDoctor(
+			CrmBranch branch, CrmDoctor doctor, int numApp,
+			CrmProcedureDetail procedureDetail, Date selectedDate) {
 
 		List<Candidate> result = new ArrayList<Candidate>();
+		String message = null;
 		int id = 1;
 
 		int minutes = 0;
@@ -600,16 +611,24 @@ public class ProcessBo implements Serializable {
 							}
 						}
 					}
+				} else {
+					message = FacesUtil.getMessage("app_msg_error_1");
 				}
 			}
 		}
 
-		return result;
+		ResultSearchAppointment resultSearchAppointment = new ResultSearchAppointment();
+		resultSearchAppointment.setListCandidate(result);
+		resultSearchAppointment.setMessage(message);
+
+		return resultSearchAppointment;
 	}
 
-	public List<Candidate> getScheduleAppointmentForDate(CrmBranch branch,
-			Date selectedDate, CrmProcedureDetail procedureDetail) {
+	public ResultSearchAppointment getScheduleAppointmentForDate(
+			CrmBranch branch, Date selectedDate,
+			CrmProcedureDetail procedureDetail) {
 		List<Candidate> result = new ArrayList<Candidate>();
+		String message = null;
 
 		int minutes = 0;
 		String timeType = null;
@@ -738,7 +757,11 @@ public class ProcessBo implements Serializable {
 			}
 		}
 
-		return result;
+		ResultSearchAppointment resultSearchAppointment = new ResultSearchAppointment();
+		resultSearchAppointment.setListCandidate(result);
+		resultSearchAppointment.setMessage(message);
+
+		return resultSearchAppointment;
 	}
 
 	private int validateDuplicated(String patient, Date startDate, Date endDate) {

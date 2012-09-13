@@ -172,20 +172,14 @@ public class DaoAuthenticationProviderCustom extends
 				user.setListWSMaterials(new ArrayList<WSBean>());
 			}
 
-			/*
-			 * List<WSBean> result = new ArrayList<WSBean>(); WSBean bean = new
-			 * WSBean(); bean.setCode("001"); bean.setNames("MEDICAMENTO 1");
-			 * bean.setType("01"); result.add(bean); bean = new WSBean();
-			 * bean.setCode("002"); bean.setNames("MEDICAMENTO 2");
-			 * bean.setType("01"); result.add(bean);bean = new WSBean();
-			 * bean.setCode("003"); bean.setNames("MEDICAMENTO 3");
-			 * bean.setType("05"); result.add(bean); bean = new WSBean();
-			 * bean.setCode("004"); bean.setNames("MEDICAMENTO 4");
-			 * bean.setType("01"); result.add(bean); bean = new WSBean();
-			 * bean.setCode("005"); bean.setNames("MEDICAMENTO 5");
-			 * bean.setType("05"); result.add(bean);
-			 * user.setListWSMaterials(result);
-			 */
+			try {
+				List<WSBean> result = CustomListsExecute.getDocTypes(
+						sap.getUrlWebList(), sap.getUsername(),
+						sap.getPassword());
+				user.setListWSDocType(result);
+			} catch (Exception ex) {
+				user.setListWSDocType(new ArrayList<WSBean>());
+			}
 
 			CrmDoctor doctor = tableService
 					.getCrmDoctor(user.getUser().getId());
