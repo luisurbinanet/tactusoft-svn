@@ -198,6 +198,29 @@ public class CustomListsExecute {
 		Collections.sort(list, new WSBeanComparator());
 		return list;
 	}
+	
+	public static List<WSBean> getDocTypes(String url, String user,
+			String password) {
+		List<WSBean> list = new ArrayList<WSBean>();
+		Zweblistline[] result = getCustomLists(url, user, password,
+				"TIPOS_DOCUMENTO");
+
+		for (Zweblistline row : result) {
+			if (row.getText1().toString().equals("S")
+					&& !row.getText2().toString().isEmpty()
+					&& !row.getText3().toString().isEmpty()) {
+
+				WSBean bean = new WSBean();
+				bean.setCode(row.getText2().toString());
+				bean.setNames(row.getText3().toString());
+				bean.setType(row.getText4().toString());
+				list.add(bean);
+			}
+		}
+
+		Collections.sort(list, new WSBeanComparator());
+		return list;
+	}
 
 	public static List<WSBean> getCenters(String url, String user,
 			String password) {
@@ -244,7 +267,7 @@ public class CustomListsExecute {
 	}
 
 	public static void main(String args[]) {
-		List<WSBean> list = getMaterials(
+		List<WSBean> list = getDocTypes(
 				"http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zweblist/300/zweblist/zweblist",
 				"TACTUSOFT", "AFFINITY");
 		for (WSBean row : list) {
