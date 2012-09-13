@@ -27,6 +27,8 @@ import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.beans.Candidate;
+import co.com.tactusoft.crm.view.beans.ResultSearchAppointment;
+import co.com.tactusoft.crm.view.beans.ResultSearchDate;
 import co.com.tactusoft.crm.view.datamodel.CandidateDataModel;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 
@@ -512,15 +514,18 @@ public class AppointmentEditBacking extends BaseBacking {
 				String field = FacesUtil.getMessage("app_start_hour");
 				infoMessage = FacesUtil.getMessage("glb_required", field);
 			} else {
-				listAppointment = processService.getScheduleAppointmentForDate(
-						mapBranch.get(idBranch), new Date(this.currentTime),
-						procedureDetail);
+				ResultSearchAppointment resultSearchAppointment = processService
+						.getScheduleAppointmentForDate(mapBranch.get(idBranch),
+								new Date(this.currentTime), procedureDetail);
+				listAppointment = resultSearchAppointment.getListCandidate();
 			}
 		} else if (this.renderedForDoctor) {
 			CrmDoctor doctor = mapDoctor.get(selected.getCrmDoctor().getId());
-			listAppointment = processService.getScheduleAppointmentForDoctor(
-					mapBranch.get(idBranch), doctor, this.appointmentsNumber,
-					procedureDetail, this.currentDate);
+			ResultSearchAppointment resultSearchAppointment = processService
+					.getScheduleAppointmentForDoctor(mapBranch.get(idBranch),
+							doctor, this.appointmentsNumber, procedureDetail,
+							this.currentDate);
+			listAppointment = resultSearchAppointment.getListCandidate();
 		}
 
 		modelAppointment = new CandidateDataModel(listAppointment);
@@ -613,8 +618,11 @@ public class AppointmentEditBacking extends BaseBacking {
 			date = event.getDate();
 		}
 
-		List<Date> list = processService.getListcandidatesHours(date,
-				mapBranch.get(idBranch), minutes, timeType);
+		ResultSearchDate resultSearchDate = processService
+				.getListcandidatesHours(date, mapBranch.get(idBranch), minutes,
+						timeType);
+		List<Date> list = resultSearchDate.getListDate();
+		String message = resultSearchDate.getMessage();
 
 		listTimes = new ArrayList<SelectItem>();
 		String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);

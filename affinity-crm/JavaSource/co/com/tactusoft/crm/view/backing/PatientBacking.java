@@ -37,6 +37,9 @@ public class PatientBacking extends BaseBacking {
 	private PatientDataModel model;
 	private CrmPatient selected;
 
+	private List<SelectItem> listDocType;
+	private String docType;
+
 	private List<SelectItem> listBranch;
 	private String salesOff;
 
@@ -92,6 +95,28 @@ public class PatientBacking extends BaseBacking {
 
 	public void setSelected(CrmPatient selected) {
 		this.selected = selected;
+	}
+
+	public List<SelectItem> getListDocType() {
+		if (listDocType == null) {
+			listDocType = new LinkedList<SelectItem>();
+			for (WSBean row : FacesUtil.getCurrentUserData().getListWSDocType()) {
+				listDocType.add(new SelectItem(row.getCode(), row.getNames()));
+			}
+		}
+		return listDocType;
+	}
+
+	public void setListDocType(List<SelectItem> listDocType) {
+		this.listDocType = listDocType;
+	}
+
+	public String getDocType() {
+		return docType;
+	}
+
+	public void setDocType(String docType) {
+		this.docType = docType;
 	}
 
 	public List<SelectItem> getListBranch() {

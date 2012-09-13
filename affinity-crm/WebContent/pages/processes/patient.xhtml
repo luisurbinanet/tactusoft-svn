@@ -87,6 +87,13 @@
 					columnClasses="width250per,width250per,width250per,width250per"
 					width="100%">
 
+					<h:outputLabel id="lblDocType" value="#{msg['pat_type_code']}"
+						rendered="#{!patientBacking.automatic}" />
+					<p:selectOneMenu value="#{patientBacking.docType}"
+						rendered="#{!patientBacking.automatic}" style="width:248px">
+						<f:selectItems value="#{patientBacking.listDocType}" />
+					</p:selectOneMenu>
+
 					<h:outputLabel id="lblDoc" value="#{msg['pat_code']}"
 						rendered="#{!patientBacking.automatic or (!patientBacking.automatic and patientBacking.existsSAP)}" />
 					<p:inputText id="txtDoc" value="#{patientBacking.selected.doc}"

@@ -106,22 +106,28 @@
 
 					<h:outputLabel id="lblCurrentDate" value="#{msg['app_date']}"
 						rendered="#{appointmentBacking.renderedForDate or appointmentBacking.renderedForDoctor}" />
-					<p:calendar value="#{appointmentBacking.currentDate}"
-						id="calCurrentDate" showOn="button" navigator="true"
-						pattern="dd/MM/yyyy" readonlyInput="true"
-						mindate="#{appointmentBacking.currentDate}"
-						rendered="#{appointmentBacking.renderedForDate or appointmentBacking.renderedForDoctor}"
-						locale="es">
-						<p:ajax event="dateSelect"
-							listener="#{appointmentBacking.handleDateSelect}"
-							update="selHours" />
-					</p:calendar>
+					<h:panelGrid columns="2">
+						<p:calendar value="#{appointmentBacking.currentDate}"
+							id="calCurrentDate" showOn="button" navigator="true"
+							pattern="dd/MM/yyyy" readonlyInput="true"
+							mindate="#{appointmentBacking.currentDate}"
+							rendered="#{appointmentBacking.renderedForDate or appointmentBacking.renderedForDoctor}"
+							locale="es">
+							<p:ajax event="dateSelect"
+								listener="#{appointmentBacking.handleDateSelect}"
+								update="selHours lblMessageDate" />
+						</p:calendar>
+						<h:outputLabel id="lblMessageDate" style="font-weight:bold;"
+							value="#{appointmentBacking.infoMessageDate}"
+							rendered="#{appointmentBacking.renderedForDate}" />
+					</h:panelGrid>
 
 					<h:outputLabel id="lblCurrentHour" value="#{msg['app_start_hour']}"
 						rendered="#{appointmentBacking.renderedForDate}" />
 					<p:selectOneMenu id="selHours" style="width:700px"
 						rendered="#{appointmentBacking.renderedForDate}"
-						value="#{appointmentBacking.currentTime}">
+						value="#{appointmentBacking.currentTime}"
+						disabled="#{appointmentBacking.infoMessageDate ne null}">
 						<f:selectItems value="#{appointmentBacking.listTimes}" />
 					</p:selectOneMenu>
 
