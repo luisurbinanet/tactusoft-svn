@@ -38,7 +38,6 @@ public class PatientBacking extends BaseBacking {
 	private CrmPatient selected;
 
 	private List<SelectItem> listDocType;
-	private String docType;
 
 	private List<SelectItem> listBranch;
 	private String salesOff;
@@ -98,25 +97,11 @@ public class PatientBacking extends BaseBacking {
 	}
 
 	public List<SelectItem> getListDocType() {
-		if (listDocType == null) {
-			listDocType = new LinkedList<SelectItem>();
-			for (WSBean row : FacesUtil.getCurrentUserData().getListWSDocType()) {
-				listDocType.add(new SelectItem(row.getCode(), row.getNames()));
-			}
-		}
 		return listDocType;
 	}
 
 	public void setListDocType(List<SelectItem> listDocType) {
 		this.listDocType = listDocType;
-	}
-
-	public String getDocType() {
-		return docType;
-	}
-
-	public void setDocType(String docType) {
-		this.docType = docType;
 	}
 
 	public List<SelectItem> getListBranch() {
@@ -302,6 +287,15 @@ public class PatientBacking extends BaseBacking {
 				listRegion = new LinkedList<SelectItem>();
 				listCity = new LinkedList<SelectItem>();
 			}
+
+			listDocType = new LinkedList<SelectItem>();
+			for (WSBean row : FacesUtil.getCurrentUserData().getListWSDocType()) {
+				if (row.getNames().contains(crmCountry.getCode())) {
+					listDocType.add(new SelectItem(row.getCode(), row
+							.getNames()));
+				}
+			}
+
 		} else {
 			idRegion = null;
 			idCity = null;
@@ -332,6 +326,7 @@ public class PatientBacking extends BaseBacking {
 	public void newAction(ActionEvent event) {
 		optionSearchPatient = 1;
 		selected = new CrmPatient();
+		selected.setCrmProfile(new CrmProfile());
 		selected.setGender("-1");
 		selected.setCycle(false);
 		disabledSaveButton = false;
@@ -342,8 +337,17 @@ public class PatientBacking extends BaseBacking {
 
 	private void searchIdCountry(String countryCode) {
 		idCountry = null;
-		for (Map.Entry<BigDecimal, CrmCountry> entry : mapCountry.entrySet()) {
-			if (entry.getValue().getCode().equals(countryCode)) {
+		if (!FacesUtil.isEmptyOrBlank(countryCode)) {
+			for (Map.Entry<BigDecimal, CrmCountry> entry : mapCountry
+					.entrySet()) {
+				if (entry.getValue().getCode().equals(countryCode)) {
+					idCountry = entry.getValue().getId();
+					break;
+				}
+			}
+		} else {
+			for (Map.Entry<BigDecimal, CrmCountry> entry : mapCountry
+					.entrySet()) {
 				idCountry = entry.getValue().getId();
 				break;
 			}
@@ -353,8 +357,15 @@ public class PatientBacking extends BaseBacking {
 
 	private void searchIdRegion(String regionCode) {
 		idRegion = null;
-		for (Map.Entry<BigDecimal, CrmRegion> entry : mapRegion.entrySet()) {
-			if (entry.getValue().getCode().equals(regionCode)) {
+		if (!FacesUtil.isEmptyOrBlank(regionCode)) {
+			for (Map.Entry<BigDecimal, CrmRegion> entry : mapRegion.entrySet()) {
+				if (entry.getValue().getCode().equals(regionCode)) {
+					idRegion = entry.getValue().getId();
+					break;
+				}
+			}
+		} else {
+			for (Map.Entry<BigDecimal, CrmRegion> entry : mapRegion.entrySet()) {
 				idRegion = entry.getValue().getId();
 				break;
 			}
@@ -364,14 +375,18 @@ public class PatientBacking extends BaseBacking {
 
 	private void searchIdCity(String cityCode) {
 		idCity = null;
-		for (Map.Entry<BigDecimal, CrmCity> entry : mapCity.entrySet()) {
-			String entryName = FacesUtil.removeCharacter(entry.getValue()
-					.getName());
-			String beanName = FacesUtil.removeCharacter(cityCode);
-			if (entryName.equals(beanName)) {
-				idCity = entry.getValue().getId();
-				break;
+		if (!FacesUtil.isEmptyOrBlank(cityCode)) {
+			for (Map.Entry<BigDecimal, CrmCity> entry : mapCity.entrySet()) {
+				String entryName = FacesUtil.removeCharacter(entry.getValue()
+						.getName());
+				String beanName = FacesUtil.removeCharacter(cityCode);
+				if (entryName.equals(beanName)) {
+					idCity = entry.getValue().getId();
+					break;
+				}
 			}
+		} else {
+
 		}
 	}
 
@@ -382,7 +397,7 @@ public class PatientBacking extends BaseBacking {
 		if (selected.getId() == null) {
 			SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
 			CrmProfile profile = mapProfile.get(this.idProfile);
-			selected.setIdProfile(profile.getId());
+			selected.setCrmProfile(profile);
 
 			List<WSBean> listPatient = CustomerExecute.findByDoc(
 					sap.getUrlCustomer2(), sap.getUsername(),
@@ -410,6 +425,7 @@ public class PatientBacking extends BaseBacking {
 					selected.setPhoneNumber(customer.getPhoneNumber());
 					selected.setEmail(customer.getEmail());
 					selected.setZipCode(customer.getZipCode());
+					selected.setCycle(false);
 
 					try {
 						searchIdCountry(customer.getCountry());
@@ -443,10 +459,12 @@ public class PatientBacking extends BaseBacking {
 		String message = null;
 		try {
 			SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
-			CrmProfile profile = mapProfile.get(selected.getIdProfile());
+			CrmProfile profile = mapProfile.get(selected.getCrmProfile()
+					.getId());
 			List<WSBean> customer = new LinkedList<WSBean>();
 
 			if (newRecord) {
+				selected.setCrmProfile(profile);
 				if (!existsSAP || !automatic) {
 					customer = CustomerExecute.findByDoc(sap.getUrlCustomer2(),
 							sap.getUsername(), sap.getPassword(),
@@ -506,6 +524,12 @@ public class PatientBacking extends BaseBacking {
 					}
 				}
 
+				String docType = selected.getDocType();
+				if (automatic) {
+					docType = crmCountry.getDefaultDocType();
+				}
+
+				selected.setDocType(docType);
 				selected.setCrmUserByIdUserCreate(FacesUtil.getCurrentUser());
 				selected.setDateCreate(new Date());
 				processService.savePatient(selected, automatic && newRecord,
@@ -515,7 +539,7 @@ public class PatientBacking extends BaseBacking {
 				if (!existsSAP || newRecord) {
 					codeSap = CustomerExecute.excecute(
 							sap.getUrlCustomerMaintainAll(), sap.getUsername(),
-							sap.getPassword(), sap.getEnvironment(), "13",
+							sap.getPassword(), sap.getEnvironment(), docType,
 							selected.getDoc(), tratamiento,
 							selected.getSurnames(), selected.getFirstnames(),
 							direccion, selected.getZipCode(),
@@ -527,6 +551,7 @@ public class PatientBacking extends BaseBacking {
 							profile.getSociety(), this.salesOff, "01",
 							profile.getPaymentTerm(), profile.getAccount(),
 							"01", "1", "1", crmCountry.getCurrencyIso());
+
 				} else {
 					codeSap = selected.getCodeSap();
 				}

@@ -281,7 +281,7 @@ public class TablesBo implements Serializable {
 	public List<CrmCieMaterial> getListMaterialbyDiagnosis(
 			BigDecimal idDiagnosis) {
 		return dao.find("from CrmCieMaterial o where o.crmCie.id = "
-				+ idDiagnosis);
+				+ idDiagnosis + " and state = 1");
 	}
 
 	public Integer saveDoctor(CrmDoctor entity) {

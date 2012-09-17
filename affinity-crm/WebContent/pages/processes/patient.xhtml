@@ -49,9 +49,9 @@
 					columnClasses="width250per,width250per,width250per,width250per">
 
 					<h:outputText value="#{msg['usr_profile']}" style="width:100%" />
-					<p:selectOneMenu value="#{patientBacking.selected.idProfile}"
+					<p:selectOneMenu value="#{patientBacking.selected.crmProfile.id}"
 						style="width:248px" required="true" label="#{msg['usr_profile']}"
-						disabled="#{not patientBacking.newRecord}">
+						disabled="#{patientBacking.selected.id ne null}">
 						<f:selectItems value="#{patientBacking.listProfile}" />
 					</p:selectOneMenu>
 
@@ -89,7 +89,7 @@
 
 					<h:outputLabel id="lblDocType" value="#{msg['pat_type_code']}"
 						rendered="#{!patientBacking.automatic}" />
-					<p:selectOneMenu value="#{patientBacking.docType}"
+					<p:selectOneMenu value="#{patientBacking.selected.docType}"
 						rendered="#{!patientBacking.automatic}" style="width:248px">
 						<f:selectItems value="#{patientBacking.listDocType}" />
 					</p:selectOneMenu>
@@ -98,7 +98,7 @@
 						rendered="#{!patientBacking.automatic or (!patientBacking.automatic and patientBacking.existsSAP)}" />
 					<p:inputText id="txtDoc" value="#{patientBacking.selected.doc}"
 						style="width:240px;" label="#{msg['pat_code']}" required="true"
-						readonly="#{patientBacking.existsSAP}" maxlength="10"
+						readonly="#{patientBacking.existsSAP}" maxlength="16"
 						rendered="#{!patientBacking.automatic or (!patientBacking.automatic and patientBacking.existsSAP)}" />
 
 					<h:outputLabel id="lblDocAutomatic"
@@ -213,7 +213,7 @@
 						<h:outputLabel value="#{msg['pat_code']}" />
 						<p:inputText id="txtDocSearch" value="#{patientBacking.docSearch}"
 							style="width:240px;" label="#{msg['pat_code']}" required="true"
-							maxlength="10" />
+							maxlength="16" />
 
 						<f:facet name="footer">
 							<p:commandButton value="#{msg['btn_search']}"

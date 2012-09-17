@@ -5,7 +5,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -26,7 +25,7 @@ import co.com.tactusoft.crm.util.FacesUtil;
  */
 @Entity
 @Table(name = "crm_patient", catalog = "crm_db", uniqueConstraints = {
-		@UniqueConstraint(columnNames = "doc"),
+		@UniqueConstraint(columnNames = { "doc", "doc_type" }),
 		@UniqueConstraint(columnNames = "code_sap") })
 public class CrmPatient implements java.io.Serializable {
 
@@ -35,8 +34,10 @@ public class CrmPatient implements java.io.Serializable {
 	private CrmOccupation crmOccupation;
 	private CrmUser crmUserByIdUserCreate;
 	private CrmUser crmUserByIdUserModified;
+	private CrmProfile crmProfile;
 	private String doc;
 	private String codeSap;
+	private String docType;
 	private String firstnames;
 	private String surnames;
 	private Date bornDate;
@@ -64,7 +65,6 @@ public class CrmPatient implements java.io.Serializable {
 	private String salesOrg;
 	private Date dateCreate;
 	private Date dateModified;
-	private BigDecimal idProfile;
 	private Set<CrmHistoryPhysique> crmHistoryPhysiques = new HashSet<CrmHistoryPhysique>(
 			0);
 	private Set<CrmHistoryHomeopathic> crmHistoryHomeopathics = new HashSet<CrmHistoryHomeopathic>(
@@ -83,24 +83,25 @@ public class CrmPatient implements java.io.Serializable {
 	public CrmPatient() {
 	}
 
-	public CrmPatient(BigDecimal id, String doc, String codeSap) {
+	public CrmPatient(BigDecimal id, String doc, String codeSap, String docType) {
 		this.id = id;
 		this.doc = doc;
 		this.codeSap = codeSap;
+		this.docType = docType;
 	}
 
 	public CrmPatient(BigDecimal id, CrmOccupation crmOccupation,
 			CrmUser crmUserByIdUserCreate, CrmUser crmUserByIdUserModified,
-			String doc, String codeSap, String firstnames, String surnames,
-			Date bornDate, String gender, String address, String zipCode,
-			String neighborhood, String phoneNumber, String cellNumber,
-			String email, String typeHousing, String country, String region,
-			String city, String guardian, String guardianAddress,
+			CrmProfile crmProfile, String doc, String codeSap, String docType,
+			String firstnames, String surnames, Date bornDate, String gender,
+			String address, String zipCode, String neighborhood,
+			String phoneNumber, String cellNumber, String email,
+			String typeHousing, String country, String region, String city,
+			String guardian, String guardianAddress,
 			String guardianRelationship, String guardianTelephone, String obs,
 			Boolean cycle, Boolean sendPhone, Boolean sendEmail,
 			Boolean sendPostal, Boolean sendSms, String salesOrg,
-			BigDecimal idUserCreate, Date dateCreate,
-			BigDecimal idUserModified, Date dateModified, BigDecimal idProfile,
+			Date dateCreate, Date dateModified,
 			Set<CrmHistoryPhysique> crmHistoryPhysiques,
 			Set<CrmHistoryHomeopathic> crmHistoryHomeopathics,
 			Set<CrmHistoryOrganometry> crmHistoryOrganometries,
@@ -111,8 +112,10 @@ public class CrmPatient implements java.io.Serializable {
 		this.crmOccupation = crmOccupation;
 		this.crmUserByIdUserCreate = crmUserByIdUserCreate;
 		this.crmUserByIdUserModified = crmUserByIdUserModified;
+		this.crmProfile = crmProfile;
 		this.doc = doc;
 		this.codeSap = codeSap;
+		this.docType = docType;
 		this.firstnames = firstnames;
 		this.surnames = surnames;
 		this.bornDate = bornDate;
@@ -140,7 +143,6 @@ public class CrmPatient implements java.io.Serializable {
 		this.salesOrg = salesOrg;
 		this.dateCreate = dateCreate;
 		this.dateModified = dateModified;
-		this.idProfile = idProfile;
 		this.crmHistoryPhysiques = crmHistoryPhysiques;
 		this.crmHistoryHomeopathics = crmHistoryHomeopathics;
 		this.crmHistoryOrganometries = crmHistoryOrganometries;
@@ -189,7 +191,17 @@ public class CrmPatient implements java.io.Serializable {
 		this.crmUserByIdUserModified = crmUserByIdUserModified;
 	}
 
-	@Column(name = "doc", unique = true, nullable = false, length = 45)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "id_profile")
+	public CrmProfile getCrmProfile() {
+		return this.crmProfile;
+	}
+
+	public void setCrmProfile(CrmProfile crmProfile) {
+		this.crmProfile = crmProfile;
+	}
+
+	@Column(name = "doc", nullable = false, length = 45)
 	public String getDoc() {
 		return this.doc;
 	}
@@ -205,6 +217,15 @@ public class CrmPatient implements java.io.Serializable {
 
 	public void setCodeSap(String codeSap) {
 		this.codeSap = codeSap;
+	}
+
+	@Column(name = "doc_type", nullable = false, length = 2)
+	public String getDocType() {
+		return this.docType;
+	}
+
+	public void setDocType(String docType) {
+		this.docType = docType;
 	}
 
 	@Column(name = "firstnames", length = 45)
@@ -451,15 +472,6 @@ public class CrmPatient implements java.io.Serializable {
 
 	public void setDateModified(Date dateModified) {
 		this.dateModified = dateModified;
-	}
-
-	@Column(name = "id_profile", nullable = false, scale = 0)
-	public BigDecimal getIdProfile() {
-		return idProfile;
-	}
-
-	public void setIdProfile(BigDecimal idProfile) {
-		this.idProfile = idProfile;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmPatient")

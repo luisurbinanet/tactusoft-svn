@@ -9,8 +9,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
+
+import org.primefaces.event.CloseEvent;
 
 import co.com.tactusoft.crm.controller.bo.ProcessBo;
 import co.com.tactusoft.crm.controller.bo.SecurityBo;
@@ -47,7 +50,7 @@ public class BaseBacking implements Serializable {
 	protected String docPatient;
 	protected String namePatient;
 	protected int optionSearchPatient;
-	
+
 	protected List<SelectItem> listProfile;
 	protected BigDecimal idProfile;
 	protected Map<BigDecimal, CrmProfile> mapProfile;
@@ -180,7 +183,11 @@ public class BaseBacking implements Serializable {
 			}
 		}
 	}
-	
+
+	public void patientHandleClose(CloseEvent event) {
+		//selectedPatient = null;
+	}
+
 	public List<SelectItem> getListProfile() {
 		if (listProfile == null) {
 			listProfile = new LinkedList<SelectItem>();
@@ -414,6 +421,15 @@ public class BaseBacking implements Serializable {
 
 	public String getRolePrincipal() {
 		return FacesUtil.getCurrentUserData().getRolePrincipal();
+	}
+
+	public void newPatientAction(ActionEvent event) {
+		optionSearchPatient = 1;
+		selectedPatient = new CrmPatient();
+		List<CrmPatient> listPatient = new LinkedList<CrmPatient>();
+		patientModel = new PatientDataModel(listPatient);
+		docPatient = null;
+		namePatient = null;
 	}
 
 }
