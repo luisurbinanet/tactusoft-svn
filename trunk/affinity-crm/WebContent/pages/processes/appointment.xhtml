@@ -24,8 +24,9 @@
 							actionListener="#{appointmentBacking.newAction}" process="@this"
 							update="pnlDetail pnlDetail2 pnlDetail3 pnlDetail4 btnSaveOrder btnSearch" />
 						<p:commandButton value="#{msg['btn_add_patient']}"
-							icon="ui-icon-circle-check" oncomplete="dlg2.show()"
-							update=":editForm:dialog2" />
+							icon="ui-icon-circle-check"
+							actionListener="#{appointmentBacking.newPatientAction}"
+							oncomplete="dlg2.show()" update=":editForm:dialog2" />
 						<p:commandButton id="btnSearch" value="#{msg['btn_search_app']}"
 							icon="ui-icon-search" update=":editForm:dialog3 pnlDetail4"
 							action="#{appointmentBacking.searchAppointMentAction}"
@@ -197,6 +198,9 @@
 					resizable="false" id="dialog2" showEffect="fade"
 					hideEffect="explode" modal="true" width="600">
 
+					<p:ajax event="close"
+						listener="#{appointmentBacking.patientHandleClose}" />
+
 					<h:panelGrid columns="2" width="100%">
 
 						<p:outputPanel id="customPanel">
@@ -241,7 +245,8 @@
 								action="#{appointmentBacking.searchPatientAction}" />
 							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
 								icon="ui-icon-plusthick" update=":form:pnlDetail"
-								oncomplete="dlg2.hide()"
+								oncomplete="handleComplete(xhr, status, args)"
+								actionListener="#{appointmentBacking.addPatient}"
 								disabled="#{appointmentBacking.disabledAddPatient}" />
 						</f:facet>
 					</h:panelGrid>
@@ -320,6 +325,30 @@
 			</h:form>
 
 		</p:panel>
+
+		<p:confirmDialog id="dialogAddPatient"
+			message="#{msg['pat_msg_exists_sap_3']}"
+			header="#{msg['pat_msg_no_exists']}" severity="alert"
+			widgetVar="dlgAddPatient">
+
+			<p:commandButton id="confirmAddPatient" value="#{msg['btn_ok']}"
+				oncomplete="dlgAddPatient.hide()"
+				action="#{appointmentBacking.searchRedirectPatient}" />
+			<p:commandButton id="declineAddPatient" value="#{msg['btn_cancel']}"
+				onclick="dlgAddPatient.hide()" type="button" />
+
+		</p:confirmDialog>
+
+		<script type="text/javascript">
+			function handleComplete(xhr, status, args) {
+				if (args.validate) {
+					dlg2.hide();
+				} else {
+					dlgAddPatient.show();
+				}
+			}
+		</script>
+
 
 	</ui:define>
 </ui:composition>

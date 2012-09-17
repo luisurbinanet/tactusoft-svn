@@ -14,6 +14,7 @@ import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.inject.Named;
 
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 import org.primefaces.event.DateSelectEvent;
 import org.springframework.context.annotation.Scope;
@@ -545,8 +546,10 @@ public class AppointmentBacking extends BaseBacking {
 		boolean validateNoRepeat = true;
 		infoMessage = null;
 
-		if (selectedPatient == null || selectedPatient.getId() == null) {
+		if (selectedPatient == null) {
 			infoMessage = FacesUtil.getMessage("app_msg_error_pat");
+		} else if (selectedPatient.getId() == null) {
+			infoMessage = FacesUtil.getMessage("pat_msg_exists_sap_2");
 		} else {
 
 			if (this.renderedForDate) {
@@ -746,6 +749,23 @@ public class AppointmentBacking extends BaseBacking {
 			item.setLabel(hour + ":" + (minute == 0 ? "00" : minute));
 			listTimes.add(item);
 		}
+	}
+
+	public void addPatient(ActionEvent event) {
+		boolean validate = true;
+		RequestContext context = RequestContext.getCurrentInstance();
+		if (selectedPatient.getId() == null) {
+			validate = false;
+		}
+		context.addCallbackParam("validate", validate);
+	}
+
+	public String searchRedirectPatient() {
+		PatientBacking patientBacking = FacesUtil.findBean("patientBacking");
+		patientBacking.setSelected(new CrmPatient());
+		patientBacking.setDocSearch(this.docPatient);
+		patientBacking.searchAction();
+		return "/pages/processes/patient?faces-redirect=true";
 	}
 
 }

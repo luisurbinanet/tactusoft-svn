@@ -3,13 +3,11 @@ package co.com.tactusoft.crm.model.entities;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -26,6 +24,7 @@ public class CrmCountry implements java.io.Serializable {
 	private String name;
 	private String currencyIso;
 	private Boolean automatic;
+	private String defaultDocType;
 	private Set<CrmRegion> crmRegions = new HashSet<CrmRegion>(0);
 
 	public CrmCountry() {
@@ -38,12 +37,14 @@ public class CrmCountry implements java.io.Serializable {
 	}
 
 	public CrmCountry(BigDecimal id, String code, String name,
-			String currencyIso, Boolean automatic, Set<CrmRegion> crmRegions) {
+			String currencyIso, Boolean automatic, String defaultDocType,
+			Set<CrmRegion> crmRegions) {
 		this.id = id;
 		this.code = code;
 		this.name = name;
 		this.currencyIso = currencyIso;
 		this.automatic = automatic;
+		this.defaultDocType = defaultDocType;
 		this.crmRegions = crmRegions;
 	}
 
@@ -93,8 +94,16 @@ public class CrmCountry implements java.io.Serializable {
 		this.automatic = automatic;
 	}
 
+	@Column(name = "default_doc_type", length = 2)
+	public String getDefaultDocType() {
+		return this.defaultDocType;
+	}
+
+	public void setDefaultDocType(String defaultDocType) {
+		this.defaultDocType = defaultDocType;
+	}
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmCountry")
-	@OrderBy("name")
 	public Set<CrmRegion> getCrmRegions() {
 		return this.crmRegions;
 	}

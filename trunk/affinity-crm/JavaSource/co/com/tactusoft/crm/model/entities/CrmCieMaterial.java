@@ -21,6 +21,7 @@ public class CrmCieMaterial implements java.io.Serializable {
 	private CrmCie crmCie;
 	private String description;
 	private String material;
+	private Integer state;
 
 	public CrmCieMaterial() {
 	}
@@ -32,11 +33,12 @@ public class CrmCieMaterial implements java.io.Serializable {
 	}
 
 	public CrmCieMaterial(BigDecimal id, CrmCie crmCie, String description,
-			String material) {
+			String material, Integer state) {
 		this.id = id;
 		this.crmCie = crmCie;
 		this.description = description;
 		this.material = material;
+		this.state = state;
 	}
 
 	@Id
@@ -75,6 +77,15 @@ public class CrmCieMaterial implements java.io.Serializable {
 
 	public void setMaterial(String material) {
 		this.material = material;
+	}
+
+	@Column(name = "state")
+	public Integer getState() {
+		return this.state;
+	}
+
+	public void setState(Integer state) {
+		this.state = state;
 	}
 
 }
