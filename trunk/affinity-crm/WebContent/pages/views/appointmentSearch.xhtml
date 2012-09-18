@@ -62,15 +62,50 @@
 						<f:selectItems value="#{appointmentSearchBacking.listStates}" />
 					</p:selectOneMenu>
 
+					<h:outputText value="Fecha de la cita: " />
+					<p:selectBooleanCheckbox value="#{appointmentSearchBacking.dates}">
+						<p:ajax update="calSD calED" />
+					</p:selectBooleanCheckbox>
+					<h:outputText value="" />
+					<h:outputText value="" />
+
 					<h:outputLabel value="#{msg['src_star_date']}" style="width:40%" />
-					<p:calendar value="#{appointmentSearchBacking.startDate}"
+					<p:calendar id="calSD"
+						value="#{appointmentSearchBacking.startDate}"
 						label="#{msg['src_star_date']}" readonlyInput="true"
-						pattern="dd/MM/yyyy" showOn="button" navigator="true" locale="es" />
+						pattern="dd/MM/yyyy" showOn="button" navigator="true" locale="es"
+						disabled="#{not appointmentSearchBacking.dates}" />
 
 					<h:outputLabel value="#{msg['src_end_date']}" style="width:40%" />
-					<p:calendar value="#{appointmentSearchBacking.endDate}"
+					<p:calendar id="calED" value="#{appointmentSearchBacking.endDate}"
 						label="#{msg['src_end_date']}" readonlyInput="true"
-						pattern="dd/MM/yyyy" showOn="button" navigator="true" locale="es" />
+						pattern="dd/MM/yyyy" showOn="button" navigator="true" locale="es"
+						disabled="#{not appointmentSearchBacking.dates}" />
+
+					<h:outputText value="Fechas Creación Cita: " />
+					<p:selectBooleanCheckbox
+						value="#{appointmentSearchBacking.datesCreate}">
+						<p:ajax update="calSDC caleEDC" />
+					</p:selectBooleanCheckbox>
+					<h:outputText value="" />
+					<h:outputText value="" />
+
+					<h:outputLabel value="#{msg['src_star_date']}" style="width:40%" />
+					<p:calendar id="calSDC"
+						value="#{appointmentSearchBacking.startDateCreate}"
+						label="#{msg['src_star_date']}" readonlyInput="true"
+						pattern="dd/MM/yyyy" showOn="button" navigator="true" locale="es"
+						disabled="#{not appointmentSearchBacking.datesCreate}" />
+
+					<h:outputLabel value="#{msg['src_end_date']}" style="width:40%" />
+					<p:calendar id="caleEDC"
+						value="#{appointmentSearchBacking.endDateCreate}"
+						label="#{msg['src_end_date']}" readonlyInput="true"
+						pattern="dd/MM/yyyy" showOn="button" navigator="true" locale="es"
+						disabled="#{not appointmentSearchBacking.datesCreate}" />
+
+					<h:outputText value="" />
+					<h:outputText value="" />
 
 				</h:panelGrid>
 
@@ -123,7 +158,7 @@
 					<p:column headerText="#{msg['app_username_created']}">
 						<h:outputLabel value="#{rec.userCreateCode}" />
 					</p:column>
-					
+
 					<p:column headerText="#{msg['app_created_date']}">
 						<h:outputLabel value="#{rec.dateCreate}">
 							<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />

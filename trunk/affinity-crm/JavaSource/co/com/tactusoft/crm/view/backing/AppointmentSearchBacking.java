@@ -37,8 +37,12 @@ public class AppointmentSearchBacking extends BaseBacking {
 	private BigDecimal idBranch;
 	private BigDecimal idDoctor;
 	private BigDecimal idProcedure;
+	private boolean dates;
 	private Date startDate;
 	private Date endDate;
+	private boolean datesCreate;
+	private Date startDateCreate;
+	private Date endDateCreate;
 	private int state;
 
 	private List<VwAppointment> listAppointment;
@@ -117,6 +121,14 @@ public class AppointmentSearchBacking extends BaseBacking {
 		this.idProcedure = idProcedure;
 	}
 
+	public boolean isDates() {
+		return dates;
+	}
+
+	public void setDates(boolean dates) {
+		this.dates = dates;
+	}
+
 	public Date getStartDate() {
 		return startDate;
 	}
@@ -131,6 +143,30 @@ public class AppointmentSearchBacking extends BaseBacking {
 
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+
+	public boolean isDatesCreate() {
+		return datesCreate;
+	}
+
+	public void setDatesCreate(boolean datesCreate) {
+		this.datesCreate = datesCreate;
+	}
+
+	public Date getStartDateCreate() {
+		return startDateCreate;
+	}
+
+	public void setStartDateCreate(Date startDateCreate) {
+		this.startDateCreate = startDateCreate;
+	}
+
+	public Date getEndDateCreate() {
+		return endDateCreate;
+	}
+
+	public void setEndDateCreate(Date endDateCreate) {
+		this.endDateCreate = endDateCreate;
 	}
 
 	public int getState() {
@@ -179,10 +215,12 @@ public class AppointmentSearchBacking extends BaseBacking {
 		selectedAppointment = new CrmAppointment();
 
 		startDate = new Date();
+		startDateCreate = new Date();
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(startDate);
 		calendar.add(Calendar.MONTH, 1);
 		endDate = calendar.getTime();
+		endDateCreate = calendar.getTime();
 
 		listStates = new LinkedList<SelectItem>();
 		String message = FacesUtil.getMessage(Constant.ALL_LABEL);
@@ -222,13 +260,29 @@ public class AppointmentSearchBacking extends BaseBacking {
 	}
 
 	public void searchAppoinmentAction(ActionEvent event) {
-		String startDateString = FacesUtil.formatDate(startDate, "yyyy-MM-dd");
-		String endDateString = FacesUtil.formatDate(endDate, "yyyy-MM-dd");
 
-		String where = "from VwAppointment o where (o.startAppointmentDate between '"
-				+ startDateString
-				+ "T00:00:00.000+05:00' and '"
-				+ endDateString + "T23:59:59.999+05:00')";
+		String where = "from VwAppointment o where 1 = 1 ";
+
+		if (dates) {
+			String startDateString = FacesUtil.formatDate(startDate,
+					"yyyy-MM-dd");
+			String endDateString = FacesUtil.formatDate(endDate, "yyyy-MM-dd");
+
+			where = where + " and (o.startAppointmentDate between '"
+					+ startDateString + "T00:00:00.000+05:00' and '"
+					+ endDateString + "T23:59:59.999+05:00')";
+		}
+
+		if (datesCreate) {
+			String startDateCreateString = FacesUtil.formatDate(
+					startDateCreate, "yyyy-MM-dd");
+			String endDateCreateString = FacesUtil.formatDate(endDateCreate,
+					"yyyy-MM-dd");
+
+			where = where + " and (o.dateCreate between '"
+					+ startDateCreateString + "T00:00:00.000+05:00' and '"
+					+ endDateCreateString + "T23:59:59.999+05:00')";
+		}
 
 		if (idBranch.intValue() != -1) {
 			where = where + " and o.branchId = " + idBranch.intValue();
