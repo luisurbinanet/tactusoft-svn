@@ -25,6 +25,7 @@ import co.com.tactusoft.crm.util.SAPEnvironment;
 import co.com.tactusoft.crm.view.beans.Material;
 import co.com.tactusoft.crm.view.datamodel.MaterialDataModel;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
+import co.com.tactusoft.crm.view.datamodel.WSBeanDataModel;
 
 import com.tactusoft.webservice.client.beans.WSBean;
 import com.tactusoft.webservice.client.custom.MaterialesCustom;
@@ -50,9 +51,9 @@ public class SalesOrderBacking extends BaseBacking {
 	private String salesOff;
 	private Map<String, CrmBranch> mapBranch;
 
-	private List<Material> listMaterial;
-	private MaterialDataModel materialModel;
-	private Material[] selectedMaterial;
+	private List<WSBean> listMaterial;
+	private WSBeanDataModel materialModel;
+	private WSBean[] selectedMaterial;
 
 	private String codeNameMaterial;
 
@@ -174,19 +175,27 @@ public class SalesOrderBacking extends BaseBacking {
 		this.salesOff = salesOff;
 	}
 
-	public MaterialDataModel getMaterialModel() {
+	public List<WSBean> getListMaterial() {
+		return listMaterial;
+	}
+
+	public void setListMaterial(List<WSBean> listMaterial) {
+		this.listMaterial = listMaterial;
+	}
+
+	public WSBeanDataModel getMaterialModel() {
 		return materialModel;
 	}
 
-	public void setMaterialModel(MaterialDataModel materialModel) {
+	public void setMaterialModel(WSBeanDataModel materialModel) {
 		this.materialModel = materialModel;
 	}
 
-	public Material[] getSelectedMaterial() {
+	public WSBean[] getSelectedMaterial() {
 		return selectedMaterial;
 	}
 
-	public void setSelectedMaterial(Material[] selectedMaterial) {
+	public void setSelectedMaterial(WSBean[] selectedMaterial) {
 		this.selectedMaterial = selectedMaterial;
 	}
 
@@ -196,14 +205,6 @@ public class SalesOrderBacking extends BaseBacking {
 
 	public void setCodeNameMaterial(String codeNameMaterial) {
 		this.codeNameMaterial = codeNameMaterial;
-	}
-
-	public List<Material> getListMaterial() {
-		return listMaterial;
-	}
-
-	public void setListMaterial(List<Material> listMaterial) {
-		this.listMaterial = listMaterial;
 	}
 
 	public List<Material> getListSelectedMaterial() {
@@ -240,13 +241,12 @@ public class SalesOrderBacking extends BaseBacking {
 
 	public void generateListMaterialAction() {
 		if (listMaterial.size() == 0) {
-			LoadXLS loadXLS = FacesUtil.findBean("loadXLS");
-			listMaterial = loadXLS.getListMaterial();
-			materialModel = new MaterialDataModel(listMaterial);
+			listMaterial = FacesUtil.getCurrentUserData().getListWSMaterials();
+			materialModel = new WSBeanDataModel(listMaterial);
 		} else {
 			if (!isDisabledAddMaterial()) {
-				List<Material> listMaterial2 = new LinkedList<Material>();
-				for (Material row : listMaterial) {
+				List<WSBean> listMaterial2 = new LinkedList<WSBean>();
+				for (WSBean row : listMaterial) {
 					boolean exits = false;
 					for (Material sel : listSelectedMaterial) {
 						if (sel.getCode().equals(row.getCode())) {
@@ -260,18 +260,18 @@ public class SalesOrderBacking extends BaseBacking {
 					}
 				}
 				listMaterial = listMaterial2;
-				materialModel = new MaterialDataModel(listMaterial);
+				materialModel = new WSBeanDataModel(listMaterial);
 			}
 		}
 	}
 
 	public void newAction(ActionEvent event) {
 		selectedMaterial = null;
-		listMaterial = new LinkedList<Material>();
-		materialModel = new MaterialDataModel(listMaterial);
+		listMaterial = new LinkedList<WSBean>();
+		materialModel = new WSBeanDataModel(listMaterial);
 		listSelectedMaterial = new LinkedList<Material>();
 		materialSelectedModel = new MaterialDataModel(listSelectedMaterial);
-		selectedPatient = new CrmPatient();
+		selectedPatient = null;
 		listPatient = new LinkedList<CrmPatient>();
 		patientModel = new PatientDataModel(listPatient);
 		disabledSaveButton = false;
@@ -362,8 +362,8 @@ public class SalesOrderBacking extends BaseBacking {
 	}
 
 	public void searchMaterialAction() {
-		List<Material> listMaterial2 = new LinkedList<Material>();
-		for (Material material : listMaterial) {
+		List<WSBean> listMaterial2 = new LinkedList<WSBean>();
+		for (WSBean material : listMaterial) {
 			if (material.getCode().toUpperCase()
 					.lastIndexOf(this.codeNameMaterial.toUpperCase()) >= 0
 					|| material.getDescr().toUpperCase()
@@ -371,11 +371,11 @@ public class SalesOrderBacking extends BaseBacking {
 				listMaterial2.add(material);
 			}
 		}
-		materialModel = new MaterialDataModel(listMaterial2);
+		materialModel = new WSBeanDataModel(listMaterial2);
 	}
 
 	public void addMaterialAction() {
-		for (Material row : selectedMaterial) {
+		for (WSBean row : selectedMaterial) {
 			listSelectedMaterial.add(row);
 		}
 
