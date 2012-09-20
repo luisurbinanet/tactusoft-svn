@@ -38,18 +38,32 @@
 				<h:panelGrid id="pnlDetail" columns="4" cellpadding="4"
 					style="margin:0 auto;" width="100%">
 
-					<h:outputLabel value="#{msg['pat_sap_code']}" style="width:40%" />
-					<p:inputText value="#{salesOrderBacking.selectedPatient.codeSap}"
-						style="width:350px" readonly="true" />
+					<h:outputLabel value="#{msg['pat_sap_code']}"
+						rendered="#{salesOrderBacking.selectedPatient eq null?false:true}" />
+					<p:inputText value="#{appointmentBacking.selectedPatient.codeSap}"
+						style="width:350px;background-color:#FFFF80;font-weight:bold;"
+						readonly="true"
+						rendered="#{salesOrderBacking.selectedPatient eq null?false:true}" />
 
-					<h:outputLabel value="#{msg['pat_names']}" style="width:40%" />
-					<p:inputText value="#{salesOrderBacking.selectedPatient.names}"
-						style="width:350px" readonly="true" />
+					<h:outputLabel value="#{msg['pat_names']}"
+						rendered="#{salesOrderBacking.selectedPatient eq null?false:true}" />
+					<p:inputText value="#{appointmentBacking.selectedPatient.names}"
+						style="width:350px;background-color:#FFFF80;font-weight:bold;"
+						readonly="true"
+						rendered="#{salesOrderBacking.selectedPatient eq null?false:true}" />
 
-					<p:spacer height="5" />
-					<p:spacer height="5" />
-					<p:spacer height="5" />
-					<p:spacer height="5" />
+					<h:outputLabel value="#{msg['sal_sales_off']}" style="width:40%" />
+					<p:selectOneMenu value="#{salesOrderBacking.salesOff}"
+						style="width:350px">
+						<f:selectItems value="#{salesOrderBacking.listBranch}" />
+					</p:selectOneMenu>
+
+					<h:outputText value="#{msg['usr_profile']}" style="width:100%" />
+					<p:selectOneMenu value="#{salesOrderBacking.idProfile}"
+						style="width:350px" required="true" label="#{msg['usr_profile']}"
+						disabled="#{patientBacking.selected.id ne null}">
+						<f:selectItems value="#{salesOrderBacking.listProfile}" />
+					</p:selectOneMenu>
 
 					<h:outputLabel value="#{msg['sal_method_payment']}"
 						style="width:40%" />
@@ -70,18 +84,6 @@
 						style="width:350px">
 						<f:selectItems value="#{salesOrderBacking.listSalesGrp}" />
 					</p:selectOneMenu>
-
-					<h:outputLabel value="#{msg['sal_sales_off']}" style="width:40%" />
-					<p:selectOneMenu value="#{salesOrderBacking.salesOff}"
-						style="width:350px">
-						<f:selectItems value="#{salesOrderBacking.listBranch}" />
-					</p:selectOneMenu>
-
-					<p:commandButton value="#{msg['btn_add_material']}"
-						icon="ui-icon-plusthick" oncomplete="dlg.show()"
-						update=":editForm:dialog"
-						action="#{salesOrderBacking.generateListMaterialAction}" />
-					<h:outputLabel value=" " />
 
 				</h:panelGrid>
 
@@ -116,6 +118,10 @@
 					</p:column>
 
 					<f:facet name="footer">
+						<p:commandButton value="#{msg['btn_add_material']}"
+							icon="ui-icon-plusthick" oncomplete="dlg.show()"
+							update=":editForm:dialog"
+							action="#{salesOrderBacking.generateListMaterialAction}" />
 						<p:commandButton value="#{msg['btn_delete']}"
 							icon="ui-icon-closethick" update="selectedTable"
 							action="#{salesOrderBacking.removeMaterialAction}" />
@@ -188,8 +194,7 @@
 
 						<p:outputPanel id="customPanel">
 							<p:selectOneRadio id="customRadio"
-								value="#{salesOrderBacking.optionSearchPatient}"
-								layout="custom">
+								value="#{salesOrderBacking.optionSearchPatient}" layout="custom">
 								<f:selectItem itemLabel="#{msg['sal_key_press_doc']}"
 									itemValue="1" />
 								<f:selectItem itemLabel="#{msg['sal_key_press_nom']}"
