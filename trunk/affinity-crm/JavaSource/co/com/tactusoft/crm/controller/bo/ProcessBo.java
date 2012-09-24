@@ -1266,6 +1266,14 @@ public class ProcessBo implements Serializable {
 		}
 	}
 
+	public List<CrmPatient> getContactByName(String name) {
+		List<CrmPatient> list = null;
+		list = dao.find("FROM CrmPatient o WHERE (o.firstnames like '%" + name
+				+ "%' OR o.surnames like '%" + name
+				+ "%') AND (o.doc IS NULL OR o.doc = o.codeSap)");
+		return list;
+	}
+
 	public long getContactExist(String doc) {
 		long result = (Long) dao.find(
 				"SELECT count(*) FROM CrmPatient o WHERE o.doc = '" + doc

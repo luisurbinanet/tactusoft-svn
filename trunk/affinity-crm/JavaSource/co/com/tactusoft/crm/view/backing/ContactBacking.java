@@ -12,14 +12,16 @@ import javax.inject.Named;
 
 import org.springframework.context.annotation.Scope;
 
-import com.tactusoft.webservice.client.beans.WSBean;
-
 import co.com.tactusoft.crm.model.entities.CrmCity;
 import co.com.tactusoft.crm.model.entities.CrmCountry;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
 import co.com.tactusoft.crm.model.entities.CrmRegion;
+import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
+import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
+
+import com.tactusoft.webservice.client.beans.WSBean;
 
 @Named
 @Scope("session")
@@ -31,7 +33,7 @@ public class ContactBacking extends BaseBacking {
 	private boolean automatic;
 
 	private List<SelectItem> listDocType;
-	private String docSearch;
+	private CrmPatient tmpSelectedPatient;
 
 	public ContactBacking() {
 		newAction(null);
@@ -69,22 +71,27 @@ public class ContactBacking extends BaseBacking {
 		this.listDocType = listDocType;
 	}
 
-	public String getDocSearch() {
-		return docSearch;
+	public CrmPatient getTmpSelectedPatient() {
+		return tmpSelectedPatient;
 	}
 
-	public void setDocSearch(String docSearch) {
-		this.docSearch = docSearch;
+	public void setTmpSelectedPatient(CrmPatient tmpSelectedPatient) {
+		this.tmpSelectedPatient = tmpSelectedPatient;
 	}
 
 	public void newAction(ActionEvent event) {
 		selectedPatient = new CrmPatient();
-		optionSearchPatient = 1;
 		selectedPatient.setCrmProfile(new CrmProfile());
 		selectedPatient.setGender("-1");
 		selectedPatient.setCycle(false);
 		disabledSaveButton = false;
 		newRecord = true;
+
+		// Busquedas
+		optionSearchPatient = 1;
+		docPatient = null;
+		namePatient = null;
+		patientModel = new PatientDataModel();
 	}
 
 	public void saveAction() {
@@ -95,6 +102,10 @@ public class ContactBacking extends BaseBacking {
 		CrmProfile profile = mapProfile.get(selectedPatient.getCrmProfile()
 				.getId());
 
+		selectedPatient.setFirstnames(selectedPatient.getFirstnames()
+				.toUpperCase());
+		selectedPatient
+				.setSurnames(selectedPatient.getSurnames().toUpperCase());
 		selectedPatient.setSalesOrg(profile.getSalesOrg());
 		selectedPatient.setCountry(crmCountry.getCode());
 		selectedPatient.setRegion(crmRegion.getCode());
@@ -116,11 +127,19 @@ public class ContactBacking extends BaseBacking {
 			selectedPatient.setDateModified(new Date());
 		}
 
+		if (FacesUtil.isEmptyOrBlank(selectedPatient.getDoc())) {
+			selectedPatient.setDoc(null);
+		}
+
+		if (FacesUtil.isEmptyOrBlank(selectedPatient.getDocType())) {
+			selectedPatient.setDocType(null);
+		}
+
 		try {
 			processService.savePatient(selectedPatient, automatic && newRecord,
 					false);
 			message = FacesUtil.getMessage("con_msg_update_ok",
-					selectedPatient.getDoc());
+					selectedPatient.getNames());
 			FacesUtil.addInfo(message);
 			disabledSaveButton = true;
 			newRecord = false;
@@ -132,8 +151,36 @@ public class ContactBacking extends BaseBacking {
 		}
 	}
 
-	public void searchAction(ActionEvent event) {
+	public void refreshSearchAction(ActionEvent event) {
+		listPatient = new LinkedList<CrmPatient>();
+		patientModel = new PatientDataModel(listPatient);
+		tmpSelectedPatient = new CrmPatient();
+		optionSearchPatient = 1;
+		docPatient = null;
+		namePatient = null;
+		disabledAddPatient = true;
+	}
 
+	public void searchAction(ActionEvent event) {
+		listPatient = new LinkedList<CrmPatient>();
+		patientModel = new PatientDataModel(listPatient);
+		tmpSelectedPatient = new CrmPatient();
+		if (optionSearchPatient == 1) {
+			tmpSelectedPatient = processService.getContactByDoc(docPatient);
+			if (tmpSelectedPatient.getId() != null) {
+				listPatient.add(tmpSelectedPatient);
+				patientModel = new PatientDataModel(listPatient);
+				disabledAddPatient = false;
+			}
+		} else {
+			listPatient = processService.getContactByName(namePatient
+					.toUpperCase());
+			patientModel = new PatientDataModel(listPatient);
+			if (listPatient.size() > 0) {
+				tmpSelectedPatient = listPatient.get(0);
+				disabledAddPatient = false;
+			}
+		}
 	}
 
 	@Override
@@ -164,6 +211,8 @@ public class ContactBacking extends BaseBacking {
 			}
 
 			listDocType = new LinkedList<SelectItem>();
+			String message = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
+			listDocType.add(new SelectItem(null, message));
 			for (WSBean row : FacesUtil.getCurrentUserData().getListWSDocType()) {
 				if (row.getNames().contains(crmCountry.getCode())) {
 					listDocType.add(new SelectItem(row.getCode(), row
@@ -177,6 +226,13 @@ public class ContactBacking extends BaseBacking {
 			listRegion = new LinkedList<SelectItem>();
 			listCity = new LinkedList<SelectItem>();
 		}
+	}
+
+	public String goAppointment() {
+		AppointmentBacking appointmentBacking = FacesUtil
+				.findBean("appointmentBacking");
+		appointmentBacking.setSelectedPatient(selectedPatient);
+		return "/pages/processes/appointment.jsf?faces-redirect=true";
 	}
 
 }
