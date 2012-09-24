@@ -35,6 +35,7 @@ import co.com.tactusoft.crm.model.entities.CrmUser;
 import co.com.tactusoft.crm.model.entities.CrmUserBranch;
 import co.com.tactusoft.crm.model.entities.CrmUserProfile;
 import co.com.tactusoft.crm.model.entities.CrmUserRole;
+import co.com.tactusoft.crm.model.entities.VwProcedure;
 
 import com.tactusoft.webservice.client.beans.WSBean;
 
@@ -218,6 +219,10 @@ public class TablesBo implements Serializable {
 				+ ")";
 		return dao.find("from CrmProcedureDetail o where o.crmProcedure.id in "
 				+ complementary + " order by o.name");
+	}
+
+	public List<VwProcedure> getListVwProcedureByBranch(BigDecimal idBranch) {
+		return dao.find("from VwProcedure o where o.idBranch = " + idBranch);
 	}
 
 	public List<CrmProcedureDetail> getListProcedureDetailByProcedure(

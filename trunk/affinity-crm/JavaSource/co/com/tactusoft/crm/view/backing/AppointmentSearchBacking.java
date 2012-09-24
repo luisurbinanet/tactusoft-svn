@@ -3,8 +3,10 @@ package co.com.tactusoft.crm.view.backing;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
@@ -15,8 +17,8 @@ import org.springframework.context.annotation.Scope;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
-import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
 import co.com.tactusoft.crm.model.entities.VwAppointment;
+import co.com.tactusoft.crm.model.entities.VwProcedure;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.datamodel.VwAppointmentDataModel;
@@ -34,7 +36,7 @@ public class AppointmentSearchBacking extends BaseBacking {
 	private List<SelectItem> listProcedure;
 	private List<SelectItem> listStates;
 
-	private BigDecimal idBranch;
+	private List<String> listSelectedBranch;
 	private BigDecimal idDoctor;
 	private BigDecimal idProcedure;
 	private boolean dates;
@@ -58,9 +60,9 @@ public class AppointmentSearchBacking extends BaseBacking {
 	public List<SelectItem> getListBranch() {
 		if (listBranch == null) {
 			listBranch = new LinkedList<SelectItem>();
-			listBranch.add(new SelectItem(Constant.DEFAULT_VALUE, label));
 			for (CrmBranch row : FacesUtil.getCurrentUserData().getListBranch()) {
-				listBranch.add(new SelectItem(row.getId(), row.getName()));
+				listBranch.add(new SelectItem(row.getId(), row.getCode()
+						+ " - " + row.getName()));
 			}
 
 			idBranch = Constant.DEFAULT_VALUE;
@@ -95,6 +97,14 @@ public class AppointmentSearchBacking extends BaseBacking {
 
 	public void setListStates(List<SelectItem> listStates) {
 		this.listStates = listStates;
+	}
+
+	public List<String> getListSelectedBranch() {
+		return listSelectedBranch;
+	}
+
+	public void setListSelectedBranch(List<String> listSelectedBranch) {
+		this.listSelectedBranch = listSelectedBranch;
 	}
 
 	public BigDecimal getIdBranch() {
@@ -247,20 +257,37 @@ public class AppointmentSearchBacking extends BaseBacking {
 		idDoctor = Constant.DEFAULT_VALUE;
 		idProcedure = Constant.DEFAULT_VALUE;
 
-		if (idBranch.intValue() != -1) {
-			for (CrmDoctor row : tablesService.getListDoctorByBranch(idBranch)) {
-				listDoctor.add(new SelectItem(row.getId(), row.getNames()));
+		Map<BigDecimal, String> mapDoctor = new HashMap<BigDecimal, String>();
+		Map<BigDecimal, String> mapProcedure = new HashMap<BigDecimal, String>();
+
+		if (listSelectedBranch != null) {
+			for (String idBranch : listSelectedBranch) {
+
+				for (CrmDoctor row : tablesService
+						.getListDoctorByBranch(new BigDecimal(idBranch))) {
+					mapDoctor.put(row.getId(), row.getNames());
+				}
+
+				for (VwProcedure row : tablesService
+						.getListVwProcedureByBranch(new BigDecimal(idBranch))) {
+					mapProcedure.put(row.getId(), row.getNameProcedure()
+							+ " - " + row.getNameProcedureDetail());
+				}
 			}
 
-			for (CrmProcedureDetail row : tablesService
-					.getListProcedureDetailByBranch(idBranch)) {
-				listProcedure.add(new SelectItem(row.getId(), row.getName()));
+			for (Map.Entry<BigDecimal, String> entry : mapDoctor.entrySet()) {
+				listDoctor
+						.add(new SelectItem(entry.getKey(), entry.getValue()));
+			}
+
+			for (Map.Entry<BigDecimal, String> entry : mapProcedure.entrySet()) {
+				listProcedure.add(new SelectItem(entry.getKey(), entry
+						.getValue()));
 			}
 		}
 	}
 
 	public void searchAppoinmentAction(ActionEvent event) {
-
 		String where = "from VwAppointment o where 1 = 1 ";
 
 		if (dates) {
@@ -284,8 +311,13 @@ public class AppointmentSearchBacking extends BaseBacking {
 					+ endDateCreateString + "T23:59:59.999+05:00')";
 		}
 
-		if (idBranch.intValue() != -1) {
-			where = where + " and o.branchId = " + idBranch.intValue();
+		if (listSelectedBranch != null && listSelectedBranch.size() > 0) {
+			String branchs = " and o.branchId in (";
+			for (String idBranch : listSelectedBranch) {
+				branchs = branchs + idBranch + ",";
+			}
+			branchs = branchs.substring(0, branchs.length() - 1) + ")";
+			where = where + branchs;
 
 			if (idDoctor.intValue() == -1) {
 				String doctors = " and o.doctorId in (";

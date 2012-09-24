@@ -13,7 +13,6 @@ import javax.inject.Named;
 
 import org.springframework.context.annotation.Scope;
 
-import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmCity;
 import co.com.tactusoft.crm.model.entities.CrmCountry;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
@@ -37,24 +36,8 @@ public class PatientBacking extends BaseBacking {
 	private PatientDataModel model;
 	private CrmPatient selected;
 
-	private List<SelectItem> listDocType;
-
-	private List<SelectItem> listBranch;
+	private List<SelectItem> listDocType;	
 	private String salesOff;
-
-	private List<SelectItem> listCountry;
-	private BigDecimal idCountry;
-	private Map<BigDecimal, CrmCountry> mapCountry;
-
-	private List<CrmRegion> listAllRegion;
-	private List<SelectItem> listRegion;
-	private BigDecimal idRegion;
-	private Map<BigDecimal, CrmRegion> mapRegion;
-
-	private List<CrmCity> listAllCity;
-	private List<SelectItem> listCity;
-	private BigDecimal idCity;
-	private Map<BigDecimal, CrmCity> mapCity;
 
 	private List<String> selectedSendOptions;
 
@@ -104,90 +87,12 @@ public class PatientBacking extends BaseBacking {
 		this.listDocType = listDocType;
 	}
 
-	public List<SelectItem> getListBranch() {
-		if (listBranch == null) {
-			listBranch = new LinkedList<SelectItem>();
-			for (CrmBranch row : FacesUtil.getCurrentUserData().getListBranch()) {
-				listBranch.add(new SelectItem(row.getCode(), row.getName()
-						+ " (" + row.getSociety() + ")"));
-			}
-		}
-		return listBranch;
-	}
-
-	public void setListBranch(List<SelectItem> listBranch) {
-		this.listBranch = listBranch;
-	}
-
 	public String getSalesOff() {
 		return salesOff;
 	}
 
 	public void setSalesOff(String salesOff) {
 		this.salesOff = salesOff;
-	}
-
-	public List<SelectItem> getListCountry() {
-		if (listCountry == null) {
-			listCountry = new LinkedList<SelectItem>();
-			mapCountry = new HashMap<BigDecimal, CrmCountry>();
-			for (CrmCountry row : tablesService.getListCountry()) {
-				listCountry.add(new SelectItem(row.getId(), row.getName()));
-				mapCountry.put(row.getId(), row);
-			}
-
-			if (listCountry.size() > 0) {
-				idCountry = (BigDecimal) listCountry.get(0).getValue();
-				listAllRegion = tablesService.getListRegion();
-				listAllCity = tablesService.getListCity();
-				handleCountryChange();
-			}
-		}
-		return listCountry;
-	}
-
-	public void setListCountry(List<SelectItem> listCountry) {
-		this.listCountry = listCountry;
-	}
-
-	public BigDecimal getIdCountry() {
-		return idCountry;
-	}
-
-	public void setIdCountry(BigDecimal idCountry) {
-		this.idCountry = idCountry;
-	}
-
-	public List<SelectItem> getListRegion() {
-		return listRegion;
-	}
-
-	public void setListRegion(List<SelectItem> listRegion) {
-		this.listRegion = listRegion;
-	}
-
-	public BigDecimal getIdRegion() {
-		return idRegion;
-	}
-
-	public void setIdRegion(BigDecimal idRegion) {
-		this.idRegion = idRegion;
-	}
-
-	public List<SelectItem> getListCity() {
-		return listCity;
-	}
-
-	public void setListCity(List<SelectItem> listCity) {
-		this.listCity = listCity;
-	}
-
-	public BigDecimal getIdCity() {
-		return idCity;
-	}
-
-	public void setIdCity(BigDecimal idCity) {
-		this.idCity = idCity;
 	}
 
 	public List<String> getSelectedSendOptions() {
@@ -262,6 +167,19 @@ public class PatientBacking extends BaseBacking {
 		this.mapCity = mapCity;
 	}
 
+	public void newAction(ActionEvent event) {
+		optionSearchPatient = 1;
+		selected = new CrmPatient();
+		selected.setCrmProfile(new CrmProfile());
+		selected.setGender("-1");
+		selected.setCycle(false);
+		disabledSaveButton = false;
+		existsSAP = false;
+		newRecord = true;
+		docSearch = null;
+	}
+
+	@Override
 	public void handleCountryChange() {
 		if (idCountry != null) {
 			CrmCountry crmCountry = mapCountry.get(idCountry);
@@ -302,37 +220,6 @@ public class PatientBacking extends BaseBacking {
 			listRegion = new LinkedList<SelectItem>();
 			listCity = new LinkedList<SelectItem>();
 		}
-	}
-
-	public void handleRegionChange() {
-		CrmRegion crmRegion = mapRegion.get(idRegion);
-		listCity = new LinkedList<SelectItem>();
-		mapCity = new HashMap<BigDecimal, CrmCity>();
-		for (CrmCity row : this.listAllCity) {
-			if (row.getCrmRegion().getId().intValue() == crmRegion.getId()
-					.intValue()) {
-				listCity.add(new SelectItem(row.getId(), row.getName()));
-				mapCity.put(row.getId(), row);
-			}
-		}
-
-		if (listRegion.size() > 0) {
-			idCity = (BigDecimal) listCity.get(0).getValue();
-		} else {
-			idCity = null;
-		}
-	}
-
-	public void newAction(ActionEvent event) {
-		optionSearchPatient = 1;
-		selected = new CrmPatient();
-		selected.setCrmProfile(new CrmProfile());
-		selected.setGender("-1");
-		selected.setCycle(false);
-		disabledSaveButton = false;
-		existsSAP = false;
-		newRecord = true;
-		docSearch = null;
 	}
 
 	private void searchIdCountry(String countryCode) {

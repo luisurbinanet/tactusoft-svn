@@ -19,8 +19,11 @@ import co.com.tactusoft.crm.controller.bo.ProcessBo;
 import co.com.tactusoft.crm.controller.bo.SecurityBo;
 import co.com.tactusoft.crm.controller.bo.TablesBo;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
+import co.com.tactusoft.crm.model.entities.CrmCity;
+import co.com.tactusoft.crm.model.entities.CrmCountry;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
+import co.com.tactusoft.crm.model.entities.CrmRegion;
 import co.com.tactusoft.crm.model.entities.CrmSpeciality;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
@@ -70,6 +73,22 @@ public class BaseBacking implements Serializable {
 	protected List<SelectItem> listWSGroupSellers;
 	protected Map<String, String> mapWSGroupSellers;
 	protected String selectedWSGroupSellers;
+
+	protected List<SelectItem> listCountry;
+	protected BigDecimal idCountry;
+	protected Map<BigDecimal, CrmCountry> mapCountry;
+
+	protected List<CrmRegion> listAllRegion;
+	protected List<SelectItem> listRegion;
+	protected BigDecimal idRegion;
+	protected Map<BigDecimal, CrmRegion> mapRegion;
+
+	protected List<CrmCity> listAllCity;
+	protected List<SelectItem> listCity;
+	protected BigDecimal idCity;
+	protected Map<BigDecimal, CrmCity> mapCity;
+	
+	protected List<SelectItem> listBranch;
 
 	public List<CrmPatient> getListPatient() {
 		return listPatient;
@@ -185,7 +204,7 @@ public class BaseBacking implements Serializable {
 	}
 
 	public void patientHandleClose(CloseEvent event) {
-		//selectedPatient = null;
+		// selectedPatient = null;
 	}
 
 	public List<SelectItem> getListProfile() {
@@ -419,6 +438,124 @@ public class BaseBacking implements Serializable {
 		this.selectedWSGroupSellers = selectedWSGroupSellers;
 	}
 
+	public List<SelectItem> getListCountry() {
+		if (listCountry == null) {
+			listCountry = new LinkedList<SelectItem>();
+			mapCountry = new HashMap<BigDecimal, CrmCountry>();
+			for (CrmCountry row : tablesService.getListCountry()) {
+				listCountry.add(new SelectItem(row.getId(), row.getName()));
+				mapCountry.put(row.getId(), row);
+			}
+
+			if (listCountry.size() > 0) {
+				idCountry = (BigDecimal) listCountry.get(0).getValue();
+				listAllRegion = tablesService.getListRegion();
+				listAllCity = tablesService.getListCity();
+				handleCountryChange();
+			}
+		}
+		return listCountry;
+	}
+
+	public void setListCountry(List<SelectItem> listCountry) {
+		this.listCountry = listCountry;
+	}
+
+	public BigDecimal getIdCountry() {
+		return idCountry;
+	}
+
+	public void setIdCountry(BigDecimal idCountry) {
+		this.idCountry = idCountry;
+	}
+
+	public Map<BigDecimal, CrmCountry> getMapCountry() {
+		return mapCountry;
+	}
+
+	public void setMapCountry(Map<BigDecimal, CrmCountry> mapCountry) {
+		this.mapCountry = mapCountry;
+	}
+
+	public List<CrmRegion> getListAllRegion() {
+		return listAllRegion;
+	}
+
+	public void setListAllRegion(List<CrmRegion> listAllRegion) {
+		this.listAllRegion = listAllRegion;
+	}
+
+	public List<SelectItem> getListRegion() {
+		return listRegion;
+	}
+
+	public void setListRegion(List<SelectItem> listRegion) {
+		this.listRegion = listRegion;
+	}
+
+	public BigDecimal getIdRegion() {
+		return idRegion;
+	}
+
+	public void setIdRegion(BigDecimal idRegion) {
+		this.idRegion = idRegion;
+	}
+
+	public Map<BigDecimal, CrmRegion> getMapRegion() {
+		return mapRegion;
+	}
+
+	public void setMapRegion(Map<BigDecimal, CrmRegion> mapRegion) {
+		this.mapRegion = mapRegion;
+	}
+
+	public List<CrmCity> getListAllCity() {
+		return listAllCity;
+	}
+
+	public void setListAllCity(List<CrmCity> listAllCity) {
+		this.listAllCity = listAllCity;
+	}
+
+	public List<SelectItem> getListCity() {
+		return listCity;
+	}
+
+	public void setListCity(List<SelectItem> listCity) {
+		this.listCity = listCity;
+	}
+
+	public BigDecimal getIdCity() {
+		return idCity;
+	}
+
+	public void setIdCity(BigDecimal idCity) {
+		this.idCity = idCity;
+	}
+
+	public Map<BigDecimal, CrmCity> getMapCity() {
+		return mapCity;
+	}
+
+	public void setMapCity(Map<BigDecimal, CrmCity> mapCity) {
+		this.mapCity = mapCity;
+	}
+	
+	public List<SelectItem> getListBranch() {
+		if (listBranch == null) {
+			listBranch = new LinkedList<SelectItem>();
+			for (CrmBranch row : FacesUtil.getCurrentUserData().getListBranch()) {
+				listBranch.add(new SelectItem(row.getCode(), row.getName()
+						+ " (" + row.getSociety() + ")"));
+			}
+		}
+		return listBranch;
+	}
+
+	public void setListBranch(List<SelectItem> listBranch) {
+		this.listBranch = listBranch;
+	}
+
 	public String getRolePrincipal() {
 		return FacesUtil.getCurrentUserData().getRolePrincipal();
 	}
@@ -430,6 +567,57 @@ public class BaseBacking implements Serializable {
 		patientModel = new PatientDataModel(listPatient);
 		docPatient = null;
 		namePatient = null;
+	}
+
+	public void handleCountryChange() {
+		if (idCountry != null) {
+			CrmCountry crmCountry = mapCountry.get(idCountry);
+			listRegion = new LinkedList<SelectItem>();
+			mapRegion = new HashMap<BigDecimal, CrmRegion>();
+
+			for (CrmRegion row : this.listAllRegion) {
+				if (row.getCrmCountry().getId().intValue() == crmCountry
+						.getId().intValue()) {
+					listRegion.add(new SelectItem(row.getId(), row.getName()));
+					mapRegion.put(row.getId(), row);
+				}
+			}
+
+			if (listRegion.size() > 0) {
+				idRegion = (BigDecimal) listRegion.get(0).getValue();
+				handleRegionChange();
+			} else {
+				idRegion = null;
+				idCity = null;
+				listRegion = new LinkedList<SelectItem>();
+				listCity = new LinkedList<SelectItem>();
+			}
+
+		} else {
+			idRegion = null;
+			idCity = null;
+			listRegion = new LinkedList<SelectItem>();
+			listCity = new LinkedList<SelectItem>();
+		}
+	}
+
+	public void handleRegionChange() {
+		CrmRegion crmRegion = mapRegion.get(idRegion);
+		listCity = new LinkedList<SelectItem>();
+		mapCity = new HashMap<BigDecimal, CrmCity>();
+		for (CrmCity row : this.listAllCity) {
+			if (row.getCrmRegion().getId().intValue() == crmRegion.getId()
+					.intValue()) {
+				listCity.add(new SelectItem(row.getId(), row.getName()));
+				mapCity.put(row.getId(), row);
+			}
+		}
+
+		if (listRegion.size() > 0) {
+			idCity = (BigDecimal) listCity.get(0).getValue();
+		} else {
+			idCity = null;
+		}
 	}
 
 }

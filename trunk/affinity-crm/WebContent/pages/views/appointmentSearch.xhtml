@@ -36,12 +36,14 @@
 					style="margin:0 auto;" width="100%">
 
 					<h:outputLabel value="#{msg['app_branch']}" />
-					<p:selectOneMenu style="width:400px"
-						value="#{appointmentSearchBacking.idBranch}">
+					<p:selectCheckboxMenu
+						value="#{appointmentSearchBacking.listSelectedBranch}"
+						label="#{msg['app_branch']}" filter="true" filterText="Filter"
+						filterMatchMode="startsWith" panelStyle="width:400px">
 						<f:selectItems value="#{appointmentSearchBacking.listBranch}" />
-						<p:ajax update="selDoctor selProcedure"
+						<p:ajax event="valueChange" update="selDoctor selProcedure"
 							listener="#{appointmentSearchBacking.handleBranchChange}" />
-					</p:selectOneMenu>
+					</p:selectCheckboxMenu>
 
 					<h:outputLabel value="#{msg['app_doctor']}" />
 					<p:selectOneMenu id="selDoctor" style="width:400px"
@@ -134,7 +136,13 @@
 
 					<p:column headerText="#{msg['app_date']}">
 						<h:outputLabel value="#{rec.startAppointmentDate}">
-							<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputLabel>
+					</p:column>
+
+					<p:column headerText="#{msg['app_created_time']}">
+						<h:outputLabel value="#{rec.startAppointmentDate}">
+							<f:convertDateTime pattern="HH:mm" />
 						</h:outputLabel>
 					</p:column>
 
@@ -161,7 +169,13 @@
 
 					<p:column headerText="#{msg['app_created_date']}">
 						<h:outputLabel value="#{rec.dateCreate}">
-							<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputLabel>
+					</p:column>
+
+					<p:column headerText="#{msg['app_created_time']}">
+						<h:outputLabel value="#{rec.dateCreate}">
+							<f:convertDateTime pattern="HH:mm" />
 						</h:outputLabel>
 					</p:column>
 

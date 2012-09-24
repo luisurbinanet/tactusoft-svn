@@ -89,20 +89,19 @@
 
 				<p:spacer height="10" />
 				<p:dataTable id="selectedTable" var="rec"
-					value="#{salesOrderBacking.materialSelectedModel}"
-					rowKey="#{rec.code}"
-					selection="#{salesOrderBacking.listDeletedMaterial}"
-					paginator="true" rows="4" style="width:100%"
+					value="#{salesOrderBacking.medicationModel}"
+					selection="#{salesOrderBacking.selectedMedication}"
+					rowKey="#{rec.codMaterial}" paginator="true" rows="4" style="width:100%"
 					emptyMessage="#{msg['glb_no_records_found']}">
 
 					<p:column selectionMode="multiple" style="width:18px" />
 
 					<p:column headerText="#{msg['sal_material_code']}">
-						<h:outputLabel value="#{rec.code}" />
+						<h:outputLabel value="#{rec.codMaterial}" />
 					</p:column>
 
 					<p:column headerText="#{msg['sal_material_descr']}">
-						<h:outputLabel value="#{rec.descr}" />
+						<h:outputLabel value="#{rec.descMaterial}" />
 					</p:column>
 
 					<p:column headerText="#{msg['sal_material_price']}">
@@ -111,7 +110,7 @@
 
 					<p:column headerText="#{msg['sal_material_amount']}">
 						<p:inplace>
-							<pe:inputNumber value="#{rec.amount}" symbol=" Unid"
+							<pe:inputNumber value="#{rec.unit}" symbol=" Unid"
 								symbolPosition="s" decimalPlaces="0" style="width:100px"
 								maxValue="999" />
 						</p:inplace>
@@ -119,8 +118,8 @@
 
 					<f:facet name="footer">
 						<p:commandButton value="#{msg['btn_add_material']}"
-							icon="ui-icon-plusthick" oncomplete="dlg.show()"
-							update=":editForm:dialog"
+							icon="ui-icon-plusthick" oncomplete="dlgMedication.show()"
+							update=":editForm:dialogMedication"
 							action="#{salesOrderBacking.generateListMaterialAction}" />
 						<p:commandButton value="#{msg['btn_delete']}"
 							icon="ui-icon-closethick" update="selectedTable"
@@ -132,59 +131,6 @@
 			</h:form>
 
 			<h:form id="editForm">
-
-				<p:dialog header="#{msg['sal_material']}" widgetVar="dlg"
-					resizable="false" id="dialog" showEffect="fade"
-					hideEffect="explode" modal="true" width="600">
-
-					<h:panelGrid columns="2" width="100%">
-						<h:outputLabel value="#{msg['sal_key_press']}" style="width:100%" />
-						<h:inputText value="#{salesOrderBacking.codeNameMaterial}"
-							style="width:100%" />
-
-						<f:facet name="footer">
-							<p:spacer height="10" />
-
-							<p:commandButton id="btnSearchMaterial"
-								value="#{msg['btn_search']}" icon="ui-icon-search"
-								update="pnlTable recordTable"
-								action="#{salesOrderBacking.searchMaterialAction}"
-								widgetVar="btnSearchMaterial"
-								disabled="#{salesOrderBacking.disabledAddMaterial}" />
-							<p:commandButton value="#{msg['btn_add']}"
-								icon="ui-icon-plusthick"
-								update=":form:selectedTable recordTable"
-								action="#{salesOrderBacking.addMaterialAction}"
-								disabled="#{salesOrderBacking.disabledAddMaterial}" />
-						</f:facet>
-					</h:panelGrid>
-
-					<p:spacer height="10" />
-					<p:scrollPanel id="pnlTable" style="width:580px;height:400px">
-						<p:dataTable id="recordTable" var="rec"
-							value="#{salesOrderBacking.materialModel}" rowKey="#{rec.code}"
-							selection="#{salesOrderBacking.selectedMaterial}"
-							paginator="true" rows="15" style="width:570px"
-							emptyMessage="#{msg['glb_no_records_found']}">
-
-							<p:column selectionMode="multiple" style="width:18px" />
-
-							<p:column headerText="#{msg['sal_material_code']}">
-								<h:outputLabel value="#{rec.code}" />
-							</p:column>
-
-							<p:column headerText="#{msg['sal_material_descr']}">
-								<h:outputLabel value="#{rec.descr}" />
-							</p:column>
-
-							<p:column headerText="#{msg['sal_material_price']}">
-								<h:outputLabel value="#{rec.price}" />
-							</p:column>
-
-						</p:dataTable>
-					</p:scrollPanel>
-
-				</p:dialog>
 
 				<p:dialog header="#{msg['sal_patient']}" widgetVar="dlg2"
 					resizable="false" id="dialog2" showEffect="fade"
@@ -251,6 +197,78 @@
 					</p:scrollPanel>
 
 				</p:dialog>
+
+				<p:dialog header="#{msg['his_history_medicaction']}"
+					widgetVar="dlgMedication" resizable="false" id="dialogMedication"
+					showEffect="fade" hideEffect="explode" modal="true" width="600">
+
+					<h:panelGrid columns="2" width="100%">
+
+						<p:outputPanel>
+							<p:selectOneRadio id="sorMedicine"
+								value="#{salesOrderBacking.optionSearchMaterial}"
+								layout="custom">
+								<f:selectItem itemLabel="#{msg['cie_code']}" itemValue="1" />
+								<f:selectItem itemLabel="#{msg['cie_desc']}" itemValue="2" />
+							</p:selectOneRadio>
+
+							<h:panelGrid columns="3" width="100%">
+								<p:radioButton id="rdbMedicine1" for="sorMedicine" itemIndex="0" />
+								<h:outputLabel for="rdbMedicine1" value="#{msg['cie_code']}" />
+								<p:inputText value="#{salesOrderBacking.codeMaterial}"
+									style="width:100%" />
+
+								<p:radioButton id="rdbMedicine2" for="sorMedicine" itemIndex="1" />
+								<h:outputLabel for="rdbMedicine2" value="#{msg['cie_desc']}" />
+								<p:inputText value="#{salesOrderBacking.descMaterial}"
+									style="width:100%" />
+
+								<h:outputLabel />
+								<h:outputLabel value="#{msg['sal_material_amount']}" />
+								<pe:inputNumber value="#{salesOrderBacking.unit}" minValue="1"
+									maxValue="99" />
+							</h:panelGrid>
+						</p:outputPanel>
+
+						<f:facet name="footer">
+							<p:spacer height="10" />
+
+							<p:commandButton value="#{msg['btn_search']}"
+								icon="ui-icon-search"
+								update="pnlTable4 recordTable4 btnAddMaterial"
+								actionListener="#{salesOrderBacking.searchMaterialAction}" />
+							<p:commandButton id="btnAddMaterial" value="#{msg['btn_add']}"
+								icon="ui-icon-plusthick"
+								update="recordTable4 :form:selectedTable"
+								actionListener="#{salesOrderBacking.addMaterialAction}"
+								disabled="#{salesOrderBacking.disabledAddMaterial}" />
+						</f:facet>
+					</h:panelGrid>
+
+					<p:spacer height="10" />
+
+					<p:scrollPanel id="pnlTable4" style="width:580px;height:400px">
+						<p:dataTable id="recordTable4" var="rec"
+							value="#{salesOrderBacking.materialModel}" rowKey="#{rec.code}"
+							selection="#{salesOrderBacking.selectedMaterial}"
+							paginator="true" rows="15" style="width:570px"
+							emptyMessage="#{msg['glb_no_records_found']}">
+
+							<p:column selectionMode="single" style="width:18px" />
+
+							<p:column headerText="#{msg['cie_code']}">
+								<h:outputLabel value="#{rec.code}" />
+							</p:column>
+
+							<p:column headerText="#{msg['cie_desc']}">
+								<h:outputLabel value="#{rec.names}" />
+							</p:column>
+
+						</p:dataTable>
+					</p:scrollPanel>
+
+				</p:dialog>
+
 			</h:form>
 
 		</p:panel>

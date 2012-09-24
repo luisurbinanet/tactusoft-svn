@@ -11,7 +11,6 @@ public interface CustomHibernateDao {
 	public int delete(Object entity);
 
 	public void persist(Object[] entities);
-
 	
 	public <T> T load(Class<T> entityClass, Serializable id);
 
