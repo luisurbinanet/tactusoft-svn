@@ -1255,4 +1255,22 @@ public class ProcessBo implements Serializable {
 		return result;
 	}
 
+	public CrmPatient getContactByDoc(String doc) {
+		List<CrmPatient> list = null;
+		list = dao.find("FROM CrmPatient o WHERE o.doc = '" + doc
+				+ "' AND o.codeSap = '" + doc + "'");
+		if (list.size() > 0) {
+			return list.get(0);
+		} else {
+			return new CrmPatient();
+		}
+	}
+
+	public long getContactExist(String doc) {
+		long result = (Long) dao.find(
+				"SELECT count(*) FROM CrmPatient o WHERE o.doc = '" + doc
+						+ "' AND o.codeSap = '" + doc + "'").get(0);
+		return result;
+	}
+
 }

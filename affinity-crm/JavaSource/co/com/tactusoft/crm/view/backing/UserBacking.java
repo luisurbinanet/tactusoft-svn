@@ -38,7 +38,7 @@ public class UserBacking extends BaseBacking {
 	private Map<BigDecimal, CrmDepartment> mapDepartment;
 
 	private DualListModel<CrmRole> listRole;
-	private DualListModel<CrmBranch> listBranch;
+	private DualListModel<CrmBranch> listBranchUser;
 	private DualListModel<CrmProfile> listUserProfile;
 
 	private String password;
@@ -109,12 +109,12 @@ public class UserBacking extends BaseBacking {
 		this.listRole = listRole;
 	}
 
-	public DualListModel<CrmBranch> getListBranch() {
-		return listBranch;
+	public DualListModel<CrmBranch> getListBranchUser() {
+		return listBranchUser;
 	}
 
-	public void setListBranch(DualListModel<CrmBranch> listBranch) {
-		this.listBranch = listBranch;
+	public void setListBranchUser(DualListModel<CrmBranch> listBranchUser) {
+		this.listBranchUser = listBranchUser;
 	}
 
 	public DualListModel<CrmProfile> getListUserProfile() {
@@ -146,7 +146,7 @@ public class UserBacking extends BaseBacking {
 		selected.setState(Constant.STATE_ACTIVE);
 		selected.setCrmDepartment(new CrmDepartment());
 
-		listBranch = new DualListModel<CrmBranch>();
+		listBranchUser = new DualListModel<CrmBranch>();
 		listRole = new DualListModel<CrmRole>();
 		listUserProfile = new DualListModel<CrmProfile>();
 		generateListAction(null);
@@ -172,7 +172,7 @@ public class UserBacking extends BaseBacking {
 			}
 		}
 
-		if (listBranch.getTarget().size() == 0) {
+		if (listBranchUser.getTarget().size() == 0) {
 			message = FacesUtil.getMessage("usr_msg_error_branch");
 			FacesUtil.addError(message);
 		}
@@ -236,7 +236,8 @@ public class UserBacking extends BaseBacking {
 			int result = tablesService.saveUser(selected, crmDoctor, crmNurse);
 
 			if (result == 0) {
-				tablesService.saveUserBranch(selected, listBranch.getTarget());
+				tablesService.saveUserBranch(selected,
+						listBranchUser.getTarget());
 				tablesService.saveUserRole(selected, listRole.getTarget());
 				tablesService.saveUserProfile(selected,
 						listUserProfile.getTarget());
@@ -346,7 +347,7 @@ public class UserBacking extends BaseBacking {
 			}
 		}
 
-		listBranch = new DualListModel<CrmBranch>(listSourceBranch,
+		listBranchUser = new DualListModel<CrmBranch>(listSourceBranch,
 				listTargetBranch);
 		listRole = new DualListModel<CrmRole>(listSourceRole, listTargetRole);
 		listUserProfile = new DualListModel<CrmProfile>(listSourceProfile,

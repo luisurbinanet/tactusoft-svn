@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,8 +39,10 @@ public class CustomHibernateDaoImpl implements CustomHibernateDao, Serializable 
 		try {
 			getSessionFactory().getCurrentSession().saveOrUpdate(entity);
 			getSessionFactory().getCurrentSession().flush();
-		} catch (DataIntegrityViolationException ex) {
+		} catch (ConstraintViolationException ex) {
 			result = -1;
+		} catch (DataIntegrityViolationException ex) {
+			result = -2;
 		}
 		return result;
 	}

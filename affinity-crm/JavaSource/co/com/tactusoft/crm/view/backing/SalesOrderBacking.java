@@ -16,14 +16,12 @@ import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.controller.bo.TablesBo;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
-import co.com.tactusoft.crm.model.entities.CrmDomain;
+import co.com.tactusoft.crm.model.entities.CrmMedication;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
 import co.com.tactusoft.crm.util.FacesUtil;
-import co.com.tactusoft.crm.util.LoadXLS;
 import co.com.tactusoft.crm.util.SAPEnvironment;
-import co.com.tactusoft.crm.view.beans.Material;
-import co.com.tactusoft.crm.view.datamodel.MaterialDataModel;
+import co.com.tactusoft.crm.view.datamodel.MedicationDataModel;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 import co.com.tactusoft.crm.view.datamodel.WSBeanDataModel;
 
@@ -51,22 +49,27 @@ public class SalesOrderBacking extends BaseBacking {
 	private String salesOff;
 	private Map<String, CrmBranch> mapBranch;
 
+	private int optionSearchMaterial;
+	private boolean disabledAddMaterial;
+	private String codeMaterial;
+	private String descMaterial;
+	private int unit;
+	private double price;
+
+	private List<WSBean> listAllMaterial;
 	private List<WSBean> listMaterial;
 	private WSBeanDataModel materialModel;
-	private WSBean[] selectedMaterial;
+	private WSBean selectedMaterial;
 
-	private String codeNameMaterial;
-
-	private List<Material> listSelectedMaterial;
-	private MaterialDataModel materialSelectedModel;
-	private Material[] listDeletedMaterial;
+	private List<CrmMedication> listMedication;
+	private MedicationDataModel medicationModel;
+	private CrmMedication[] selectedMedication;
 
 	private boolean disabledSaveButton;
 
 	private SAPEnvironment sap;
 
 	public SalesOrderBacking() {
-		sap = FacesUtil.findBean("SAPEnvironment");
 		newAction(null);
 	}
 
@@ -78,7 +81,7 @@ public class SalesOrderBacking extends BaseBacking {
 					"co");
 			for (WSBean row : list) {
 				listMethodPayment.add(new SelectItem(row.getCode(), row
-						.getNames()));
+						.getCode() + " - " + row.getNames()));
 			}
 		}
 		return listMethodPayment;
@@ -91,9 +94,12 @@ public class SalesOrderBacking extends BaseBacking {
 	public List<SelectItem> getListConditionPayment() {
 		if (listConditionPayment == null) {
 			listConditionPayment = new LinkedList<SelectItem>();
-			for (CrmDomain row : tablesService.getListDomain("CONDICION_PAGO")) {
+			List<WSBean> list = CustomListsExecute.getPaymentMethod(
+					sap.getUrlWebList(), sap.getUsername(), sap.getPassword(),
+					"co");
+			for (WSBean row : list) {
 				listConditionPayment.add(new SelectItem(row.getCode(), row
-						.getItemValue()));
+						.getCode() + " - " + row.getNames()));
 			}
 		}
 		return listConditionPayment;
@@ -106,9 +112,10 @@ public class SalesOrderBacking extends BaseBacking {
 	public List<SelectItem> getListSalesGrp() {
 		if (listSalesGrp == null) {
 			listSalesGrp = new LinkedList<SelectItem>();
-			for (CrmDomain row : tablesService.getListDomain("PAUTA")) {
-				listSalesGrp.add(new SelectItem(row.getCode(), row
-						.getItemValue()));
+			for (WSBean row : FacesUtil.getCurrentUserData()
+					.getListWSGroupSellers()) {
+				listSalesGrp.add(new SelectItem(row.getCode(), row.getCode()
+						+ " - " + row.getNames()));
 			}
 		}
 		return listSalesGrp;
@@ -175,12 +182,12 @@ public class SalesOrderBacking extends BaseBacking {
 		this.salesOff = salesOff;
 	}
 
-	public List<WSBean> getListMaterial() {
-		return listMaterial;
+	public List<WSBean> getListAllMaterial() {
+		return listAllMaterial;
 	}
 
-	public void setListMaterial(List<WSBean> listMaterial) {
-		this.listMaterial = listMaterial;
+	public void setListAllMaterial(List<WSBean> listAllMaterial) {
+		this.listAllMaterial = listAllMaterial;
 	}
 
 	public WSBeanDataModel getMaterialModel() {
@@ -191,44 +198,84 @@ public class SalesOrderBacking extends BaseBacking {
 		this.materialModel = materialModel;
 	}
 
-	public WSBean[] getSelectedMaterial() {
+	public WSBean getSelectedMaterial() {
 		return selectedMaterial;
 	}
 
-	public void setSelectedMaterial(WSBean[] selectedMaterial) {
+	public void setSelectedMaterial(WSBean selectedMaterial) {
 		this.selectedMaterial = selectedMaterial;
 	}
 
-	public String getCodeNameMaterial() {
-		return codeNameMaterial;
+	public List<CrmMedication> getListMedication() {
+		return listMedication;
 	}
 
-	public void setCodeNameMaterial(String codeNameMaterial) {
-		this.codeNameMaterial = codeNameMaterial;
+	public void setListMedication(List<CrmMedication> listMedication) {
+		this.listMedication = listMedication;
 	}
 
-	public List<Material> getListSelectedMaterial() {
-		return listSelectedMaterial;
+	public MedicationDataModel getMedicationModel() {
+		return medicationModel;
 	}
 
-	public void setListSelectedMaterial(List<Material> listSelectedMaterial) {
-		this.listSelectedMaterial = listSelectedMaterial;
+	public void setMedicationModel(MedicationDataModel medicationModel) {
+		this.medicationModel = medicationModel;
 	}
 
-	public MaterialDataModel getMaterialSelectedModel() {
-		return materialSelectedModel;
+	public CrmMedication[] getSelectedMedication() {
+		return selectedMedication;
 	}
 
-	public void setMaterialSelectedModel(MaterialDataModel materialSelectedModel) {
-		this.materialSelectedModel = materialSelectedModel;
+	public void setSelectedMedication(CrmMedication[] selectedMedication) {
+		this.selectedMedication = selectedMedication;
 	}
 
-	public Material[] getListDeletedMaterial() {
-		return listDeletedMaterial;
+	public int getOptionSearchMaterial() {
+		return optionSearchMaterial;
 	}
 
-	public void setListDeletedMaterial(Material[] listDeletedMaterial) {
-		this.listDeletedMaterial = listDeletedMaterial;
+	public void setOptionSearchMaterial(int optionSearchMaterial) {
+		this.optionSearchMaterial = optionSearchMaterial;
+	}
+
+	public String getCodeMaterial() {
+		return codeMaterial;
+	}
+
+	public void setCodeMaterial(String codeMaterial) {
+		this.codeMaterial = codeMaterial;
+	}
+
+	public String getDescMaterial() {
+		return descMaterial;
+	}
+
+	public void setDescMaterial(String descMaterial) {
+		this.descMaterial = descMaterial;
+	}
+
+	public int getUnit() {
+		return unit;
+	}
+
+	public void setUnit(int unit) {
+		this.unit = unit;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public void setDisabledAddMaterial(boolean disabledAddMaterial) {
+		this.disabledAddMaterial = disabledAddMaterial;
+	}
+
+	public boolean isDisabledAddMaterial() {
+		return disabledAddMaterial;
 	}
 
 	public boolean isDisabledSaveButton() {
@@ -239,47 +286,33 @@ public class SalesOrderBacking extends BaseBacking {
 		this.disabledSaveButton = disabledSaveButton;
 	}
 
-	public void generateListMaterialAction() {
-		if (listMaterial.size() == 0) {
-			listMaterial = FacesUtil.getCurrentUserData().getListWSMaterials();
-			materialModel = new WSBeanDataModel(listMaterial);
-		} else {
-			if (!isDisabledAddMaterial()) {
-				List<WSBean> listMaterial2 = new LinkedList<WSBean>();
-				for (WSBean row : listMaterial) {
-					boolean exits = false;
-					for (Material sel : listSelectedMaterial) {
-						if (sel.getCode().equals(row.getCode())) {
-							exits = true;
-							break;
-						}
-					}
-
-					if (!exits) {
-						listMaterial2.add(row);
-					}
-				}
-				listMaterial = listMaterial2;
-				materialModel = new WSBeanDataModel(listMaterial);
-			}
-		}
-	}
-
 	public void newAction(ActionEvent event) {
+		sap = FacesUtil.findBean("SAPEnvironment");
 		selectedMaterial = null;
-		listMaterial = new LinkedList<WSBean>();
-		materialModel = new WSBeanDataModel(listMaterial);
-		listSelectedMaterial = new LinkedList<Material>();
-		materialSelectedModel = new MaterialDataModel(listSelectedMaterial);
+		listAllMaterial = new LinkedList<WSBean>();
+		materialModel = new WSBeanDataModel(listAllMaterial);
+		listMedication = new LinkedList<CrmMedication>();
+		medicationModel = new MedicationDataModel(listMedication);
 		selectedPatient = null;
 		listPatient = new LinkedList<CrmPatient>();
 		patientModel = new PatientDataModel(listPatient);
 		disabledSaveButton = false;
 
 		optionSearchPatient = 1;
-		codeNameMaterial = "";
-		docPatient = "";
-		namePatient = "";
+		docPatient = null;
+		namePatient = null;
+
+		codeMaterial = null;
+		descMaterial = null;
+		optionSearchMaterial = 1;
+		disabledAddMaterial = true;
+
+		try {
+			listAllMaterial = CustomListsExecute.getMaterials(
+					sap.getUrlWebList(), sap.getUsername(), sap.getPassword());
+		} catch (Exception ex) {
+			listAllMaterial = new ArrayList<WSBean>();
+		}
 	}
 
 	public void saveAction() {
@@ -292,7 +325,7 @@ public class SalesOrderBacking extends BaseBacking {
 			message = FacesUtil.getMessage("sal_msg_error_pat");
 			FacesUtil.addError(message);
 		}
-		if (listSelectedMaterial.size() == 0) {
+		if (listMedication.size() == 0) {
 			message = FacesUtil.getMessage("sal_msg_error_mat");
 			FacesUtil.addError(message);
 		}
@@ -317,14 +350,15 @@ public class SalesOrderBacking extends BaseBacking {
 
 			List<MaterialesCustom> listMaterialTmp = new ArrayList<MaterialesCustom>();
 			int index = 1;
-			for (Material row : this.listSelectedMaterial) {
+			for (CrmMedication row : this.listMedication) {
 				MaterialesCustom custom = new MaterialesCustom();
 				String itmNumber = FacesUtil
 						.lpad(String.valueOf(index), '0', 6);
 				custom.setItmNumber(itmNumber);
-				custom.setMaterial(FacesUtil.lpad(row.getCode(), '0', 18));
-				custom.setQuantity(new BigDecimal(row.getAmount()));
-				custom.setCurrency(Double.valueOf(row.getPrice()));
+				custom.setMaterial(FacesUtil.lpad(
+						String.valueOf(row.getCodMaterial()), '0', 18));
+				custom.setQuantity(new BigDecimal(row.getUnit()));
+				custom.setCurrency(row.getPrice().doubleValue());
 				listMaterialTmp.add(custom);
 				index++;
 			}
@@ -361,45 +395,86 @@ public class SalesOrderBacking extends BaseBacking {
 		selectedMaterial = null;
 	}
 
-	public void searchMaterialAction() {
-		List<WSBean> listMaterial2 = new LinkedList<WSBean>();
-		for (WSBean material : listMaterial) {
-			if (material.getCode().toUpperCase()
-					.lastIndexOf(this.codeNameMaterial.toUpperCase()) >= 0
-					|| material.getDescr().toUpperCase()
-							.lastIndexOf(this.codeNameMaterial.toUpperCase()) >= 0) {
-				listMaterial2.add(material);
+	public void generateListMaterialAction() {
+
+	}
+
+	public void searchMaterialAction(ActionEvent event) {
+		if ((optionSearchMaterial == 1 && this.codeMaterial.isEmpty())
+				|| (optionSearchMaterial == 2 && this.descMaterial.isEmpty())) {
+			this.listMaterial = new ArrayList<WSBean>();
+			disabledAddMaterial = true;
+		} else {
+			this.listMaterial = new ArrayList<WSBean>();
+			for (WSBean material : listAllMaterial) {
+				if (optionSearchMaterial == 1) {
+					if (material.getCode().toUpperCase()
+							.contains(codeMaterial.toUpperCase())) {
+						this.listMaterial.add(material);
+					}
+				} else {
+					if (material.getNames().toUpperCase()
+							.contains(descMaterial.toUpperCase())) {
+						this.listMaterial.add(material);
+					}
+				}
+			}
+
+			if (listMaterial.size() > 0) {
+				selectedMaterial = listMaterial.get(0);
+				disabledAddMaterial = false;
+			} else {
+				disabledAddMaterial = true;
 			}
 		}
-		materialModel = new WSBeanDataModel(listMaterial2);
+		refreshListMedication();
+	}
+
+	private void refreshListMedication() {
+		List<WSBean> listFilter = new ArrayList<WSBean>();
+		for (WSBean row : listMaterial) {
+			boolean filter = true;
+
+			for (CrmMedication med : listMedication) {
+				if (row.getCode() == String.valueOf(med.getCodMaterial())) {
+					filter = false;
+					break;
+				}
+			}
+
+			if (filter) {
+				listFilter.add(row);
+			}
+		}
+
+		this.materialModel = new WSBeanDataModel(listFilter);
+		if (listFilter.size() > 0) {
+			selectedMaterial = listFilter.get(0);
+			disabledAddMaterial = false;
+		} else {
+			disabledAddMaterial = true;
+		}
 	}
 
 	public void addMaterialAction() {
-		for (WSBean row : selectedMaterial) {
-			listSelectedMaterial.add(row);
-		}
+		BigDecimal id = new BigDecimal(listMedication.size() + 1);
+		CrmMedication medication = new CrmMedication();
+		medication.setId(id);
+		medication.setCodMaterial(Integer.parseInt(selectedMaterial.getCode()));
+		medication.setDescMaterial(selectedMaterial.getNames());
+		medication.setUnit(unit);
+		medication.setPrice(new BigDecimal(price));
+		listMedication.add(medication);
+		medicationModel = new MedicationDataModel(listMedication);
 
-		materialSelectedModel = new MaterialDataModel(listSelectedMaterial);
-		generateListMaterialAction();
-		if (!codeNameMaterial.isEmpty()) {
-			searchMaterialAction();
-		}
+		refreshListMedication();
 	}
 
 	public void removeMaterialAction() {
-		for (Material row : listDeletedMaterial) {
-			listSelectedMaterial.remove(row);
+		for (CrmMedication row : selectedMedication) {
+			listMedication.remove(row);
 		}
-		materialModel = new MaterialDataModel(listSelectedMaterial);
-	}
-
-	public boolean isDisabledAddMaterial() {
-		if (listMaterial.size() == 1) {
-			if (listMaterial.get(0).getCode().equals("-1")) {
-				return true;
-			}
-		}
-		return false;
+		medicationModel = new MedicationDataModel(listMedication);
 	}
 
 }
