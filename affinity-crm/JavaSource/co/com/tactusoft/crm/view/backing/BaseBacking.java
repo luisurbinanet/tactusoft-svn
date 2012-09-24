@@ -53,6 +53,7 @@ public class BaseBacking implements Serializable {
 	protected String docPatient;
 	protected String namePatient;
 	protected int optionSearchPatient;
+	protected boolean disabledAddPatient;
 
 	protected List<SelectItem> listProfile;
 	protected BigDecimal idProfile;
@@ -136,6 +137,10 @@ public class BaseBacking implements Serializable {
 
 	public void setOptionSearchPatient(int optionSearchPatient) {
 		this.optionSearchPatient = optionSearchPatient;
+	}
+
+	public void setDisabledAddPatient(boolean disabledAddPatient) {
+		this.disabledAddPatient = disabledAddPatient;
 	}
 
 	public void searchPatientAction() {
