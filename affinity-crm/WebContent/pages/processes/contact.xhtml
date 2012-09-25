@@ -25,12 +25,15 @@
 							update="pnlDetail pnlDetail2 pnlDetail3 toolBar" process="@this" />
 						<p:commandButton value="#{msg['btn_search']}" process="@this"
 							icon="ui-icon-search" oncomplete="searchDlg.show()"
-							update="searchDialog"
-							actionListener="#{contactBacking.refreshSearchAction}" />
+							actionListener="#{contactBacking.refreshSearchAction}"
+							update="searchDialog" />
 						<p:commandButton id="btnSavePatient" value="#{msg['btn_save']}"
 							icon="ui-icon-disk" action="#{contactBacking.saveAction}"
 							update="growl toolBar pnlDetail pnlDetail2 pnlDetail3"
 							process="toolBar pnlDetail pnlDetail2 pnlDetail3" />
+						<p:commandButton value="#{msg['btn_update']}" process="@this"
+							icon="ui-icon-search" oncomplete="updateDlg.show()"
+							update="updateDialog" disabled="#{contactBacking.newRecord}" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -167,7 +170,10 @@
 								update="btnAddPatient scpSearchPatient dtbSearchPatient"
 								process="@this, txtDocSearch, txtNameSearch, radioSearch, optDocSearch, txtNameSearch" />
 							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
-								icon="ui-icon-plusthick" update=":form:pnlDetail"
+								icon="ui-icon-plusthick"
+								update="pnlDetail pnlDetail2 pnlDetail3 toolBar"
+								actionListener="#{contactBacking.addContactAction}"
+								process="@this, scpSearchPatient" oncomplete="searchDlg.hide();"
 								disabled="#{contactBacking.disabledAddPatient}" />
 						</f:facet>
 
@@ -199,6 +205,138 @@
 						</p:dataTable>
 					</p:scrollPanel>
 
+				</p:dialog>
+
+				<p:dialog header="#{msg['btn_update']}" widgetVar="updateDlg"
+					resizable="false" id="updateDialog" showEffect="fade"
+					hideEffect="explode" modal="true">
+
+					<h:panelGrid id="pnlUpdate" columns="4" cellspacing="5"
+						width="100%"
+						columnClasses="width250per,width250per,width250per,width250per">
+
+						<h:outputText value="#{msg['pat_country']}" style="width:100%" />
+						<p:selectOneMenu value="#{contactBacking.idCountry}"
+							style="width:248px" required="true" label="#{msg['pat_country']}">
+							<f:selectItems value="#{contactBacking.listCountry}" />
+							<p:ajax update="selRegion2 selCity2 pnlUpdate2"
+								listener="#{contactBacking.handleCountryChange}" />
+						</p:selectOneMenu>
+
+						<h:outputText value="#{msg['pat_region']}" style="width:100%" />
+						<p:selectOneMenu id="selRegion2"
+							value="#{contactBacking.idRegion}" style="width:248px"
+							required="true" label="#{msg['pat_region']}">
+							<f:selectItems value="#{contactBacking.listRegion}" />
+							<p:ajax update="selCity"
+								listener="#{contactBacking.handleRegionChange}" />
+						</p:selectOneMenu>
+
+						<h:outputText value="#{msg['pat_city']}" style="width:100%" />
+						<p:selectOneMenu id="selCity2" value="#{contactBacking.idCity}"
+							style="width:248px" required="true" label="#{msg['pat_city']}">
+							<f:selectItems value="#{contactBacking.listCity}" />
+						</p:selectOneMenu>
+
+						<h:outputText style="width:240px" />
+						<h:outputText style="width:240px" />
+
+					</h:panelGrid>
+
+					<h:panelGrid id="pnlUpdate2" columns="4" cellspacing="5"
+						columnClasses="width250per,width250per,width250per,width250per"
+						width="100%">
+
+						<h:outputLabel id="lblDocType2" value="#{msg['pat_type_code']}"
+							rendered="#{!contactBacking.automatic}" />
+						<p:selectOneMenu value="#{contactBacking.selectedPatient.docType}"
+							rendered="#{!contactBacking.automatic}" style="width:248px">
+							<f:selectItems value="#{contactBacking.listDocType}" />
+						</p:selectOneMenu>
+
+						<h:outputLabel id="lblDoc2" value="#{msg['pat_code']}"
+							rendered="#{!contactBacking.automatic or !contactBacking.newRecord}" />
+						<p:inputText id="txtDoc2"
+							value="#{contactBacking.selectedPatient.doc}"
+							style="width:240px;" label="#{msg['pat_code']}" maxlength="16"
+							rendered="#{!contactBacking.automatic or !contactBacking.newRecord}" />
+
+						<h:outputText style="width:240px"
+							rendered="#{!contactBacking.automatic or !contactBacking.newRecord}" />
+						<h:outputText style="width:240px"
+							rendered="#{!contactBacking.automatic or !contactBacking.newRecord}" />
+					</h:panelGrid>
+
+					<h:panelGrid id="pnlUpdate3" columns="4" cellspacing="5"
+						columnClasses="width250per,width250per,width250per,width250per"
+						width="100%">
+
+						<h:outputLabel value="#{msg['pat_names']}" />
+						<p:inputText value="#{contactBacking.selectedPatient.firstnames}"
+							maxlength="35" style="width:240px" label="#{msg['pat_names']}"
+							required="true" />
+
+						<h:outputLabel value="#{msg['pat_surnames']}" />
+						<p:inputText value="#{contactBacking.selectedPatient.surnames}"
+							maxlength="35" style="width:240px" label="#{msg['pat_surnames']}"
+							required="true" />
+
+						<h:outputText value="#{msg['glb_gender']}" />
+						<p:selectOneMenu value="#{contactBacking.selectedPatient.gender}"
+							style="width:248px" label="#{msg['glb_gender']}" required="true">
+							<f:selectItem itemLabel="#{msg['glb_default_value']}"
+								itemValue="" />
+							<f:selectItem itemLabel="#{msg['glb_gender_woman']}"
+								itemValue="W" />
+							<f:selectItem itemLabel="#{msg['glb_gender_man']}" itemValue="M" />
+						</p:selectOneMenu>
+
+						<h:outputText value="#{msg['pat_address']}" />
+						<p:inputText value="#{contactBacking.selectedPatient.address}"
+							maxlength="255" style="width:240px" label="#{msg['pat_address']}"
+							required="true" />
+
+						<h:outputText value="#{msg['pat_zip_code']}" />
+						<p:inputText value="#{contactBacking.selectedPatient.zipCode}"
+							style="width:240px" label="#{msg['pat_zip_code']}" maxlength="5" />
+
+						<h:outputText value="#{msg['pat_phone_number']}" />
+						<p:inputText value="#{contactBacking.selectedPatient.phoneNumber}"
+							style="width:240px" label="#{msg['pat_phone_number']}"
+							required="true" maxlength="16" />
+
+						<h:outputText value="#{msg['pat_email']}" />
+						<p:inputText value="#{contactBacking.selectedPatient.email}"
+							style="width:240px" label="#{msg['pat_email']}"
+							validator="emailValidator" />
+
+						<h:outputText value="#{msg['pat_cell_number']}" />
+						<p:inputText value="#{contactBacking.selectedPatient.cellNumber}"
+							style="width:240px" label="#{msg['pat_cell_number']}"
+							required="true" maxlength="16" />
+
+						<h:outputText value="#{msg['pat_cycle']}" />
+						<p:selectOneRadio id="optionsCycle" layout="pageDirection"
+							value="#{contactBacking.selectedPatient.cycle}">
+							<f:selectItem itemLabel="#{msg['glb_state_yes']}"
+								itemValue="true" />
+							<f:selectItem itemLabel="#{msg['glb_state_no']}"
+								itemValue="false" />
+						</p:selectOneRadio>
+
+						<h:outputText value="#{msg['pat_send']}" />
+						<p:selectManyCheckbox id="optionsSend" layout="pageDirection"
+							value="#{contactBacking.selectedSendOptions}">
+							<f:selectItem itemLabel="#{msg['pat_send_phone']}" itemValue="1" />
+							<f:selectItem itemLabel="#{msg['pat_send_email']}" itemValue="2" />
+							<f:selectItem itemLabel="#{msg['pat_send_postal']}" itemValue="3" />
+							<f:selectItem itemLabel="#{msg['pat_send_sms']}" itemValue="4" />
+						</p:selectManyCheckbox>
+
+						<h:outputText value="#{msg['pat_type_obs']}" />
+						<p:inputTextarea value="#{contactBacking.selectedPatient.obs}"
+							style="width:240px" rows="4" />
+					</h:panelGrid>
 				</p:dialog>
 
 			</h:form>

@@ -34,6 +34,8 @@ public class ContactBacking extends BaseBacking {
 
 	private List<SelectItem> listDocType;
 	private CrmPatient tmpSelectedPatient;
+	
+	private List<String> selectedSendOptions;
 
 	public ContactBacking() {
 		newAction(null);
@@ -77,6 +79,14 @@ public class ContactBacking extends BaseBacking {
 
 	public void setTmpSelectedPatient(CrmPatient tmpSelectedPatient) {
 		this.tmpSelectedPatient = tmpSelectedPatient;
+	}
+
+	public List<String> getSelectedSendOptions() {
+		return selectedSendOptions;
+	}
+
+	public void setSelectedSendOptions(List<String> selectedSendOptions) {
+		this.selectedSendOptions = selectedSendOptions;
 	}
 
 	public void newAction(ActionEvent event) {
@@ -130,6 +140,7 @@ public class ContactBacking extends BaseBacking {
 		if (FacesUtil.isEmptyOrBlank(selectedPatient.getDoc())) {
 			selectedPatient.setDoc(null);
 		}
+		selectedPatient.setCodeSap(selectedPatient.getDoc());
 
 		if (FacesUtil.isEmptyOrBlank(selectedPatient.getDocType())) {
 			selectedPatient.setDocType(null);
@@ -226,6 +237,11 @@ public class ContactBacking extends BaseBacking {
 			listRegion = new LinkedList<SelectItem>();
 			listCity = new LinkedList<SelectItem>();
 		}
+	}
+
+	public void addContactAction(ActionEvent event) {
+		selectedPatient = tmpSelectedPatient;
+		newRecord = false;
 	}
 
 	public String goAppointment() {
