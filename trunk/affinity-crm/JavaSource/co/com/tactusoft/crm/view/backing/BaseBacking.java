@@ -177,7 +177,7 @@ public class BaseBacking implements Serializable {
 				listPatient = processService.getListPatientByNameOrDoc("NAMES",
 						this.namePatient.toUpperCase());
 
-				result = CustomerExecute.findByName(sap.getUrlCustomer2(),
+				/*result = CustomerExecute.findByName(sap.getUrlCustomer2(),
 						sap.getUsername(), sap.getPassword(),
 						profile.getSociety(), this.namePatient);
 
@@ -197,7 +197,7 @@ public class BaseBacking implements Serializable {
 						patient.setNames(row.getNames());
 						listPatient.add(patient);
 					}
-				}
+				}*/
 			}
 
 			patientModel = new PatientDataModel(listPatient);
