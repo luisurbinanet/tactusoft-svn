@@ -36,7 +36,7 @@ public class PatientBacking extends BaseBacking {
 	private PatientDataModel model;
 	private CrmPatient selected;
 
-	private List<SelectItem> listDocType;	
+	private List<SelectItem> listDocType;
 	private String salesOff;
 
 	private List<String> selectedSendOptions;
@@ -222,59 +222,21 @@ public class PatientBacking extends BaseBacking {
 		}
 	}
 
-	private void searchIdCountry(String countryCode) {
-		idCountry = null;
-		if (!FacesUtil.isEmptyOrBlank(countryCode)) {
-			for (Map.Entry<BigDecimal, CrmCountry> entry : mapCountry
-					.entrySet()) {
-				if (entry.getValue().getCode().equals(countryCode)) {
-					idCountry = entry.getValue().getId();
-					break;
-				}
-			}
-		} else {
-			for (Map.Entry<BigDecimal, CrmCountry> entry : mapCountry
-					.entrySet()) {
-				idCountry = entry.getValue().getId();
-				break;
-			}
+	private void searchIdCountry() {
+		for (Map.Entry<BigDecimal, CrmCountry> entry : mapCountry.entrySet()) {
+			idCountry = entry.getValue().getId();
+			break;
 		}
+
 		handleCountryChange();
 	}
 
-	private void searchIdRegion(String regionCode) {
-		idRegion = null;
-		if (!FacesUtil.isEmptyOrBlank(regionCode)) {
-			for (Map.Entry<BigDecimal, CrmRegion> entry : mapRegion.entrySet()) {
-				if (entry.getValue().getCode().equals(regionCode)) {
-					idRegion = entry.getValue().getId();
-					break;
-				}
-			}
-		} else {
-			for (Map.Entry<BigDecimal, CrmRegion> entry : mapRegion.entrySet()) {
-				idRegion = entry.getValue().getId();
-				break;
-			}
+	private void searchIdRegion() {
+		for (Map.Entry<BigDecimal, CrmRegion> entry : mapRegion.entrySet()) {
+			idRegion = entry.getValue().getId();
+			break;
 		}
 		handleRegionChange();
-	}
-
-	private void searchIdCity(String cityCode) {
-		idCity = null;
-		if (!FacesUtil.isEmptyOrBlank(cityCode)) {
-			for (Map.Entry<BigDecimal, CrmCity> entry : mapCity.entrySet()) {
-				String entryName = FacesUtil.removeCharacter(entry.getValue()
-						.getName());
-				String beanName = FacesUtil.removeCharacter(cityCode);
-				if (entryName.equals(beanName)) {
-					idCity = entry.getValue().getId();
-					break;
-				}
-			}
-		} else {
-
-		}
 	}
 
 	public void searchAction() {
@@ -314,16 +276,6 @@ public class PatientBacking extends BaseBacking {
 					selected.setZipCode(customer.getZipCode());
 					selected.setCycle(false);
 
-					try {
-						searchIdCountry(customer.getCountry());
-						searchIdRegion(customer.getRegion());
-						searchIdCity(customer.getCity());
-					} catch (Exception ex) {
-						idCountry = null;
-						idRegion = null;
-						idCity = null;
-					}
-
 					newRecord = false;
 					message = FacesUtil.getMessage("pat_msg_exists_sap");
 					FacesUtil.addWarn(message);
@@ -336,9 +288,8 @@ public class PatientBacking extends BaseBacking {
 		} else {
 			existsSAP = true;
 			newRecord = false;
-			searchIdCountry(selected.getCountry());
-			searchIdRegion(selected.getRegion());
-			searchIdCity(selected.getCity());
+			searchIdCountry();
+			searchIdRegion();
 		}
 	}
 
@@ -390,10 +341,6 @@ public class PatientBacking extends BaseBacking {
 				 */
 
 				selected.setSalesOrg(profile.getSalesOrg());
-				selected.setCountry(crmCountry.getCode());
-				selected.setRegion(crmRegion.getCode());
-				selected.setCity(crmCity.getCode());
-
 				selected.setSendPhone(false);
 				selected.setSendEmail(false);
 				selected.setSendPostal(false);
@@ -420,7 +367,7 @@ public class PatientBacking extends BaseBacking {
 				selected.setCrmUserByIdUserCreate(FacesUtil.getCurrentUser());
 				selected.setDateCreate(new Date());
 				processService.savePatient(selected, automatic && newRecord,
-						existsSAP);
+						existsSAP, crmCountry.getCode());
 
 				String codeSap = null;
 				if (!existsSAP || newRecord) {
@@ -461,7 +408,7 @@ public class PatientBacking extends BaseBacking {
 
 					if (!existsSAP) {
 						processService.savePatient(selected, automatic,
-								existsSAP);
+								existsSAP, crmCountry.getCode());
 					}
 					FacesUtil.addInfo(message);
 

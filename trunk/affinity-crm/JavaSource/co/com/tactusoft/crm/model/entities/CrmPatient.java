@@ -49,9 +49,9 @@ public class CrmPatient implements java.io.Serializable {
 	private String cellNumber;
 	private String email;
 	private String typeHousing;
-	private String country;
-	private String region;
-	private String city;
+	private BigDecimal idCountry;
+	private BigDecimal idRegion;
+	private BigDecimal idCity;
 	private String guardian;
 	private String guardianAddress;
 	private String guardianRelationship;
@@ -96,8 +96,8 @@ public class CrmPatient implements java.io.Serializable {
 			String firstnames, String surnames, Date bornDate, String gender,
 			String address, String zipCode, String neighborhood,
 			String phoneNumber, String cellNumber, String email,
-			String typeHousing, String country, String region, String city,
-			String guardian, String guardianAddress,
+			String typeHousing, BigDecimal idCountry, BigDecimal idRegion,
+			BigDecimal idCity, String guardian, String guardianAddress,
 			String guardianRelationship, String guardianTelephone, String obs,
 			Boolean cycle, Boolean sendPhone, Boolean sendEmail,
 			Boolean sendPostal, Boolean sendSms, String salesOrg,
@@ -127,9 +127,9 @@ public class CrmPatient implements java.io.Serializable {
 		this.cellNumber = cellNumber;
 		this.email = email;
 		this.typeHousing = typeHousing;
-		this.country = country;
-		this.region = region;
-		this.city = city;
+		this.idCountry = idCountry;
+		this.idRegion = idRegion;
+		this.idCity = idCity;
 		this.guardian = guardian;
 		this.guardianAddress = guardianAddress;
 		this.guardianRelationship = guardianRelationship;
@@ -328,31 +328,31 @@ public class CrmPatient implements java.io.Serializable {
 		this.typeHousing = typeHousing;
 	}
 
-	@Column(name = "country", length = 45)
-	public String getCountry() {
-		return this.country;
+	@Column(name = "id_country", scale = 0)
+	public BigDecimal getIdCountry() {
+		return idCountry;
 	}
 
-	public void setCountry(String country) {
-		this.country = country;
+	public void setIdCountry(BigDecimal idCountry) {
+		this.idCountry = idCountry;
 	}
 
-	@Column(name = "region", length = 45)
-	public String getRegion() {
-		return this.region;
+	@Column(name = "id_region", scale = 0)
+	public BigDecimal getIdRegion() {
+		return idRegion;
 	}
 
-	public void setRegion(String region) {
-		this.region = region;
+	public void setIdRegion(BigDecimal idRegion) {
+		this.idRegion = idRegion;
 	}
 
-	@Column(name = "city", length = 45)
-	public String getCity() {
-		return this.city;
+	@Column(name = "id_city", scale = 0)
+	public BigDecimal getIdCity() {
+		return idCity;
 	}
 
-	public void setCity(String city) {
-		this.city = city;
+	public void setIdCity(BigDecimal idCity) {
+		this.idCity = idCity;
 	}
 
 	@Column(name = "guardian")
