@@ -52,7 +52,8 @@
 
 					<h:outputText value="#{msg['pat_country']}" style="width:100%" />
 					<p:selectOneMenu value="#{contactBacking.idCountry}"
-						style="width:248px" required="true" label="#{msg['pat_country']}">
+						style="width:248px" required="true" label="#{msg['pat_country']}"
+						disabled="#{not contactBacking.newRecord}">
 						<f:selectItems value="#{contactBacking.listCountry}" />
 						<p:ajax update="selRegion selCity pnlDetail2"
 							listener="#{contactBacking.handleCountryChange}" />
@@ -60,7 +61,8 @@
 
 					<h:outputText value="#{msg['pat_region']}" style="width:100%" />
 					<p:selectOneMenu id="selRegion" value="#{contactBacking.idRegion}"
-						style="width:248px" required="true" label="#{msg['pat_region']}">
+						style="width:248px" required="true" label="#{msg['pat_region']}"
+						disabled="#{not contactBacking.newRecord}">
 						<f:selectItems value="#{contactBacking.listRegion}" />
 						<p:ajax update="selCity"
 							listener="#{contactBacking.handleRegionChange}" />
@@ -68,7 +70,8 @@
 
 					<h:outputText value="#{msg['pat_city']}" style="width:100%" />
 					<p:selectOneMenu id="selCity" value="#{contactBacking.idCity}"
-						style="width:248px" required="true" label="#{msg['pat_city']}">
+						style="width:248px" required="true" label="#{msg['pat_city']}"
+						disabled="#{not contactBacking.newRecord}">
 						<f:selectItems value="#{contactBacking.listCity}" />
 					</p:selectOneMenu>
 
@@ -211,39 +214,18 @@
 					resizable="false" id="updateDialog" showEffect="fade"
 					hideEffect="explode" modal="true">
 
+					<p:toolbar id="toolBarUpdate" style="width:100%">
+						<p:toolbarGroup align="left">
+							<p:commandButton id="btnUpdate" value="#{msg['btn_save']}"
+								icon="ui-icon-disk" action="#{contactBacking.updateAction}"
+								update="growl pnlDetail pnlDetail2 pnlDetail3"
+								process="pnlUpdate pnlUpdate2" oncomplete="updateDlg.hide();" />
+						</p:toolbarGroup>
+					</p:toolbar>
+
+					<p:spacer height="5" />
+
 					<h:panelGrid id="pnlUpdate" columns="4" cellspacing="5"
-						width="100%"
-						columnClasses="width250per,width250per,width250per,width250per">
-
-						<h:outputText value="#{msg['pat_country']}" style="width:100%" />
-						<p:selectOneMenu value="#{contactBacking.idCountry}"
-							style="width:248px" required="true" label="#{msg['pat_country']}">
-							<f:selectItems value="#{contactBacking.listCountry}" />
-							<p:ajax update="selRegion2 selCity2 pnlUpdate2"
-								listener="#{contactBacking.handleCountryChange}" />
-						</p:selectOneMenu>
-
-						<h:outputText value="#{msg['pat_region']}" style="width:100%" />
-						<p:selectOneMenu id="selRegion2"
-							value="#{contactBacking.idRegion}" style="width:248px"
-							required="true" label="#{msg['pat_region']}">
-							<f:selectItems value="#{contactBacking.listRegion}" />
-							<p:ajax update="selCity"
-								listener="#{contactBacking.handleRegionChange}" />
-						</p:selectOneMenu>
-
-						<h:outputText value="#{msg['pat_city']}" style="width:100%" />
-						<p:selectOneMenu id="selCity2" value="#{contactBacking.idCity}"
-							style="width:248px" required="true" label="#{msg['pat_city']}">
-							<f:selectItems value="#{contactBacking.listCity}" />
-						</p:selectOneMenu>
-
-						<h:outputText style="width:240px" />
-						<h:outputText style="width:240px" />
-
-					</h:panelGrid>
-
-					<h:panelGrid id="pnlUpdate2" columns="4" cellspacing="5"
 						columnClasses="width250per,width250per,width250per,width250per"
 						width="100%">
 
@@ -267,7 +249,7 @@
 							rendered="#{!contactBacking.automatic or !contactBacking.newRecord}" />
 					</h:panelGrid>
 
-					<h:panelGrid id="pnlUpdate3" columns="4" cellspacing="5"
+					<h:panelGrid id="pnlUpdate2" columns="4" cellspacing="5"
 						columnClasses="width250per,width250per,width250per,width250per"
 						width="100%">
 
