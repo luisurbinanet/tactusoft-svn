@@ -51,7 +51,8 @@
 					</p:selectOneMenu>
 
 					<h:outputText value="#{msg['pat_country']}" style="width:100%" />
-					<p:selectOneMenu value="#{contactBacking.idCountry}"
+					<p:selectOneMenu
+						value="#{contactBacking.selectedPatient.idCountry}"
 						style="width:248px" required="true" label="#{msg['pat_country']}"
 						disabled="#{not contactBacking.newRecord}">
 						<f:selectItems value="#{contactBacking.listCountry}" />
@@ -60,7 +61,8 @@
 					</p:selectOneMenu>
 
 					<h:outputText value="#{msg['pat_region']}" style="width:100%" />
-					<p:selectOneMenu id="selRegion" value="#{contactBacking.idRegion}"
+					<p:selectOneMenu id="selRegion"
+						value="#{contactBacking.selectedPatient.idRegion}"
 						style="width:248px" required="true" label="#{msg['pat_region']}"
 						disabled="#{not contactBacking.newRecord}">
 						<f:selectItems value="#{contactBacking.listRegion}" />
@@ -69,7 +71,8 @@
 					</p:selectOneMenu>
 
 					<h:outputText value="#{msg['pat_city']}" style="width:100%" />
-					<p:selectOneMenu id="selCity" value="#{contactBacking.idCity}"
+					<p:selectOneMenu id="selCity"
+						value="#{contactBacking.selectedPatient.idCity}"
 						style="width:248px" required="true" label="#{msg['pat_city']}"
 						disabled="#{not contactBacking.newRecord}">
 						<f:selectItems value="#{contactBacking.listCity}" />

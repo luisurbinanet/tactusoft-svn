@@ -1016,12 +1016,11 @@ public class ProcessBo implements Serializable {
 	}
 
 	public int savePatient(CrmPatient entity, boolean automatic,
-			boolean existsSAP) {
+			boolean existsSAP, String country) {
 		if (entity.getId() == null) {
 			BigDecimal id = getId(CrmPatient.class);
 			if (automatic) {
-				String doc = entity.getCountry()
-						+ FacesUtil.lpad(id.toString(), '0', 8);
+				String doc = country + FacesUtil.lpad(id.toString(), '0', 8);
 				entity.setDoc(doc);
 				entity.setCodeSap(doc);
 			} else {

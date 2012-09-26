@@ -233,7 +233,7 @@ public class AppointmentPatientBacking extends BaseBacking {
 				selectedPatient.setNeighborhood(neighborhood);
 				selectedPatient.setCrmOccupation(mapOccupation
 						.get(idOccupation));
-				processService.savePatient(selectedPatient, false, false);
+				processService.savePatient(selectedPatient, false, false, null);
 			}
 
 			CrmDoctor doctor = mapDoctor.get(idDoctor);
