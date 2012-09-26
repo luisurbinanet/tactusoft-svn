@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
@@ -34,7 +35,7 @@ public class ContactBacking extends BaseBacking {
 
 	private List<SelectItem> listDocType;
 	private CrmPatient tmpSelectedPatient;
-	
+
 	private List<String> selectedSendOptions;
 
 	public ContactBacking() {
@@ -194,6 +195,10 @@ public class ContactBacking extends BaseBacking {
 		}
 	}
 
+	public void updateAction(ActionEvent event) {
+		newAction(null);
+	}
+
 	@Override
 	public void handleCountryChange() {
 		if (idCountry != null) {
@@ -242,6 +247,9 @@ public class ContactBacking extends BaseBacking {
 	public void addContactAction(ActionEvent event) {
 		selectedPatient = tmpSelectedPatient;
 		newRecord = false;
+		searchIdCountry(selectedPatient.getCountry());
+		searchIdRegion(selectedPatient.getRegion());
+		searchIdCity(selectedPatient.getCity());
 	}
 
 	public String goAppointment() {
@@ -249,6 +257,61 @@ public class ContactBacking extends BaseBacking {
 				.findBean("appointmentBacking");
 		appointmentBacking.setSelectedPatient(selectedPatient);
 		return "/pages/processes/appointment.jsf?faces-redirect=true";
+	}
+
+	private void searchIdCountry(String countryCode) {
+		idCountry = null;
+		if (!FacesUtil.isEmptyOrBlank(countryCode)) {
+			for (Map.Entry<BigDecimal, CrmCountry> entry : mapCountry
+					.entrySet()) {
+				if (entry.getValue().getCode().equals(countryCode)) {
+					idCountry = entry.getValue().getId();
+					break;
+				}
+			}
+		} else {
+			for (Map.Entry<BigDecimal, CrmCountry> entry : mapCountry
+					.entrySet()) {
+				idCountry = entry.getValue().getId();
+				break;
+			}
+		}
+		handleCountryChange();
+	}
+
+	private void searchIdRegion(String regionCode) {
+		idRegion = null;
+		if (!FacesUtil.isEmptyOrBlank(regionCode)) {
+			for (Map.Entry<BigDecimal, CrmRegion> entry : mapRegion.entrySet()) {
+				if (entry.getValue().getCode().equals(regionCode)) {
+					idRegion = entry.getValue().getId();
+					break;
+				}
+			}
+		} else {
+			for (Map.Entry<BigDecimal, CrmRegion> entry : mapRegion.entrySet()) {
+				idRegion = entry.getValue().getId();
+				break;
+			}
+		}
+		handleRegionChange();
+	}
+
+	private void searchIdCity(String cityCode) {
+		idCity = null;
+		if (!FacesUtil.isEmptyOrBlank(cityCode)) {
+			for (Map.Entry<BigDecimal, CrmCity> entry : mapCity.entrySet()) {
+				String entryName = FacesUtil.removeCharacter(entry.getValue()
+						.getName());
+				String beanName = FacesUtil.removeCharacter(cityCode);
+				if (entryName.equals(beanName)) {
+					idCity = entry.getValue().getId();
+					break;
+				}
+			}
+		} else {
+
+		}
 	}
 
 }
