@@ -51,8 +51,7 @@
 					</p:selectOneMenu>
 
 					<h:outputText value="#{msg['pat_country']}" style="width:100%" />
-					<p:selectOneMenu
-						value="#{contactBacking.selectedPatient.idCountry}"
+					<p:selectOneMenu value="#{contactBacking.idCountry}"
 						style="width:248px" required="true" label="#{msg['pat_country']}"
 						disabled="#{not contactBacking.newRecord}">
 						<f:selectItems value="#{contactBacking.listCountry}" />
@@ -61,8 +60,7 @@
 					</p:selectOneMenu>
 
 					<h:outputText value="#{msg['pat_region']}" style="width:100%" />
-					<p:selectOneMenu id="selRegion"
-						value="#{contactBacking.selectedPatient.idRegion}"
+					<p:selectOneMenu id="selRegion" value="#{contactBacking.idRegion}"
 						style="width:248px" required="true" label="#{msg['pat_region']}"
 						disabled="#{not contactBacking.newRecord}">
 						<f:selectItems value="#{contactBacking.listRegion}" />
@@ -71,8 +69,7 @@
 					</p:selectOneMenu>
 
 					<h:outputText value="#{msg['pat_city']}" style="width:100%" />
-					<p:selectOneMenu id="selCity"
-						value="#{contactBacking.selectedPatient.idCity}"
+					<p:selectOneMenu id="selCity" value="#{contactBacking.idCity}"
 						style="width:248px" required="true" label="#{msg['pat_city']}"
 						disabled="#{not contactBacking.newRecord}">
 						<f:selectItems value="#{contactBacking.listCity}" />
@@ -133,6 +130,12 @@
 					<p:inputText value="#{contactBacking.selectedPatient.cellNumber}"
 						style="width:240px" label="#{msg['pat_cell_number']}"
 						required="false" maxlength="16" />
+
+					<h:outputLabel value="#{msg['pat_sales_off']}" style="width:40%" />
+					<p:selectOneMenu value="#{contactBacking.salesOff}"
+						style="width:248px">
+						<f:selectItems value="#{contactBacking.listBranch}" />
+					</p:selectOneMenu>
 
 					<h:outputText value="#{msg['pat_type_obs']}" />
 					<p:inputTextarea value="#{contactBacking.selectedPatient.obs}"
@@ -220,9 +223,11 @@
 					<p:toolbar id="toolBarUpdate" style="width:100%">
 						<p:toolbarGroup align="left">
 							<p:commandButton id="btnUpdate" value="#{msg['btn_save']}"
-								icon="ui-icon-disk" action="#{contactBacking.updateAction}"
+								icon="ui-icon-disk"
+								actionListener="#{contactBacking.updateAction}"
 								update="growl pnlDetail pnlDetail2 pnlDetail3"
-								process="pnlUpdate pnlUpdate2" oncomplete="updateDlg.hide();" />
+								process="@this, pnlUpdate pnlUpdate2"
+								oncomplete="handleLoginRequest(xhr, status, args)" />
 						</p:toolbarGroup>
 					</p:toolbar>
 
@@ -235,7 +240,8 @@
 						<h:outputLabel id="lblDocType2" value="#{msg['pat_type_code']}"
 							rendered="#{!contactBacking.automatic}" />
 						<p:selectOneMenu value="#{contactBacking.selectedPatient.docType}"
-							rendered="#{!contactBacking.automatic}" style="width:248px">
+							rendered="#{!contactBacking.automatic}" style="width:248px"
+							required="true" label="#{contactBacking.selectedPatient.docType}">
 							<f:selectItems value="#{contactBacking.listDocType}" />
 						</p:selectOneMenu>
 
@@ -244,7 +250,8 @@
 						<p:inputText id="txtDoc2"
 							value="#{contactBacking.selectedPatient.doc}"
 							style="width:240px;" label="#{msg['pat_code']}" maxlength="16"
-							rendered="#{!contactBacking.automatic or !contactBacking.newRecord}" />
+							rendered="#{!contactBacking.automatic or !contactBacking.newRecord}"
+							required="true" />
 
 						<h:outputText style="width:240px"
 							rendered="#{!contactBacking.automatic or !contactBacking.newRecord}" />
@@ -325,6 +332,18 @@
 				</p:dialog>
 
 			</h:form>
+
+			<script type="text/javascript">
+				function handleLoginRequest(xhr, status, args) {
+					if (args.validationFailed || !args.saved) {
+						jQuery('#updateDialog').effect("shake", {
+							times : 3
+						}, 100);
+					} else {
+						updateDlg.hide();
+					}
+				}
+			</script>
 
 		</p:panel>
 

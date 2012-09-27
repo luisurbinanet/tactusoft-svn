@@ -37,8 +37,6 @@ public class PatientBacking extends BaseBacking {
 	private CrmPatient selected;
 
 	private List<SelectItem> listDocType;
-	private String salesOff;
-
 	private List<String> selectedSendOptions;
 
 	private boolean disabledSaveButton;
@@ -85,14 +83,6 @@ public class PatientBacking extends BaseBacking {
 
 	public void setListDocType(List<SelectItem> listDocType) {
 		this.listDocType = listDocType;
-	}
-
-	public String getSalesOff() {
-		return salesOff;
-	}
-
-	public void setSalesOff(String salesOff) {
-		this.salesOff = salesOff;
 	}
 
 	public List<String> getSelectedSendOptions() {
@@ -340,7 +330,10 @@ public class PatientBacking extends BaseBacking {
 				 * profile.getDivision(), crmCountry.getCurrencyIso());
 				 */
 
-				selected.setSalesOrg(profile.getSalesOrg());
+				selected.setIdCountry(idCountry);
+				selected.setIdRegion(idRegion);
+				selected.setIdCity(idCity);
+				selected.setSalesOrg(this.salesOff);
 				selected.setSendPhone(false);
 				selected.setSendEmail(false);
 				selected.setSendPostal(false);

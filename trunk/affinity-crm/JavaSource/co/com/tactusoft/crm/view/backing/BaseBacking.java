@@ -90,6 +90,7 @@ public class BaseBacking implements Serializable {
 	protected Map<BigDecimal, CrmCity> mapCity;
 	
 	protected List<SelectItem> listBranch;
+	protected String salesOff;
 
 	public List<CrmPatient> getListPatient() {
 		return listPatient;
@@ -559,6 +560,14 @@ public class BaseBacking implements Serializable {
 
 	public void setListBranch(List<SelectItem> listBranch) {
 		this.listBranch = listBranch;
+	}
+
+	public String getSalesOff() {
+		return salesOff;
+	}
+
+	public void setSalesOff(String salesOff) {
+		this.salesOff = salesOff;
 	}
 
 	public String getRolePrincipal() {
