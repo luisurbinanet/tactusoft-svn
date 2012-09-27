@@ -93,6 +93,14 @@ public class ContactBacking extends BaseBacking {
 		this.selectedSendOptions = selectedSendOptions;
 	}
 
+	public boolean isDisabledAddContact() {
+		if ((listPatient == null) || (listPatient.size() == 0)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public void newAction(ActionEvent event) {
 		selectedPatient = new CrmPatient();
 		selectedPatient.setCrmProfile(new CrmProfile());
@@ -111,8 +119,6 @@ public class ContactBacking extends BaseBacking {
 	public void saveAction() {
 		String message = null;
 		CrmCountry crmCountry = mapCountry.get(idCountry);
-		CrmProfile profile = mapProfile.get(selectedPatient.getCrmProfile()
-				.getId());
 
 		selectedPatient.setIdCountry(idCountry);
 		selectedPatient.setIdRegion(idRegion);
@@ -121,9 +127,12 @@ public class ContactBacking extends BaseBacking {
 				.toUpperCase());
 		selectedPatient
 				.setSurnames(selectedPatient.getSurnames().toUpperCase());
-		selectedPatient.setSalesOrg(profile.getSalesOrg());
+		selectedPatient.setSalesOrg(salesOff);
 
 		if (newRecord) {
+			CrmProfile profile = mapProfile.get(selectedPatient.getCrmProfile()
+					.getId());
+			selectedPatient.setCrmProfile(profile);
 			selectedPatient
 					.setCrmUserByIdUserCreate(FacesUtil.getCurrentUser());
 			selectedPatient.setDateCreate(new Date());
@@ -149,7 +158,6 @@ public class ContactBacking extends BaseBacking {
 			}
 		}
 		selectedPatient.setDocType(docType);
-		selectedPatient.setSalesOrg(salesOff);
 
 		try {
 			processService.savePatient(selectedPatient, automatic && newRecord,
@@ -201,6 +209,7 @@ public class ContactBacking extends BaseBacking {
 
 	public void updateAction(ActionEvent event) {
 		String codeSap = null;
+		String message = null;
 		SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
 		CrmProfile profile = selectedPatient.getCrmProfile();
 		CrmCountry crmCountry = mapCountry.get(selectedPatient.getIdCountry());
@@ -246,14 +255,17 @@ public class ContactBacking extends BaseBacking {
 		selectedPatient.setCrmUserByIdUserModified(FacesUtil.getCurrentUser());
 		selectedPatient.setDateModified(new Date());
 
+		RequestContext context = RequestContext.getCurrentInstance();
 		boolean saved = false;
 		try {
 			processService.savePatient(selectedPatient, automatic && newRecord,
 					false, null);
 			saved = true;
 			newAction(null);
+			message = FacesUtil.getMessage("con_msg_update_ok",
+					selectedPatient.getNames());
+			FacesUtil.addInfo(message);
 		} catch (Exception ex) {
-			String message = null;
 			if (ex instanceof DataIntegrityViolationException) {
 				String field = FacesUtil.getMessage("con");
 				message = FacesUtil.getMessage("msg_record_unique_exception",
@@ -262,10 +274,9 @@ public class ContactBacking extends BaseBacking {
 				message = ex.getMessage();
 			}
 			FacesUtil.addError(message);
-
-			RequestContext context = RequestContext.getCurrentInstance();
-			context.addCallbackParam("saved", saved);
 		}
+
+		context.addCallbackParam("saved", saved);
 	}
 
 	@Override
