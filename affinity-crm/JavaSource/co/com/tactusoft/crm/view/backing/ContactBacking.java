@@ -10,17 +10,22 @@ import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.inject.Named;
 
+import org.primefaces.context.RequestContext;
 import org.springframework.context.annotation.Scope;
+import org.springframework.dao.DataIntegrityViolationException;
 
+import co.com.tactusoft.crm.model.entities.CrmCity;
 import co.com.tactusoft.crm.model.entities.CrmCountry;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
 import co.com.tactusoft.crm.model.entities.CrmRegion;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
+import co.com.tactusoft.crm.util.SAPEnvironment;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 
 import com.tactusoft.webservice.client.beans.WSBean;
+import com.tactusoft.webservice.client.execute.CustomerExecute;
 
 @Named
 @Scope("session")
@@ -105,21 +110,18 @@ public class ContactBacking extends BaseBacking {
 
 	public void saveAction() {
 		String message = null;
-		CrmCountry crmCountry = mapCountry.get(selectedPatient.getIdCountry());
+		CrmCountry crmCountry = mapCountry.get(idCountry);
 		CrmProfile profile = mapProfile.get(selectedPatient.getCrmProfile()
 				.getId());
 
+		selectedPatient.setIdCountry(idCountry);
+		selectedPatient.setIdRegion(idRegion);
+		selectedPatient.setIdCity(idCity);
 		selectedPatient.setFirstnames(selectedPatient.getFirstnames()
 				.toUpperCase());
 		selectedPatient
 				.setSurnames(selectedPatient.getSurnames().toUpperCase());
 		selectedPatient.setSalesOrg(profile.getSalesOrg());
-
-		String docType = selectedPatient.getDocType();
-		if (automatic) {
-			docType = crmCountry.getDefaultDocType();
-		}
-		selectedPatient.setDocType(docType);
 
 		if (newRecord) {
 			selectedPatient
@@ -136,9 +138,18 @@ public class ContactBacking extends BaseBacking {
 		}
 		selectedPatient.setCodeSap(selectedPatient.getDoc());
 
+		String docType = null;
 		if (FacesUtil.isEmptyOrBlank(selectedPatient.getDocType())) {
-			selectedPatient.setDocType(null);
+			docType = null;
+		} else {
+			if (automatic) {
+				docType = crmCountry.getDefaultDocType();
+			} else {
+				docType = selectedPatient.getDocType();
+			}
 		}
+		selectedPatient.setDocType(docType);
+		selectedPatient.setSalesOrg(salesOff);
 
 		try {
 			processService.savePatient(selectedPatient, automatic && newRecord,
@@ -189,7 +200,72 @@ public class ContactBacking extends BaseBacking {
 	}
 
 	public void updateAction(ActionEvent event) {
-		newAction(null);
+		String codeSap = null;
+		SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
+		CrmProfile profile = selectedPatient.getCrmProfile();
+		CrmCountry crmCountry = mapCountry.get(selectedPatient.getIdCountry());
+
+		List<WSBean> listCustomer = CustomerExecute.findByDoc(
+				sap.getUrlCustomer2(), sap.getUsername(), sap.getPassword(),
+				profile.getSociety(), selectedPatient.getDoc(), 0);
+
+		String docType = selectedPatient.getDocType();
+		if (automatic) {
+			docType = crmCountry.getDefaultDocType();
+		}
+
+		if (listCustomer.size() == 0) {
+			String tratamiento = "Señor";
+			if (selectedPatient.getGender().equals("W")) {
+				tratamiento = "Señora";
+			}
+
+			CrmRegion crmRegion = mapRegion.get(selectedPatient.getIdRegion());
+			CrmCity crmCity = mapCity.get(selectedPatient.getIdCity());
+
+			codeSap = CustomerExecute.excecute(sap.getUrlCustomerMaintainAll(),
+					sap.getUsername(), sap.getPassword(), sap.getEnvironment(),
+					docType, selectedPatient.getDoc(), tratamiento,
+					selectedPatient.getSurnames(),
+					selectedPatient.getFirstnames(),
+					selectedPatient.getAddress(), selectedPatient.getZipCode(),
+					selectedPatient.getPhoneNumber(),
+					selectedPatient.getCellNumber(),
+					selectedPatient.getEmail(), crmCountry.getCode(),
+					crmCity.getName(), crmRegion.getCode(), "D001",
+					profile.getSalesOrg(), profile.getDistrChan(),
+					profile.getDivision(), profile.getSociety(), this.salesOff,
+					"01", profile.getPaymentTerm(), profile.getAccount(), "01",
+					"1", "1", crmCountry.getCurrencyIso());
+		} else {
+			codeSap = listCustomer.get(0).getCode();
+		}
+
+		selectedPatient.setCodeSap(codeSap);
+		selectedPatient.setDocType(docType);
+		selectedPatient.setCrmUserByIdUserModified(FacesUtil.getCurrentUser());
+		selectedPatient.setDateModified(new Date());
+
+		boolean saved = false;
+		try {
+			processService.savePatient(selectedPatient, automatic && newRecord,
+					false, null);
+			saved = true;
+			newAction(null);
+		} catch (Exception ex) {
+			String message = null;
+			if (ex instanceof DataIntegrityViolationException) {
+				String field = FacesUtil.getMessage("con");
+				message = FacesUtil.getMessage("msg_record_unique_exception",
+						field);
+			} else {
+				message = ex.getMessage();
+			}
+			FacesUtil.addError(message);
+
+			RequestContext context = RequestContext.getCurrentInstance();
+			context.addCallbackParam("saved", saved);
+		}
 	}
 
 	@Override
