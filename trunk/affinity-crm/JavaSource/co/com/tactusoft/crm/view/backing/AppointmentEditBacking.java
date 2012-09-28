@@ -562,7 +562,7 @@ public class AppointmentEditBacking extends BaseBacking {
 					selectedCandidate.getStartDate(),
 					selectedCandidate.getEndDate(), procedureDetail,
 					selectedCandidate.getDoctor().getId(),
-					selectedPatient.getCodeSap(), timeType);
+					selectedPatient.getId(), timeType);
 
 			if (validateApp != 0) {
 				switch (validateApp) {

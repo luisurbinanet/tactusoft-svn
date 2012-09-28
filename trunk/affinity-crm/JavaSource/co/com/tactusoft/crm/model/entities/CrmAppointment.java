@@ -35,7 +35,6 @@ public class CrmAppointment implements java.io.Serializable {
 	private CrmDoctor crmDoctor;
 	private String code;
 	private String patientNames;
-	private String patientSap;
 	private Date startAppointmentDate;
 	private Date endAppointmentDate;
 	private String codPublicity;
@@ -76,7 +75,7 @@ public class CrmAppointment implements java.io.Serializable {
 			CrmUser crmUserByIdUserModified, CrmUser crmUserByIdUserCreate,
 			CrmBranch crmBranch, CrmUser crmUserByIdUserCanceled,
 			CrmDoctor crmDoctor, String code, String patientNames,
-			String patientSap, Date startAppointmentDate,
+			Date startAppointmentDate,
 			Date endAppointmentDate, String codPublicity, String namePublicity,
 			String obs, Boolean untimely, Boolean closeAppointment,
 			Boolean medicationTherapy, int state, Date dateCreate,
@@ -94,7 +93,6 @@ public class CrmAppointment implements java.io.Serializable {
 		this.crmDoctor = crmDoctor;
 		this.code = code;
 		this.patientNames = patientNames;
-		this.patientSap = patientSap;
 		this.startAppointmentDate = startAppointmentDate;
 		this.endAppointmentDate = endAppointmentDate;
 		this.codPublicity = codPublicity;
@@ -219,15 +217,6 @@ public class CrmAppointment implements java.io.Serializable {
 
 	public void setPatientNames(String patientNames) {
 		this.patientNames = patientNames;
-	}
-
-	@Column(name = "patient_sap", length = 45)
-	public String getPatientSap() {
-		return this.patientSap;
-	}
-
-	public void setPatientSap(String patientSap) {
-		this.patientSap = patientSap;
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)

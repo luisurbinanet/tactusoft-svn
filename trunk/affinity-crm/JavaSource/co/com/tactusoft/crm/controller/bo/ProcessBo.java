@@ -764,7 +764,8 @@ public class ProcessBo implements Serializable {
 		return resultSearchAppointment;
 	}
 
-	private int validateDuplicated(String patient, Date startDate, Date endDate) {
+	private int validateDuplicated(BigDecimal idPatient, Date startDate,
+			Date endDate) {
 		String dateString = FacesUtil.formatDate(startDate, "yyyy-MM-dd");
 		String startHourString = FacesUtil.formatDate(startDate, "HH:mm:ss");
 		String endHourString = FacesUtil.formatDate(endDate, "HH:mm:ss");
@@ -774,8 +775,8 @@ public class ProcessBo implements Serializable {
 						+ dateString + "T" + startHourString
 						+ ".000+05:00' and o.startAppointmentDate <= '"
 						+ dateString + "T" + endHourString
-						+ ".000+05:00' and o.patientSap = '" + patient
-						+ "' and o.state in (1,3,4,5)"
+						+ ".000+05:00' and o.crmPatient.id = " + idPatient
+						+ " and o.state in (1,3,4,5)"
 						+ "order by o.startAppointmentDate");
 
 		return listApp.size();
@@ -832,12 +833,12 @@ public class ProcessBo implements Serializable {
 
 	public int validateAppointmentForDate(BigDecimal idBranch, Date starDate,
 			Date endDate, CrmProcedureDetail procedureDetail,
-			BigDecimal idDoctor, String patient, String timeType) {
+			BigDecimal idDoctor, BigDecimal idPatient, String timeType) {
 
 		int result = 0;
 
 		// Validar si Paciente tiene otra cita
-		result = validateDuplicated(patient, starDate, endDate);
+		result = validateDuplicated(idPatient, starDate, endDate);
 		if (result > 0) {
 			return -4;
 		}
@@ -939,25 +940,25 @@ public class ProcessBo implements Serializable {
 		return result;
 	}
 
-	public List<CrmAppointment> listAppointmentByPatient(String patient,
+	public List<CrmAppointment> listAppointmentByPatient(BigDecimal idPatient,
 			int state) {
 		List<CrmAppointment> list = new ArrayList<CrmAppointment>();
-		list = dao.find("from CrmAppointment o where o.patientSap = '"
-				+ patient + "' and o.state = " + state
+		list = dao.find("from CrmAppointment o where o.crmPatient.id = "
+				+ idPatient + " and o.state = " + state
 				+ " order by o.startAppointmentDate desc");
 		return list;
 	}
 
-	public List<CrmAppointment> listAppointmentByPatient(String patient,
+	public List<CrmAppointment> listAppointmentByPatient(BigDecimal idPatient,
 			String state) {
 		List<CrmAppointment> list = new ArrayList<CrmAppointment>();
-		list = dao.find("from CrmAppointment o where o.patientSap = '"
-				+ patient + "' and o.state in (" + state
+		list = dao.find("from CrmAppointment o where o.crmPatient.id = "
+				+ idPatient + " and o.state in (" + state
 				+ ") order by o.startAppointmentDate desc");
 		return list;
 	}
 
-	public List<CrmAppointment> listAppointmentByPatient(String patient,
+	public List<CrmAppointment> listAppointmentByPatient(BigDecimal idPatient,
 			int state, Date startDate, Date endDate) {
 
 		String startDateString = FacesUtil.formatDate(startDate, "yyyy-MM-dd");
@@ -975,9 +976,9 @@ public class ProcessBo implements Serializable {
 						+ startDateString
 						+ "T00:00:00.000+05:00' and '"
 						+ endDateString
-						+ "T23:59:59.999+05:00') and o.patientSap = '"
-						+ patient
-						+ "' and o.state = "
+						+ "T23:59:59.999+05:00') and o.crmPatient.id = "
+						+ idPatient
+						+ " and o.state = "
 						+ stateString
 						+ " order by o.startAppointmentDate desc");
 
