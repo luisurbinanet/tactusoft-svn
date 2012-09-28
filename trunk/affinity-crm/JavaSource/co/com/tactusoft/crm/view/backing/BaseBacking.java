@@ -88,7 +88,7 @@ public class BaseBacking implements Serializable {
 	protected List<SelectItem> listCity;
 	protected BigDecimal idCity;
 	protected Map<BigDecimal, CrmCity> mapCity;
-	
+
 	protected List<SelectItem> listBranch;
 	protected String salesOff;
 
@@ -178,27 +178,22 @@ public class BaseBacking implements Serializable {
 				listPatient = processService.getListPatientByNameOrDoc("NAMES",
 						this.namePatient.toUpperCase());
 
-				/*result = CustomerExecute.findByName(sap.getUrlCustomer2(),
-						sap.getUsername(), sap.getPassword(),
-						profile.getSociety(), this.namePatient);
-
-				for (WSBean row : result) {
-					boolean validate = true;
-
-					for (CrmPatient pat : listPatient) {
-						if (row.getCode().equals(pat.getCodeSap())) {
-							validate = false;
-							break;
-						}
-					}
-
-					if (validate) {
-						CrmPatient patient = new CrmPatient();
-						patient.setCodeSap(row.getCode());
-						patient.setNames(row.getNames());
-						listPatient.add(patient);
-					}
-				}*/
+				/*
+				 * result = CustomerExecute.findByName(sap.getUrlCustomer2(),
+				 * sap.getUsername(), sap.getPassword(), profile.getSociety(),
+				 * this.namePatient);
+				 * 
+				 * for (WSBean row : result) { boolean validate = true;
+				 * 
+				 * for (CrmPatient pat : listPatient) { if
+				 * (row.getCode().equals(pat.getCodeSap())) { validate = false;
+				 * break; } }
+				 * 
+				 * if (validate) { CrmPatient patient = new CrmPatient();
+				 * patient.setCodeSap(row.getCode());
+				 * patient.setNames(row.getNames()); listPatient.add(patient); }
+				 * }
+				 */
 			}
 
 			patientModel = new PatientDataModel(listPatient);
@@ -317,12 +312,9 @@ public class BaseBacking implements Serializable {
 	public boolean isDisabledAddPatient() {
 		if ((listPatient == null) || (listPatient.size() == 0)) {
 			return true;
-		} else if (listPatient.size() == 1) {
-			if (listPatient.get(0).getCodeSap().isEmpty()) {
-				return true;
-			}
+		} else {
+			return false;
 		}
-		return false;
 	}
 
 	public boolean isDisabledSelectedPatient() {
@@ -546,7 +538,7 @@ public class BaseBacking implements Serializable {
 	public void setMapCity(Map<BigDecimal, CrmCity> mapCity) {
 		this.mapCity = mapCity;
 	}
-	
+
 	public List<SelectItem> getListBranch() {
 		if (listBranch == null) {
 			listBranch = new LinkedList<SelectItem>();

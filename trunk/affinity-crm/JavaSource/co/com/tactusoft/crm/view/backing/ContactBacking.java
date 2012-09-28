@@ -93,14 +93,6 @@ public class ContactBacking extends BaseBacking {
 		this.selectedSendOptions = selectedSendOptions;
 	}
 
-	public boolean isDisabledAddContact() {
-		if ((listPatient == null) || (listPatient.size() == 0)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	public void newAction(ActionEvent event) {
 		selectedPatient = new CrmPatient();
 		selectedPatient.setCrmProfile(new CrmProfile());
@@ -262,8 +254,7 @@ public class ContactBacking extends BaseBacking {
 					false, null);
 			saved = true;
 			newAction(null);
-			message = FacesUtil.getMessage("con_msg_update_ok",
-					selectedPatient.getNames());
+			message = FacesUtil.getMessage("pat_msg_ok", codeSap);
 			FacesUtil.addInfo(message);
 		} catch (Exception ex) {
 			if (ex instanceof DataIntegrityViolationException) {
