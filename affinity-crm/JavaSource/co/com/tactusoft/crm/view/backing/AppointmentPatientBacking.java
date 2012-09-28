@@ -186,7 +186,7 @@ public class AppointmentPatientBacking extends BaseBacking {
 			FacesUtil.addError(message);
 		} else {
 			listAppointment = processService.listAppointmentByPatient(
-					selectedPatient.getCodeSap(), Constant.APP_STATE_CONFIRMED);
+					selectedPatient.getId(), Constant.APP_STATE_CONFIRMED);
 			appointmentModel = new AppointmentDataModel(listAppointment);
 			if (listAppointment.size() > 0) {
 				selectedAppointment = listAppointment.get(0);

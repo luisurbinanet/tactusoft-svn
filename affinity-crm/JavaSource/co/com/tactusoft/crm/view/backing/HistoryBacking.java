@@ -679,7 +679,7 @@ public class HistoryBacking extends BaseBacking {
 			}
 
 			listAppointment = processService.listAppointmentByPatient(
-					selectedPatient.getCodeSap(), "3,4");
+					selectedPatient.getId(), "3,4");
 			appointmentModel = new AppointmentDataModel(listAppointment);
 
 			selectedHistoryHistory = processService
@@ -946,7 +946,8 @@ public class HistoryBacking extends BaseBacking {
 			selectedHistoryPhysique.setCrmPatient(selectedPatient);
 			selectedHistoryOrganometry.setCrmPatient(selectedPatient);
 
-			int result = processService.savePatient(selectedPatient, false, false, null);
+			int result = processService.savePatient(selectedPatient, false,
+					false, null);
 			if (result == 0) {
 
 				if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getHead())) {

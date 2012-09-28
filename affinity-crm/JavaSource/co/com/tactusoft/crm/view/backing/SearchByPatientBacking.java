@@ -145,8 +145,7 @@ public class SearchByPatientBacking extends BaseBacking {
 			FacesUtil.addError(message);
 		} else {
 			listAppointment = processService.listAppointmentByPatient(
-					selectedPatient.getCodeSap(), this.state, startDate,
-					endDate);
+					selectedPatient.getId(), this.state, startDate, endDate);
 			appointmentModel = new AppointmentDataModel(listAppointment);
 
 			if (listAppointment.size() > 0) {
@@ -189,8 +188,9 @@ public class SearchByPatientBacking extends BaseBacking {
 
 	public void cancelAppointmentAction(ActionEvent actionEvent) {
 		String code = "";
-		
-		selectedAppointment.setCrmUserByIdUserCanceled(FacesUtil.getCurrentUser());
+
+		selectedAppointment.setCrmUserByIdUserCanceled(FacesUtil
+				.getCurrentUser());
 		selectedAppointment.setDateCanceled(new Date());
 		selectedAppointment.setState(Constant.APP_STATE_CANCELED);
 		processService.saveAppointment(selectedAppointment);
@@ -201,7 +201,7 @@ public class SearchByPatientBacking extends BaseBacking {
 		String message = FacesUtil.getMessage("app_msg_cancel", code);
 		FacesUtil.addInfo(message);
 	}
-	
+
 	public void checkAppointmentAction(ActionEvent actionEvent) {
 		String code = "";
 		selectedAppointment.setCrmUserByIdUserChecked(FacesUtil

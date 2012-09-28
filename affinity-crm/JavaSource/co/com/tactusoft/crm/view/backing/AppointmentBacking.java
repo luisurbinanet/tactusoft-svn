@@ -654,7 +654,7 @@ public class AppointmentBacking extends BaseBacking {
 						selectedAppointment.getStartDate(),
 						selectedAppointment.getEndDate(), procedureDetail,
 						selectedAppointment.getDoctor().getId(),
-						selectedPatient.getCodeSap(), timeType);
+						selectedPatient.getId(), timeType);
 			} else {
 				CrmDoctor doctor = mapDoctor.get(selected.getCrmDoctor()
 						.getId());
@@ -685,7 +685,6 @@ public class AppointmentBacking extends BaseBacking {
 
 				selected.setCode(code);
 				selected.setCrmPatient(selectedPatient);
-				selected.setPatientSap(selectedPatient.getCodeSap());
 				selected.setPatientNames(selectedPatient.getFirstnames() + " "
 						+ selectedPatient.getSurnames());
 				selected.setCrmDoctor(selectedAppointment.getDoctor());
