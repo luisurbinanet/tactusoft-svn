@@ -181,9 +181,11 @@ public class AppointmentPatientBacking extends BaseBacking {
 	}
 
 	public void searchAppoinmnetConfirmedAction() {
-		if (selectedPatient.getCodeSap() == null) {
-			String message = FacesUtil.getMessage("sal_msg_error_pat");
-			FacesUtil.addError(message);
+		if (selectedPatient.getCodeSap() == null
+				|| selectedPatient.getCodeSap()
+						.equals(selectedPatient.getDoc())) {
+			String message = FacesUtil.getMessage("sal_msg_error_con");
+			FacesUtil.addWarn(message);
 		} else {
 			listAppointment = processService.listAppointmentByPatient(
 					selectedPatient.getId(), Constant.APP_STATE_CONFIRMED);
@@ -191,6 +193,15 @@ public class AppointmentPatientBacking extends BaseBacking {
 			if (listAppointment.size() > 0) {
 				selectedAppointment = listAppointment.get(0);
 			}
+		}
+	}
+
+	public void searchAppoinmnetConfirmedWithoutValidAction() {
+		listAppointment = processService.listAppointmentByPatient(
+				selectedPatient.getId(), Constant.APP_STATE_CONFIRMED);
+		appointmentModel = new AppointmentDataModel(listAppointment);
+		if (listAppointment.size() > 0) {
+			selectedAppointment = listAppointment.get(0);
 		}
 	}
 
@@ -210,7 +221,7 @@ public class AppointmentPatientBacking extends BaseBacking {
 		processService.saveAppointment(selectedAppointment);
 		code = selectedAppointment.getCode();
 
-		searchAppoinmnetConfirmedAction();
+		searchAppoinmnetConfirmedWithoutValidAction();
 
 		String message = FacesUtil.getMessage("app_msg_cancel", code);
 		FacesUtil.addInfo(message);
@@ -285,5 +296,16 @@ public class AppointmentPatientBacking extends BaseBacking {
 		}
 		typeHousing = selectedPatient.getTypeHousing();
 		neighborhood = selectedPatient.getNeighborhood();
+	}
+
+	public void addPatientAction(ActionEvent event) {
+		searchAppoinmnetConfirmedAction();
+	}
+
+	public String addGoPatientAction() {
+		ContactBacking contactBacking = FacesUtil.findBean("contactBacking");
+		contactBacking.setSelectedPatient(selectedPatient);
+		contactBacking.setNewRecord(false);
+		return "/pages/processes/contact?faces-redirect=true";
 	}
 }

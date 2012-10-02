@@ -22,15 +22,10 @@
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
 							actionListener="#{appointmentPatientBacking.newAction}"
-							process="@this" update="pnlDetail selectedTable btnSearchPatient" />
+							process="@this" update="pnlDetail selectedTable" />
 						<p:commandButton value="#{msg['btn_add_patient']}"
 							icon="ui-icon-circle-check" oncomplete="dlg2.show()"
 							update=":editForm:dialog2" />
-						<p:commandButton id="btnSearchPatient"
-							value="#{msg['btn_search_app']}" icon="ui-icon-search"
-							update="selectedTable growl"
-							disabled="#{appointmentPatientBacking.disabledSelectedPatient}"
-							action="#{appointmentPatientBacking.searchAppoinmnetConfirmedAction}" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -54,7 +49,14 @@
 						readonly="true"
 						rendered="#{appointmentPatientBacking.selectedPatient eq null?false:true}" />
 
-					<p:spacer height="10"
+					<p:commandButton value="#{msg['btn_update_patient']}"
+						icon="ui-icon-circle-check"
+						disabled="#{not appointmentPatientBacking.selectedPatient.contact}"
+						rendered="#{appointmentPatientBacking.selectedPatient eq null?false:true}"
+						action="#{appointmentPatientBacking.addGoPatientAction}" />
+					<h:outputLabel value="" />
+
+					<p:spacer height="20"
 						rendered="#{appointmentPatientBacking.selectedPatient eq null?false:true}" />
 				</h:panelGrid>
 
@@ -138,7 +140,7 @@
 								<f:selectItem itemLabel="#{msg['sal_key_press_nom']}"
 									itemValue="2" />
 							</p:selectOneRadio>
-							
+
 							<h:panelGrid columns="2" width="100%" cellspacing="10">
 								<h:outputText value="#{msg['usr_profile']}" />
 								<p:selectOneMenu value="#{appointmentPatientBacking.idProfile}"
@@ -170,9 +172,9 @@
 								update="pnlTable2 recordTable2 btnAddPatient"
 								action="#{appointmentPatientBacking.searchPatientAction}" />
 							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
-								icon="ui-icon-plusthick"
-								update=":form:pnlDetail :form:btnSearchPatient"
+								icon="ui-icon-plusthick" update=":form:pnlDetail :form:growl :form:selectedTable"
 								oncomplete="dlg2.hide()"
+								actionListener="#{appointmentPatientBacking.addPatientAction}"
 								disabled="#{appointmentPatientBacking.disabledAddPatient}" />
 						</f:facet>
 					</h:panelGrid>
@@ -181,7 +183,7 @@
 					<p:scrollPanel id="pnlTable2" style="width:580px;height:400px">
 						<p:dataTable id="recordTable2" var="rec"
 							value="#{appointmentPatientBacking.patientModel}"
-							rowKey="#{rec.codeSap}"
+							rowKey="#{rec.id}"
 							selection="#{appointmentPatientBacking.selectedPatient}"
 							paginator="true" rows="15" style="width:570px"
 							emptyMessage="#{msg['glb_no_records_found']}">
@@ -249,7 +251,7 @@
 
 						<h:panelGrid columns="2">
 							<p:commandButton value="#{msg['btn_ok']}"
-								update=":form:selectedTable :form:growl"
+								update=":form:selectedTable :form:growl :form:selectedTable"
 								oncomplete="handleSaveRequest(xhr, status, args)"
 								actionListener="#{appointmentPatientBacking.checkAppointmentAction}" />
 							<p:commandButton value="#{msg['btn_close']}"
@@ -276,8 +278,10 @@
 
 				<script type="text/javascript">
 					function handleSaveRequest(xhr, status, args) {
-						if(args.validationFailed || !args.saved) {
-							jQuery('#confirmDialog').effect("shake", { times:3 }, 100);
+						if (args.validationFailed || !args.saved) {
+							jQuery('#confirmDialog').effect("shake", {
+								times : 3
+							}, 100);
 						} else {
 							confirmDlg.hide();
 						}

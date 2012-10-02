@@ -200,7 +200,7 @@
 							<p:column selectionMode="single" style="width:18px" />
 
 							<p:column headerText="#{msg['pat_code_1']}">
-								<h:outputLabel value="#{rec.codeSap}" />
+								<h:outputLabel value="#{rec.doc}" />
 							</p:column>
 
 							<p:column headerText="#{msg['pat_names']}">
@@ -285,7 +285,7 @@
 
 						<h:outputText value="#{msg['pat_address']}" />
 						<p:inputText value="#{contactBacking.selectedPatient.address}"
-							maxlength="255" style="width:240px" label="#{msg['pat_address']}"
+							maxlength="35" style="width:240px" label="#{msg['pat_address']}"
 							required="true" />
 
 						<h:outputText value="#{msg['pat_zip_code']}" />

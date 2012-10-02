@@ -1270,7 +1270,7 @@ public class ProcessBo implements Serializable {
 		List<CrmPatient> list = null;
 		list = dao.find("FROM CrmPatient o WHERE (o.firstnames like '%" + name
 				+ "%' OR o.surnames like '%" + name
-				+ "%') AND (o.doc IS NULL OR o.doc = o.codeSap)");
+				+ "%') AND (o.doc IS NULL OR o.codeSap IS NULL OR o.doc = o.codeSap)");
 		return list;
 	}
 

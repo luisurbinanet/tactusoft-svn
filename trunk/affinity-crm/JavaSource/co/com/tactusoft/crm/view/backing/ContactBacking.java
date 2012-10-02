@@ -200,6 +200,8 @@ public class ContactBacking extends BaseBacking {
 	}
 
 	public void updateAction(ActionEvent event) {
+		RequestContext context = RequestContext.getCurrentInstance();
+		boolean saved = false;
 		String codeSap = null;
 		String message = null;
 		SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
@@ -224,12 +226,21 @@ public class ContactBacking extends BaseBacking {
 			CrmRegion crmRegion = mapRegion.get(selectedPatient.getIdRegion());
 			CrmCity crmCity = mapCity.get(selectedPatient.getIdCity());
 
+			String address = selectedPatient.getAddress();
+			if (address.length() > 35) {
+				address = address.substring(0, 34);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedPatient.getZipCode())) {
+				selectedPatient.setZipCode("00000");
+			}
+
 			codeSap = CustomerExecute.excecute(sap.getUrlCustomerMaintainAll(),
 					sap.getUsername(), sap.getPassword(), sap.getEnvironment(),
 					docType, selectedPatient.getDoc(), tratamiento,
 					selectedPatient.getSurnames(),
-					selectedPatient.getFirstnames(),
-					selectedPatient.getAddress(), selectedPatient.getZipCode(),
+					selectedPatient.getFirstnames(), address,
+					selectedPatient.getZipCode(),
 					selectedPatient.getPhoneNumber(),
 					selectedPatient.getCellNumber(),
 					selectedPatient.getEmail(), crmCountry.getCode(),
@@ -238,32 +249,35 @@ public class ContactBacking extends BaseBacking {
 					profile.getDivision(), profile.getSociety(), this.salesOff,
 					"01", profile.getPaymentTerm(), profile.getAccount(), "01",
 					"1", "1", crmCountry.getCurrencyIso());
+
+			selectedPatient.setCodeSap(codeSap);
+			selectedPatient.setDocType(docType);
+			selectedPatient.setCrmUserByIdUserModified(FacesUtil
+					.getCurrentUser());
+			selectedPatient.setDateModified(new Date());
+
+			try {
+				processService.savePatient(selectedPatient, automatic
+						&& newRecord, false, null);
+				saved = true;
+				newAction(null);
+				message = FacesUtil.getMessage("pat_msg_ok", codeSap);
+				FacesUtil.addInfo(message);
+			} catch (Exception ex) {
+				if (ex instanceof DataIntegrityViolationException) {
+					String field = FacesUtil.getMessage("con");
+					message = FacesUtil.getMessage(
+							"msg_record_unique_exception", field);
+				} else {
+					message = ex.getMessage();
+				}
+				FacesUtil.addError(message);
+			}
+
 		} else {
 			codeSap = listCustomer.get(0).getCode();
-		}
-
-		selectedPatient.setCodeSap(codeSap);
-		selectedPatient.setDocType(docType);
-		selectedPatient.setCrmUserByIdUserModified(FacesUtil.getCurrentUser());
-		selectedPatient.setDateModified(new Date());
-
-		RequestContext context = RequestContext.getCurrentInstance();
-		boolean saved = false;
-		try {
-			processService.savePatient(selectedPatient, automatic && newRecord,
-					false, null);
-			saved = true;
-			newAction(null);
-			message = FacesUtil.getMessage("pat_msg_ok", codeSap);
-			FacesUtil.addInfo(message);
-		} catch (Exception ex) {
-			if (ex instanceof DataIntegrityViolationException) {
-				String field = FacesUtil.getMessage("con");
-				message = FacesUtil.getMessage("msg_record_unique_exception",
-						field);
-			} else {
-				message = ex.getMessage();
-			}
+			message = FacesUtil.getMessage("pat_msg_exists_sap_1",
+					selectedPatient.getDoc(), codeSap);
 			FacesUtil.addError(message);
 		}
 
