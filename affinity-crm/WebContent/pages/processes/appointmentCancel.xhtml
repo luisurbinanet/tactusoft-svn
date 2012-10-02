@@ -30,7 +30,7 @@
 							value="#{msg['btn_search_app']}" icon="ui-icon-search"
 							update="selectedTable growl"
 							disabled="#{appointmentPatientBacking.disabledSelectedPatient}"
-							action="#{appointmentPatientBacking.searchAppoinmnetConfirmedAction}" />
+							action="#{appointmentPatientBacking.searchAppoinmnetConfirmedWithoutValidAction}" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -130,7 +130,7 @@
 								<f:selectItem itemLabel="#{msg['sal_key_press_nom']}"
 									itemValue="2" />
 							</p:selectOneRadio>
-							
+
 							<h:panelGrid columns="2" width="100%" cellspacing="10">
 								<h:outputText value="#{msg['usr_profile']}" />
 								<p:selectOneMenu value="#{appointmentPatientBacking.idProfile}"
@@ -173,7 +173,7 @@
 					<p:scrollPanel id="pnlTable2" style="width:580px;height:400px">
 						<p:dataTable id="recordTable2" var="rec"
 							value="#{appointmentPatientBacking.patientModel}"
-							rowKey="#{rec.codeSap}"
+							rowKey="#{rec.id}"
 							selection="#{appointmentPatientBacking.selectedPatient}"
 							paginator="true" rows="15" style="width:570px"
 							emptyMessage="#{msg['glb_no_records_found']}">

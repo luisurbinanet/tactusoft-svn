@@ -574,4 +574,17 @@ public class CrmPatient implements java.io.Serializable {
 		this.age = age;
 	}
 
+	@Transient
+	public boolean isContact() {
+		if (id == null) {
+			return false;
+		} else {
+			if (FacesUtil.isEmptyOrBlank(codeSap) || codeSap.equals(doc)) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+	}
+
 }

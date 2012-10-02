@@ -178,7 +178,7 @@
 					<p:spacer height="10" />
 					<p:scrollPanel id="pnlTable2" style="width:580px;height:400px">
 						<p:dataTable id="recordTable2" var="rec"
-							value="#{salesOrderBacking.patientModel}" rowKey="#{rec.codeSap}"
+							value="#{salesOrderBacking.patientModel}" rowKey="#{rec.id}"
 							selection="#{salesOrderBacking.selectedPatient}" paginator="true"
 							rows="15" style="width:570px"
 							emptyMessage="#{msg['glb_no_records_found']}">

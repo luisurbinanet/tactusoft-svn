@@ -41,7 +41,7 @@ public class PatientDataModel extends ListDataModel<CrmPatient> implements
 	}
 
 	@Override
-	public Object getRowKey(CrmPatient car) {
-		return car.getId();
+	public Object getRowKey(CrmPatient row) {
+		return row.getId();
 	}
 }

@@ -122,6 +122,17 @@ public class FacesUtil {
 		Object[] args = { paramValue };
 		return messageFormat.format(args);
 	}
+	
+	public static String getMessage(String resourceBundleKey, String paramValue1, String paramValue2) {
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+		Locale locale = facesContext.getViewRoot().getLocale();
+		ResourceBundle bundle = ResourceBundle.getBundle(
+				"co.com.tactusoft.crm.view.resources.resources", locale);
+		String msgValue = bundle.getString(resourceBundleKey);
+		MessageFormat messageFormat = new MessageFormat(msgValue);
+		Object[] args = { paramValue1, paramValue2 };
+		return messageFormat.format(args);
+	}
 
 	public static void logout() {
 		ExternalContext ectx = FacesContext.getCurrentInstance()
