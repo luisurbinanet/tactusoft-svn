@@ -20,6 +20,7 @@ public class CrmParameter implements java.io.Serializable {
 	private String description;
 	private String textValue;
 	private BigDecimal numberValue;
+	private String byGroup;
 
 	public CrmParameter() {
 	}
@@ -29,12 +30,13 @@ public class CrmParameter implements java.io.Serializable {
 	}
 
 	public CrmParameter(BigDecimal id, String code, String description,
-			String textValue, BigDecimal numberValue) {
+			String textValue, BigDecimal numberValue, String byGroup) {
 		this.id = id;
 		this.code = code;
 		this.description = description;
 		this.textValue = textValue;
 		this.numberValue = numberValue;
+		this.byGroup = byGroup;
 	}
 
 	@Id
@@ -81,6 +83,15 @@ public class CrmParameter implements java.io.Serializable {
 
 	public void setNumberValue(BigDecimal numberValue) {
 		this.numberValue = numberValue;
+	}
+
+	@Column(name = "group_by", length = 45)
+	public String getByGroup() {
+		return byGroup;
+	}
+
+	public void setByGroup(String byGroup) {
+		this.byGroup = byGroup;
 	}
 
 }

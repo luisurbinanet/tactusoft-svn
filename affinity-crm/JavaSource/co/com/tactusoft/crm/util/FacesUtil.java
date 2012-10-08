@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.InetAddress;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
@@ -122,8 +123,9 @@ public class FacesUtil {
 		Object[] args = { paramValue };
 		return messageFormat.format(args);
 	}
-	
-	public static String getMessage(String resourceBundleKey, String paramValue1, String paramValue2) {
+
+	public static String getMessage(String resourceBundleKey,
+			String paramValue1, String paramValue2) {
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		Locale locale = facesContext.getViewRoot().getLocale();
 		ResourceBundle bundle = ResourceBundle.getBundle(
@@ -376,5 +378,16 @@ public class FacesUtil {
 			break;
 		}
 		return result;
+	}
+
+	public static String getCurrentIP() {
+		String ip = null;
+		try {
+			InetAddress thisIp = InetAddress.getLocalHost();
+			ip = thisIp.getHostAddress();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ip;
 	}
 }

@@ -13,33 +13,38 @@
 			media="screen" />
 
 		<script type="text/javascript">
-            PrimeFaces.locales['es'] = {
-                closeText: 'Cerrar',
-                prevText: 'Anterior',
-                nextText: 'Próximo',
-                currentText: 'Inicio',
-                monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
-                monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun', 'Jul','Ago','Sep','Oct','Nov','Dec'],
-                dayNames: ['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sábado'],
-                dayNamesShort: ['Dom','Lun','Mar','Mie','Jue','Vie','Sáb'],
-                dayNamesMin: ['D','L','M','M','J','V','S'],
-                weekHeader: 'Semana',
-                firstDay: 1,
-                isRTL: false,
-                showMonthAfterYear: false,
-                yearSuffix: '',
-                timeOnlyTitle: 'Apenas unas horas',
-                timeText: 'Tempo',
-                hourText: 'Hora',
-                minuteText: 'Minuto',
-                secondText: 'Segundo',
-                ampm: false,
-                month: 'Mes',
-                week: 'Semana',
-                day: 'Día',
-                allDayText : 'Todos Los Días'
-            };
-        </script>
+			PrimeFaces.locales['es'] = {
+				closeText : 'Cerrar',
+				prevText : 'Anterior',
+				nextText : 'Próximo',
+				currentText : 'Inicio',
+				monthNames : [ 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo',
+						'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre',
+						'Noviembre', 'Diciembre' ],
+				monthNamesShort : [ 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+						'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dec' ],
+				dayNames : [ 'Domingo', 'Lunes', 'Martes', 'Miercoles',
+						'Jueves', 'Viernes', 'Sábado' ],
+				dayNamesShort : [ 'Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie',
+						'Sáb' ],
+				dayNamesMin : [ 'D', 'L', 'M', 'M', 'J', 'V', 'S' ],
+				weekHeader : 'Semana',
+				firstDay : 1,
+				isRTL : false,
+				showMonthAfterYear : false,
+				yearSuffix : '',
+				timeOnlyTitle : 'Apenas unas horas',
+				timeText : 'Tempo',
+				hourText : 'Hora',
+				minuteText : 'Minuto',
+				secondText : 'Segundo',
+				ampm : false,
+				month : 'Mes',
+				week : 'Semana',
+				day : 'Día',
+				allDayText : 'Todos Los Días'
+			};
+		</script>
 	</h:head>
 
 	<h:body>
@@ -65,6 +70,24 @@
 			</h:panelGrid>
 		</p:dialog>
 
+		<p:dialog id="dialogEnvironment" modal="true"
+			widgetVar="dlgEnvironment" header="#{msg['env_title']}"
+			draggable="false" closable="true" resizable="false" dynamic="true">
+
+			<h:panelGrid columns="2">
+				<h:outputText value="#{msg['env_environment']}" />
+				<h:outputText value="#{sessionBacking.environment}"
+					style="font-weight:bold;" />
+				<h:outputText value="#{msg['env_ip_web']}" />
+				<h:outputText value="#{sessionBacking.ipWeb}"
+					style="font-weight:bold;" />
+				<h:outputText value="#{msg['env_version']}" />
+				<h:outputText value="#{sessionBacking.version}"
+					style="font-weight:bold;" />
+			</h:panelGrid>
+
+		</p:dialog>
+
 		<div id="content">
 
 			<div id="mainContent">
@@ -78,8 +101,11 @@
 					rendered="#{loginBacking.authenticated}" columns="2">
 					<h:outputLabel value="#{msg['title_app']}"
 						style="font-size:medium;width:100%;font-weight:bold;" />
-					<h:outputLabel value="Usuario: #{loginBacking.userName}"
-						style="font-size:medium;width:100%;font-weight:bold;" />
+					<h:outputLink value="javascript:void(0)"
+						style="margin-right:20px;font-weight:bold;"
+						onclick="dlgEnvironment.show()">
+						<h:outputText value="Usuario: #{loginBacking.userName}" />
+					</h:outputLink>
 				</h:panelGrid>
 
 				<p:spacer height="1" />
