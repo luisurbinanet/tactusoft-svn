@@ -22,36 +22,40 @@
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
 							actionListener="#{appointmentPatientBacking.newAction}"
-							process="@this" update="pnlDetail selectedTable btnSearchPatient" />
+							process="@this" update="pnlPatient selectedTable" />
 						<p:commandButton value="#{msg['btn_add_patient']}"
 							icon="ui-icon-circle-check" oncomplete="dlg2.show()"
 							update=":editForm:dialog2" />
-						<p:commandButton id="btnSearchPatient"
-							value="#{msg['btn_search_app']}" icon="ui-icon-search"
-							update="selectedTable growl"
-							disabled="#{appointmentPatientBacking.disabledSelectedPatient}"
-							action="#{appointmentPatientBacking.searchAppoinmnetConfirmedWithoutValidAction}" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
 				<p:spacer height="10" />
 
-				<h:panelGrid id="pnlDetail" columns="4" cellpadding="4"
+				<h:panelGrid id="pnlPatient" columns="4" cellpadding="4"
 					style="margin:0 auto;" width="100%">
-
-					<h:outputLabel value="#{msg['pat_sap_code']}" style="width:40%" />
+					<h:outputLabel
+						value="#{appointmentPatientBacking.selectedPatient.contact?msg['pat_phone_number']:msg['pat_sap_code']}"
+						rendered="#{appointmentPatientBacking.selectedPatient eq null?false:true}" />
 					<p:inputText
-						value="#{appointmentPatientBacking.selectedPatient.codeSap}"
-						style="width:350px" readonly="true" />
+						value="#{appointmentPatientBacking.selectedPatient.contact?appointmentPatientBacking.selectedPatient.phoneNumber:appointmentPatientBacking.selectedPatient.codeSap}"
+						style="width:350px;background-color:#FFFF80;font-weight:bold;"
+						readonly="true"
+						rendered="#{appointmentPatientBacking.selectedPatient eq null?false:true}" />
 
-					<h:outputLabel value="#{msg['pat_names']}" style="width:40%" />
+					<h:outputLabel value="#{msg['pat_names']}"
+						rendered="#{appointmentPatientBacking.selectedPatient eq null?false:true}" />
 					<p:inputText
 						value="#{appointmentPatientBacking.selectedPatient.names}"
-						style="width:350px" readonly="true" />
+						style="width:350px;background-color:#FFFF80;font-weight:bold;"
+						readonly="true"
+						rendered="#{appointmentPatientBacking.selectedPatient eq null?false:true}" />
 
+					<p:spacer height="20"
+						rendered="#{appointmentPatientBacking.selectedPatient eq null?false:true}" />
+					<p:spacer height="20"
+						rendered="#{appointmentPatientBacking.selectedPatient eq null?false:true}" />
 				</h:panelGrid>
 
-				<p:spacer height="15" />
 				<p:dataTable id="selectedTable" var="rec"
 					value="#{appointmentPatientBacking.appointmentModel}"
 					rowKey="#{rec.code}" style="width:100%"
@@ -162,15 +166,15 @@
 								update="pnlTable2 recordTable2 btnAddPatient"
 								action="#{appointmentPatientBacking.searchPatientAction}" />
 							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
-								icon="ui-icon-plusthick"
-								update=":form:pnlDetail :form:btnSearchPatient"
+								icon="ui-icon-plusthick" update=":form:pnlPatient :form:selectedTable"
 								oncomplete="dlg2.hide()"
+								actionListener="#{appointmentPatientBacking.addPatientWithoutValidAction}"
 								disabled="#{appointmentPatientBacking.disabledAddPatient}" />
 						</f:facet>
 					</h:panelGrid>
 
 					<p:spacer height="10" />
-					<p:scrollPanel id="pnlTable2" style="width:580px;height:400px">
+					<p:scrollPanel id="pnlTable2" style="width:580px;height:300px">
 						<p:dataTable id="recordTable2" var="rec"
 							value="#{appointmentPatientBacking.patientModel}"
 							rowKey="#{rec.id}"

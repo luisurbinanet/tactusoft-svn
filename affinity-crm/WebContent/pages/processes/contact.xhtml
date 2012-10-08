@@ -32,7 +32,7 @@
 							update="growl toolBar pnlDetail pnlDetail2 pnlDetail3"
 							process="toolBar pnlDetail pnlDetail2 pnlDetail3" />
 						<p:commandButton value="#{msg['btn_update']}" process="@this"
-							icon="ui-icon-search" oncomplete="updateDlg.show()"
+							icon="ui-icon-refresh" oncomplete="updateDlg.show()"
 							update="updateDialog" disabled="#{contactBacking.newRecord}" />
 					</p:toolbarGroup>
 				</p:toolbar>
@@ -306,6 +306,30 @@
 						<p:inputText value="#{contactBacking.selectedPatient.cellNumber}"
 							style="width:240px" label="#{msg['pat_cell_number']}"
 							required="true" maxlength="16" />
+
+						<h:outputLabel value="#{msg['pat_occupation']}" />
+						<p:selectOneMenu value="#{contactBacking.idOccupation}"
+							style="width:240px" label="#{msg['pat_occupation']}"
+							required="true">
+							<f:selectItems value="#{contactBacking.listOccupation}" />
+						</p:selectOneMenu>
+
+						<h:outputLabel value="#{msg['pat_neighborhood']}" />
+						<p:inputText maxlength="45" required="true"
+							value="#{contactBacking.selectedPatient.neighborhood}"
+							style="width:240px" label="#{msg['pat_neighborhood']}" />
+
+						<h:outputLabel value="#{msg['pat_type_housing']}" />
+						<p:selectOneMenu required="true"
+							value="#{contactBacking.selectedPatient.typeHousing}"
+							style="width:240px" label="#{msg['pat_type_housing']}">
+							<f:selectItem itemLabel="#{msg['glb_default_value']}"
+								itemValue="" />
+							<f:selectItem itemLabel="#{msg['pat_type_housing_u']}"
+								itemValue="U" />
+							<f:selectItem itemLabel="#{msg['pat_type_housing_r']}"
+								itemValue="R" />
+						</p:selectOneMenu>
 
 						<h:outputText value="#{msg['pat_cycle']}" />
 						<p:selectOneRadio id="optionsCycle" layout="pageDirection"

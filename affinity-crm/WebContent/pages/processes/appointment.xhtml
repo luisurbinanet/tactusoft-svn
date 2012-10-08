@@ -46,9 +46,11 @@
 				<h:panelGrid id="pnlDetail" columns="2" width="100%"
 					columnClasses="width25per,width75per">
 
-					<h:outputLabel value="#{msg['pat_sap_code']}"
+					<h:outputLabel
+						value="#{appointmentBacking.selectedPatient.contact?msg['pat_phone_number']:msg['pat_sap_code']}"
 						rendered="#{appointmentBacking.selectedPatient eq null?false:true}" />
-					<p:inputText value="#{appointmentBacking.selectedPatient.codeSap}"
+					<p:inputText
+						value="#{appointmentBacking.selectedPatient.contact?appointmentBacking.selectedPatient.phoneNumber:appointmentBacking.selectedPatient.codeSap}"
 						style="width:700px;background-color:#FFFF80;font-weight:bold;"
 						readonly="true"
 						rendered="#{appointmentBacking.selectedPatient eq null?false:true}" />
@@ -166,7 +168,7 @@
 					<p:spacer height="5" />
 					<h:outputLabel
 						style="text-align:center;font-size:large;font-weight:bold;"
-						value="#{appointmentBacking.detSelectedAppointment}" />
+						value="#{appointmentBacking.detSelectedCandidate}" />
 
 				</h:panelGrid>
 
@@ -186,8 +188,7 @@
 						<h:outputLabel value="#{appointmentBacking.infoMessage}"
 							style="text-align:center;font-size:large;font-weight:bold;" />
 						<p:spacer height="5" rendered="#{appointmentBacking.saved}" />
-						<h:outputLabel
-							value="#{appointmentBacking.detSelectedAppointment}"
+						<h:outputLabel value="#{appointmentBacking.detSelectedCandidate}"
 							rendered="#{appointmentBacking.saved}"
 							style="text-align:center;font-size:large;font-weight:bold;" />
 					</h:panelGrid>
@@ -252,7 +253,7 @@
 					</h:panelGrid>
 
 					<p:spacer height="10" />
-					<p:scrollPanel id="pnlTable2" style="width:580px;height:400px">
+					<p:scrollPanel id="pnlTable2" style="width:580px;height:300px">
 						<p:dataTable id="recordTable2" var="rec"
 							value="#{appointmentBacking.patientModel}" rowKey="#{rec.id}"
 							selection="#{appointmentBacking.selectedPatient}"
@@ -286,7 +287,7 @@
 					<p:dataTable id="selectedTable" var="rec"
 						value="#{appointmentBacking.modelAppointment}" rowKey="#{rec.id}"
 						style="width:100%"
-						selection="#{appointmentBacking.selectedAppointment}"
+						selection="#{appointmentBacking.selectedCandidate}"
 						paginator="true" rows="10"
 						emptyMessage="#{msg['glb_no_records_found']}">
 
