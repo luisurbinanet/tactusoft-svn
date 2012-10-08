@@ -79,6 +79,9 @@ public class MenuBacking implements Serializable {
 		PatientBacking patientBacking = FacesUtil.findBean("patientBacking");
 		patientBacking.newAction(null);
 		
+		ContactBacking contactBacking = FacesUtil.findBean("contactBacking");
+		contactBacking.newAction(null);
+		
 		HistoryBacking historyBacking = FacesUtil.findBean("historyBacking");
 		historyBacking.newAction(null);
 

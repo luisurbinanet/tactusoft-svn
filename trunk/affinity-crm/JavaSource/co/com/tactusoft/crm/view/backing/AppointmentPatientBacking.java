@@ -301,8 +301,12 @@ public class AppointmentPatientBacking extends BaseBacking {
 	public void addPatientAction(ActionEvent event) {
 		searchAppoinmnetConfirmedAction();
 	}
+	
+	public void addPatientWithoutValidAction(ActionEvent event) {
+		searchAppoinmnetConfirmedWithoutValidAction();
+	}
 
-	public String addGoPatientAction() {
+	public String addGoContactAction() {
 		ContactBacking contactBacking = FacesUtil.findBean("contactBacking");
 		contactBacking.setSelectedPatient(selectedPatient);
 		contactBacking.setNewRecord(false);

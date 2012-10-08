@@ -140,7 +140,7 @@ public class SearchByPatientBacking extends BaseBacking {
 	}
 
 	public void searchAppoinmentAction() {
-		if (selectedPatient.getCodeSap() == null) {
+		if (FacesUtil.isEmptyOrBlank(selectedPatient.getFirstnames())) {
 			String message = FacesUtil.getMessage("sal_msg_error_pat");
 			FacesUtil.addError(message);
 		} else {
@@ -162,10 +162,10 @@ public class SearchByPatientBacking extends BaseBacking {
 	}
 
 	public String editAppoinmnetAction() {
-		AppointmentEditBacking appointmentEditBacking = FacesUtil
-				.findBean("appointmentEditBacking");
+		AppointmentBacking appointmentEditBacking = FacesUtil
+				.findBean("appointmentBacking");
 
-		appointmentEditBacking.editAction(null);
+		appointmentEditBacking.newAction(null);
 		appointmentEditBacking.setSelected(selectedAppointment);
 		appointmentEditBacking.setSelectedPatient(selectedAppointment
 				.getCrmPatient());
@@ -182,6 +182,7 @@ public class SearchByPatientBacking extends BaseBacking {
 		appointmentEditBacking.handleProcedureDetailChange();
 		appointmentEditBacking.setSelectedWSGroupSellers(selectedAppointment
 				.getCodPublicity());
+		appointmentEditBacking.setEdit(true);
 
 		return "/pages/processes/appointmentEdit.jsf?faces-redirect=true";
 	}
@@ -215,6 +216,13 @@ public class SearchByPatientBacking extends BaseBacking {
 
 		String message = FacesUtil.getMessage("app_msg_check", code);
 		FacesUtil.addInfo(message);
+	}
+	
+	public String addGoContactAction() {
+		ContactBacking contactBacking = FacesUtil.findBean("contactBacking");
+		contactBacking.setSelectedPatient(selectedPatient);
+		contactBacking.setNewRecord(false);
+		return "/pages/processes/contact?faces-redirect=true";
 	}
 
 }

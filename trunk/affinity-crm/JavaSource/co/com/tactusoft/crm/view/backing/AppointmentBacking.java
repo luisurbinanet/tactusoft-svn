@@ -69,7 +69,7 @@ public class AppointmentBacking extends BaseBacking {
 
 	private List<Candidate> listAppointment;
 	private CandidateDataModel modelAppointment;
-	private Candidate selectedAppointment;
+	private Candidate selectedCandidate;
 
 	private boolean renderedForDate;
 	private boolean renderedForDoctor;
@@ -78,6 +78,7 @@ public class AppointmentBacking extends BaseBacking {
 
 	private String infoMessage;
 	private boolean saved;
+	private boolean edit;
 
 	private int minutes = 0;
 	private String timeType = null;
@@ -270,12 +271,12 @@ public class AppointmentBacking extends BaseBacking {
 		this.modelAppointment = modelAppointment;
 	}
 
-	public Candidate getSelectedAppointment() {
-		return selectedAppointment;
+	public Candidate getSelectedCandidate() {
+		return selectedCandidate;
 	}
 
-	public void setSelectedAppointment(Candidate selectedAppointment) {
-		this.selectedAppointment = selectedAppointment;
+	public void setSelectedCandidate(Candidate selectedCandidate) {
+		this.selectedCandidate = selectedCandidate;
 	}
 
 	public boolean isRenderedForDate() {
@@ -326,6 +327,14 @@ public class AppointmentBacking extends BaseBacking {
 		this.saved = saved;
 	}
 
+	public boolean isEdit() {
+		return edit;
+	}
+
+	public void setEdit(boolean edit) {
+		this.edit = edit;
+	}
+
 	public String getInfoMessageDate() {
 		return infoMessageDate;
 	}
@@ -360,10 +369,11 @@ public class AppointmentBacking extends BaseBacking {
 
 		listAppointment = new LinkedList<Candidate>();
 		modelAppointment = new CandidateDataModel(listAppointment);
-		selectedAppointment = null;
+		selectedCandidate = null;
 
 		infoMessage = null;
 		saved = false;
+		edit = false;
 
 		if (listProcedureDetail != null) {
 			if (listProcedureDetail.size() > 0) {
@@ -526,15 +536,15 @@ public class AppointmentBacking extends BaseBacking {
 		}
 	}
 
-	public String getDetSelectedAppointment() {
+	public String getDetSelectedCandidate() {
 		String result = "";
-		if (selectedAppointment != null) {
+		if (selectedCandidate != null) {
 			String message = FacesUtil.getMessage("app_msg_selected");
 			if (this.idSearch.intValue() == Constant.APP_TYPE_FOR_DATE_VALUE
 					.intValue()) {
-				result = message + " " + selectedAppointment.getDateDetail();
+				result = message + " " + selectedCandidate.getDateDetail();
 			} else {
-				result = message + " " + selectedAppointment.getDoctorDetail();
+				result = message + " " + selectedCandidate.getDoctorDetail();
 			}
 		}
 		return result;
@@ -583,7 +593,7 @@ public class AppointmentBacking extends BaseBacking {
 			}
 		}
 
-		if (validateNoRepeat && infoMessage == null) {
+		if ((validateNoRepeat || edit) && infoMessage == null) {
 			if (this.renderedForDate) {
 				ResultSearchAppointment resultSearchAppointment = processService
 						.getScheduleAppointmentForDate(mapBranch.get(idBranch),
@@ -604,12 +614,12 @@ public class AppointmentBacking extends BaseBacking {
 
 			modelAppointment = new CandidateDataModel(listAppointment);
 			if (listAppointment.size() > 0) {
-				selectedAppointment = listAppointment.get(0);
+				selectedCandidate = listAppointment.get(0);
 			}
 		} else {
 			listAppointment = new ArrayList<Candidate>();
 			modelAppointment = new CandidateDataModel(listAppointment);
-			selectedAppointment = null;
+			selectedCandidate = null;
 			if (!validateNoRepeat) {
 				String message = procedureDetail.getNoRepeatDays().toString();
 				infoMessage = FacesUtil.getMessage("app_msg_error_procedure",
@@ -638,7 +648,7 @@ public class AppointmentBacking extends BaseBacking {
 		}
 
 		// validar Selección Cita
-		if ((selectedAppointment == null) && (appType.equals("ORDINARY"))) {
+		if ((selectedCandidate == null) && (appType.equals("ORDINARY"))) {
 			infoMessage = FacesUtil.getMessage("app_msg_error_app");
 		}
 
@@ -651,17 +661,17 @@ public class AppointmentBacking extends BaseBacking {
 			if (appType.equals("ORDINARY")) {
 				validateApp = processService.validateAppointmentForDate(
 						selected.getCrmBranch().getId(),
-						selectedAppointment.getStartDate(),
-						selectedAppointment.getEndDate(), procedureDetail,
-						selectedAppointment.getDoctor().getId(),
+						selectedCandidate.getStartDate(),
+						selectedCandidate.getEndDate(), procedureDetail,
+						selectedCandidate.getDoctor().getId(),
 						selectedPatient.getId(), timeType);
 			} else {
 				CrmDoctor doctor = mapDoctor.get(selected.getCrmDoctor()
 						.getId());
-				selectedAppointment = new Candidate();
-				selectedAppointment.setStartDate(currentDate);
-				selectedAppointment.setEndDate(currentDate);
-				selectedAppointment.setDoctor(doctor);
+				selectedCandidate = new Candidate();
+				selectedCandidate.setStartDate(currentDate);
+				selectedCandidate.setEndDate(currentDate);
+				selectedCandidate.setDoctor(doctor);
 			}
 
 			if (validateApp != 0) {
@@ -681,13 +691,10 @@ public class AppointmentBacking extends BaseBacking {
 				}
 
 			} else {
-				String code = "";
-
-				selected.setCode(code);
 				selected.setCrmPatient(selectedPatient);
 				selected.setPatientNames(selectedPatient.getFirstnames() + " "
 						+ selectedPatient.getSurnames());
-				selected.setCrmDoctor(selectedAppointment.getDoctor());
+				selected.setCrmDoctor(selectedCandidate.getDoctor());
 				selected.setCrmBranch(mapBranch.get(idBranch));
 				selected.setCrmProcedureDetail(procedureDetail);
 
@@ -695,9 +702,9 @@ public class AppointmentBacking extends BaseBacking {
 				selected.setNamePublicity(mapWSGroupSellers
 						.get(selectedWSGroupSellers));
 
-				selected.setStartAppointmentDate(selectedAppointment
+				selected.setStartAppointmentDate(selectedCandidate
 						.getStartDate());
-				selected.setEndAppointmentDate(selectedAppointment.getEndDate());
+				selected.setEndAppointmentDate(selectedCandidate.getEndDate());
 				selected.setCloseAppointment(false);
 
 				if (appType.equals("ORDINARY")) {

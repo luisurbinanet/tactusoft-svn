@@ -318,7 +318,8 @@ public class BaseBacking implements Serializable {
 	}
 
 	public boolean isDisabledSelectedPatient() {
-		if ((selectedPatient == null) || (selectedPatient.getCodeSap() == null)) {
+		if ((selectedPatient == null)
+				|| (FacesUtil.isEmptyOrBlank(selectedPatient.getFirstnames()))) {
 			return true;
 		}
 		return false;

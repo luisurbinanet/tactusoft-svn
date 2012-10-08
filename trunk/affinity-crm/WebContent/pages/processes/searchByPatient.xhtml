@@ -25,9 +25,14 @@
 							update=":editForm:dialog2" />
 						<p:commandButton id="btnSearchPatient"
 							value="#{msg['btn_search_app']}" icon="ui-icon-search"
-							update="selectedTable growl"
+							update="selectedTable growl btnUpdatePatient"
 							disabled="#{searchByPatientBacking.disabledSelectedPatient}"
 							action="#{searchByPatientBacking.searchAppoinmentAction}" />
+						<p:commandButton id="btnUpdatePatient"
+							value="#{msg['btn_update']}" process="@this"
+							icon="ui-icon-refresh"
+							action="#{searchByPatientBacking.addGoContactAction}"
+							disabled="#{not searchByPatientBacking.selectedPatient.contact}" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -36,10 +41,11 @@
 				<h:panelGrid id="pnlDetail" columns="4" cellpadding="4"
 					style="margin:0 auto;" width="100%">
 
-					<h:outputLabel value="#{msg['pat_sap_code']}"
+					<h:outputLabel
+						value="#{searchByPatientBacking.selectedPatient.contact?msg['pat_phone_number']:msg['pat_sap_code']}"
 						rendered="#{searchByPatientBacking.selectedPatient.id eq null?false:true}" />
 					<p:inputText
-						value="#{searchByPatientBacking.selectedPatient.codeSap}"
+						value="#{searchByPatientBacking.selectedPatient.contact?searchByPatientBacking.selectedPatient.phoneNumber:searchByPatientBacking.selectedPatient.codeSap}"
 						style="width:350px;background-color:#FFFF80;font-weight:bold;"
 						readonly="true"
 						rendered="#{searchByPatientBacking.selectedPatient.id eq null?false:true}" />
@@ -143,7 +149,7 @@
 							disabled="#{searchByPatientBacking.selectedAppointment.state eq 1?false:true}" />
 						<p:commandButton value="#{msg['btn_check_appointment']}"
 							icon="ui-icon-check" onclick="checkedDlg.show()"
-							disabled="#{searchByPatientBacking.selectedAppointment.state eq 1?false:true}" />
+							disabled="#{(searchByPatientBacking.selectedAppointment.state eq 1?false:true) or searchByPatientBacking.selectedPatient.contact}" />
 					</f:facet>
 
 				</p:dataTable>
@@ -206,10 +212,9 @@
 					</h:panelGrid>
 
 					<p:spacer height="10" />
-					<p:scrollPanel id="pnlTable2" style="width:580px;height:400px">
+					<p:scrollPanel id="pnlTable2" style="width:580px;height:300px">
 						<p:dataTable id="recordTable2" var="rec"
-							value="#{searchByPatientBacking.patientModel}"
-							rowKey="#{rec.id}"
+							value="#{searchByPatientBacking.patientModel}" rowKey="#{rec.id}"
 							selection="#{searchByPatientBacking.selectedPatient}"
 							paginator="true" rows="15" style="width:570px"
 							emptyMessage="#{msg['glb_no_records_found']}">

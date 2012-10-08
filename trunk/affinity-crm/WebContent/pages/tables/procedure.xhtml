@@ -115,7 +115,8 @@
 
 					<p:pickList var="row" value="#{procedureBacking.listModelBranch}"
 						converter="branchConverter" itemValue="#{row}"
-						itemLabel="#{row.name} (#{row.society})">
+						itemLabel="#{row.name} (#{row.society})" showSourceFilter="true"
+						showTargetFilter="true" filterMatchMode="contains">
 
 						<f:facet name="sourceCaption">#{msg['usr_branch']}</f:facet>
 						<f:facet name="targetCaption">#{msg['glb_target_caption']}</f:facet>
