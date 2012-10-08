@@ -2,6 +2,7 @@ package co.com.tactusoft.crm.view.backing;
 
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.context.annotation.Scope;
@@ -13,12 +14,17 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import co.com.tactusoft.crm.controller.bo.ParameterBo;
+import co.com.tactusoft.crm.model.entities.CrmParameter;
 import co.com.tactusoft.crm.security.UserData;
 import co.com.tactusoft.crm.util.FacesUtil;
 
 @Named
 @Scope("session")
 public class LoginBacking {
+
+	@Inject
+	private ParameterBo parameterBo;
 
 	private String userName;
 	private String password;
@@ -101,6 +107,20 @@ public class LoginBacking {
 				this.authenticated = true;
 				page = ((UserData) authenticationResponseToken.getPrincipal())
 						.getPageDefault() + "?faces-redirect=true";
+
+				SessionBacking sessionBacking = FacesUtil
+						.findBean("sessionBacking");
+
+				List<CrmParameter> list = parameterBo
+						.getListParameterByGroup("AMBIENTE");
+				sessionBacking.setIpWeb(FacesUtil.getCurrentIP());
+				for (CrmParameter row : list) {
+					if (row.getCode().equals("ENV_AMBIENTE")) {
+						sessionBacking.setEnvironment(row.getTextValue());
+					} else if (row.getCode().equals("ENV_VERSION")) {
+						sessionBacking.setVersion(row.getTextValue());
+					}
+				}
 			}
 
 		} catch (BadCredentialsException badCredentialsException) {

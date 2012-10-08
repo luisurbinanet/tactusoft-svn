@@ -12,10 +12,7 @@ import co.com.tactusoft.crm.model.entities.CrmParameter;
 
 @Named
 public class ParameterBo implements Serializable {
-
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 
 	@Inject
@@ -35,6 +32,11 @@ public class ParameterBo implements Serializable {
 
 	public List<CrmParameter> getListParameter() {
 		return dao.find("from CrmParameter o");
+	}
+
+	public List<CrmParameter> getListParameterByGroup(String byGroup) {
+		return dao
+				.find("from CrmParameter o where byGroup = '" + byGroup + "'");
 	}
 
 	public Integer saveParameter(CrmParameter entity) {
