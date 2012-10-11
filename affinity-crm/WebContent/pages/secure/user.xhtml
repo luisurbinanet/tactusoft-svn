@@ -80,115 +80,120 @@
 
 				<p:spacer height="10" />
 
-				<h:panelGrid columns="4" cellpadding="4" style="margin:0 auto;"
-					width="100%">
+				<p:scrollPanel style="width:900px;height:600px;">
+					<h:panelGrid columns="4" cellpadding="4" style="margin:0 auto;"
+						width="100%">
 
-					<h:outputLabel value="#{msg['usr_username']}" />
-					<p:inputText value="#{userBacking.selected.username}"
-						style="width:250px" label="#{msg['usr_username']}" required="true"
-						readonly="#{userBacking.selected.id ne null?true:false}" />
+						<h:outputLabel value="#{msg['usr_username']}" />
+						<p:inputText value="#{userBacking.selected.username}"
+							style="width:250px" label="#{msg['usr_username']}"
+							required="true"
+							readonly="#{userBacking.selected.id ne null?true:false}" />
 
-					<h:outputLabel value="#{msg['usr_doc']}" />
-					<p:inputText value="#{userBacking.selected.doc}"
-						style="width:250px" label="#{msg['usr_doc']}" required="true"
-						maxlength="45" />
+						<h:outputLabel value="#{msg['usr_doc']}" />
+						<p:inputText value="#{userBacking.selected.doc}"
+							style="width:250px" label="#{msg['usr_doc']}" required="true"
+							maxlength="45" />
 
-					<h:outputLabel value="#{msg['usr_names']}" />
-					<p:inputText value="#{userBacking.selected.names}"
-						style="width:250px" label="#{msg['usr_names']}" required="true"
-						maxlength="255" />
+						<h:outputLabel value="#{msg['usr_names']}" />
+						<p:inputText value="#{userBacking.selected.names}"
+							style="width:250px" label="#{msg['usr_names']}" required="true"
+							maxlength="255" />
 
-					<h:outputLabel value="#{msg['usr_surnames']}" />
-					<p:inputText value="#{userBacking.selected.surnames}"
-						style="width:250px" label="#{msg['usr_surnames']}" required="true"
-						maxlength="255" />
+						<h:outputLabel value="#{msg['usr_surnames']}" />
+						<p:inputText value="#{userBacking.selected.surnames}"
+							style="width:250px" label="#{msg['usr_surnames']}"
+							required="true" maxlength="255" />
 
-					<h:outputLabel value="#{msg['usr_email']}" />
-					<p:inputText value="#{userBacking.selected.email}"
-						style="width:250px" label="#{msg['usr_email']}" required="true"
-						validator="emailValidator" />
+						<h:outputLabel value="#{msg['usr_email']}" />
+						<p:inputText value="#{userBacking.selected.email}"
+							style="width:250px" label="#{msg['usr_email']}" required="true"
+							validator="emailValidator" />
 
-					<h:outputLabel value="#{msg['usr_phone']}" />
-					<p:inputText value="#{userBacking.selected.phone}"
-						style="width:250px" label="#{msg['usr_phone']}" />
+						<h:outputLabel value="#{msg['usr_phone']}" />
+						<p:inputText value="#{userBacking.selected.phone}"
+							style="width:250px" label="#{msg['usr_phone']}" />
 
-					<h:outputLabel value="#{msg['usr_ext']}" />
-					<p:inputText value="#{userBacking.selected.extension}"
-						style="width:250px" label="#{msg['usr_ext']}" />
+						<h:outputLabel value="#{msg['usr_ext']}" />
+						<p:inputText value="#{userBacking.selected.extension}"
+							style="width:250px" label="#{msg['usr_ext']}" />
 
-					<h:outputLabel value="#{msg['usr_password']}" />
-					<p:password id="pwd1" value="#{userBacking.selected.password}"
-						label="#{msg['usr_password']}" style="width:250px" />
+						<h:outputLabel value="#{msg['usr_password']}" />
+						<p:password id="pwd1" value="#{userBacking.selected.password}"
+							label="#{msg['usr_password']}" style="width:250px" />
 
-					<h:outputLabel value="#{msg['usr_departament']}" />
-					<p:selectOneMenu value="#{userBacking.selected.crmDepartment.id}"
-						style="width:250px">
-						<f:selectItems value="#{userBacking.listDepartment}" />
-					</p:selectOneMenu>
+						<h:outputLabel value="#{msg['usr_departament']}" />
+						<p:selectOneMenu value="#{userBacking.selected.crmDepartment.id}"
+							style="width:250px">
+							<f:selectItems value="#{userBacking.listDepartment}" />
+						</p:selectOneMenu>
 
-					<h:outputLabel value="#{msg['usr_role_principal']}" />
-					<p:selectOneMenu value="#{userBacking.rolePrincipal}">
-						<p:ajax update="lblSpeciality cmbSpeciality" />
-						<f:selectItem itemValue="USER"
-							itemLabel="#{msg['user_role_principal_user']}" />
-						<f:selectItem itemValue="DOCTOR"
-							itemLabel="#{msg['user_role_principal_doctor']}" />
-						<f:selectItem itemValue="NURSE"
-							itemLabel="#{msg['user_role_principal_nurse']}" />
-					</p:selectOneMenu>
+						<h:outputLabel value="#{msg['usr_role_principal']}" />
+						<p:selectOneMenu value="#{userBacking.rolePrincipal}">
+							<p:ajax update="lblSpeciality cmbSpeciality" />
+							<f:selectItem itemValue="USER"
+								itemLabel="#{msg['user_role_principal_user']}" />
+							<f:selectItem itemValue="DOCTOR"
+								itemLabel="#{msg['user_role_principal_doctor']}" />
+							<f:selectItem itemValue="NURSE"
+								itemLabel="#{msg['user_role_principal_nurse']}" />
+						</p:selectOneMenu>
 
-					<h:outputLabel id="lblSpeciality" value="#{msg['doc_speciality']}"
-						disabled="#{userBacking.rolePrincipal ne 'DOCTOR'?true:false}" />
-					<p:selectOneMenu id="cmbSpeciality"
-						value="#{userBacking.idSpeciality}" style="width:250px"
-						disabled="#{userBacking.rolePrincipal ne 'DOCTOR'?true:false}">
-						<f:selectItems value="#{userBacking.listCrmSpeciality}" />
-					</p:selectOneMenu>
+						<h:outputLabel id="lblSpeciality" value="#{msg['doc_speciality']}"
+							disabled="#{userBacking.rolePrincipal ne 'DOCTOR'?true:false}" />
+						<p:selectOneMenu id="cmbSpeciality"
+							value="#{userBacking.idSpeciality}" style="width:250px"
+							disabled="#{userBacking.rolePrincipal ne 'DOCTOR'?true:false}">
+							<f:selectItems value="#{userBacking.listCrmSpeciality}" />
+						</p:selectOneMenu>
 
-					<h:outputLabel value="#{msg['glb_state']}"
-						rendered="#{userBacking.selected.id!=null?true:false}" />
-					<p:selectOneMenu value="#{userBacking.selected.state}"
-						rendered="#{userBacking.selected.id!=null?true:false}"
-						style="width:250px">
-						<f:selectItem itemValue="1" itemLabel="#{msg['glb_state_active']}" />
-						<f:selectItem itemValue="0"
-							itemLabel="#{msg['glb_state_inactive']}" />
-					</p:selectOneMenu>
+						<h:outputLabel value="#{msg['glb_state']}"
+							rendered="#{userBacking.selected.id!=null?true:false}" />
+						<p:selectOneMenu value="#{userBacking.selected.state}"
+							rendered="#{userBacking.selected.id!=null?true:false}"
+							style="width:250px">
+							<f:selectItem itemValue="1"
+								itemLabel="#{msg['glb_state_active']}" />
+							<f:selectItem itemValue="0"
+								itemLabel="#{msg['glb_state_inactive']}" />
+						</p:selectOneMenu>
 
-				</h:panelGrid>
+					</h:panelGrid>
 
-				<p:spacer height="10" />
+					<p:spacer height="10" />
 
 
-				<h:panelGrid columns="2" width="100%">
+					<h:panelGrid columns="2" width="100%">
 
-					<p:pickList var="row" value="#{userBacking.listBranchUser}"
-						converter="branchConverter" itemValue="#{row}"
-						itemLabel="#{row.name} (#{row.society})" showSourceFilter="true"
-						showTargetFilter="true" filterMatchMode="contains">
+						<p:pickList var="row" value="#{userBacking.listBranchUser}"
+							converter="branchConverter" itemValue="#{row}"
+							itemLabel="#{row.name} (#{row.society})" showSourceFilter="true"
+							showTargetFilter="true" filterMatchMode="contains">
 
-						<f:facet name="sourceCaption">#{msg['usr_branch']}</f:facet>
-						<f:facet name="targetCaption">#{msg['glb_target_caption']}</f:facet>
-					</p:pickList>
+							<f:facet name="sourceCaption">#{msg['usr_branch']}</f:facet>
+							<f:facet name="targetCaption">#{msg['glb_target_caption']}</f:facet>
+						</p:pickList>
 
-					<p:pickList var="row" value="#{userBacking.listRole}"
-						converter="roleConverter" itemValue="#{row}"
-						itemLabel="#{row.name}" showSourceFilter="true"
-						showTargetFilter="true" filterMatchMode="contains">
+						<p:pickList var="row" value="#{userBacking.listRole}"
+							converter="roleConverter" itemValue="#{row}"
+							itemLabel="#{row.name}" showSourceFilter="true"
+							showTargetFilter="true" filterMatchMode="contains">
 
-						<f:facet name="sourceCaption">#{msg['usr_roles']}</f:facet>
-						<f:facet name="targetCaption">#{msg['glb_target_caption']}</f:facet>
-					</p:pickList>
+							<f:facet name="sourceCaption">#{msg['usr_roles']}</f:facet>
+							<f:facet name="targetCaption">#{msg['glb_target_caption']}</f:facet>
+						</p:pickList>
 
-					<p:pickList var="row" value="#{userBacking.listUserProfile}"
-						converter="profileConverter" itemValue="#{row}"
-						itemLabel="#{row.code}" showSourceFilter="true"
-						showTargetFilter="true" filterMatchMode="contains">
+						<p:pickList var="row" value="#{userBacking.listUserProfile}"
+							converter="profileConverter" itemValue="#{row}"
+							itemLabel="#{row.code}" showSourceFilter="true"
+							showTargetFilter="true" filterMatchMode="contains">
 
-						<f:facet name="sourceCaption">#{msg['usr_profile']}</f:facet>
-						<f:facet name="targetCaption">#{msg['glb_target_caption']}</f:facet>
-					</p:pickList>
-				</h:panelGrid>
+							<f:facet name="sourceCaption">#{msg['usr_profile']}</f:facet>
+							<f:facet name="targetCaption">#{msg['glb_target_caption']}</f:facet>
+						</p:pickList>
+					</h:panelGrid>
+				</p:scrollPanel>
+
 			</p:dialog>
 		</h:form>
 
