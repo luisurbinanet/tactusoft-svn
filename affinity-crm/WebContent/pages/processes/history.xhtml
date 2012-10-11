@@ -364,11 +364,10 @@
 								<h:outputLabel value="#{msg['pat_neighborhood']}" />
 								<p:inputText style="width:400px"
 									label="#{msg['pat_neighborhood']}"
-									value="#{historyBacking.selectedPatient.neighborhood}" />
+									value="#{historyBacking.neighborhood}" />
 
 								<h:outputLabel value="#{msg['pat_type_housing']}" />
-								<p:selectOneMenu
-									value="#{historyBacking.selectedPatient.typeHousing}"
+								<p:selectOneMenu value="#{historyBacking.typeHousing}"
 									style="width:408px" label="#{msg['pat_type_housing']}">
 									<f:selectItem itemLabel="#{msg['glb_default_value']}"
 										itemValue="" />
