@@ -129,6 +129,8 @@ public class HistoryBacking extends BaseBacking {
 	private List<SelectItem> listOccupation;
 	private Map<BigDecimal, CrmOccupation> mapOccupation;
 	private BigDecimal idOccupation;
+	private String neighborhood;
+	private String typeHousing;
 
 	public HistoryBacking() {
 		newAction(null);
@@ -632,6 +634,22 @@ public class HistoryBacking extends BaseBacking {
 		this.idOccupation = idOccupation;
 	}
 
+	public String getNeighborhood() {
+		return neighborhood;
+	}
+
+	public void setNeighborhood(String neighborhood) {
+		this.neighborhood = neighborhood;
+	}
+
+	public String getTypeHousing() {
+		return typeHousing;
+	}
+
+	public void setTypeHousing(String typeHousing) {
+		this.typeHousing = typeHousing;
+	}
+
 	public void newAction(ActionEvent event) {
 		selectedHistoryHistory = new CrmHistoryHistory();
 		selectedHistoryRecord = new CrmHistoryRecord();
@@ -654,6 +672,8 @@ public class HistoryBacking extends BaseBacking {
 		selectedPatient.setCrmOccupation(new CrmOccupation());
 		selectedPatient.getCrmOccupation().setId(Constant.DEFAULT_VALUE);
 		idOccupation = null;
+		neighborhood = null;
+		typeHousing = null;
 
 		disabledSaveButton = true;
 		optionSearchPatient = 1;
@@ -718,7 +738,12 @@ public class HistoryBacking extends BaseBacking {
 			if (selectedPatient.getCrmOccupation() == null) {
 				selectedPatient.setCrmOccupation(new CrmOccupation());
 				idOccupation = null;
+			} else {
+				idOccupation = selectedPatient.getCrmOccupation().getId();
 			}
+
+			neighborhood = selectedPatient.getNeighborhood();
+			typeHousing = selectedPatient.getTypeHousing();
 
 			if (selectedPatient.getBornDate() != null) {
 				age = calculateAge(selectedPatient.getBornDate());
@@ -812,28 +837,34 @@ public class HistoryBacking extends BaseBacking {
 			FacesUtil.addError(message);
 		}
 
-		if (idOccupation == null) {
+		if (idOccupation == null || idOccupation.intValue() == 0) {
 			field = FacesUtil.getMessage("pat_occupation");
 			message = FacesUtil.getMessage("title_patient_complementary");
 			message = message + " - "
 					+ FacesUtil.getMessage("glb_required", field);
 			FacesUtil.addError(message);
+		} else {
+			selectedPatient.setCrmOccupation(mapOccupation.get(idOccupation));
 		}
 
-		if (selectedPatient.getNeighborhood() == null) {
+		if (FacesUtil.isEmptyOrBlank(neighborhood)) {
 			field = FacesUtil.getMessage("pat_neighborhood");
 			message = FacesUtil.getMessage("title_patient_complementary");
 			message = message + " - "
 					+ FacesUtil.getMessage("glb_required", field);
 			FacesUtil.addError(message);
+		} else {
+			selectedPatient.setNeighborhood(neighborhood);
 		}
 
-		if (selectedPatient.getTypeHousing() == null) {
+		if (FacesUtil.isEmptyOrBlank(typeHousing)) {
 			field = FacesUtil.getMessage("pat_type_housing");
 			message = FacesUtil.getMessage("title_patient_complementary");
 			message = message + " - "
 					+ FacesUtil.getMessage("glb_required", field);
 			FacesUtil.addError(message);
+		} else {
+			selectedPatient.setTypeHousing(typeHousing);
 		}
 
 		if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getReason())) {
@@ -1016,7 +1047,6 @@ public class HistoryBacking extends BaseBacking {
 			selectedHistoryPhysique.setCrmPatient(selectedPatient);
 			selectedHistoryOrganometry.setCrmPatient(selectedPatient);
 
-			selectedPatient.setCrmOccupation(mapOccupation.get(idOccupation));
 			int result = processService.savePatient(selectedPatient, false,
 					false, null);
 			if (result == 0) {
