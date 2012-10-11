@@ -356,22 +356,27 @@
 									readonly="true" value="#{historyBacking.age} #{msg['glb_age']}" />
 
 								<h:outputLabel value="#{msg['pat_occupation']}" />
-								<p:inputText
-									style="width:400px;background-color:#FFFF80;font-weight:bold;"
-									readonly="true"
-									value="#{historyBacking.selectedPatient.crmOccupation.name}" />
+								<p:selectOneMenu value="#{historyBacking.idOccupation}"
+									style="width:408px" label="#{msg['pat_occupation']}">
+									<f:selectItems value="#{historyBacking.listOccupation}" />
+								</p:selectOneMenu>
 
 								<h:outputLabel value="#{msg['pat_neighborhood']}" />
-								<p:inputText
-									style="width:400px;background-color:#FFFF80;font-weight:bold;"
-									readonly="true"
+								<p:inputText style="width:400px"
+									label="#{msg['pat_neighborhood']}"
 									value="#{historyBacking.selectedPatient.neighborhood}" />
 
 								<h:outputLabel value="#{msg['pat_type_housing']}" />
-								<p:inputText
-									style="width:400px;background-color:#FFFF80;font-weight:bold;"
-									readonly="true"
-									value="#{historyBacking.selectedPatient.typeHousing eq 'U'?msg['pat_type_housing_u']:historyBacking.selectedPatient.typeHousing eq 'R'?msg['pat_type_housing_r']:''}" />
+								<p:selectOneMenu
+									value="#{historyBacking.selectedPatient.typeHousing}"
+									style="width:408px" label="#{msg['pat_type_housing']}">
+									<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										itemValue="" />
+									<f:selectItem itemLabel="#{msg['pat_type_housing_u']}"
+										itemValue="U" />
+									<f:selectItem itemLabel="#{msg['pat_type_housing_r']}"
+										itemValue="R" />
+								</p:selectOneMenu>
 
 							</h:panelGrid>
 						</p:fieldset>
@@ -1273,7 +1278,7 @@
 
 					<p:spacer height="10" />
 
-					<p:scrollPanel id="pnlTable2" style="width:580px;height:400px">
+					<p:scrollPanel id="pnlTable2" style="width:580px;height:300px">
 						<p:dataTable id="recordTable2" var="rec"
 							value="#{historyBacking.patientModel}" rowKey="#{rec.id}"
 							selection="#{historyBacking.selectedPatient}" paginator="true"

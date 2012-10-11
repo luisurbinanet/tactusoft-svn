@@ -6,9 +6,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.event.ActionEvent;
+import javax.faces.model.SelectItem;
 import javax.inject.Named;
 
 import net.sf.jasperreports.engine.JRException;
@@ -121,6 +125,10 @@ public class HistoryBacking extends BaseBacking {
 	private List<CrmMedication> listTherapyView;
 	private List<CrmMedication> listExamView;
 	private List<CrmNote> listNoteView;
+
+	private List<SelectItem> listOccupation;
+	private Map<BigDecimal, CrmOccupation> mapOccupation;
+	private BigDecimal idOccupation;
 
 	public HistoryBacking() {
 		newAction(null);
@@ -590,6 +598,40 @@ public class HistoryBacking extends BaseBacking {
 		this.listNoteView = listNoteView;
 	}
 
+	public List<SelectItem> getListOccupation() {
+		if (listOccupation == null) {
+			listOccupation = new LinkedList<SelectItem>();
+			mapOccupation = new HashMap<BigDecimal, CrmOccupation>();
+			String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
+			listOccupation.add(new SelectItem(null, label));
+			for (CrmOccupation row : tablesService.getListOccupationActive()) {
+				mapOccupation.put(row.getId(), row);
+				listOccupation.add(new SelectItem(row.getId(), row.getName()));
+			}
+		}
+		return listOccupation;
+	}
+
+	public void setListOccupation(List<SelectItem> listOccupation) {
+		this.listOccupation = listOccupation;
+	}
+
+	public Map<BigDecimal, CrmOccupation> getMapOccupation() {
+		return mapOccupation;
+	}
+
+	public void setMapOccupation(Map<BigDecimal, CrmOccupation> mapOccupation) {
+		this.mapOccupation = mapOccupation;
+	}
+
+	public BigDecimal getIdOccupation() {
+		return idOccupation;
+	}
+
+	public void setIdOccupation(BigDecimal idOccupation) {
+		this.idOccupation = idOccupation;
+	}
+
 	public void newAction(ActionEvent event) {
 		selectedHistoryHistory = new CrmHistoryHistory();
 		selectedHistoryRecord = new CrmHistoryRecord();
@@ -611,6 +653,7 @@ public class HistoryBacking extends BaseBacking {
 		selectedPatient = new CrmPatient();
 		selectedPatient.setCrmOccupation(new CrmOccupation());
 		selectedPatient.getCrmOccupation().setId(Constant.DEFAULT_VALUE);
+		idOccupation = null;
 
 		disabledSaveButton = true;
 		optionSearchPatient = 1;
@@ -674,7 +717,10 @@ public class HistoryBacking extends BaseBacking {
 
 			if (selectedPatient.getCrmOccupation() == null) {
 				selectedPatient.setCrmOccupation(new CrmOccupation());
-			} else {
+				idOccupation = null;
+			}
+
+			if (selectedPatient.getBornDate() != null) {
 				age = calculateAge(selectedPatient.getBornDate());
 			}
 
@@ -760,6 +806,30 @@ public class HistoryBacking extends BaseBacking {
 
 		if (selectedPatient.getBornDate() == null) {
 			field = FacesUtil.getMessage("pat_born_date");
+			message = FacesUtil.getMessage("title_patient_complementary");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addError(message);
+		}
+
+		if (idOccupation == null) {
+			field = FacesUtil.getMessage("pat_occupation");
+			message = FacesUtil.getMessage("title_patient_complementary");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addError(message);
+		}
+
+		if (selectedPatient.getNeighborhood() == null) {
+			field = FacesUtil.getMessage("pat_neighborhood");
+			message = FacesUtil.getMessage("title_patient_complementary");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addError(message);
+		}
+
+		if (selectedPatient.getTypeHousing() == null) {
+			field = FacesUtil.getMessage("pat_type_housing");
 			message = FacesUtil.getMessage("title_patient_complementary");
 			message = message + " - "
 					+ FacesUtil.getMessage("glb_required", field);
@@ -946,6 +1016,7 @@ public class HistoryBacking extends BaseBacking {
 			selectedHistoryPhysique.setCrmPatient(selectedPatient);
 			selectedHistoryOrganometry.setCrmPatient(selectedPatient);
 
+			selectedPatient.setCrmOccupation(mapOccupation.get(idOccupation));
 			int result = processService.savePatient(selectedPatient, false,
 					false, null);
 			if (result == 0) {
