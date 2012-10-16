@@ -198,7 +198,7 @@ public class CustomListsExecute {
 		Collections.sort(list, new WSBeanComparator());
 		return list;
 	}
-	
+
 	public static List<WSBean> getDocTypes(String url, String user,
 			String password) {
 		List<WSBean> list = new ArrayList<WSBean>();
@@ -267,12 +267,18 @@ public class CustomListsExecute {
 	}
 
 	public static void main(String args[]) {
-		List<WSBean> list = getDocTypes(
+		List<WSBean> list = getSalesDocuments(
 				"http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zweblist/300/zweblist/zweblist",
 				"TACTUSOFT", "AFFINITY");
 		for (WSBean row : list) {
-			System.out.println(row.getCode() + " - " + row.getNames() + " - "
-					+ row.getType());
+			if (row.getCode().equals("ZCM") || row.getCode().equals("ZCMT")
+					|| row.getCode().equals("ZOT")
+					|| row.getCode().equals("ZFCT")
+					|| row.getCode().equals("ZFCS")
+					|| row.getCode().equals("ZOP")) {
+				System.out.println(row.getCode() + " - " + row.getNames()
+						+ " - " + row.getType());
+			}
 		}
 	}
 
