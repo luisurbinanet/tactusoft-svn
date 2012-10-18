@@ -1246,7 +1246,7 @@ public class ProcessBo implements Serializable {
 				.find("select max(o.startAppointmentDate) from CrmAppointment o where o.crmPatient.id = "
 						+ idPatient
 						+ " and o.crmProcedureDetail.id = "
-						+ idProcedureDetail);
+						+ idProcedureDetail + " and o.state in (1,3,4)");
 
 		if (list.size() > 0) {
 			result = list.get(0);
@@ -1268,9 +1268,12 @@ public class ProcessBo implements Serializable {
 
 	public List<CrmPatient> getContactByName(String name) {
 		List<CrmPatient> list = null;
-		list = dao.find("FROM CrmPatient o WHERE (o.firstnames like '%" + name
-				+ "%' OR o.surnames like '%" + name
-				+ "%') AND (o.doc IS NULL OR o.codeSap IS NULL OR o.doc = o.codeSap)");
+		list = dao
+				.find("FROM CrmPatient o WHERE (o.firstnames like '%"
+						+ name
+						+ "%' OR o.surnames like '%"
+						+ name
+						+ "%') AND (o.doc IS NULL OR o.codeSap IS NULL OR o.doc = o.codeSap)");
 		return list;
 	}
 
