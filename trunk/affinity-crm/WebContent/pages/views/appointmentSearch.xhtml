@@ -118,68 +118,110 @@
 					rowKey="#{rec.code}" style="width:100%" paginator="true" rows="20"
 					emptyMessage="#{msg['glb_no_records_found']}">
 
-					<p:column headerText="#{msg['app_num']}">
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['app_num']}" />
+						</f:facet>
 						<h:outputLabel value="#{rec.code}" />
 					</p:column>
 
-					<p:column headerText="#{msg['pat_code_1']}">
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['pat_code_1']}" />
+						</f:facet>
 						<h:outputLabel value="#{rec.patCode}" />
 					</p:column>
 
-					<p:column headerText="#{msg['pat_surnames']}">
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['pat_surnames']}" />
+						</f:facet>
 						<h:outputLabel value="#{rec.patSurnames}" />
 					</p:column>
 
-					<p:column headerText="#{msg['pat_names']}">
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['pat_names']}" />
+						</f:facet>
 						<h:outputLabel value="#{rec.patFirstnames}" />
 					</p:column>
 
-					<p:column headerText="#{msg['app_date']}">
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['app_date']}" />
+						</f:facet>
 						<h:outputLabel value="#{rec.startAppointmentDate}">
 							<f:convertDateTime pattern="dd/MM/yyyy" />
 						</h:outputLabel>
 					</p:column>
 
-					<p:column headerText="#{msg['app_created_time']}">
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['app_created_time']}" />
+						</f:facet>
 						<h:outputLabel value="#{rec.startAppointmentDate}">
 							<f:convertDateTime pattern="HH:mm" />
 						</h:outputLabel>
 					</p:column>
 
-					<p:column headerText="#{msg['app_branch']}">
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['app_branch']}" />
+						</f:facet>
 						<h:outputLabel value="#{rec.branchName}" />
 					</p:column>
 
-					<p:column headerText="#{msg['app_doctor']}">
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['app_doctor']}" />
+						</f:facet>
 						<h:outputLabel value="#{rec.doctorNames}" />
 					</p:column>
 
-					<p:column headerText="#{msg['app_procedure']}">
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['app_procedure']}" />
+						</f:facet>
 						<h:outputLabel value="#{rec.prcDetName}" />
 					</p:column>
 
-					<p:column headerText="#{msg['app_state']}">
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['app_state']}" />
+						</f:facet>
 						<h:outputLabel
 							value="#{rec.state eq 1?'Agendada':rec.state eq 2?'Cancelada':rec.state eq 3?'Chequeada':rec.state eq 4?'Asistió a Consulta':'No Asistió a Consulta'}" />
 					</p:column>
 
-					<p:column headerText="#{msg['app_username_created']}">
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['app_username_created']}" />
+						</f:facet>
 						<h:outputLabel value="#{rec.userCreateCode}" />
 					</p:column>
 
-					<p:column headerText="#{msg['app_created_date']}">
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['app_created_date']}" />
+						</f:facet>
 						<h:outputLabel value="#{rec.dateCreate}">
 							<f:convertDateTime pattern="dd/MM/yyyy" />
 						</h:outputLabel>
 					</p:column>
 
-					<p:column headerText="#{msg['app_created_time']}">
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['app_created_time']}" />
+						</f:facet>
 						<h:outputLabel value="#{rec.dateCreate}">
 							<f:convertDateTime pattern="HH:mm" />
 						</h:outputLabel>
 					</p:column>
 
-					<p:column headerText="#{msg['app_username_modified']}">
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['app_username_modified']}" />
+						</f:facet>
 						<h:outputLabel value="#{rec.userModifiedCode}" />
 					</p:column>
 
