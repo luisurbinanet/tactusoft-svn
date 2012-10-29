@@ -1,11 +1,12 @@
 package co.com.tactusoft.crm.view.backing;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
@@ -14,11 +15,14 @@ import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.controller.bo.CapaignBo;
 import co.com.tactusoft.crm.model.entities.CrmCall;
+import co.com.tactusoft.crm.model.entities.CrmGuideline;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
+import co.com.tactusoft.crm.model.entities.CrmProfile;
+import co.com.tactusoft.crm.util.FacesUtil;
 
 @Named
 @Scope("view")
-public class CallBacking implements Serializable {
+public class CallBacking extends BaseBacking {
 
 	private static final long serialVersionUID = 1L;
 
@@ -33,6 +37,7 @@ public class CallBacking implements Serializable {
 	private String phone;
 	private String remoteChannel;
 
+	private CrmGuideline crmGuideline;
 	private int patientGridType;
 
 	public CallBacking() {
@@ -44,10 +49,12 @@ public class CallBacking implements Serializable {
 		camapignId = new BigDecimal(req.getParameter("_CAMPAIGN_ID_"));
 		phone = req.getParameter("_PHONE_");
 		remoteChannel = req.getParameter("_REMOTE_CHANNEL_");
+
+		crmGuideline = new CrmGuideline();
 	}
 
 	@PostConstruct
-	private void init() {
+	public void init() {
 		CrmCall call = new CrmCall();
 		call.setCallId(callId);
 		call.setAgentNumber(agentNumber);
@@ -56,6 +63,8 @@ public class CallBacking implements Serializable {
 		call.setPhone(phone);
 		call.setRemoteChannel(remoteChannel);
 		capaignService.saveCall(call);
+
+		crmGuideline = capaignService.getGuideline(phone);
 
 		List<CrmPatient> listCrmPatient = capaignService
 				.getListPatient(remoteChannel);
@@ -66,8 +75,27 @@ public class CallBacking implements Serializable {
 				patientGridType = 1;
 			}
 		} else {
+			CrmProfile profile = tablesService.getProfileById(crmGuideline
+					.getIdProfile());
+
+			ContactBacking contactBacking = FacesUtil
+					.findBean("contactBacking");
+			contactBacking.newAction(null);
+			contactBacking.getSelectedPatient().setPhoneNumber(remoteChannel);
+			contactBacking.getSelectedPatient().setCrmProfile(profile);
+			contactBacking.setListProfile(new ArrayList<SelectItem>());
+			contactBacking.getListProfile().add(
+					new SelectItem(profile.getId(), profile.getCode()));
 			patientGridType = 2;
 		}
+	}
+
+	public CrmGuideline getCrmGuideline() {
+		return crmGuideline;
+	}
+
+	public void setCrmGuideline(CrmGuideline crmGuideline) {
+		this.crmGuideline = crmGuideline;
 	}
 
 	public int getPatientGridType() {

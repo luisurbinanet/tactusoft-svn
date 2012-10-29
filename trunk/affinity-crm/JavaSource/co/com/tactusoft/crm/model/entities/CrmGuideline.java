@@ -19,6 +19,8 @@ public class CrmGuideline implements java.io.Serializable {
 	private BigDecimal idPublicity;
 	private String phone;
 	private String guideline;
+	private BigDecimal idProfile;
+	private BigDecimal idCountry;
 
 	public CrmGuideline() {
 	}
@@ -81,6 +83,24 @@ public class CrmGuideline implements java.io.Serializable {
 
 	public void setGuideline(String guideline) {
 		this.guideline = guideline;
+	}
+
+	@Column(name = "id_profile", scale = 0)
+	public BigDecimal getIdProfile() {
+		return idProfile;
+	}
+
+	public void setIdProfile(BigDecimal idProfile) {
+		this.idProfile = idProfile;
+	}
+
+	@Column(name = "id_country", scale = 0)
+	public BigDecimal getIdCountry() {
+		return idCountry;
+	}
+
+	public void setIdCountry(BigDecimal idCountry) {
+		this.idCountry = idCountry;
 	}
 
 }
