@@ -10,6 +10,7 @@ import javax.inject.Named;
 import co.com.tactusoft.sap.dao.CustomHibernateDao;
 import co.com.tactusoft.sap.entities.CrmSapMedication;
 import co.com.tactusoft.sap.entities.VwAppointment;
+import co.com.tactusoft.sap.entities.VwAppointmentMedication;
 
 @Named
 public class ProcessBO implements Serializable {
@@ -22,8 +23,8 @@ public class ProcessBO implements Serializable {
 	public List<CrmSapMedication> getListSapMedicationByLoadState(
 			String patient, String typeBill, String date) {
 		return dao.find("FROM CrmSapMedication WHERE idPatient = '" + patient
-				+ "' AND typeBill = '" + typeBill + "' AND dateBill = '" + date
-				+ "' ORDER BY id");
+				+ "' AND typeBill = '" + typeBill + "' AND dateBill >= '"
+				+ date + "' ORDER BY id");
 	}
 
 	public Date getMinDateByLoadState() {
@@ -47,6 +48,12 @@ public class ProcessBO implements Serializable {
 						+ maxDate
 						+ "T23:59:59.999+05:00') AND o.state in (3, 4) "
 						+ " ORDER BY id");
+	}
+
+	public List<VwAppointmentMedication> getListAppointmentMedicationByCode(
+			String code) {
+		return dao.find("FROM VwAppointmentMedication o WHERE code = '" + code
+				+ "'");
 	}
 
 }

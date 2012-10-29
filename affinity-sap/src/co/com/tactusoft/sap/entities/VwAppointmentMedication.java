@@ -35,7 +35,6 @@ public class VwAppointmentMedication implements java.io.Serializable {
 	private BigDecimal doctorId;
 	private String doctorCode;
 	private String doctorNames;
-	private String descMaterial;
 
 	public VwAppointmentMedication() {
 	}
@@ -66,7 +65,6 @@ public class VwAppointmentMedication implements java.io.Serializable {
 		this.doctorId = doctorId;
 		this.doctorCode = doctorCode;
 		this.doctorNames = doctorNames;
-		this.descMaterial = descMaterial;
 	}
 
 	public VwAppointmentMedication(VwAppointmentMedicationId id) {
@@ -242,15 +240,6 @@ public class VwAppointmentMedication implements java.io.Serializable {
 
 	public void setDoctorNames(String doctorNames) {
 		this.doctorNames = doctorNames;
-	}
-
-	@Column(name = "desc_material", nullable = false, length = 1000)
-	public String getDescMaterial() {
-		return this.descMaterial;
-	}
-
-	public void setDescMaterial(String descMaterial) {
-		this.descMaterial = descMaterial;
 	}
 
 }

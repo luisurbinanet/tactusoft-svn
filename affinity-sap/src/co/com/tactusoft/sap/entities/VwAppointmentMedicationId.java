@@ -14,6 +14,7 @@ public class VwAppointmentMedicationId implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
 	private String codMaterial;
+	private String descMaterial;
 
 	public VwAppointmentMedicationId() {
 	}
@@ -39,5 +40,14 @@ public class VwAppointmentMedicationId implements java.io.Serializable {
 
 	public void setCodMaterial(String codMaterial) {
 		this.codMaterial = codMaterial;
+	}
+	
+	@Column(name = "desc_material", nullable = false, length = 1000)
+	public String getDescMaterial() {
+		return this.descMaterial;
+	}
+
+	public void setDescMaterial(String descMaterial) {
+		this.descMaterial = descMaterial;
 	}
 }
