@@ -157,6 +157,11 @@ public class TablesBo implements Serializable {
 		return dao.find("from CrmCountry o");
 	}
 
+	public CrmCountry getCountry(BigDecimal idCountry) {
+		return (CrmCountry) dao.find(
+				"from CrmCountry o where o.id = " + idCountry).get(0);
+	}
+
 	public List<CrmRegion> getListRegion() {
 		return dao.find("from CrmRegion o");
 	}
