@@ -27,39 +27,26 @@
 
 				<p:spacer height="5" />
 
-				<h:panelGrid id="pnlInfo" columns="2" width="100%">
-					<h:outputText value="#{msg['cam_name']}" style="width:100%" />
-					<h:outputText value="#{callBacking.crmGuideline.guideline}" style="width:100%" />
-					<h:outputText value="#{msg['cam_name_guideline']}"
-						style="width:100%" />
-					<h:outputText value="#{callBacking.crmGuideline.descMedia}" style="width:100%" />
-				</h:panelGrid>
+				<p:fieldset legend="#{msg['cam_name']}">
+					<h:panelGrid id="pnlInfo" columns="2" width="100%">
+						<h:outputText value="#{msg['cam_name']}" style="width:100%" />
+						<h:outputText value="#{callBacking.crmGuideline.guideline}"
+							style="width:100%" />
+						<h:outputText value="#{msg['cam_name_guideline']}"
+							style="width:100%" />
+						<h:outputText value="#{callBacking.crmGuideline.descMedia}"
+							style="width:100%" />
+					</h:panelGrid>
+				</p:fieldset>
 
 				<p:spacer height="5" />
 
 				<h:panelGrid id="pnlContactNew" columns="1" width="100%"
-					rendered="#{callBacking.patientGridType eq 2}">
+					rendered="#{callBacking.patientGridType eq 0 OR callBacking.patientGridType eq 2}">
 
 					<h:panelGrid id="pnlDetail" columns="4" cellspacing="5"
 						width="100%"
 						columnClasses="width250per,width250per,width250per,width250per">
-
-						<h:outputText value="#{msg['usr_profile']}" style="width:100%" />
-						<p:selectOneMenu
-							value="#{contactBacking.selectedPatient.crmProfile.id}"
-							style="width:248px" required="true" label="#{msg['usr_profile']}"
-							disabled="#{contactBacking.selectedPatient.id ne null}">
-							<f:selectItems value="#{contactBacking.listProfile}" />
-						</p:selectOneMenu>
-
-						<h:outputText value="#{msg['pat_country']}" style="width:100%" />
-						<p:selectOneMenu value="#{contactBacking.idCountry}"
-							style="width:248px" required="true" label="#{msg['pat_country']}"
-							disabled="#{not contactBacking.newRecord}">
-							<f:selectItems value="#{contactBacking.listCountry}" />
-							<p:ajax update="selRegion selCity pnlDetail2"
-								listener="#{contactBacking.handleCountryChange}" />
-						</p:selectOneMenu>
 
 						<h:outputText value="#{msg['pat_region']}" style="width:100%" />
 						<p:selectOneMenu id="selRegion" value="#{contactBacking.idRegion}"
@@ -135,17 +122,38 @@
 							style="width:240px" label="#{msg['pat_cell_number']}"
 							required="false" maxlength="16" />
 
-						<h:outputLabel value="#{msg['pat_sales_off']}" style="width:40%" />
-						<p:selectOneMenu value="#{contactBacking.salesOff}"
-							style="width:248px">
-							<f:selectItems value="#{contactBacking.listBranch}" />
-						</p:selectOneMenu>
-
 						<h:outputText value="#{msg['pat_type_obs']}" />
 						<p:inputTextarea value="#{contactBacking.selectedPatient.obs}"
 							style="width:240px" rows="4" />
 					</h:panelGrid>
 
+
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlContactList" columns="1" width="100%"
+					rendered="#{callBacking.patientGridType eq 1}">
+
+					<p:dataTable id="dtbSearchPatient" var="rec"
+						value="#{contactBacking.patientModel}" rowKey="#{rec.id}"
+						selection="#{contactBacking.tmpSelectedPatient}" paginator="true"
+						rows="15" style="width:450px"
+						emptyMessage="#{msg['glb_no_records_found']}">
+
+						<p:column selectionMode="single" style="width:18px" />
+
+						<p:column headerText="#{msg['pat_code_1']}">
+							<h:outputLabel value="#{rec.doc}" />
+						</p:column>
+
+						<p:column headerText="#{msg['pat_names']}">
+							<h:outputLabel value="#{rec.names}" />
+						</p:column>
+
+						<p:column headerText="#{msg['pat_phone_number']}">
+							<h:outputLabel value="#{rec.phoneNumber}" />
+						</p:column>
+
+					</p:dataTable>
 
 				</h:panelGrid>
 

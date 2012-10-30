@@ -2,6 +2,8 @@ package co.com.tactusoft.crm.view.backing;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -18,7 +20,9 @@ import co.com.tactusoft.crm.model.entities.CrmCall;
 import co.com.tactusoft.crm.model.entities.CrmGuideline;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
+import co.com.tactusoft.crm.model.entities.CrmRegion;
 import co.com.tactusoft.crm.util.FacesUtil;
+import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 
 @Named
 @Scope("view")
@@ -68,24 +72,56 @@ public class CallBacking extends BaseBacking {
 
 		List<CrmPatient> listCrmPatient = capaignService
 				.getListPatient(remoteChannel);
+		ContactBacking contactBacking = FacesUtil.findBean("contactBacking");
+		contactBacking.newAction(null);
+
 		if (listCrmPatient.size() > 0) {
-			if (listCrmPatient.size() > 0) {
+			if (listCrmPatient.size() == 1) {
 				patientGridType = 0;
 			} else {
 				patientGridType = 1;
+				contactBacking.setListPatient(listCrmPatient);
+				contactBacking.setPatientModel(new PatientDataModel(
+						listCrmPatient));
 			}
 		} else {
 			CrmProfile profile = tablesService.getProfileById(crmGuideline
 					.getIdProfile());
 
-			ContactBacking contactBacking = FacesUtil
-					.findBean("contactBacking");
-			contactBacking.newAction(null);
 			contactBacking.getSelectedPatient().setPhoneNumber(remoteChannel);
 			contactBacking.getSelectedPatient().setCrmProfile(profile);
 			contactBacking.setListProfile(new ArrayList<SelectItem>());
 			contactBacking.getListProfile().add(
 					new SelectItem(profile.getId(), profile.getCode()));
+
+			listAllRegion = tablesService.getListRegion();
+			listAllCity = tablesService.getListCity();
+			listRegion = new ArrayList<SelectItem>();
+			mapRegion = new HashMap<BigDecimal, CrmRegion>();
+
+			for (CrmRegion row : this.listAllRegion) {
+				if (row.getCrmCountry().getId().intValue() == crmGuideline
+						.getIdCountry().intValue()) {
+					listRegion.add(new SelectItem(row.getId(), row.getName()));
+					mapRegion.put(row.getId(), row);
+				}
+			}
+
+			contactBacking.setListRegion(listRegion);
+			contactBacking.setMapRegion(mapRegion);
+			contactBacking.setListAllCity(listAllCity);
+
+			if (listRegion.size() > 0) {
+				idRegion = (BigDecimal) listRegion.get(0).getValue();
+				contactBacking.setIdRegion(idRegion);
+				contactBacking.handleRegionChange();
+			} else {
+				contactBacking.setIdRegion(null);
+				contactBacking.setIdCity(null);
+				listRegion = new LinkedList<SelectItem>();
+				listCity = new LinkedList<SelectItem>();
+			}
+
 			patientGridType = 2;
 		}
 	}
