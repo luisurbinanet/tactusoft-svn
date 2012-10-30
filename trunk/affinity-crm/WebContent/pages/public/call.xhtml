@@ -18,15 +18,6 @@
 
 				<p:growl id="growl" showDetail="true" />
 
-				<p:toolbar id="toolBar" style="width:100%">
-					<p:toolbarGroup align="left">
-						<p:commandButton id="btnSavePatient" value="#{msg['btn_save']}"
-							icon="ui-icon-disk" />
-					</p:toolbarGroup>
-				</p:toolbar>
-
-				<p:spacer height="5" />
-
 				<p:fieldset legend="#{msg['cam_name']}">
 					<h:panelGrid id="pnlInfo" columns="2" width="100%">
 						<h:outputText value="#{msg['cam_name']}" style="width:100%" />
@@ -41,8 +32,24 @@
 
 				<p:spacer height="5" />
 
+				<p:toolbar id="toolBar" style="width:100%"
+					rendered="#{callBacking.patientGridType eq 1 || callBacking.patientGridType eq 2}">
+					<p:toolbarGroup align="left">
+						<p:commandButton id="btnSavePatient" value="#{msg['btn_save']}"
+							icon="ui-icon-disk"
+							rendered="#{callBacking.patientGridType eq 2}"
+							actionListener="#{callBacking.saveAction}" />
+						<p:commandButton id="btnAddPatient" value="#{msg['btn_select']}"
+							icon="ui-icon-plusthick"
+							rendered="#{callBacking.patientGridType eq 1}" update="form"
+							actionListener="#{callBacking.addContactAction}" />
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="5" />
+
 				<h:panelGrid id="pnlContactNew" columns="1" width="100%"
-					rendered="#{callBacking.patientGridType eq 0 OR callBacking.patientGridType eq 2}">
+					rendered="#{callBacking.patientGridType eq 0 || callBacking.patientGridType eq 2}">
 
 					<h:panelGrid id="pnlDetail" columns="4" cellspacing="5"
 						width="100%"
@@ -51,7 +58,7 @@
 						<h:outputText value="#{msg['pat_region']}" style="width:100%" />
 						<p:selectOneMenu id="selRegion" value="#{contactBacking.idRegion}"
 							style="width:248px" required="true" label="#{msg['pat_region']}"
-							disabled="#{not contactBacking.newRecord}">
+							disabled="#{callBacking.patientGridType eq 0}">
 							<f:selectItems value="#{contactBacking.listRegion}" />
 							<p:ajax update="selCity"
 								listener="#{contactBacking.handleRegionChange}" />
@@ -60,7 +67,7 @@
 						<h:outputText value="#{msg['pat_city']}" style="width:100%" />
 						<p:selectOneMenu id="selCity" value="#{contactBacking.idCity}"
 							style="width:248px" required="true" label="#{msg['pat_city']}"
-							disabled="#{not contactBacking.newRecord}">
+							disabled="#{callBacking.patientGridType eq 0}">
 							<f:selectItems value="#{contactBacking.listCity}" />
 						</p:selectOneMenu>
 
@@ -76,7 +83,8 @@
 						<h:outputLabel id="lblDocType" value="#{msg['pat_type_code']}"
 							rendered="#{!contactBacking.automatic}" />
 						<p:selectOneMenu value="#{contactBacking.selectedPatient.docType}"
-							rendered="#{!contactBacking.automatic}" style="width:248px">
+							rendered="#{!contactBacking.automatic}" style="width:248px"
+							disabled="#{callBacking.patientGridType eq 0}">
 							<f:selectItems value="#{contactBacking.listDocType}" />
 						</p:selectOneMenu>
 
@@ -85,7 +93,8 @@
 						<p:inputText id="txtDoc"
 							value="#{contactBacking.selectedPatient.doc}"
 							style="width:240px;" label="#{msg['pat_code']}" maxlength="16"
-							rendered="#{!contactBacking.automatic or !contactBacking.newRecord}" />
+							rendered="#{!contactBacking.automatic or !contactBacking.newRecord}"
+							readonly="#{callBacking.patientGridType eq 0}" />
 					</h:panelGrid>
 
 					<h:panelGrid id="pnlDetail3" columns="4" cellspacing="5"
@@ -104,7 +113,8 @@
 
 						<h:outputText value="#{msg['glb_gender']}" />
 						<p:selectOneMenu value="#{contactBacking.selectedPatient.gender}"
-							style="width:248px" label="#{msg['glb_gender']}" required="true">
+							style="width:248px" label="#{msg['glb_gender']}" required="true"
+							disabled="#{callBacking.patientGridType eq 0}">
 							<f:selectItem itemLabel="#{msg['glb_default_value']}"
 								itemValue="" />
 							<f:selectItem itemLabel="#{msg['glb_gender_woman']}"
@@ -136,7 +146,7 @@
 					<p:dataTable id="dtbSearchPatient" var="rec"
 						value="#{contactBacking.patientModel}" rowKey="#{rec.id}"
 						selection="#{contactBacking.tmpSelectedPatient}" paginator="true"
-						rows="15" style="width:450px"
+						rows="15" style="width:100%"
 						emptyMessage="#{msg['glb_no_records_found']}">
 
 						<p:column selectionMode="single" style="width:18px" />
@@ -158,7 +168,6 @@
 				</h:panelGrid>
 
 			</h:form>
-
 
 		</p:panel>
 
