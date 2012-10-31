@@ -11,7 +11,6 @@ import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmCall;
 import co.com.tactusoft.crm.model.entities.CrmGuideline;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
-import co.com.tactusoft.crm.model.entities.CrmUser;
 
 @Named
 public class CapaignBo implements Serializable {
@@ -21,9 +20,9 @@ public class CapaignBo implements Serializable {
 	@Inject
 	private CustomHibernateDao dao;
 
-	public CrmGuideline getGuideline(String phone) {
+	public CrmGuideline getGuideline(String campaignId) {
 		List<CrmGuideline> list = dao
-				.find("FROM CrmGuideline o WHERE o.phone = '" + phone + "'");
+				.find("FROM CrmGuideline o WHERE o.phone = '" + campaignId + "'");
 		if (list.size() > 0) {
 			return list.get(0);
 		} else {
@@ -38,7 +37,7 @@ public class CapaignBo implements Serializable {
 
 	public void saveCall(CrmCall entity) {
 		if (entity.getId() == null) {
-			entity.setId(getId(CrmUser.class));
+			entity.setId(getId(CrmCall.class));
 		}
 		dao.persist(entity);
 	}
