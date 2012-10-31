@@ -38,7 +38,7 @@
 						<p:commandButton id="btnSavePatient" value="#{msg['btn_save']}"
 							icon="ui-icon-disk"
 							rendered="#{callBacking.patientGridType eq 2}"
-							actionListener="#{callBacking.saveAction}" />
+							actionListener="#{callBacking.saveAction}" update="growl toolBar" />
 						<p:commandButton id="btnAddPatient" value="#{msg['btn_select']}"
 							icon="ui-icon-plusthick"
 							rendered="#{callBacking.patientGridType eq 1}" update="form"
@@ -56,19 +56,19 @@
 						columnClasses="width250per,width250per,width250per,width250per">
 
 						<h:outputText value="#{msg['pat_region']}" style="width:100%" />
-						<p:selectOneMenu id="selRegion" value="#{contactBacking.idRegion}"
+						<p:selectOneMenu id="selRegion" value="#{callBacking.idRegion}"
 							style="width:248px" required="true" label="#{msg['pat_region']}"
 							disabled="#{callBacking.patientGridType eq 0}">
-							<f:selectItems value="#{contactBacking.listRegion}" />
+							<f:selectItems value="#{callBacking.listRegion}" />
 							<p:ajax update="selCity"
-								listener="#{contactBacking.handleRegionChange}" />
+								listener="#{callBacking.handleRegionChange}" />
 						</p:selectOneMenu>
 
 						<h:outputText value="#{msg['pat_city']}" style="width:100%" />
-						<p:selectOneMenu id="selCity" value="#{contactBacking.idCity}"
+						<p:selectOneMenu id="selCity" value="#{callBacking.idCity}"
 							style="width:248px" required="true" label="#{msg['pat_city']}"
 							disabled="#{callBacking.patientGridType eq 0}">
-							<f:selectItems value="#{contactBacking.listCity}" />
+							<f:selectItems value="#{callBacking.listCity}" />
 						</p:selectOneMenu>
 
 						<h:outputText style="width:240px" />
@@ -81,19 +81,19 @@
 						width="100%">
 
 						<h:outputLabel id="lblDocType" value="#{msg['pat_type_code']}"
-							rendered="#{!contactBacking.automatic}" />
-						<p:selectOneMenu value="#{contactBacking.selectedPatient.docType}"
-							rendered="#{!contactBacking.automatic}" style="width:248px"
+							rendered="#{!callBacking.automatic}" />
+						<p:selectOneMenu value="#{callBacking.selectedPatient.docType}"
+							rendered="#{!callBacking.automatic}" style="width:248px"
 							disabled="#{callBacking.patientGridType eq 0}">
-							<f:selectItems value="#{contactBacking.listDocType}" />
+							<f:selectItems value="#{callBacking.listDocType}" />
 						</p:selectOneMenu>
 
 						<h:outputLabel id="lblDoc" value="#{msg['pat_code']}"
-							rendered="#{!contactBacking.automatic or !contactBacking.newRecord}" />
+							rendered="#{!callBacking.automatic or !callBacking.newRecord}" />
 						<p:inputText id="txtDoc"
-							value="#{contactBacking.selectedPatient.doc}"
-							style="width:240px;" label="#{msg['pat_code']}" maxlength="16"
-							rendered="#{!contactBacking.automatic or !contactBacking.newRecord}"
+							value="#{callBacking.selectedPatient.doc}" style="width:240px;"
+							label="#{msg['pat_code']}" maxlength="16"
+							rendered="#{!callBacking.automatic or !callBacking.newRecord}"
 							readonly="#{callBacking.patientGridType eq 0}" />
 					</h:panelGrid>
 
@@ -102,17 +102,17 @@
 						width="100%">
 
 						<h:outputLabel value="#{msg['pat_names']}" />
-						<p:inputText value="#{contactBacking.selectedPatient.firstnames}"
+						<p:inputText value="#{callBacking.selectedPatient.firstnames}"
 							maxlength="35" style="width:240px" label="#{msg['pat_names']}"
 							required="true" />
 
 						<h:outputLabel value="#{msg['pat_surnames']}" />
-						<p:inputText value="#{contactBacking.selectedPatient.surnames}"
+						<p:inputText value="#{callBacking.selectedPatient.surnames}"
 							maxlength="35" style="width:240px" label="#{msg['pat_surnames']}"
 							required="true" />
 
 						<h:outputText value="#{msg['glb_gender']}" />
-						<p:selectOneMenu value="#{contactBacking.selectedPatient.gender}"
+						<p:selectOneMenu value="#{callBacking.selectedPatient.gender}"
 							style="width:248px" label="#{msg['glb_gender']}" required="true"
 							disabled="#{callBacking.patientGridType eq 0}">
 							<f:selectItem itemLabel="#{msg['glb_default_value']}"
@@ -123,17 +123,17 @@
 						</p:selectOneMenu>
 
 						<h:outputText value="#{msg['pat_phone_number']}" />
-						<p:inputText value="#{contactBacking.selectedPatient.phoneNumber}"
+						<p:inputText value="#{callBacking.selectedPatient.phoneNumber}"
 							style="width:240px" label="#{msg['pat_phone_number']}"
 							required="true" maxlength="16" />
 
 						<h:outputText value="#{msg['pat_cell_number']}" />
-						<p:inputText value="#{contactBacking.selectedPatient.cellNumber}"
+						<p:inputText value="#{callBacking.selectedPatient.cellNumber}"
 							style="width:240px" label="#{msg['pat_cell_number']}"
 							required="false" maxlength="16" />
 
 						<h:outputText value="#{msg['pat_type_obs']}" />
-						<p:inputTextarea value="#{contactBacking.selectedPatient.obs}"
+						<p:inputTextarea value="#{callBacking.selectedPatient.obs}"
 							style="width:240px" rows="4" />
 					</h:panelGrid>
 
@@ -144,8 +144,8 @@
 					rendered="#{callBacking.patientGridType eq 1}">
 
 					<p:dataTable id="dtbSearchPatient" var="rec"
-						value="#{contactBacking.patientModel}" rowKey="#{rec.id}"
-						selection="#{contactBacking.tmpSelectedPatient}" paginator="true"
+						value="#{callBacking.patientModel}" rowKey="#{rec.id}"
+						selection="#{callBacking.tmpSelectedPatient}" paginator="true"
 						rows="15" style="width:100%"
 						emptyMessage="#{msg['glb_no_records_found']}">
 

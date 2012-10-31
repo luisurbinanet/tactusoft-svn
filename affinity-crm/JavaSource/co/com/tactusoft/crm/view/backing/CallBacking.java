@@ -33,7 +33,7 @@ import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 
 @Named
 @Scope("view")
-public class CallBacking extends BaseBacking {
+public class CallBacking extends ContactBacking {
 
 	private static final long serialVersionUID = 1L;
 
@@ -44,14 +44,13 @@ public class CallBacking extends BaseBacking {
 	private String agentNumber;
 	private BigDecimal callId;
 	private String callType;
-	private BigDecimal camapignId;
+	private String camapignId;
 	private String phone;
 	private String remoteChannel;
 
 	private CrmGuideline crmGuideline;
 	private int patientGridType;
 
-	private ContactBacking contactBacking;
 	private CrmCountry crmCountry;
 
 	public CallBacking() {
@@ -60,7 +59,7 @@ public class CallBacking extends BaseBacking {
 		agentNumber = req.getParameter("_AGENT_NUMBER_");
 		callId = new BigDecimal(req.getParameter("_CALL_ID_"));
 		callType = req.getParameter("_CALL_TYPE_");
-		camapignId = new BigDecimal(req.getParameter("_CAMPAIGN_ID_"));
+		camapignId = req.getParameter("_CAMPAIGN_ID_");
 		phone = req.getParameter("_PHONE_");
 		remoteChannel = req.getParameter("_REMOTE_CHANNEL_");
 
@@ -93,7 +92,6 @@ public class CallBacking extends BaseBacking {
 
 	@PostConstruct
 	public void init() {
-		contactBacking = FacesUtil.findBean("contactBacking");
 		try {
 			CrmCall call = new CrmCall();
 			call.setCallId(callId);
@@ -102,13 +100,18 @@ public class CallBacking extends BaseBacking {
 			call.setCampaignId(camapignId);
 			call.setPhone(phone);
 			call.setRemoteChannel(remoteChannel);
-			capaignService.saveCall(call);
+			
+			try {
+				capaignService.saveCall(call);
+			} catch (Exception ex) {
 
-			crmGuideline = capaignService.getGuideline(phone);
+			}
+
+			crmGuideline = capaignService.getGuideline(camapignId);
 
 			List<CrmPatient> listCrmPatient = capaignService
-					.getListPatient(remoteChannel);
-			contactBacking.newAction(null);
+					.getListPatient(phone);
+			this.newAction(null);
 
 			listAllRegion = tablesService.getListRegion();
 			listAllCity = tablesService.getListCity();
@@ -116,46 +119,50 @@ public class CallBacking extends BaseBacking {
 			if (listCrmPatient.size() > 0) {
 				if (listCrmPatient.size() == 1) {
 					patientGridType = 0;
-					contactBacking.setSelectedPatient(listCrmPatient.get(0));
-					generateRegion(contactBacking.getSelectedPatient()
-							.getIdCountry());
+					this.setSelectedPatient(listCrmPatient.get(0));
+					generateRegion(this.getSelectedPatient().getIdCountry());
 				} else {
 					patientGridType = 1;
-					contactBacking.setListPatient(listCrmPatient);
-					contactBacking.setPatientModel(new PatientDataModel(
-							listCrmPatient));
-					contactBacking.setTmpSelectedPatient(listCrmPatient.get(0));
-					contactBacking.setIdCountry(crmGuideline.getIdCountry());
+					this.setListPatient(listCrmPatient);
+					this.setPatientModel(new PatientDataModel(listCrmPatient));
+					this.setTmpSelectedPatient(listCrmPatient.get(0));
+					this.setIdCountry(crmGuideline.getIdCountry());
 				}
 			} else {
 				CrmProfile profile = tablesService.getProfileById(crmGuideline
 						.getIdProfile());
 
-				contactBacking.getSelectedPatient().setPhoneNumber(
-						remoteChannel);
-				contactBacking.getSelectedPatient().setCrmProfile(profile);
-				contactBacking.setListProfile(new ArrayList<SelectItem>());
-				contactBacking.getListProfile().add(
+				this.getSelectedPatient().setPhoneNumber(phone);
+				this.getSelectedPatient().setCrmProfile(profile);
+				this.getSelectedPatient().setCrmUserByIdUserCreate(
+						securityService.getObject("usuario"));
+
+				this.setListProfile(new ArrayList<SelectItem>());
+				this.getListProfile().add(
 						new SelectItem(profile.getId(), profile.getCode()));
+
+				mapProfile = new HashMap<BigDecimal, CrmProfile>();
+				mapProfile.put(profile.getId(), profile);
 
 				generateRegion(crmGuideline.getIdCountry());
 				patientGridType = 2;
 			}
 
-			crmCountry = tablesService
-					.getCountry(contactBacking.getIdCountry());
+			crmCountry = tablesService.getCountry(this.getIdCountry());
+			mapCountry = new HashMap<BigDecimal, CrmCountry>();
+			mapCountry.put(crmCountry.getId(), crmCountry);
 			generateDocType(crmCountry.getCode());
 		} catch (Exception ex) {
-			contactBacking.newAction(null);
+			this.newAction(null);
 			patientGridType = 1;
 		}
 	}
 
+	@Override
 	public void addContactAction(ActionEvent event) {
-		contactBacking.setSelectedPatient(contactBacking
-				.getTmpSelectedPatient());
+		this.setSelectedPatient(this.getTmpSelectedPatient());
 		patientGridType = 0;
-		generateRegion(contactBacking.getSelectedPatient().getIdCountry());
+		generateRegion(this.getSelectedPatient().getIdCountry());
 	}
 
 	private void generateRegion(BigDecimal idCountry) {
@@ -169,18 +176,18 @@ public class CallBacking extends BaseBacking {
 			}
 		}
 
-		contactBacking.setIdCountry(idCountry);
-		contactBacking.setListRegion(listRegion);
-		contactBacking.setMapRegion(mapRegion);
-		contactBacking.setListAllCity(listAllCity);
+		this.setIdCountry(idCountry);
+		this.setListRegion(listRegion);
+		this.setMapRegion(mapRegion);
+		this.setListAllCity(listAllCity);
 
 		if (listRegion.size() > 0) {
 			idRegion = (BigDecimal) listRegion.get(0).getValue();
-			contactBacking.setIdRegion(idRegion);
-			contactBacking.handleRegionChange();
+			this.setIdRegion(idRegion);
+			this.handleRegionChange();
 		} else {
-			contactBacking.setIdRegion(null);
-			contactBacking.setIdCity(null);
+			this.setIdRegion(null);
+			this.setIdCity(null);
 			listRegion = new LinkedList<SelectItem>();
 			listCity = new LinkedList<SelectItem>();
 		}
@@ -205,7 +212,7 @@ public class CallBacking extends BaseBacking {
 				listDocType.add(new SelectItem(row.getCode(), row.getNames()));
 			}
 		}
-		contactBacking.setListDocType(listDocType);
+		this.setListDocType(listDocType);
 	}
 
 	// http://localhost:8080/affinity-crm/pages/public/call.jsf?_AGENT_NUMBER_=9000&_CALL_TYPE_=1&_CAMPAIGN_ID_=2&_CALL_ID_=999&_PHONE_=6445880&_REMOTE_CHANNEL_=3004413679

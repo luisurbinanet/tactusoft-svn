@@ -146,6 +146,8 @@ public class ContactBacking extends BaseBacking {
 		docPatient = null;
 		namePatient = null;
 		patientModel = new PatientDataModel();
+
+		mapOccupation = new HashMap<BigDecimal, CrmOccupation>();
 	}
 
 	public void saveAction() {
@@ -165,8 +167,10 @@ public class ContactBacking extends BaseBacking {
 			CrmProfile profile = mapProfile.get(selectedPatient.getCrmProfile()
 					.getId());
 			selectedPatient.setCrmProfile(profile);
-			selectedPatient
-					.setCrmUserByIdUserCreate(FacesUtil.getCurrentUser());
+			if (FacesUtil.getCurrentUser() != null) {
+				selectedPatient.setCrmUserByIdUserCreate(FacesUtil
+						.getCurrentUser());
+			}
 			selectedPatient.setDateCreate(new Date());
 		} else {
 			selectedPatient.setCrmUserByIdUserModified(FacesUtil

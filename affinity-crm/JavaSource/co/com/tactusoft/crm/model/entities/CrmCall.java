@@ -19,7 +19,7 @@ public class CrmCall implements java.io.Serializable {
 	private BigDecimal callId;
 	private String agentNumber;
 	private String callType;
-	private BigDecimal campaignId;
+	private String campaignId;
 	private String phone;
 	private String remoteChannel;
 	private BigDecimal patientId;
@@ -28,7 +28,7 @@ public class CrmCall implements java.io.Serializable {
 	}
 
 	public CrmCall(BigDecimal id, BigDecimal callId, String agentNumber,
-			String callType, BigDecimal campaignId, String phone,
+			String callType, String campaignId, String phone,
 			String remoteChannel) {
 		this.id = id;
 		this.callId = callId;
@@ -40,7 +40,7 @@ public class CrmCall implements java.io.Serializable {
 	}
 
 	public CrmCall(BigDecimal id, BigDecimal callId, String agentNumber,
-			String callType, BigDecimal campaignId, String phone,
+			String callType, String campaignId, String phone,
 			String remoteChannel, BigDecimal patientId) {
 		this.id = id;
 		this.callId = callId;
@@ -89,12 +89,12 @@ public class CrmCall implements java.io.Serializable {
 		this.callType = callType;
 	}
 
-	@Column(name = "campaign_id", nullable = false, scale = 0)
-	public BigDecimal getCampaignId() {
+	@Column(name = "campaign_id", nullable = false, length = 45)
+	public String getCampaignId() {
 		return this.campaignId;
 	}
 
-	public void setCampaignId(BigDecimal campaignId) {
+	public void setCampaignId(String campaignId) {
 		this.campaignId = campaignId;
 	}
 
