@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
@@ -21,6 +22,7 @@ import com.tactusoft.webservice.client.execute.CustomListsExecute;
 
 import co.com.tactusoft.crm.controller.bo.CapaignBo;
 import co.com.tactusoft.crm.model.entities.CrmCall;
+import co.com.tactusoft.crm.model.entities.CrmCallFinal;
 import co.com.tactusoft.crm.model.entities.CrmCountry;
 import co.com.tactusoft.crm.model.entities.CrmGuideline;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
@@ -48,10 +50,15 @@ public class CallBacking extends ContactBacking {
 	private String phone;
 	private String remoteChannel;
 
+	private CrmCall call;
 	private CrmGuideline crmGuideline;
 	private int patientGridType;
 
 	private CrmCountry crmCountry;
+
+	protected List<SelectItem> listCallFinal;
+	protected BigDecimal idCallFinal;
+	protected Map<BigDecimal, CrmCallFinal> mapCallFinal;
 
 	public CallBacking() {
 		HttpServletRequest req = (HttpServletRequest) FacesContext
@@ -90,17 +97,43 @@ public class CallBacking extends ContactBacking {
 		this.names = names;
 	}
 
+	public List<SelectItem> getListCallFinal() {
+		return listCallFinal;
+	}
+
+	public void setListCallFinal(List<SelectItem> listCallFinal) {
+		this.listCallFinal = listCallFinal;
+	}
+
+	public BigDecimal getIdCallFinal() {
+		return idCallFinal;
+	}
+
+	public void setIdCallFinal(BigDecimal idCallFinal) {
+		this.idCallFinal = idCallFinal;
+	}
+
+	public Map<BigDecimal, CrmCallFinal> getMapCallFinal() {
+		return mapCallFinal;
+	}
+
+	public void setMapCallFinal(Map<BigDecimal, CrmCallFinal> mapCallFinal) {
+		this.mapCallFinal = mapCallFinal;
+	}
+
 	@PostConstruct
 	public void init() {
 		try {
-			CrmCall call = new CrmCall();
-			call.setCallId(callId);
+			generateCallFinal();
+
+			call = new CrmCall();
+			call.setIdCall(callId);
 			call.setAgentNumber(agentNumber);
 			call.setCallType(callType);
-			call.setCampaignId(camapignId);
+			call.setIdCampaign(camapignId);
 			call.setPhone(phone);
 			call.setRemoteChannel(remoteChannel);
-			
+
 			try {
 				capaignService.saveCall(call);
 			} catch (Exception ex) {
@@ -165,6 +198,17 @@ public class CallBacking extends ContactBacking {
 		generateRegion(this.getSelectedPatient().getIdCountry());
 	}
 
+	private void generateCallFinal() {
+		listCallFinal = new ArrayList<SelectItem>();
+		mapCallFinal = new HashMap<BigDecimal, CrmCallFinal>();
+
+		for (CrmCallFinal row : capaignService.getListCallFinal()) {
+			listCallFinal
+					.add(new SelectItem(row.getId(), row.getDescription()));
+			mapCallFinal.put(row.getId(), row);
+		}
+	}
+
 	private void generateRegion(BigDecimal idCountry) {
 		listRegion = new ArrayList<SelectItem>();
 		mapRegion = new HashMap<BigDecimal, CrmRegion>();
@@ -213,6 +257,11 @@ public class CallBacking extends ContactBacking {
 			}
 		}
 		this.setListDocType(listDocType);
+	}
+
+	@Override
+	public void saveAction() {
+		super.saveAction();
 	}
 
 	// http://localhost:8080/affinity-crm/pages/public/call.jsf?_AGENT_NUMBER_=9000&_CALL_TYPE_=1&_CAMPAIGN_ID_=2&_CALL_ID_=999&_PHONE_=6445880&_REMOTE_CHANNEL_=3004413679
