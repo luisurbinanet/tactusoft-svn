@@ -9,6 +9,7 @@ import javax.inject.Named;
 
 import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmCall;
+import co.com.tactusoft.crm.model.entities.CrmCallFinal;
 import co.com.tactusoft.crm.model.entities.CrmGuideline;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 
@@ -22,7 +23,8 @@ public class CapaignBo implements Serializable {
 
 	public CrmGuideline getGuideline(String campaignId) {
 		List<CrmGuideline> list = dao
-				.find("FROM CrmGuideline o WHERE o.phone = '" + campaignId + "'");
+				.find("FROM CrmGuideline o WHERE o.phone = '" + campaignId
+						+ "'");
 		if (list.size() > 0) {
 			return list.get(0);
 		} else {
@@ -33,6 +35,10 @@ public class CapaignBo implements Serializable {
 	public List<CrmPatient> getListPatient(String phone) {
 		return dao.find("FROM CrmPatient o WHERE o.phoneNumber = '" + phone
 				+ "' OR o.cellNumber = '" + phone + "'");
+	}
+
+	public List<CrmCallFinal> getListCallFinal() {
+		return dao.find("from CrmCallFinal");
 	}
 
 	public void saveCall(CrmCall entity) {
