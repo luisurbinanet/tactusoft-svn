@@ -56,9 +56,11 @@ public class CallBacking extends ContactBacking {
 
 	private CrmCountry crmCountry;
 
-	protected List<SelectItem> listCallFinal;
-	protected BigDecimal idCallFinal;
-	protected Map<BigDecimal, CrmCallFinal> mapCallFinal;
+	private List<SelectItem> listCallFinal;
+	private BigDecimal idCallFinal;
+	private Map<BigDecimal, CrmCallFinal> mapCallFinal;
+
+	private CrmProfile profile;
 
 	public CallBacking() {
 		HttpServletRequest req = (HttpServletRequest) FacesContext
@@ -141,6 +143,7 @@ public class CallBacking extends ContactBacking {
 			}
 
 			crmGuideline = capaignService.getGuideline(camapignId);
+			generateProfile();
 
 			List<CrmPatient> listCrmPatient = capaignService
 					.getListPatient(phone);
@@ -162,20 +165,11 @@ public class CallBacking extends ContactBacking {
 					this.setIdCountry(crmGuideline.getIdCountry());
 				}
 			} else {
-				CrmProfile profile = tablesService.getProfileById(crmGuideline
-						.getIdProfile());
 
 				this.getSelectedPatient().setPhoneNumber(phone);
 				this.getSelectedPatient().setCrmProfile(profile);
 				this.getSelectedPatient().setCrmUserByIdUserCreate(
 						securityService.getObject("usuario"));
-
-				this.setListProfile(new ArrayList<SelectItem>());
-				this.getListProfile().add(
-						new SelectItem(profile.getId(), profile.getCode()));
-
-				mapProfile = new HashMap<BigDecimal, CrmProfile>();
-				mapProfile.put(profile.getId(), profile);
 
 				generateRegion(crmGuideline.getIdCountry());
 				patientGridType = 2;
@@ -202,11 +196,24 @@ public class CallBacking extends ContactBacking {
 		listCallFinal = new ArrayList<SelectItem>();
 		mapCallFinal = new HashMap<BigDecimal, CrmCallFinal>();
 
+		String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
+		listCallFinal.add(new SelectItem(null, label));
 		for (CrmCallFinal row : capaignService.getListCallFinal()) {
 			listCallFinal.add(new SelectItem(row.getId(), row.getCode() + " - "
 					+ row.getDescription()));
 			mapCallFinal.put(row.getId(), row);
 		}
+	}
+
+	private void generateProfile() {
+		profile = tablesService.getProfileById(crmGuideline.getIdProfile());
+
+		this.setListProfile(new ArrayList<SelectItem>());
+		this.getListProfile().add(
+				new SelectItem(profile.getId(), profile.getCode()));
+
+		mapProfile = new HashMap<BigDecimal, CrmProfile>();
+		mapProfile.put(profile.getId(), profile);
 	}
 
 	private void generateRegion(BigDecimal idCountry) {
@@ -261,14 +268,20 @@ public class CallBacking extends ContactBacking {
 
 	@Override
 	public void saveAction() {
-		super.saveAction();
+		if (patientGridType == 2) {
+			super.saveAction();
+		}
 		if (this.selectedPatient.getId() != null) {
 			call.setCrmCallFinal(mapCallFinal.get(idCallFinal));
 			call.setIdPatient(this.selectedPatient.getId());
 			capaignService.saveCall(call);
+			String message = FacesUtil.getMessage("cam_msg_update_ok",
+					selectedPatient.getNames());
+			FacesUtil.addInfo(message);
 		}
 	}
 
-	// http://localhost:8080/affinity-crm/pages/public/call.jsf?_AGENT_NUMBER_=9000&_CALL_TYPE_=1&_CAMPAIGN_ID_=2&_CALL_ID_=999&_PHONE_=6445880&_REMOTE_CHANNEL_=3004413679
+	// http://localhost:8080/affinity-crm/pages/public/call.jsf?_AGENT_NUMBER_=9000&_CALL_TYPE_=1&_CAMPAIGN_ID_=6445880&_CALL_ID_=999&_PHONE_=3004413679&_REMOTE_CHANNEL_=3004413679
+	// http://localhost:8080/affinity-crm/pages/public/call.jsf?_AGENT_NUMBER_=9000&_CALL_TYPE_=1&_CAMPAIGN_ID_=6445880&_CALL_ID_=578&_PHONE_=300441&_REMOTE_CHANNEL_=3004413679
 
 }
