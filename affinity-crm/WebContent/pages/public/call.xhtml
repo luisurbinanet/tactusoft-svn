@@ -37,17 +37,17 @@
 
 				<p:spacer height="5" />
 
-				<p:toolbar id="toolBar" style="width:100%"
-					rendered="#{callBacking.patientGridType eq 1 || callBacking.patientGridType eq 2}">
+				<p:toolbar id="toolBar" style="width:100%">
 					<p:toolbarGroup align="left">
 						<p:commandButton id="btnSavePatient" value="#{msg['btn_save']}"
 							icon="ui-icon-disk"
-							rendered="#{callBacking.patientGridType eq 2}"
+							rendered="#{callBacking.patientGridType eq 0 || callBacking.patientGridType eq 2}"
 							actionListener="#{callBacking.saveAction}" update="growl toolBar" />
 						<p:commandButton id="btnAddPatient" value="#{msg['btn_select']}"
 							icon="ui-icon-plusthick"
 							rendered="#{callBacking.patientGridType eq 1}" update="form"
-							actionListener="#{callBacking.addContactAction}" />
+							actionListener="#{callBacking.addContactAction}"
+							process="@this,pnlContactNew,pnlContactList" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -99,7 +99,7 @@
 							value="#{callBacking.selectedPatient.doc}" style="width:240px;"
 							label="#{msg['pat_code']}" maxlength="16"
 							rendered="#{!callBacking.automatic or !callBacking.newRecord}"
-							readonly="#{callBacking.patientGridType eq 0}" />
+							disabled="#{callBacking.patientGridType eq 0}" />
 					</h:panelGrid>
 
 					<h:panelGrid id="pnlDetail3" columns="4" cellspacing="5"
@@ -109,12 +109,12 @@
 						<h:outputLabel value="#{msg['pat_names']}" />
 						<p:inputText value="#{callBacking.selectedPatient.firstnames}"
 							maxlength="35" style="width:240px" label="#{msg['pat_names']}"
-							required="true" />
+							required="true" disabled="#{callBacking.patientGridType eq 0}" />
 
 						<h:outputLabel value="#{msg['pat_surnames']}" />
 						<p:inputText value="#{callBacking.selectedPatient.surnames}"
 							maxlength="35" style="width:240px" label="#{msg['pat_surnames']}"
-							required="true" />
+							required="true" disabled="#{callBacking.patientGridType eq 0}" />
 
 						<h:outputText value="#{msg['glb_gender']}" />
 						<p:selectOneMenu value="#{callBacking.selectedPatient.gender}"
@@ -130,16 +130,19 @@
 						<h:outputText value="#{msg['pat_phone_number']}" />
 						<p:inputText value="#{callBacking.selectedPatient.phoneNumber}"
 							style="width:240px" label="#{msg['pat_phone_number']}"
-							required="true" maxlength="16" />
+							required="true" maxlength="16"
+							disabled="#{callBacking.patientGridType eq 0}" />
 
 						<h:outputText value="#{msg['pat_cell_number']}" />
 						<p:inputText value="#{callBacking.selectedPatient.cellNumber}"
 							style="width:240px" label="#{msg['pat_cell_number']}"
-							required="false" maxlength="16" />
+							required="false" maxlength="16"
+							disabled="#{callBacking.patientGridType eq 0}" />
 
 						<h:outputText value="#{msg['pat_type_obs']}" />
 						<p:inputTextarea value="#{callBacking.selectedPatient.obs}"
-							style="width:240px" rows="4" />
+							style="width:240px" rows="4"
+							disabled="#{callBacking.patientGridType eq 0}" />
 					</h:panelGrid>
 
 
