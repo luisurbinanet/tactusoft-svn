@@ -203,8 +203,8 @@ public class CallBacking extends ContactBacking {
 		mapCallFinal = new HashMap<BigDecimal, CrmCallFinal>();
 
 		for (CrmCallFinal row : capaignService.getListCallFinal()) {
-			listCallFinal
-					.add(new SelectItem(row.getId(), row.getDescription()));
+			listCallFinal.add(new SelectItem(row.getId(), row.getCode() + " - "
+					+ row.getDescription()));
 			mapCallFinal.put(row.getId(), row);
 		}
 	}
@@ -262,6 +262,11 @@ public class CallBacking extends ContactBacking {
 	@Override
 	public void saveAction() {
 		super.saveAction();
+		if (this.selectedPatient.getId() != null) {
+			call.setCrmCallFinal(mapCallFinal.get(idCallFinal));
+			call.setIdPatient(this.selectedPatient.getId());
+			capaignService.saveCall(call);
+		}
 	}
 
 	// http://localhost:8080/affinity-crm/pages/public/call.jsf?_AGENT_NUMBER_=9000&_CALL_TYPE_=1&_CAMPAIGN_ID_=2&_CALL_ID_=999&_PHONE_=6445880&_REMOTE_CHANNEL_=3004413679
