@@ -23,6 +23,7 @@ public class CrmCampaign implements java.io.Serializable {
 	private BigDecimal idUser;
 	private BigDecimal idBranch;
 	private String observation;
+	private Integer state;
 	private Set<CrmCampaignDetail> crmCampaignDetails = new HashSet<CrmCampaignDetail>(
 			0);
 
@@ -92,6 +93,15 @@ public class CrmCampaign implements java.io.Serializable {
 
 	public void setObservation(String observation) {
 		this.observation = observation;
+	}
+
+	@Column(name = "state", nullable = false, scale = 0)
+	public Integer getState() {
+		return state;
+	}
+
+	public void setState(Integer state) {
+		this.state = state;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmCampaign")

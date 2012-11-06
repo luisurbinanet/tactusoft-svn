@@ -50,15 +50,46 @@ public class Principal {
 		return now;
 	}
 
+	private static List<Campaign> getCampaign(ProcessBO dao, String code,
+			List<CrmSapMedication> listSapMedication) {
+		List<Campaign> list = new ArrayList<Campaign>();
+		Campaign campaign = null;
+		List<VwAppointmentMedication> listMedication = dao
+				.getListAppointmentMedicationByCode(code);
+		for (VwAppointmentMedication vw : listMedication) {
+			boolean exists = false;
+			for (CrmSapMedication sap2 : listSapMedication) {
+
+				campaign = new Campaign();
+				campaign.setCodeBranch(sap2.getIdSalesOff().toString());
+				campaign.setIdPatient(vw.getPatId());
+				campaign.setCodeMaterial(vw.getId().getCodMaterial());
+				campaign.setNameMaterial(vw.getId().getDescMaterial());
+
+				if (vw.getId().getCodMaterial().equals(sap2.getIdMaterial())) {
+					exists = true;
+				}
+
+				sap2.setStatus("P");
+				dao.saveCrmSapMedication(sap2);
+			}
+			if (!exists) {
+				list.add(campaign);
+			}
+		}
+
+		return list;
+	}
+
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				"spring-config.xml");
+		System.out.println("INICIO: Iniciando Operación. " + new Date());
 		ProcessBO dao = context.getBean(ProcessBO.class);
 		Date minDateSAP = dao.getMinDateByLoadState();
-
 		if (minDateSAP != null) {
 
 			String minDate = Principal.formatDate(minDateSAP, "yyyy-MM-dd");
@@ -137,38 +168,13 @@ public class Principal {
 				crmCampaignDetail.setDescMaterial(row.getNameMaterial());
 				dao.saveCrmCampaignDetail(crmCampaignDetail);
 			}
-		}
-	}
 
-	private static List<Campaign> getCampaign(ProcessBO dao, String code,
-			List<CrmSapMedication> listSapMedication) {
-		List<Campaign> list = new ArrayList<Campaign>();
-		Campaign campaign = null;
-		List<VwAppointmentMedication> listMedication = dao
-				.getListAppointmentMedicationByCode(code);
-		for (VwAppointmentMedication vw : listMedication) {
-			boolean exists = false;
-			for (CrmSapMedication sap2 : listSapMedication) {
-
-				campaign = new Campaign();
-				campaign.setCodeBranch(sap2.getIdSalesOff().toString());
-				campaign.setIdPatient(vw.getPatId());
-				campaign.setCodeMaterial(vw.getId().getCodMaterial());
-				campaign.setNameMaterial(vw.getId().getDescMaterial());
-
-				if (vw.getId().getCodMaterial().equals(sap2.getIdMaterial())) {
-					exists = true;
-				}
-
-				sap2.setStatus("P");
-				dao.saveCrmSapMedication(sap2);
-			}
-			if (!exists) {
-				list.add(campaign);
-			}
+			System.out.println("FIN: Finalizado el proceso. " + new Date());
+		} else {
+			System.out.println("FIN: No existen registros a procesar. "
+					+ new Date());
 		}
 
-		return list;
 	}
 
 }
