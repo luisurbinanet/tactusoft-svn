@@ -2,8 +2,11 @@ package co.com.tactusoft.sap.entities;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
 
+@Entity
 public class CrmUserCampaign implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -19,6 +22,7 @@ public class CrmUserCampaign implements Serializable {
 		this.id = id;
 	}
 
+	@Column(name = "num_records")
 	public Long getNumRecords() {
 		return numRecords;
 	}

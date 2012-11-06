@@ -3,6 +3,7 @@ package co.com.tactusoft.sap.entities;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
@@ -10,8 +11,9 @@ public class CrmUserCampaignId implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private BigDecimal idUser;
-	private String codeBranch;
+	private BigDecimal idBranch;
 
+	@Column(name = "id_user")
 	public BigDecimal getIdUser() {
 		return idUser;
 	}
@@ -20,12 +22,13 @@ public class CrmUserCampaignId implements Serializable {
 		this.idUser = idUser;
 	}
 
-	public String getCodeBranch() {
-		return codeBranch;
+	@Column(name = "id_branch")
+	public BigDecimal getIdBranch() {
+		return idBranch;
 	}
 
-	public void setCodeBranch(String codeBranch) {
-		this.codeBranch = codeBranch;
+	public void setIdBranch(BigDecimal idBranch) {
+		this.idBranch = idBranch;
 	}
 
 }

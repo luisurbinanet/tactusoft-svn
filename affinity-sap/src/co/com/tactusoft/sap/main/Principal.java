@@ -1,5 +1,6 @@
 package co.com.tactusoft.sap.main;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,7 +16,10 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import co.com.tactusoft.sap.beans.Campaign;
 import co.com.tactusoft.sap.bo.ProcessBO;
+import co.com.tactusoft.sap.entities.CrmCampaign;
+import co.com.tactusoft.sap.entities.CrmCampaignDetail;
 import co.com.tactusoft.sap.entities.CrmSapMedication;
+import co.com.tactusoft.sap.entities.CrmUserCampaign;
 import co.com.tactusoft.sap.entities.VwAppointment;
 import co.com.tactusoft.sap.entities.VwAppointmentMedication;
 
@@ -53,69 +57,92 @@ public class Principal {
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				"spring-config.xml");
 		ProcessBO dao = context.getBean(ProcessBO.class);
+		Date minDateSAP = dao.getMinDateByLoadState();
 
-		String minDate = Principal.formatDate(dao.getMinDateByLoadState(),
-				"yyyy-MM-dd");
-		String maxDate = Principal.formatDate(dao.getMaxDateByLoadState(),
-				"yyyy-MM-dd");
+		if (minDateSAP != null) {
 
-		List<Campaign> listMedCampaing = new ArrayList<Campaign>();
-		Campaign campaign = null;
-
-		for (VwAppointment row : dao
-				.getListAppointmentByDates(minDate, maxDate)) {
-
-			String date = Principal.formatDate(row.getStartAppointmentDate(),
+			String minDate = Principal.formatDate(minDateSAP, "yyyy-MM-dd");
+			String maxDate = Principal.formatDate(dao.getMaxDateByLoadState(),
 					"yyyy-MM-dd");
 
-			List<CrmSapMedication> listSapMedication = dao
-					.getListSapMedicationByLoadState(row.getPatCodeSap(),
-							row.getPrcFormulaDocType(), date);
+			List<Campaign> listMedCampaing = new ArrayList<Campaign>();
 
-			for (CrmSapMedication sap : listSapMedication) {
-				if (getDateWithoutTime(row.getStartAppointmentDate())
-						.compareTo(sap.getDateBill()) == 0) {
+			for (VwAppointment row : dao.getListAppointmentByDates(minDate,
+					maxDate)) {
 
-					campaign = getCampaign(dao, row.getCode(),
-							listSapMedication);
+				String date = Principal.formatDate(
+						row.getStartAppointmentDate(), "yyyy-MM-dd");
 
-					if (campaign != null) {
-						listMedCampaing.add(campaign);
-					}
+				List<CrmSapMedication> listSapMedication = dao
+						.getListSapMedicationByLoadState(row.getPatCodeSap(),
+								row.getPrcFormulaDocType(), date);
 
-					break;
-				} else {
-					Calendar c = Calendar.getInstance();
-					Calendar starDate = new GregorianCalendar();
-					starDate.setTime(getDateWithoutTime(row
-							.getStartAppointmentDate()));
-					Calendar endDate = new GregorianCalendar();
-					endDate.setTime(sap.getDateBill());
-					c.setTimeInMillis(endDate.getTime().getTime()
-							- starDate.getTime().getTime());
-					int days = c.get(Calendar.DAY_OF_YEAR);
-					if (days <= CONST_MAX_DAYS) {
-						campaign = getCampaign(dao, row.getCode(),
-								listSapMedication);
+				for (CrmSapMedication sap : listSapMedication) {
+					if (getDateWithoutTime(row.getStartAppointmentDate())
+							.compareTo(sap.getDateBill()) == 0) {
 
-						if (campaign != null) {
-							listMedCampaing.add(campaign);
+						listMedCampaing.addAll(getCampaign(dao, row.getCode(),
+								listSapMedication));
+						break;
+					} else {
+						Calendar c = Calendar.getInstance();
+						Calendar starDate = new GregorianCalendar();
+						starDate.setTime(getDateWithoutTime(row
+								.getStartAppointmentDate()));
+						Calendar endDate = new GregorianCalendar();
+						endDate.setTime(sap.getDateBill());
+						c.setTimeInMillis(endDate.getTime().getTime()
+								- starDate.getTime().getTime());
+						int days = c.get(Calendar.DAY_OF_YEAR);
+
+						if (days <= CONST_MAX_DAYS) {
+							listMedCampaing.addAll(getCampaign(dao,
+									row.getCode(), listSapMedication));
+							break;
 						}
 					}
 				}
 			}
-		}
 
-		Collections.sort(listMedCampaing);
-		for (Campaign row : listMedCampaing) {
-			System.out.println(row.getIdPatient() + " - "
-					+ row.getNameMaterial());
-		}
+			// Ordenar por Paciente
+			Collections.sort(listMedCampaing);
 
+			BigDecimal currentIdPatient = null;
+			CrmCampaign crmCampaign = null;
+			for (Campaign row : listMedCampaing) {
+
+				System.out.println(row.getIdPatient() + " - "
+						+ row.getNameMaterial() + " - " + row.getCodeBranch());
+
+				if (currentIdPatient == null
+						|| currentIdPatient.intValue() != row.getIdPatient()
+								.intValue()) {
+					CrmUserCampaign crmUserCampaign = dao
+							.getListUserCampaignByBranchs(
+									"'" + row.getCodeBranch() + "'").get(0);
+
+					crmCampaign = new CrmCampaign();
+					crmCampaign.setIdBranch(crmUserCampaign.getId()
+							.getIdBranch());
+					crmCampaign.setIdPatient(row.getIdPatient());
+					crmCampaign.setIdUser(crmUserCampaign.getId().getIdUser());
+					dao.saveCrmCampaign(crmCampaign);
+				}
+
+				currentIdPatient = row.getIdPatient();
+
+				CrmCampaignDetail crmCampaignDetail = new CrmCampaignDetail();
+				crmCampaignDetail.setCrmCampaign(crmCampaign);
+				crmCampaignDetail.setCodMaterial(row.getCodeMaterial());
+				crmCampaignDetail.setDescMaterial(row.getNameMaterial());
+				dao.saveCrmCampaignDetail(crmCampaignDetail);
+			}
+		}
 	}
 
-	private static Campaign getCampaign(ProcessBO dao, String code,
+	private static List<Campaign> getCampaign(ProcessBO dao, String code,
 			List<CrmSapMedication> listSapMedication) {
+		List<Campaign> list = new ArrayList<Campaign>();
 		Campaign campaign = null;
 		List<VwAppointmentMedication> listMedication = dao
 				.getListAppointmentMedicationByCode(code);
@@ -131,15 +158,17 @@ public class Principal {
 
 				if (vw.getId().getCodMaterial().equals(sap2.getIdMaterial())) {
 					exists = true;
-					break;
 				}
+
+				sap2.setStatus("P");
+				dao.saveCrmSapMedication(sap2);
 			}
-			if (exists) {
-				campaign = null;
+			if (!exists) {
+				list.add(campaign);
 			}
 		}
 
-		return campaign;
+		return list;
 	}
 
 }
