@@ -75,35 +75,16 @@ public class Principal {
 			for (CrmSapMedication sap : listSapMedication) {
 				if (getDateWithoutTime(row.getStartAppointmentDate())
 						.compareTo(sap.getDateBill()) == 0) {
-					List<VwAppointmentMedication> listMedication = dao
-							.getListAppointmentMedicationByCode(row.getCode());
-					for (VwAppointmentMedication vw : listMedication) {
-						boolean exists = false;
-						for (CrmSapMedication sap2 : listSapMedication) {
 
-							campaign = new Campaign();
-							campaign.setCodeBranch(sap2.getIdSalesOff()
-									.toString());
-							campaign.setIdPatient(vw.getPatId());
-							campaign.setCodeMaterial(vw.getId()
-									.getCodMaterial());
-							campaign.setNameMaterial(vw.getId()
-									.getDescMaterial());
+					campaign = getCampaign(dao, row.getCode(),
+							listSapMedication);
 
-							if (vw.getId().getCodMaterial()
-									.equals(sap2.getIdMaterial())) {
-								exists = true;
-								break;
-							}
-						}
-						if (!exists) {
-							listMedCampaing.add(campaign);
-						}
+					if (campaign != null) {
+						listMedCampaing.add(campaign);
 					}
+
 					break;
 				} else {
-					System.out.println(row.getStartAppointmentDate() + " - "
-							+ sap.getDateBill());
 					Calendar c = Calendar.getInstance();
 					Calendar starDate = new GregorianCalendar();
 					starDate.setTime(getDateWithoutTime(row
@@ -114,7 +95,12 @@ public class Principal {
 							- starDate.getTime().getTime());
 					int days = c.get(Calendar.DAY_OF_YEAR);
 					if (days <= CONST_MAX_DAYS) {
+						campaign = getCampaign(dao, row.getCode(),
+								listSapMedication);
 
+						if (campaign != null) {
+							listMedCampaing.add(campaign);
+						}
 					}
 				}
 			}
@@ -126,6 +112,34 @@ public class Principal {
 					+ row.getNameMaterial());
 		}
 
+	}
+
+	private static Campaign getCampaign(ProcessBO dao, String code,
+			List<CrmSapMedication> listSapMedication) {
+		Campaign campaign = null;
+		List<VwAppointmentMedication> listMedication = dao
+				.getListAppointmentMedicationByCode(code);
+		for (VwAppointmentMedication vw : listMedication) {
+			boolean exists = false;
+			for (CrmSapMedication sap2 : listSapMedication) {
+
+				campaign = new Campaign();
+				campaign.setCodeBranch(sap2.getIdSalesOff().toString());
+				campaign.setIdPatient(vw.getPatId());
+				campaign.setCodeMaterial(vw.getId().getCodMaterial());
+				campaign.setNameMaterial(vw.getId().getDescMaterial());
+
+				if (vw.getId().getCodMaterial().equals(sap2.getIdMaterial())) {
+					exists = true;
+					break;
+				}
+			}
+			if (exists) {
+				campaign = null;
+			}
+		}
+
+		return campaign;
 	}
 
 }

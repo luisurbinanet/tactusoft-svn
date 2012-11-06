@@ -9,6 +9,7 @@ import javax.inject.Named;
 
 import co.com.tactusoft.sap.dao.CustomHibernateDao;
 import co.com.tactusoft.sap.entities.CrmSapMedication;
+import co.com.tactusoft.sap.entities.CrmUserCampaign;
 import co.com.tactusoft.sap.entities.VwAppointment;
 import co.com.tactusoft.sap.entities.VwAppointmentMedication;
 
@@ -55,5 +56,22 @@ public class ProcessBO implements Serializable {
 		return dao.find("FROM VwAppointmentMedication o WHERE code = '" + code
 				+ "'");
 	}
+	
+	public List<CrmUserCampaign> getListUserCampaignByBranchs(
+			String branchs) {
+		return dao.find("FROM VwAppointmentMedication o WHERE code = '" + branchs
+				+ "'");
+	}
+	
+	SELECT a.id, a.code_branch, count(b.id_user) num_records
+	FROM (SELECT DISTINCT c.id id_branch, c.code code_branch, a.*
+	FROM crm_user a JOIN crm_user_branch b
+	JOIN crm_branch c
+	ON a.id = b.id_user AND c.id = b.id_branch
+	WHERE c.code IN ('1002','1003') AND a.id_departament = 2) a 
+	LEFT JOIN crm_campaign b
+	ON a.id = b.id_user AND a.id_branch = b.id_branch
+	GROUP BY a.id, a.code_branch
+	ORDER BY num_records ASC
 
 }
