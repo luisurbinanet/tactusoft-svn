@@ -271,6 +271,7 @@ public class CallBacking extends ContactBacking {
 		if (patientGridType == 2) {
 			super.saveAction();
 		}
+
 		if (this.selectedPatient.getId() != null) {
 			call.setCrmCallFinal(mapCallFinal.get(idCallFinal));
 			call.setIdPatient(this.selectedPatient.getId());
@@ -279,6 +280,8 @@ public class CallBacking extends ContactBacking {
 					selectedPatient.getNames());
 			FacesUtil.addInfo(message);
 		}
+
+		patientGridType = 3;
 	}
 
 	// http://localhost:8080/affinity-crm/pages/public/call.jsf?_AGENT_NUMBER_=9000&_CALL_TYPE_=1&_CAMPAIGN_ID_=6445880&_CALL_ID_=999&_PHONE_=3004413679&_REMOTE_CHANNEL_=3004413679
