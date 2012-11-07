@@ -9,6 +9,7 @@ import javax.inject.Named;
 
 import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
+import co.com.tactusoft.crm.model.entities.CrmCampaign;
 import co.com.tactusoft.crm.model.entities.CrmCie;
 import co.com.tactusoft.crm.model.entities.CrmCieMaterial;
 import co.com.tactusoft.crm.model.entities.CrmCity;
@@ -57,6 +58,10 @@ public class TablesBo implements Serializable {
 
 	public List<CrmNurse> getListNurse() {
 		return dao.find("from CrmNurse");
+	}
+
+	public List<CrmCampaign> getListCampaign() {
+		return dao.find("from CrmCampaign");
 	}
 
 	public List<CrmNurse> getListNurseActive() {
@@ -554,6 +559,13 @@ public class TablesBo implements Serializable {
 
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmCieMaterial.class));
+		}
+		return dao.persist(entity);
+	}
+
+	public Integer saveCampaign(CrmCampaign entity) {
+		if (entity.getId() == null) {
+			entity.setId(getId(CrmCampaign.class));
 		}
 		return dao.persist(entity);
 	}

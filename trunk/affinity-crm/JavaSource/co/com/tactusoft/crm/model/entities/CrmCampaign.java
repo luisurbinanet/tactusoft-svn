@@ -21,24 +21,30 @@ public class CrmCampaign implements java.io.Serializable {
 	private BigDecimal id;
 	private BigDecimal idPatient;
 	private BigDecimal idUser;
+	private BigDecimal idBranch;
 	private String observation;
+	private Integer state;
 	private Set<CrmCampaignDetail> crmCampaignDetails = new HashSet<CrmCampaignDetail>(
 			0);
 
 	public CrmCampaign() {
 	}
 
-	public CrmCampaign(BigDecimal id, BigDecimal idPatient, BigDecimal idUser) {
+	public CrmCampaign(BigDecimal id, BigDecimal idPatient, BigDecimal idUser,
+			BigDecimal idBranch) {
 		this.id = id;
 		this.idPatient = idPatient;
 		this.idUser = idUser;
+		this.idBranch = idBranch;
 	}
 
 	public CrmCampaign(BigDecimal id, BigDecimal idPatient, BigDecimal idUser,
-			String observation, Set<CrmCampaignDetail> crmCampaignDetails) {
+			BigDecimal idBranch, String observation,
+			Set<CrmCampaignDetail> crmCampaignDetails) {
 		this.id = id;
 		this.idPatient = idPatient;
 		this.idUser = idUser;
+		this.idBranch = idBranch;
 		this.observation = observation;
 		this.crmCampaignDetails = crmCampaignDetails;
 	}
@@ -71,6 +77,15 @@ public class CrmCampaign implements java.io.Serializable {
 		this.idUser = idUser;
 	}
 
+	@Column(name = "id_branch", nullable = false, scale = 0)
+	public BigDecimal getIdBranch() {
+		return idBranch;
+	}
+
+	public void setIdBranch(BigDecimal idBranch) {
+		this.idBranch = idBranch;
+	}
+
 	@Column(name = "observation", length = 65535)
 	public String getObservation() {
 		return this.observation;
@@ -78,6 +93,15 @@ public class CrmCampaign implements java.io.Serializable {
 
 	public void setObservation(String observation) {
 		this.observation = observation;
+	}
+
+	@Column(name = "state", nullable = false, scale = 0)
+	public Integer getState() {
+		return state;
+	}
+
+	public void setState(Integer state) {
+		this.state = state;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmCampaign")
