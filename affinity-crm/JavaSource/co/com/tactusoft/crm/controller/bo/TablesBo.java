@@ -10,6 +10,7 @@ import javax.inject.Named;
 import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmCampaign;
+import co.com.tactusoft.crm.model.entities.CrmCampaignDetail;
 import co.com.tactusoft.crm.model.entities.CrmCie;
 import co.com.tactusoft.crm.model.entities.CrmCieMaterial;
 import co.com.tactusoft.crm.model.entities.CrmCity;
@@ -37,6 +38,7 @@ import co.com.tactusoft.crm.model.entities.CrmUserBranch;
 import co.com.tactusoft.crm.model.entities.CrmUserProfile;
 import co.com.tactusoft.crm.model.entities.CrmUserRole;
 import co.com.tactusoft.crm.model.entities.VwProcedure;
+import co.com.tactusoft.crm.util.FacesUtil;
 
 import com.tactusoft.webservice.client.beans.WSBean;
 
@@ -61,7 +63,13 @@ public class TablesBo implements Serializable {
 	}
 
 	public List<CrmCampaign> getListCampaign() {
-		return dao.find("from CrmCampaign");
+		return dao.find("from CrmCampaign where idUser = "
+				+ FacesUtil.getCurrentIdUsuario());
+	}
+
+	public List<CrmCampaignDetail> getListCampaign(BigDecimal idCampaign) {
+		return dao.find("from CrmCampaignDetail where crmCampaign.id = "
+				+ idCampaign);
 	}
 
 	public List<CrmNurse> getListNurseActive() {

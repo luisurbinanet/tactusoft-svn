@@ -10,7 +10,7 @@
 	<ui:define name="body">
 
 		<p:panel style="width:100%;height:600px;"
-			header="#{msg['title_nurse']}">
+			header="#{msg['title_campaign']}">
 
 			<p:spacer height="10" />
 
@@ -26,23 +26,25 @@
 				<p:spacer height="10" />
 
 				<p:dataTable id="recordTable" var="rec"
-					value="#{nurseBacking.model}" rowKey="#{rec.id}"
-					selection="#{nurseBacking.selected}" paginator="true" rows="10"
-					style="width:100%">
+					value="#{campaignBacking.model}" rowKey="#{rec.id}"
+					selection="#{campaignBacking.selected}" paginator="true" rows="10"
+					style="width:100%" emptyMessage="#{msg['glb_no_records_found']}">
 
 					<p:column selectionMode="single" style="width:18px" />
 
-					<p:column headerText="#{msg['dep_code']}">
-						<h:outputLabel value="#{rec.code}" />
+					<p:column headerText="#{msg['cam_pat']}">
+						<h:outputLabel value="#{rec.crmPatient.names}" />
 					</p:column>
 
-					<p:column headerText="#{msg['dep_name']}">
-						<h:outputLabel value="#{rec.names}" />
+					<p:column headerText="#{msg['cam_date']}">
+						<h:outputLabel value="#{rec.dateCall}" >
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputLabel>
 					</p:column>
 
 					<p:column headerText="#{msg['glb_state']}">
 						<h:outputLabel
-							value="#{rec.state==1?msg['glb_state_active']:msg['glb_state_inactive']}" />
+							value="#{rec.state==1?msg['crm_state_open']:msg['crm_state_close']}" />
 					</p:column>
 
 				</p:dataTable>
@@ -58,7 +60,6 @@
 			<p:dialog header="#{msg['msg_detail']}" widgetVar="dlg"
 				resizable="false" id="dialog" showEffect="fade" hideEffect="explode"
 				modal="true" width="500">
-
 				<p:toolbar style="width:100%">
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_save']}" icon="ui-icon-disk"
@@ -74,25 +75,6 @@
 
 				<h:panelGrid id="pnlDetail" columns="2" cellpadding="4"
 					style="margin:0 auto;" width="100%">
-
-					<h:outputLabel value="#{msg['dep_code']}" />
-					<h:inputText value="#{nurseBacking.selected.code}"
-						style="width:100%" label="#{msg['dep_code']}" required="true" />
-
-					<h:outputLabel value="#{msg['dep_name']}" />
-					<h:inputText value="#{nurseBacking.selected.names}"
-						style="width:100%" label="#{msg['dep_name']}" required="true" />
-
-					<h:outputLabel value="#{msg['glb_state']}"
-						rendered="#{nurseBacking.selected.id!=null?true:false}" />
-					<p:selectOneMenu value="#{nurseBacking.selected.state}"
-						style="width:250px"
-						rendered="#{nurseBacking.selected.id!=null?true:false}">
-						<f:selectItem itemValue="1" itemLabel="#{msg['glb_state_active']}" />
-						<f:selectItem itemValue="0"
-							itemLabel="#{msg['glb_state_inactive']}" />
-					</p:selectOneMenu>
-
 				</h:panelGrid>
 
 			</p:dialog>
