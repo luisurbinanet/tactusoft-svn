@@ -25,6 +25,7 @@ public class CrmCall implements java.io.Serializable {
 	private String callType;
 	private String idCampaign;
 	private String phone;
+	private String companyPhone;
 	private String remoteChannel;
 	private BigDecimal idPatient;
 
@@ -33,19 +34,21 @@ public class CrmCall implements java.io.Serializable {
 
 	public CrmCall(BigDecimal id, BigDecimal idCall, String agentNumber,
 			String callType, String idCampaign, String phone,
-			String remoteChannel) {
+			String companyPhone, String remoteChannel) {
 		this.id = id;
 		this.idCall = idCall;
 		this.agentNumber = agentNumber;
 		this.callType = callType;
 		this.idCampaign = idCampaign;
 		this.phone = phone;
+		this.companyPhone = companyPhone;
 		this.remoteChannel = remoteChannel;
 	}
 
 	public CrmCall(BigDecimal id, CrmCallFinal crmCallFinal, BigDecimal idCall,
 			String agentNumber, String callType, String idCampaign,
-			String phone, String remoteChannel, BigDecimal idPatient) {
+			String phone, String companyPhone, String remoteChannel,
+			BigDecimal idPatient) {
 		this.id = id;
 		this.crmCallFinal = crmCallFinal;
 		this.idCall = idCall;
@@ -53,6 +56,7 @@ public class CrmCall implements java.io.Serializable {
 		this.callType = callType;
 		this.idCampaign = idCampaign;
 		this.phone = phone;
+		this.companyPhone = companyPhone;
 		this.remoteChannel = remoteChannel;
 		this.idPatient = idPatient;
 	}
@@ -120,6 +124,15 @@ public class CrmCall implements java.io.Serializable {
 
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+	@Column(name = "company_phone", nullable = false, length = 45)
+	public String getCompanyPhone() {
+		return companyPhone;
+	}
+
+	public void setCompanyPhone(String companyPhone) {
+		this.companyPhone = companyPhone;
 	}
 
 	@Column(name = "remote_channel", nullable = false, length = 45)
