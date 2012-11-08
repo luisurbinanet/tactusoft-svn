@@ -110,11 +110,9 @@
 										<p:commandButton update=":form:tabView"
 											disabled="#{rec.closeAppointment}" icon="ui-icon-check"
 											rendered="#{historyBacking.rolePrincipal eq 'DOCTOR' or historyBacking.rolePrincipal eq 'NURSE'}"
-											title="#{msg['btn_edit']}">
+											title="#{msg['btn_edit']}" action="#{historyBacking.editAppointmentAction}">
 											<f:setPropertyActionListener value="#{rec}"
 												target="#{historyBacking.selectedAppointment}" />
-											<f:setPropertyActionListener value="false"
-												target="#{historyBacking.viewMode}" />
 										</p:commandButton>
 										<p:commandButton disabled="#{not rec.closeAppointment}"
 											icon="ui-icon-print"
@@ -123,7 +121,6 @@
 											action="#{historyBacking.printFormulaAction}">
 											<f:setPropertyActionListener value="#{rec}"
 												target="#{historyBacking.selectedAppointment}" />
-
 										</p:commandButton>
 										<p:commandButton disabled="#{not rec.closeAppointment}"
 											icon="ui-icon-bookmark"

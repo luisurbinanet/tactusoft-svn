@@ -1,6 +1,8 @@
 package co.com.tactusoft.crm.view.backing;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -48,6 +50,7 @@ public class CallBacking extends ContactBacking {
 	private String callType;
 	private String camapignId;
 	private String phone;
+	private String companyPhone;
 	private String remoteChannel;
 
 	private CrmCall call;
@@ -69,7 +72,16 @@ public class CallBacking extends ContactBacking {
 		callId = new BigDecimal(req.getParameter("_CALL_ID_"));
 		callType = req.getParameter("_CALL_TYPE_");
 		camapignId = req.getParameter("_CAMPAIGN_ID_");
-		phone = req.getParameter("_PHONE_");
+
+		String parameter = req.getParameter("_PHONE_");
+		try {
+			parameter = URLDecoder.decode(parameter, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+
+		}
+		String[] phones = parameter.split(":");
+		companyPhone = phones[0];
+		phone = phones[1];
 		remoteChannel = req.getParameter("_REMOTE_CHANNEL_");
 
 		crmGuideline = new CrmGuideline();
@@ -134,6 +146,7 @@ public class CallBacking extends ContactBacking {
 			call.setCallType(callType);
 			call.setIdCampaign(camapignId);
 			call.setPhone(phone);
+			call.setCompanyPhone(companyPhone);
 			call.setRemoteChannel(remoteChannel);
 
 			try {
@@ -142,7 +155,7 @@ public class CallBacking extends ContactBacking {
 
 			}
 
-			crmGuideline = capaignService.getGuideline(camapignId);
+			crmGuideline = capaignService.getGuideline(companyPhone);
 			generateProfile();
 
 			List<CrmPatient> listCrmPatient = capaignService
@@ -165,7 +178,6 @@ public class CallBacking extends ContactBacking {
 					this.setIdCountry(crmGuideline.getIdCountry());
 				}
 			} else {
-
 				this.getSelectedPatient().setPhoneNumber(phone);
 				this.getSelectedPatient().setCrmProfile(profile);
 				this.getSelectedPatient().setCrmUserByIdUserCreate(

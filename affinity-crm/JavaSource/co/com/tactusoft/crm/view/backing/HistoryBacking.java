@@ -1830,4 +1830,25 @@ public class HistoryBacking extends BaseBacking {
 		return listExam.size() == 0 ? true : false;
 	}
 
+	public void editAppointmentAction() {
+		listDiagnosis = processService
+				.getListDiagnosisByAppointment(selectedAppointment.getId());
+		diagnosisModel = new DiagnosisDataModel(listDiagnosis);
+
+		listTherapy = processService.getListMedicationByAppointment(
+				selectedAppointment.getId(), Constant.MATERIAL_TYPE_THERAPY);
+		therapyModel = new MedicationDataModel(listTherapy);
+
+		listExam = processService.getListMedicationByAppointment(
+				selectedAppointment.getId(), Constant.MATERIAL_TYPE_EXAMS);
+		examModel = new MedicationDataModel(listExam);
+
+		List<CrmNote> listNote = processService.getListNoteByAppointment(
+				selectedAppointment.getId(), Constant.NOTE_TYPE_DOCTOR);
+		if (listNote.size() > 0) {
+			this.noteDoctor = listNote.get(0).getNote();
+		}
+
+		this.viewMode = false;
+	}
 }

@@ -1223,6 +1223,14 @@ public class ProcessBo implements Serializable {
 		return list;
 	}
 
+	public List<CrmDiagnosis> getListDiagnosisByAppointment(
+			BigDecimal idAppointment) {
+		List<CrmDiagnosis> list = dao
+				.find("from CrmDiagnosis o where o.crmAppointment.id = "
+						+ idAppointment + " order by o.id");
+		return list;
+	}
+
 	public List<CrmMedication> getListMedicationByPatient(BigDecimal idPatient) {
 		List<CrmMedication> list = dao
 				.find("from CrmMedication o where o.crmAppointment.crmPatient.id = "
@@ -1231,11 +1239,29 @@ public class ProcessBo implements Serializable {
 		return list;
 	}
 
+	public List<CrmMedication> getListMedicationByAppointment(
+			BigDecimal idAppointment, String materialType) {
+		List<CrmMedication> list = dao
+				.find("from CrmMedication o where o.crmAppointment.id = "
+						+ idAppointment + " and materialType = '"
+						+ materialType + "' order by o.id");
+		return list;
+	}
+
 	public List<CrmNote> getListNoteByPatient(BigDecimal idPatient) {
 		List<CrmNote> list = dao
 				.find("from CrmNote o where o.crmAppointment.crmPatient.id = "
 						+ idPatient
 						+ " order by o.crmAppointment.startAppointmentDate desc");
+		return list;
+	}
+
+	public List<CrmNote> getListNoteByAppointment(BigDecimal idAppointment,
+			String noteType) {
+		List<CrmNote> list = dao
+				.find("from CrmNote o where o.crmAppointment.id = "
+						+ idAppointment + " and noteType ='" + noteType
+						+ "' order by o.id desc");
 		return list;
 	}
 

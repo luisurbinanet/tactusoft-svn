@@ -49,18 +49,12 @@
 							update="form toolBar"
 							actionListener="#{callBacking.addContactAction}"
 							process="@this,pnlContactNew,pnlContactList" />
-						<p:commandButton id="btnClose" value="#{msg['btn_close']}"
-							icon="ui-icon-closethick" process="@this,pnlContactNew"
-							onclick="window.close()" ajax="false" type="button" />
-						<p:commandButton ajax="false"
-							onclick="window.opener=null;window.open('','_self');window.close();"
-							type="button"></p:commandButton>
 					</p:toolbarGroup>
 				</p:toolbar>
 
 				<p:spacer height="5" />
 
-				<h:panelGrid id="c" columns="1" width="100%"
+				<h:panelGrid id="pnlContactNew" columns="1" width="100%"
 					rendered="#{callBacking.patientGridType eq 0 || callBacking.patientGridType eq 2}">
 
 					<h:panelGrid id="pnlDetail" columns="4" cellspacing="5"
