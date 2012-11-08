@@ -1835,6 +1835,10 @@ public class HistoryBacking extends BaseBacking {
 				.getListDiagnosisByAppointment(selectedAppointment.getId());
 		diagnosisModel = new DiagnosisDataModel(listDiagnosis);
 
+		listMedication = processService.getListMedicationByAppointment(
+				selectedAppointment.getId(), Constant.MATERIAL_TYPE_MEDICINE);
+		medicationModel = new MedicationDataModel(listMedication);
+
 		listTherapy = processService.getListMedicationByAppointment(
 				selectedAppointment.getId(), Constant.MATERIAL_TYPE_THERAPY);
 		therapyModel = new MedicationDataModel(listTherapy);
