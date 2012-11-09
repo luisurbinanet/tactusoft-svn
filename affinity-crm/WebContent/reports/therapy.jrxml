@@ -104,29 +104,29 @@ order by a.id]]>
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[select a.id_appointment,
+		<![CDATA[select c.id_appointment,
 		c.diagnosis desc_cie,
-		a.id_cie,
+		0 id_cie,
 		c.unit,
 		c.cod_material,
 		c.desc_material,
-		a.posology,
+		'' posology,
 		e.doc,
 		cast(d.start_appointment_date as Date) appointment_date,
 		concat(e.firstnames,' ', e.surnames) as name_patient,
 		f.names as name_doctor,
 		concat(g.code, ' - ',g.name) as name_branch
-from crm_diagnosis a join crm_medication c on a.id_appointment = c.id_appointment and a.id_cie = c.id_cie
-join crm_appointment d on a.id_appointment = d.id
+from crm_medication c
+join crm_appointment d on c.id_appointment = d.id
 join crm_patient e on d.id_patient = e.id
 join crm_doctor f on d.id_doctor = f.id
 join crm_branch g on d.id_branch = g.id
-where a.id_appointment = $P{P_APPOINTMENT}  and c.material_type = 'TERAPIA'
-order by a.id]]>
+where c.id_appointment = $P{P_APPOINTMENT} and c.material_type = 'TERAPIA'
+order by c.id]]>
 	</queryString>
 	<field name="id_appointment" class="java.math.BigDecimal"/>
 	<field name="desc_cie" class="java.lang.String"/>
-	<field name="id_cie" class="java.math.BigDecimal"/>
+	<field name="id_cie" class="java.lang.Long"/>
 	<field name="unit" class="java.lang.Integer"/>
 	<field name="cod_material" class="java.lang.Long"/>
 	<field name="desc_material" class="java.lang.String"/>
@@ -203,10 +203,6 @@ order by a.id]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{appointment_date}]]></textFieldExpression>
 			</textField>
-			<image>
-				<reportElement uuid="da432f78-d87a-4002-a482-a63906fe4d24" positionType="Float" x="4" y="30" width="131" height="48"/>
-				<imageExpression><![CDATA[$P{P_IMAGE} + "/logo_naturizza.png"]]></imageExpression>
-			</image>
 		</band>
 	</title>
 	<pageHeader>
