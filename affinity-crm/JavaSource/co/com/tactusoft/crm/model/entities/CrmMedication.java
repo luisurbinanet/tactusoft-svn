@@ -77,7 +77,7 @@ public class CrmMedication implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_cie", nullable = false)
+	@JoinColumn(name = "id_cie", nullable = true)
 	public CrmCie getCrmCie() {
 		return this.crmCie;
 	}
