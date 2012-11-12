@@ -390,4 +390,27 @@ public class FacesUtil {
 		}
 		return ip;
 	}
+
+	public static int getHour(Date date) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		int hour = calendar.get(Calendar.HOUR_OF_DAY);
+		int min = calendar.get(Calendar.MINUTE);
+		if (min > 0) {
+			hour = hour + 1;
+		}
+		return hour;
+	}
+
+	public static Date stringTOSDate(String strDate) {
+		SimpleDateFormat formatoDelTexto = new SimpleDateFormat(
+				"dd-MM-yyyy HH:mm:ss");
+		Date date = null;
+		try {
+			date = formatoDelTexto.parse(strDate);
+		} catch (ParseException ex) {
+			date = null;
+		}
+		return date;
+	}
 }

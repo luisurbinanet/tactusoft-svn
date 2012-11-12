@@ -37,6 +37,7 @@ import co.com.tactusoft.crm.model.entities.CrmUser;
 import co.com.tactusoft.crm.model.entities.CrmUserBranch;
 import co.com.tactusoft.crm.model.entities.CrmUserProfile;
 import co.com.tactusoft.crm.model.entities.CrmUserRole;
+import co.com.tactusoft.crm.model.entities.DatesBean;
 import co.com.tactusoft.crm.model.entities.VwProcedure;
 import co.com.tactusoft.crm.util.FacesUtil;
 
@@ -86,6 +87,24 @@ public class TablesBo implements Serializable {
 	public List<CrmDoctorSchedule> getListScheduleByDoctor(BigDecimal idDoctor) {
 		return dao.find("from CrmDoctorSchedule o where o.crmDoctor.id = "
 				+ idDoctor);
+	}
+
+	public List<CrmDoctorSchedule> getListScheduleByBranch(BigDecimal idBranch) {
+		return dao.find("from CrmDoctorSchedule o where o.crmBranch.id = "
+				+ idBranch + " order by o.day, o.startHour");
+	}
+
+	public DatesBean getMinMaxHourScheduleByBranch(BigDecimal idBranch) {
+		return dao
+				.findNative(
+						"select min(start_hour) min_date, max(end_hour) max_date, 0 day from crm_doctor_schedule a where a.id_branch = "
+								+ idBranch, DatesBean.class).get(0);
+	}
+
+	public List<DatesBean> getDistinctHoursScheduleByBranch(BigDecimal idBranch) {
+		return dao.findNative("select distinct start_hour min_date, end_hour max_date, day "
+				+ "from crm_doctor_schedule a where a.id_branch = " + idBranch
+				+ " order by a. day, a.start_hour", DatesBean.class);
 	}
 
 	public List<CrmSpeciality> getListSpeciality() {

@@ -53,8 +53,9 @@
 							<f:convertDateTime pattern="dd/MMM/yyyy" locale="es" />
 						</h:outputText>
 
-						<h:outputLabel />
-						<h:outputLabel />
+						<h:outputLabel value="#{msg['app_branch']}" />
+						<h:outputText
+							value="#{appointmentBacking.selected.crmBranch.name}" />
 
 						<h:outputLabel value="#{msg['app_start_hour']}" />
 						<h:outputText
