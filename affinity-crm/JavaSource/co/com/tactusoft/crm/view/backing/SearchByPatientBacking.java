@@ -1,5 +1,6 @@
 package co.com.tactusoft.crm.view.backing;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
@@ -183,6 +184,16 @@ public class SearchByPatientBacking extends BaseBacking {
 		appointmentEditBacking.setSelectedWSGroupSellers(selectedAppointment
 				.getCodPublicity());
 		appointmentEditBacking.setEdit(true);
+		appointmentEditBacking.setSaved(true);
+		for (SelectItem item : appointmentEditBacking.getListBranch()) {
+			long value = ((BigDecimal) item.getValue()).longValue();
+			if (value == selectedAppointment.getCrmBranch().getId().longValue()) {
+				appointmentEditBacking.setSaved(false);
+				break;
+			}
+		}
+		appointmentEditBacking.setIdBranch(selectedAppointment.getCrmBranch()
+				.getId());
 
 		return "/pages/processes/appointmentEdit.jsf?faces-redirect=true";
 	}
@@ -217,7 +228,7 @@ public class SearchByPatientBacking extends BaseBacking {
 		String message = FacesUtil.getMessage("app_msg_check", code);
 		FacesUtil.addInfo(message);
 	}
-	
+
 	public String addGoContactAction() {
 		ContactBacking contactBacking = FacesUtil.findBean("contactBacking");
 		contactBacking.setSelectedPatient(selectedPatient);

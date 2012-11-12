@@ -69,6 +69,14 @@ public class CustomHibernateDaoImpl implements CustomHibernateDao, Serializable 
 				.createQuery(hql).list();
 		return entities;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional(readOnly = true)
+	public <T> List<T> findNative(String sql, Class<T> clasz) {
+		final List<T> entities = getSessionFactory().getCurrentSession()
+				.createSQLQuery(sql).addEntity(clasz).list();
+		return entities;
+	}
 
 	@Override
 	public int delete(Object entity) {

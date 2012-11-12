@@ -23,6 +23,8 @@ import org.springframework.context.annotation.Scope;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
+import co.com.tactusoft.crm.model.entities.DatesBean;
+import co.com.tactusoft.crm.model.entities.VwAppointment;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.datamodel.AppointmentDataModel;
@@ -35,7 +37,7 @@ public class DoctorAppointmentBacking extends BaseBacking {
 
 	private List<SelectItem> listDoctor;
 	private CrmDoctor doctor;
-	private List<CrmAppointment> listAppointment;
+	private List<VwAppointment> listAppointment;
 
 	private List<CrmAppointment> listAppointmentByDoctor;
 	private CrmAppointment selectedAppointment;
@@ -61,6 +63,12 @@ public class DoctorAppointmentBacking extends BaseBacking {
 	private String labelBranch;
 	private String labelState;
 
+	private int minHour;
+	private int maxHour;
+
+	private Date startDate;
+	private Date endDate;
+
 	public DoctorAppointmentBacking() {
 		idBranch = Constant.DEFAULT_VALUE;
 		doctor = new CrmDoctor();
@@ -71,6 +79,11 @@ public class DoctorAppointmentBacking extends BaseBacking {
 		labelState = FacesUtil.getMessage("app_state");
 
 		untimely = false;
+		minHour = 7;
+		maxHour = 19;
+
+		startDate = new Date();
+		endDate = new Date();
 	}
 
 	public CrmDoctor getDoctor() {
@@ -81,11 +94,11 @@ public class DoctorAppointmentBacking extends BaseBacking {
 		this.doctor = doctor;
 	}
 
-	public List<CrmAppointment> getListAppointment() {
+	public List<VwAppointment> getListAppointment() {
 		return listAppointment;
 	}
 
-	public void setListAppointment(List<CrmAppointment> listAppointment) {
+	public void setListAppointment(List<VwAppointment> listAppointment) {
 		this.listAppointment = listAppointment;
 	}
 
@@ -194,17 +207,49 @@ public class DoctorAppointmentBacking extends BaseBacking {
 		this.listAppointmentByBranch = listAppointmentByBranch;
 	}
 
+	public int getMinHour() {
+		return minHour;
+	}
+
+	public void setMinHour(int minHour) {
+		this.minHour = minHour;
+	}
+
+	public int getMaxHour() {
+		return maxHour;
+	}
+
+	public void setMaxHour(int maxHour) {
+		this.maxHour = maxHour;
+	}
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
 	public ScheduleModel getEventModel() {
 		if (eventModel == null) {
 			eventModel = new DefaultScheduleModel();
 			if (doctor != null) {
 				listAppointment = processService
-						.getListAppointmentByDoctor(doctor.getId());
-				for (CrmAppointment row : listAppointment) {
-					String title = labelPatient + ": " + row.getPatientNames()
-							+ " - " + labelProcedure + ":"
-							+ row.getCrmProcedureDetail().getName() + " - "
-							+ labelBranch + ": " + row.getCrmBranch().getName()
+						.getListVwAppointmentByDoctor(doctor.getId());
+				for (VwAppointment row : listAppointment) {
+					String title = labelPatient + ": " + row.getPatFirstnames()
+							+ " " + row.getPatSurnames() + " - "
+							+ labelProcedure + ":" + row.getPrcDetName()
+							+ " - " + labelBranch + ": " + row.getBranchName()
 							+ " - " + labelState + ": "
 							+ FacesUtil.getAppState(row.getState());
 
@@ -260,23 +305,45 @@ public class DoctorAppointmentBacking extends BaseBacking {
 		if (idBranch.intValue() != -1) {
 			branchEventModel = new DefaultScheduleModel();
 
+			DatesBean datesBean = tablesService
+					.getMinMaxHourScheduleByBranch(idBranch);
+
+			minHour = FacesUtil.getHour(datesBean.getId().getMinDate());
+			maxHour = FacesUtil.getHour(datesBean.getId().getMaxDate()) + 1;
+
 			if (doctor.getId().intValue() == -1) {
-				listAppointment = processService
-						.getListAppointmentByBranch(idBranch);
+				listAppointment = processService.getListVwAppointmentByBranch(
+						idBranch, startDate, endDate);
 			} else {
 				listAppointment = processService
 						.getListAppointmentByBranchDoctor(idBranch,
-								doctor.getId());
+								doctor.getId(), startDate, endDate);
 			}
 
-			for (CrmAppointment row : listAppointment) {
-				branchEventModel.addEvent(new DefaultScheduleEvent("Cita Nro."
-						+ row.getCode() + ". Paciente: "
-						+ row.getPatientNames() + ". Doctor: "
-						+ row.getCrmDoctor().getNames(), row
-						.getStartAppointmentDate(), row
-						.getStartAppointmentDate()));
+			List<DatesBean> listScheduleBranch = tablesService
+					.getDistinctHoursScheduleByBranch(idBranch);
+
+			for (VwAppointment row : listAppointment) {
+				branchEventModel
+						.addEvent(new DefaultScheduleEvent("Cita Nro."
+								+ row.getCode() + ". Paciente: "
+								+ row.getPatFirstnames() + " "
+								+ row.getPatSurnames() + ". Doctor: "
+								+ row.getDoctorNames(), row
+								.getStartAppointmentDate(), row
+								.getEndAppointmentDate()));
 			}
+
+			Date ini = startDate;
+			do {
+				generateNoAlvailable(listScheduleBranch,
+						FacesUtil.getDateWithoutTime(ini));
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(ini);
+				calendar.add(Calendar.DAY_OF_WEEK, 1);
+				ini = calendar.getTime();
+			} while (ini.compareTo(endDate) < 0);
+
 		} else {
 			branchEventModel = null;
 		}
@@ -383,4 +450,33 @@ public class DoctorAppointmentBacking extends BaseBacking {
 		selectedAppointment = (CrmAppointment) event.getData();
 	}
 
+	private void generateNoAlvailable(List<DatesBean> listScheduleBranch,
+			Date currentDate) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(currentDate);
+		int day = calendar.get(Calendar.DAY_OF_WEEK);
+
+		int hour = minHour;
+		Date hourDate = FacesUtil.stringTOSDate("01-01-1900 " + minHour
+				+ ":00:00");
+		for (DatesBean row : listScheduleBranch) {
+			if (row.getId().getDay() == day) {
+				int startHour = FacesUtil.getHour(row.getId().getMinDate());
+
+				int dif = startHour - hour;
+				if (dif > 0) {
+					Date initDate = FacesUtil.addHourToDate(currentDate,
+							hourDate);
+					Date hourAdd = FacesUtil.stringTOSDate("01-01-1900 " + dif
+							+ ":00:00");
+					branchEventModel.addEvent(new DefaultScheduleEvent(
+							"NO DISPONIBLE", initDate, FacesUtil.addHourToDate(
+									initDate, hourAdd), "style_no_available"));
+				}
+
+				hourDate = row.getId().getMaxDate();
+				hour = FacesUtil.getHour(row.getId().getMaxDate());
+			}
+		}
+	}
 }

@@ -51,8 +51,8 @@ public class ProcessBo implements Serializable {
 		return dao.find("from CrmAppointment");
 	}
 
-	public List<CrmAppointment> getListAppointmentByDoctor(BigDecimal idDoctor) {
-		return dao.find("from CrmAppointment o where o.crmDoctor.id = "
+	public List<VwAppointment> getListVwAppointmentByDoctor(BigDecimal idDoctor) {
+		return dao.find("from VwAppointment o where o.crmDoctor.id = "
 				+ idDoctor + "order by o.startAppointmentDate");
 	}
 
@@ -77,27 +77,39 @@ public class ProcessBo implements Serializable {
 				+ idDoctor + "and o.state = 1 order by o.startAppointmentDate");
 	}
 
-	public List<CrmAppointment> getListAppointmentByBranch(BigDecimal idBranch) {
-		return dao.find("from CrmAppointment o where o.crmBranch.id = "
-				+ idBranch + "order by o.startAppointmentDate");
+	public List<VwAppointment> getListVwAppointmentByBranch(
+			BigDecimal idBranch, Date startDate, Date endDate) {
+
+		String startDateString = FacesUtil.formatDate(startDate, "yyyy-MM-dd");
+		String endDateString = FacesUtil.formatDate(endDate, "yyyy-MM-dd");
+
+		return dao.find("from VwAppointment o where o.branchId = " + idBranch
+				+ " and o.startAppointmentDate >= '" + startDateString
+				+ "' and o.endAppointmentDate <= '" + endDateString
+				+ "' order by o.startAppointmentDate");
 	}
 
-	public List<CrmAppointment> getListAppointmentByBranchDoctor(
-			BigDecimal idBranch, BigDecimal idDoctor) {
-		return dao.find("from CrmAppointment o where o.crmBranch.id = "
-				+ idBranch + " and o.crmDoctor.id = " + idDoctor
+	public List<VwAppointment> getListAppointmentByBranchDoctor(
+			BigDecimal idBranch, BigDecimal idDoctor, Date startDate,
+			Date endDate) {
+		String startDateString = FacesUtil.formatDate(startDate, "yyyy-MM-dd");
+		String endDateString = FacesUtil.formatDate(endDate, "yyyy-MM-dd");
+		return dao.find("from VwAppointment o where o.branchId = " + idBranch
+				+ " and o.doctorId = " + idDoctor
+				+ " and o.startAppointmentDate >= '" + startDateString
+				+ "' and o.endAppointmentDate <= '" + endDateString
 				+ "order by o.startAppointmentDate");
 	}
 
-	public List<CrmAppointment> getListAppointmentByDoctor(CrmDoctor doctor,
+	public List<VwAppointment> getListVwAppointmentByDoctor(CrmDoctor doctor,
 			Date startDate) {
 
 		String startDateString = FacesUtil.formatDate(startDate, "yyyy-MM-dd");
 
-		List<CrmAppointment> list = dao
-				.find("from CrmAppointment o where o.startAppointmentDate >= '"
+		List<VwAppointment> list = dao
+				.find("from VwAppointment o where o.startAppointmentDate >= '"
 						+ startDateString
-						+ "T00:00:00.000+05:00' and o.crmDoctor.id = '"
+						+ "T00:00:00.000+05:00' and o.doctorId = '"
 						+ doctor.getId() + "' and o.state in (1,3,4,5) "
 						+ " order by o.startAppointmentDate desc");
 
