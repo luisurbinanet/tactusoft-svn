@@ -18,7 +18,8 @@
 
 				<p:growl id="growl" showDetail="true" />
 
-				<p:fieldset legend="#{msg['cam_name']}">
+				<p:fieldset legend="#{msg['cam_name']}"
+					rendered="#{not callBacking.renderedError}">
 					<h:panelGrid id="pnlInfo" columns="2" width="100%">
 						<h:outputText value="#{msg['cam_name']}" style="width:100%" />
 						<h:outputText value="#{callBacking.crmGuideline.guideline}"
@@ -35,9 +36,10 @@
 					</h:panelGrid>
 				</p:fieldset>
 
-				<p:spacer height="5" />
+				<p:spacer height="5" rendered="#{not callBacking.renderedError}" />
 
-				<p:toolbar id="toolBar" style="width:100%">
+				<p:toolbar id="toolBar" style="width:100%"
+					rendered="#{not callBacking.renderedError}">
 					<p:toolbarGroup align="left">
 						<p:commandButton id="btnSavePatient" value="#{msg['btn_save']}"
 							icon="ui-icon-disk"
@@ -49,10 +51,18 @@
 							update="form toolBar"
 							actionListener="#{callBacking.addContactAction}"
 							process="@this,pnlContactNew,pnlContactList" />
+						<p:splitButton icon="ui-icon-arrowrefresh-1-w"
+							value="#{msg['btn_actions']}"
+							disabled="#{callBacking.selectedPatient.id == null?true:false}">
+							<p:menuitem value="#{msg['title_appointment']}"
+								action="#{callBacking.goAppointment}" immediate="true" />
+							<p:menuitem value="#{msg['title_search_by_patient']}"
+								action="#{patientBacking.goSearchByPatient}" immediate="true" />
+						</p:splitButton>
 					</p:toolbarGroup>
 				</p:toolbar>
 
-				<p:spacer height="5" />
+				<p:spacer height="5" rendered="#{not callBacking.renderedError}" />
 
 				<h:panelGrid id="pnlContactNew" columns="1" width="100%"
 					rendered="#{callBacking.patientGridType eq 0 || callBacking.patientGridType eq 2}">
@@ -150,7 +160,7 @@
 				</h:panelGrid>
 
 				<h:panelGrid id="pnlContactList" columns="1" width="100%"
-					rendered="#{callBacking.patientGridType eq 1}">
+					rendered="#{callBacking.patientGridType eq 1 and not callBacking.renderedError}">
 
 					<p:dataTable id="dtbSearchPatient" var="rec"
 						value="#{callBacking.patientModel}" rowKey="#{rec.id}"
@@ -174,6 +184,12 @@
 
 					</p:dataTable>
 
+				</h:panelGrid>
+
+				<h:panelGrid width="100%" columns="1"
+					rendered="#{callBacking.renderedError}">
+					<h:outputLabel value="#{msg['cam_msg_error_parameter']}"
+						style="font-size: 18px;color: red;" />
 				</h:panelGrid>
 
 			</h:form>

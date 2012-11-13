@@ -84,6 +84,8 @@ public class AppointmentBacking extends BaseBacking {
 	private String timeType = null;
 	private String infoMessageDate;
 
+	private CrmPatient selectedPatientTemp;
+
 	public AppointmentBacking() {
 		newAction(null);
 	}
@@ -343,6 +345,14 @@ public class AppointmentBacking extends BaseBacking {
 		this.infoMessageDate = infoMessageDate;
 	}
 
+	public CrmPatient getSelectedPatientTemp() {
+		return selectedPatientTemp;
+	}
+
+	public void setSelectedPatientTemp(CrmPatient selectedPatientTemp) {
+		this.selectedPatientTemp = selectedPatientTemp;
+	}
+
 	public void newAction(ActionEvent event) {
 		listBranch = null;
 
@@ -356,6 +366,7 @@ public class AppointmentBacking extends BaseBacking {
 		selected.setCrmProcedureDetail(new CrmProcedureDetail());
 
 		selectedPatient = null;
+		selectedPatientTemp = null;
 		currentDate = new Date();
 
 		renderedForDate = false;
@@ -760,8 +771,10 @@ public class AppointmentBacking extends BaseBacking {
 	public void addPatient(ActionEvent event) {
 		boolean validate = true;
 		RequestContext context = RequestContext.getCurrentInstance();
-		if (selectedPatient.getId() == null) {
+		if (selectedPatientTemp.getId() == null) {
 			validate = false;
+		} else {
+			selectedPatient = selectedPatientTemp;
 		}
 		context.addCallbackParam("validate", validate);
 	}

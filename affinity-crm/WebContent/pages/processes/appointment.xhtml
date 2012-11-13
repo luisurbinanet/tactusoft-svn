@@ -256,7 +256,7 @@
 					<p:scrollPanel id="pnlTable2" style="width:580px;height:300px">
 						<p:dataTable id="recordTable2" var="rec"
 							value="#{appointmentBacking.patientModel}" rowKey="#{rec.id}"
-							selection="#{appointmentBacking.selectedPatient}"
+							selection="#{appointmentBacking.selectedPatientTemp}"
 							paginator="true" rows="15" style="width:570px"
 							emptyMessage="#{msg['glb_no_records_found']}">
 
