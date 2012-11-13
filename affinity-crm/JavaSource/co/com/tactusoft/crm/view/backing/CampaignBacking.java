@@ -3,7 +3,6 @@ package co.com.tactusoft.crm.view.backing;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -11,9 +10,11 @@ import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.controller.bo.TablesBo;
 import co.com.tactusoft.crm.model.entities.CrmCampaign;
+import co.com.tactusoft.crm.model.entities.CrmCampaignDetail;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.datamodel.CampaignDataModel;
+import co.com.tactusoft.crm.view.datamodel.CampaignDetailDataModel;
 
 @Named
 @Scope("view")
@@ -27,6 +28,9 @@ public class CampaignBacking implements Serializable {
 	private List<CrmCampaign> list;
 	private CampaignDataModel model;
 	private CrmCampaign selected;
+
+	private List<CrmCampaignDetail> listDetail;
+	private CampaignDetailDataModel modelDetail;
 
 	public CampaignBacking() {
 		newAction();
@@ -48,6 +52,8 @@ public class CampaignBacking implements Serializable {
 			if (list.size() > 0) {
 				selected = list.get(0);
 			}
+
+			isDisabledButton();
 		}
 		return model;
 	}
@@ -62,6 +68,22 @@ public class CampaignBacking implements Serializable {
 
 	public void setSelected(CrmCampaign selected) {
 		this.selected = selected;
+	}
+
+	public List<CrmCampaignDetail> getListDetail() {
+		return listDetail;
+	}
+
+	public void setListDetail(List<CrmCampaignDetail> listDetail) {
+		this.listDetail = listDetail;
+	}
+
+	public CampaignDetailDataModel getModelDetail() {
+		return modelDetail;
+	}
+
+	public void setModelDetail(CampaignDetailDataModel modelDetail) {
+		this.modelDetail = modelDetail;
 	}
 
 	public void newAction() {
@@ -87,21 +109,14 @@ public class CampaignBacking implements Serializable {
 		}
 	}
 
-	public void removeAction(ActionEvent event) {
-		String message = null;
-		int result = tableService.remove(selected);
-		if (result == 0) {
-			list.remove(selected);
-			model = new CampaignDataModel(list);
-			if (list.size() > 0) {
-				selected = list.get(0);
-			}
-			message = FacesUtil.getMessage("msg_record_ok");
-			FacesUtil.addInfo(message);
-		} else {
-			message = FacesUtil.getMessage("doc_msg_error_fk");
-			FacesUtil.addError(message);
-		}
+	public boolean isDisabledButton() {
+		getModel();
+		return (this.list == null || this.list.size() == 0) ? true : false;
+	}
+
+	public void generateDetail() {
+		listDetail = tableService.getListCampaignDetail(selected.getId());
+		modelDetail = new CampaignDetailDataModel(listDetail);
 	}
 
 }

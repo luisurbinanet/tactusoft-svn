@@ -64,8 +64,15 @@ public class TablesBo implements Serializable {
 	}
 
 	public List<CrmCampaign> getListCampaign() {
-		return dao.find("from CrmCampaign where idUser = "
-				+ FacesUtil.getCurrentIdUsuario());
+		return dao
+				.find("from CrmCampaign where idUser = "
+						+ FacesUtil.getCurrentIdUsuario()
+						+ " order by state, dateCall");
+	}
+
+	public List<CrmCampaignDetail> getListCampaignDetail(BigDecimal idCampaign) {
+		return dao.find("from CrmCampaignDetail where crmCampaign.id = "
+				+ idCampaign);
 	}
 
 	public List<CrmCampaignDetail> getListCampaign(BigDecimal idCampaign) {
@@ -102,9 +109,11 @@ public class TablesBo implements Serializable {
 	}
 
 	public List<DatesBean> getDistinctHoursScheduleByBranch(BigDecimal idBranch) {
-		return dao.findNative("select distinct start_hour min_date, end_hour max_date, day "
-				+ "from crm_doctor_schedule a where a.id_branch = " + idBranch
-				+ " order by a. day, a.start_hour", DatesBean.class);
+		return dao.findNative(
+				"select distinct start_hour min_date, end_hour max_date, day "
+						+ "from crm_doctor_schedule a where a.id_branch = "
+						+ idBranch + " order by a. day, a.start_hour",
+				DatesBean.class);
 	}
 
 	public List<CrmSpeciality> getListSpeciality() {
