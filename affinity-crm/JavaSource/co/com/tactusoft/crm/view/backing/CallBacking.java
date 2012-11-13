@@ -64,27 +64,33 @@ public class CallBacking extends ContactBacking {
 	private Map<BigDecimal, CrmCallFinal> mapCallFinal;
 
 	private CrmProfile profile;
+	public boolean renderedError;
 
 	public CallBacking() {
-		HttpServletRequest req = (HttpServletRequest) FacesContext
-				.getCurrentInstance().getExternalContext().getRequest();
-		agentNumber = req.getParameter("_AGENT_NUMBER_");
-		callId = new BigDecimal(req.getParameter("_CALL_ID_"));
-		callType = req.getParameter("_CALL_TYPE_");
-		camapignId = req.getParameter("_CAMPAIGN_ID_");
-
-		String parameter = req.getParameter("_PHONE_");
-		try {
-			parameter = URLDecoder.decode(parameter, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-
-		}
-		String[] phones = parameter.split(":");
-		companyPhone = phones[0];
-		phone = phones[1];
-		remoteChannel = req.getParameter("_REMOTE_CHANNEL_");
-
 		crmGuideline = new CrmGuideline();
+		renderedError = false;
+
+		try {
+			HttpServletRequest req = (HttpServletRequest) FacesContext
+					.getCurrentInstance().getExternalContext().getRequest();
+			agentNumber = req.getParameter("_AGENT_NUMBER_");
+			callId = new BigDecimal(req.getParameter("_CALL_ID_"));
+			callType = req.getParameter("_CALL_TYPE_");
+			camapignId = req.getParameter("_CAMPAIGN_ID_");
+
+			String parameter = req.getParameter("_PHONE_");
+			try {
+				parameter = URLDecoder.decode(parameter, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+
+			}
+			String[] phones = parameter.split(":");
+			companyPhone = phones[0];
+			phone = phones[1];
+			remoteChannel = req.getParameter("_REMOTE_CHANNEL_");
+		} catch (Exception ex) {
+			renderedError = true;
+		}
 	}
 
 	public CrmGuideline getCrmGuideline() {
@@ -133,6 +139,14 @@ public class CallBacking extends ContactBacking {
 
 	public void setMapCallFinal(Map<BigDecimal, CrmCallFinal> mapCallFinal) {
 		this.mapCallFinal = mapCallFinal;
+	}
+
+	public boolean isRenderedError() {
+		return renderedError;
+	}
+
+	public void setRenderedError(boolean renderedError) {
+		this.renderedError = renderedError;
 	}
 
 	@PostConstruct
@@ -296,7 +310,14 @@ public class CallBacking extends ContactBacking {
 		patientGridType = 3;
 	}
 
-	// http://localhost:8080/affinity-crm/pages/public/call.jsf?_AGENT_NUMBER_=9000&_CALL_TYPE_=1&_CAMPAIGN_ID_=6445880&_CALL_ID_=999&_PHONE_=3004413679&_REMOTE_CHANNEL_=3004413679
-	// http://localhost:8080/affinity-crm/pages/public/call.jsf?_AGENT_NUMBER_=9000&_CALL_TYPE_=1&_CAMPAIGN_ID_=6445880&_CALL_ID_=578&_PHONE_=300441&_REMOTE_CHANNEL_=3004413679
+	public String goAppointment() {
+		AppointmentBacking appointmentBacking = FacesUtil
+				.findBean("appointmentBacking");
+		appointmentBacking.setSelectedPatient(this.getSelectedPatient());
+		return "/pages/processes/appointment.jsf?faces-redirect=true";
+	}
+
+	// http://localhost:8080/affinity-crm/pages/public/call.jsf?_AGENT_NUMBER_=9000&_CALL_TYPE_=1&_CAMPAIGN_ID_=6445880&_CALL_ID_=999&_PHONE_=6445880:3004413679&_REMOTE_CHANNEL_=3004413679
+	// http://localhost:8080/affinity-crm/pages/public/call.jsf?_AGENT_NUMBER_=9000&_CALL_TYPE_=1&_CAMPAIGN_ID_=6445880&_CALL_ID_=578&_PHONE_=6445880:300441&_REMOTE_CHANNEL_=3004413679
 
 }
