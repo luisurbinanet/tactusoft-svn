@@ -21,16 +21,18 @@ public class CrmCampaignDetail implements java.io.Serializable {
 	private CrmCampaign crmCampaign;
 	private String codMaterial;
 	private String descMaterial;
+	private Integer unit;
 
 	public CrmCampaignDetail() {
 	}
 
 	public CrmCampaignDetail(BigDecimal id, CrmCampaign crmCampaign,
-			String codMaterial, String descMaterial) {
+			String codMaterial, String descMaterial, Integer unit) {
 		this.id = id;
 		this.crmCampaign = crmCampaign;
 		this.codMaterial = codMaterial;
 		this.descMaterial = descMaterial;
+		this.unit = unit;
 	}
 
 	@Id
@@ -69,6 +71,15 @@ public class CrmCampaignDetail implements java.io.Serializable {
 
 	public void setDescMaterial(String descMaterial) {
 		this.descMaterial = descMaterial;
+	}
+
+	@Column(name = "unit")
+	public Integer getUnit() {
+		return unit;
+	}
+
+	public void setUnit(Integer unit) {
+		this.unit = unit;
 	}
 
 }

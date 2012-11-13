@@ -7,6 +7,7 @@ import javax.inject.Named;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
@@ -134,6 +135,14 @@ public class LoginBacking {
 		} catch (DisabledException disabledException) {
 			this.visibleBadCredentials = true;
 			message = FacesUtil.getMessage("log_msg_enabled");
+			FacesUtil.addWarn(message);
+		} catch (NullPointerException nullPointerException) {
+			this.visibleBadCredentials = true;
+			message = FacesUtil.getMessage("log_msg_validate_credentials");
+			FacesUtil.addWarn(message);
+		} catch (AuthenticationServiceException authenticationServiceException) {
+			this.visibleBadCredentials = true;
+			message = FacesUtil.getMessage("log_msg_validate_credentials");
 			FacesUtil.addWarn(message);
 		}
 

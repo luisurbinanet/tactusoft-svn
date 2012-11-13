@@ -98,7 +98,7 @@ public class ProcessBo implements Serializable {
 				+ " and o.doctorId = " + idDoctor
 				+ " and o.startAppointmentDate >= '" + startDateString
 				+ "' and o.endAppointmentDate <= '" + endDateString
-				+ "order by o.startAppointmentDate");
+				+ "' order by o.startAppointmentDate");
 	}
 
 	public List<VwAppointment> getListVwAppointmentByDoctor(CrmDoctor doctor,
