@@ -22,6 +22,7 @@ public class Constant {
 	public static final String ROLE_USER = "USER";
 	public static final String ROLE_DOCTOR = "DOCTOR";
 	public static final String ROLE_NURSE = "NURSE";
+	public static final String ROLE_NURSE_AUX = "NURSE_AUX";
 
 	public static BigDecimal APP_TYPE_FOR_DATE_VALUE = new BigDecimal(1);
 	public static BigDecimal APP_TYPE_FOR_DOCTOR_VALUE = new BigDecimal(2);

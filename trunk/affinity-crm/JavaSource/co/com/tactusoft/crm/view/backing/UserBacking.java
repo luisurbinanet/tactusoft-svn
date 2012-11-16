@@ -153,6 +153,9 @@ public class UserBacking extends BaseBacking {
 
 		rolePrincipal = Constant.ROLE_USER;
 		idSpeciality = Constant.DEFAULT_VALUE;
+
+		crmDoctor = null;
+		crmNurse = null;
 	}
 
 	public void saveAction() {
@@ -219,17 +222,24 @@ public class UserBacking extends BaseBacking {
 								: Constant.STATE_INACTIVE);
 			}
 
-			if (crmNurse == null && rolePrincipal.equals(Constant.ROLE_NURSE)) {
+			if (crmNurse == null
+					&& (rolePrincipal.equals(Constant.ROLE_NURSE) || rolePrincipal
+							.equals(Constant.ROLE_NURSE_AUX))) {
 				crmNurse = new CrmNurse();
 				crmNurse.setCode(selected.getDoc());
 				crmNurse.setNames(selected.getSurnames().toUpperCase() + " "
 						+ selected.getNames().toUpperCase());
+				crmNurse.setAux(rolePrincipal.equals(Constant.ROLE_NURSE_AUX) ? Constant.STATE_ACTIVE
+						: Constant.STATE_INACTIVE);
 				crmNurse.setState(Constant.STATE_ACTIVE);
 			} else if (crmNurse != null) {
 				crmNurse.setCode(selected.getDoc());
 				crmNurse.setNames(selected.getSurnames().toUpperCase() + " "
 						+ selected.getNames().toUpperCase());
-				crmNurse.setState(rolePrincipal.equals(Constant.ROLE_NURSE) ? Constant.STATE_ACTIVE
+				crmNurse.setAux(rolePrincipal.equals(Constant.ROLE_NURSE_AUX) ? Constant.STATE_ACTIVE
+						: Constant.STATE_INACTIVE);
+				crmNurse.setState(rolePrincipal.equals(Constant.ROLE_NURSE)
+						|| rolePrincipal.equals(Constant.ROLE_NURSE_AUX) ? Constant.STATE_ACTIVE
 						: Constant.STATE_INACTIVE);
 			}
 
@@ -280,7 +290,11 @@ public class UserBacking extends BaseBacking {
 				if (listNurse.size() > 0) {
 					crmNurse = listNurse.get(0);
 					if (crmNurse.getState() == Constant.STATE_ACTIVE) {
-						rolePrincipal = Constant.ROLE_NURSE;
+						if (crmNurse.getAux() == Constant.STATE_ACTIVE) {
+							rolePrincipal = Constant.ROLE_NURSE_AUX;
+						} else {
+							rolePrincipal = Constant.ROLE_NURSE;
+						}
 					} else {
 						rolePrincipal = Constant.ROLE_USER;
 					}
