@@ -22,17 +22,19 @@ public class CrmNurse implements java.io.Serializable {
 	private CrmUser crmUser;
 	private String code;
 	private String names;
+	private int aux;
 	private int state;
 
 	public CrmNurse() {
 	}
 
 	public CrmNurse(BigDecimal id, CrmUser crmUser, String code, String names,
-			int state) {
+			int aux, int state) {
 		this.id = id;
 		this.crmUser = crmUser;
 		this.code = code;
 		this.names = names;
+		this.aux = aux;
 		this.state = state;
 	}
 
@@ -72,6 +74,15 @@ public class CrmNurse implements java.io.Serializable {
 
 	public void setNames(String names) {
 		this.names = names;
+	}
+
+	@Column(name = "aux")
+	public int getAux() {
+		return aux;
+	}
+
+	public void setAux(int aux) {
+		this.aux = aux;
 	}
 
 	@Column(name = "state", nullable = false)

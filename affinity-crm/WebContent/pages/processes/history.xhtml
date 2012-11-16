@@ -32,7 +32,7 @@
 							actionListener="#{historyBacking.saveAction}"
 							update="toolBar growl tabView"
 							disabled="#{historyBacking.disabledSaveButton}"
-							rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}" />
+							rendered="#{historyBacking.rolePrincipal eq 'DOCTOR' or historyBacking.rolePrincipal eq 'NURSE_AUX'}" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -78,7 +78,8 @@
 
 				<p:tabView id="tabView" style="height:100%">
 
-					<p:tab id="tab0" title="#{msg['his_history']}">
+					<p:tab id="tab0" title="#{msg['his_history']}"
+						rendered="#{historyBacking.rolePrincipal eq 'DOCTOR' or historyBacking.rolePrincipal eq 'NURSE'}">
 
 						<h:panelGrid columns="1" rendered="#{historyBacking.viewMode}"
 							width="100%">
@@ -110,7 +111,8 @@
 										<p:commandButton update=":form:tabView"
 											disabled="#{rec.closeAppointment}" icon="ui-icon-check"
 											rendered="#{historyBacking.rolePrincipal eq 'DOCTOR' or historyBacking.rolePrincipal eq 'NURSE'}"
-											title="#{msg['btn_edit']}" action="#{historyBacking.editAppointmentAction}">
+											title="#{msg['btn_edit']}"
+											action="#{historyBacking.editAppointmentAction}">
 											<f:setPropertyActionListener value="#{rec}"
 												target="#{historyBacking.selectedAppointment}" />
 										</p:commandButton>
@@ -880,7 +882,7 @@
 					</p:tab>
 
 					<p:tab id="tab5" title="#{msg['his_history_physique']}"
-						rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
+						rendered="#{historyBacking.rolePrincipal eq 'DOCTOR' or historyBacking.rolePrincipal eq 'NURSE_AUX'}">
 						<h:panelGrid columns="4" width="100%"
 							columnClasses="width25per,width25per,width25per,width25per">
 
@@ -1065,7 +1067,7 @@
 					</p:tab>
 
 					<p:tab id="tab6" title="#{msg['his_organometry']}"
-						rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
+						rendered="#{historyBacking.rolePrincipal eq 'DOCTOR' or historyBacking.rolePrincipal eq 'NURSE_AUX'}">
 						<h:panelGrid id="pnlOrganometry" columns="1" width="100%">
 							<p:selectBooleanCheckbox
 								disabled="#{historyBacking.readOnlySelectedHistoryOrganometry}"
@@ -1135,7 +1137,8 @@
 						</p:dataTable>
 					</p:tab>
 
-					<p:tab id="tab9" title="#{msg['his_history_therapy']}">
+					<p:tab id="tab9" title="#{msg['his_history_therapy']}"
+						rendered="#{historyBacking.rolePrincipal ne 'NURSE_AUX'}">
 						<p:dataTable var="rec" value="#{historyBacking.listTherapyView}"
 							paginator="true" rows="15" style="width:100%"
 							emptyMessage="#{msg['glb_no_records_found']}">
@@ -1190,7 +1193,8 @@
 						</p:dataTable>
 					</p:tab>
 
-					<p:tab id="tab11" title="#{msg['his_history_note']}">
+					<p:tab id="tab11" title="#{msg['his_history_note']}"
+						rendered="#{historyBacking.rolePrincipal ne 'NURSE_AUX'}">
 						<p:dataTable var="rec" value="#{historyBacking.listNoteView}"
 							paginator="true" rows="15" style="width:100%"
 							emptyMessage="#{msg['glb_no_records_found']}">

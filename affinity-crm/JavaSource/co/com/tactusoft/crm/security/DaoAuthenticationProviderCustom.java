@@ -189,7 +189,11 @@ public class DaoAuthenticationProviderCustom extends
 				CrmNurse nurse = tableService.getCrmNurse(user.getUser()
 						.getId());
 				if (nurse != null) {
-					user.setRolePrincipal(Constant.ROLE_NURSE);
+					if (nurse.getAux() == Constant.STATE_ACTIVE) {
+						user.setRolePrincipal(Constant.ROLE_NURSE_AUX);
+					} else {
+						user.setRolePrincipal(Constant.ROLE_NURSE);
+					}
 				} else {
 					user.setRolePrincipal(Constant.ROLE_USER);
 				}
