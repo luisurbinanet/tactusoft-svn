@@ -381,4 +381,17 @@ public class UserBacking extends BaseBacking {
 		}
 	}
 
+	public void copyUserAction(ActionEvent event) {
+		generateListAction(null);
+		this.selected.setId(null);
+		this.selected.setUsername(null);
+		this.selected.setDoc(null);
+		this.selected.setNames(null);
+		this.selected.setSurnames(null);
+		this.selected.setEmail(null);
+		this.selected.setPhone(null);
+		this.selected.setExtension(null);
+		this.selected.setPassword(null);
+	}
+
 }
