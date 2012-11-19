@@ -10,6 +10,9 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
+
 import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
@@ -142,7 +145,7 @@ public class ProcessBo implements Serializable {
 			entity.setCode(code);
 		}
 
-		dao.persist(entity);
+		this.persist(entity);
 		return entity;
 	}
 
@@ -1043,7 +1046,7 @@ public class ProcessBo implements Serializable {
 			}
 			entity.setId(id);
 		}
-		return dao.persist(entity);
+		return this.persist(entity);
 	}
 
 	public void removePatient(BigDecimal id) {
@@ -1154,35 +1157,35 @@ public class ProcessBo implements Serializable {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmHistoryRecord.class));
 		}
-		return dao.persist(entity);
+		return this.persist(entity);
 	}
 
 	public int saveHistoryHistory(CrmHistoryHistory entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmHistoryHistory.class));
 		}
-		return dao.persist(entity);
+		return this.persist(entity);
 	}
 
 	public int saveHistoryHomeopathic(CrmHistoryHomeopathic entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmHistoryHomeopathic.class));
 		}
-		return dao.persist(entity);
+		return this.persist(entity);
 	}
 
 	public int saveHistoryPhysique(CrmHistoryPhysique entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmHistoryPhysique.class));
 		}
-		return dao.persist(entity);
+		return this.persist(entity);
 	}
 
 	public int saveHistoryOrganometry(CrmHistoryOrganometry entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmHistoryOrganometry.class));
 		}
-		return dao.persist(entity);
+		return this.persist(entity);
 	}
 
 	public Integer saveDiagnosis(CrmAppointment entity, List<CrmDiagnosis> list) {
@@ -1193,7 +1196,7 @@ public class ProcessBo implements Serializable {
 
 		for (CrmDiagnosis row : list) {
 			row.setId(getId(CrmDiagnosis.class));
-			dao.persist(row);
+			this.persist(row);
 		}
 
 		return i;
@@ -1211,7 +1214,7 @@ public class ProcessBo implements Serializable {
 
 		for (CrmMedication row : list) {
 			row.setId(getId(CrmMedication.class));
-			dao.persist(row);
+			this.persist(row);
 		}
 
 		return i;
@@ -1224,7 +1227,7 @@ public class ProcessBo implements Serializable {
 		entity.setCrmAppointment(appointment);
 		entity.setNote(note);
 		entity.setNoteType(noteType);
-		return dao.persist(entity);
+		return this.persist(entity);
 	}
 
 	public List<CrmDiagnosis> getListDiagnosisByPatient(BigDecimal idPatient) {
@@ -1319,6 +1322,20 @@ public class ProcessBo implements Serializable {
 		long result = (Long) dao.find(
 				"SELECT count(*) FROM CrmPatient o WHERE o.doc = '" + doc
 						+ "' AND o.codeSap = '" + doc + "'").get(0);
+		return result;
+	}
+
+	public int persist(Object entity) {
+		int result = 0;
+		try {
+			result = dao.persist(entity);
+		} catch (RuntimeException ex) {
+			if (ex.getCause() instanceof ConstraintViolationException) {
+				result = -1;
+			} else if (ex.getCause() instanceof DataIntegrityViolationException) {
+				result = -2;
+			}
+		}
 		return result;
 	}
 

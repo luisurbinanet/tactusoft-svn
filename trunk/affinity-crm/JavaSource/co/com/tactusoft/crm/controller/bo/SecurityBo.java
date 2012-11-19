@@ -58,13 +58,6 @@ public class SecurityBo implements Serializable {
 		return dao.find("from CrmRole o where o.state = 1");
 	}
 
-	public void saveUser(CrmUser entity) {
-		if (entity.getId() == null) {
-			entity.setId(getId(CrmUser.class));
-		}
-		dao.persist(entity);
-	}
-
 	public void remove(Object entity) {
 		dao.delete(entity);
 	}

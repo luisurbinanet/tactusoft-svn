@@ -7,6 +7,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -33,12 +34,16 @@ public class CustomHibernateDaoImpl implements CustomHibernateDao, Serializable 
 		this.sessionFactory = sessionFactory;
 	}
 
+	protected Session getCurrentSession() {
+		return getSessionFactory().getCurrentSession();
+	}
+
 	@Transactional
 	public Integer persist(Object entity) {
 		int result = 0;
 		try {
-			getSessionFactory().getCurrentSession().saveOrUpdate(entity);
-			getSessionFactory().getCurrentSession().flush();
+			getCurrentSession().saveOrUpdate(entity);
+			getCurrentSession().flush();
 		} catch (ConstraintViolationException ex) {
 			result = -1;
 		} catch (DataIntegrityViolationException ex) {
@@ -57,24 +62,22 @@ public class CustomHibernateDaoImpl implements CustomHibernateDao, Serializable 
 	@SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
 	public <T> T load(Class<T> entityClass, Serializable id) {
-		final T entity = (T) getSessionFactory().getCurrentSession().load(
-				entityClass, id);
+		final T entity = (T) getCurrentSession().load(entityClass, id);
 		return entity;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
 	public <T> List<T> find(String hql) {
-		final List<T> entities = getSessionFactory().getCurrentSession()
-				.createQuery(hql).list();
+		final List<T> entities = getCurrentSession().createQuery(hql).list();
 		return entities;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
 	public <T> List<T> findNative(String sql, Class<T> clasz) {
-		final List<T> entities = getSessionFactory().getCurrentSession()
-				.createSQLQuery(sql).addEntity(clasz).list();
+		final List<T> entities = getCurrentSession().createSQLQuery(sql)
+				.addEntity(clasz).list();
 		return entities;
 	}
 
@@ -82,7 +85,7 @@ public class CustomHibernateDaoImpl implements CustomHibernateDao, Serializable 
 	public int delete(Object entity) {
 		int result = 0;
 		try {
-			getSessionFactory().getCurrentSession().delete(entity);
+			getCurrentSession().delete(entity);
 		} catch (Exception ex) {
 			result = -1;
 		}
@@ -91,7 +94,7 @@ public class CustomHibernateDaoImpl implements CustomHibernateDao, Serializable 
 
 	@Transactional(readOnly = false)
 	public int executeHQL(final String hql) {
-		Query query = getSessionFactory().getCurrentSession().createQuery(hql);
+		Query query = getCurrentSession().createQuery(hql);
 		return query.executeUpdate();
 	}
 

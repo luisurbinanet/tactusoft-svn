@@ -7,6 +7,9 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
+
 import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmCampaign;
@@ -339,45 +342,49 @@ public class TablesBo implements Serializable {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmDoctor.class));
 		}
-		return dao.persist(entity);
+		return this.persist(entity);
 	}
 
 	public Integer saveSpeciality(CrmSpeciality entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmSpeciality.class));
 		}
-		return dao.persist(entity);
+		return this.persist(entity);
 	}
 
 	public Integer saveNurse(CrmNurse entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmNurse.class));
 		}
-		return dao.persist(entity);
+		return this.persist(entity);
 	}
 
 	public Integer saveProfile(CrmProfile entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmProfile.class));
 		}
-		return dao.persist(entity);
+		return this.persist(entity);
 	}
 
 	public Integer saveUser(CrmUser entity, CrmDoctor doctor, CrmNurse nurse) {
+		int result = 0;
+
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmUser.class));
 		}
 
-		int result = dao.persist(entity);
+		result = this.persist(entity);
 
-		if (doctor != null) {
-			doctor.setCrmUser(entity);
-			saveDoctor(doctor);
-		}
+		if (result == 0) {
+			if (doctor != null) {
+				doctor.setCrmUser(entity);
+				saveDoctor(doctor);
+			}
 
-		if (nurse != null) {
-			nurse.setCrmUser(entity);
-			saveNurse(nurse);
+			if (nurse != null) {
+				nurse.setCrmUser(entity);
+				saveNurse(nurse);
+			}
 		}
 
 		return result;
@@ -387,35 +394,35 @@ public class TablesBo implements Serializable {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmRole.class));
 		}
-		return dao.persist(entity);
+		return this.persist(entity);
 	}
 
 	public Integer saveBranch(CrmBranch entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmBranch.class));
 		}
-		return dao.persist(entity);
+		return this.persist(entity);
 	}
 
 	public Integer saveDepartment(CrmDepartment entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmDepartment.class));
 		}
-		return dao.persist(entity);
+		return this.persist(entity);
 	}
 
 	public Integer saveOccupation(CrmOccupation entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmOccupation.class));
 		}
-		return dao.persist(entity);
+		return this.persist(entity);
 	}
 
 	public Integer saveProcedure(CrmProcedure entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmProcedure.class));
 		}
-		return dao.persist(entity);
+		return this.persist(entity);
 	}
 
 	public Integer savePageRole(CrmRole entity, List<CrmPage> listPages) {
@@ -430,7 +437,7 @@ public class TablesBo implements Serializable {
 			crmPageRole.setId(getId(CrmPageRole.class));
 			crmPageRole.setCrmRole(entity);
 			crmPageRole.setCrmPage(page);
-			dao.persist(crmPageRole);
+			this.persist(crmPageRole);
 
 			ids = ids + page.getParent() + ",";
 		}
@@ -443,7 +450,7 @@ public class TablesBo implements Serializable {
 			crmPageRole.setId(getId(CrmPageRole.class));
 			crmPageRole.setCrmRole(entity);
 			crmPageRole.setCrmPage(page);
-			dao.persist(crmPageRole);
+			this.persist(crmPageRole);
 		}
 
 		return i;
@@ -460,7 +467,7 @@ public class TablesBo implements Serializable {
 			crmUserBranch.setId(getId(CrmUserBranch.class));
 			crmUserBranch.setCrmUser(entity);
 			crmUserBranch.setCrmBranch(branch);
-			dao.persist(crmUserBranch);
+			this.persist(crmUserBranch);
 		}
 
 		return i;
@@ -477,7 +484,7 @@ public class TablesBo implements Serializable {
 			cmUserRole.setId(getId(CrmUserRole.class));
 			cmUserRole.setCrmUser(entity);
 			cmUserRole.setCrmRole(role);
-			dao.persist(cmUserRole);
+			this.persist(cmUserRole);
 		}
 
 		return i;
@@ -494,7 +501,7 @@ public class TablesBo implements Serializable {
 			row.setId(getId(CrmUserProfile.class));
 			row.setCrmUser(entity);
 			row.setCrmProfile(profile);
-			dao.persist(row);
+			this.persist(row);
 		}
 
 		return i;
@@ -510,7 +517,7 @@ public class TablesBo implements Serializable {
 		for (CrmDoctorSchedule row : listSchedule) {
 			row.setId(getId(CrmDoctorSchedule.class));
 			row.setCrmDoctor(entity);
-			dao.persist(row);
+			this.persist(row);
 		}
 
 		return i;
@@ -520,7 +527,7 @@ public class TablesBo implements Serializable {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmDoctorException.class));
 		}
-		return dao.persist(entity);
+		return this.persist(entity);
 	}
 
 	public Integer saveProcedureDetail(CrmProcedure entity,
@@ -532,7 +539,7 @@ public class TablesBo implements Serializable {
 				row.setId(getId(CrmProcedureDetail.class));
 			}
 			row.setCrmProcedure(entity);
-			dao.persist(row);
+			this.persist(row);
 		}
 
 		return i;
@@ -549,7 +556,7 @@ public class TablesBo implements Serializable {
 			newRow.setId(getId(CrmProcedureBranch.class));
 			newRow.setCrmProcedure(entity);
 			newRow.setCrmBranch(row);
-			dao.persist(newRow);
+			this.persist(newRow);
 		}
 
 		return i;
@@ -559,7 +566,7 @@ public class TablesBo implements Serializable {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmHoliday.class));
 		}
-		return dao.persist(entity);
+		return this.persist(entity);
 	}
 
 	public Integer saveHolidayBranch(CrmHoliday entity,
@@ -574,7 +581,7 @@ public class TablesBo implements Serializable {
 			row.setId(getId(CrmHolidayBranch.class));
 			row.setCrmHoliday(entity);
 			row.setCrmBranch(branch);
-			dao.persist(row);
+			this.persist(row);
 		}
 
 		return i;
@@ -590,20 +597,20 @@ public class TablesBo implements Serializable {
 			row.setCrmCie(entity);
 			row.setMaterial(data.getCode());
 			row.setDescription(data.getNames());
-			dao.persist(row);
+			this.persist(row);
 		}
 
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmCieMaterial.class));
 		}
-		return dao.persist(entity);
+		return this.persist(entity);
 	}
 
 	public Integer saveCampaign(CrmCampaign entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmCampaign.class));
 		}
-		return dao.persist(entity);
+		return this.persist(entity);
 	}
 
 	public void udpateBranch(String code, String society) {
@@ -617,6 +624,20 @@ public class TablesBo implements Serializable {
 
 	public <T> BigDecimal getId(Class<T> clasz) {
 		return dao.getId(clasz);
+	}
+
+	public int persist(Object entity) {
+		int result = 0;
+		try {
+			result = dao.persist(entity);
+		} catch (RuntimeException ex) {
+			if (ex.getCause() instanceof ConstraintViolationException) {
+				result = -1;
+			} else if (ex.getCause() instanceof DataIntegrityViolationException) {
+				result = -2;
+			}
+		}
+		return result;
 	}
 
 }

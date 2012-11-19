@@ -23,6 +23,10 @@
 						<p:commandButton value="#{msg['btn_edit']}" icon="ui-icon-pencil"
 							oncomplete="dlg.show()" update=":editForm:dialog"
 							actionListener="#{userBacking.generateListAction}" />
+						<p:commandButton value="#{msg['btn_copy_user']}"
+							icon="ui-icon-copy" oncomplete="dlg.show()"
+							update=":editForm:dialog"
+							actionListener="#{userBacking.copyUserAction}" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -30,7 +34,8 @@
 
 				<p:dataTable id="recordTable" var="rec" value="#{userBacking.model}"
 					rowKey="#{rec.id}" selection="#{userBacking.selected}"
-					paginator="true" rows="15" style="width:100%">
+					paginator="true" rows="15" style="width:100%"
+					emptyMessage="#{msg['glb_no_records_found']}">
 
 					<p:column selectionMode="single" style="width:18px" />
 
