@@ -19,21 +19,24 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.context.annotation.Scope;
 
-import com.tactusoft.webservice.client.beans.WSBean;
-import com.tactusoft.webservice.client.execute.CustomListsExecute;
-
 import co.com.tactusoft.crm.controller.bo.CapaignBo;
+import co.com.tactusoft.crm.controller.bo.ParameterBo;
 import co.com.tactusoft.crm.model.entities.CrmCall;
 import co.com.tactusoft.crm.model.entities.CrmCallFinal;
 import co.com.tactusoft.crm.model.entities.CrmCountry;
 import co.com.tactusoft.crm.model.entities.CrmGuideline;
+import co.com.tactusoft.crm.model.entities.CrmParameter;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
 import co.com.tactusoft.crm.model.entities.CrmRegion;
+import co.com.tactusoft.crm.util.Asterisk;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.util.SAPEnvironment;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
+
+import com.tactusoft.webservice.client.beans.WSBean;
+import com.tactusoft.webservice.client.execute.CustomListsExecute;
 
 @Named
 @Scope("view")
@@ -41,6 +44,8 @@ public class CallBacking extends ContactBacking {
 
 	private static final long serialVersionUID = 1L;
 
+	@Inject
+	private ParameterBo parameterService;
 	@Inject
 	private CapaignBo capaignService;
 
@@ -65,6 +70,10 @@ public class CallBacking extends ContactBacking {
 
 	private CrmProfile profile;
 	public boolean renderedError;
+
+	private String asteriskHost;
+	private String asteriskUser;
+	private String asteriskPassword;
 
 	public CallBacking() {
 		crmGuideline = new CrmGuideline();
@@ -153,6 +162,18 @@ public class CallBacking extends ContactBacking {
 	public void init() {
 		try {
 			generateCallFinal();
+
+			List<CrmParameter> listParameter = parameterService
+					.getListParameterByGroup("ATERISK");
+			for (CrmParameter crmParameter : listParameter) {
+				if (crmParameter.getCode().equals("")) {
+
+				} else if (crmParameter.getCode().equals("")) {
+
+				} else if (crmParameter.getCode().equals("")) {
+
+				}
+			}
 
 			call = new CrmCall();
 			call.setIdCall(callId);
@@ -290,6 +311,13 @@ public class CallBacking extends ContactBacking {
 			}
 		}
 		this.setListDocType(listDocType);
+	}
+
+	public int getCalls() {
+		Asterisk asterisk = new Asterisk(asteriskHost, asteriskUser,
+				asteriskPassword);
+		asterisk.run();
+		return asterisk.getNumCalls();
 	}
 
 	@Override
