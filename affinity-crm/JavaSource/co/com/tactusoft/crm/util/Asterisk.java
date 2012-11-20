@@ -86,5 +86,11 @@ public class Asterisk {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void main(String[] args){
+		Asterisk asterisk = new Asterisk("192.168.1.20","admin", "lukro9753");
+		asterisk.run();
+		System.out.println(asterisk.getNumCalls());
+	}
 
 }

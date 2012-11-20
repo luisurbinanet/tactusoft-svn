@@ -81,7 +81,7 @@ public class CrmCall implements java.io.Serializable {
 		this.crmCallFinal = crmCallFinal;
 	}
 
-	@Column(name = "id_call", unique = true, nullable = false, scale = 0)
+	@Column(name = "id_call", unique = true, nullable = true, scale = 0)
 	public BigDecimal getIdCall() {
 		return this.idCall;
 	}
@@ -90,7 +90,7 @@ public class CrmCall implements java.io.Serializable {
 		this.idCall = idCall;
 	}
 
-	@Column(name = "agent_number", nullable = false, length = 30)
+	@Column(name = "agent_number", nullable = true, length = 30)
 	public String getAgentNumber() {
 		return this.agentNumber;
 	}
@@ -99,7 +99,7 @@ public class CrmCall implements java.io.Serializable {
 		this.agentNumber = agentNumber;
 	}
 
-	@Column(name = "call_type", nullable = false, length = 45)
+	@Column(name = "call_type", nullable = true, length = 45)
 	public String getCallType() {
 		return this.callType;
 	}
@@ -108,7 +108,7 @@ public class CrmCall implements java.io.Serializable {
 		this.callType = callType;
 	}
 
-	@Column(name = "id_campaign", nullable = false, length = 45)
+	@Column(name = "id_campaign", nullable = true, length = 45)
 	public String getIdCampaign() {
 		return this.idCampaign;
 	}
@@ -117,7 +117,7 @@ public class CrmCall implements java.io.Serializable {
 		this.idCampaign = idCampaign;
 	}
 
-	@Column(name = "phone", nullable = false, length = 45)
+	@Column(name = "phone", nullable = true, length = 45)
 	public String getPhone() {
 		return this.phone;
 	}
@@ -126,7 +126,7 @@ public class CrmCall implements java.io.Serializable {
 		this.phone = phone;
 	}
 
-	@Column(name = "company_phone", nullable = false, length = 45)
+	@Column(name = "company_phone", nullable = true, length = 45)
 	public String getCompanyPhone() {
 		return companyPhone;
 	}
@@ -135,7 +135,7 @@ public class CrmCall implements java.io.Serializable {
 		this.companyPhone = companyPhone;
 	}
 
-	@Column(name = "remote_channel", nullable = false, length = 45)
+	@Column(name = "remote_channel", nullable = true, length = 45)
 	public String getRemoteChannel() {
 		return this.remoteChannel;
 	}

@@ -28,10 +28,8 @@
 							style="width:100%" />
 						<h:outputText value="#{callBacking.crmGuideline.descMedia}"
 							style="width:100%" />
-						<h:outputText value="#{msg['cam_calls']}"
-							style="width:100%" />
-						<h:outputText value="#{callBacking.calls}"
-							style="width:100%" />
+						<h:outputText value="#{msg['cam_calls']}" style="width:100%" />
+						<h:outputText value="#{callBacking.calls}" style="width:100%" />
 						<h:outputText value="#{msg['cam_final']}" style="width:100%" />
 						<p:selectOneMenu id="selFinal" value="#{callBacking.idCallFinal}"
 							style="width:500px" required="true" label="#{msg['cam_final']}">
@@ -45,10 +43,13 @@
 				<p:toolbar id="toolBar" style="width:100%"
 					rendered="#{not callBacking.renderedError}">
 					<p:toolbarGroup align="left">
+						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
+							actionListener="#{callBacking.new2Action}" update="form"
+							process="@this,pnlContactNew,pnlContactList" />
 						<p:commandButton id="btnSavePatient" value="#{msg['btn_save']}"
 							icon="ui-icon-disk"
 							rendered="#{callBacking.patientGridType eq 0 || callBacking.patientGridType eq 2}"
-							actionListener="#{callBacking.saveAction}" update="growl toolBar" />
+							action="#{callBacking.saveAction}" update="growl toolBar" />
 						<p:commandButton id="btnAddPatient" value="#{msg['btn_select']}"
 							icon="ui-icon-plusthick"
 							rendered="#{callBacking.patientGridType eq 1}"

@@ -23,6 +23,7 @@ import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmDoctorException;
 import co.com.tactusoft.crm.model.entities.CrmDoctorSchedule;
 import co.com.tactusoft.crm.model.entities.CrmDomain;
+import co.com.tactusoft.crm.model.entities.CrmGuideline;
 import co.com.tactusoft.crm.model.entities.CrmHoliday;
 import co.com.tactusoft.crm.model.entities.CrmHolidayBranch;
 import co.com.tactusoft.crm.model.entities.CrmNurse;
@@ -64,6 +65,10 @@ public class TablesBo implements Serializable {
 
 	public List<CrmNurse> getListNurse() {
 		return dao.find("from CrmNurse");
+	}
+
+	public List<CrmGuideline> getListGuideline() {
+		return dao.find("from CrmGuideline");
 	}
 
 	public List<CrmCampaign> getListCampaign() {
@@ -362,6 +367,13 @@ public class TablesBo implements Serializable {
 	public Integer saveProfile(CrmProfile entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmProfile.class));
+		}
+		return this.persist(entity);
+	}
+
+	public Integer saveGuideline(CrmGuideline entity) {
+		if (entity.getId() == null) {
+			entity.setId(getId(CrmGuideline.class));
 		}
 		return this.persist(entity);
 	}

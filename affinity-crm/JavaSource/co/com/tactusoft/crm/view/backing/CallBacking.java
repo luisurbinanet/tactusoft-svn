@@ -75,6 +75,8 @@ public class CallBacking extends ContactBacking {
 	private String asteriskUser;
 	private String asteriskPassword;
 
+	private int calls = -1;
+
 	public CallBacking() {
 		crmGuideline = new CrmGuideline();
 		renderedError = false;
@@ -158,20 +160,34 @@ public class CallBacking extends ContactBacking {
 		this.renderedError = renderedError;
 	}
 
+	public int getCalls() {
+		if (calls == -1) {
+			Asterisk asterisk = new Asterisk(asteriskHost, asteriskUser,
+					asteriskPassword);
+			asterisk.run();
+			calls = asterisk.getNumCalls();
+		}
+		return calls;
+	}
+
+	public void setCalls(int calls) {
+		this.calls = calls;
+	}
+
 	@PostConstruct
 	public void init() {
 		try {
 			generateCallFinal();
 
 			List<CrmParameter> listParameter = parameterService
-					.getListParameterByGroup("ATERISK");
+					.getListParameterByGroup("ASTERISK");
 			for (CrmParameter crmParameter : listParameter) {
-				if (crmParameter.getCode().equals("")) {
-
-				} else if (crmParameter.getCode().equals("")) {
-
-				} else if (crmParameter.getCode().equals("")) {
-
+				if (crmParameter.getCode().equals("ASTERISK_HOST")) {
+					asteriskHost = crmParameter.getTextValue();
+				} else if (crmParameter.getCode().equals("ASTERISK_USER")) {
+					asteriskUser = crmParameter.getTextValue();
+				} else if (crmParameter.getCode().equals("ASTERISK_PASSWORD")) {
+					asteriskPassword = crmParameter.getTextValue();
 				}
 			}
 
@@ -195,7 +211,7 @@ public class CallBacking extends ContactBacking {
 
 			List<CrmPatient> listCrmPatient = capaignService
 					.getListPatient(phone);
-			this.newAction(null);
+			super.newAction(null);
 
 			listAllRegion = tablesService.getListRegion();
 			listAllCity = tablesService.getListCity();
@@ -213,13 +229,7 @@ public class CallBacking extends ContactBacking {
 					this.setIdCountry(crmGuideline.getIdCountry());
 				}
 			} else {
-				this.getSelectedPatient().setPhoneNumber(phone);
-				this.getSelectedPatient().setCrmProfile(profile);
-				this.getSelectedPatient().setCrmUserByIdUserCreate(
-						securityService.getObject("usuario"));
-
-				generateRegion(crmGuideline.getIdCountry());
-				patientGridType = 2;
+				this.new2Action(null);
 			}
 
 			crmCountry = tablesService.getCountry(this.getIdCountry());
@@ -227,7 +237,7 @@ public class CallBacking extends ContactBacking {
 			mapCountry.put(crmCountry.getId(), crmCountry);
 			generateDocType(crmCountry.getCode());
 		} catch (Exception ex) {
-			this.newAction(null);
+			super.newAction(null);
 			patientGridType = 1;
 		}
 	}
@@ -313,16 +323,23 @@ public class CallBacking extends ContactBacking {
 		this.setListDocType(listDocType);
 	}
 
-	public int getCalls() {
-		Asterisk asterisk = new Asterisk(asteriskHost, asteriskUser,
-				asteriskPassword);
-		asterisk.run();
-		return asterisk.getNumCalls();
+	public void new2Action(ActionEvent event) {
+		super.newAction(event);
+		this.getSelectedPatient().setPhoneNumber(phone);
+		this.getSelectedPatient().setCrmProfile(profile);
+
+		generateRegion(crmGuideline.getIdCountry());
+		patientGridType = 2;
 	}
 
 	@Override
 	public void saveAction() {
 		if (patientGridType == 2) {
+			this.getSelectedPatient().setCrmUserByIdUserCreate(
+					securityService.getObject("usuario"));
+			this.getSelectedPatient().setIdCountry(idCountry);
+			this.getSelectedPatient().setIdRegion(idRegion);
+			this.getSelectedPatient().setIdCity(callId);
 			super.saveAction();
 		}
 
