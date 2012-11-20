@@ -14,27 +14,26 @@ import org.asteriskjava.manager.event.ResponseEvent;
 
 public class Asterisk {
 
-	private String user = "admin";
-	private String password = "lukro9753";
-	private String url = "192.168.1.20";
+	private String user;
+	private String password;
+	private String url;
+	private int port;
 
 	private AsteriskServer asteriskServer;
-	private int numCalls = 0;
+	private String numCalls;
 
-	public Asterisk(String url, String user, String password) {
+	public Asterisk() {
+		asteriskServer = new DefaultAsteriskServer(this.url, this.port,
+				this.user, this.password);
+	}
+
+	public Asterisk(String url, int port, String user, String password) {
 		this.url = url;
+		this.port = port;
 		this.user = user;
 		this.password = password;
 		asteriskServer = new DefaultAsteriskServer(this.url, this.user,
 				this.password);
-	}
-
-	public int getNumCalls() {
-		return numCalls;
-	}
-
-	public void setNumCalls(int numCalls) {
-		this.numCalls = numCalls;
 	}
 
 	public String getUser() {
@@ -61,34 +60,62 @@ public class Asterisk {
 		this.url = url;
 	}
 
-	public void run() throws ManagerCommunicationException {
-		for (AsteriskChannel asteriskChannel : asteriskServer.getChannels()) {
-			System.out.println(asteriskChannel);
-		}
+	public int getPort() {
+		return port;
+	}
 
+	public void setPort(int port) {
+		this.port = port;
+	}
+
+	public String getNumCalls() {
+		return numCalls;
+	}
+
+	public void setNumCalls(String numCalls) {
+		this.numCalls = numCalls;
+	}
+
+	public void run() throws ManagerCommunicationException {
+		int calls = 0;
 		try {
-			ResponseEvents responseEvents = asteriskServer
-					.getManagerConnection().sendEventGeneratingAction(
-							new QueueStatusAction());
-			for (ResponseEvent event : responseEvents.getEvents()) {
-				if (event instanceof QueueParamsEvent) {
-					QueueParamsEvent qe = (QueueParamsEvent) event;
-					numCalls = numCalls + qe.getCalls();
-				}
+			for (AsteriskChannel asteriskChannel : asteriskServer.getChannels()) {
+				System.out.println(asteriskChannel);
 			}
-		} catch (EventTimeoutException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalStateException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+
+			try {
+				ResponseEvents responseEvents = asteriskServer
+						.getManagerConnection().sendEventGeneratingAction(
+								new QueueStatusAction());
+				for (ResponseEvent event : responseEvents.getEvents()) {
+					if (event instanceof QueueParamsEvent) {
+						QueueParamsEvent qe = (QueueParamsEvent) event;
+						calls = calls + qe.getCalls();
+					}
+				}
+
+				numCalls = String.valueOf(calls);
+			} catch (EventTimeoutException e) {
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} catch (Exception ex) {
+			numCalls = "No Disponible";
 		}
 	}
-	
-	public static void main(String[] args){
-		Asterisk asterisk = new Asterisk("192.168.1.20","admin", "lukro9753");
+
+	public static void main(String[] args) {
+		/*
+		 * Asterisk asterisk = new Asterisk("192.168.1.20",5038,"admin",
+		 * "lukro9753");
+		 */
+		Asterisk asterisk = new Asterisk("192.168.1.22", 5038, "crmaffinity",
+				"4dm1n.aff");
 		asterisk.run();
 		System.out.println(asterisk.getNumCalls());
 	}
