@@ -55,15 +55,15 @@ public class ProcessBo implements Serializable {
 	}
 
 	public List<VwAppointment> getListVwAppointmentByDoctor(BigDecimal idDoctor) {
-		return dao.find("from VwAppointment o where o.crmDoctor.id = "
-				+ idDoctor + "order by o.startAppointmentDate");
+		return dao.find("from VwAppointment o where o.doctorId = "
+				+ idDoctor + " order by o.startAppointmentDate");
 	}
 
 	public List<CrmAppointment> getListAppointmentByDoctorWithOutUntimely(
 			BigDecimal idDoctor) {
 		return dao.find("from CrmAppointment o where o.crmDoctor.id = "
 				+ idDoctor
-				+ "and o.untimely = 0 order by o.startAppointmentDate");
+				+ " and o.untimely = 0 order by o.startAppointmentDate");
 	}
 
 	public List<CrmAppointment> getListAppointmentByDoctorWithUntimely(
@@ -76,8 +76,10 @@ public class ProcessBo implements Serializable {
 
 	public List<CrmAppointment> getListAppointmentByDoctorConfirmed(
 			BigDecimal idDoctor) {
-		return dao.find("from CrmAppointment o where o.crmDoctor.id = "
-				+ idDoctor + "and o.state = 1 order by o.startAppointmentDate");
+		return dao
+				.find("from CrmAppointment o where o.crmDoctor.id = "
+						+ idDoctor
+						+ " and o.state = 1 order by o.startAppointmentDate");
 	}
 
 	public List<VwAppointment> getListVwAppointmentByBranch(
