@@ -72,10 +72,11 @@ public class CallBacking extends ContactBacking {
 	public boolean renderedError;
 
 	private String asteriskHost;
+	private int asteriskPort;
 	private String asteriskUser;
 	private String asteriskPassword;
 
-	private int calls = -1;
+	private String calls = "-1";
 
 	public CallBacking() {
 		crmGuideline = new CrmGuideline();
@@ -160,17 +161,17 @@ public class CallBacking extends ContactBacking {
 		this.renderedError = renderedError;
 	}
 
-	public int getCalls() {
-		if (calls == -1) {
-			Asterisk asterisk = new Asterisk(asteriskHost, asteriskUser,
-					asteriskPassword);
+	public String getCalls() {
+		if (calls.equals("-1")) {
+			Asterisk asterisk = new Asterisk(asteriskHost, asteriskPort,
+					asteriskUser, asteriskPassword);
 			asterisk.run();
 			calls = asterisk.getNumCalls();
 		}
 		return calls;
 	}
 
-	public void setCalls(int calls) {
+	public void setCalls(String calls) {
 		this.calls = calls;
 	}
 
@@ -184,6 +185,9 @@ public class CallBacking extends ContactBacking {
 			for (CrmParameter crmParameter : listParameter) {
 				if (crmParameter.getCode().equals("ASTERISK_HOST")) {
 					asteriskHost = crmParameter.getTextValue();
+				} else if (crmParameter.getCode().equals("ASTERISK_PORT")) {
+					asteriskPort = Integer
+							.parseInt(crmParameter.getTextValue());
 				} else if (crmParameter.getCode().equals("ASTERISK_USER")) {
 					asteriskUser = crmParameter.getTextValue();
 				} else if (crmParameter.getCode().equals("ASTERISK_PASSWORD")) {

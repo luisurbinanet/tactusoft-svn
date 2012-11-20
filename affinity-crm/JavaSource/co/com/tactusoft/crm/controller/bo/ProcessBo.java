@@ -55,8 +55,8 @@ public class ProcessBo implements Serializable {
 	}
 
 	public List<VwAppointment> getListVwAppointmentByDoctor(BigDecimal idDoctor) {
-		return dao.find("from VwAppointment o where o.doctorId = "
-				+ idDoctor + " order by o.startAppointmentDate");
+		return dao.find("from VwAppointment o where o.doctorId = " + idDoctor
+				+ " order by o.startAppointmentDate");
 	}
 
 	public List<CrmAppointment> getListAppointmentByDoctorWithOutUntimely(
@@ -85,8 +85,10 @@ public class ProcessBo implements Serializable {
 	public List<VwAppointment> getListVwAppointmentByBranch(
 			BigDecimal idBranch, Date startDate, Date endDate) {
 
-		String startDateString = FacesUtil.formatDate(startDate, "yyyy-MM-dd");
-		String endDateString = FacesUtil.formatDate(endDate, "yyyy-MM-dd");
+		String startDateString = FacesUtil.formatDate(startDate, "yyyy-MM-dd")
+				+ " 00:00:00";
+		String endDateString = FacesUtil.formatDate(endDate, "yyyy-MM-dd")
+				+ " 23:59:59";
 
 		return dao.find("from VwAppointment o where o.branchId = " + idBranch
 				+ " and o.startAppointmentDate >= '" + startDateString
@@ -97,8 +99,10 @@ public class ProcessBo implements Serializable {
 	public List<VwAppointment> getListAppointmentByBranchDoctor(
 			BigDecimal idBranch, BigDecimal idDoctor, Date startDate,
 			Date endDate) {
-		String startDateString = FacesUtil.formatDate(startDate, "yyyy-MM-dd");
-		String endDateString = FacesUtil.formatDate(endDate, "yyyy-MM-dd");
+		String startDateString = FacesUtil.formatDate(startDate, "yyyy-MM-dd")
+				+ " 00:00:00";
+		String endDateString = FacesUtil.formatDate(endDate, "yyyy-MM-dd")
+				+ " 23:59:59";
 		return dao.find("from VwAppointment o where o.branchId = " + idBranch
 				+ " and o.doctorId = " + idDoctor
 				+ " and o.startAppointmentDate >= '" + startDateString
