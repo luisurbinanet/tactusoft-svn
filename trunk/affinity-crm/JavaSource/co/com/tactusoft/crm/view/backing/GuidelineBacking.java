@@ -1,6 +1,5 @@
 package co.com.tactusoft.crm.view.backing;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.faces.event.ActionEvent;
@@ -16,7 +15,7 @@ import co.com.tactusoft.crm.view.datamodel.GuidelineDataModel;
 
 @Named
 @Scope("view")
-public class GuidelineBacking implements Serializable {
+public class GuidelineBacking extends BaseBacking {
 
 	private static final long serialVersionUID = 1L;
 

@@ -124,6 +124,15 @@ public class TablesBo implements Serializable {
 				DatesBean.class);
 	}
 
+	public List<DatesBean> getDistinctHoursScheduleByDoctor(
+			BigDecimal idBranch, BigDecimal idDoctor) {
+		return dao.findNative(
+				"select distinct start_hour min_date, end_hour max_date, day "
+						+ "from crm_doctor_schedule a where a.id_branch = "
+						+ idBranch + " and id_doctor = " + idDoctor
+						+ " order by a. day, a.start_hour", DatesBean.class);
+	}
+
 	public List<CrmSpeciality> getListSpeciality() {
 		return dao.find("from CrmSpeciality o");
 	}

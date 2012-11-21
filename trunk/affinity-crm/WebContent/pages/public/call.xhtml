@@ -35,6 +35,9 @@
 							style="width:500px" required="true" label="#{msg['cam_final']}">
 							<f:selectItems value="#{callBacking.listCallFinal}" />
 						</p:selectOneMenu>
+						<h:outputLink style="font-size: 13px;" onclick="dlg.show()">
+							#{msg['gui_libretto']}
+						</h:outputLink>
 					</h:panelGrid>
 				</p:fieldset>
 
@@ -196,6 +199,12 @@
 					<h:outputLabel value="#{msg['cam_msg_error_parameter']}"
 						style="font-size: 18px;color: red;" />
 				</h:panelGrid>
+
+				<p:dialog header="#{msg['gui_libretto']}" widgetVar="dlg" showEffect="fade"
+					hideEffect="fade" modal="true" width="300">
+					<h:outputText id="display" value="#{callBacking.crmGuideline.libretto}"
+						escape="false" />
+				</p:dialog>
 
 			</h:form>
 

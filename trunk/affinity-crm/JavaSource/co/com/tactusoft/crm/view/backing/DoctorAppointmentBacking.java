@@ -239,6 +239,14 @@ public class DoctorAppointmentBacking extends BaseBacking {
 		this.endDate = endDate;
 	}
 
+	public DefaultScheduleEvent getEvent() {
+		return event;
+	}
+
+	public void setEvent(DefaultScheduleEvent event) {
+		this.event = event;
+	}
+
 	public ScheduleModel getEventModel() {
 		if (eventModel == null) {
 			eventModel = new DefaultScheduleModel();
@@ -311,25 +319,27 @@ public class DoctorAppointmentBacking extends BaseBacking {
 			minHour = FacesUtil.getHour(datesBean.getId().getMinDate());
 			maxHour = FacesUtil.getHour(datesBean.getId().getMaxDate()) + 1;
 
+			List<DatesBean> listScheduleBranch = null;
 			if (doctor.getId().intValue() == -1) {
 				listAppointment = processService.getListVwAppointmentByBranch(
 						idBranch, startDate, endDate);
+				listScheduleBranch = tablesService
+						.getDistinctHoursScheduleByBranch(idBranch);
 			} else {
 				listAppointment = processService
 						.getListAppointmentByBranchDoctor(idBranch,
 								doctor.getId(), startDate, endDate);
+				listScheduleBranch = tablesService
+						.getDistinctHoursScheduleByDoctor(idBranch,
+								doctor.getId());
 			}
 
-			List<DatesBean> listScheduleBranch = tablesService
-					.getDistinctHoursScheduleByBranch(idBranch);
-
 			for (VwAppointment row : listAppointment) {
+				String title = "Nro. Cita:" + row.getCode() + ". Paciente: "
+						+ row.getPatFirstnames() + " " + row.getPatSurnames()
+						+ ". Doctor: " + row.getDoctorNames();
 				branchEventModel
-						.addEvent(new DefaultScheduleEvent("Cita Nro."
-								+ row.getCode() + ". Paciente: "
-								+ row.getPatFirstnames() + " "
-								+ row.getPatSurnames() + ". Doctor: "
-								+ row.getDoctorNames(), row
+						.addEvent(new DefaultScheduleEvent(title, row
 								.getStartAppointmentDate(), row
 								.getEndAppointmentDate()));
 			}
