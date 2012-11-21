@@ -18,8 +18,11 @@
 
 				<p:toolbar style="width:100%">
 					<p:toolbarGroup align="left">
+						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
+							action="#{guidelineBacking.newAction}" oncomplete="dlg.show()"
+							update=":editForm:dialog" />
 						<p:commandButton value="#{msg['btn_edit']}" icon="ui-icon-pencil"
-							oncomplete="dlg.show()" update=":editForm:pnlDetail" />
+							oncomplete="dlg.show()" update=":editForm:pnlDetail :editForm:editor" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -32,17 +35,16 @@
 
 					<p:column selectionMode="single" style="width:18px" />
 
-					<p:column headerText="#{msg['dep_code']}">
-						<h:outputLabel value="#{rec.code}" />
+					<p:column headerText="#{msg['gui_desc_media']}">
+						<h:outputLabel value="#{rec.descMedia}" />
 					</p:column>
 
-					<p:column headerText="#{msg['dep_name']}">
-						<h:outputLabel value="#{rec.names}" />
+					<p:column headerText="#{msg['gui_phone']}">
+						<h:outputLabel value="#{rec.phone}" />
 					</p:column>
 
-					<p:column headerText="#{msg['glb_state']}">
-						<h:outputLabel
-							value="#{rec.state==1?msg['glb_state_active']:msg['glb_state_inactive']}" />
+					<p:column headerText="#{msg['gui_guideline']}">
+						<h:outputLabel value="#{rec.guideline}" />
 					</p:column>
 
 				</p:dataTable>
@@ -57,16 +59,17 @@
 
 			<p:dialog header="#{msg['msg_detail']}" widgetVar="dlg"
 				resizable="false" id="dialog" showEffect="fade" hideEffect="explode"
-				modal="true" width="500">
+				modal="true" width="500" dynamic="true">
 
 				<p:toolbar style="width:100%">
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_save']}" icon="ui-icon-disk"
 							action="#{guidelineBacking.saveAction}"
-							update="growl :form:recordTable" oncomplete="dlg.hide()" />
+							update="growl :form:recordTable"
+							oncomplete="dlg.hide();" />
 						<p:commandButton value="#{msg['btn_close']}"
 							icon="ui-icon-closethick" update="growl :form:recordTable"
-							process="@none" oncomplete="dlg.hide()" />
+							process="@none" oncomplete="dlg.hide();" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -75,25 +78,37 @@
 				<h:panelGrid id="pnlDetail" columns="2" cellpadding="4"
 					style="margin:0 auto;" width="100%">
 
-					<h:outputLabel value="#{msg['dep_code']}" />
-					<h:inputText value="#{guidelineBacking.selected.code}"
-						style="width:100%" label="#{msg['dep_code']}" required="true" />
+					<h:outputLabel value="#{msg['gui_desc_media']}" />
+					<h:inputText value="#{guidelineBacking.selected.descMedia}"
+						style="width:100%" label="#{msg['gui_desc_media']}"
+						required="true" />
 
-					<h:outputLabel value="#{msg['dep_name']}" />
-					<h:inputText value="#{guidelineBacking.selected.names}"
-						style="width:100%" label="#{msg['dep_name']}" required="true" />
+					<h:outputLabel value="#{msg['gui_phone']}" />
+					<h:inputText value="#{guidelineBacking.selected.phone}"
+						style="width:100%" label="#{msg['gui_phone']}" required="true" />
 
-					<h:outputLabel value="#{msg['glb_state']}"
-						rendered="#{guidelineBacking.selected.id!=null?true:false}" />
-					<p:selectOneMenu value="#{guidelineBacking.selected.state}"
-						style="width:250px"
-						rendered="#{guidelineBacking.selected.id!=null?true:false}">
-						<f:selectItem itemValue="1" itemLabel="#{msg['glb_state_active']}" />
-						<f:selectItem itemValue="0"
-							itemLabel="#{msg['glb_state_inactive']}" />
+					<h:outputLabel value="#{msg['gui_guideline']}" />
+					<h:inputText value="#{guidelineBacking.selected.guideline}"
+						style="width:100%" label="#{msg['gui_guideline']}" required="true" />
+
+					<h:outputLabel value="#{msg['gui_profile']}" />
+					<p:selectOneMenu required="true" label="#{msg['gui_profile']}"
+						style="width:255px" value="#{guidelineBacking.selected.idProfile}">
+						<f:selectItems value="#{guidelineBacking.listAllProfile}" />
+					</p:selectOneMenu>
+
+					<h:outputLabel value="#{msg['gui_country']}" />
+					<p:selectOneMenu required="true" label="#{msg['gui_country']}"
+						style="width:255px" value="#{guidelineBacking.selected.idCountry}">
+						<f:selectItems value="#{guidelineBacking.listCountry}" />
 					</p:selectOneMenu>
 
 				</h:panelGrid>
+
+				<h:outputLabel value="#{msg['gui_libretto']}" />
+				<p:editor id="editor" value="#{guidelineBacking.selected.libretto}"
+					width="480" required="true" widgetVar="editor"
+					requiredMessage="Digite un Libreto para completar el formulario" />
 
 			</p:dialog>
 		</h:form>

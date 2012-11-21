@@ -59,7 +59,38 @@
 					widgetVar="myschedule" view="agendaWeek"
 					minTime="#{doctorAppointmentBacking.minHour}"
 					maxTime="#{doctorAppointmentBacking.maxHour}" slotMinutes="15"
-					showHeader="true" />
+					showHeader="true">
+
+					<p:ajax event="eventSelect"
+						listener="#{doctorAppointmentBacking.onEventSelect}"
+						update="eventDetails" oncomplete="eventDialog.show()" />
+
+				</p:schedule>
+
+				<p:dialog widgetVar="eventDialog" header="#{msg['msg_detail']}"
+					showEffect="clip" hideEffect="clip" resizable="false">
+					<h:panelGrid id="eventDetails" columns="2">
+						<h:outputLabel for="title" value="#{msg['app_title']}" />
+						<p:inputTextarea id="title" style="width:100%"
+							value="#{doctorAppointmentBacking.event.title}" readonly="true" />
+
+						<h:outputLabel for="from" value="#{msg['app_start_hour']}" />
+						<p:inputText id="from" style="width:100%"
+							value="#{doctorAppointmentBacking.event.startDate}"
+							readonly="true">
+							<f:convertDateTime pattern="dd/MM/yyyy hh:mm a" />
+						</p:inputText>
+
+						<h:outputLabel for="to" value="#{msg['app_end_hour']}" />
+						<p:inputText id="to" style="width:100%"
+							value="#{doctorAppointmentBacking.event.endDate}" readonly="true">
+							<f:convertDateTime pattern="dd/MM/yyyy hh:mm a" />
+						</p:inputText>
+
+						<p:commandButton value="#{msg['btn_close']}"
+							oncomplete="eventDialog.hide();" />
+					</h:panelGrid>
+				</p:dialog>
 
 			</h:form>
 

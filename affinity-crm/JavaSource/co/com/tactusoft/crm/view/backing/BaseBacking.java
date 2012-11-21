@@ -55,6 +55,9 @@ public class BaseBacking implements Serializable {
 	protected int optionSearchPatient;
 	protected boolean disabledAddPatient;
 
+	protected List<SelectItem> listAllProfile;
+	protected Map<BigDecimal, CrmProfile> mapAllProfile;
+
 	protected List<SelectItem> listProfile;
 	protected BigDecimal idProfile;
 	protected Map<BigDecimal, CrmProfile> mapProfile;
@@ -206,6 +209,35 @@ public class BaseBacking implements Serializable {
 
 	public void patientHandleClose(CloseEvent event) {
 		// selectedPatient = null;
+	}
+
+	public List<SelectItem> getListAllProfile() {
+		if (listAllProfile == null) {
+			List<CrmProfile> list = tablesService.getListProfile();
+			listAllProfile = new LinkedList<SelectItem>();
+			mapAllProfile = new HashMap<BigDecimal, CrmProfile>();
+			for (CrmProfile row : list) {
+				listAllProfile.add(new SelectItem(row.getId(), row.getCode()));
+				mapAllProfile.put(row.getId(), row);
+			}
+
+			if (listAllProfile.size() > 0) {
+				idProfile = (BigDecimal) listAllProfile.get(0).getValue();
+			}
+		}
+		return listAllProfile;
+	}
+
+	public void setListAllProfile(List<SelectItem> listAllProfile) {
+		this.listAllProfile = listAllProfile;
+	}
+
+	public Map<BigDecimal, CrmProfile> getMapAllProfile() {
+		return mapAllProfile;
+	}
+
+	public void setMapAllProfile(Map<BigDecimal, CrmProfile> mapAllProfile) {
+		this.mapAllProfile = mapAllProfile;
 	}
 
 	public List<SelectItem> getListProfile() {
