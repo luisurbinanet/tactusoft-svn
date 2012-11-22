@@ -10,13 +10,13 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Scanner;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 
 import org.primefaces.event.FileUploadEvent;
 import org.springframework.context.annotation.Scope;
+
+import co.com.tactusoft.crm.util.FacesUtil;
 
 @Named
 @Scope("view")
@@ -24,7 +24,7 @@ public class ScheduleBacking implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private boolean disabledButton;
-	private String destination = "D:\\tmp\\";
+	private String destination = "/Users/CSARMIENTO/dumps/";
 	private String fileName;
 
 	public ScheduleBacking() {
@@ -40,11 +40,11 @@ public class ScheduleBacking implements Serializable {
 	}
 
 	public void handleFileUpload(FileUploadEvent event) {
-		FacesMessage msg = new FacesMessage("Succesful", event.getFile()
-				.getFileName() + " is uploaded.");
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-		disabledButton = false;
+		String message = FacesUtil.getMessage("file_msg_upload", event
+				.getFile().getFileName());
 
+		FacesUtil.addInfo(message);
+		disabledButton = false;
 		try {
 			fileName = destination + event.getFile().getFileName();
 			copyFile(fileName, event.getFile().getInputstream());
