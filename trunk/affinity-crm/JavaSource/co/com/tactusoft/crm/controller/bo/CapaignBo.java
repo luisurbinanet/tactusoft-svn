@@ -44,11 +44,15 @@ public class CapaignBo implements Serializable {
 		return dao.find("from CrmCallFinal");
 	}
 
-	public void saveCall(CrmCall entity) {
+	public CrmCall getListCallById(BigDecimal id) {
+		return (CrmCall) dao.find("from CrmCall where idCall = " + id).get(0);
+	}
+
+	public int saveCall(CrmCall entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmCall.class));
 		}
-		this.persist(entity);
+		return this.persist(entity);
 	}
 
 	public <T> BigDecimal getId(Class<T> clasz) {
