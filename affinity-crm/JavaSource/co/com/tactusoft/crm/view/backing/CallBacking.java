@@ -205,7 +205,10 @@ public class CallBacking extends ContactBacking {
 			call.setRemoteChannel(remoteChannel);
 
 			try {
-				capaignService.saveCall(call);
+				int result = capaignService.saveCall(call);
+				if (result == -1) {
+					call = capaignService.getListCallById(callId);
+				}
 			} catch (Exception ex) {
 
 			}
@@ -365,7 +368,7 @@ public class CallBacking extends ContactBacking {
 		appointmentBacking.setSelectedPatient(this.getSelectedPatient());
 		return "/pages/processes/appointment.jsf?faces-redirect=true";
 	}
-	
+
 	public void handleFinalDetailChange() {
 		call.setCrmCallFinal(mapCallFinal.get(idCallFinal));
 		capaignService.saveCall(call);
