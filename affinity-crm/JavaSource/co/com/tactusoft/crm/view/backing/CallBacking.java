@@ -365,6 +365,11 @@ public class CallBacking extends ContactBacking {
 		appointmentBacking.setSelectedPatient(this.getSelectedPatient());
 		return "/pages/processes/appointment.jsf?faces-redirect=true";
 	}
+	
+	public void handleFinalDetailChange() {
+		call.setCrmCallFinal(mapCallFinal.get(idCallFinal));
+		capaignService.saveCall(call);
+	}
 
 	// http://localhost:8080/affinity-crm/pages/public/call.jsf?_AGENT_NUMBER_=9000&_CALL_TYPE_=1&_CAMPAIGN_ID_=6445880&_CALL_ID_=999&_PHONE_=6445880:3004413679&_REMOTE_CHANNEL_=3004413679
 	// http://localhost:8080/affinity-crm/pages/public/call.jsf?_AGENT_NUMBER_=9000&_CALL_TYPE_=1&_CAMPAIGN_ID_=6445880&_CALL_ID_=578&_PHONE_=6445880:300441&_REMOTE_CHANNEL_=3004413679
