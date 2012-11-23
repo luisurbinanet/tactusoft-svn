@@ -2,6 +2,7 @@ package co.com.tactusoft.crm.view.backing;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -34,14 +35,12 @@ public class LoginBacking {
 	private String message;
 
 	public LoginBacking() {
-		this.init();
 	}
 
+	@PostConstruct
 	public void init() {
-		this.userName = null;
-		this.password = null;
-		this.visibleBadCredentials = false;
-		this.authenticated = false;
+		TimerBacking timerBacking = FacesUtil.findBean("timerBacking");
+		timerBacking.execute();
 	}
 
 	public String getUserName() {
@@ -150,7 +149,11 @@ public class LoginBacking {
 	}
 
 	public String logout() {
-		this.init();
+		this.userName = null;
+		this.password = null;
+		this.visibleBadCredentials = false;
+		this.authenticated = false;
+
 		FacesUtil.logout();
 		return "/pages/public/login?faces-redirect=true";
 	}

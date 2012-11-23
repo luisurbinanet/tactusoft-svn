@@ -21,16 +21,17 @@ public class ParameterBo implements Serializable {
 	@Inject
 	private CustomHibernateDao dao;
 
-	public String getTextValue(String param) {
+	public CrmParameter getParameter(String param) {
 		return ((CrmParameter) dao.find(
-				"from CrmParameter o where o.code = '" + param + "'").get(0))
-				.getTextValue();
+				"from CrmParameter o where o.code = '" + param + "'").get(0));
+	}
+
+	public String getTextValue(String param) {
+		return getParameter(param).getTextValue();
 	}
 
 	public BigDecimal getNumberValue(String param) {
-		return ((CrmParameter) dao.find(
-				"from CrmParameter o where o.code = '" + param + "'").get(0))
-				.getNumberValue();
+		return getParameter(param).getNumberValue();
 	}
 
 	public List<CrmParameter> getListParameter() {

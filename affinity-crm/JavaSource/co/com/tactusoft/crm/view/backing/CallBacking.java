@@ -29,7 +29,6 @@ import co.com.tactusoft.crm.model.entities.CrmParameter;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
 import co.com.tactusoft.crm.model.entities.CrmRegion;
-import co.com.tactusoft.crm.util.Asterisk;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.util.SAPEnvironment;
@@ -45,9 +44,10 @@ public class CallBacking extends ContactBacking {
 	private static final long serialVersionUID = 1L;
 
 	@Inject
-	private ParameterBo parameterService;
-	@Inject
 	private CapaignBo capaignService;
+	
+	@Inject
+	private ParameterBo parameterService;
 
 	private String names;
 	private String agentNumber;
@@ -70,11 +70,6 @@ public class CallBacking extends ContactBacking {
 
 	private CrmProfile profile;
 	public boolean renderedError;
-
-	private String asteriskHost;
-	private int asteriskPort;
-	private String asteriskUser;
-	private String asteriskPassword;
 
 	private String calls = "-1";
 
@@ -162,12 +157,9 @@ public class CallBacking extends ContactBacking {
 	}
 
 	public String getCalls() {
-		if (calls.equals("-1")) {
-			Asterisk asterisk = new Asterisk(asteriskHost, asteriskPort,
-					asteriskUser, asteriskPassword);
-			asterisk.run();
-			calls = asterisk.getNumCalls();
-		}
+		CrmParameter crmParameter = parameterService
+				.getParameter("NUM_CALLS");
+		calls = crmParameter.getTextValue();
 		return calls;
 	}
 
@@ -179,21 +171,6 @@ public class CallBacking extends ContactBacking {
 	public void init() {
 		try {
 			generateCallFinal();
-
-			List<CrmParameter> listParameter = parameterService
-					.getListParameterByGroup("ASTERISK");
-			for (CrmParameter crmParameter : listParameter) {
-				if (crmParameter.getCode().equals("ASTERISK_HOST")) {
-					asteriskHost = crmParameter.getTextValue();
-				} else if (crmParameter.getCode().equals("ASTERISK_PORT")) {
-					asteriskPort = Integer
-							.parseInt(crmParameter.getTextValue());
-				} else if (crmParameter.getCode().equals("ASTERISK_USER")) {
-					asteriskUser = crmParameter.getTextValue();
-				} else if (crmParameter.getCode().equals("ASTERISK_PASSWORD")) {
-					asteriskPassword = crmParameter.getTextValue();
-				}
-			}
 
 			call = new CrmCall();
 			call.setIdCall(callId);
