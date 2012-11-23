@@ -402,9 +402,8 @@ public class FacesUtil {
 		return hour;
 	}
 
-	public static Date stringTOSDate(String strDate) {
-		SimpleDateFormat formatoDelTexto = new SimpleDateFormat(
-				"dd-MM-yyyy HH:mm:ss");
+	public static Date stringTOSDate(String strDate, String format) {
+		SimpleDateFormat formatoDelTexto = new SimpleDateFormat(format);
 		Date date = null;
 		try {
 			date = formatoDelTexto.parse(strDate);
@@ -412,5 +411,9 @@ public class FacesUtil {
 			date = null;
 		}
 		return date;
+	}
+
+	public static Date stringTOSDate(String strDate) {
+		return stringTOSDate("dd-MM-yyyy HH:mm:ss");
 	}
 }
