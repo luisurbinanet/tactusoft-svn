@@ -12,18 +12,8 @@
 	<tx:annotation-driven transaction-manager="transactionManager" />
 
 	<!-- Datasource -->
-	<bean id="dataSourceDefault" class="com.mchange.v2.c3p0.ComboPooledDataSource"
-		destroy-method="close">
-		<property name="driverClass" value="com.mysql.jdbc.Driver" />
-		<property name="jdbcUrl" value="jdbc:mysql://192.168.1.29/crm_db" />
-		<property name="user" value="root" />
-		<property name="password" value="lukro9753" />
-		<property name="minPoolSize" value="5" />
-		<property name="maxPoolSize" value="20" />
-		<property name="acquireIncrement" value="1" />
-		<property name="idleConnectionTestPeriod" value="100" />
-		<property name="maxStatements" value="0" />
-		<property name="checkoutTimeout" value="60000" />
+	<bean id="dataSourceDefault" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName" value="java:jboss/datasources/cmrDS" />
 	</bean>
 
 	<bean id="dataSourceDefault0" class="com.mchange.v2.c3p0.ComboPooledDataSource"
@@ -54,20 +44,6 @@
 		<property name="checkoutTimeout" value="60000" />
 	</bean>
 
-	<bean id="dataSourceDefault1" class="com.mchange.v2.c3p0.ComboPooledDataSource"
-		destroy-method="close">
-		<property name="driverClass" value="com.mysql.jdbc.Driver" />
-		<property name="jdbcUrl" value="jdbc:mysql://localhost/crm_db" />
-		<property name="user" value="root" />
-		<property name="password" value="admin" />
-		<property name="minPoolSize" value="5" />
-		<property name="maxPoolSize" value="20" />
-		<property name="acquireIncrement" value="1" />
-		<property name="idleConnectionTestPeriod" value="100" />
-		<property name="maxStatements" value="0" />
-		<property name="checkoutTimeout" value="60000" />
-	</bean>
-
 	<!-- Hibernate -->
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
@@ -75,7 +51,7 @@
 		<property name="hibernateProperties">
 			<props>
 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
-				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.show_sql">false</prop>
 				<prop key="hibernate.hibernate.format_sql">true</prop>
 				<!-- <prop key="hibernate.hbm2ddl.auto">create-drop</prop> -->
 			</props>

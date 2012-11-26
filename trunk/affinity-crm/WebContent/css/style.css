@@ -208,6 +208,6 @@ input,select,textarea {
 	font-size: 90% !important;
 }
 
-.style_no_available a {
+.style_no_available {
     background-color: yellow;
 }

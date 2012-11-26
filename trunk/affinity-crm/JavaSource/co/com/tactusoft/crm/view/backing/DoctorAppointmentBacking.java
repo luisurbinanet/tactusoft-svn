@@ -316,8 +316,13 @@ public class DoctorAppointmentBacking extends BaseBacking {
 			DatesBean datesBean = tablesService
 					.getMinMaxHourScheduleByBranch(idBranch);
 
-			minHour = FacesUtil.getHour(datesBean.getId().getMinDate());
-			maxHour = FacesUtil.getHour(datesBean.getId().getMaxDate()) + 1;
+			if (datesBean != null) {
+				minHour = FacesUtil.getHour(datesBean.getId().getMinDate());
+				maxHour = FacesUtil.getHour(datesBean.getId().getMaxDate()) + 1;
+			} else {
+				minHour = 7;
+				maxHour = 19;
+			}
 
 			List<DatesBean> listScheduleBranch = null;
 			if (doctor.getId().intValue() == -1) {
@@ -465,27 +470,36 @@ public class DoctorAppointmentBacking extends BaseBacking {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(currentDate);
 		int day = calendar.get(Calendar.DAY_OF_WEEK);
+		if (day == 1) {
+			Date initDate = FacesUtil.addHourToDate(currentDate,
+					FacesUtil.stringTOSDate("01-01-1900 07:00:00"));
+			Date endDate = FacesUtil.addHourToDate(currentDate,
+					FacesUtil.stringTOSDate("01-01-1900 18:00:00"));
+			branchEventModel.addEvent(new DefaultScheduleEvent("NO DISPONIBLE",
+					initDate, endDate, "style_no_available"));
+		} else {
+			int hour = minHour;
+			Date hourDate = FacesUtil.stringTOSDate("01-01-1900 " + minHour
+					+ ":00:00");
+			for (DatesBean row : listScheduleBranch) {
+				if (row.getId().getDay() == day) {
+					int startHour = FacesUtil.getHour(row.getId().getMinDate());
 
-		int hour = minHour;
-		Date hourDate = FacesUtil.stringTOSDate("01-01-1900 " + minHour
-				+ ":00:00");
-		for (DatesBean row : listScheduleBranch) {
-			if (row.getId().getDay() == day) {
-				int startHour = FacesUtil.getHour(row.getId().getMinDate());
+					int dif = startHour - hour;
+					if (dif > 0) {
+						Date initDate = FacesUtil.addHourToDate(currentDate,
+								hourDate);
+						Date hourAdd = FacesUtil.stringTOSDate("01-01-1900 "
+								+ dif + ":00:00");
+						branchEventModel.addEvent(new DefaultScheduleEvent(
+								"NO DISPONIBLE", initDate, FacesUtil
+										.addHourToDate(initDate, hourAdd),
+								"style_no_available"));
+					}
 
-				int dif = startHour - hour;
-				if (dif > 0) {
-					Date initDate = FacesUtil.addHourToDate(currentDate,
-							hourDate);
-					Date hourAdd = FacesUtil.stringTOSDate("01-01-1900 " + dif
-							+ ":00:00");
-					branchEventModel.addEvent(new DefaultScheduleEvent(
-							"NO DISPONIBLE", initDate, FacesUtil.addHourToDate(
-									initDate, hourAdd), "style_no_available"));
+					hourDate = row.getId().getMaxDate();
+					hour = FacesUtil.getHour(row.getId().getMaxDate());
 				}
-
-				hourDate = row.getId().getMaxDate();
-				hour = FacesUtil.getHour(row.getId().getMaxDate());
 			}
 		}
 	}
