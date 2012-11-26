@@ -62,4 +62,8 @@ public class Constant {
 
 	public static final String PRINT_ORIENTATION_PORTRAIT = "PORTRAIT";
 	public static final String PRINT_ORIENTATION_LANDSCAPE = "LANDSCAPE";
+
+	public static final String SCHEDULE_REMOVE = "REMOVE";
+	public static final String SCHEDULE_MAINTAIN = "MAINTAIN";
+
 }
