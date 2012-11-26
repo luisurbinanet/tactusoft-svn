@@ -414,6 +414,6 @@ public class FacesUtil {
 	}
 
 	public static Date stringTOSDate(String strDate) {
-		return stringTOSDate("dd-MM-yyyy HH:mm:ss");
+		return stringTOSDate(strDate, "dd-MM-yyyy HH:mm:ss");
 	}
 }
