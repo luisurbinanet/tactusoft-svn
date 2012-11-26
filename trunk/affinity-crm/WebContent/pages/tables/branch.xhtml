@@ -31,7 +31,7 @@
 				<p:dataTable id="recordTable" var="rec"
 					value="#{branchBacking.model}" rowKey="#{rec.id}"
 					selection="#{branchBacking.selected}" paginator="true" rows="15"
-					style="width:100%">
+					style="width:100%" emptyMessage="#{msg['glb_no_records_found']}">
 
 					<p:column selectionMode="single" style="width:18px" />
 

@@ -23,6 +23,7 @@ import org.springframework.context.annotation.Scope;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmDoctorSchedule;
+import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.beans.ScheduleBranch;
 
@@ -31,13 +32,20 @@ import co.com.tactusoft.crm.view.beans.ScheduleBranch;
 public class ScheduleBacking implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
 	private boolean disabledButton;
+	private boolean disabledExecuteButton;
+
 	private String destination = "/Users/CSARMIENTO/dumps/";
 	private String fileName;
 	private List<ScheduleBranch> listScheduleBranch;
 
+	private String mode;
+
 	public ScheduleBacking() {
 		disabledButton = true;
+		disabledExecuteButton = true;
+		mode = Constant.SCHEDULE_MAINTAIN;
 	}
 
 	public boolean isDisabledButton() {
@@ -48,12 +56,37 @@ public class ScheduleBacking implements Serializable {
 		this.disabledButton = disabledButton;
 	}
 
+	public boolean isDisabledExecuteButton() {
+		return disabledExecuteButton;
+	}
+
+	public void setDisabledExecuteButton(boolean disabledExecuteButton) {
+		this.disabledExecuteButton = disabledExecuteButton;
+	}
+
+	public List<ScheduleBranch> getListScheduleBranch() {
+		return listScheduleBranch;
+	}
+
+	public void setListScheduleBranch(List<ScheduleBranch> listScheduleBranch) {
+		this.listScheduleBranch = listScheduleBranch;
+	}
+
+	public String getMode() {
+		return mode;
+	}
+
+	public void setMode(String mode) {
+		this.mode = mode;
+	}
+
 	public void handleFileUpload(FileUploadEvent event) {
 		String message = FacesUtil.getMessage("file_msg_upload", event
 				.getFile().getFileName());
 
 		FacesUtil.addInfo(message);
 		disabledButton = false;
+		disabledExecuteButton = true;
 		try {
 			fileName = destination + event.getFile().getFileName();
 			copyFile(fileName, event.getFile().getInputstream());
@@ -85,7 +118,7 @@ public class ScheduleBacking implements Serializable {
 		}
 	}
 
-	public void executeAction(ActionEvent event) {
+	public void analyzeAction(ActionEvent event) {
 		listScheduleBranch = new ArrayList<ScheduleBranch>();
 		File file = new File(fileName);
 		BufferedReader reader = null;
@@ -169,6 +202,7 @@ public class ScheduleBacking implements Serializable {
 						scheduleBranch.setCrmDoctorSchedule(crmDoctorSchedule);
 
 						scheduleBranch.setMessage("Listo para Procesar");
+						disabledExecuteButton = false;
 					}
 				} else {
 					scheduleBranch
@@ -190,6 +224,15 @@ public class ScheduleBacking implements Serializable {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public void executeAction(ActionEvent event) {
+
+		for (ScheduleBranch row : listScheduleBranch) {
+			if (row.getState() == 1) {
+			}
+		}
+
 	}
 
 }
