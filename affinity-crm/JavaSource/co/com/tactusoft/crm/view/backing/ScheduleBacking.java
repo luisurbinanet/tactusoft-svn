@@ -12,14 +12,17 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.faces.event.ActionEvent;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.primefaces.event.FileUploadEvent;
 import org.springframework.context.annotation.Scope;
 
+import co.com.tactusoft.crm.controller.bo.TablesBo;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmDoctorSchedule;
@@ -33,10 +36,12 @@ public class ScheduleBacking implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@Inject
+	private TablesBo tableService;
+
 	private boolean disabledButton;
 	private boolean disabledExecuteButton;
 
-	private String destination = "/Users/CSARMIENTO/dumps/";
 	private String fileName;
 	private List<ScheduleBranch> listScheduleBranch;
 
@@ -88,7 +93,10 @@ public class ScheduleBacking implements Serializable {
 		disabledButton = false;
 		disabledExecuteButton = true;
 		try {
-			fileName = destination + event.getFile().getFileName();
+			fileName = FacesUtil
+					.getParameterTextValue("RUTA_ARCHIVOS_TEMPORALES")
+					+ "/"
+					+ event.getFile().getFileName();
 			copyFile(fileName, event.getFile().getInputstream());
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -116,6 +124,13 @@ public class ScheduleBacking implements Serializable {
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
+	}
+
+	public void newAction(ActionEvent event) {
+		disabledButton = true;
+		disabledExecuteButton = true;
+		mode = Constant.SCHEDULE_MAINTAIN;
+		listScheduleBranch = new LinkedList<ScheduleBranch>();
 	}
 
 	public void analyzeAction(ActionEvent event) {
@@ -227,12 +242,31 @@ public class ScheduleBacking implements Serializable {
 	}
 
 	public void executeAction(ActionEvent event) {
-
-		for (ScheduleBranch row : listScheduleBranch) {
-			if (row.getState() == 1) {
+		if (mode.equals(Constant.SCHEDULE_REMOVE)) {
+			for (ScheduleBranch row : listScheduleBranch) {
+				if (row.getState() == 1) {
+					tableService.removeSchedule(row.getCrmDoctorSchedule()
+							.getCrmBranch().getId(), row.getCrmDoctorSchedule()
+							.getCrmDoctor().getId());
+				}
 			}
 		}
 
+		int count = 0;
+		for (ScheduleBranch row : listScheduleBranch) {
+			if (row.getState() == 1) {
+				String message = FacesUtil.getMessage("msg_record_ok");
+				row.setMessage(message);
+				tableService.saveDoctorSchedule(row.getCrmDoctorSchedule());
+				count++;
+			}
+		}
+
+		disabledButton = true;
+		disabledExecuteButton = true;
+		String message = FacesUtil.getMessage("msg_load_ok",
+				String.valueOf(count));
+		FacesUtil.addInfo(message);
 	}
 
 }

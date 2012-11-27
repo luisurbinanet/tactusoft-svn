@@ -544,6 +544,13 @@ public class TablesBo implements Serializable {
 		return i;
 	}
 
+	public Integer saveDoctorSchedule(CrmDoctorSchedule entity) {
+		if (entity.getId() == null) {
+			entity.setId(getId(CrmDoctorSchedule.class));
+		}
+		return this.persist(entity);
+	}
+
 	public Integer saveDoctorException(CrmDoctorException entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmDoctorException.class));
@@ -637,6 +644,11 @@ public class TablesBo implements Serializable {
 	public void udpateBranch(String code, String society) {
 		dao.executeHQL("update CrmBranch set society = '" + society
 				+ "' where code = '" + code + "'");
+	}
+
+	public void removeSchedule(BigDecimal idBranch, BigDecimal idDoctor) {
+		dao.executeHQL("delete from CrmDoctorSchedule where crmBranch.id = "
+				+ idBranch + " and crmDoctor.id = " + idDoctor);
 	}
 
 	public int remove(Object entity) {

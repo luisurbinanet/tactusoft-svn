@@ -20,6 +20,11 @@
 
 				<p:toolbar id="toolBar" style="width:100%">
 					<p:toolbarGroup align="left">
+						<p:commandButton value="#{msg['btn_new']}"
+							actionListener="#{scheduleBacking.newAction}"
+							update="recordTable,toolBar,fileUpload,options"
+							icon="ui-icon-document" />
+
 						<p:commandButton value="#{msg['btn_analyze']}"
 							actionListener="#{scheduleBacking.analyzeAction}"
 							update="recordTable,toolBar" icon="ui-icon-check"
@@ -27,14 +32,14 @@
 
 						<p:commandButton value="#{msg['btn_execute']}"
 							actionListener="#{scheduleBacking.executeAction}"
-							icon="ui-icon-check"
+							icon="ui-icon-check" update="recordTable,toolBar,growl"
 							disabled="#{scheduleBacking.disabledExecuteButton}" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
 				<p:spacer height="5" />
 
-				<p:fileUpload
+				<p:fileUpload id="fileUpload"
 					fileUploadListener="#{scheduleBacking.handleFileUpload}"
 					mode="advanced" sizeLimit="100000" allowTypes="/(\.|\/)(txt|csv)$/"
 					uploadLabel="#{msg['file_upload']}"
