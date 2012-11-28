@@ -45,7 +45,7 @@ public class CallBacking extends ContactBacking {
 
 	@Inject
 	private CapaignBo capaignService;
-	
+
 	@Inject
 	private ParameterBo parameterService;
 
@@ -93,7 +93,11 @@ public class CallBacking extends ContactBacking {
 			}
 			String[] phones = parameter.split(":");
 			companyPhone = phones[0];
-			phone = phones[1];
+			if (phones.length > 1) {
+				phone = phones[1];
+			} else {
+				phone = null;
+			}
 			remoteChannel = req.getParameter("_REMOTE_CHANNEL_");
 		} catch (Exception ex) {
 			renderedError = true;
@@ -157,8 +161,7 @@ public class CallBacking extends ContactBacking {
 	}
 
 	public String getCalls() {
-		CrmParameter crmParameter = parameterService
-				.getParameter("NUM_CALLS");
+		CrmParameter crmParameter = parameterService.getParameter("NUM_CALLS");
 		calls = crmParameter.getTextValue();
 		return calls;
 	}
@@ -185,6 +188,13 @@ public class CallBacking extends ContactBacking {
 				int result = capaignService.saveCall(call);
 				if (result == -1) {
 					call = capaignService.getListCallById(callId);
+					call.setAgentNumber(agentNumber);
+					call.setCallType(callType);
+					call.setIdCampaign(camapignId);
+					call.setPhone(phone);
+					call.setCompanyPhone(companyPhone);
+					call.setRemoteChannel(remoteChannel);
+					capaignService.saveCall(call);
 				}
 			} catch (Exception ex) {
 
@@ -193,8 +203,13 @@ public class CallBacking extends ContactBacking {
 			crmGuideline = capaignService.getGuideline(companyPhone);
 			generateProfile();
 
-			List<CrmPatient> listCrmPatient = capaignService
-					.getListPatient(phone);
+			List<CrmPatient> listCrmPatient;
+			if (phone != null) {
+				listCrmPatient = capaignService.getListPatient(phone);
+			} else {
+				listCrmPatient = new LinkedList<CrmPatient>();
+			}
+
 			super.newAction(null);
 
 			listAllRegion = tablesService.getListRegion();

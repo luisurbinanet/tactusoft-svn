@@ -124,12 +124,18 @@
 					<h:outputText value="#{msg['pat_phone_number']}" />
 					<p:inputText value="#{contactBacking.selectedPatient.phoneNumber}"
 						style="width:240px" label="#{msg['pat_phone_number']}"
-						required="true" maxlength="16" />
+						required="false" maxlength="7">
+						<f:convertNumber integerOnly="true" />
+						<f:validateLength minimum="7" maximum="7" />
+					</p:inputText>
 
 					<h:outputText value="#{msg['pat_cell_number']}" />
 					<p:inputText value="#{contactBacking.selectedPatient.cellNumber}"
 						style="width:240px" label="#{msg['pat_cell_number']}"
-						required="false" maxlength="16" />
+						required="false" maxlength="10">
+						<f:convertNumber integerOnly="true" />
+						<f:validateLength minimum="10" maximum="10" />
+					</p:inputText>
 
 					<h:outputLabel value="#{msg['pat_sales_off']}" style="width:40%" />
 					<p:selectOneMenu value="#{contactBacking.salesOff}"
