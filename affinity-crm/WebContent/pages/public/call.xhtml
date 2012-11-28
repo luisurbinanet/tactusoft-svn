@@ -10,8 +10,6 @@
 	<ui:define name="body">
 
 		<h:outputScript library="js" name="crm.js" />
-		
-		
 
 		<p:panel style="width:100%;height:700px;"
 			header="#{msg['title_campaign']}">
@@ -38,7 +36,7 @@
 						<p:selectOneMenu id="selFinal" value="#{callBacking.idCallFinal}"
 							style="width:500px" required="true" label="#{msg['cam_final']}">
 							<f:selectItems value="#{callBacking.listCallFinal}" />
-							<p:ajax	listener="#{callBacking.handleFinalDetailChange}" />
+							<p:ajax listener="#{callBacking.handleFinalDetailChange}" />
 						</p:selectOneMenu>
 					</h:panelGrid>
 					<p:fieldset legend="#{msg['gui_libretto']}" toggleable="true"
@@ -157,14 +155,20 @@
 						<h:outputText value="#{msg['pat_phone_number']}" />
 						<p:inputText value="#{callBacking.selectedPatient.phoneNumber}"
 							style="width:240px" label="#{msg['pat_phone_number']}"
-							required="true" maxlength="16"
-							disabled="#{callBacking.patientGridType eq 0}" />
+							required="false" maxlength="7"
+							disabled="#{callBacking.patientGridType eq 0}">
+							<f:convertNumber integerOnly="true" />
+							<f:validateLength minimum="7" maximum="7" />
+						</p:inputText>
 
 						<h:outputText value="#{msg['pat_cell_number']}" />
 						<p:inputText value="#{callBacking.selectedPatient.cellNumber}"
 							style="width:240px" label="#{msg['pat_cell_number']}"
-							required="false" maxlength="16"
-							disabled="#{callBacking.patientGridType eq 0}" />
+							required="false" maxlength="10"
+							disabled="#{callBacking.patientGridType eq 0}">
+							<f:convertNumber integerOnly="true" />
+							<f:validateLength minimum="10" maximum="10" />
+						</p:inputText>
 
 						<h:outputText value="#{msg['pat_type_obs']}" />
 						<p:inputTextarea value="#{callBacking.selectedPatient.obs}"

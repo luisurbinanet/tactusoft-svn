@@ -152,63 +152,71 @@ public class ContactBacking extends BaseBacking {
 
 	public void saveAction() {
 		String message = null;
-		CrmCountry crmCountry = mapCountry.get(idCountry);
 
-		selectedPatient.setIdCountry(idCountry);
-		selectedPatient.setIdRegion(idRegion);
-		selectedPatient.setIdCity(idCity);
-		selectedPatient.setFirstnames(selectedPatient.getFirstnames()
-				.toUpperCase());
-		selectedPatient
-				.setSurnames(selectedPatient.getSurnames().toUpperCase());
-		selectedPatient.setSalesOrg(salesOff);
-
-		if (newRecord) {
-			CrmProfile profile = mapProfile.get(selectedPatient.getCrmProfile()
-					.getId());
-			selectedPatient.setCrmProfile(profile);
-			if (FacesUtil.getCurrentUser() != null) {
-				selectedPatient.setCrmUserByIdUserCreate(FacesUtil
-						.getCurrentUser());
-			}
-			selectedPatient.setDateCreate(new Date());
-		} else {
-			selectedPatient.setCrmUserByIdUserModified(FacesUtil
-					.getCurrentUser());
-			selectedPatient.setDateModified(new Date());
-		}
-
-		if (FacesUtil.isEmptyOrBlank(selectedPatient.getDoc())) {
-			selectedPatient.setDoc(null);
-		}
-		selectedPatient.setCodeSap(selectedPatient.getDoc());
-
-		String docType = null;
-		if (FacesUtil.isEmptyOrBlank(selectedPatient.getDocType())) {
-			docType = null;
-		} else {
-			if (automatic) {
-				docType = crmCountry.getDefaultDocType();
-			} else {
-				docType = selectedPatient.getDocType();
-			}
-		}
-		selectedPatient.setDocType(docType);
-
-		try {
-			selectedPatient.setCrmOccupation(mapOccupation.get(idOccupation));
-			processService.savePatient(selectedPatient, automatic && newRecord,
-					false, crmCountry.getCode());
-			message = FacesUtil.getMessage("con_msg_update_ok",
-					selectedPatient.getNames());
-			FacesUtil.addInfo(message);
-			disabledSaveButton = true;
-			newRecord = false;
-		} catch (Exception ex) {
-			String field = FacesUtil.getMessage("con");
-			message = FacesUtil
-					.getMessage("msg_record_unique_exception", field);
+		if (FacesUtil.isEmptyOrBlank(selectedPatient.getPhoneNumber())
+				&& FacesUtil.isEmptyOrBlank(selectedPatient.getCellNumber())) {
+			message = FacesUtil.getMessage("pat_msg_phone");
 			FacesUtil.addError(message);
+		} else {
+
+			CrmCountry crmCountry = mapCountry.get(idCountry);
+			selectedPatient.setIdCountry(idCountry);
+			selectedPatient.setIdRegion(idRegion);
+			selectedPatient.setIdCity(idCity);
+			selectedPatient.setFirstnames(selectedPatient.getFirstnames()
+					.toUpperCase());
+			selectedPatient.setSurnames(selectedPatient.getSurnames()
+					.toUpperCase());
+			selectedPatient.setSalesOrg(salesOff);
+
+			if (newRecord) {
+				CrmProfile profile = mapProfile.get(selectedPatient
+						.getCrmProfile().getId());
+				selectedPatient.setCrmProfile(profile);
+				if (FacesUtil.getCurrentUser() != null) {
+					selectedPatient.setCrmUserByIdUserCreate(FacesUtil
+							.getCurrentUser());
+				}
+				selectedPatient.setDateCreate(new Date());
+			} else {
+				selectedPatient.setCrmUserByIdUserModified(FacesUtil
+						.getCurrentUser());
+				selectedPatient.setDateModified(new Date());
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedPatient.getDoc())) {
+				selectedPatient.setDoc(null);
+			}
+			selectedPatient.setCodeSap(selectedPatient.getDoc());
+
+			String docType = null;
+			if (FacesUtil.isEmptyOrBlank(selectedPatient.getDocType())) {
+				docType = null;
+			} else {
+				if (automatic) {
+					docType = crmCountry.getDefaultDocType();
+				} else {
+					docType = selectedPatient.getDocType();
+				}
+			}
+			selectedPatient.setDocType(docType);
+
+			try {
+				selectedPatient.setCrmOccupation(mapOccupation
+						.get(idOccupation));
+				processService.savePatient(selectedPatient, automatic
+						&& newRecord, false, crmCountry.getCode());
+				message = FacesUtil.getMessage("con_msg_update_ok",
+						selectedPatient.getNames());
+				FacesUtil.addInfo(message);
+				disabledSaveButton = true;
+				newRecord = false;
+			} catch (Exception ex) {
+				String field = FacesUtil.getMessage("con");
+				message = FacesUtil.getMessage("msg_record_unique_exception",
+						field);
+				FacesUtil.addError(message);
+			}
 		}
 	}
 
