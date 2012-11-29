@@ -867,6 +867,8 @@ public class HistoryBacking extends BaseBacking {
 			selectedPatient.setTypeHousing(typeHousing);
 		}
 
+		selectedPatient.setIdMemberShip(idMembershipType);
+
 		if (this.getRolePrincipal().equals(Constant.ROLE_DOCTOR)) {
 
 			if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getReason())) {
@@ -1295,7 +1297,7 @@ public class HistoryBacking extends BaseBacking {
 					selectedHistoryPhysique.setObs(Constant.HISTORY_NOT_REFER);
 				}
 
-				if(this.getRolePrincipal().equals(Constant.ROLE_DOCTOR)){
+				if (this.getRolePrincipal().equals(Constant.ROLE_DOCTOR)) {
 					result = processService
 							.saveHistoryHistory(selectedHistoryHistory);
 					result = processService
@@ -1307,40 +1309,31 @@ public class HistoryBacking extends BaseBacking {
 						.saveHistoryPhysique(selectedHistoryPhysique);
 				result = processService
 						.saveHistoryOrganometry(selectedHistoryOrganometry);
-				message = FacesUtil
-						.getMessage("msg_record_ok");
+				message = FacesUtil.getMessage("msg_record_ok");
 				FacesUtil.addInfo(message);
-				/*if (result == 0) {
-					result = processService
-							.saveHistoryRecord(selectedHistoryRecord);
-					if (result == 0) {
-						result = processService
-								.saveHistoryHomeopathic(selectedHistoryHomeopathic);
-						if (result == 0) {
-							result = processService
-									.saveHistoryPhysique(selectedHistoryPhysique);
-							if (result == 0) {
-								result = processService
-										.saveHistoryOrganometry(selectedHistoryOrganometry);
-								if (result == 0) {
-									message = FacesUtil
-											.getMessage("msg_record_ok");
-									FacesUtil.addInfo(message);
-								} else {
-
-								}
-							} else {
-
-							}
-						} else {
-
-						}
-					} else {
-
-					}
-				} else {
-
-				}*/
+				/*
+				 * if (result == 0) { result = processService
+				 * .saveHistoryRecord(selectedHistoryRecord); if (result == 0) {
+				 * result = processService
+				 * .saveHistoryHomeopathic(selectedHistoryHomeopathic); if
+				 * (result == 0) { result = processService
+				 * .saveHistoryPhysique(selectedHistoryPhysique); if (result ==
+				 * 0) { result = processService
+				 * .saveHistoryOrganometry(selectedHistoryOrganometry); if
+				 * (result == 0) { message = FacesUtil
+				 * .getMessage("msg_record_ok"); FacesUtil.addInfo(message); }
+				 * else {
+				 * 
+				 * } } else {
+				 * 
+				 * } } else {
+				 * 
+				 * } } else {
+				 * 
+				 * } } else {
+				 * 
+				 * }
+				 */
 			}
 		}
 	}

@@ -380,6 +380,10 @@ public class ContactBacking extends BaseBacking {
 	public void addContactAction(ActionEvent event) {
 		selectedPatient = tmpSelectedPatient;
 		newRecord = false;
+		idCountry = selectedPatient.getIdCountry();
+		idRegion = selectedPatient.getIdRegion();
+		handleRegionChange();
+		idCity = selectedPatient.getIdCity();
 	}
 
 	public String goAppointment() {

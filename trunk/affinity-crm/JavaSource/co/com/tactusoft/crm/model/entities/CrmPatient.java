@@ -65,6 +65,9 @@ public class CrmPatient implements java.io.Serializable {
 	private String salesOrg;
 	private Date dateCreate;
 	private Date dateModified;
+	private BigDecimal idMaritalState;
+	private BigDecimal idMemberShip;
+	private BigDecimal idEps;
 	private Set<CrmHistoryPhysique> crmHistoryPhysiques = new HashSet<CrmHistoryPhysique>(
 			0);
 	private Set<CrmHistoryHomeopathic> crmHistoryHomeopathics = new HashSet<CrmHistoryHomeopathic>(
@@ -472,6 +475,33 @@ public class CrmPatient implements java.io.Serializable {
 
 	public void setDateModified(Date dateModified) {
 		this.dateModified = dateModified;
+	}
+
+	@Column(name = "id_marital_state", scale = 0)
+	public BigDecimal getIdMaritalState() {
+		return idMaritalState;
+	}
+
+	public void setIdMaritalState(BigDecimal idMaritalState) {
+		this.idMaritalState = idMaritalState;
+	}
+
+	@Column(name = "id_membership", scale = 0)
+	public BigDecimal getIdMemberShip() {
+		return idMemberShip;
+	}
+
+	public void setIdMemberShip(BigDecimal idMemberShip) {
+		this.idMemberShip = idMemberShip;
+	}
+
+	@Column(name = "id_eps", scale = 0)
+	public BigDecimal getIdEps() {
+		return idEps;
+	}
+
+	public void setIdEps(BigDecimal idEps) {
+		this.idEps = idEps;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmPatient")

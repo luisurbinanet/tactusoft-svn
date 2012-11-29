@@ -61,8 +61,7 @@
 
 					<h:outputText value="#{msg['pat_region']}" style="width:100%" />
 					<p:selectOneMenu id="selRegion" value="#{contactBacking.idRegion}"
-						style="width:248px" required="true" label="#{msg['pat_region']}"
-						disabled="#{not contactBacking.newRecord}">
+						style="width:248px" required="true" label="#{msg['pat_region']}">
 						<f:selectItems value="#{contactBacking.listRegion}" />
 						<p:ajax update="selCity"
 							listener="#{contactBacking.handleRegionChange}" />
@@ -70,8 +69,7 @@
 
 					<h:outputText value="#{msg['pat_city']}" style="width:100%" />
 					<p:selectOneMenu id="selCity" value="#{contactBacking.idCity}"
-						style="width:248px" required="true" label="#{msg['pat_city']}"
-						disabled="#{not contactBacking.newRecord}">
+						style="width:248px" required="true" label="#{msg['pat_city']}">
 						<f:selectItems value="#{contactBacking.listCity}" />
 					</p:selectOneMenu>
 
@@ -289,6 +287,15 @@
 							<f:selectItem itemLabel="#{msg['glb_gender_man']}" itemValue="M" />
 						</p:selectOneMenu>
 
+						<h:outputLabel value="#{msg['pat_marital_state']}" />
+						<p:selectOneMenu style="width:248px" required="true"
+							value="#{contactBacking.selectedPatient.idMaritalState}"
+							label="#{msg['pat_marital_state']}">
+							<f:selectItem itemLabel="#{msg['glb_default_value']}"
+								itemValue="" />
+							<f:selectItems value="#{contactBacking.listMaritalStatus}" />
+						</p:selectOneMenu>
+
 						<h:outputText value="#{msg['pat_address']}" />
 						<p:inputText value="#{contactBacking.selectedPatient.address}"
 							maxlength="35" style="width:240px" label="#{msg['pat_address']}"
@@ -301,7 +308,10 @@
 						<h:outputText value="#{msg['pat_phone_number']}" />
 						<p:inputText value="#{contactBacking.selectedPatient.phoneNumber}"
 							style="width:240px" label="#{msg['pat_phone_number']}"
-							required="true" maxlength="16" />
+							required="true" maxlength="7">
+							<f:convertNumber integerOnly="true" />
+							<f:validateLength minimum="7" maximum="7" />
+						</p:inputText>
 
 						<h:outputText value="#{msg['pat_email']}" />
 						<p:inputText value="#{contactBacking.selectedPatient.email}"
@@ -311,7 +321,21 @@
 						<h:outputText value="#{msg['pat_cell_number']}" />
 						<p:inputText value="#{contactBacking.selectedPatient.cellNumber}"
 							style="width:240px" label="#{msg['pat_cell_number']}"
-							required="true" maxlength="16" />
+							required="true" maxlength="10">
+							<f:convertNumber integerOnly="true" />
+							<f:validateLength minimum="10" maximum="10" />
+						</p:inputText>
+
+						<h:outputLabel value="#{msg['pat_membership_type']}"
+							style="width:40%" />
+						<p:selectOneMenu
+							value="#{contactBacking.selectedPatient.idMemberShip}"
+							label="#{msg['pat_membership_type']}" style="width:248px"
+							required="true">
+							<f:selectItem itemLabel="#{msg['glb_default_value']}"
+								itemValue="" />
+							<f:selectItems value="#{contactBacking.listMembershipType}" />
+						</p:selectOneMenu>
 
 						<h:outputLabel value="#{msg['pat_occupation']}" />
 						<p:selectOneMenu value="#{contactBacking.idOccupation}"
