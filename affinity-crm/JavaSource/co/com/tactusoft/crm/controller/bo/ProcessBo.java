@@ -55,6 +55,18 @@ public class ProcessBo implements Serializable {
 	}
 
 	public List<VwAppointment> getListVwAppointmentByDoctor(BigDecimal idDoctor) {
+		String startDateString = FacesUtil.formatDate(new Date(), "yyyy-MM-dd")
+				+ " 00:00:00";
+		String endDateString = FacesUtil.formatDate(new Date(), "yyyy-MM-dd")
+				+ " 23:59:59";
+		return dao.find("from VwAppointment o where o.doctorId = " + idDoctor
+				+ " and o.startAppointmentDate >= '" + startDateString
+				+ "' and o.endAppointmentDate <= '" + endDateString
+				+ "' order by o.startAppointmentDate");
+	}
+
+	public List<VwAppointment> getListVwAppointmentByDoctorToday(
+			BigDecimal idDoctor) {
 		return dao.find("from VwAppointment o where o.doctorId = " + idDoctor
 				+ " order by o.startAppointmentDate");
 	}

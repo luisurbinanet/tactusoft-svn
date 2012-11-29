@@ -145,6 +145,14 @@
 						<f:selectItem itemLabel="#{msg['glb_gender_man']}" itemValue="M" />
 					</p:selectOneMenu>
 
+					<h:outputLabel value="#{msg['pat_marital_state']}" />
+					<p:selectOneMenu style="width:248px" required="true"
+						value="#{patientBacking.selected.idMaritalState}"
+						label="#{msg['pat_marital_state']}">
+						<f:selectItem itemLabel="#{msg['glb_default_value']}" itemValue="" />
+						<f:selectItems value="#{patientBacking.listMaritalStatus}" />
+					</p:selectOneMenu>
+
 					<h:outputText value="#{msg['pat_address']}" />
 					<p:inputText value="#{patientBacking.selected.address}"
 						maxlength="255" style="width:240px" label="#{msg['pat_address']}"
@@ -157,7 +165,10 @@
 					<h:outputText value="#{msg['pat_phone_number']}" />
 					<p:inputText value="#{patientBacking.selected.phoneNumber}"
 						style="width:240px" label="#{msg['pat_phone_number']}"
-						required="true" maxlength="16" />
+						required="true" maxlength="16">
+						<f:convertNumber integerOnly="true" />
+						<f:validateLength minimum="7" maximum="7" />
+					</p:inputText>
 
 					<h:outputText value="#{msg['pat_email']}" />
 					<p:inputText value="#{patientBacking.selected.email}"
@@ -167,12 +178,24 @@
 					<h:outputText value="#{msg['pat_cell_number']}" />
 					<p:inputText value="#{patientBacking.selected.cellNumber}"
 						style="width:240px" label="#{msg['pat_cell_number']}"
-						required="true" maxlength="16" />
+						required="true" maxlength="10">
+						<f:convertNumber integerOnly="true" />
+						<f:validateLength minimum="10" maximum="10" />
+					</p:inputText>
 
 					<h:outputLabel value="#{msg['pat_sales_off']}" style="width:40%" />
 					<p:selectOneMenu value="#{patientBacking.salesOff}"
 						style="width:248px">
 						<f:selectItems value="#{patientBacking.listBranch}" />
+					</p:selectOneMenu>
+
+					<h:outputLabel value="#{msg['pat_membership_type']}"
+						style="width:40%" />
+					<p:selectOneMenu value="#{patientBacking.selected.idMemberShip}"
+						label="#{msg['pat_membership_type']}" style="width:248px"
+						required="true">
+						<f:selectItem itemLabel="#{msg['glb_default_value']}" itemValue="" />
+						<f:selectItems value="#{patientBacking.listMembershipType}" />
 					</p:selectOneMenu>
 
 					<h:outputText value="#{msg['pat_cycle']}" />

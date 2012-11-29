@@ -21,6 +21,7 @@ import co.com.tactusoft.crm.controller.bo.TablesBo;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmCity;
 import co.com.tactusoft.crm.model.entities.CrmCountry;
+import co.com.tactusoft.crm.model.entities.CrmDomain;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
 import co.com.tactusoft.crm.model.entities.CrmRegion;
@@ -94,6 +95,18 @@ public class BaseBacking implements Serializable {
 
 	protected List<SelectItem> listBranch;
 	protected String salesOff;
+
+	protected List<SelectItem> listMaritalStatus;
+	protected BigDecimal idMaritalStatus;
+	protected Map<BigDecimal, CrmCountry> mapMaritalStatus;
+
+	protected List<SelectItem> listMembershipType;
+	protected BigDecimal idMembershipType;
+	protected Map<BigDecimal, CrmCountry> mapMembershipType;
+
+	protected List<SelectItem> listKin;
+	protected BigDecimal idKin;
+	protected Map<BigDecimal, CrmCountry> mapKin;
 
 	public List<CrmPatient> getListPatient() {
 		return listPatient;
@@ -585,6 +598,99 @@ public class BaseBacking implements Serializable {
 
 	public void setListBranch(List<SelectItem> listBranch) {
 		this.listBranch = listBranch;
+	}
+
+	public List<SelectItem> getListMaritalStatus() {
+		if (listMaritalStatus == null) {
+			listMaritalStatus = new LinkedList<SelectItem>();
+			for (CrmDomain row : tablesService.getListDomain("ESTADO_CIVIL")) {
+				listMaritalStatus.add(new SelectItem(row.getId(), row
+						.getItemValue()));
+			}
+		}
+		return listMaritalStatus;
+	}
+
+	public void setListMaritalStatus(List<SelectItem> listMaritalStatus) {
+		this.listMaritalStatus = listMaritalStatus;
+	}
+
+	public BigDecimal getIdMaritalStatus() {
+		return idMaritalStatus;
+	}
+
+	public void setIdMaritalStatus(BigDecimal idMaritalStatus) {
+		this.idMaritalStatus = idMaritalStatus;
+	}
+
+	public Map<BigDecimal, CrmCountry> getMapMaritalStatus() {
+		return mapMaritalStatus;
+	}
+
+	public void setMapMaritalStatus(Map<BigDecimal, CrmCountry> mapMaritalStatus) {
+		this.mapMaritalStatus = mapMaritalStatus;
+	}
+
+	public List<SelectItem> getListMembershipType() {
+		if (listMembershipType == null) {
+			listMembershipType = new LinkedList<SelectItem>();
+			for (CrmDomain row : tablesService.getListDomain("TIPO_AFILIACION")) {
+				listMembershipType.add(new SelectItem(row.getId(), row
+						.getItemValue()));
+			}
+		}
+		return listMembershipType;
+	}
+
+	public void setListMembershipType(List<SelectItem> listMembershipType) {
+		this.listMembershipType = listMembershipType;
+	}
+
+	public BigDecimal getIdMembershipType() {
+		return idMembershipType;
+	}
+
+	public void setIdMembershipType(BigDecimal idMembershipType) {
+		this.idMembershipType = idMembershipType;
+	}
+
+	public Map<BigDecimal, CrmCountry> getMapMembershipType() {
+		return mapMembershipType;
+	}
+
+	public void setMapMembershipType(
+			Map<BigDecimal, CrmCountry> mapMembershipType) {
+		this.mapMembershipType = mapMembershipType;
+	}
+
+	public List<SelectItem> getListKin() {
+		if (listKin == null) {
+			listKin = new LinkedList<SelectItem>();
+			for (CrmDomain row : tablesService.getListDomain("PARENTESCO")) {
+				listKin.add(new SelectItem(row.getId(), row.getItemValue()));
+			}
+		}
+		return listKin;
+	}
+
+	public void setListKin(List<SelectItem> listKin) {
+		this.listKin = listKin;
+	}
+
+	public BigDecimal getIdKin() {
+		return idKin;
+	}
+
+	public void setIdKin(BigDecimal idKin) {
+		this.idKin = idKin;
+	}
+
+	public Map<BigDecimal, CrmCountry> getMapKin() {
+		return mapKin;
+	}
+
+	public void setMapKin(Map<BigDecimal, CrmCountry> mapKin) {
+		this.mapKin = mapKin;
 	}
 
 	public String getSalesOff() {

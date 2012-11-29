@@ -24,9 +24,10 @@
 							icon="ui-icon-document"
 							actionListener="#{historyBacking.newAction}" update="form"
 							process="@this" onkeypress="return false;" />
-						<p:commandButton id="btnSelectPatient"
-							value="#{msg['btn_add_patient']}" icon="ui-icon-circle-check"
-							oncomplete="dlg2.show()" update="dialog2" />
+						<p:commandButton id="btnSelectAppointment"
+							value="#{msg['btn_select_appointment']}"
+							icon="ui-icon-circle-check" oncomplete="dlg2.show()"
+							update="dialog2" />
 						<p:commandButton id="btnSaveHistory"
 							value="#{msg['btn_save_history']}" icon="ui-icon-disk"
 							actionListener="#{historyBacking.saveAction}"
@@ -399,10 +400,11 @@
 									maxlength="255" />
 
 								<h:outputLabel value="#{msg['pat_guardian_relationship']}" />
-								<p:inputText maxlength="255"
-									value="#{historyBacking.selectedPatient.guardianRelationship}"
-									style="width:400px" label="#{msg['pat_guardian_relationship']}"
-									readonly="#{historyBacking.readOnlySelectedHistoryHistory}" />
+								<p:selectOneMenu style="width:408px"
+									value="#{historyBacking.idMembershipType}"
+									disabled="#{historyBacking.readOnlySelectedHistoryHistory}">
+									<f:selectItems value="#{historyBacking.listKin}" />
+								</p:selectOneMenu>
 
 								<h:outputLabel value="#{msg['pat_guardian_telephone']}" />
 								<p:inputText
