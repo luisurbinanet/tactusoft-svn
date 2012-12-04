@@ -31,6 +31,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.MethodExpressionActionListener;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -415,5 +416,12 @@ public class FacesUtil {
 
 	public static Date stringTOSDate(String strDate) {
 		return stringTOSDate(strDate, "dd-MM-yyyy HH:mm:ss");
+	}
+
+	public static String getSessionID() {
+		HttpServletRequest hrq = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest(); 
+		HttpSession session = hrq.getSession(); 
+		String sessionId = session.getId(); 
+		return sessionId; 
 	}
 }

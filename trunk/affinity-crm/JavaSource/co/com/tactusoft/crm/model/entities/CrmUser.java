@@ -31,6 +31,7 @@ public class CrmUser implements java.io.Serializable {
 	private String email;
 	private String phone;
 	private String extension;
+	private String extensionAgent;
 	private int state;
 	private Set<CrmUserBranch> crmUserBranchs = new HashSet<CrmUserBranch>(0);
 	private Set<CrmDoctor> crmDoctors = new HashSet<CrmDoctor>(0);
@@ -194,6 +195,15 @@ public class CrmUser implements java.io.Serializable {
 
 	public void setExtension(String extension) {
 		this.extension = extension;
+	}
+	
+	@Column(name = "extension_agent")
+	public String getExtensionAgent() {
+		return extensionAgent;
+	}
+
+	public void setExtensionAgent(String extensionAgent) {
+		this.extensionAgent = extensionAgent;
 	}
 
 	@Column(name = "state", nullable = false)

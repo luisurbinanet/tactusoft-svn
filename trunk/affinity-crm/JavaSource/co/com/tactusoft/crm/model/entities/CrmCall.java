@@ -20,7 +20,7 @@ public class CrmCall implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
 	private CrmCallFinal crmCallFinal;
-	private BigDecimal idCall;
+	private String idCall;
 	private String agentNumber;
 	private String callType;
 	private String idCampaign;
@@ -32,7 +32,7 @@ public class CrmCall implements java.io.Serializable {
 	public CrmCall() {
 	}
 
-	public CrmCall(BigDecimal id, BigDecimal idCall, String agentNumber,
+	public CrmCall(BigDecimal id, String idCall, String agentNumber,
 			String callType, String idCampaign, String phone,
 			String companyPhone, String remoteChannel) {
 		this.id = id;
@@ -45,7 +45,7 @@ public class CrmCall implements java.io.Serializable {
 		this.remoteChannel = remoteChannel;
 	}
 
-	public CrmCall(BigDecimal id, CrmCallFinal crmCallFinal, BigDecimal idCall,
+	public CrmCall(BigDecimal id, CrmCallFinal crmCallFinal, String idCall,
 			String agentNumber, String callType, String idCampaign,
 			String phone, String companyPhone, String remoteChannel,
 			BigDecimal idPatient) {
@@ -82,11 +82,11 @@ public class CrmCall implements java.io.Serializable {
 	}
 
 	@Column(name = "id_call", unique = true, nullable = true, scale = 0)
-	public BigDecimal getIdCall() {
+	public String getIdCall() {
 		return this.idCall;
 	}
 
-	public void setIdCall(BigDecimal idCall) {
+	public void setIdCall(String idCall) {
 		this.idCall = idCall;
 	}
 
