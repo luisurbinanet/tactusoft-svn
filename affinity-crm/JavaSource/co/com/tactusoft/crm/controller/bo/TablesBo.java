@@ -42,6 +42,7 @@ import co.com.tactusoft.crm.model.entities.CrmUserBranch;
 import co.com.tactusoft.crm.model.entities.CrmUserProfile;
 import co.com.tactusoft.crm.model.entities.CrmUserRole;
 import co.com.tactusoft.crm.model.entities.DatesBean;
+import co.com.tactusoft.crm.model.entities.VwCallRange;
 import co.com.tactusoft.crm.model.entities.VwProcedure;
 import co.com.tactusoft.crm.util.FacesUtil;
 
@@ -54,6 +55,10 @@ public class TablesBo implements Serializable {
 
 	@Inject
 	private CustomHibernateDao dao;
+
+	public List<VwCallRange> getVwCallRange() {
+		return dao.find("from VwCallRange o");
+	}
 
 	public List<CrmDoctor> getListDoctor() {
 		return dao.find("from CrmDoctor o");

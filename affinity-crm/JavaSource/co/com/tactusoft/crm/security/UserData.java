@@ -38,6 +38,7 @@ public class UserData implements UserDetails {
 	private List<WSBean> listWSDocType;
 	private CrmPatient selectedPatient;
 	private String rolePrincipal;
+	private int numCalls;
 
 	private boolean accountNonExpired = true;
 	private boolean credentialsNonExpired = true;
@@ -178,6 +179,14 @@ public class UserData implements UserDetails {
 
 	public void setRolePrincipal(String rolePrincipal) {
 		this.rolePrincipal = rolePrincipal;
+	}
+
+	public int getNumCalls() {
+		return numCalls;
+	}
+
+	public void setNumCalls(int numCalls) {
+		this.numCalls = numCalls;
 	}
 
 	@Override

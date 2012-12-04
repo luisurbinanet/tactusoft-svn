@@ -1,6 +1,8 @@
 package co.com.tactusoft.crm.view.backing;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -8,10 +10,12 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.context.annotation.Scope;
 
@@ -72,6 +76,32 @@ public class CallBacking extends ContactBacking {
 	public CallBacking() {
 		crmGuideline = new CrmGuideline();
 		renderedError = false;
+
+		try {
+			HttpServletRequest req = (HttpServletRequest) FacesContext
+					.getCurrentInstance().getExternalContext().getRequest();
+			agentNumber = req.getParameter("_AGENT_NUMBER_");
+			callId = new BigDecimal(req.getParameter("_CALL_ID_"));
+			callType = req.getParameter("_CALL_TYPE_");
+			camapignId = req.getParameter("_CAMPAIGN_ID_");
+
+			String parameter = req.getParameter("_PHONE_");
+			try {
+				parameter = URLDecoder.decode(parameter, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+
+			}
+			String[] phones = parameter.split(":");
+			companyPhone = phones[0];
+			if (phones.length > 1) {
+				phone = phones[1];
+			} else {
+				phone = null;
+			}
+			remoteChannel = req.getParameter("_REMOTE_CHANNEL_");
+		} catch (Exception ex) {
+			renderedError = true;
+		}
 	}
 
 	public CrmGuideline getCrmGuideline() {
@@ -142,11 +172,11 @@ public class CallBacking extends ContactBacking {
 
 	@PostConstruct
 	public void init() {
-		//try {
+		try {
 			generateCallFinal();
 
-			/*call = new CrmCall();
-			call.setIdCall(callId);
+			call = new CrmCall();
+			call.setIdCall(callId.toString());
 			call.setAgentNumber(agentNumber);
 			call.setCallType(callType);
 			call.setIdCampaign(camapignId);
@@ -208,7 +238,7 @@ public class CallBacking extends ContactBacking {
 		} catch (Exception ex) {
 			super.newAction(null);
 			patientGridType = 1;
-		}*/
+		}
 	}
 
 	@Override
@@ -224,7 +254,7 @@ public class CallBacking extends ContactBacking {
 
 		String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
 		listCallFinal.add(new SelectItem(null, label));
-		for (CrmCallFinal row : capaignService.getListCallFinalIncoming()) {
+		for (CrmCallFinal row : capaignService.getListCallFinalOutcoming()) {
 			listCallFinal.add(new SelectItem(row.getId(), row.getCode() + " - "
 					+ row.getDescription()));
 			mapCallFinal.put(row.getId(), row);

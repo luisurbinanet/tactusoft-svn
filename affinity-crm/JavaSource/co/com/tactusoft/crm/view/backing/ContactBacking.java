@@ -39,7 +39,7 @@ public class ContactBacking extends BaseBacking {
 	private boolean automatic;
 
 	private List<SelectItem> listDocType;
-	private CrmPatient tmpSelectedPatient;
+	protected CrmPatient tmpSelectedPatient;
 
 	private List<String> selectedSendOptions;
 
