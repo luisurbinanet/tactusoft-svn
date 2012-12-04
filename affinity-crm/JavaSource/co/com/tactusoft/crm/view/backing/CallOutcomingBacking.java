@@ -1,5 +1,6 @@
 package co.com.tactusoft.crm.view.backing;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,6 +13,8 @@ import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.asteriskjava.manager.AuthenticationFailedException;
+import org.asteriskjava.manager.TimeoutException;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.controller.bo.CapaignBo;
@@ -20,6 +23,8 @@ import co.com.tactusoft.crm.model.entities.CrmCall;
 import co.com.tactusoft.crm.model.entities.CrmCallFinal;
 import co.com.tactusoft.crm.model.entities.CrmParameter;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
+import co.com.tactusoft.crm.model.entities.VwCallRange;
+import co.com.tactusoft.crm.util.Asterisk;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
@@ -37,8 +42,8 @@ public class CallOutcomingBacking extends ContactBacking {
 	private ParameterBo parameterService;
 
 	private String names;
-	private String agentNumber;
 	private String phone;
+	private String indicative;
 
 	private List<SelectItem> listCallFinal;
 	private BigDecimal idCallFinal;
@@ -50,6 +55,16 @@ public class CallOutcomingBacking extends ContactBacking {
 
 	private String calls = "-1";
 	private CrmCall call;
+
+	private List<VwCallRange> listCallRange;
+	private String remoteChannel;
+	private String idCall;
+	private String agentNumber;
+
+	private String asteriskHost;
+	private int asteriskPort;
+	private String asteriskUser;
+	private String asteriskPassword;
 
 	public CallOutcomingBacking() {
 		searched = false;
@@ -123,6 +138,14 @@ public class CallOutcomingBacking extends ContactBacking {
 		this.calls = calls;
 	}
 
+	public String getIndicative() {
+		return indicative;
+	}
+
+	public void setIndicative(String indicative) {
+		this.indicative = indicative;
+	}
+
 	public String getPhone() {
 		return phone;
 	}
@@ -141,53 +164,24 @@ public class CallOutcomingBacking extends ContactBacking {
 
 	@PostConstruct
 	public void init() {
-		// try {
 		generateCallFinal();
+		listCallRange = tablesService.getVwCallRange();
 
-		/*
-		 * call = new CrmCall(); call.setIdCall(callId);
-		 * call.setAgentNumber(agentNumber); call.setCallType(callType);
-		 * call.setIdCampaign(camapignId); call.setPhone(phone);
-		 * call.setCompanyPhone(companyPhone);
-		 * call.setRemoteChannel(remoteChannel);
-		 * 
-		 * try { int result = capaignService.saveCall(call); if (result == -1) {
-		 * call = capaignService.getListCallById(callId);
-		 * call.setAgentNumber(agentNumber); call.setCallType(callType);
-		 * call.setIdCampaign(camapignId); call.setPhone(phone);
-		 * call.setCompanyPhone(companyPhone);
-		 * call.setRemoteChannel(remoteChannel); capaignService.saveCall(call);
-		 * } } catch (Exception ex) {
-		 * 
-		 * }
-		 * 
-		 * crmGuideline = capaignService.getGuideline(companyPhone);
-		 * generateProfile();
-		 * 
-		 * List<CrmPatient> listCrmPatient; if (phone != null) { listCrmPatient
-		 * = capaignService.getListPatient(phone); } else { listCrmPatient = new
-		 * LinkedList<CrmPatient>(); }
-		 * 
-		 * super.newAction(null);
-		 * 
-		 * listAllRegion = tablesService.getListRegion(); listAllCity =
-		 * tablesService.getListCity();
-		 * 
-		 * if (listCrmPatient.size() > 0) { if (listCrmPatient.size() == 1) {
-		 * patientGridType = 0; this.setSelectedPatient(listCrmPatient.get(0));
-		 * generateRegion(this.getSelectedPatient().getIdCountry()); } else {
-		 * patientGridType = 1; this.setListPatient(listCrmPatient);
-		 * this.setPatientModel(new PatientDataModel(listCrmPatient));
-		 * this.setTmpSelectedPatient(listCrmPatient.get(0));
-		 * this.setIdCountry(crmGuideline.getIdCountry()); } } else {
-		 * this.new2Action(null); }
-		 * 
-		 * crmCountry = tablesService.getCountry(this.getIdCountry());
-		 * mapCountry = new HashMap<BigDecimal, CrmCountry>();
-		 * mapCountry.put(crmCountry.getId(), crmCountry);
-		 * generateDocType(crmCountry.getCode()); } catch (Exception ex) {
-		 * super.newAction(null); patientGridType = 1; }
-		 */
+		List<CrmParameter> listParameter = parameterService
+				.getListParameterByGroup("ASTERISK");
+		for (CrmParameter crmParameter : listParameter) {
+			if (crmParameter.getCode().equals("ASTERISK_HOST")) {
+				asteriskHost = crmParameter.getTextValue();
+			} else if (crmParameter.getCode().equals("ASTERISK_PORT")) {
+				asteriskPort = Integer.parseInt(crmParameter.getTextValue());
+			} else if (crmParameter.getCode().equals("ASTERISK_USER")) {
+				asteriskUser = crmParameter.getTextValue();
+			} else if (crmParameter.getCode().equals("ASTERISK_PASSWORD")) {
+				asteriskPassword = crmParameter.getTextValue();
+			}
+		}
+
+		agentNumber = FacesUtil.getCurrentUser().getExtensionAgent();
 	}
 
 	private void generateCallFinal() {
@@ -207,6 +201,7 @@ public class CallOutcomingBacking extends ContactBacking {
 	public void newAction(ActionEvent event) {
 		super.newAction(event);
 		phone = null;
+		indicative = null;
 		searched = false;
 		called = false;
 		saved = false;
@@ -217,33 +212,63 @@ public class CallOutcomingBacking extends ContactBacking {
 		List<CrmPatient> listCrmPatient = capaignService.getListPatient(phone);
 		patientModel = new PatientDataModel(listCrmPatient);
 		if (listCrmPatient.size() > 0) {
-			tmpSelectedPatient = listCrmPatient.get(0);
+			selectedPatient = listCrmPatient.get(0);
 		}
 		searched = true;
+		called = false;
 	}
 
 	public void callAction(ActionEvent event) {
-		
-		called = true;
+		remoteChannel = null;
+		String phoneWithIndicative = phone;
+		if (!FacesUtil.isEmptyOrBlank(indicative)) {
+			phoneWithIndicative = indicative + phoneWithIndicative;
+		}
+		for (VwCallRange row : listCallRange) {
+			if (FacesUtil.getRegularExpression(row.getExpressionRegular(),
+					phoneWithIndicative)) {
+				remoteChannel = row.getCallNumber().replace("numero_a_marcar",
+						phoneWithIndicative);
+				break;
+			}
+		}
+
+		if (remoteChannel != null) {
+			String sessionId = FacesUtil.getSessionID().substring(0, 16);
+			int numCalls = FacesUtil.getCurrentUserData().getNumCalls();
+			numCalls = numCalls + 1;
+			FacesUtil.getCurrentUserData().setNumCalls(numCalls);
+			idCall = sessionId + numCalls;
+
+			Asterisk asterisk = new Asterisk(asteriskHost, asteriskPort,
+					asteriskUser, asteriskPassword);
+			try {
+				asterisk.callAction(remoteChannel, agentNumber, idCall);
+				called = true;
+			} catch (IOException e) {
+				called = false;
+			} catch (AuthenticationFailedException e) {
+				called = false;
+			} catch (TimeoutException e) {
+				called = false;
+			}
+		} else {
+			called = false;
+			searched = false;
+			String message = FacesUtil.getMessage("cam_msg_call_error");
+			FacesUtil.addError(message);
+		}
 	}
 
 	@Override
 	public void saveAction() {
 		call = new CrmCall();
-		
-		String sessionId = FacesUtil.getSessionID().substring(0, 16);
-		int numCalls = FacesUtil.getCurrentUserData().getNumCalls();
-		numCalls = numCalls + 1;
-		FacesUtil.getCurrentUserData().setNumCalls(numCalls);
-		String idCall = sessionId + numCalls;
 		call.setIdCall(idCall);
-		
-		String agentNumber = "Agent/"
-				+ FacesUtil.getCurrentUser().getExtensionAgent();
 		call.setAgentNumber(agentNumber);
 		call.setCallType(Constant.CALLE_TYPE_OUT);
 		call.setCrmCallFinal(mapCallFinal.get(idCallFinal));
 		call.setPhone(phone);
+		call.setRemoteChannel(remoteChannel);
 
 		if (this.selectedPatient != null
 				&& this.selectedPatient.getId() != null) {
@@ -253,6 +278,8 @@ public class CallOutcomingBacking extends ContactBacking {
 		String message = FacesUtil.getMessage("cam_msg_update_ok",
 				selectedPatient.getNames());
 		FacesUtil.addInfo(message);
+
+		saved = true;
 	}
 
 	public String goAppointment() {
