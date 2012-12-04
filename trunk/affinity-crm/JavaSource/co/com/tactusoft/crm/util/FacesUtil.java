@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
@@ -65,15 +67,15 @@ public class FacesUtil {
 		return result;
 	}
 
-	public static void showMessage(String title, String text) {
+	public static void showMessage(String title, String message) {
 		FacesContext context = FacesContext.getCurrentInstance();
 
-		context.addMessage(null, new FacesMessage(title, text));
+		context.addMessage(null, new FacesMessage(title, message));
 	}
 
-	public static void addInfo(String title, String text) {
+	public static void addInfo(String title, String message) {
 		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_INFO, title, text));
+				new FacesMessage(FacesMessage.SEVERITY_INFO, title, message));
 	}
 
 	public static void addInfo(String text) {
@@ -81,29 +83,29 @@ public class FacesUtil {
 		addInfo(title, text);
 	}
 
-	public static void addWarn(String title, String text) {
+	public static void addWarn(String title, String message) {
 		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_WARN, title, text));
+				new FacesMessage(FacesMessage.SEVERITY_WARN, title, message));
 	}
 
-	public static void addWarn(String text) {
+	public static void addWarn(String message) {
 		String title = FacesUtil.getMessage("msg_warn");
-		addWarn(title, text);
+		addWarn(title, message);
 	}
 
-	public static void addError(String title, String text) {
+	public static void addError(String title, String message) {
 		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_ERROR, title, text));
+				new FacesMessage(FacesMessage.SEVERITY_ERROR, title, message));
 	}
 
-	public static void addError(String text) {
+	public static void addError(String message) {
 		String title = FacesUtil.getMessage("msg_error");
-		addError(title, text);
+		addError(title, message);
 	}
 
-	public static void addFatal(String title, String text) {
+	public static void addFatal(String title, String message) {
 		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_FATAL, title, text));
+				new FacesMessage(FacesMessage.SEVERITY_FATAL, title, message));
 	}
 
 	public static String getMessage(String resourceBundleKey) {
@@ -419,9 +421,20 @@ public class FacesUtil {
 	}
 
 	public static String getSessionID() {
-		HttpServletRequest hrq = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest(); 
-		HttpSession session = hrq.getSession(); 
-		String sessionId = session.getId(); 
-		return sessionId; 
+		HttpServletRequest hrq = (HttpServletRequest) FacesContext
+				.getCurrentInstance().getExternalContext().getRequest();
+		HttpSession session = hrq.getSession();
+		String sessionId = session.getId();
+		return sessionId;
+	}
+
+	public static boolean getRegularExpression(String regex, String match) {
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(match);
+		boolean found = false;
+		while (matcher.find()) {
+			found = true;
+		}
+		return found;
 	}
 }

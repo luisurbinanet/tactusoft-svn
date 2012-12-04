@@ -68,7 +68,7 @@ public class TimerBacking {
 					crmParameter.setDescription("Última Actualización: "
 							+ new Date());
 					parameterService.saveParameter(crmParameter);
-					System.out.println("LLamadas: " + asterisk.getNumCalls());
+					//System.out.println("LLamadas: " + asterisk.getNumCalls());
 				}
 			}, 0L, 60000L);
 		}

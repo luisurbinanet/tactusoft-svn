@@ -21,19 +21,20 @@
 				<p:toolbar id="toolBar" style="width:100%">
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
-							actionListener="#{callOutcomingBacking.newAction}" update="form" />
+							actionListener="#{callOutcomingBacking.newAction}" update="form"
+							process="@this" />
 						<p:commandButton value="#{msg['btn_search']}"
 							icon="ui-icon-search" update="form"
 							actionListener="#{callOutcomingBacking.searchAction}"
-							process="@this, txtPhone"
-							disabled="#{callOutcomingBacking.searched}" />
+							process="@this, txtPhone, txtInd"
+							disabled="#{callOutcomingBacking.searched or callOutcomingBacking.saved}" />
 						<p:commandButton value="#{msg['btn_call']}" icon="ui-icon-disk"
 							actionListener="#{callOutcomingBacking.callAction}"
-							update="growl toolBar"
+							update="growl toolBar pnlInfo" process="@this, txtPhone, txtInd"
 							disabled="#{not callOutcomingBacking.searched}" />
 						<p:commandButton value="#{msg['btn_save']}" icon="ui-icon-disk"
 							action="#{callOutcomingBacking.saveAction}" update="form"
-							disabled="#{not callOutcomingBacking.called}" />
+							disabled="#{not callOutcomingBacking.called or callOutcomingBacking.saved}" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -43,15 +44,20 @@
 					<h:panelGrid id="pnlInfo" columns="2" width="100%">
 						<h:outputText value="#{msg['pat_guardian_telephone']}"
 							style="width:100%" />
-						<p:inputText id="txtPhone" maxlength="10" required="true"
-							label="#{msg['pat_guardian_telephone']}"
-							value="#{callOutcomingBacking.phone}"
-							disabled="#{callOutcomingBacking.searched}" />
+						<h:panelGrid columns="2">
+							<p:inputText id="txtInd" maxlength="3"
+								value="#{callOutcomingBacking.indicative}"
+								disabled="#{callOutcomingBacking.searched or callOutcomingBacking.called}" />
+							<p:inputText id="txtPhone" maxlength="10" required="true"
+								label="#{msg['pat_guardian_telephone']}"
+								value="#{callOutcomingBacking.phone}"
+								disabled="#{callOutcomingBacking.searched or callOutcomingBacking.called}" />
+						</h:panelGrid>
 						<h:outputText value="#{msg['cam_final']}" style="width:100%" />
 						<p:selectOneMenu id="selFinal"
 							value="#{callOutcomingBacking.idCallFinal}" style="width:500px"
 							required="true" label="#{msg['cam_final']}"
-							disabled="#{not callOutcomingBacking.searched}">
+							disabled="#{not callOutcomingBacking.searched or callOutcomingBacking.saved}">
 							<f:selectItems value="#{callOutcomingBacking.listCallFinal}" />
 							<p:ajax
 								listener="#{callOutcomingBacking.handleFinalDetailChange}" />
@@ -59,13 +65,15 @@
 					</h:panelGrid>
 				</p:fieldset>
 
+				<p:watermark for="txtInd" value="#{msg['cam_ind']}" />
+
 				<p:spacer height="5" />
 
 				<h:panelGrid id="pnlContactList" columns="1" width="100%">
 
 					<p:dataTable id="dtbSearchPatient" var="rec"
 						value="#{callOutcomingBacking.patientModel}" rowKey="#{rec.id}"
-						selection="#{callOutcomingBacking.tmpSelectedPatient}"
+						selection="#{callOutcomingBacking.selectedPatient}"
 						paginator="true" rows="15" style="width:100%"
 						emptyMessage="#{msg['glb_no_records_found']}">
 
