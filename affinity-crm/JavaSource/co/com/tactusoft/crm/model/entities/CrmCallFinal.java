@@ -22,6 +22,7 @@ public class CrmCallFinal implements java.io.Serializable {
 	private BigDecimal id;
 	private String code;
 	private String description;
+	private String typeCall;
 	private Set<CrmCall> crmCalls = new HashSet<CrmCall>(0);
 
 	public CrmCallFinal() {
@@ -32,10 +33,11 @@ public class CrmCallFinal implements java.io.Serializable {
 	}
 
 	public CrmCallFinal(BigDecimal id, String code, String description,
-			Set<CrmCall> crmCalls) {
+			String typeCall, Set<CrmCall> crmCalls) {
 		this.id = id;
 		this.code = code;
 		this.description = description;
+		this.typeCall = typeCall;
 		this.crmCalls = crmCalls;
 	}
 
@@ -65,6 +67,15 @@ public class CrmCallFinal implements java.io.Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	@Column(name = "type_call")
+	public String getTypeCall() {
+		return typeCall;
+	}
+
+	public void setTypeCall(String typeCall) {
+		this.typeCall = typeCall;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmCallFinal")

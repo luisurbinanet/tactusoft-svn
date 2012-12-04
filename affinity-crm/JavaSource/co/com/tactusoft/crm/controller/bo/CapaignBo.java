@@ -40,8 +40,16 @@ public class CapaignBo implements Serializable {
 				+ "' OR o.cellNumber = '" + phone + "'");
 	}
 
-	public List<CrmCallFinal> getListCallFinal() {
-		return dao.find("from CrmCallFinal");
+	public List<CrmCallFinal> getListCallFinal(String type) {
+		return dao.find("from CrmCallFinal where typeCall = '" + type + "'");
+	}
+
+	public List<CrmCallFinal> getListCallFinalIncoming() {
+		return getListCallFinal("INCOMING");
+	}
+
+	public List<CrmCallFinal> getListCallFinalOutcoming() {
+		return getListCallFinal("OUTCOMING");
 	}
 
 	public CrmCall getListCallById(BigDecimal id) {

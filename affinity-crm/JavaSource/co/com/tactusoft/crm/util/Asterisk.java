@@ -6,11 +6,18 @@ import org.asteriskjava.live.AsteriskChannel;
 import org.asteriskjava.live.AsteriskServer;
 import org.asteriskjava.live.DefaultAsteriskServer;
 import org.asteriskjava.live.ManagerCommunicationException;
+import org.asteriskjava.manager.AuthenticationFailedException;
 import org.asteriskjava.manager.EventTimeoutException;
+import org.asteriskjava.manager.ManagerEventListener;
 import org.asteriskjava.manager.ResponseEvents;
+import org.asteriskjava.manager.TimeoutException;
+import org.asteriskjava.manager.action.OriginateAction;
 import org.asteriskjava.manager.action.QueueStatusAction;
+import org.asteriskjava.manager.event.CdrEvent;
+import org.asteriskjava.manager.event.ManagerEvent;
 import org.asteriskjava.manager.event.QueueParamsEvent;
 import org.asteriskjava.manager.event.ResponseEvent;
+import org.asteriskjava.manager.response.ManagerResponse;
 
 public class Asterisk {
 
@@ -109,15 +116,68 @@ public class Asterisk {
 		}
 	}
 
-	public static void main(String[] args) {
+	public void run2() throws IOException, AuthenticationFailedException,
+			TimeoutException {
+		OriginateAction originateAction;
+		ManagerResponse originateResponse;
+
+		originateAction = new OriginateAction();
+		originateAction.setAccount("999");
+		originateAction.setAsync(false);
+		originateAction.setChannel("SIP/N2P6737/011573112510963");
+		originateAction.setContext("from-internal");
+		originateAction.setExten("6503");
+		originateAction.setPriority(new Integer(1));
+		originateAction.setTimeout(new Long(30000));
+
+		// connect to Asterisk and log in
+		asteriskServer.getManagerConnection().login();
+
+		// send the originate action and wait for a maximum of 30 seconds for
+		// Asterisk
+		// to send a reply
+		originateResponse = asteriskServer.getManagerConnection().sendAction(
+				originateAction, 30000);
+
+		// print out whether the originate succeeded or not
+		System.out.println(originateResponse.getResponse());
+
+		for (AsteriskChannel asteriskChannel : asteriskServer.getChannels()) {
+			System.out.println(asteriskChannel);
+		}
+
+		asteriskServer.getManagerConnection().addEventListener(
+				new ManagerEventListener() {
+
+					@Override
+					public void onManagerEvent(ManagerEvent event) {
+						if (event instanceof QueueParamsEvent) {
+							System.out.println("");
+						}
+
+					}
+				});
+
+		// and finally log off and disconnect
+		// asteriskServer.getManagerConnection().logoff();
+	}
+
+	public void event(CdrEvent event) {
+
+	}
+
+	public static void main(String[] args) throws IOException,
+			AuthenticationFailedException, TimeoutException {
+
+		Asterisk asterisk = new Asterisk("192.168.1.20", 5038, "admin",
+				"lukro9753");
+
 		/*
-		 * Asterisk asterisk = new Asterisk("192.168.1.20",5038,"admin",
-		 * "lukro9753");
+		 * Asterisk asterisk = new Asterisk("192.168.1.22", 5038, "crmaffinity",
+		 * "4dm1n.aff");
 		 */
-		Asterisk asterisk = new Asterisk("192.168.1.22", 5038, "crmaffinity",
-				"4dm1n.aff");
-		asterisk.run();
-		System.out.println(asterisk.getNumCalls());
+		asterisk.run2();
+		// System.out.println(asterisk.getNumCalls());
 	}
 
 }
