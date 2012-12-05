@@ -50,6 +50,15 @@
 							<h:outputLabel value="#{rec.prcDetName}" />
 						</p:column>
 
+						<p:column style="width:4%">
+							<p:commandButton icon="ui-icon-check"
+								title="#{msg['btn_assisted_appointment']}"
+								action="#{historyBacking.editAppointmentAction}">
+								<f:setPropertyActionListener value="#{rec}"
+									target="#{historyBacking.selectedAppointment}" />
+							</p:commandButton>
+						</p:column>
+
 					</p:dataTable>
 				</h:panelGrid>
 
