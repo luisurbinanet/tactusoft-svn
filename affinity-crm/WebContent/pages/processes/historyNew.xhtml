@@ -1,0 +1,71 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="../templates/common.xhtml">
+
+	<ui:define name="body">
+
+		<p:panel style="width:100%;height:100%;"
+			header="#{msg['title_view_history']}">
+
+			<p:spacer height="5" />
+
+			<h:form id="form">
+
+				<p:growl id="growl" showDetail="true" />
+
+				<h:panelGrid columns="1" width="100%">
+					<p:dataTable id="selectedTable" var="rec"
+						value="#{historyBackingNew.appointmentModel}" rowKey="#{rec.code}"
+						style="width:100%" paginator="true" rows="10"
+						emptyMessage="#{msg['glb_no_records_found']}">
+
+						<f:facet name="header">
+							#{msg['app_avalaible']}
+						</f:facet>
+
+						<p:column headerText="#{msg['app_date']}">
+							<h:outputLabel value="#{rec.startAppointmentDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+							</h:outputLabel>
+						</p:column>
+
+						<p:column headerText="#{msg['pat_surnames']}">
+							<h:outputLabel value="#{rec.patSurnames}" />
+						</p:column>
+
+						<p:column headerText="#{msg['pat_names']}">
+							<h:outputLabel value="#{rec.patFirstnames}" />
+						</p:column>
+
+						<p:column headerText="#{msg['app_branch']}">
+							<h:outputLabel value="#{rec.branchName}" />
+						</p:column>
+
+						<p:column headerText="#{msg['app_procedure']}">
+							<h:outputLabel value="#{rec.prcDetName}" />
+						</p:column>
+
+						<p:column style="width:4%">
+							<p:commandButton icon="ui-icon-check"
+								title="#{msg['btn_assisted_appointment']}"
+								action="#{historyBackingNew.editAppointmentAction}">
+								<f:setPropertyActionListener value="#{rec}"
+									target="#{historyBackingNew.selectedAppointment}" />
+							</p:commandButton>
+						</p:column>
+
+					</p:dataTable>
+				</h:panelGrid>
+
+			</h:form>
+
+		</p:panel>
+
+	</ui:define>
+</ui:composition>
+</html>
