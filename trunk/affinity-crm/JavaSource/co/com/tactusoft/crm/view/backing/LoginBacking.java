@@ -39,8 +39,8 @@ public class LoginBacking {
 
 	@PostConstruct
 	public void init() {
-		TimerBacking timerBacking = FacesUtil.findBean("timerBacking");
-		timerBacking.execute();
+		//TimerBacking timerBacking = FacesUtil.findBean("timerBacking");
+		//timerBacking.execute();
 	}
 
 	public String getUserName() {

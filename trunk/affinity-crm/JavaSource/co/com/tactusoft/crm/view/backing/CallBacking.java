@@ -194,6 +194,7 @@ public class CallBacking extends ContactBacking {
 					call.setPhone(phone);
 					call.setCompanyPhone(companyPhone);
 					call.setRemoteChannel(remoteChannel);
+					call.setCallType(Constant.CALLED_TYPE_IN);
 					capaignService.saveCall(call);
 				}
 			} catch (Exception ex) {
@@ -254,7 +255,7 @@ public class CallBacking extends ContactBacking {
 
 		String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
 		listCallFinal.add(new SelectItem(null, label));
-		for (CrmCallFinal row : capaignService.getListCallFinalOutcoming()) {
+		for (CrmCallFinal row : capaignService.getListCallFinalIncoming()) {
 			listCallFinal.add(new SelectItem(row.getId(), row.getCode() + " - "
 					+ row.getDescription()));
 			mapCallFinal.put(row.getId(), row);
@@ -345,6 +346,7 @@ public class CallBacking extends ContactBacking {
 		if (this.selectedPatient.getId() != null) {
 			call.setCrmCallFinal(mapCallFinal.get(idCallFinal));
 			call.setIdPatient(this.selectedPatient.getId());
+			call.setCallType(Constant.CALLED_TYPE_IN);
 			capaignService.saveCall(call);
 			String message = FacesUtil.getMessage("cam_msg_update_ok",
 					selectedPatient.getNames());
@@ -363,6 +365,7 @@ public class CallBacking extends ContactBacking {
 
 	public void handleFinalDetailChange() {
 		call.setCrmCallFinal(mapCallFinal.get(idCallFinal));
+		call.setCallType(Constant.CALLED_TYPE_IN);
 		capaignService.saveCall(call);
 	}
 

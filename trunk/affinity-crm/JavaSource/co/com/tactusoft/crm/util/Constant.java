@@ -67,6 +67,6 @@ public class Constant {
 	public static final String SCHEDULE_MAINTAIN = "MAINTAIN";
 	
 	public static String CALLED_TYPE_IN = "incoming";
-	public static String CALLE_TYPE_OUT = "outcoming";
+	public static String CALLE_TYPE_OUT = "outgoing";
 
 }
