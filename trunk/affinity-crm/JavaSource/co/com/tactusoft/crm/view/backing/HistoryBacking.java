@@ -31,6 +31,7 @@ public class HistoryBacking extends BaseBacking {
 	@PostConstruct
 	public void init() {
 		doctor = processService.getCrmDoctor();
+		appointmentModel = null;
 	}
 
 	public List<VwAppointment> getListAppointment() {
@@ -42,12 +43,14 @@ public class HistoryBacking extends BaseBacking {
 	}
 
 	public VwAppointmentDataModel getAppointmentModel() {
-		if (doctor != null) {
-			listAppointment = processService
-					.getListVwAppointmentByHistory(doctor.getId());
-			appointmentModel = new VwAppointmentDataModel(listAppointment);
-			if (listAppointment.size() > 0) {
-				selectedAppointment = listAppointment.get(0);
+		if (appointmentModel == null) {
+			if (doctor != null) {
+				listAppointment = processService
+						.getListVwAppointmentByHistory(doctor.getId());
+				appointmentModel = new VwAppointmentDataModel(listAppointment);
+				if (listAppointment.size() > 0) {
+					selectedAppointment = listAppointment.get(0);
+				}
 			}
 		}
 		return appointmentModel;
@@ -70,6 +73,10 @@ public class HistoryBacking extends BaseBacking {
 	}
 
 	public void searchAction(ActionEvent event) {
+
+	}
+
+	public void editAppointmentAction() {
 
 	}
 
