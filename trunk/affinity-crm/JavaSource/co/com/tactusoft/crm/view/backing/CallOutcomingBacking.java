@@ -190,7 +190,7 @@ public class CallOutcomingBacking extends ContactBacking {
 
 		String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
 		listCallFinal.add(new SelectItem(null, label));
-		for (CrmCallFinal row : capaignService.getListCallFinalIncoming()) {
+		for (CrmCallFinal row : capaignService.getListCallFinalOutcoming()) {
 			listCallFinal.add(new SelectItem(row.getId(), row.getCode() + " - "
 					+ row.getDescription()));
 			mapCallFinal.put(row.getId(), row);

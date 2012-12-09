@@ -15,6 +15,7 @@ import co.com.tactusoft.crm.model.entities.CrmCall;
 import co.com.tactusoft.crm.model.entities.CrmCallFinal;
 import co.com.tactusoft.crm.model.entities.CrmGuideline;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
+import co.com.tactusoft.crm.util.Constant;
 
 @Named
 public class CapaignBo implements Serializable {
@@ -45,11 +46,11 @@ public class CapaignBo implements Serializable {
 	}
 
 	public List<CrmCallFinal> getListCallFinalIncoming() {
-		return getListCallFinal("INCOMING");
+		return getListCallFinal(Constant.CALLED_TYPE_IN);
 	}
 
 	public List<CrmCallFinal> getListCallFinalOutcoming() {
-		return getListCallFinal("OUTCOMING");
+		return getListCallFinal(Constant.CALLE_TYPE_OUT);
 	}
 
 	public CrmCall getListCallById(BigDecimal id) {

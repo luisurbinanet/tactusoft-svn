@@ -60,6 +60,8 @@ public class VwAppointment implements java.io.Serializable {
 	private String userCanceledSurnames;
 	private Date dateCanceled;
 	private int closeAppointment;
+	private String publicityCode;
+	private String publicityName;
 
 	public VwAppointment() {
 	}
@@ -553,4 +555,24 @@ public class VwAppointment implements java.io.Serializable {
 	public void setCloseAppointment(int closeAppointment) {
 		this.closeAppointment = closeAppointment;
 	}
+
+	@Column(name = "publicity_cod", nullable = false)
+	public String getPublicityCode() {
+		return publicityCode;
+	}
+
+	public void setPublicityCode(String publicityCode) {
+		this.publicityCode = publicityCode;
+	}
+
+	@Column(name = "publicity_name", nullable = false)
+	public String getPublicityName() {
+		return publicityName;
+	}
+
+	public void setPublicityName(String publicityName) {
+		this.publicityName = publicityName;
+	}
+	
+	
 }
