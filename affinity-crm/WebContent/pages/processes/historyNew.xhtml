@@ -18,7 +18,9 @@
 
 				<p:growl id="growl" showDetail="true" />
 
-				<h:panelGrid columns="1" width="100%">
+				<!-- TACTU CITAS -->
+				<h:panelGrid id="tblAppointment" columns="1" width="100%"
+					rendered="#{not historyBackingNew.modeEdit}">
 					<p:dataTable id="selectedTable" var="rec"
 						value="#{historyBackingNew.appointmentModel}" rowKey="#{rec.code}"
 						style="width:100%" paginator="true" rows="10"
@@ -52,7 +54,7 @@
 
 						<p:column style="width:4%">
 							<p:commandButton icon="ui-icon-check"
-								title="#{msg['btn_assisted_appointment']}"
+								title="#{msg['btn_assisted_appointment']}" update=":form"
 								action="#{historyBackingNew.editAppointmentAction}">
 								<f:setPropertyActionListener value="#{rec}"
 									target="#{historyBackingNew.selectedAppointment}" />
@@ -60,6 +62,145 @@
 						</p:column>
 
 					</p:dataTable>
+				</h:panelGrid>
+
+				<!-- TACTU CITAS -->
+				<h:panelGrid id="tblPart" columns="1" width="100%"
+					rendered="#{historyBackingNew.modeEdit}">
+
+					<p:toolbar style="width:100%">
+						<p:toolbarGroup align="left">
+							<p:commandButton icon="ui-icon-arrowreturnthick-1-w"
+								value="#{msg['btn_return']}" update="form">
+								<f:setPropertyActionListener value="false"
+									target="#{historyBackingNew.modeEdit}" />
+							</p:commandButton>
+						</p:toolbarGroup>
+					</p:toolbar>
+
+					<h:panelGrid columns="2">
+						<p:outputLabel for="selPart" value="#{msg['his_part']}" />
+						<p:selectOneMenu id="selPart" value="#{historyBackingNew.part}"
+							required="true" style="width:600px;">
+							<p:ajax event="change" update="tblPart" />
+							<f:selectItem itemLabel="#{msg['his_history_history']}"
+								itemValue="HISTORY" />
+							<f:selectItem itemLabel="#{msg['his_history_record']}"
+								itemValue="RECORD" />
+							<f:selectItem itemLabel="#{msg['his_history_homeopathic']}"
+								itemValue="HOMEOPATHIC" />
+							<f:selectItem itemLabel="#{msg['his_history_physique']}"
+								itemValue="PHYSIQUE" />
+							<f:selectItem itemLabel="#{msg['his_history_ip']}" itemValue="IP" />
+							<f:selectItem itemLabel="#{msg['his_history_medicaction']}"
+								itemValue="MEDICATION" />
+							<f:selectItem itemLabel="#{msg['his_history_therapy']}"
+								itemValue="THERAPY" />
+							<f:selectItem itemLabel="#{msg['his_history_examinations']}"
+								itemValue="EXAMINATIONS" />
+							<f:selectItem itemLabel="#{msg['his_history_note']}"
+								itemValue="NOTE" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+
+					<h:panelGrid id="pnlHistory" columns="1" width="100%"
+						rendered="#{historyBackingNew.part eq 'HISTORY'}">
+						<p:dataTable id="tblHistory" var="rec"
+							value="#{historyBackingNew.historyHistoryModel}"
+							rowKey="#{rec.code}" style="width:100%" paginator="true"
+							rows="10" emptyMessage="#{msg['glb_no_records_found']}">
+
+							<f:facet name="header">
+								#{msg['his_history_history']}
+							</f:facet>
+
+							<p:column headerText="#{msg['app_date']}">
+								<h:outputLabel
+									value="#{rec.crmAppointment.startAppointmentDate}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputLabel>
+							</p:column>
+
+							<p:column headerText="#{msg['his_history_reason']}">
+								<h:outputLabel value="#{rec.reason}" />
+							</p:column>
+
+							<p:column headerText="#{msg['his_history_disease']}">
+								<h:outputLabel value="#{rec.disease}" />
+							</p:column>
+
+							<p:column style="width:4%">
+								<p:commandButton icon="ui-icon-search"
+									title="#{msg['btn_view']}" update=":form"
+									action="#{historyBackingNew.editAppointmentAction}">
+
+								</p:commandButton>
+							</p:column>
+
+						</p:dataTable>
+					</h:panelGrid>
+
+					<h:panelGrid id="pnlRecord" columns="1" width="100%"
+						rendered="#{historyBackingNew.part eq 'RECORD'}">
+						<p:dataTable id="tblRecord" var="rec"
+							value="#{historyBackingNew.historyRecordModel}"
+							rowKey="#{rec.code}" style="width:100%" paginator="true"
+							rows="10" emptyMessage="#{msg['glb_no_records_found']}">
+
+							<f:facet name="header">
+								#{msg['his_history_record']}
+							</f:facet>
+
+							<p:column headerText="#{msg['app_date']}">
+								<h:outputLabel
+									value="#{rec.crmAppointment.startAppointmentDate}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputLabel>
+							</p:column>
+
+							<p:column headerText="#{msg['his_rec_per_arthritis']}">
+								<h:outputLabel value="#{rec.arthritis?'SI':'NO'}" />
+							</p:column>
+
+							<p:column headerText="#{msg['his_rec_per_cancer']}">
+								<h:outputLabel value="#{rec.cancer?'SI':'NO'}" />
+							</p:column>
+
+							<p:column headerText="#{msg['his_rec_per_pulmonary']}">
+								<h:outputLabel value="#{rec.pulmonary?'SI':'NO'}" />
+							</p:column>
+
+							<p:column headerText="#{msg['his_rec_per_diabetes']}">
+								<h:outputLabel value="#{rec.diabetes?'SI':'NO'}" />
+							</p:column>
+
+							<p:column headerText="#{msg['his_rec_per_hypertension']}">
+								<h:outputLabel value="#{rec.hypertension?'SI':'NO'}" />
+							</p:column>
+
+							<p:column headerText="#{msg['his_rec_per_hospitalizations']}">
+								<h:outputLabel value="#{rec.hospitalizations?'SI':'NO'}" />
+							</p:column>
+
+							<p:column headerText="#{msg['his_rec_per_allergy']}">
+								<h:outputLabel value="#{rec.allergy?'SI':'NO'}" />
+							</p:column>
+
+							<p:column headerText="#{msg['his_rec_per_infections']}">
+								<h:outputLabel value="#{rec.infections?'SI':'NO'}" />
+							</p:column>
+
+							<p:column style="width:4%">
+								<p:commandButton icon="ui-icon-search"
+									title="#{msg['btn_view']}" update=":form"
+									action="#{historyBackingNew.editAppointmentAction}">
+
+								</p:commandButton>
+							</p:column>
+
+						</p:dataTable>
+					</h:panelGrid>
+
 				</h:panelGrid>
 
 			</h:form>

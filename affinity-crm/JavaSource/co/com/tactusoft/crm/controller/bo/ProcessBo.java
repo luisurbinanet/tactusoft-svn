@@ -1132,6 +1132,11 @@ public class ProcessBo implements Serializable {
 		}
 	}
 
+	public List<CrmHistoryHistory> getListHistoryHistory(BigDecimal idPatient) {
+		return dao.find("from CrmHistoryHistory o where o.crmPatient.id = "
+				+ idPatient);
+	}
+
 	public CrmHistoryRecord getHistoryRecord(BigDecimal idPatient) {
 		List<CrmHistoryRecord> list = null;
 		list = dao.find("from CrmHistoryRecord o where o.crmPatient.id = "
@@ -1143,6 +1148,11 @@ public class ProcessBo implements Serializable {
 		}
 	}
 
+	public List<CrmHistoryRecord> getListHistoryRecord(BigDecimal idPatient) {
+		return dao.find("from CrmHistoryRecord o where o.crmPatient.id = "
+				+ idPatient);
+	}
+
 	public CrmHistoryHomeopathic getHistoryHomeopathic(BigDecimal idPatient) {
 		List<CrmHistoryHomeopathic> list = null;
 		list = dao.find("from CrmHistoryHomeopathic o where o.crmPatient.id = "
@@ -1152,6 +1162,12 @@ public class ProcessBo implements Serializable {
 		} else {
 			return new CrmHistoryHomeopathic();
 		}
+	}
+
+	public List<CrmHistoryHomeopathic> getListHistoryHomeopathic(
+			BigDecimal idPatient) {
+		return dao.find("from CrmHistoryHomeopathic o where o.crmPatient.id = "
+				+ idPatient);
 	}
 
 	public CrmHistoryPhysique getHistoryPhysique(BigDecimal idPatient) {
