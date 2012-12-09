@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.controller.bo.CapaignBo;
 import co.com.tactusoft.crm.controller.bo.ParameterBo;
+import co.com.tactusoft.crm.model.entities.AstTrunkDialpatterns;
 import co.com.tactusoft.crm.model.entities.CrmCall;
 import co.com.tactusoft.crm.model.entities.CrmCallFinal;
 import co.com.tactusoft.crm.model.entities.CrmParameter;
@@ -57,6 +58,7 @@ public class CallOutcomingBacking extends ContactBacking {
 	private CrmCall call;
 
 	private List<VwCallRange> listCallRange;
+	private List<AstTrunkDialpatterns> listDialpatterns;
 	private String remoteChannel;
 	private String idCall;
 	private String agentNumber;
@@ -166,6 +168,7 @@ public class CallOutcomingBacking extends ContactBacking {
 	public void init() {
 		generateCallFinal();
 		listCallRange = tablesService.getVwCallRange();
+		listDialpatterns = tablesService.getListDialpatterns();
 
 		List<CrmParameter> listParameter = parameterService
 				.getListParameterByGroup("ASTERISK");
@@ -227,8 +230,20 @@ public class CallOutcomingBacking extends ContactBacking {
 		for (VwCallRange row : listCallRange) {
 			if (FacesUtil.getRegularExpression(row.getExpressionRegular(),
 					phoneWithIndicative)) {
-				remoteChannel = row.getCallNumber().replace("numero_a_marcar",
-						phoneWithIndicative);
+				for (AstTrunkDialpatterns dial : listDialpatterns) {
+					String pattern = dial.getMatchPatternPass().replace("X",
+							"\\d");
+					if (FacesUtil.getRegularExpression(pattern, phone)) {
+						phoneWithIndicative = phone;
+						if (!FacesUtil.isEmptyOrBlank(dial.getPrependDigits())) {
+							phoneWithIndicative = dial.getPrependDigits()
+									+ phone;
+						}
+						remoteChannel = row.getCallNumber().replace(
+								"numero_a_marcar", phoneWithIndicative);
+						break;
+					}
+				}
 				break;
 			}
 		}

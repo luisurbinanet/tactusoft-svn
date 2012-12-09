@@ -314,6 +314,13 @@ public class FacesUtil {
 		return calendar.getTime();
 	}
 
+	public static Date addDaysToDate(Date date, int days) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.DATE, days);
+		return calendar.getTime();
+	}
+
 	public static String formatDate(Date date, String format) {
 		String stringDate = null;
 		DateFormat formatter;

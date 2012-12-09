@@ -11,6 +11,7 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
+import co.com.tactusoft.crm.model.entities.AstTrunkDialpatterns;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmCampaign;
 import co.com.tactusoft.crm.model.entities.CrmCampaignDetail;
@@ -58,6 +59,10 @@ public class TablesBo implements Serializable {
 
 	public List<VwCallRange> getVwCallRange() {
 		return dao.find("from VwCallRange o");
+	}
+
+	public List<AstTrunkDialpatterns> getListDialpatterns() {
+		return dao.find("from AstTrunkDialpatterns o");
 	}
 
 	public List<CrmDoctor> getListDoctor() {
