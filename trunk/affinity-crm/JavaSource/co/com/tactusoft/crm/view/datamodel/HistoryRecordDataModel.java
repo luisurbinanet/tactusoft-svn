@@ -7,29 +7,29 @@ import javax.faces.model.ListDataModel;
 
 import org.primefaces.model.SelectableDataModel;
 
-import co.com.tactusoft.crm.model.entities.CrmAppointment;
+import co.com.tactusoft.crm.model.entities.CrmHistoryRecord;
 
-public class AppointmentDataModel extends ListDataModel<CrmAppointment> implements
-		SelectableDataModel<CrmAppointment>, Serializable {
+public class HistoryRecordDataModel extends ListDataModel<CrmHistoryRecord> implements
+		SelectableDataModel<CrmHistoryRecord>, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public AppointmentDataModel() {
+	public HistoryRecordDataModel() {
 	}
 
-	public AppointmentDataModel(List<CrmAppointment> data) {
+	public HistoryRecordDataModel(List<CrmHistoryRecord> data) {
 		super(data);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public CrmAppointment getRowData(String rowKey) {
+	public CrmHistoryRecord getRowData(String rowKey) {
 		// In a real app, a more efficient way like a query by rowKey should be
 		// implemented to deal with huge data
 
-		List<CrmAppointment> list = (List<CrmAppointment>) getWrappedData();
+		List<CrmHistoryRecord> list = (List<CrmHistoryRecord>) getWrappedData();
 
-		for (CrmAppointment row : list) {
+		for (CrmHistoryRecord row : list) {
 			if (row.getId().equals(rowKey))
 				return row;
 		}
@@ -38,7 +38,7 @@ public class AppointmentDataModel extends ListDataModel<CrmAppointment> implemen
 	}
 
 	@Override
-	public Object getRowKey(CrmAppointment row) {
+	public Object getRowKey(CrmHistoryRecord row) {
 		return row.getId();
 	}
 }

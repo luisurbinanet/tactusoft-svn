@@ -68,5 +68,8 @@ public class Constant {
 	
 	public static String CALLED_TYPE_IN = "incoming";
 	public static String CALLE_TYPE_OUT = "outgoing";
+	
+	public static String HISTORY_HISTORY = "HISTORY";
+	public static String HISTORY_RECORD = "RECORD";
 
 }
