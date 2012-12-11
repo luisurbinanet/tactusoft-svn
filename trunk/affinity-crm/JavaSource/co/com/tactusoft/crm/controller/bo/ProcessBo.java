@@ -358,7 +358,7 @@ public class ProcessBo implements Serializable {
 									+ idBranch
 									+ " and o.day = "
 									+ currentDay
-									+ " and o.crmDoctor.id <> 0");
+									+ " and o.crmDoctor.id <> 0 and o.crmDoctor.state = 1");
 				} else {
 					listCrmDoctorSchedule = dao
 							.find("from CrmDoctorSchedule o where o.crmBranch.id = "
@@ -545,8 +545,10 @@ public class ProcessBo implements Serializable {
 
 		List<CrmDoctorSchedule> listDoctorSchedule = dao
 				.find("from CrmDoctorSchedule o where o.crmDoctor.id = "
-						+ doctor.getId() + " and o.crmBranch.id = " + idBranch
-						+ " order by o.day, o.startHour");
+						+ doctor.getId()
+						+ " and o.crmBranch.id = "
+						+ idBranch
+						+ "  and o.crmDoctor.state = 1 order by o.day, o.startHour");
 
 		// Validar si Doctor tiene Horario
 		if (listDoctorSchedule.size() > 0) {
@@ -718,7 +720,7 @@ public class ProcessBo implements Serializable {
 							+ idBranch + " and o.id.onlyDate = '" + dateString
 							+ "' and o.id.idDoctor <> 0");
 			listCrmDoctorWithoutApp = dao
-					.find("select distinct c from CrmDoctorSchedule a inner join a.crmDoctor as c where a.crmDoctor.id <> 0 and a.day = "
+					.find("select distinct c from CrmDoctorSchedule a inner join a.crmDoctor as c where a.crmDoctor.id <> 0 and a.crmDoctor.state = 1 and a.day = "
 							+ currentDay
 							+ " and ('"
 							+ timeString
@@ -733,7 +735,7 @@ public class ProcessBo implements Serializable {
 							+ idBranch + " and o.id.onlyDate = '" + dateString
 							+ "' and o.id.idDoctor = 0");
 			listCrmDoctorWithoutApp = dao
-					.find("select distinct c from CrmDoctorSchedule a inner join a.crmDoctor as c where a.crmDoctor.id = 0 and a.day = "
+					.find("select distinct c from CrmDoctorSchedule a inner join a.crmDoctor as c where a.crmDoctor.id = 0 and a.crmDoctor.state = 1 and a.day = "
 							+ currentDay
 							+ " and ('"
 							+ timeString
@@ -752,10 +754,13 @@ public class ProcessBo implements Serializable {
 			for (VwDoctorHour row : listDoctorHour) {
 
 				List<CrmDoctorSchedule> listDoctorSchedule = dao
-						.find("from CrmDoctorSchedule o where o.day = "
-								+ currentDay + " and o.crmBranch.id = "
-								+ idBranch + " and o.crmDoctor.id = "
-								+ row.getId().getIdDoctor() + " and ('"
+						.find("from CrmDoctorSchedule o where o.crmDoctor.state = 1 and o.day = "
+								+ currentDay
+								+ " and o.crmBranch.id = "
+								+ idBranch
+								+ " and o.crmDoctor.id = "
+								+ row.getId().getIdDoctor()
+								+ " and ('"
 								+ timeString
 								+ "' between o.startHour and o.endHour)");
 
@@ -882,14 +887,17 @@ public class ProcessBo implements Serializable {
 
 	public int validateAppointmentForDate(BigDecimal idBranch, Date starDate,
 			Date endDate, CrmProcedureDetail procedureDetail,
-			BigDecimal idDoctor, BigDecimal idPatient, String timeType) {
+			BigDecimal idDoctor, BigDecimal idPatient, String timeType,
+			Boolean edit) {
 
 		int result = 0;
 
-		// Validar si Paciente tiene otra cita
-		result = validateDuplicated(idPatient, starDate, endDate);
-		if (result > 0) {
-			return -4;
+		if (!edit) {
+			// Validar si Paciente tiene otra cita
+			result = validateDuplicated(idPatient, starDate, endDate);
+			if (result > 0) {
+				return -4;
+			}
 		}
 
 		// Buscar los festivos

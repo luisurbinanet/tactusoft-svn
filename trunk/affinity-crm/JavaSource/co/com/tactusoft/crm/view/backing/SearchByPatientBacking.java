@@ -184,7 +184,7 @@ public class SearchByPatientBacking extends BaseBacking {
 		appointmentEditBacking.setSelectedWSGroupSellers(selectedAppointment
 				.getCodPublicity());
 		appointmentEditBacking.setEdit(true);
-		appointmentEditBacking.setSaved(true);
+		appointmentEditBacking.setSaved(false);
 		for (SelectItem item : appointmentEditBacking.getListBranch()) {
 			long value = ((BigDecimal) item.getValue()).longValue();
 			if (value == selectedAppointment.getCrmBranch().getId().longValue()) {

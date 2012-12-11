@@ -675,7 +675,7 @@ public class AppointmentBacking extends BaseBacking {
 						selectedCandidate.getStartDate(),
 						selectedCandidate.getEndDate(), procedureDetail,
 						selectedCandidate.getDoctor().getId(),
-						selectedPatient.getId(), timeType);
+						selectedPatient.getId(), timeType, edit);
 			} else {
 				CrmDoctor doctor = mapDoctor.get(selected.getCrmDoctor()
 						.getId());

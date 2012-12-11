@@ -381,6 +381,7 @@ public class ContactBacking extends BaseBacking {
 		selectedPatient = tmpSelectedPatient;
 		newRecord = false;
 		idCountry = selectedPatient.getIdCountry();
+		handleCountryChange();
 		idRegion = selectedPatient.getIdRegion();
 		handleRegionChange();
 		idCity = selectedPatient.getIdCity();
