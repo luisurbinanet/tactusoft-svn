@@ -22,15 +22,15 @@
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
 							actionListener="#{contactBacking.newAction}"
-							update="pnlDetail pnlDetail2 pnlDetail3 toolBar" process="@this" />
+							update="pnlDetail  pnlDetail3 toolBar" process="@this" />
 						<p:commandButton value="#{msg['btn_search']}" process="@this"
 							icon="ui-icon-search" oncomplete="searchDlg.show()"
 							actionListener="#{contactBacking.refreshSearchAction}"
 							update="searchDialog" />
 						<p:commandButton id="btnSavePatient" value="#{msg['btn_save']}"
 							icon="ui-icon-disk" action="#{contactBacking.saveAction}"
-							update="growl toolBar pnlDetail pnlDetail2 pnlDetail3"
-							process="toolBar pnlDetail pnlDetail2 pnlDetail3" />
+							update="growl toolBar pnlDetail  pnlDetail3"
+							process="toolBar pnlDetail  pnlDetail3" />
 						<p:commandButton value="#{msg['btn_update']}" process="@this"
 							icon="ui-icon-refresh" oncomplete="updateDlg.show()"
 							update="updateDialog" disabled="#{contactBacking.newRecord}" />
@@ -55,7 +55,7 @@
 						style="width:248px" required="true" label="#{msg['pat_country']}"
 						disabled="#{not contactBacking.newRecord}">
 						<f:selectItems value="#{contactBacking.listCountry}" />
-						<p:ajax update="selRegion selCity pnlDetail2"
+						<p:ajax update="selRegion selCity "
 							listener="#{contactBacking.handleCountryChange}" />
 					</p:selectOneMenu>
 
@@ -78,25 +78,6 @@
 					<h:outputText style="width:240px" />
 					<h:outputText style="width:240px" />
 
-				</h:panelGrid>
-
-				<h:panelGrid id="pnlDetail2" columns="4" cellspacing="5"
-					columnClasses="width250per,width250per,width250per,width250per"
-					width="100%">
-
-					<h:outputLabel id="lblDocType" value="#{msg['pat_type_code']}"
-						rendered="#{!contactBacking.automatic}" />
-					<p:selectOneMenu value="#{contactBacking.selectedPatient.docType}"
-						rendered="#{!contactBacking.automatic}" style="width:248px">
-						<f:selectItems value="#{contactBacking.listDocType}" />
-					</p:selectOneMenu>
-
-					<h:outputLabel id="lblDoc" value="#{msg['pat_code']}"
-						rendered="#{!contactBacking.automatic or !contactBacking.newRecord}" />
-					<p:inputText id="txtDoc"
-						value="#{contactBacking.selectedPatient.doc}" style="width:240px;"
-						label="#{msg['pat_code']}" maxlength="16"
-						rendered="#{!contactBacking.automatic or !contactBacking.newRecord}" />
 				</h:panelGrid>
 
 				<h:panelGrid id="pnlDetail3" columns="4" cellspacing="5"
@@ -179,8 +160,7 @@
 								update="btnAddPatient scpSearchPatient dtbSearchPatient"
 								process="@this, txtDocSearch, txtNameSearch, radioSearch, optDocSearch, txtNameSearch" />
 							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
-								icon="ui-icon-plusthick"
-								update="pnlDetail pnlDetail2 pnlDetail3 toolBar"
+								icon="ui-icon-plusthick" update="pnlDetail  pnlDetail3 toolBar"
 								actionListener="#{contactBacking.addContactAction}"
 								process="@this, scpSearchPatient" oncomplete="searchDlg.hide();"
 								disabled="#{contactBacking.disabledAddPatient}" />
@@ -225,7 +205,7 @@
 							<p:commandButton id="btnUpdate" value="#{msg['btn_save']}"
 								icon="ui-icon-disk"
 								actionListener="#{contactBacking.updateAction}"
-								update="growl pnlDetail pnlDetail2 pnlDetail3"
+								update="growl pnlDetail  pnlDetail3"
 								process="@this, pnlUpdate pnlUpdate2"
 								oncomplete="handleLoginRequest(xhr, status, args)" />
 						</p:toolbarGroup>
