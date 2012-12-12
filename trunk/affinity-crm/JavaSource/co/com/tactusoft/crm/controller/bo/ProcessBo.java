@@ -337,8 +337,8 @@ public class ProcessBo implements Serializable {
 						+ dateString
 						+ "T00:00:00.000+05:00' and '"
 						+ dateString
-						+ "T23:59:59.999+05:00') and o.state in (1,3,4,5) "
-						+ "order by o.startAppointmentDate");
+						+ "T23:59:59.999+05:00') and o.state in (1,3,4,5) and o.crmBranch.id = "
+						+ idBranch + " order by o.startAppointmentDate");
 
 		// Validar Festivo
 		List<CrmHoliday> listHoliday = getListHoliday(currentDate, idBranch);
@@ -350,7 +350,7 @@ public class ProcessBo implements Serializable {
 
 			if (currentDay != 1) {// Si no es domingo
 
-				// Buscar citas x doctor y sucursal
+				// Buscar horarios
 				List<CrmDoctorSchedule> listCrmDoctorSchedule = null;
 				if (timeType.equals(Constant.TIME_TYPE_DOCTOR)) {
 					listCrmDoctorSchedule = dao
