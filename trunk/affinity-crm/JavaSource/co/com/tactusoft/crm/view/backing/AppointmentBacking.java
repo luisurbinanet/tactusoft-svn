@@ -84,8 +84,6 @@ public class AppointmentBacking extends BaseBacking {
 	private String timeType = null;
 	private String infoMessageDate;
 
-	private CrmPatient selectedPatientTemp;
-
 	public AppointmentBacking() {
 		newAction(null);
 	}
@@ -343,14 +341,6 @@ public class AppointmentBacking extends BaseBacking {
 
 	public void setInfoMessageDate(String infoMessageDate) {
 		this.infoMessageDate = infoMessageDate;
-	}
-
-	public CrmPatient getSelectedPatientTemp() {
-		return selectedPatientTemp;
-	}
-
-	public void setSelectedPatientTemp(CrmPatient selectedPatientTemp) {
-		this.selectedPatientTemp = selectedPatientTemp;
 	}
 
 	public void newAction(ActionEvent event) {
@@ -668,6 +658,8 @@ public class AppointmentBacking extends BaseBacking {
 			CrmProcedureDetail procedureDetail = mapProcedureDetail
 					.get(idProcedureDetail);
 
+			CrmBranch branch = mapBranch.get(idBranch);
+
 			int validateApp = 0;
 			if (appType.equals("ORDINARY")) {
 				validateApp = processService.validateAppointmentForDate(
@@ -680,8 +672,11 @@ public class AppointmentBacking extends BaseBacking {
 				CrmDoctor doctor = mapDoctor.get(selected.getCrmDoctor()
 						.getId());
 				selectedCandidate = new Candidate();
+				selectedCandidate.setBranch(branch.getName());
+				selectedCandidate.setProcedure(procedureDetail.getName());
 				selectedCandidate.setStartDate(currentDate);
-				selectedCandidate.setEndDate(currentDate);
+				selectedCandidate.setEndDate(FacesUtil.addMinutesToDate(
+						currentDate, procedureDetail.getTimeDoctor()));
 				selectedCandidate.setDoctor(doctor);
 			}
 
@@ -706,7 +701,7 @@ public class AppointmentBacking extends BaseBacking {
 				selected.setPatientNames(selectedPatient.getFirstnames() + " "
 						+ selectedPatient.getSurnames());
 				selected.setCrmDoctor(selectedCandidate.getDoctor());
-				selected.setCrmBranch(mapBranch.get(idBranch));
+				selected.setCrmBranch(branch);
 				selected.setCrmProcedureDetail(procedureDetail);
 
 				selected.setCodPublicity(selectedWSGroupSellers);

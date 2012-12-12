@@ -51,6 +51,7 @@ public class BaseBacking implements Serializable {
 	protected List<CrmPatient> listPatient;
 	protected PatientDataModel patientModel;
 	protected CrmPatient selectedPatient;
+	protected CrmPatient selectedPatientTemp;
 	protected String docPatient;
 	protected String namePatient;
 	protected int optionSearchPatient;
@@ -130,6 +131,14 @@ public class BaseBacking implements Serializable {
 
 	public void setSelectedPatient(CrmPatient selectedPatient) {
 		this.selectedPatient = selectedPatient;
+	}
+	
+	public CrmPatient getSelectedPatientTemp() {
+		return selectedPatientTemp;
+	}
+
+	public void setSelectedPatientTemp(CrmPatient selectedPatientTemp) {
+		this.selectedPatientTemp = selectedPatientTemp;
 	}
 
 	public String getDocPatient() {
@@ -216,6 +225,7 @@ public class BaseBacking implements Serializable {
 
 			if (listPatient.size() > 0) {
 				selectedPatient = listPatient.get(0);
+				selectedPatientTemp = listPatient.get(0);
 			}
 		}
 	}
