@@ -320,6 +320,13 @@ public class FacesUtil {
 		calendar.add(Calendar.DATE, days);
 		return calendar.getTime();
 	}
+	
+	public static Date addMinutesToDate(Date date, int hours) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.MINUTE, hours);
+		return calendar.getTime();
+	}
 
 	public static String formatDate(Date date, String format) {
 		String stringDate = null;
