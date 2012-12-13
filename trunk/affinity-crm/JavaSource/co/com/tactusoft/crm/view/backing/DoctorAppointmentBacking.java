@@ -27,6 +27,7 @@ import co.com.tactusoft.crm.model.entities.DatesBean;
 import co.com.tactusoft.crm.model.entities.VwAppointment;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
+import co.com.tactusoft.crm.view.beans.Candidate;
 import co.com.tactusoft.crm.view.datamodel.AppointmentDataModel;
 
 @Named
@@ -499,6 +500,13 @@ public class DoctorAppointmentBacking extends BaseBacking {
 
 					hourDate = row.getId().getMaxDate();
 					hour = FacesUtil.getHour(row.getId().getMaxDate());
+
+					for (Candidate candidate : processService
+							.getListOccupatedHours(currentDate, idBranch)) {
+						branchEventModel.addEvent(new DefaultScheduleEvent(
+								"NO DISPONIBLE", candidate.getStartDate(),
+								candidate.getEndDate(), "style_no_available"));
+					}
 				}
 			}
 		}
