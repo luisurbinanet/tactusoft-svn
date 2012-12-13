@@ -463,7 +463,13 @@ public class DoctorAppointmentBacking extends BaseBacking {
 
 	public void onEventSelect(ScheduleEntrySelectEvent selectEvent) {
 		event = (DefaultScheduleEvent) selectEvent.getScheduleEvent();
-		selectedAppointment = (CrmAppointment) event.getData();
+		try {
+			selectedAppointment = (CrmAppointment) event.getData();
+		} catch (ClassCastException ex) {
+			VwAppointment current = (VwAppointment) event.getData();
+			selectedAppointment = processService
+					.getAppointment(current.getId());
+		}
 	}
 
 	private void generateNoAlvailable(List<DatesBean> listScheduleBranch,

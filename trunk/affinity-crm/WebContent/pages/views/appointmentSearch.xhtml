@@ -32,24 +32,36 @@
 
 				<p:spacer height="10" />
 
+				<p:fieldset legend="#{msg['app_branch']}" collapsed="true"
+					toggleable="true">
+					<h:panelGrid id="pnlBranch" columns="1">
+						<h:panelGrid columns="2">
+							<p:selectBooleanCheckbox value="#{appointmentSearchBacking.all}">
+								<p:ajax listener="#{appointmentSearchBacking.handleAllChange}"
+									update="pnlBranch pnlDetail" />
+							</p:selectBooleanCheckbox>
+							<h:outputText value="#{msg['glb_gender_all']}" />
+						</h:panelGrid>
+						<p:selectManyCheckbox
+							value="#{appointmentSearchBacking.listSelectedBranch}">
+							<f:selectItems value="#{appointmentSearchBacking.listBranch}" />
+							<p:ajax listener="#{appointmentSearchBacking.handleBranchChange}"
+								update="pnlBranch selDoctor selProcedure" icon="ui-icon-refresh" />
+						</p:selectManyCheckbox>
+					</h:panelGrid>
+				</p:fieldset>
+
 				<h:panelGrid id="pnlDetail" columns="4" cellpadding="4"
 					style="margin:0 auto;" width="100%">
-
-					<h:outputLabel value="#{msg['app_branch']}" />
-					<p:selectCheckboxMenu
-						value="#{appointmentSearchBacking.listSelectedBranch}"
-						label="#{msg['app_branch']}" filter="true" filterText="Filter"
-						filterMatchMode="startsWith" panelStyle="width:400px">
-						<f:selectItems value="#{appointmentSearchBacking.listBranch}" />
-						<p:ajax event="valueChange" update="selDoctor selProcedure"
-							listener="#{appointmentSearchBacking.handleBranchChange}" />
-					</p:selectCheckboxMenu>
 
 					<h:outputLabel value="#{msg['app_doctor']}" />
 					<p:selectOneMenu id="selDoctor" style="width:400px"
 						value="#{appointmentSearchBacking.idDoctor}">
 						<f:selectItems value="#{appointmentSearchBacking.listDoctor}" />
 					</p:selectOneMenu>
+
+					<h:outputLabel />
+					<h:outputLabel />
 
 					<h:outputLabel value="#{msg['app_procedure_type']}"
 						style="width:40%" />
