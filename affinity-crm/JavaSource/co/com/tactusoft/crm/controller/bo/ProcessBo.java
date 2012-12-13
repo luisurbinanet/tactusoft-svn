@@ -497,6 +497,125 @@ public class ProcessBo implements Serializable {
 		return resultSearchDate;
 	}
 
+	public List<Candidate> getListOccupatedHours(Date currentDate,
+			BigDecimal idBranch) {
+		List<Candidate> result = new ArrayList<Candidate>();
+
+		// Validar Festivo
+		List<CrmHoliday> listHoliday = getListHoliday(currentDate, idBranch);
+		if (listHoliday.size() == 0) {
+
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(currentDate);
+			int currentDay = calendar.get(Calendar.DAY_OF_WEEK);
+
+			if (currentDay != 1) {// Si no es domingo
+
+				List<CrmDoctorSchedule> listCrmDoctorSchedule = dao
+						.find("from CrmDoctorSchedule o where o.crmBranch.id = "
+								+ idBranch
+								+ " and o.day = "
+								+ currentDay
+								+ " and o.crmDoctor.id <> 0 and o.crmDoctor.state = 1");
+
+				if (listCrmDoctorSchedule.size() > 0) {
+
+					Date minHour = null;
+					Date maxHour = null;
+
+					for (CrmDoctorSchedule row : listCrmDoctorSchedule) {
+						if (minHour != null) {
+							if (row.getStartHour().compareTo(minHour) < 0) {
+								minHour = row.getStartHour();
+							}
+						} else {
+							minHour = row.getStartHour();
+						}
+
+						if (maxHour != null) {
+							if (row.getEndHour().compareTo(maxHour) > 0) {
+								maxHour = row.getEndHour();
+							}
+						} else {
+							maxHour = row.getEndHour();
+						}
+					}
+
+					String dateString = FacesUtil.formatDate(currentDate,
+							"yyyy-MM-dd");
+					// Buscar Citas
+					List<CrmAppointment> listApp = dao
+							.find("from CrmAppointment o where (o.startAppointmentDate between '"
+									+ dateString
+									+ "T00:00:00.000+05:00' and '"
+									+ dateString
+									+ "T23:59:59.999+05:00') and o.state in (1,3,4,5) and o.crmBranch.id = "
+									+ idBranch
+									+ " order by o.startAppointmentDate");
+
+					boolean end = false;
+					Date scheduleInitHour = minHour;
+
+					do {
+						int numInteractions = 0;
+						int numApp = 0;
+
+						for (CrmDoctorSchedule row : listCrmDoctorSchedule) {
+							if ((scheduleInitHour.compareTo(row.getStartHour()) >= 0)
+									&& (scheduleInitHour.compareTo(row
+											.getEndHour()) < 0)) {
+								numInteractions++;
+							}
+						}
+
+						if (numInteractions > 0) {
+							calendar = Calendar.getInstance();
+							calendar.setTime(scheduleInitHour);
+							calendar.add(Calendar.MINUTE, 15);
+							Date scheduleEndHour = calendar.getTime();
+							scheduleEndHour = FacesUtil.addHourToDate(
+									currentDate, scheduleEndHour);
+
+							List<Date> candidatesHours = getListcandidatesHours(
+									FacesUtil.addHourToDate(currentDate,
+											scheduleInitHour), scheduleEndHour);
+
+							for (CrmAppointment row : listApp) {
+								boolean validate = validateAvailabilitySchedule(
+										candidatesHours,
+										row.getStartAppointmentDate(),
+										row.getEndAppointmentDate());
+								if (!validate) {
+									numApp++;
+								}
+							}
+
+							if (numApp >= numInteractions) {
+								Date time = FacesUtil.addHourToDate(
+										currentDate, scheduleInitHour);
+								Candidate candidate = new Candidate();
+								candidate.setStartDate(time);
+								candidate.setEndDate(scheduleEndHour);
+								result.add(candidate);
+							}
+						}
+						calendar = Calendar.getInstance();
+						calendar.setTime(scheduleInitHour);
+						calendar.add(Calendar.MINUTE, 15);
+						scheduleInitHour = calendar.getTime();
+
+						if (scheduleInitHour.compareTo(maxHour) >= 0) {
+							end = true;
+						}
+					} while (!end);
+				}
+
+			}
+		}
+
+		return result;
+	}
+
 	private List<Date> getListcandidatesHours(Date initHour, Date endHour) {
 		long diff = endHour.getTime() - initHour.getTime();
 		double diffInMin = diff / ((double) 1000 * 60);
