@@ -397,11 +397,23 @@ public class FacesUtil {
 		return result;
 	}
 
-	public static String getCurrentIP() {
+	public static String getClientIP() {
 		String ip = null;
 		try {
 			InetAddress thisIp = InetAddress.getLocalHost();
 			ip = thisIp.getHostAddress();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ip;
+	}
+	
+	public static String getServerIP() {
+		String ip = null;
+		try {
+			HttpServletRequest httpServletRequest = (HttpServletRequest) FacesContext
+					.getCurrentInstance().getExternalContext().getRequest();
+			ip = httpServletRequest.getRemoteAddr();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

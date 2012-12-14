@@ -22,7 +22,7 @@
 						'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre',
 						'Noviembre', 'Diciembre' ],
 				monthNamesShort : [ 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
-						'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dec' ],
+						'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic' ],
 				dayNames : [ 'Domingo', 'Lunes', 'Martes', 'Miercoles',
 						'Jueves', 'Viernes', 'Sábado' ],
 				dayNamesShort : [ 'Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie',
@@ -75,6 +75,9 @@
 			draggable="false" closable="true" resizable="false" dynamic="true">
 
 			<h:panelGrid columns="2">
+				<h:outputText value="#{msg['doc_user']}" />
+				<h:outputText value="#{loginBacking.userName}"
+					style="font-weight:bold;" />
 				<h:outputText value="#{msg['env_environment']}" />
 				<h:outputText value="#{sessionBacking.environment}"
 					style="font-weight:bold;" />
@@ -104,7 +107,8 @@
 					<h:outputLink value="javascript:void(0)"
 						style="margin-right:20px;font-weight:bold;"
 						onclick="dlgEnvironment.show()">
-						<h:outputText value="Usuario: #{loginBacking.userName}" />
+						<h:outputText
+							value="#{msg['doc_user']}: #{sessionBacking.usernameNames}" />
 					</h:outputLink>
 				</h:panelGrid>
 

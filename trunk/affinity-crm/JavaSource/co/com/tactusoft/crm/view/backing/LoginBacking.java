@@ -39,8 +39,8 @@ public class LoginBacking {
 
 	@PostConstruct
 	public void init() {
-		//TimerBacking timerBacking = FacesUtil.findBean("timerBacking");
-		//timerBacking.execute();
+		// TimerBacking timerBacking = FacesUtil.findBean("timerBacking");
+		// timerBacking.execute();
 	}
 
 	public String getUserName() {
@@ -113,7 +113,7 @@ public class LoginBacking {
 
 				List<CrmParameter> list = parameterBo
 						.getListParameterByGroup("AMBIENTE");
-				sessionBacking.setIpWeb(FacesUtil.getCurrentIP());
+				sessionBacking.setIpWeb(FacesUtil.getServerIP());
 				for (CrmParameter row : list) {
 					if (row.getCode().equals("ENV_AMBIENTE")) {
 						sessionBacking.setEnvironment(row.getTextValue());

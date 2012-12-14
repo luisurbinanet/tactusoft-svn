@@ -22,7 +22,7 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name = "crm_appointment", catalog = "crm_db", uniqueConstraints = @UniqueConstraint(columnNames = "code"))
 public class CrmAppointment implements java.io.Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
 	private CrmProcedureDetail crmProcedureDetail;
@@ -75,9 +75,9 @@ public class CrmAppointment implements java.io.Serializable {
 			CrmUser crmUserByIdUserModified, CrmUser crmUserByIdUserCreate,
 			CrmBranch crmBranch, CrmUser crmUserByIdUserCanceled,
 			CrmDoctor crmDoctor, String code, String patientNames,
-			Date startAppointmentDate,
-			Date endAppointmentDate, String codPublicity, String namePublicity,
-			String obs, Boolean untimely, Boolean closeAppointment,
+			Date startAppointmentDate, Date endAppointmentDate,
+			String codPublicity, String namePublicity, String obs,
+			Boolean untimely, Boolean closeAppointment,
 			Boolean medicationTherapy, int state, Date dateCreate,
 			Date dateModified, Date dateChecked, Date dateCanceled,
 			Set<CrmDiagnosis> crmDiagnosises, Set<CrmNote> crmNotes,
@@ -275,7 +275,7 @@ public class CrmAppointment implements java.io.Serializable {
 		this.untimely = untimely;
 	}
 
-	@Column(name = "close_appointment")
+	@Column(name = "close_appointment", nullable = false)
 	public Boolean getCloseAppointment() {
 		return this.closeAppointment;
 	}

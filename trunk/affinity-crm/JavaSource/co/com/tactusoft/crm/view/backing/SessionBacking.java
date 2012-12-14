@@ -6,6 +6,8 @@ import javax.inject.Named;
 
 import org.springframework.context.annotation.Scope;
 
+import co.com.tactusoft.crm.util.FacesUtil;
+
 @Named
 @Scope("session")
 public class SessionBacking implements Serializable {
@@ -41,6 +43,11 @@ public class SessionBacking implements Serializable {
 
 	public void setVersion(String version) {
 		this.version = version;
+	}
+
+	public String getUsernameNames() {
+		return FacesUtil.getCurrentUser().getNames() + " "
+				+ FacesUtil.getCurrentUser().getSurnames();
 	}
 
 }
