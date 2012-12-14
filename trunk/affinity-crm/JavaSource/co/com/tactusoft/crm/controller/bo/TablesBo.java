@@ -2,6 +2,8 @@ package co.com.tactusoft.crm.controller.bo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -107,6 +109,21 @@ public class TablesBo implements Serializable {
 				.find("select distinct o.crmDoctor from CrmDoctorSchedule o where o.crmBranch.id = "
 						+ idBranch
 						+ " and o.crmDoctor.id <> 0 and o.crmDoctor.state = 1");
+	}
+
+	public List<CrmDoctor> getListDoctorByBranch(BigDecimal idBranch, Date date) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		int day = calendar.get(Calendar.DAY_OF_WEEK);
+		return getListDoctorByBranch(idBranch, day);
+	}
+
+	public List<CrmDoctor> getListDoctorByBranch(BigDecimal idBranch, int day) {
+		return dao
+				.find("select distinct o.crmDoctor from CrmDoctorSchedule o where o.crmBranch.id = "
+						+ idBranch
+						+ " and o.crmDoctor.id <> 0 and o.crmDoctor.state = 1 and o.day = "
+						+ day);
 	}
 
 	public List<CrmDoctorSchedule> getListScheduleByDoctor(BigDecimal idDoctor) {
