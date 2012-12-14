@@ -11,7 +11,7 @@ import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.inject.Named;
 
-import org.primefaces.context.RequestContext;
+import org.primefaces.event.CloseEvent;
 import org.springframework.context.annotation.Scope;
 import org.springframework.dao.DataIntegrityViolationException;
 
@@ -46,6 +46,8 @@ public class ContactBacking extends BaseBacking {
 	private List<SelectItem> listOccupation;
 	private Map<BigDecimal, CrmOccupation> mapOccupation;
 	private BigDecimal idOccupation;
+
+	private boolean saved;
 
 	public ContactBacking() {
 		newAction(null);
@@ -133,6 +135,14 @@ public class ContactBacking extends BaseBacking {
 		this.idOccupation = idOccupation;
 	}
 
+	public boolean isSaved() {
+		return saved;
+	}
+
+	public void setSaved(boolean saved) {
+		this.saved = saved;
+	}
+
 	public void newAction(ActionEvent event) {
 		selectedPatient = new CrmPatient();
 		selectedPatient.setCrmProfile(new CrmProfile());
@@ -140,6 +150,7 @@ public class ContactBacking extends BaseBacking {
 		selectedPatient.setCycle(false);
 		disabledSaveButton = false;
 		newRecord = true;
+		saved = false;
 
 		// Busquedas
 		optionSearchPatient = 1;
@@ -253,8 +264,7 @@ public class ContactBacking extends BaseBacking {
 	}
 
 	public void updateAction(ActionEvent event) {
-		RequestContext context = RequestContext.getCurrentInstance();
-		boolean saved = false;
+		saved = false;
 		String codeSap = null;
 		String message = null;
 		SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
@@ -315,7 +325,6 @@ public class ContactBacking extends BaseBacking {
 			processService.savePatient(selectedPatient, automatic && newRecord,
 					false, null);
 			saved = true;
-			newAction(null);
 			message = FacesUtil.getMessage("pat_msg_ok", codeSap);
 			FacesUtil.addInfo(message);
 		} catch (Exception ex) {
@@ -328,8 +337,14 @@ public class ContactBacking extends BaseBacking {
 			}
 			FacesUtil.addError(message);
 		}
+	}
 
-		context.addCallbackParam("saved", saved);
+	public void closeAction(ActionEvent event) {
+		handleClose(null);
+	}
+
+	public void handleClose(CloseEvent event) {
+		newAction(null);
 	}
 
 	@Override
