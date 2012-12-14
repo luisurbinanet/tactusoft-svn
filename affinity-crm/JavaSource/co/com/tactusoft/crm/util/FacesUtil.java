@@ -320,7 +320,7 @@ public class FacesUtil {
 		calendar.add(Calendar.DATE, days);
 		return calendar.getTime();
 	}
-	
+
 	public static Date addMinutesToDate(Date date, int hours) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
@@ -397,7 +397,7 @@ public class FacesUtil {
 		return result;
 	}
 
-	public static String getClientIP() {
+	public static String getServerIP() {
 		String ip = null;
 		try {
 			InetAddress thisIp = InetAddress.getLocalHost();
@@ -407,8 +407,8 @@ public class FacesUtil {
 		}
 		return ip;
 	}
-	
-	public static String getServerIP() {
+
+	public static String getClientIP() {
 		String ip = null;
 		try {
 			HttpServletRequest httpServletRequest = (HttpServletRequest) FacesContext

@@ -235,14 +235,32 @@
 					resizable="false" id="updateDialog" showEffect="fade"
 					hideEffect="explode" modal="true">
 
+					<p:ajax event="close" listener="#{contactBacking.handleClose}" />
+
 					<p:toolbar id="toolBarUpdate" style="width:100%">
 						<p:toolbarGroup align="left">
 							<p:commandButton id="btnUpdate" value="#{msg['btn_save']}"
 								icon="ui-icon-disk"
 								actionListener="#{contactBacking.updateAction}"
-								update="growl pnlDetail  pnlDetail3"
+								update="growl toolBarUpdate pnlUpdate pnlUpdate2"
+								disabled="#{contactBacking.saved}"
+								process="@this, pnlUpdate pnlUpdate2" />
+							<p:commandButton id="btnClose" value="#{msg['btn_return']}"
+								icon="ui-icon-arrowreturnthick-1-w"
+								actionListener="#{contactBacking.closeAction}"
+								update="toolBar pnlDetail pnlDetail2 pnlDetail3"
 								process="@this, pnlUpdate pnlUpdate2"
-								oncomplete="handleLoginRequest(xhr, status, args)" />
+								oncomplete="updateDlg.hide();" />
+							<p:splitButton icon="ui-icon-arrowrefresh-1-w"
+								value="#{msg['btn_actions']}"
+								disabled="#{contactBacking.selectedPatient.id == null?true:false}">
+								<p:menuitem value="#{msg['title_appointment']}"
+									action="#{contactBacking.goAppointment}" immediate="true" />
+								<p:menuitem value="#{msg['title_search_by_patient']}"
+									action="#{contactBacking.goSearchByPatient}" immediate="true" />
+								<p:menuitem value="#{msg['title_sales_order']}" rendered="false"
+									action="#{contactBacking.goAppointment}" immediate="true" />
+							</p:splitButton>
 						</p:toolbarGroup>
 					</p:toolbar>
 
@@ -371,18 +389,6 @@
 				</p:dialog>
 
 			</h:form>
-
-			<script type="text/javascript">
-				function handleLoginRequest(xhr, status, args) {
-					if (args.validationFailed || !args.saved) {
-						jQuery('#updateDialog').effect("shake", {
-							times : 3
-						}, 100);
-					} else {
-						updateDlg.hide();
-					}
-				}
-			</script>
 
 		</p:panel>
 
