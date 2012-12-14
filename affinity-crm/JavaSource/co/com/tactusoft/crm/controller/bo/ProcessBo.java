@@ -842,7 +842,7 @@ public class ProcessBo implements Serializable {
 			listDoctorHour = dao
 					.find("from VwDoctorHour o where o.id.idBranch = "
 							+ idBranch + " and o.id.onlyDate = '" + dateString
-							+ "' and o.id.idDoctor <> 0");
+							+ "' and o.id.idDoctor <> 0 order by rand()");
 			listCrmDoctorWithoutApp = dao
 					.find("select distinct c from CrmDoctorSchedule a inner join a.crmDoctor as c where a.crmDoctor.id <> 0 and a.crmDoctor.state = 1 and a.day = "
 							+ currentDay
@@ -851,13 +851,13 @@ public class ProcessBo implements Serializable {
 							+ "' between a.startHour and a.endHour) "
 							+ " and a.crmBranch.id = "
 							+ idBranch
-							+ " and a.crmDoctor.id not in (select b.crmDoctor.id from CrmAppointment b where cast(b.startAppointmentDate as date) = '"
-							+ dateString + "')");
+							+ " and a.crmDoctor.id not in (select b.crmDoctor.id from CrmAppointment b where b.state in (1,3,4,5) and cast(b.startAppointmentDate as date) = '"
+							+ dateString + "') order by rand()");
 		} else {
 			listDoctorHour = dao
 					.find("from VwDoctorHour o where o.id.idBranch = "
 							+ idBranch + " and o.id.onlyDate = '" + dateString
-							+ "' and o.id.idDoctor = 0");
+							+ "' and o.id.idDoctor = 0 order by rand()");
 			listCrmDoctorWithoutApp = dao
 					.find("select distinct c from CrmDoctorSchedule a inner join a.crmDoctor as c where a.crmDoctor.id = 0 and a.crmDoctor.state = 1 and a.day = "
 							+ currentDay
@@ -866,8 +866,8 @@ public class ProcessBo implements Serializable {
 							+ "' between a.startHour and a.endHour) "
 							+ " and a.crmBranch.id = "
 							+ idBranch
-							+ " and a.crmDoctor.id not in (select b.crmDoctor.id from CrmAppointment b where cast(b.startAppointmentDate as date) = '"
-							+ dateString + "')");
+							+ " and a.crmDoctor.id not in (select b.crmDoctor.id from CrmAppointment b where b.state in (1,3,4,5) and cast(b.startAppointmentDate as date) = '"
+							+ dateString + "') order by rand()");
 		}
 
 		if (listCrmDoctorWithoutApp.size() > 0) {
