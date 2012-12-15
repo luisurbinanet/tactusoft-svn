@@ -6,14 +6,21 @@ import javax.annotation.PostConstruct;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 
+import org.primefaces.context.RequestContext;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmHistoryHistory;
+import co.com.tactusoft.crm.model.entities.CrmHistoryHomeopathic;
+import co.com.tactusoft.crm.model.entities.CrmHistoryOrganometry;
+import co.com.tactusoft.crm.model.entities.CrmHistoryPhysique;
 import co.com.tactusoft.crm.model.entities.CrmHistoryRecord;
 import co.com.tactusoft.crm.model.entities.VwAppointment;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.view.datamodel.HistoryHistoryDataModel;
+import co.com.tactusoft.crm.view.datamodel.HistoryHomeopathicDataModel;
+import co.com.tactusoft.crm.view.datamodel.HistoryOrganometryDataModel;
+import co.com.tactusoft.crm.view.datamodel.HistoryPhysiqueDataModel;
 import co.com.tactusoft.crm.view.datamodel.HistoryRecordDataModel;
 import co.com.tactusoft.crm.view.datamodel.VwAppointmentDataModel;
 
@@ -34,6 +41,9 @@ public class HistoryBackingNew extends BaseBacking {
 
 	private HistoryHistoryDataModel historyHistoryModel;
 	private HistoryRecordDataModel historyRecordModel;
+	private HistoryHomeopathicDataModel historyHomeopathicModel;
+	private HistoryPhysiqueDataModel historyPhysiqueModel;
+	private HistoryOrganometryDataModel historyOrganometryModel;
 
 	public HistoryBackingNew() {
 		newAction(null);
@@ -112,6 +122,33 @@ public class HistoryBackingNew extends BaseBacking {
 		this.historyRecordModel = historyRecordModel;
 	}
 
+	public HistoryHomeopathicDataModel getHistoryHomeopathicModel() {
+		return historyHomeopathicModel;
+	}
+
+	public void setHistoryHomeopathicModel(
+			HistoryHomeopathicDataModel historyHomeopathicModel) {
+		this.historyHomeopathicModel = historyHomeopathicModel;
+	}
+
+	public HistoryPhysiqueDataModel getHistoryPhysiqueModel() {
+		return historyPhysiqueModel;
+	}
+
+	public void setHistoryPhysiqueModel(
+			HistoryPhysiqueDataModel historyPhysiqueModel) {
+		this.historyPhysiqueModel = historyPhysiqueModel;
+	}
+
+	public HistoryOrganometryDataModel getHistoryOrganometryModel() {
+		return historyOrganometryModel;
+	}
+
+	public void setHistoryOrganometryModel(
+			HistoryOrganometryDataModel historyOrganometryModel) {
+		this.historyOrganometryModel = historyOrganometryModel;
+	}
+
 	public void newAction(ActionEvent event) {
 		modeEdit = false;
 		part = Constant.HISTORY_HISTORY;
@@ -132,5 +169,28 @@ public class HistoryBackingNew extends BaseBacking {
 		List<CrmHistoryRecord> listTempRecord = processService
 				.getListHistoryRecord(selectedAppointment.getPatId());
 		historyRecordModel = new HistoryRecordDataModel(listTempRecord);
+
+		List<CrmHistoryHomeopathic> listTempHomeopathic = processService
+				.getListHistoryHomeopathic(selectedAppointment.getPatId());
+		historyHomeopathicModel = new HistoryHomeopathicDataModel(
+				listTempHomeopathic);
+
+		List<CrmHistoryPhysique> listTempPhysique = processService
+				.getListHistoryPhysique(selectedAppointment.getPatId());
+		historyPhysiqueModel = new HistoryPhysiqueDataModel(listTempPhysique);
+
+		List<CrmHistoryOrganometry> listTempOrganometry = processService
+				.getListHistoryOrganometry(selectedAppointment.getPatId());
+		historyOrganometryModel = new HistoryOrganometryDataModel(
+				listTempOrganometry);
+	}
+
+	public void viewHistoryAction() {
+		RequestContext context = RequestContext.getCurrentInstance();
+		if (this.part.equals(Constant.HISTORY_HISTORY)) {
+			context.execute("dlgHistory.show()");
+		} else if (this.part.equals(Constant.HISTORY_RECORD)) {
+			context.execute("dlgRecord.show()");
+		}
 	}
 }

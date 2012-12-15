@@ -1313,6 +1313,11 @@ public class ProcessBo implements Serializable {
 		}
 	}
 
+	public List<CrmHistoryPhysique> getListHistoryPhysique(BigDecimal idPatient) {
+		return dao.find("from CrmHistoryPhysique o where o.crmPatient.id = "
+				+ idPatient);
+	}
+
 	public CrmHistoryOrganometry getHistoryOrganometry(BigDecimal idPatient) {
 		List<CrmHistoryOrganometry> list = null;
 		list = dao.find("from CrmHistoryOrganometry o where o.crmPatient.id = "
@@ -1322,6 +1327,12 @@ public class ProcessBo implements Serializable {
 		} else {
 			return new CrmHistoryOrganometry();
 		}
+	}
+
+	public List<CrmHistoryOrganometry> getListHistoryOrganometry(
+			BigDecimal idPatient) {
+		return dao.find("from CrmHistoryOrganometry o where o.crmPatient.id = "
+				+ idPatient);
 	}
 
 	public Long getDocAutomatic(String country) {
