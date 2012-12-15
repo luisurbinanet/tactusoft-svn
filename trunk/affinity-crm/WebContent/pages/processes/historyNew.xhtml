@@ -70,6 +70,9 @@
 
 					<p:toolbar style="width:100%">
 						<p:toolbarGroup align="left">
+							<p:commandButton icon="ui-icon-bookmark"
+								value="#{msg['btn_view_history']}" update="form"
+								action="#{historyBackingNew.viewHistoryAction}" />
 							<p:commandButton icon="ui-icon-arrowreturnthick-1-w"
 								value="#{msg['btn_return']}" update="form">
 								<f:setPropertyActionListener value="false"
@@ -105,103 +108,116 @@
 
 					<h:panelGrid id="pnlHistory" columns="1" width="100%"
 						rendered="#{historyBackingNew.part eq 'HISTORY'}">
-						<p:dataTable id="tblHistory" var="rec"
-							value="#{historyBackingNew.historyHistoryModel}"
-							rowKey="#{rec.code}" style="width:100%" paginator="true"
-							rows="10" emptyMessage="#{msg['glb_no_records_found']}">
 
-							<f:facet name="header">
-								#{msg['his_history_history']}
-							</f:facet>
-
-							<p:column headerText="#{msg['app_date']}">
-								<h:outputLabel
-									value="#{rec.crmAppointment.startAppointmentDate}">
-									<f:convertDateTime pattern="dd/MM/yyyy" />
-								</h:outputLabel>
-							</p:column>
-
-							<p:column headerText="#{msg['his_history_reason']}">
-								<h:outputLabel value="#{rec.reason}" />
-							</p:column>
-
-							<p:column headerText="#{msg['his_history_disease']}">
-								<h:outputLabel value="#{rec.disease}" />
-							</p:column>
-
-							<p:column style="width:4%">
-								<p:commandButton icon="ui-icon-search"
-									title="#{msg['btn_view']}" update=":form"
-									action="#{historyBackingNew.editAppointmentAction}">
-
-								</p:commandButton>
-							</p:column>
-
-						</p:dataTable>
 					</h:panelGrid>
 
 					<h:panelGrid id="pnlRecord" columns="1" width="100%"
 						rendered="#{historyBackingNew.part eq 'RECORD'}">
-						<p:dataTable id="tblRecord" var="rec"
-							value="#{historyBackingNew.historyRecordModel}"
-							rowKey="#{rec.code}" style="width:100%" paginator="true"
-							rows="10" emptyMessage="#{msg['glb_no_records_found']}">
 
-							<f:facet name="header">
-								#{msg['his_history_record']}
-							</f:facet>
-
-							<p:column headerText="#{msg['app_date']}">
-								<h:outputLabel
-									value="#{rec.crmAppointment.startAppointmentDate}">
-									<f:convertDateTime pattern="dd/MM/yyyy" />
-								</h:outputLabel>
-							</p:column>
-
-							<p:column headerText="#{msg['his_rec_per_arthritis']}">
-								<h:outputLabel value="#{rec.arthritis?'SI':'NO'}" />
-							</p:column>
-
-							<p:column headerText="#{msg['his_rec_per_cancer']}">
-								<h:outputLabel value="#{rec.cancer?'SI':'NO'}" />
-							</p:column>
-
-							<p:column headerText="#{msg['his_rec_per_pulmonary']}">
-								<h:outputLabel value="#{rec.pulmonary?'SI':'NO'}" />
-							</p:column>
-
-							<p:column headerText="#{msg['his_rec_per_diabetes']}">
-								<h:outputLabel value="#{rec.diabetes?'SI':'NO'}" />
-							</p:column>
-
-							<p:column headerText="#{msg['his_rec_per_hypertension']}">
-								<h:outputLabel value="#{rec.hypertension?'SI':'NO'}" />
-							</p:column>
-
-							<p:column headerText="#{msg['his_rec_per_hospitalizations']}">
-								<h:outputLabel value="#{rec.hospitalizations?'SI':'NO'}" />
-							</p:column>
-
-							<p:column headerText="#{msg['his_rec_per_allergy']}">
-								<h:outputLabel value="#{rec.allergy?'SI':'NO'}" />
-							</p:column>
-
-							<p:column headerText="#{msg['his_rec_per_infections']}">
-								<h:outputLabel value="#{rec.infections?'SI':'NO'}" />
-							</p:column>
-
-							<p:column style="width:4%">
-								<p:commandButton icon="ui-icon-search"
-									title="#{msg['btn_view']}" update=":form"
-									action="#{historyBackingNew.editAppointmentAction}">
-
-								</p:commandButton>
-							</p:column>
-
-						</p:dataTable>
 					</h:panelGrid>
 
 				</h:panelGrid>
+
+				<p:dialog id="dialogHistory" widgetVar="dlgHistory" resizable="true"
+					draggable="true" width="700" height="400">
+
+					<p:dataTable id="tblHistory" var="rec"
+						value="#{historyBackingNew.historyHistoryModel}"
+						rowKey="#{rec.code}" style="width:100%" paginator="true" rows="10"
+						emptyMessage="#{msg['glb_no_records_found']}">
+
+						<f:facet name="header">
+								#{msg['his_history_history']}
+							</f:facet>
+
+						<p:column headerText="#{msg['app_date']}">
+							<h:outputLabel value="#{rec.crmAppointment.startAppointmentDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+						</p:column>
+
+						<p:column headerText="#{msg['his_history_reason']}">
+							<h:outputLabel value="#{rec.reason}" />
+						</p:column>
+
+						<p:column headerText="#{msg['his_history_disease']}">
+							<h:outputLabel value="#{rec.disease}" />
+						</p:column>
+
+						<p:column style="width:4%">
+							<p:commandButton icon="ui-icon-search" title="#{msg['btn_view']}"
+								update=":form"
+								action="#{historyBackingNew.editAppointmentAction}">
+
+							</p:commandButton>
+						</p:column>
+
+					</p:dataTable>
+
+				</p:dialog>
+
+				<p:dialog id="dialogRecord" widgetVar="dlgRecord" resizable="true"
+					draggable="true" width="700" height="400">
+
+					<p:dataTable id="tblRecord" var="rec"
+						value="#{historyBackingNew.historyRecordModel}"
+						rowKey="#{rec.code}" style="width:100%" paginator="true" rows="10"
+						emptyMessage="#{msg['glb_no_records_found']}">
+
+						<f:facet name="header">
+								#{msg['his_history_record']}
+							</f:facet>
+
+						<p:column headerText="#{msg['app_date']}">
+							<h:outputLabel value="#{rec.crmAppointment.startAppointmentDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+						</p:column>
+
+						<p:column headerText="#{msg['his_rec_per_arthritis']}">
+							<h:outputLabel value="#{rec.arthritis?'SI':'NO'}" />
+						</p:column>
+
+						<p:column headerText="#{msg['his_rec_per_cancer']}">
+							<h:outputLabel value="#{rec.cancer?'SI':'NO'}" />
+						</p:column>
+
+						<p:column headerText="#{msg['his_rec_per_pulmonary']}">
+							<h:outputLabel value="#{rec.pulmonary?'SI':'NO'}" />
+						</p:column>
+
+						<p:column headerText="#{msg['his_rec_per_diabetes']}">
+							<h:outputLabel value="#{rec.diabetes?'SI':'NO'}" />
+						</p:column>
+
+						<p:column headerText="#{msg['his_rec_per_hypertension']}">
+							<h:outputLabel value="#{rec.hypertension?'SI':'NO'}" />
+						</p:column>
+
+						<p:column headerText="#{msg['his_rec_per_hospitalizations']}">
+							<h:outputLabel value="#{rec.hospitalizations?'SI':'NO'}" />
+						</p:column>
+
+						<p:column headerText="#{msg['his_rec_per_allergy']}">
+							<h:outputLabel value="#{rec.allergy?'SI':'NO'}" />
+						</p:column>
+
+						<p:column headerText="#{msg['his_rec_per_infections']}">
+							<h:outputLabel value="#{rec.infections?'SI':'NO'}" />
+						</p:column>
+
+						<p:column style="width:4%">
+							<p:commandButton icon="ui-icon-search" title="#{msg['btn_view']}"
+								update=":form"
+								action="#{historyBackingNew.editAppointmentAction}">
+
+							</p:commandButton>
+						</p:column>
+
+					</p:dataTable>
+
+				</p:dialog>
+
 
 			</h:form>
 
