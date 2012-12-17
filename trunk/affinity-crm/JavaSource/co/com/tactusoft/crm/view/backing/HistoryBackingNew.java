@@ -147,6 +147,9 @@ public class HistoryBackingNew extends BaseBacking {
 		currentDoctor = processService.getCrmDoctor();
 		appointmentModel = null;
 		modeEdit = false;
+
+		listMaterialGroup = processService.getListMaterialGroup();
+		listCieMaterial = processService.getListCieMaterial();
 	}
 
 	public CrmDoctor getCurrentDoctor() {
@@ -617,6 +620,13 @@ public class HistoryBackingNew extends BaseBacking {
 	}
 
 	public String getTitleMedication() {
+		if (typeMedication.equals(Constant.MATERIAL_TYPE_MEDICINE)) {
+			titleMedication = FacesUtil.getMessage("his_history_medicaction");
+		} else if (typeMedication.equals(Constant.MATERIAL_TYPE_THERAPY)) {
+			titleMedication = FacesUtil.getMessage("his_history_therapy");
+		} else if (typeMedication.equals(Constant.MATERIAL_TYPE_EXAMS)) {
+			titleMedication = FacesUtil.getMessage("his_history_examinations");
+		}
 		return titleMedication;
 	}
 
@@ -823,6 +833,28 @@ public class HistoryBackingNew extends BaseBacking {
 				.getListHistoryOrganometry(selectedAppointment.getPatId());
 		historyOrganometryModel = new HistoryOrganometryDataModel(
 				listTempOrganometry);
+		
+		listDiagnosis = processService
+				.getListDiagnosisByAppointment(selectedAppointment.getId());
+		diagnosisModel = new DiagnosisDataModel(listDiagnosis);
+
+		listMedication = processService.getListMedicationByAppointment(
+				selectedAppointment.getId(), Constant.MATERIAL_TYPE_MEDICINE);
+		medicationModel = new MedicationDataModel(listMedication);
+
+		listTherapy = processService.getListMedicationByAppointment(
+				selectedAppointment.getId(), Constant.MATERIAL_TYPE_THERAPY);
+		therapyModel = new MedicationDataModel(listTherapy);
+
+		listExam = processService.getListMedicationByAppointment(
+				selectedAppointment.getId(), Constant.MATERIAL_TYPE_EXAMS);
+		examModel = new MedicationDataModel(listExam);
+
+		List<CrmNote> listNote = processService.getListNoteByAppointment(
+				selectedAppointment.getId(), Constant.NOTE_TYPE_DOCTOR);
+		if (listNote.size() > 0) {
+			this.noteDoctor = listNote.get(0).getNote();
+		}
 
 		currentAppointment = processService.getAppointment(selectedAppointment
 				.getId());
@@ -895,6 +927,8 @@ public class HistoryBackingNew extends BaseBacking {
 		Date bornDate = event.getDate();
 		age = calculateAge(bornDate);
 	}
+
+	private boolean noMessage = false;
 
 	public void saveAction(ActionEvent event) {
 		String field = null;
@@ -1383,8 +1417,11 @@ public class HistoryBackingNew extends BaseBacking {
 						.saveHistoryPhysique(selectedHistoryPhysique);
 				result = processService
 						.saveHistoryOrganometry(selectedHistoryOrganometry);
-				message = FacesUtil.getMessage("msg_record_ok");
-				FacesUtil.addInfo(message);
+
+				if (!noMessage) {
+					message = FacesUtil.getMessage("msg_record_ok");
+					FacesUtil.addInfo(message);
+				}
 			}
 		}
 	}
@@ -1734,18 +1771,21 @@ public class HistoryBackingNew extends BaseBacking {
 		String message = null;
 		boolean medicationTherapy = false;
 
+		noMessage = true;
+		saveAction(null);
+		noMessage = false;
+
 		if (this.getRolePrincipal().equals(Constant.ROLE_DOCTOR)) {
 			int minMedication = currentAppointment.getCrmProcedureDetail()
 					.getMinMedication();
 			int maxMedication = currentAppointment.getCrmProcedureDetail()
 					.getMaxMedication();
 
-			if ((minMedication > 0 || minMedication > 0)
-					&& listDiagnosis.size() < minMedication) {
+			if (minMedication > 0 && listDiagnosis.size() < minMedication) {
 				message = FacesUtil.getMessage("his_msg_message_dig_1",
 						String.valueOf(minMedication));
 				FacesUtil.addWarn(message);
-			} else if ((minMedication > 0 || minMedication > 0)
+			} else if (maxMedication > 0
 					&& listDiagnosis.size() > maxMedication) {
 				message = FacesUtil.getMessage("his_msg_message_dig_3",
 						String.valueOf(maxMedication));
@@ -1776,11 +1816,12 @@ public class HistoryBackingNew extends BaseBacking {
 				medicationTherapy = true;
 			}
 
-			/*if (FacesUtil.isEmptyOrBlank(noteDoctor)) {
-				String field = FacesUtil.getMessage("his_history_note");
-				message = FacesUtil.getMessage("glb_required", field);
-				FacesUtil.addWarn(message);
-			}*/
+			/*
+			 * if (FacesUtil.isEmptyOrBlank(noteDoctor)) { String field =
+			 * FacesUtil.getMessage("his_history_note"); message =
+			 * FacesUtil.getMessage("glb_required", field);
+			 * FacesUtil.addWarn(message); }
+			 */
 
 			if (message == null) {
 				processService.saveDiagnosis(currentAppointment, listDiagnosis);
@@ -1801,6 +1842,14 @@ public class HistoryBackingNew extends BaseBacking {
 				message = FacesUtil.getMessage("his_msg_message_med_ok");
 				FacesUtil.addInfo(message);
 				refreshLists();
+				
+				listAppointment = processService
+						.getListVwAppointmentByHistory(currentDoctor.getId());
+				appointmentModel = new VwAppointmentDataModel(listAppointment);
+				if (listAppointment.size() > 0) {
+					selectedAppointment = listAppointment.get(0);
+				}
+				
 			}
 		} else if (this.getRolePrincipal().equals(Constant.ROLE_NURSE)) {
 			if (FacesUtil.isEmptyOrBlank(noteDoctor)) {
@@ -1818,13 +1867,20 @@ public class HistoryBackingNew extends BaseBacking {
 				message = FacesUtil.getMessage("his_msg_message_med_ok");
 				FacesUtil.addInfo(message);
 				refreshLists();
+				
+				listAppointment = processService
+						.getListVwAppointmentByHistory(currentDoctor.getId());
+				appointmentModel = new VwAppointmentDataModel(listAppointment);
+				if (listAppointment.size() > 0) {
+					selectedAppointment = listAppointment.get(0);
+				}
 			}
 		}
 	}
 
 	public void printFormulaAction() {
 		try {
-			GenerateFormulaPDF.PDF(selectedAppointment.getId(),
+			GenerateFormulaPDF.PDF(currentAppointment.getId(),
 					Constant.MATERIAL_TYPE_MEDICINE);
 		} catch (JRException e) {
 			e.printStackTrace();
@@ -1837,7 +1893,7 @@ public class HistoryBackingNew extends BaseBacking {
 
 	public void printFormulaTherapyAction() {
 		try {
-			GenerateFormulaPDF.PDF(selectedAppointment.getId(),
+			GenerateFormulaPDF.PDF(currentAppointment.getId(),
 					Constant.MATERIAL_TYPE_THERAPY);
 		} catch (JRException e) {
 			e.printStackTrace();
