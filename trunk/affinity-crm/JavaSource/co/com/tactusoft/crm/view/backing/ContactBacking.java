@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
@@ -42,10 +41,6 @@ public class ContactBacking extends BaseBacking {
 	protected CrmPatient tmpSelectedPatient;
 
 	private List<String> selectedSendOptions;
-
-	private List<SelectItem> listOccupation;
-	private Map<BigDecimal, CrmOccupation> mapOccupation;
-	private BigDecimal idOccupation;
 
 	private boolean saved;
 
@@ -101,39 +96,7 @@ public class ContactBacking extends BaseBacking {
 		this.selectedSendOptions = selectedSendOptions;
 	}
 
-	public List<SelectItem> getListOccupation() {
-		if (listOccupation == null) {
-			listOccupation = new LinkedList<SelectItem>();
-			mapOccupation = new HashMap<BigDecimal, CrmOccupation>();
-			String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
-			listOccupation.add(new SelectItem(null, label));
-			for (CrmOccupation row : tablesService.getListOccupationActive()) {
-				mapOccupation.put(row.getId(), row);
-				listOccupation.add(new SelectItem(row.getId(), row.getName()));
-			}
-		}
-		return listOccupation;
-	}
-
-	public void setListOccupation(List<SelectItem> listOccupation) {
-		this.listOccupation = listOccupation;
-	}
-
-	public Map<BigDecimal, CrmOccupation> getMapOccupation() {
-		return mapOccupation;
-	}
-
-	public void setMapOccupation(Map<BigDecimal, CrmOccupation> mapOccupation) {
-		this.mapOccupation = mapOccupation;
-	}
-
-	public BigDecimal getIdOccupation() {
-		return idOccupation;
-	}
-
-	public void setIdOccupation(BigDecimal idOccupation) {
-		this.idOccupation = idOccupation;
-	}
+	
 
 	public boolean isSaved() {
 		return saved;

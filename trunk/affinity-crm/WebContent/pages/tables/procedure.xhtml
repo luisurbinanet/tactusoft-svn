@@ -128,7 +128,7 @@
 			<p:dialog header="#{msg['prc_detail']}"
 				widgetVar="dlgProcedureDetail" resizable="false"
 				id="dialogProcedureDetail" showEffect="fade" hideEffect="explode"
-				modal="true" width="1000">
+				modal="true" width="1050">
 
 				<p:toolbar style="width:100%">
 					<p:toolbarGroup align="left">
@@ -220,6 +220,24 @@
 						<p:inplace>
 							<pe:inputNumber value="#{rec.noRepeatDays}" symbol=" Días"
 								symbolPosition="s" decimalPlaces="0" style="width:70px" />
+						</p:inplace>
+					</p:column>
+
+					<p:column headerText="#{msg['prc_availability']}">
+						<p:selectBooleanCheckbox value="#{rec.availability}" />
+					</p:column>
+
+					<p:column style="width:80px" headerText="#{msg['prc_min_medicamento']}">
+						<p:inplace>
+							<pe:inputNumber value="#{rec.minMedication}" symbolPosition="s"
+								decimalPlaces="0" style="width:70px" />
+						</p:inplace>
+					</p:column>
+					
+					<p:column style="width:80px" headerText="#{msg['prc_max_medicamento']}">
+						<p:inplace>
+							<pe:inputNumber value="#{rec.maxMedication}" symbolPosition="s"
+								decimalPlaces="0" style="width:70px" />
 						</p:inplace>
 					</p:column>
 
