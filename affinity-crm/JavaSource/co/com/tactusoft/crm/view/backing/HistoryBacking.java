@@ -115,7 +115,6 @@ public class HistoryBacking extends BaseBacking {
 	private String titleMedication;
 	private int amount;
 	private String noteDoctor;
-	private boolean viewMode;
 	private List<CrmMaterialGroup> listMaterialGroup;
 	private List<CrmCieMaterial> listCieMaterial;
 
@@ -551,14 +550,6 @@ public class HistoryBacking extends BaseBacking {
 		this.noteDoctor = noteDoctor;
 	}
 
-	public boolean isViewMode() {
-		return viewMode;
-	}
-
-	public void setViewMode(boolean viewMode) {
-		this.viewMode = viewMode;
-	}
-
 	public List<CrmDiagnosis> getListDiagnosisView() {
 		return listDiagnosisView;
 	}
@@ -700,7 +691,7 @@ public class HistoryBacking extends BaseBacking {
 		therapyModel = new MedicationDataModel(listTherapy);
 		listExam = new ArrayList<CrmMedication>();
 		examModel = new MedicationDataModel(listExam);
-		viewMode = true;
+
 		typeMedication = Constant.MATERIAL_TYPE_MEDICINE;
 
 		listDiagnosisView = new ArrayList<CrmDiagnosis>();
@@ -1294,7 +1285,7 @@ public class HistoryBacking extends BaseBacking {
 					selectedHistoryPhysique.setObs(Constant.HISTORY_NOT_REFER);
 				}
 
-				if(this.getRolePrincipal().equals(Constant.ROLE_DOCTOR)){
+				if (this.getRolePrincipal().equals(Constant.ROLE_DOCTOR)) {
 					result = processService
 							.saveHistoryHistory(selectedHistoryHistory);
 					result = processService
@@ -1306,40 +1297,31 @@ public class HistoryBacking extends BaseBacking {
 						.saveHistoryPhysique(selectedHistoryPhysique);
 				result = processService
 						.saveHistoryOrganometry(selectedHistoryOrganometry);
-				message = FacesUtil
-						.getMessage("msg_record_ok");
+				message = FacesUtil.getMessage("msg_record_ok");
 				FacesUtil.addInfo(message);
-				/*if (result == 0) {
-					result = processService
-							.saveHistoryRecord(selectedHistoryRecord);
-					if (result == 0) {
-						result = processService
-								.saveHistoryHomeopathic(selectedHistoryHomeopathic);
-						if (result == 0) {
-							result = processService
-									.saveHistoryPhysique(selectedHistoryPhysique);
-							if (result == 0) {
-								result = processService
-										.saveHistoryOrganometry(selectedHistoryOrganometry);
-								if (result == 0) {
-									message = FacesUtil
-											.getMessage("msg_record_ok");
-									FacesUtil.addInfo(message);
-								} else {
-
-								}
-							} else {
-
-							}
-						} else {
-
-						}
-					} else {
-
-					}
-				} else {
-
-				}*/
+				/*
+				 * if (result == 0) { result = processService
+				 * .saveHistoryRecord(selectedHistoryRecord); if (result == 0) {
+				 * result = processService
+				 * .saveHistoryHomeopathic(selectedHistoryHomeopathic); if
+				 * (result == 0) { result = processService
+				 * .saveHistoryPhysique(selectedHistoryPhysique); if (result ==
+				 * 0) { result = processService
+				 * .saveHistoryOrganometry(selectedHistoryOrganometry); if
+				 * (result == 0) { message = FacesUtil
+				 * .getMessage("msg_record_ok"); FacesUtil.addInfo(message); }
+				 * else {
+				 * 
+				 * } } else {
+				 * 
+				 * } } else {
+				 * 
+				 * } } else {
+				 * 
+				 * } } else {
+				 * 
+				 * }
+				 */
 			}
 		}
 	}
@@ -1756,7 +1738,6 @@ public class HistoryBacking extends BaseBacking {
 				processService.saveNotes(selectedAppointment, noteDoctor,
 						Constant.NOTE_TYPE_DOCTOR);
 
-				viewMode = true;
 				selectedAppointment.setMedicationTherapy(medicationTherapy);
 				selectedAppointment.setCloseAppointment(true);
 				selectedAppointment.setState(Constant.APP_STATE_ATTENDED);
@@ -1774,7 +1755,6 @@ public class HistoryBacking extends BaseBacking {
 				processService.saveNotes(selectedAppointment, noteDoctor,
 						Constant.NOTE_TYPE_NURSE);
 
-				viewMode = true;
 				selectedAppointment.setCloseAppointment(true);
 				selectedAppointment.setState(Constant.APP_STATE_ATTENDED);
 				processService.saveAppointment(selectedAppointment);
@@ -1845,7 +1825,5 @@ public class HistoryBacking extends BaseBacking {
 		if (listNote.size() > 0) {
 			this.noteDoctor = listNote.get(0).getNote();
 		}
-
-		this.viewMode = false;
 	}
 }

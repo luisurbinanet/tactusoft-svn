@@ -68,15 +68,29 @@
 				<h:panelGrid id="tblPart" columns="1" width="100%"
 					rendered="#{historyBackingNew.modeEdit}">
 
-					<p:toolbar style="width:100%">
+					<p:toolbar id="toolBar" style="width:100%">
 						<p:toolbarGroup align="left">
 							<p:commandButton icon="ui-icon-disk" value="#{msg['btn_save']}"
-								update="form" actionListener="#{historyBackingNew.saveAction}" />
+								update="form" actionListener="#{historyBackingNew.saveAction}"
+								disabled="#{historyBackingNew.currentAppointment.closeAppointment}" />
 							<p:commandButton value="#{msg['btn_close_appointment']}"
-								icon="ui-icon-folder-collapsed" onclick="confirmation.show()" />
+								icon="ui-icon-locked" onclick="confirmation.show()"
+								disabled="#{historyBackingNew.currentAppointment.closeAppointment}" />
 							<p:commandButton icon="ui-icon-bookmark"
 								value="#{msg['btn_view_history']}" update="form"
 								oncomplete="dlgHistorial.show()" />
+							<p:commandButton
+								disabled="#{not historyBackingNew.currentAppointment.closeAppointment}"
+								icon="ui-icon-print"
+								rendered="#{historyBackingNew.rolePrincipal eq 'DOCTOR'}"
+								value="#{msg['btn_print_medication']}" ajax="false"
+								action="#{historyBackingNew.printFormulaAction}" />
+							<p:commandButton
+								disabled="#{not historyBackingNew.currentAppointment.closeAppointment}"
+								icon="ui-icon-print"
+								rendered="#{historyBackingNew.rolePrincipal eq 'DOCTOR' and historyBackingNew.currentAppointment.medicationTherapy}"
+								value="#{msg['btn_print_therapy']}" ajax="false"
+								action="#{historyBackingNew.printFormulaTherapyAction}" />
 							<p:commandButton icon="ui-icon-arrowreturnthick-1-w"
 								value="#{msg['btn_return']}" update="form">
 								<f:setPropertyActionListener value="false"
@@ -1000,7 +1014,7 @@
 							<p:spacer />
 
 							<p:fieldset legend="#{msg['his_history_note']}">
-								<p:inputTextarea rows="5" style="width:950px;"
+								<p:inputTextarea rows="5" style="width:1000px;"
 									value="#{historyBackingNew.noteDoctor}" />
 							</p:fieldset>
 
@@ -1458,7 +1472,7 @@
 
 					<p:commandButton id="confirm" value="#{msg['btn_ok']}"
 						oncomplete="confirmation.hide()"
-						update=":form:accordion :form:growl"
+						update=":form:accordion :form:growl :form:toolBar"
 						actionListener="#{historyBackingNew.closeAppointmentAction}" />
 					<p:commandButton id="decline" value="#{msg['btn_cancel']}"
 						onclick="confirmation.hide()" type="button" />
