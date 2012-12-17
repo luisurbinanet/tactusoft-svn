@@ -18,9 +18,6 @@ import org.primefaces.event.DateSelectEvent;
 import org.primefaces.event.TabChangeEvent;
 import org.springframework.context.annotation.Scope;
 
-import com.tactusoft.webservice.client.beans.WSBean;
-import com.tactusoft.webservice.client.execute.CustomListsExecute;
-
 import co.com.tactusoft.crm.controller.bo.GenerateFormulaPDF;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmCie;
@@ -36,6 +33,7 @@ import co.com.tactusoft.crm.model.entities.CrmMaterialGroup;
 import co.com.tactusoft.crm.model.entities.CrmMedication;
 import co.com.tactusoft.crm.model.entities.CrmNote;
 import co.com.tactusoft.crm.model.entities.CrmOccupation;
+import co.com.tactusoft.crm.model.entities.CrmOtherMedication;
 import co.com.tactusoft.crm.model.entities.VwAppointment;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
@@ -48,8 +46,12 @@ import co.com.tactusoft.crm.view.datamodel.HistoryOrganometryDataModel;
 import co.com.tactusoft.crm.view.datamodel.HistoryPhysiqueDataModel;
 import co.com.tactusoft.crm.view.datamodel.HistoryRecordDataModel;
 import co.com.tactusoft.crm.view.datamodel.MedicationDataModel;
+import co.com.tactusoft.crm.view.datamodel.OtherMedicationDataModel;
 import co.com.tactusoft.crm.view.datamodel.VwAppointmentDataModel;
 import co.com.tactusoft.crm.view.datamodel.WSBeanDataModel;
+
+import com.tactusoft.webservice.client.beans.WSBean;
+import com.tactusoft.webservice.client.execute.CustomListsExecute;
 
 @Named
 @Scope("session")
@@ -115,6 +117,11 @@ public class HistoryBackingNew extends BaseBacking {
 	private List<CrmMedication> listMedication;
 	private MedicationDataModel medicationModel;
 	private CrmMedication[] selectedMedication;
+
+	private List<CrmOtherMedication> listOtherMedication;
+	private OtherMedicationDataModel otherMedicationModel;
+	private CrmOtherMedication[] selectedOtherMedication;
+	private int sequenceOtherMedication;
 
 	private List<CrmMedication> listExam;
 	private MedicationDataModel examModel;
@@ -563,6 +570,33 @@ public class HistoryBackingNew extends BaseBacking {
 		this.selectedMedication = selectedMedication;
 	}
 
+	public List<CrmOtherMedication> getListOtherMedication() {
+		return listOtherMedication;
+	}
+
+	public void setListOtherMedication(
+			List<CrmOtherMedication> listOtherMedication) {
+		this.listOtherMedication = listOtherMedication;
+	}
+
+	public OtherMedicationDataModel getOtherMedicationModel() {
+		return otherMedicationModel;
+	}
+
+	public void setOtherMedicationModel(
+			OtherMedicationDataModel otherMedicationModel) {
+		this.otherMedicationModel = otherMedicationModel;
+	}
+
+	public CrmOtherMedication[] getSelectedOtherMedication() {
+		return selectedOtherMedication;
+	}
+
+	public void setSelectedOtherMedication(
+			CrmOtherMedication[] selectedOtherMedication) {
+		this.selectedOtherMedication = selectedOtherMedication;
+	}
+
 	public List<CrmMedication> getListExam() {
 		return listExam;
 	}
@@ -833,7 +867,7 @@ public class HistoryBackingNew extends BaseBacking {
 				.getListHistoryOrganometry(selectedAppointment.getPatId());
 		historyOrganometryModel = new HistoryOrganometryDataModel(
 				listTempOrganometry);
-		
+
 		listDiagnosis = processService
 				.getListDiagnosisByAppointment(selectedAppointment.getId());
 		diagnosisModel = new DiagnosisDataModel(listDiagnosis);
@@ -841,6 +875,12 @@ public class HistoryBackingNew extends BaseBacking {
 		listMedication = processService.getListMedicationByAppointment(
 				selectedAppointment.getId(), Constant.MATERIAL_TYPE_MEDICINE);
 		medicationModel = new MedicationDataModel(listMedication);
+
+		listOtherMedication = processService
+				.getListOtherMedicationByAppointment(selectedAppointment
+						.getId());
+		otherMedicationModel = new OtherMedicationDataModel(listOtherMedication);
+		sequenceOtherMedication = listOtherMedication.size() + 1;
 
 		listTherapy = processService.getListMedicationByAppointment(
 				selectedAppointment.getId(), Constant.MATERIAL_TYPE_THERAPY);
@@ -929,14 +969,16 @@ public class HistoryBackingNew extends BaseBacking {
 	}
 
 	private boolean noMessage = false;
+	private boolean validateSave = false;
 
 	public void saveAction(ActionEvent event) {
 		String field = null;
 		String message = null;
+		validateSave = false;
 
 		if (selectedPatient == null || selectedPatient.getId() == null) {
 			message = FacesUtil.getMessage("his_msg_error_1");
-			FacesUtil.addError(message);
+			FacesUtil.addWarn(message);
 		}
 
 		if (selectedPatient.getBornDate() == null) {
@@ -944,7 +986,7 @@ public class HistoryBackingNew extends BaseBacking {
 			message = FacesUtil.getMessage("title_patient_complementary");
 			message = message + " - "
 					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addError(message);
+			FacesUtil.addWarn(message);
 		}
 
 		if (idOccupation == null || idOccupation.intValue() == 0) {
@@ -952,7 +994,7 @@ public class HistoryBackingNew extends BaseBacking {
 			message = FacesUtil.getMessage("title_patient_complementary");
 			message = message + " - "
 					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addError(message);
+			FacesUtil.addWarn(message);
 		} else {
 			selectedPatient.setCrmOccupation(mapOccupation.get(idOccupation));
 		}
@@ -962,7 +1004,7 @@ public class HistoryBackingNew extends BaseBacking {
 			message = FacesUtil.getMessage("title_patient_complementary");
 			message = message + " - "
 					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addError(message);
+			FacesUtil.addWarn(message);
 		} else {
 			selectedPatient.setNeighborhood(neighborhood);
 		}
@@ -972,7 +1014,7 @@ public class HistoryBackingNew extends BaseBacking {
 			message = FacesUtil.getMessage("title_patient_complementary");
 			message = message + " - "
 					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addError(message);
+			FacesUtil.addWarn(message);
 		} else {
 			selectedPatient.setTypeHousing(typeHousing);
 		}
@@ -984,7 +1026,7 @@ public class HistoryBackingNew extends BaseBacking {
 				message = FacesUtil.getMessage("his_history_history");
 				message = message + " - "
 						+ FacesUtil.getMessage("glb_required", field);
-				FacesUtil.addError(message);
+				FacesUtil.addWarn(message);
 			}
 
 			if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getDisease())) {
@@ -992,7 +1034,7 @@ public class HistoryBackingNew extends BaseBacking {
 				message = FacesUtil.getMessage("his_history_history");
 				message = message + " - "
 						+ FacesUtil.getMessage("glb_required", field);
-				FacesUtil.addError(message);
+				FacesUtil.addWarn(message);
 			}
 
 			if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getResults())) {
@@ -1000,7 +1042,7 @@ public class HistoryBackingNew extends BaseBacking {
 				message = FacesUtil.getMessage("his_history_history");
 				message = message + " - "
 						+ FacesUtil.getMessage("glb_required", field);
-				FacesUtil.addError(message);
+				FacesUtil.addWarn(message);
 			}
 
 			if (selectedHistoryRecord.getArthritis()
@@ -1012,7 +1054,7 @@ public class HistoryBackingNew extends BaseBacking {
 				message = FacesUtil.getMessage("his_history_record");
 				message = message + " - "
 						+ FacesUtil.getMessage("glb_required", field);
-				FacesUtil.addError(message);
+				FacesUtil.addWarn(message);
 			}
 
 			if (selectedHistoryRecord.getCancer()
@@ -1024,7 +1066,7 @@ public class HistoryBackingNew extends BaseBacking {
 				message = FacesUtil.getMessage("his_history_record");
 				message = message + " - "
 						+ FacesUtil.getMessage("glb_required", field);
-				FacesUtil.addError(message);
+				FacesUtil.addWarn(message);
 			}
 
 			if (selectedHistoryRecord.getPulmonary()
@@ -1036,7 +1078,7 @@ public class HistoryBackingNew extends BaseBacking {
 				message = FacesUtil.getMessage("his_history_record");
 				message = message + " - "
 						+ FacesUtil.getMessage("glb_required", field);
-				FacesUtil.addError(message);
+				FacesUtil.addWarn(message);
 			}
 
 			if (selectedHistoryRecord.getDiabetes()
@@ -1048,7 +1090,7 @@ public class HistoryBackingNew extends BaseBacking {
 				message = FacesUtil.getMessage("his_history_record");
 				message = message + " - "
 						+ FacesUtil.getMessage("glb_required", field);
-				FacesUtil.addError(message);
+				FacesUtil.addWarn(message);
 			}
 
 			if (selectedHistoryRecord.getHypertension()
@@ -1060,7 +1102,7 @@ public class HistoryBackingNew extends BaseBacking {
 				message = FacesUtil.getMessage("his_history_record");
 				message = message + " - "
 						+ FacesUtil.getMessage("glb_required", field);
-				FacesUtil.addError(message);
+				FacesUtil.addWarn(message);
 			}
 
 			if (selectedHistoryRecord.getHospitalizations()
@@ -1072,7 +1114,7 @@ public class HistoryBackingNew extends BaseBacking {
 				message = FacesUtil.getMessage("his_history_record");
 				message = message + " - "
 						+ FacesUtil.getMessage("glb_required", field);
-				FacesUtil.addError(message);
+				FacesUtil.addWarn(message);
 			}
 
 			if (selectedHistoryRecord.getAllergy()
@@ -1084,7 +1126,7 @@ public class HistoryBackingNew extends BaseBacking {
 				message = FacesUtil.getMessage("his_history_record");
 				message = message + " - "
 						+ FacesUtil.getMessage("glb_required", field);
-				FacesUtil.addError(message);
+				FacesUtil.addWarn(message);
 			}
 
 			if (selectedHistoryRecord.getInfections()
@@ -1096,7 +1138,7 @@ public class HistoryBackingNew extends BaseBacking {
 				message = FacesUtil.getMessage("his_history_record");
 				message = message + " - "
 						+ FacesUtil.getMessage("glb_required", field);
-				FacesUtil.addError(message);
+				FacesUtil.addWarn(message);
 			}
 		}
 
@@ -1105,7 +1147,7 @@ public class HistoryBackingNew extends BaseBacking {
 			message = FacesUtil.getMessage("his_history_physique", field);
 			message = message + " - "
 					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addError(message);
+			FacesUtil.addWarn(message);
 		}
 
 		if (selectedHistoryPhysique.getRespiratoryRate() == 0) {
@@ -1113,7 +1155,7 @@ public class HistoryBackingNew extends BaseBacking {
 			message = FacesUtil.getMessage("his_history_physique", field);
 			message = message + " - "
 					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addError(message);
+			FacesUtil.addWarn(message);
 		}
 
 		if (selectedHistoryPhysique.getHeight().intValue() == 0) {
@@ -1121,7 +1163,7 @@ public class HistoryBackingNew extends BaseBacking {
 			message = FacesUtil.getMessage("his_history_physique", field);
 			message = message + " - "
 					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addError(message);
+			FacesUtil.addWarn(message);
 		}
 
 		if (selectedHistoryPhysique.getWeight().intValue() == 0) {
@@ -1129,7 +1171,7 @@ public class HistoryBackingNew extends BaseBacking {
 			message = FacesUtil.getMessage("his_history_physique", field);
 			message = message + " - "
 					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addError(message);
+			FacesUtil.addWarn(message);
 		}
 
 		if (FacesUtil
@@ -1138,7 +1180,7 @@ public class HistoryBackingNew extends BaseBacking {
 			message = FacesUtil.getMessage("his_history_physique", field);
 			message = message + " - "
 					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addError(message);
+			FacesUtil.addWarn(message);
 		}
 
 		if (selectedHistoryOrganometry.getOrganometryCheck()) {
@@ -1148,12 +1190,13 @@ public class HistoryBackingNew extends BaseBacking {
 				message = FacesUtil.getMessage("his_organometry", field);
 				message = message + " - "
 						+ FacesUtil.getMessage("glb_required", field);
-				FacesUtil.addError(message);
+				FacesUtil.addWarn(message);
 			}
 		}
 
 		if (message == null) {
 
+			validateSave = true;
 			selectedHistoryHistory.setCrmPatient(selectedPatient);
 			selectedHistoryRecord.setCrmPatient(selectedPatient);
 			selectedHistoryHomeopathic.setCrmPatient(selectedPatient);
@@ -1776,19 +1819,9 @@ public class HistoryBackingNew extends BaseBacking {
 		noMessage = false;
 
 		if (this.getRolePrincipal().equals(Constant.ROLE_DOCTOR)) {
-			int minMedication = currentAppointment.getCrmProcedureDetail()
-					.getMinMedication();
-			int maxMedication = currentAppointment.getCrmProcedureDetail()
-					.getMaxMedication();
 
-			if (minMedication > 0 && listDiagnosis.size() < minMedication) {
-				message = FacesUtil.getMessage("his_msg_message_dig_1",
-						String.valueOf(minMedication));
-				FacesUtil.addWarn(message);
-			} else if (maxMedication > 0
-					&& listDiagnosis.size() > maxMedication) {
-				message = FacesUtil.getMessage("his_msg_message_dig_3",
-						String.valueOf(maxMedication));
+			if (listDiagnosis.size() == 0) {
+				message = FacesUtil.getMessage("his_msg_message_dig_1");
 				FacesUtil.addWarn(message);
 			} else {
 				for (CrmDiagnosis row : listDiagnosis) {
@@ -1798,11 +1831,47 @@ public class HistoryBackingNew extends BaseBacking {
 						break;
 					}
 				}
+
+				if (listMedication.size() == 0) {
+					message = FacesUtil.getMessage("his_msg_message_med_5");
+					FacesUtil.addWarn(message);
+				} else {
+					int idCie = listDiagnosis.get(0).getCrmCie().getId()
+							.intValue();
+					int numMedication = 0;
+					for (CrmMedication row : listMedication) {
+						if (row.getCrmCie().getId().intValue() == idCie) {
+							numMedication++;
+						}
+					}
+
+					int minMedication = currentAppointment
+							.getCrmProcedureDetail().getMinMedication();
+					int maxMedication = currentAppointment
+							.getCrmProcedureDetail().getMaxMedication();
+					if (minMedication > 0 && numMedication < minMedication) {
+						message = FacesUtil.getMessage("his_msg_message_med_1",
+								String.valueOf(minMedication));
+						FacesUtil.addWarn(message);
+					} else if (maxMedication > 0
+							&& numMedication > maxMedication) {
+						message = FacesUtil.getMessage("his_msg_message_med_3",
+								String.valueOf(maxMedication));
+						FacesUtil.addWarn(message);
+					}
+				}
 			}
 
-			if (listMedication.size() == 0) {
-				message = FacesUtil.getMessage("his_msg_message_med_1");
-				FacesUtil.addWarn(message);
+			if (listOtherMedication.size() > 0) {
+				for (CrmOtherMedication row : listOtherMedication) {
+					if (FacesUtil.isEmptyOrBlank(row.getDiagnosis())
+							|| FacesUtil.isEmptyOrBlank(row.getMedication())
+							|| FacesUtil.isEmptyOrBlank(row.getPosology())) {
+						message = FacesUtil.getMessage("his_msg_message_med_4");
+						FacesUtil.addWarn(message);
+						break;
+					}
+				}
 			}
 
 			if (listTherapy.size() > 0) {
@@ -1823,10 +1892,12 @@ public class HistoryBackingNew extends BaseBacking {
 			 * FacesUtil.addWarn(message); }
 			 */
 
-			if (message == null) {
+			if (message == null && validateSave) {
 				processService.saveDiagnosis(currentAppointment, listDiagnosis);
 				processService.saveMedication(currentAppointment,
 						listMedication, Constant.MATERIAL_TYPE_MEDICINE);
+				processService.saveOtherMedication(currentAppointment,
+						listOtherMedication);
 				processService.saveMedication(currentAppointment, listTherapy,
 						Constant.MATERIAL_TYPE_THERAPY);
 				processService.saveMedication(currentAppointment, listExam,
@@ -1842,14 +1913,14 @@ public class HistoryBackingNew extends BaseBacking {
 				message = FacesUtil.getMessage("his_msg_message_med_ok");
 				FacesUtil.addInfo(message);
 				refreshLists();
-				
+
 				listAppointment = processService
 						.getListVwAppointmentByHistory(currentDoctor.getId());
 				appointmentModel = new VwAppointmentDataModel(listAppointment);
 				if (listAppointment.size() > 0) {
 					selectedAppointment = listAppointment.get(0);
 				}
-				
+
 			}
 		} else if (this.getRolePrincipal().equals(Constant.ROLE_NURSE)) {
 			if (FacesUtil.isEmptyOrBlank(noteDoctor)) {
@@ -1867,7 +1938,7 @@ public class HistoryBackingNew extends BaseBacking {
 				message = FacesUtil.getMessage("his_msg_message_med_ok");
 				FacesUtil.addInfo(message);
 				refreshLists();
-				
+
 				listAppointment = processService
 						.getListVwAppointmentByHistory(currentDoctor.getId());
 				appointmentModel = new VwAppointmentDataModel(listAppointment);
@@ -1914,6 +1985,37 @@ public class HistoryBackingNew extends BaseBacking {
 
 	public boolean isDisabledExam() {
 		return listExam.size() == 0 ? true : false;
+	}
+
+	public boolean isDisabledOtherMedication() {
+		return listOtherMedication.size() == 0 ? true : false;
+	}
+
+	public void addOtherMedicationAction(ActionEvent event) {
+		CrmOtherMedication object = new CrmOtherMedication();
+		object.setCrmAppointment(currentAppointment);
+		object.setSequence(sequenceOtherMedication);
+		listOtherMedication.add(object);
+		otherMedicationModel = new OtherMedicationDataModel(listOtherMedication);
+		sequenceOtherMedication++;
+	}
+
+	public void removeOtherMedicationAction(ActionEvent event) {
+		for (CrmOtherMedication row : selectedOtherMedication) {
+			listOtherMedication.remove(row);
+
+			List<CrmOtherMedication> listDelete = new ArrayList<CrmOtherMedication>();
+			for (CrmOtherMedication med : listOtherMedication) {
+				if (med.getSequence() == row.getSequence()) {
+					listDelete.add(med);
+				}
+			}
+
+			for (CrmOtherMedication med : listDelete) {
+				listOtherMedication.remove(med);
+			}
+		}
+		otherMedicationModel = new OtherMedicationDataModel(listOtherMedication);
 	}
 
 }
