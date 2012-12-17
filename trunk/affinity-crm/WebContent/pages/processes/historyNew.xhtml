@@ -921,6 +921,45 @@
 
 							<p:spacer />
 
+							<p:fieldset legend="#{msg['his_history_other_medicaction']}">
+								<p:dataTable id="dtbOtherMedication" var="rec"
+									value="#{historyBackingNew.otherMedicationModel}"
+									selection="#{historyBackingNew.selectedOtherMedication}"
+									rowKey="#{rec.id}" paginator="true" rows="15"
+									style="width:100%"
+									emptyMessage="#{msg['glb_no_records_found']}">
+
+									<p:column selectionMode="multiple" style="width:18px" />
+
+									<p:column headerText="#{msg['cie_grp_diagnosis']}">
+										<p:inputTextarea value="#{rec.diagnosis}" rows="5"
+											style="width:300px" />
+									</p:column>
+
+									<p:column headerText="#{msg['cie_grp_medication']}">
+										<p:inputTextarea value="#{rec.medication}" rows="5"
+											style="width:300px" />
+									</p:column>
+
+									<p:column headerText="#{msg['cie_grp_posology']}">
+										<p:inputTextarea value="#{rec.posology}" rows="5"
+											style="width:300px" />
+									</p:column>
+
+									<f:facet name="footer">
+										<p:commandButton value="#{msg['btn_select_diagnosis']}"
+											actionListener="#{historyBackingNew.addOtherMedicationAction}"
+											update="dtbOtherMedication" />
+										<p:commandButton value="#{msg['btn_delete']}"
+											disabled="#{historyBackingNew.disabledOtherMedication}"
+											icon="ui-icon-closethick" update="dtbOtherMedication"
+											actionListener="#{historyBackingNew.removeOtherMedicationAction}" />
+									</f:facet>
+								</p:dataTable>
+							</p:fieldset>
+
+							<p:spacer />
+
 							<p:fieldset legend="#{msg['his_history_therapy']}">
 
 								<p:dataTable id="dtbTherapy" var="rec"
