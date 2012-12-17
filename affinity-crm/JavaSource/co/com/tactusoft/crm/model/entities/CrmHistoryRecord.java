@@ -52,6 +52,11 @@ public class CrmHistoryRecord implements java.io.Serializable {
 	private String occupational;
 	private String toxic;
 	private String bloodType;
+	private String surgical;
+	private String pharmacological;
+	private String immunizations;
+	private String transfusion;
+	private String other;
 	private String pregnancy;
 	private String parity;
 	private String abortions;
@@ -98,12 +103,14 @@ public class CrmHistoryRecord implements java.io.Serializable {
 			String allergyTime, String allergyMedication, Boolean infections,
 			String infectionsTime, String infectionsMedication,
 			String arthritisMedication, String occupational, String toxic,
-			String bloodType, String pregnancy, String parity,
-			String abortions, String familyHistory, String stillbirths,
-			String caesarean, String menarche, String sexarca, Date fur,
-			String bleeding, Date fuc, Date fuep, String psa, Date psaDate,
-			String neonatal, String perinatal, String vaccination,
-			String growth, String hypertensionParent, String epocParent,
+			String bloodType, String surgical, String pharmacological,
+			String immunizations, String transfusion, String other,
+			String pregnancy, String parity, String abortions,
+			String familyHistory, String stillbirths, String caesarean,
+			String menarche, String sexarca, Date fur, String bleeding,
+			Date fuc, Date fuep, String psa, Date psaDate, String neonatal,
+			String perinatal, String vaccination, String growth,
+			String hypertensionParent, String epocParent,
 			String heartDiseaseParent, String asthmaParent, String acvParent,
 			String cancerParent, String diabetesParent) {
 		this.id = id;
@@ -136,6 +143,11 @@ public class CrmHistoryRecord implements java.io.Serializable {
 		this.occupational = occupational;
 		this.toxic = toxic;
 		this.bloodType = bloodType;
+		this.surgical = surgical;
+		this.pharmacological = pharmacological;
+		this.immunizations = immunizations;
+		this.transfusion = transfusion;
+		this.other = other;
 		this.pregnancy = pregnancy;
 		this.parity = parity;
 		this.abortions = abortions;
@@ -434,6 +446,51 @@ public class CrmHistoryRecord implements java.io.Serializable {
 
 	public void setBloodType(String bloodType) {
 		this.bloodType = bloodType;
+	}
+
+	@Column(name = "surgical", length = 65535)
+	public String getSurgical() {
+		return surgical;
+	}
+
+	public void setSurgical(String surgical) {
+		this.surgical = surgical;
+	}
+
+	@Column(name = "pharmacological", length = 65535)
+	public String getPharmacological() {
+		return pharmacological;
+	}
+
+	public void setPharmacological(String pharmacological) {
+		this.pharmacological = pharmacological;
+	}
+
+	@Column(name = "immunizations", length = 65535)
+	public String getImmunizations() {
+		return immunizations;
+	}
+
+	public void setImmunizations(String immunizations) {
+		this.immunizations = immunizations;
+	}
+
+	@Column(name = "transfusion", length = 65535)
+	public String getTransfusion() {
+		return transfusion;
+	}
+
+	public void setTransfusion(String transfusion) {
+		this.transfusion = transfusion;
+	}
+
+	@Column(name = "other", length = 65535)
+	public String getOther() {
+		return other;
+	}
+
+	public void setOther(String other) {
+		this.other = other;
 	}
 
 	@Column(name = "pregnancy", length = 45)

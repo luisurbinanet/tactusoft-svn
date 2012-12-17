@@ -71,5 +71,8 @@ public class Constant {
 	
 	public static String HISTORY_HISTORY = "HISTORY";
 	public static String HISTORY_RECORD = "RECORD";
+	public static String HISTORY_HOMEOPATHIC = "HOMEOPATHIC";
+	public static String HISTORY_PHYSIQUE = "PHYSIQUE";
+	public static String HISTORY_ORGANOMETRY = "ORGANOMETRY";
 
 }

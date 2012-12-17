@@ -3,6 +3,8 @@ package co.com.tactusoft.crm.view.backing;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -22,6 +24,7 @@ import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmCity;
 import co.com.tactusoft.crm.model.entities.CrmCountry;
 import co.com.tactusoft.crm.model.entities.CrmDomain;
+import co.com.tactusoft.crm.model.entities.CrmOccupation;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
 import co.com.tactusoft.crm.model.entities.CrmRegion;
@@ -108,6 +111,10 @@ public class BaseBacking implements Serializable {
 	protected List<SelectItem> listKin;
 	protected BigDecimal idKin;
 	protected Map<BigDecimal, CrmCountry> mapKin;
+	
+	protected List<SelectItem> listOccupation;
+	protected Map<BigDecimal, CrmOccupation> mapOccupation;
+	protected BigDecimal idOccupation;
 
 	public List<CrmPatient> getListPatient() {
 		return listPatient;
@@ -714,6 +721,40 @@ public class BaseBacking implements Serializable {
 	public String getRolePrincipal() {
 		return FacesUtil.getCurrentUserData().getRolePrincipal();
 	}
+	
+	public List<SelectItem> getListOccupation() {
+		if (listOccupation == null) {
+			listOccupation = new LinkedList<SelectItem>();
+			mapOccupation = new HashMap<BigDecimal, CrmOccupation>();
+			String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
+			listOccupation.add(new SelectItem(null, label));
+			for (CrmOccupation row : tablesService.getListOccupationActive()) {
+				mapOccupation.put(row.getId(), row);
+				listOccupation.add(new SelectItem(row.getId(), row.getName()));
+			}
+		}
+		return listOccupation;
+	}
+
+	public void setListOccupation(List<SelectItem> listOccupation) {
+		this.listOccupation = listOccupation;
+	}
+
+	public Map<BigDecimal, CrmOccupation> getMapOccupation() {
+		return mapOccupation;
+	}
+
+	public void setMapOccupation(Map<BigDecimal, CrmOccupation> mapOccupation) {
+		this.mapOccupation = mapOccupation;
+	}
+
+	public BigDecimal getIdOccupation() {
+		return idOccupation;
+	}
+
+	public void setIdOccupation(BigDecimal idOccupation) {
+		this.idOccupation = idOccupation;
+	}
 
 	public void newPatientAction(ActionEvent event) {
 		optionSearchPatient = 1;
@@ -773,6 +814,28 @@ public class BaseBacking implements Serializable {
 		} else {
 			idCity = null;
 		}
+	}
+	
+	protected int calculateAge(Date bornDate) {
+		int age = 0;
+		if (bornDate != null) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(bornDate);
+
+			Calendar currentDate = Calendar.getInstance();
+			currentDate.setTime(new Date());
+
+			age = currentDate.get(Calendar.YEAR) - calendar.get(Calendar.YEAR);
+
+			if ((calendar.get(Calendar.MONTH) > currentDate.get(Calendar.MONTH))
+					|| (calendar.get(Calendar.MONTH) == currentDate
+							.get(Calendar.MONTH) && calendar
+							.get(Calendar.DAY_OF_MONTH) > currentDate
+							.get(Calendar.DAY_OF_MONTH))) {
+				age--;
+			}
+		}
+		return age;
 	}
 
 }

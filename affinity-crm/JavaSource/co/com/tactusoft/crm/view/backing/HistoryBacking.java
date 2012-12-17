@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -1389,28 +1388,6 @@ public class HistoryBacking extends BaseBacking {
 	public void handleBornDateSelect(DateSelectEvent event) {
 		Date bornDate = event.getDate();
 		age = calculateAge(bornDate);
-	}
-
-	private int calculateAge(Date bornDate) {
-		int age = 0;
-		if (bornDate != null) {
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(bornDate);
-
-			Calendar currentDate = Calendar.getInstance();
-			currentDate.setTime(new Date());
-
-			age = currentDate.get(Calendar.YEAR) - calendar.get(Calendar.YEAR);
-
-			if ((calendar.get(Calendar.MONTH) > currentDate.get(Calendar.MONTH))
-					|| (calendar.get(Calendar.MONTH) == currentDate
-							.get(Calendar.MONTH) && calendar
-							.get(Calendar.DAY_OF_MONTH) > currentDate
-							.get(Calendar.DAY_OF_MONTH))) {
-				age--;
-			}
-		}
-		return age;
 	}
 
 	public void searchCIEAction(ActionEvent event) {

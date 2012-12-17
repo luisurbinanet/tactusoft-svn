@@ -19,7 +19,7 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name = "crm_procedure_detail", catalog = "crm_db", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
 public class CrmProcedureDetail implements java.io.Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
 	private CrmProcedure crmProcedure;
@@ -29,6 +29,9 @@ public class CrmProcedureDetail implements java.io.Serializable {
 	private Integer timeStretchers;
 	private Boolean noRepeat;
 	private Short noRepeatDays;
+	private Boolean availability;
+	private int minMedication;
+	private int maxMedication;
 	private int state;
 	private Set<CrmAppointment> crmAppointments = new HashSet<CrmAppointment>(0);
 
@@ -131,6 +134,33 @@ public class CrmProcedureDetail implements java.io.Serializable {
 
 	public void setNoRepeatDays(Short noRepeatDays) {
 		this.noRepeatDays = noRepeatDays;
+	}
+
+	@Column(name = "availability")
+	public Boolean getAvailability() {
+		return availability;
+	}
+
+	public void setAvailability(Boolean availability) {
+		this.availability = availability;
+	}
+
+	@Column(name = "min_medication")
+	public int getMinMedication() {
+		return minMedication;
+	}
+
+	public void setMinMedication(int minMedication) {
+		this.minMedication = minMedication;
+	}
+
+	@Column(name = "max_medication")
+	public int getMaxMedication() {
+		return maxMedication;
+	}
+
+	public void setMaxMedication(int maxMedication) {
+		this.maxMedication = maxMedication;
 	}
 
 	@Column(name = "state", nullable = false)

@@ -158,6 +158,14 @@ public class ProcessBo implements Serializable {
 		return list;
 	}
 
+	public List<VwAppointment> getListByAppointmentByPatient(
+			BigDecimal idPatient) {
+		return dao
+				.find("from VwAppointment o where o.patId = "
+						+ idPatient
+						+ " and o.state in (3,4,5) order by o.startAppointmentDate DESC");
+	}
+
 	public List<CrmCie> getListCieByCode(String code) {
 		return dao.find("from CrmCie o where o.code like '%" + code
 				+ "%' order by o.description");
@@ -342,7 +350,7 @@ public class ProcessBo implements Serializable {
 						+ dateString
 						+ "T00:00:00.000+05:00' and '"
 						+ dateString
-						+ "T23:59:59.999+05:00') and o.state in (1,3,4,5) and o.crmBranch.id = "
+						+ "T23:59:59.999+05:00') and o.state in (1,3,4,5) and o.crmProcedureDetail.availability = TRUE and o.crmBranch.id = "
 						+ idBranch + " order by o.startAppointmentDate");
 
 		// Validar Festivo
@@ -556,7 +564,7 @@ public class ProcessBo implements Serializable {
 									+ dateString
 									+ "T23:59:59.999+05:00') and o.state in (1,3,4,5) and o.crmBranch.id = "
 									+ idBranch
-									+ " order by o.startAppointmentDate");
+									+ " and o.crmProcedureDetail.availability = TRUE order by o.startAppointmentDate");
 
 					boolean end = false;
 					Date scheduleInitHour = minHour;
@@ -685,7 +693,7 @@ public class ProcessBo implements Serializable {
 							+ endDate
 							+ "T23:59:59.999+05:00') and o.crmDoctor.id = "
 							+ doctor.getId()
-							+ " and o.state in (1,3,4,5) "
+							+ " and o.state in (1,3,4,5) and o.crmProcedureDetail.availability = TRUE "
 							+ "order by o.startAppointmentDate");
 
 			// Buscar los festivos
@@ -852,7 +860,8 @@ public class ProcessBo implements Serializable {
 							+ " and a.crmBranch.id = "
 							+ idBranch
 							+ " and a.crmDoctor.id not in (select b.crmDoctor.id from CrmAppointment b where b.state in (1,3,4,5) and cast(b.startAppointmentDate as date) = '"
-							+ dateString + "') order by rand()");
+							+ dateString
+							+ "' and b.crmProcedureDetail.availability = true ) order by rand()");
 		} else {
 			listDoctorHour = dao
 					.find("from VwDoctorHour o where o.id.idBranch = "
@@ -867,7 +876,8 @@ public class ProcessBo implements Serializable {
 							+ " and a.crmBranch.id = "
 							+ idBranch
 							+ " and a.crmDoctor.id not in (select b.crmDoctor.id from CrmAppointment b where b.state in (1,3,4,5) and cast(b.startAppointmentDate as date) = '"
-							+ dateString + "') order by rand()");
+							+ dateString
+							+ "' and b.crmProcedureDetail.availability = true ) order by rand()");
 		}
 
 		if (listCrmDoctorWithoutApp.size() > 0) {
@@ -898,7 +908,7 @@ public class ProcessBo implements Serializable {
 									+ row.getId().getIdDoctor()
 									+ " and o.crmBranch.id = "
 									+ idBranch
-									+ " and o.state in (1,3,4,5) "
+									+ " and o.state in (1,3,4,5) and o.crmProcedureDetail.availability = TRUE "
 									+ "order by o.startAppointmentDate");
 
 					if (listApp.size() == 0) {
@@ -950,11 +960,16 @@ public class ProcessBo implements Serializable {
 
 		List<CrmAppointment> listApp = dao
 				.find("from CrmAppointment o where o.startAppointmentDate >= '"
-						+ dateString + "T" + startHourString
+						+ dateString
+						+ "T"
+						+ startHourString
 						+ ".000+05:00' and o.startAppointmentDate <= '"
-						+ dateString + "T" + endHourString
-						+ ".000+05:00' and o.crmPatient.id = " + idPatient
-						+ " and o.state in (1,3,4,5)"
+						+ dateString
+						+ "T"
+						+ endHourString
+						+ ".000+05:00' and o.crmPatient.id = "
+						+ idPatient
+						+ " and o.state in (1,3,4,5) and o.crmProcedureDetail.availability = TRUE "
 						+ "order by o.startAppointmentDate");
 
 		return listApp.size();
@@ -1094,7 +1109,7 @@ public class ProcessBo implements Serializable {
 									+ idBranch
 									+ " and o.crmDoctor.id = "
 									+ idDoctor
-									+ " and o. state in (1,3,4,5) "
+									+ " and o. state in (1,3,4,5) and o.crmProcedureDetail.availability = TRUE "
 									+ "order by o.startAppointmentDate");
 
 					// Validar Disponibilidad
@@ -1253,10 +1268,10 @@ public class ProcessBo implements Serializable {
 		}
 	}
 
-	public CrmHistoryHistory getHistoryHistory(BigDecimal idPatient) {
+	public CrmHistoryHistory getHistoryHistory(BigDecimal idAppointment) {
 		List<CrmHistoryHistory> list = null;
-		list = dao.find("from CrmHistoryHistory o where o.crmPatient.id = "
-				+ idPatient);
+		list = dao.find("from CrmHistoryHistory o where o.crmAppointment.id = "
+				+ idAppointment);
 		if (list.size() > 0) {
 			return list.get(0);
 		} else {
@@ -1269,10 +1284,10 @@ public class ProcessBo implements Serializable {
 				+ idPatient);
 	}
 
-	public CrmHistoryRecord getHistoryRecord(BigDecimal idPatient) {
+	public CrmHistoryRecord getHistoryRecord(BigDecimal idAppointment) {
 		List<CrmHistoryRecord> list = null;
-		list = dao.find("from CrmHistoryRecord o where o.crmPatient.id = "
-				+ idPatient);
+		list = dao.find("from CrmHistoryRecord o where o.crmAppointment.id = "
+				+ idAppointment);
 		if (list.size() > 0) {
 			return list.get(0);
 		} else {
@@ -1285,10 +1300,11 @@ public class ProcessBo implements Serializable {
 				+ idPatient);
 	}
 
-	public CrmHistoryHomeopathic getHistoryHomeopathic(BigDecimal idPatient) {
+	public CrmHistoryHomeopathic getHistoryHomeopathic(BigDecimal idAppointment) {
 		List<CrmHistoryHomeopathic> list = null;
-		list = dao.find("from CrmHistoryHomeopathic o where o.crmPatient.id = "
-				+ idPatient);
+		list = dao
+				.find("from CrmHistoryHomeopathic o where o.crmAppointment.id = "
+						+ idAppointment);
 		if (list.size() > 0) {
 			return list.get(0);
 		} else {
@@ -1302,10 +1318,11 @@ public class ProcessBo implements Serializable {
 				+ idPatient);
 	}
 
-	public CrmHistoryPhysique getHistoryPhysique(BigDecimal idPatient) {
+	public CrmHistoryPhysique getHistoryPhysique(BigDecimal idAppointment) {
 		List<CrmHistoryPhysique> list = null;
-		list = dao.find("from CrmHistoryPhysique o where o.crmPatient.id = "
-				+ idPatient);
+		list = dao
+				.find("from CrmHistoryPhysique o where o.crmAppointment.id = "
+						+ idAppointment);
 		if (list.size() > 0) {
 			return list.get(0);
 		} else {
@@ -1318,10 +1335,11 @@ public class ProcessBo implements Serializable {
 				+ idPatient);
 	}
 
-	public CrmHistoryOrganometry getHistoryOrganometry(BigDecimal idPatient) {
+	public CrmHistoryOrganometry getHistoryOrganometry(BigDecimal idAppointment) {
 		List<CrmHistoryOrganometry> list = null;
-		list = dao.find("from CrmHistoryOrganometry o where o.crmPatient.id = "
-				+ idPatient);
+		list = dao
+				.find("from CrmHistoryOrganometry o where o.crmAppointment.id = "
+						+ idAppointment);
 		if (list.size() > 0) {
 			return list.get(0);
 		} else {
@@ -1487,6 +1505,16 @@ public class ProcessBo implements Serializable {
 		}
 
 		return result;
+	}
+
+	public CrmPatient getContactById(BigDecimal id) {
+		List<CrmPatient> list = null;
+		list = dao.find("FROM CrmPatient o WHERE o.id = " + id);
+		if (list.size() > 0) {
+			return list.get(0);
+		} else {
+			return new CrmPatient();
+		}
 	}
 
 	public CrmPatient getContactByDoc(String doc) {
