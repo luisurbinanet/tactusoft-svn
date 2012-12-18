@@ -849,38 +849,14 @@ public class HistoryBackingNew extends BaseBacking {
 		descImc = null;
 
 		newAction(null);
-		
+
 		currentAppointment = processService.getAppointment(selectedAppointment
 				.getId());
 
 		selectedPatient = processService.getContactById(selectedAppointment
 				.getPatId());
-
-		List<VwAppointment> listTempApp = processService
-				.getListByAppointmentByPatient(selectedAppointment.getPatId());
-		historyAppointmentModel = new VwAppointmentDataModel(listTempApp);
-
-		List<CrmHistoryHistory> listTempHistory = processService
-				.getListHistoryHistory(selectedAppointment.getPatId());
-		historyHistoryModel = new HistoryHistoryDataModel(listTempHistory);
-
-		List<CrmHistoryRecord> listTempRecord = processService
-				.getListHistoryRecord(selectedAppointment.getPatId());
-		historyRecordModel = new HistoryRecordDataModel(listTempRecord);
-
-		List<CrmHistoryHomeopathic> listTempHomeopathic = processService
-				.getListHistoryHomeopathic(selectedAppointment.getPatId());
-		historyHomeopathicModel = new HistoryHomeopathicDataModel(
-				listTempHomeopathic);
-
-		List<CrmHistoryPhysique> listTempPhysique = processService
-				.getListHistoryPhysique(selectedAppointment.getPatId());
-		historyPhysiqueModel = new HistoryPhysiqueDataModel(listTempPhysique);
-
-		List<CrmHistoryOrganometry> listTempOrganometry = processService
-				.getListHistoryOrganometry(selectedAppointment.getPatId());
-		historyOrganometryModel = new HistoryOrganometryDataModel(
-				listTempOrganometry);
+		
+		refreshLists();
 
 		listDiagnosis = processService
 				.getListDiagnosisByAppointment(selectedAppointment.getId());
@@ -903,8 +879,6 @@ public class HistoryBackingNew extends BaseBacking {
 		listExam = processService.getListMedicationByAppointment(
 				selectedAppointment.getId(), Constant.MATERIAL_TYPE_EXAMS);
 		examModel = new MedicationDataModel(listExam);
-		
-		refreshLists();
 
 		List<CrmNote> listNote = processService.getListNoteByAppointment(
 				selectedAppointment.getId(), Constant.NOTE_TYPE_DOCTOR);
@@ -954,10 +928,11 @@ public class HistoryBackingNew extends BaseBacking {
 		selectedHistoryOrganometry.setCrmPatient(selectedPatient);
 		selectedHistoryOrganometry.setCrmAppointment(currentAppointment);
 	}
-	
+
 	public void showHistorialAction() {
 		modeEdit = true;
 		modeHistorial = true;
+		selectedPatient = selectedPatientTemp;
 		refreshLists();
 	}
 
@@ -1801,6 +1776,31 @@ public class HistoryBackingNew extends BaseBacking {
 	}
 
 	private void refreshLists() {
+		List<VwAppointment> listTempApp = processService
+				.getListByAppointmentByPatient(selectedAppointment.getPatId());
+		historyAppointmentModel = new VwAppointmentDataModel(listTempApp);
+
+		List<CrmHistoryHistory> listTempHistory = processService
+				.getListHistoryHistory(selectedAppointment.getPatId());
+		historyHistoryModel = new HistoryHistoryDataModel(listTempHistory);
+
+		List<CrmHistoryRecord> listTempRecord = processService
+				.getListHistoryRecord(selectedAppointment.getPatId());
+		historyRecordModel = new HistoryRecordDataModel(listTempRecord);
+
+		List<CrmHistoryHomeopathic> listTempHomeopathic = processService
+				.getListHistoryHomeopathic(selectedAppointment.getPatId());
+		historyHomeopathicModel = new HistoryHomeopathicDataModel(
+				listTempHomeopathic);
+
+		List<CrmHistoryPhysique> listTempPhysique = processService
+				.getListHistoryPhysique(selectedAppointment.getPatId());
+		historyPhysiqueModel = new HistoryPhysiqueDataModel(listTempPhysique);
+
+		List<CrmHistoryOrganometry> listTempOrganometry = processService
+				.getListHistoryOrganometry(selectedAppointment.getPatId());
+		historyOrganometryModel = new HistoryOrganometryDataModel(
+				listTempOrganometry);
 		listDiagnosisView = processService
 				.getListDiagnosisByPatient(selectedPatient.getId());
 

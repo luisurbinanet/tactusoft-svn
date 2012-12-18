@@ -1,0 +1,377 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<p:tabView style="width:100%;height:100%">
+
+	<p:tab title="#{msg['his_history']}">
+		<p:dataTable id="tblHistoryAppointment" var="rec"
+			value="#{historyBackingNew.historyAppointmentModel}"
+			rowKey="#{rec.code}" style="width:100%" paginator="true" rows="10"
+			emptyMessage="#{msg['glb_no_records_found']}">
+
+			<p:column headerText="#{msg['app_date']}">
+				<h:outputLabel value="#{rec.startAppointmentDate}">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+				</h:outputLabel>
+			</p:column>
+
+			<p:column headerText="#{msg['app_branch']}">
+				<h:outputLabel value="#{rec.branchName}" />
+			</p:column>
+
+			<p:column headerText="#{msg['app_doctor']}">
+				<h:outputLabel value="#{rec.doctorNames}" />
+			</p:column>
+
+			<p:column headerText="#{msg['app_procedure']}">
+				<h:outputLabel value="#{rec.prcDetName}" />
+			</p:column>
+
+		</p:dataTable>
+	</p:tab>
+
+	<p:tab title="#{msg['his_history_history']}">
+		<p:dataTable id="tblHistory" var="rec"
+			value="#{historyBackingNew.historyHistoryModel}" rowKey="#{rec.code}"
+			style="width:100%" paginator="true" rows="5"
+			emptyMessage="#{msg['glb_no_records_found']}">
+
+			<p:column headerText="#{msg['app_date']}">
+				<h:outputLabel value="#{rec.crmAppointment.startAppointmentDate}">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+				</h:outputLabel>
+			</p:column>
+
+			<p:column headerText="#{msg['exp_doctor']}">
+				<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+			</p:column>
+
+			<p:column headerText="#{msg['his_history_reason']}">
+				<h:outputLabel value="#{rec.reason}" />
+			</p:column>
+
+			<p:column headerText="#{msg['his_history_disease']}">
+				<h:outputLabel value="#{rec.disease}" />
+			</p:column>
+
+			<p:column style="width:4%">
+				<p:commandButton icon="ui-icon-search" title="#{msg['btn_view']}"
+					update=":form" action="#{historyBackingNew.editAppointmentAction}">
+
+				</p:commandButton>
+			</p:column>
+
+		</p:dataTable>
+	</p:tab>
+
+	<p:tab title="#{msg['his_history_record']}">
+		<p:dataTable id="tblRecord" var="rec"
+			value="#{historyBackingNew.historyRecordModel}" rowKey="#{rec.code}"
+			style="width:100%" paginator="true" rows="5"
+			emptyMessage="#{msg['glb_no_records_found']}">
+
+			<p:column headerText="#{msg['app_date']}">
+				<h:outputLabel value="#{rec.crmAppointment.startAppointmentDate}">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+				</h:outputLabel>
+			</p:column>
+
+			<p:column headerText="#{msg['exp_doctor']}">
+				<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+			</p:column>
+
+			<p:column headerText="#{msg['his_rec_per_arthritis']}">
+				<h:outputLabel value="#{rec.arthritis?'SI':'NO'}" />
+			</p:column>
+
+			<p:column headerText="#{msg['his_rec_per_cancer']}">
+				<h:outputLabel value="#{rec.cancer?'SI':'NO'}" />
+			</p:column>
+
+			<p:column headerText="#{msg['his_rec_per_pulmonary']}">
+				<h:outputLabel value="#{rec.pulmonary?'SI':'NO'}" />
+			</p:column>
+
+			<p:column headerText="#{msg['his_rec_per_diabetes']}">
+				<h:outputLabel value="#{rec.diabetes?'SI':'NO'}" />
+			</p:column>
+
+			<p:column headerText="#{msg['his_rec_per_hypertension']}">
+				<h:outputLabel value="#{rec.hypertension?'SI':'NO'}" />
+			</p:column>
+
+			<p:column headerText="#{msg['his_rec_per_hospitalizations']}">
+				<h:outputLabel value="#{rec.hospitalizations?'SI':'NO'}" />
+			</p:column>
+
+			<p:column headerText="#{msg['his_rec_per_allergy']}">
+				<h:outputLabel value="#{rec.allergy?'SI':'NO'}" />
+			</p:column>
+
+			<p:column headerText="#{msg['his_rec_per_infections']}">
+				<h:outputLabel value="#{rec.infections?'SI':'NO'}" />
+			</p:column>
+
+			<p:column style="width:4%">
+				<p:commandButton icon="ui-icon-search" title="#{msg['btn_view']}"
+					update=":form" action="#{historyBackingNew.editAppointmentAction}">
+
+				</p:commandButton>
+			</p:column>
+
+		</p:dataTable>
+	</p:tab>
+
+	<p:tab title="#{msg['his_history_homeopathic']}">
+		<p:dataTable id="tblHomeopathic" var="rec"
+			value="#{historyBackingNew.historyHomeopathicModel}"
+			rowKey="#{rec.code}" style="width:100%" paginator="true" rows="5"
+			emptyMessage="#{msg['glb_no_records_found']}">
+
+			<p:column headerText="#{msg['app_date']}">
+				<h:outputLabel value="#{rec.crmAppointment.startAppointmentDate}">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+				</h:outputLabel>
+			</p:column>
+
+			<p:column headerText="#{msg['exp_doctor']}">
+				<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+			</p:column>
+
+			<p:column headerText="#{msg['his_homeopathic_biotipology']}">
+				<h:outputLabel value="#{rec.descBiotypology}" />
+			</p:column>
+
+			<p:column headerText="#{msg['his_homeopathic_mental']}">
+				<h:outputLabel value="#{rec.mental}" />
+			</p:column>
+
+			<p:column headerText="#{msg['his_homeopathic_special']}">
+				<h:outputLabel value="#{rec.special}" />
+			</p:column>
+
+			<p:column headerText="#{msg['his_homeopathic_general']}">
+				<h:outputLabel value="#{rec.general}" />
+			</p:column>
+
+			<p:column headerText="#{msg['his_homeopathic_miasm']}">
+				<h:outputLabel value="#{rec.miasm}" />
+			</p:column>
+
+		</p:dataTable>
+	</p:tab>
+
+	<p:tab title="#{msg['his_history_physique']}">
+		<p:dataTable id="tblPhysique" var="rec"
+			value="#{historyBackingNew.historyPhysiqueModel}"
+			rowKey="#{rec.code}" style="width:100%" paginator="true" rows="5"
+			emptyMessage="#{msg['glb_no_records_found']}">
+
+			<p:column headerText="#{msg['app_date']}">
+				<h:outputLabel value="#{rec.crmAppointment.startAppointmentDate}">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+				</h:outputLabel>
+			</p:column>
+
+			<p:column headerText="#{msg['exp_doctor']}">
+				<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+			</p:column>
+
+			<p:column headerText="#{msg['his_physique_heart_rate']}">
+				<h:outputLabel value="#{rec.heartRate}" />
+			</p:column>
+
+			<p:column headerText="#{msg['his_physique_respiratory_rate']}">
+				<h:outputLabel value="#{rec.respiratoryRate}" />
+			</p:column>
+
+			<p:column headerText="#{msg['his_physique_height']}">
+				<h:outputLabel value="#{rec.height}" />
+			</p:column>
+
+			<p:column headerText="#{msg['his_physique_weight']}">
+				<h:outputLabel value="#{rec.weight}" />
+			</p:column>
+
+			<p:column headerText="#{msg['his_physique_blood_pressure']}">
+				<h:outputLabel value="#{rec.bloodPressure}" />
+			</p:column>
+
+			<p:column headerText="#{msg['his_physique_general_state']}">
+				<h:outputLabel value="#{rec.generalState}" />
+			</p:column>
+
+			<p:column style="width:4%">
+				<p:commandButton icon="ui-icon-search" title="#{msg['btn_view']}"
+					update=":form" action="#{historyBackingNew.editAppointmentAction}">
+
+				</p:commandButton>
+			</p:column>
+
+		</p:dataTable>
+	</p:tab>
+
+	<p:tab title="#{msg['his_history_organometry']}">
+		<p:dataTable id="tblOrganometry" var="rec"
+			value="#{historyBackingNew.historyOrganometryModel}"
+			rowKey="#{rec.code}" style="width:100%" paginator="true" rows="5"
+			emptyMessage="#{msg['glb_no_records_found']}">
+
+			<p:column headerText="#{msg['app_date']}">
+				<h:outputLabel value="#{rec.crmAppointment.startAppointmentDate}">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+				</h:outputLabel>
+			</p:column>
+
+			<p:column headerText="#{msg['exp_doctor']}">
+				<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+			</p:column>
+
+			<p:column headerText="#{msg['his_organometry_check']}">
+				<h:outputLabel value="#{rec.organometryCheck?'SI':'NO'}" />
+			</p:column>
+
+			<p:column headerText="#{msg['his_organometry_analysis']}">
+				<h:outputLabel value="#{rec.organometryAnalysis}" />
+			</p:column>
+		</p:dataTable>
+	</p:tab>
+
+	<p:tab id="tab7" title="#{msg['his_history_ip']}"
+		rendered="#{historyBackingNew.rolePrincipal eq 'DOCTOR'}">
+		<p:dataTable var="rec" value="#{historyBackingNew.listDiagnosisView}"
+			paginator="true" rows="15" style="width:100%"
+			emptyMessage="#{msg['glb_no_records_found']}">
+
+			<p:column headerText="#{msg['app_date']}">
+				<h:outputLabel value="#{rec.crmAppointment.startAppointmentDate}">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+				</h:outputLabel>
+			</p:column>
+
+			<p:column headerText="#{msg['app_doctor']}">
+				<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+			</p:column>
+
+			<p:column headerText="#{msg['cie_desc']}">
+				<h:outputLabel value="#{rec.crmCie.description}" />
+			</p:column>
+
+		</p:dataTable>
+
+	</p:tab>
+
+	<p:tab id="tab8" title="#{msg['his_history_medicaction']}"
+		rendered="#{historyBackingNew.rolePrincipal eq 'DOCTOR'}">
+		<p:dataTable var="rec" value="#{historyBackingNew.listMedicationView}"
+			paginator="true" rows="15" style="width:100%"
+			emptyMessage="#{msg['glb_no_records_found']}">
+
+			<p:column headerText="#{msg['app_date']}">
+				<h:outputLabel value="#{rec.crmAppointment.startAppointmentDate}">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+				</h:outputLabel>
+			</p:column>
+
+			<p:column headerText="#{msg['app_doctor']}">
+				<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+			</p:column>
+
+			<p:column headerText="#{msg['sal_material_descr']}">
+				<h:outputLabel value="#{rec.descMaterial}" />
+			</p:column>
+
+			<p:column headerText="#{msg['sal_material_amount']}"
+				style="width:100px">
+				<h:outputLabel value="#{rec.unit}" />
+			</p:column>
+		</p:dataTable>
+	</p:tab>
+
+	<p:tab id="tab9" title="#{msg['his_history_therapy']}"
+		rendered="#{historyBackingNew.rolePrincipal ne 'NURSE_AUX'}">
+		<p:dataTable var="rec" value="#{historyBackingNew.listTherapyView}"
+			paginator="true" rows="15" style="width:100%"
+			emptyMessage="#{msg['glb_no_records_found']}">
+
+			<p:column headerText="#{msg['app_date']}">
+				<h:outputLabel value="#{rec.crmAppointment.startAppointmentDate}">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+				</h:outputLabel>
+			</p:column>
+
+			<p:column headerText="#{msg['app_doctor']}">
+				<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+			</p:column>
+
+			<p:column headerText="#{msg['sal_material_descr']}">
+				<h:outputLabel value="#{rec.descMaterial}" />
+			</p:column>
+
+			<p:column headerText="#{msg['sal_material_amount']}"
+				style="width:100px">
+				<h:outputLabel value="#{rec.unit}" />
+			</p:column>
+		</p:dataTable>
+	</p:tab>
+
+	<p:tab id="tab10" title="#{msg['his_history_examinations']}"
+		rendered="#{historyBackingNew.rolePrincipal eq 'DOCTOR'}">
+		<p:dataTable var="rec" value="#{historyBackingNew.listExamView}"
+			paginator="true" rows="15" style="width:100%"
+			emptyMessage="#{msg['glb_no_records_found']}">
+
+			<p:column headerText="#{msg['app_date']}">
+				<h:outputLabel value="#{rec.crmAppointment.startAppointmentDate}">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+				</h:outputLabel>
+			</p:column>
+
+			<p:column headerText="#{msg['app_doctor']}">
+				<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+			</p:column>
+
+			<p:column headerText="#{msg['sal_material_descr']}">
+				<h:outputLabel value="#{rec.descMaterial}" />
+			</p:column>
+
+			<p:column headerText="#{msg['sal_material_amount']}"
+				style="width:100px">
+				<h:outputLabel value="#{rec.unit}" />
+			</p:column>
+		</p:dataTable>
+	</p:tab>
+
+	<p:tab id="tab11" title="#{msg['his_history_note']}"
+		rendered="#{historyBackingNew.rolePrincipal ne 'NURSE_AUX'}">
+		<p:dataTable var="rec" value="#{historyBackingNew.listNoteView}"
+			paginator="true" rows="15" style="width:100%"
+			emptyMessage="#{msg['glb_no_records_found']}">
+
+			<p:column headerText="#{msg['app_date']}">
+				<h:outputLabel value="#{rec.crmAppointment.startAppointmentDate}">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+				</h:outputLabel>
+			</p:column>
+
+			<p:column headerText="#{msg['app_doctor']}">
+				<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+			</p:column>
+
+			<p:column headerText="#{msg['his_history_note_type']}">
+				<h:outputLabel value="#{rec.noteType}" />
+			</p:column>
+
+			<p:column headerText="#{msg['his_history_note']}" style="width:600px">
+				<h:outputLabel value="#{rec.note}" />
+			</p:column>
+		</p:dataTable>
+	</p:tab>
+
+</p:tabView>
+
+</html>

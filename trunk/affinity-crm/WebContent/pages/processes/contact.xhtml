@@ -34,16 +34,6 @@
 						<p:commandButton value="#{msg['btn_update']}" process="@this"
 							icon="ui-icon-refresh" oncomplete="updateDlg.show()"
 							update="updateDialog" disabled="#{contactBacking.newRecord}" />
-						<p:splitButton icon="ui-icon-arrowrefresh-1-w"
-							value="#{msg['btn_actions']}"
-							disabled="#{contactBacking.selectedPatient.id == null?true:false}">
-							<p:menuitem value="#{msg['title_appointment']}"
-								action="#{contactBacking.goAppointment}" immediate="true" />
-							<p:menuitem value="#{msg['title_search_by_patient']}"
-								action="#{contactBacking.goSearchByPatient}" immediate="true" />
-							<p:menuitem value="#{msg['title_sales_order']}" rendered="false"
-								action="#{contactBacking.goAppointment}" immediate="true" />
-						</p:splitButton>
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -71,8 +61,7 @@
 
 					<h:outputText value="#{msg['pat_region']}" style="width:100%" />
 					<p:selectOneMenu id="selRegion" value="#{contactBacking.idRegion}"
-						style="width:248px" required="true" label="#{msg['pat_region']}"
-						disabled="#{not contactBacking.newRecord}">
+						style="width:248px" required="true" label="#{msg['pat_region']}">
 						<f:selectItems value="#{contactBacking.listRegion}" />
 						<p:ajax update="selCity"
 							listener="#{contactBacking.handleRegionChange}" />
@@ -80,8 +69,7 @@
 
 					<h:outputText value="#{msg['pat_city']}" style="width:100%" />
 					<p:selectOneMenu id="selCity" value="#{contactBacking.idCity}"
-						style="width:248px" required="true" label="#{msg['pat_city']}"
-						disabled="#{not contactBacking.newRecord}">
+						style="width:248px" required="true" label="#{msg['pat_city']}">
 						<f:selectItems value="#{contactBacking.listCity}" />
 					</p:selectOneMenu>
 
@@ -139,12 +127,18 @@
 					<h:outputText value="#{msg['pat_phone_number']}" />
 					<p:inputText value="#{contactBacking.selectedPatient.phoneNumber}"
 						style="width:240px" label="#{msg['pat_phone_number']}"
-						required="true" maxlength="16" />
+						required="false" maxlength="7">
+						<f:convertNumber integerOnly="true" />
+						<f:validateLength minimum="7" maximum="7" />
+					</p:inputText>
 
 					<h:outputText value="#{msg['pat_cell_number']}" />
 					<p:inputText value="#{contactBacking.selectedPatient.cellNumber}"
 						style="width:240px" label="#{msg['pat_cell_number']}"
-						required="false" maxlength="16" />
+						required="false" maxlength="10">
+						<f:convertNumber integerOnly="true" />
+						<f:validateLength minimum="10" maximum="10" />
+					</p:inputText>
 
 					<h:outputLabel value="#{msg['pat_sales_off']}" style="width:40%" />
 					<p:selectOneMenu value="#{contactBacking.salesOff}"
@@ -235,32 +229,14 @@
 					resizable="false" id="updateDialog" showEffect="fade"
 					hideEffect="explode" modal="true">
 
-					<p:ajax event="close" listener="#{contactBacking.handleClose}" />
-
 					<p:toolbar id="toolBarUpdate" style="width:100%">
 						<p:toolbarGroup align="left">
 							<p:commandButton id="btnUpdate" value="#{msg['btn_save']}"
 								icon="ui-icon-disk"
 								actionListener="#{contactBacking.updateAction}"
-								update="growl toolBarUpdate pnlUpdate pnlUpdate2"
-								disabled="#{contactBacking.saved}"
-								process="@this, pnlUpdate pnlUpdate2" />
-							<p:commandButton id="btnClose" value="#{msg['btn_return']}"
-								icon="ui-icon-arrowreturnthick-1-w"
-								actionListener="#{contactBacking.closeAction}"
-								update="toolBar pnlDetail pnlDetail2 pnlDetail3"
+								update="growl pnlDetail pnlDetail2 pnlDetail3"
 								process="@this, pnlUpdate pnlUpdate2"
-								oncomplete="updateDlg.hide();" />
-							<p:splitButton icon="ui-icon-arrowrefresh-1-w"
-								value="#{msg['btn_actions']}"
-								disabled="#{contactBacking.selectedPatient.id == null?true:false}">
-								<p:menuitem value="#{msg['title_appointment']}"
-									action="#{contactBacking.goAppointment}" immediate="true" />
-								<p:menuitem value="#{msg['title_search_by_patient']}"
-									action="#{contactBacking.goSearchByPatient}" immediate="true" />
-								<p:menuitem value="#{msg['title_sales_order']}" rendered="false"
-									action="#{contactBacking.goAppointment}" immediate="true" />
-							</p:splitButton>
+								oncomplete="handleLoginRequest(xhr, status, args)" />
 						</p:toolbarGroup>
 					</p:toolbar>
 
@@ -316,6 +292,15 @@
 							<f:selectItem itemLabel="#{msg['glb_gender_man']}" itemValue="M" />
 						</p:selectOneMenu>
 
+						<h:outputLabel value="#{msg['pat_marital_state']}" />
+						<p:selectOneMenu style="width:248px" required="true"
+							value="#{contactBacking.selectedPatient.idMaritalState}"
+							label="#{msg['pat_marital_state']}">
+							<f:selectItem itemLabel="#{msg['glb_default_value']}"
+								itemValue="" />
+							<f:selectItems value="#{contactBacking.listMaritalStatus}" />
+						</p:selectOneMenu>
+
 						<h:outputText value="#{msg['pat_address']}" />
 						<p:inputText value="#{contactBacking.selectedPatient.address}"
 							maxlength="35" style="width:240px" label="#{msg['pat_address']}"
@@ -328,7 +313,10 @@
 						<h:outputText value="#{msg['pat_phone_number']}" />
 						<p:inputText value="#{contactBacking.selectedPatient.phoneNumber}"
 							style="width:240px" label="#{msg['pat_phone_number']}"
-							required="true" maxlength="16" />
+							required="true" maxlength="7">
+							<f:convertNumber integerOnly="true" />
+							<f:validateLength minimum="7" maximum="7" />
+						</p:inputText>
 
 						<h:outputText value="#{msg['pat_email']}" />
 						<p:inputText value="#{contactBacking.selectedPatient.email}"
@@ -338,7 +326,21 @@
 						<h:outputText value="#{msg['pat_cell_number']}" />
 						<p:inputText value="#{contactBacking.selectedPatient.cellNumber}"
 							style="width:240px" label="#{msg['pat_cell_number']}"
-							required="true" maxlength="16" />
+							required="true" maxlength="10">
+							<f:convertNumber integerOnly="true" />
+							<f:validateLength minimum="10" maximum="10" />
+						</p:inputText>
+
+						<h:outputLabel value="#{msg['pat_membership_type']}"
+							style="width:40%" />
+						<p:selectOneMenu
+							value="#{contactBacking.selectedPatient.idMemberShip}"
+							label="#{msg['pat_membership_type']}" style="width:248px"
+							required="true">
+							<f:selectItem itemLabel="#{msg['glb_default_value']}"
+								itemValue="" />
+							<f:selectItems value="#{contactBacking.listMembershipType}" />
+						</p:selectOneMenu>
 
 						<h:outputLabel value="#{msg['pat_occupation']}" />
 						<p:selectOneMenu value="#{contactBacking.idOccupation}"
@@ -389,6 +391,18 @@
 				</p:dialog>
 
 			</h:form>
+
+			<script type="text/javascript">
+				function handleLoginRequest(xhr, status, args) {
+					if (args.validationFailed || !args.saved) {
+						jQuery('#updateDialog').effect("shake", {
+							times : 3
+						}, 100);
+					} else {
+						updateDlg.hide();
+					}
+				}
+			</script>
 
 		</p:panel>
 
