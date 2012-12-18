@@ -67,6 +67,7 @@ public class HistoryBackingNew extends BaseBacking {
 	private VwAppointment selectedAppointment;
 
 	private boolean modeEdit;
+	private boolean modeHistorial;
 	private String part;
 
 	private VwAppointmentDataModel historyAppointmentModel;
@@ -154,6 +155,7 @@ public class HistoryBackingNew extends BaseBacking {
 		currentDoctor = processService.getCrmDoctor();
 		appointmentModel = null;
 		modeEdit = false;
+		modeHistorial = false;
 
 		listMaterialGroup = processService.getListMaterialGroup();
 		listCieMaterial = processService.getListCieMaterial();
@@ -215,6 +217,14 @@ public class HistoryBackingNew extends BaseBacking {
 
 	public void setModeEdit(boolean modeEdit) {
 		this.modeEdit = modeEdit;
+	}
+
+	public boolean isModeHistorial() {
+		return modeHistorial;
+	}
+
+	public void setModeHistorial(boolean modeHistorial) {
+		this.modeHistorial = modeHistorial;
 	}
 
 	public String getPart() {
@@ -795,6 +805,7 @@ public class HistoryBackingNew extends BaseBacking {
 
 	public void newAction(ActionEvent event) {
 		part = Constant.HISTORY_HISTORY;
+		optionSearchPatient = 1;
 
 		listDiagnosis = new ArrayList<CrmDiagnosis>();
 		diagnosisModel = new DiagnosisDataModel(listDiagnosis);
@@ -828,12 +839,9 @@ public class HistoryBackingNew extends BaseBacking {
 		refreshMaterialFields();
 	}
 
-	public void searchAction(ActionEvent event) {
-
-	}
-
 	public void editAppointmentAction() {
 		modeEdit = true;
+		modeHistorial = false;
 		part = Constant.HISTORY_HISTORY;
 		activeIndex = -1;
 		age = 0;
@@ -841,6 +849,12 @@ public class HistoryBackingNew extends BaseBacking {
 		descImc = null;
 
 		newAction(null);
+		
+		currentAppointment = processService.getAppointment(selectedAppointment
+				.getId());
+
+		selectedPatient = processService.getContactById(selectedAppointment
+				.getPatId());
 
 		List<VwAppointment> listTempApp = processService
 				.getListByAppointmentByPatient(selectedAppointment.getPatId());
@@ -889,6 +903,8 @@ public class HistoryBackingNew extends BaseBacking {
 		listExam = processService.getListMedicationByAppointment(
 				selectedAppointment.getId(), Constant.MATERIAL_TYPE_EXAMS);
 		examModel = new MedicationDataModel(listExam);
+		
+		refreshLists();
 
 		List<CrmNote> listNote = processService.getListNoteByAppointment(
 				selectedAppointment.getId(), Constant.NOTE_TYPE_DOCTOR);
@@ -896,11 +912,6 @@ public class HistoryBackingNew extends BaseBacking {
 			this.noteDoctor = listNote.get(0).getNote();
 		}
 
-		currentAppointment = processService.getAppointment(selectedAppointment
-				.getId());
-
-		selectedPatient = processService.getContactById(selectedAppointment
-				.getPatId());
 		if (selectedPatient.getCrmOccupation() == null) {
 			selectedPatient.setCrmOccupation(new CrmOccupation());
 			idOccupation = null;
@@ -942,6 +953,12 @@ public class HistoryBackingNew extends BaseBacking {
 				.getHistoryOrganometry(selectedAppointment.getId());
 		selectedHistoryOrganometry.setCrmPatient(selectedPatient);
 		selectedHistoryOrganometry.setCrmAppointment(currentAppointment);
+	}
+	
+	public void showHistorialAction() {
+		modeEdit = true;
+		modeHistorial = true;
+		refreshLists();
 	}
 
 	public void viewHistoryAction() {

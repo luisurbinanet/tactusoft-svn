@@ -18,13 +18,28 @@
 
 				<p:growl id="growl" showDetail="true" />
 
+				<p:toolbar id="toolBarPatient" style="width:100%">
+					<p:toolbarGroup align="left">
+						<p:commandButton id="btnSelectPatient"
+							value="#{msg['btn_add_patient']}" icon="ui-icon-circle-check"
+							oncomplete="dlgPatient.show()" update="dialogPatient" />
+						<p:commandButton icon="ui-icon-arrowreturnthick-1-w"
+							value="#{msg['btn_return']}" update="form">
+							<f:setPropertyActionListener value="false"
+								target="#{historyBackingNew.modeEdit}" />
+						</p:commandButton>
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer />
+
 				<!-- TACTU CITAS -->
 				<h:panelGrid id="tblAppointment" columns="1" width="100%"
 					rendered="#{not historyBackingNew.modeEdit}">
 					<p:dataTable id="selectedTable" var="rec"
 						value="#{historyBackingNew.appointmentModel}" rowKey="#{rec.code}"
 						style="width:100%" paginator="true" rows="10"
-						emptyMessage="#{msg['glb_no_records_found']}">
+						emptyMessage="#{msg['glb_no_records_found_check']}">
 
 						<f:facet name="header">
 							#{msg['app_avalaible']}
@@ -68,7 +83,8 @@
 				<h:panelGrid id="tblPart" columns="1" width="100%"
 					rendered="#{historyBackingNew.modeEdit}">
 
-					<p:toolbar id="toolBar" style="width:100%">
+					<p:toolbar id="toolBar" style="width:100%"
+						rendered="#{not historyBackingNew.modeHistorial}">
 						<p:toolbarGroup align="left">
 							<p:commandButton icon="ui-icon-disk" value="#{msg['btn_save']}"
 								update="form" actionListener="#{historyBackingNew.saveAction}"
@@ -99,7 +115,7 @@
 						</p:toolbarGroup>
 					</p:toolbar>
 
-					<p:spacer />
+					<p:spacer rendered="#{not historyBackingNew.modeHistorial}" />
 
 					<p:panelGrid id="pnlPatient" columns="4" style="width:100%">
 
@@ -141,7 +157,8 @@
 					<p:spacer />
 
 					<p:accordionPanel id="accordion" style="width:1100px;height:100%"
-						activeIndex="#{historyBackingNew.activeIndex}">
+						activeIndex="#{historyBackingNew.activeIndex}"
+						rendered="#{not historyBackingNew.modeHistorial}">
 
 						<p:tab title="#{msg['title_patient_complementary']}"
 							id="PATIENT_COMPLEMENTARY">
@@ -1061,6 +1078,10 @@
 
 					</p:accordionPanel>
 
+					<h:panelGrid id="pnlHistorial"
+						rendered="#{historyBackingNew.modeHistorial}">
+					</h:panelGrid>
+
 				</h:panelGrid>
 
 				<p:dialog id="dialogHistorial" widgetVar="dlgHistorial"
@@ -1311,6 +1332,146 @@
 							</p:dataTable>
 						</p:tab>
 
+						<p:tab id="tab7" title="#{msg['his_history_ip']}"
+							rendered="#{historyBackingNew.rolePrincipal eq 'DOCTOR'}">
+							<p:dataTable var="rec"
+								value="#{historyBackingNew.listDiagnosisView}" paginator="true"
+								rows="15" style="width:100%"
+								emptyMessage="#{msg['glb_no_records_found']}">
+
+								<p:column headerText="#{msg['app_date']}">
+									<h:outputLabel
+										value="#{rec.crmAppointment.startAppointmentDate}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputLabel>
+								</p:column>
+
+								<p:column headerText="#{msg['app_doctor']}">
+									<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+								</p:column>
+
+								<p:column headerText="#{msg['cie_desc']}">
+									<h:outputLabel value="#{rec.crmCie.description}" />
+								</p:column>
+
+							</p:dataTable>
+
+						</p:tab>
+
+						<p:tab id="tab8" title="#{msg['his_history_medicaction']}"
+							rendered="#{historyBackingNew.rolePrincipal eq 'DOCTOR'}">
+							<p:dataTable var="rec"
+								value="#{historyBackingNew.listMedicationView}" paginator="true"
+								rows="15" style="width:100%"
+								emptyMessage="#{msg['glb_no_records_found']}">
+
+								<p:column headerText="#{msg['app_date']}">
+									<h:outputLabel
+										value="#{rec.crmAppointment.startAppointmentDate}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputLabel>
+								</p:column>
+
+								<p:column headerText="#{msg['app_doctor']}">
+									<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+								</p:column>
+
+								<p:column headerText="#{msg['sal_material_descr']}">
+									<h:outputLabel value="#{rec.descMaterial}" />
+								</p:column>
+
+								<p:column headerText="#{msg['sal_material_amount']}"
+									style="width:100px">
+									<h:outputLabel value="#{rec.unit}" />
+								</p:column>
+							</p:dataTable>
+						</p:tab>
+
+						<p:tab id="tab9" title="#{msg['his_history_therapy']}"
+							rendered="#{historyBackingNew.rolePrincipal ne 'NURSE_AUX'}">
+							<p:dataTable var="rec"
+								value="#{historyBackingNew.listTherapyView}" paginator="true"
+								rows="15" style="width:100%"
+								emptyMessage="#{msg['glb_no_records_found']}">
+
+								<p:column headerText="#{msg['app_date']}">
+									<h:outputLabel
+										value="#{rec.crmAppointment.startAppointmentDate}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputLabel>
+								</p:column>
+
+								<p:column headerText="#{msg['app_doctor']}">
+									<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+								</p:column>
+
+								<p:column headerText="#{msg['sal_material_descr']}">
+									<h:outputLabel value="#{rec.descMaterial}" />
+								</p:column>
+
+								<p:column headerText="#{msg['sal_material_amount']}"
+									style="width:100px">
+									<h:outputLabel value="#{rec.unit}" />
+								</p:column>
+							</p:dataTable>
+						</p:tab>
+
+						<p:tab id="tab10" title="#{msg['his_history_examinations']}"
+							rendered="#{historyBackingNew.rolePrincipal eq 'DOCTOR'}">
+							<p:dataTable var="rec" value="#{historyBackingNew.listExamView}"
+								paginator="true" rows="15" style="width:100%"
+								emptyMessage="#{msg['glb_no_records_found']}">
+
+								<p:column headerText="#{msg['app_date']}">
+									<h:outputLabel
+										value="#{rec.crmAppointment.startAppointmentDate}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputLabel>
+								</p:column>
+
+								<p:column headerText="#{msg['app_doctor']}">
+									<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+								</p:column>
+
+								<p:column headerText="#{msg['sal_material_descr']}">
+									<h:outputLabel value="#{rec.descMaterial}" />
+								</p:column>
+
+								<p:column headerText="#{msg['sal_material_amount']}"
+									style="width:100px">
+									<h:outputLabel value="#{rec.unit}" />
+								</p:column>
+							</p:dataTable>
+						</p:tab>
+
+						<p:tab id="tab11" title="#{msg['his_history_note']}"
+							rendered="#{historyBackingNew.rolePrincipal ne 'NURSE_AUX'}">
+							<p:dataTable var="rec" value="#{historyBackingNew.listNoteView}"
+								paginator="true" rows="15" style="width:100%"
+								emptyMessage="#{msg['glb_no_records_found']}">
+
+								<p:column headerText="#{msg['app_date']}">
+									<h:outputLabel
+										value="#{rec.crmAppointment.startAppointmentDate}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputLabel>
+								</p:column>
+
+								<p:column headerText="#{msg['app_doctor']}">
+									<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+								</p:column>
+
+								<p:column headerText="#{msg['his_history_note_type']}">
+									<h:outputLabel value="#{rec.noteType}" />
+								</p:column>
+
+								<p:column headerText="#{msg['his_history_note']}"
+									style="width:600px">
+									<h:outputLabel value="#{rec.note}" />
+								</p:column>
+							</p:dataTable>
+						</p:tab>
+
 					</p:tabView>
 				</p:dialog>
 
@@ -1517,6 +1678,83 @@
 						onclick="confirmation.hide()" type="button" />
 
 				</p:confirmDialog>
+
+				<p:dialog header="#{msg['sal_patient']}" widgetVar="dlgPatient"
+					resizable="false" id="dialogPatient" showEffect="fade"
+					hideEffect="explode" modal="true" width="600">
+
+					<h:panelGrid columns="2" width="100%">
+
+						<p:outputPanel id="customPanel">
+							<p:selectOneRadio id="customRadio"
+								value="#{historyBackingNew.optionSearchPatient}" layout="custom">
+								<f:selectItem itemLabel="#{msg['sal_key_press_doc']}"
+									itemValue="1" />
+								<f:selectItem itemLabel="#{msg['sal_key_press_nom']}"
+									itemValue="2" />
+							</p:selectOneRadio>
+
+							<h:panelGrid columns="2" width="100%" cellspacing="10">
+								<h:outputText value="#{msg['usr_profile']}" />
+								<p:selectOneMenu value="#{historyBackingNew.idProfile}"
+									style="width:500px" required="true"
+									label="#{msg['usr_profile']}">
+									<f:selectItems value="#{historyBackingNew.listProfile}" />
+								</p:selectOneMenu>
+							</h:panelGrid>
+
+							<h:panelGrid columns="3" width="100%">
+								<p:radioButton id="opt1" for="customRadio" itemIndex="0" />
+								<h:outputLabel for="opt1" value="#{msg['sal_key_press_doc']}" />
+								<p:inputText value="#{historyBackingNew.docPatient}"
+									style="width:100%" />
+
+								<p:radioButton id="opt2" for="customRadio" itemIndex="1" />
+								<h:outputLabel for="opt2" value="#{msg['sal_key_press_nom']}" />
+								<p:inputText value="#{historyBackingNew.namePatient}"
+									style="width:100%" />
+
+							</h:panelGrid>
+						</p:outputPanel>
+
+						<f:facet name="footer">
+							<p:spacer height="10" />
+
+							<p:commandButton value="#{msg['btn_search']}"
+								icon="ui-icon-search"
+								update="pnlTable2 recordTable2 btnAddPatient"
+								action="#{historyBackingNew.searchPatientAction}" />
+							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
+								icon="ui-icon-plusthick" update=":form"
+								actionListener="#{historyBackingNew.showHistorialAction}"
+								disabled="#{historyBackingNew.disabledAddPatient}"
+								oncomplete="dlgPatient.hide()" />
+						</f:facet>
+					</h:panelGrid>
+
+					<p:spacer height="10" />
+
+					<p:scrollPanel id="pnlTable2" style="width:580px;height:300px">
+						<p:dataTable id="recordTable2" var="rec"
+							value="#{historyBackingNew.patientModel}" rowKey="#{rec.id}"
+							selection="#{historyBackingNew.selectedPatient}" paginator="true"
+							rows="15" style="width:570px"
+							emptyMessage="#{msg['glb_no_records_found']}">
+
+							<p:column selectionMode="single" style="width:18px" />
+
+							<p:column headerText="#{msg['pat_sap_code']}">
+								<h:outputLabel value="#{rec.codeSap}" />
+							</p:column>
+
+							<p:column headerText="#{msg['pat_names']}">
+								<h:outputLabel value="#{rec.names}" />
+							</p:column>
+
+						</p:dataTable>
+					</p:scrollPanel>
+
+				</p:dialog>
 
 			</h:form>
 
