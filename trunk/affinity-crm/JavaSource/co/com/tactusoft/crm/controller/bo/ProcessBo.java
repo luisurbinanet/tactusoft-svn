@@ -69,7 +69,8 @@ public class ProcessBo implements Serializable {
 				+ " and ((o.startAppointmentDate >= '" + startDateString
 				+ "' and o.endAppointmentDate <= '" + endDateString
 				+ "') and closeAppointment = 0 or (o.startAppointmentDate < '"
-				+ startDateString + "' and closeAppointment = 0)) "
+				+ startDateString
+				+ "' and closeAppointment = 0)) and o.state in (3,4) "
 				+ "order by o.startAppointmentDate");
 	}
 
@@ -1413,8 +1414,9 @@ public class ProcessBo implements Serializable {
 
 		return i;
 	}
-	
-	public Integer saveOtherMedication(CrmAppointment entity, List<CrmOtherMedication> list) {
+
+	public Integer saveOtherMedication(CrmAppointment entity,
+			List<CrmOtherMedication> list) {
 		int i = 0;
 
 		dao.executeHQL("delete from CrmOtherMedication o where o.crmAppointment.id = "

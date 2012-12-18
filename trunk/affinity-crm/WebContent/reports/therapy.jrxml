@@ -203,6 +203,10 @@ order by c.id]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{appointment_date}]]></textFieldExpression>
 			</textField>
+			<image>
+				<reportElement uuid="da432f78-d87a-4002-a482-a63906fe4d24" positionType="Float" x="4" y="30" width="131" height="48"/>
+				<imageExpression><![CDATA[$P{P_IMAGE} + "/logo_naturizza.png"]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>
