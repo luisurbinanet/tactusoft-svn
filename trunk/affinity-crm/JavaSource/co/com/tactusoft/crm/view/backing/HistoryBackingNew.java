@@ -1924,7 +1924,7 @@ public class HistoryBackingNew extends BaseBacking {
 			if (listOtherMedication.size() > 0) {
 				for (CrmMedication row : listOtherMedication) {
 					if (FacesUtil.isEmptyOrBlank(row.getDiagnosis())
-							|| FacesUtil.isEmptyOrBlank(row.getDiagnosis())) {
+							|| FacesUtil.isEmptyOrBlank(row.getPosology())) {
 						message = FacesUtil.getMessage("his_msg_message_med_4");
 						FacesUtil.addWarn(message);
 						break;
