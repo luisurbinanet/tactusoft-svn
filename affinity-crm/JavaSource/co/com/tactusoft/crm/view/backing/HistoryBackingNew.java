@@ -33,7 +33,6 @@ import co.com.tactusoft.crm.model.entities.CrmMaterialGroup;
 import co.com.tactusoft.crm.model.entities.CrmMedication;
 import co.com.tactusoft.crm.model.entities.CrmNote;
 import co.com.tactusoft.crm.model.entities.CrmOccupation;
-import co.com.tactusoft.crm.model.entities.CrmOtherMedication;
 import co.com.tactusoft.crm.model.entities.VwAppointment;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
@@ -46,7 +45,6 @@ import co.com.tactusoft.crm.view.datamodel.HistoryOrganometryDataModel;
 import co.com.tactusoft.crm.view.datamodel.HistoryPhysiqueDataModel;
 import co.com.tactusoft.crm.view.datamodel.HistoryRecordDataModel;
 import co.com.tactusoft.crm.view.datamodel.MedicationDataModel;
-import co.com.tactusoft.crm.view.datamodel.OtherMedicationDataModel;
 import co.com.tactusoft.crm.view.datamodel.VwAppointmentDataModel;
 import co.com.tactusoft.crm.view.datamodel.WSBeanDataModel;
 
@@ -119,10 +117,9 @@ public class HistoryBackingNew extends BaseBacking {
 	private MedicationDataModel medicationModel;
 	private CrmMedication[] selectedMedication;
 
-	private List<CrmOtherMedication> listOtherMedication;
-	private OtherMedicationDataModel otherMedicationModel;
-	private CrmOtherMedication[] selectedOtherMedication;
-	private int sequenceOtherMedication;
+	private List<CrmMedication> listOtherMedication;
+	private MedicationDataModel otherMedicationModel;
+	private CrmMedication[] selectedOtherMedication;
 
 	private List<CrmMedication> listExam;
 	private MedicationDataModel examModel;
@@ -580,30 +577,28 @@ public class HistoryBackingNew extends BaseBacking {
 		this.selectedMedication = selectedMedication;
 	}
 
-	public List<CrmOtherMedication> getListOtherMedication() {
+	public List<CrmMedication> getListOtherMedication() {
 		return listOtherMedication;
 	}
 
-	public void setListOtherMedication(
-			List<CrmOtherMedication> listOtherMedication) {
+	public void setListOtherMedication(List<CrmMedication> listOtherMedication) {
 		this.listOtherMedication = listOtherMedication;
 	}
 
-	public OtherMedicationDataModel getOtherMedicationModel() {
+	public MedicationDataModel getOtherMedicationModel() {
 		return otherMedicationModel;
 	}
 
-	public void setOtherMedicationModel(
-			OtherMedicationDataModel otherMedicationModel) {
+	public void setOtherMedicationModel(MedicationDataModel otherMedicationModel) {
 		this.otherMedicationModel = otherMedicationModel;
 	}
 
-	public CrmOtherMedication[] getSelectedOtherMedication() {
+	public CrmMedication[] getSelectedOtherMedication() {
 		return selectedOtherMedication;
 	}
 
 	public void setSelectedOtherMedication(
-			CrmOtherMedication[] selectedOtherMedication) {
+			CrmMedication[] selectedOtherMedication) {
 		this.selectedOtherMedication = selectedOtherMedication;
 	}
 
@@ -670,6 +665,9 @@ public class HistoryBackingNew extends BaseBacking {
 			titleMedication = FacesUtil.getMessage("his_history_therapy");
 		} else if (typeMedication.equals(Constant.MATERIAL_TYPE_EXAMS)) {
 			titleMedication = FacesUtil.getMessage("his_history_examinations");
+		} else if (typeMedication.equals(Constant.MATERIAL_TYPE_OTHER_MEDICINE)) {
+			titleMedication = FacesUtil
+					.getMessage("his_history_other_medicaction");
 		}
 		return titleMedication;
 	}
@@ -855,7 +853,7 @@ public class HistoryBackingNew extends BaseBacking {
 
 		selectedPatient = processService.getContactById(selectedAppointment
 				.getPatId());
-		
+
 		refreshLists();
 
 		listDiagnosis = processService
@@ -866,11 +864,10 @@ public class HistoryBackingNew extends BaseBacking {
 				selectedAppointment.getId(), Constant.MATERIAL_TYPE_MEDICINE);
 		medicationModel = new MedicationDataModel(listMedication);
 
-		listOtherMedication = processService
-				.getListOtherMedicationByAppointment(selectedAppointment
-						.getId());
-		otherMedicationModel = new OtherMedicationDataModel(listOtherMedication);
-		sequenceOtherMedication = listOtherMedication.size() + 1;
+		listOtherMedication = processService.getListMedicationByAppointment(
+				selectedAppointment.getId(),
+				Constant.MATERIAL_TYPE_OTHER_MEDICINE);
+		otherMedicationModel = new MedicationDataModel(listOtherMedication);
 
 		listTherapy = processService.getListMedicationByAppointment(
 				selectedAppointment.getId(), Constant.MATERIAL_TYPE_THERAPY);
@@ -1593,6 +1590,9 @@ public class HistoryBackingNew extends BaseBacking {
 		if (typeMedication.equals(Constant.MATERIAL_TYPE_MEDICINE)) {
 			listMedication.add(medication);
 			medicationModel = new MedicationDataModel(listMedication);
+		} else if (typeMedication.equals(Constant.MATERIAL_TYPE_OTHER_MEDICINE)) {
+			listOtherMedication.add(medication);
+			otherMedicationModel = new MedicationDataModel(listOtherMedication);
 		} else if (typeMedication.equals(Constant.MATERIAL_TYPE_THERAPY)) {
 			listTherapy.add(medication);
 			therapyModel = new MedicationDataModel(listTherapy);
@@ -1612,8 +1612,16 @@ public class HistoryBackingNew extends BaseBacking {
 		List<WSBean> listFilter = new ArrayList<WSBean>();
 		for (WSBean row : listMaterial) {
 			boolean filter = true;
-			if (typeMedication.equals(Constant.MATERIAL_TYPE_MEDICINE)) {
+			if (typeMedication.equals(Constant.MATERIAL_TYPE_MEDICINE)
+					|| typeMedication
+							.equals(Constant.MATERIAL_TYPE_OTHER_MEDICINE)) {
 				for (CrmMedication med : listMedication) {
+					if (Long.parseLong(row.getCode()) == med.getCodMaterial()) {
+						filter = false;
+						break;
+					}
+				}
+				for (CrmMedication med : listOtherMedication) {
 					if (Long.parseLong(row.getCode()) == med.getCodMaterial()) {
 						filter = false;
 						break;
@@ -1664,6 +1672,14 @@ public class HistoryBackingNew extends BaseBacking {
 		selectedTherapy = null;
 	}
 
+	public void removeOtherMedicationAction(ActionEvent event) {
+		for (CrmMedication row : selectedOtherMedication) {
+			listOtherMedication.remove(row);
+		}
+		otherMedicationModel = new MedicationDataModel(listOtherMedication);
+		selectedOtherMedication = null;
+	}
+
 	public void removeExamAction(ActionEvent event) {
 		for (CrmMedication row : selectedExam) {
 			listExam.remove(row);
@@ -1699,7 +1715,6 @@ public class HistoryBackingNew extends BaseBacking {
 
 	public void selectMedicationAction() {
 		this.typeMedication = Constant.MATERIAL_TYPE_MEDICINE;
-		refreshMaterialFields();
 
 		listAllMaterial = new ArrayList<WSBean>();
 		for (CrmCieMaterial row : listCieMaterial) {
@@ -1731,6 +1746,31 @@ public class HistoryBackingNew extends BaseBacking {
 		}
 
 		refreshListMedication();
+		refreshMaterialFields();
+	}
+
+	public void selectOtherMedicationAction(ActionEvent event) {
+		this.typeMedication = Constant.MATERIAL_TYPE_OTHER_MEDICINE;
+		listAllMaterial = new ArrayList<WSBean>();
+
+		for (WSBean material : listAllBackupMaterial) {
+			boolean validateGroup = false;
+			for (CrmMaterialGroup row : listMaterialGroup) {
+				if (row.getMaterialType().equals(
+						Constant.MATERIAL_TYPE_MEDICINE)
+						&& material.getType().equals(row.getGroup())) {
+					validateGroup = true;
+					break;
+				}
+			}
+
+			if (validateGroup) {
+				listAllMaterial.add(material);
+			}
+		}
+
+		refreshListMedication();
+		refreshMaterialFields();
 	}
 
 	public void selectTherapyAction(ActionEvent event) {
@@ -1812,7 +1852,9 @@ public class HistoryBackingNew extends BaseBacking {
 				.getListMedicationByPatient(selectedPatient.getId());
 
 		for (CrmMedication row : listAllMedication) {
-			if (row.getMaterialType().equals(Constant.MATERIAL_TYPE_MEDICINE)) {
+			if (row.getMaterialType().equals(Constant.MATERIAL_TYPE_MEDICINE)
+					|| row.getMaterialType().equals(
+							Constant.MATERIAL_TYPE_OTHER_MEDICINE)) {
 				listMedicationView.add(row);
 			} else if (row.getMaterialType().equals(
 					Constant.MATERIAL_TYPE_THERAPY)) {
@@ -1880,10 +1922,9 @@ public class HistoryBackingNew extends BaseBacking {
 			}
 
 			if (listOtherMedication.size() > 0) {
-				for (CrmOtherMedication row : listOtherMedication) {
+				for (CrmMedication row : listOtherMedication) {
 					if (FacesUtil.isEmptyOrBlank(row.getDiagnosis())
-							|| FacesUtil.isEmptyOrBlank(row.getMedication())
-							|| FacesUtil.isEmptyOrBlank(row.getPosology())) {
+							|| FacesUtil.isEmptyOrBlank(row.getDiagnosis())) {
 						message = FacesUtil.getMessage("his_msg_message_med_4");
 						FacesUtil.addWarn(message);
 						break;
@@ -1913,8 +1954,9 @@ public class HistoryBackingNew extends BaseBacking {
 				processService.saveDiagnosis(currentAppointment, listDiagnosis);
 				processService.saveMedication(currentAppointment,
 						listMedication, Constant.MATERIAL_TYPE_MEDICINE);
-				processService.saveOtherMedication(currentAppointment,
-						listOtherMedication);
+				processService.saveMedication(currentAppointment,
+						listOtherMedication,
+						Constant.MATERIAL_TYPE_OTHER_MEDICINE);
 				processService.saveMedication(currentAppointment, listTherapy,
 						Constant.MATERIAL_TYPE_THERAPY);
 				processService.saveMedication(currentAppointment, listExam,
@@ -2006,33 +2048,6 @@ public class HistoryBackingNew extends BaseBacking {
 
 	public boolean isDisabledOtherMedication() {
 		return listOtherMedication.size() == 0 ? true : false;
-	}
-
-	public void addOtherMedicationAction(ActionEvent event) {
-		CrmOtherMedication object = new CrmOtherMedication();
-		object.setCrmAppointment(currentAppointment);
-		object.setSequence(sequenceOtherMedication);
-		listOtherMedication.add(object);
-		otherMedicationModel = new OtherMedicationDataModel(listOtherMedication);
-		sequenceOtherMedication++;
-	}
-
-	public void removeOtherMedicationAction(ActionEvent event) {
-		for (CrmOtherMedication row : selectedOtherMedication) {
-			listOtherMedication.remove(row);
-
-			List<CrmOtherMedication> listDelete = new ArrayList<CrmOtherMedication>();
-			for (CrmOtherMedication med : listOtherMedication) {
-				if (med.getSequence() == row.getSequence()) {
-					listDelete.add(med);
-				}
-			}
-
-			for (CrmOtherMedication med : listDelete) {
-				listOtherMedication.remove(med);
-			}
-		}
-		otherMedicationModel = new OtherMedicationDataModel(listOtherMedication);
 	}
 
 }

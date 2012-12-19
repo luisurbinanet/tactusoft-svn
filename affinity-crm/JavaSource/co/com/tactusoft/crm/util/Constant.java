@@ -48,8 +48,10 @@ public class Constant {
 	public static final String APP_STATE_NOATTENDED_LABEL = "glb_app_no_attended";
 
 	public static final String HISTORY_NOT_REFER = "NO REFERIDO";
+	public static final String HISTORY_NORMAL = "NORMAL";
 
 	public static final String MATERIAL_TYPE_MEDICINE = "MEDICAMENTO";
+	public static final String MATERIAL_TYPE_OTHER_MEDICINE = "OTRO_MEDICAMENTO";
 	public static final String MATERIAL_TYPE_THERAPY = "TERAPIA";
 	public static final String MATERIAL_TYPE_EXAMS = "EXAMENES_COMPLEMENTARIOS";
 
@@ -65,10 +67,10 @@ public class Constant {
 
 	public static final String SCHEDULE_REMOVE = "REMOVE";
 	public static final String SCHEDULE_MAINTAIN = "MAINTAIN";
-	
+
 	public static String CALLED_TYPE_IN = "incoming";
 	public static String CALLE_TYPE_OUT = "outgoing";
-	
+
 	public static String HISTORY_HISTORY = "HISTORY";
 	public static String HISTORY_RECORD = "RECORD";
 	public static String HISTORY_HOMEOPATHIC = "HOMEOPATHIC";
