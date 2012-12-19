@@ -107,9 +107,9 @@ order by a.id]]>
 		<![CDATA[select a.id_appointment,
 		b.description desc_cie,
 		a.id_cie,
-    c.unit,
+		c.unit,
 		c.cod_material,
-    c.desc_material,
+		c.desc_material,
 		a.posology,
 		e.doc,
 		cast(d.start_appointment_date as Date) appointment_date,
@@ -123,7 +123,25 @@ join crm_patient e on d.id_patient = e.id
 join crm_doctor f on d.id_doctor = f.id
 join crm_branch g on d.id_branch = g.id
 where a.id_appointment = $P{P_APPOINTMENT} and c.material_type = 'MEDICAMENTO'
-order by a.id]]>
+UNION
+select c.id_appointment,
+		c.diagnosis desc_cie,
+		0 id_cie,
+		c.unit,
+		c.cod_material,
+		c.desc_material,
+		posology,
+		e.doc,
+		cast(d.start_appointment_date as Date) appointment_date,
+		concat(e.firstnames,' ', e.surnames) as name_patient,
+		f.names as name_doctor,
+		concat(g.code, ' - ',g.name) as name_branch
+from crm_medication c
+join crm_appointment d on c.id_appointment = d.id
+join crm_patient e on d.id_patient = e.id
+join crm_doctor f on d.id_doctor = f.id
+join crm_branch g on d.id_branch = g.id
+where c.id_appointment = $P{P_APPOINTMENT} and c.material_type = 'OTRO_MEDICAMENTO']]>
 	</queryString>
 	<field name="id_appointment" class="java.math.BigDecimal"/>
 	<field name="desc_cie" class="java.lang.String"/>
