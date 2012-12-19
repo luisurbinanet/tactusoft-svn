@@ -33,7 +33,8 @@
 					</p:toolbarGroup>
 				</p:toolbar>
 
-				<p:spacer rendered="#{not historyBackingNew.modeEdit or historyBackingNew.modeHistorial}" />
+				<p:spacer
+					rendered="#{not historyBackingNew.modeEdit or historyBackingNew.modeHistorial}" />
 
 				<!-- TACTU CITAS -->
 				<h:panelGrid id="tblAppointment" columns="1" width="100%"
@@ -931,7 +932,7 @@
 										<p:commandButton value="#{msg['btn_delete']}"
 											disabled="#{historyBackingNew.disabledDiagnosis}"
 											icon="ui-icon-closethick"
-											update="dtbDiagnosis :form:accordion:dtbTherapy :form:accordion:dtbExamns"
+											update="dtbDiagnosis :form:accordion:dtbOtherMedication :form:accordion:dtbTherapy :form:accordion:dtbExamns"
 											actionListener="#{historyBackingNew.removeDiagnosisAction}" />
 									</f:facet>
 
@@ -940,7 +941,7 @@
 
 							<p:spacer />
 
-							<p:fieldset legend="#{msg['his_history_other_medicaction']}" rendered="false">
+							<p:fieldset legend="#{msg['his_history_other_medicaction']}">
 								<p:dataTable id="dtbOtherMedication" var="rec"
 									value="#{historyBackingNew.otherMedicationModel}"
 									selection="#{historyBackingNew.selectedOtherMedication}"
@@ -950,30 +951,39 @@
 
 									<p:column selectionMode="multiple" style="width:18px" />
 
-									<p:column headerText="#{msg['cie_grp_diagnosis']}">
-										<p:inputTextarea value="#{rec.diagnosis}" rows="5"
-											style="width:300px" />
+									<p:column headerText="#{msg['sal_material_code']}">
+										<h:outputLabel value="#{rec.codMaterial}" />
 									</p:column>
 
-									<p:column headerText="#{msg['cie_grp_medication']}">
-										<p:inputTextarea value="#{rec.medication}" rows="5"
-											style="width:300px" />
+									<p:column headerText="#{msg['sal_material_descr']}">
+										<h:outputLabel value="#{rec.descMaterial}" />
 									</p:column>
 
-									<p:column headerText="#{msg['cie_grp_posology']}">
-										<p:inputTextarea value="#{rec.posology}" rows="5"
-											style="width:300px" />
+									<p:column headerText="#{msg['sal_material_amount']}"
+										style="width:100px">
+										<pe:inputNumber value="#{rec.unit}" symbolPosition="s"
+											decimalPlaces="0" style="width:100px" minValue="1"
+											maxValue="99" />
+									</p:column>
+
+									<p:column headerText="#{msg['cie_grp_diagnosis']}"
+										style="width:400px">
+										<p:inputTextarea value="#{rec.diagnosis}" rows="3"
+											style="width:400px" />
 									</p:column>
 
 									<f:facet name="footer">
-										<p:commandButton value="#{msg['btn_select_diagnosis']}"
-											actionListener="#{historyBackingNew.addOtherMedicationAction}"
-											update="dtbOtherMedication" />
+										<p:commandButton id="btnSelOtherMedication"
+											oncomplete="dlgMedicine.show()" update=":form:dialogMedicine"
+											disabled="#{historyBackingNew.disabledDiagnosis}"
+											value="#{msg['btn_select']}" icon="ui-icon-search"
+											actionListener="#{historyBackingNew.selectOtherMedicationAction}" />
 										<p:commandButton value="#{msg['btn_delete']}"
 											disabled="#{historyBackingNew.disabledOtherMedication}"
 											icon="ui-icon-closethick" update="dtbOtherMedication"
 											actionListener="#{historyBackingNew.removeOtherMedicationAction}" />
 									</f:facet>
+
 								</p:dataTable>
 							</p:fieldset>
 
@@ -1131,7 +1141,7 @@
 								actionListener="#{historyBackingNew.searchCIEAction}" />
 							<p:commandButton id="btnAddCIE" value="#{msg['btn_add']}"
 								icon="ui-icon-plusthick"
-								update="recordTable3 :form:accordion:dtbDiagnosis :form:accordion:dtbTherapy :form:accordion:dtbExamns"
+								update="recordTable3 :form:accordion:dtbDiagnosis :form:accordion:dtbTherapy :form:accordion:dtbOtherMedication :form:accordion:dtbExamns"
 								actionListener="#{historyBackingNew.addCieAction}"
 								disabled="#{historyBackingNew.disabledAddCie}" />
 						</f:facet>
@@ -1202,7 +1212,7 @@
 								actionListener="#{historyBackingNew.searchMaterialAction}" />
 							<p:commandButton id="btnAddMaterial" value="#{msg['btn_add']}"
 								icon="ui-icon-plusthick"
-								update="recordTable4 :form:accordion:dtbDiagnosis :form:accordion:dtbTherapy :form:accordion:dtbExamns"
+								update="recordTable4 :form:accordion:dtbDiagnosis :form:accordion:dtbOtherMedication :form:accordion:dtbTherapy :form:accordion:dtbExamns"
 								actionListener="#{historyBackingNew.addMaterialAction}"
 								disabled="#{historyBackingNew.disabledAddMaterial}" />
 						</f:facet>
@@ -1359,8 +1369,8 @@
 					<p:scrollPanel id="pnlTable2" style="width:580px;height:300px">
 						<p:dataTable id="recordTable2" var="rec"
 							value="#{historyBackingNew.patientModel}" rowKey="#{rec.id}"
-							selection="#{historyBackingNew.selectedPatientTemp}" paginator="true"
-							rows="15" style="width:570px"
+							selection="#{historyBackingNew.selectedPatientTemp}"
+							paginator="true" rows="15" style="width:570px"
 							emptyMessage="#{msg['glb_no_records_found']}">
 
 							<p:column selectionMode="single" style="width:18px" />

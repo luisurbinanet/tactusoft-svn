@@ -32,7 +32,6 @@ import co.com.tactusoft.crm.model.entities.CrmMaterialGroup;
 import co.com.tactusoft.crm.model.entities.CrmMedication;
 import co.com.tactusoft.crm.model.entities.CrmNote;
 import co.com.tactusoft.crm.model.entities.CrmNurse;
-import co.com.tactusoft.crm.model.entities.CrmOtherMedication;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
 import co.com.tactusoft.crm.model.entities.VwAppointment;
@@ -1415,20 +1414,6 @@ public class ProcessBo implements Serializable {
 		return i;
 	}
 
-	public Integer saveOtherMedication(CrmAppointment entity,
-			List<CrmOtherMedication> list) {
-		int i = 0;
-
-		dao.executeHQL("delete from CrmOtherMedication o where o.crmAppointment.id = "
-				+ entity.getId());
-
-		for (CrmOtherMedication row : list) {
-			this.persist(row);
-		}
-
-		return i;
-	}
-
 	public Integer saveMedication(CrmAppointment entity,
 			List<CrmMedication> list, String materialType) {
 		int i = 0;
@@ -1489,15 +1474,7 @@ public class ProcessBo implements Serializable {
 						+ materialType + "' order by o.id");
 		return list;
 	}
-
-	public List<CrmOtherMedication> getListOtherMedicationByAppointment(
-			BigDecimal idAppointment) {
-		List<CrmOtherMedication> list = dao
-				.find("from CrmOtherMedication o where o.crmAppointment.id = "
-						+ idAppointment + " order by o.id");
-		return list;
-	}
-
+	
 	public List<CrmNote> getListNoteByPatient(BigDecimal idPatient) {
 		List<CrmNote> list = dao
 				.find("from CrmNote o where o.crmAppointment.crmPatient.id = "
