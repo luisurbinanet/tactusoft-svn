@@ -79,6 +79,7 @@ public class CrmPatient implements java.io.Serializable {
 	private Set<CrmHistoryHistory> crmHistoryHistories = new HashSet<CrmHistoryHistory>(
 			0);
 	private Set<CrmAppointment> crmAppointments = new HashSet<CrmAppointment>(0);
+	private Set<CrmNote> crmNotes = new HashSet<CrmNote>(0);
 
 	private String names;
 	private int age;
@@ -110,7 +111,7 @@ public class CrmPatient implements java.io.Serializable {
 			Set<CrmHistoryOrganometry> crmHistoryOrganometries,
 			Set<CrmHistoryRecord> crmHistoryRecords,
 			Set<CrmHistoryHistory> crmHistoryHistories,
-			Set<CrmAppointment> crmAppointments) {
+			Set<CrmAppointment> crmAppointments, Set<CrmNote> crmNotes) {
 		this.id = id;
 		this.crmOccupation = crmOccupation;
 		this.crmUserByIdUserCreate = crmUserByIdUserCreate;
@@ -152,6 +153,7 @@ public class CrmPatient implements java.io.Serializable {
 		this.crmHistoryRecords = crmHistoryRecords;
 		this.crmHistoryHistories = crmHistoryHistories;
 		this.crmAppointments = crmAppointments;
+		this.crmNotes = crmNotes;
 	}
 
 	@Id
@@ -560,6 +562,15 @@ public class CrmPatient implements java.io.Serializable {
 
 	public void setCrmAppointments(Set<CrmAppointment> crmAppointments) {
 		this.crmAppointments = crmAppointments;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmAppointment")
+	public Set<CrmNote> getCrmNotes() {
+		return this.crmNotes;
+	}
+
+	public void setCrmNotes(Set<CrmNote> crmNotes) {
+		this.crmNotes = crmNotes;
 	}
 
 	@Transient
