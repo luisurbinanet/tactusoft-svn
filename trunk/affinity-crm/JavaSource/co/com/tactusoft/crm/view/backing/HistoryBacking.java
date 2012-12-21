@@ -132,6 +132,7 @@ public class HistoryBacking extends BaseBacking {
 	private String typeMedication;
 	private String titleMedication;
 	private int amount;
+	private String typeNote;
 	private String noteDoctor;
 	private boolean viewMode;
 	private List<CrmMaterialGroup> listMaterialGroup;
@@ -684,6 +685,14 @@ public class HistoryBacking extends BaseBacking {
 		this.amount = amount;
 	}
 
+	public String getTypeNote() {
+		return typeNote;
+	}
+
+	public void setTypeNote(String typeNote) {
+		this.typeNote = typeNote;
+	}
+
 	public String getNoteDoctor() {
 		return noteDoctor;
 	}
@@ -778,6 +787,26 @@ public class HistoryBacking extends BaseBacking {
 
 	public Date getMaxDate() {
 		return new Date();
+	}
+
+	public boolean isDisabledDiagnosis() {
+		return listDiagnosis.size() == 0 ? true : false;
+	}
+
+	public boolean isDisabledMedication() {
+		return listMedication.size() == 0 ? true : false;
+	}
+
+	public boolean isDisabledTherapy() {
+		return listTherapy.size() == 0 ? true : false;
+	}
+
+	public boolean isDisabledExam() {
+		return listExam.size() == 0 ? true : false;
+	}
+
+	public boolean isDisabledOtherMedication() {
+		return listOtherMedication.size() == 0 ? true : false;
 	}
 
 	public void calculateIMCAction(ActionEvent event) {
@@ -1534,10 +1563,6 @@ public class HistoryBacking extends BaseBacking {
 		diagnosisModel = new DiagnosisDataModel(listDiagnosis);
 	}
 
-	public boolean isDisabledDiagnosis() {
-		return listDiagnosis.size() == 0 ? true : false;
-	}
-
 	// Medication
 	public void searchMaterialAction(ActionEvent event) {
 		if ((optionSearchMaterial == 1 && this.codeMaterial.isEmpty())
@@ -1810,6 +1835,13 @@ public class HistoryBacking extends BaseBacking {
 	}
 
 	private void refreshLists() {
+
+		if (this.getRolePrincipal().equals(Constant.ROLE_DOCTOR)) {
+			this.typeNote = Constant.NOTE_TYPE_DOCTOR;
+		} else {
+			this.typeNote = Constant.NOTE_TYPE_NURSE;
+		}
+
 		List<VwAppointment> listTempApp = processService
 				.getListByAppointmentByPatient(selectedAppointment.getPatId());
 		historyAppointmentModel = new VwAppointmentDataModel(listTempApp);
@@ -1955,8 +1987,6 @@ public class HistoryBacking extends BaseBacking {
 						Constant.MATERIAL_TYPE_THERAPY);
 				processService.saveMedication(currentAppointment, listExam,
 						Constant.MATERIAL_TYPE_EXAMS);
-				processService.saveNotes(selectedPatient, noteDoctor,
-						Constant.NOTE_TYPE_DOCTOR);
 
 				viewMode = true;
 				currentAppointment.setMedicationTherapy(medicationTherapy);
@@ -1975,30 +2005,27 @@ public class HistoryBacking extends BaseBacking {
 				}
 
 			}
-		} else if (this.getRolePrincipal().equals(Constant.ROLE_NURSE)) {
-			if (FacesUtil.isEmptyOrBlank(noteDoctor)) {
-				String field = FacesUtil.getMessage("his_history_note");
-				message = FacesUtil.getMessage("glb_required", field);
-				FacesUtil.addWarn(message);
-			} else {
-				processService.saveNotes(selectedPatient, noteDoctor,
-						Constant.NOTE_TYPE_NURSE);
-
-				viewMode = true;
-				currentAppointment.setCloseAppointment(true);
-				currentAppointment.setState(Constant.APP_STATE_ATTENDED);
-				processService.saveAppointment(currentAppointment);
-				message = FacesUtil.getMessage("his_msg_message_med_ok");
-				FacesUtil.addInfo(message);
-				refreshLists();
-
-				listAppointment = processService
-						.getListVwAppointmentByHistory(currentDoctor.getId());
-				appointmentModel = new VwAppointmentDataModel(listAppointment);
-				if (listAppointment.size() > 0) {
-					selectedAppointment = listAppointment.get(0);
-				}
-			}
+			/*
+			 * } else if (this.getRolePrincipal().equals(Constant.ROLE_NURSE)) {
+			 * if (FacesUtil.isEmptyOrBlank(noteDoctor)) { String field =
+			 * FacesUtil.getMessage("his_history_note"); message =
+			 * FacesUtil.getMessage("glb_required", field);
+			 * FacesUtil.addWarn(message); } else {
+			 * processService.saveNotes(selectedPatient, noteDoctor,
+			 * Constant.NOTE_TYPE_NURSE);
+			 * 
+			 * viewMode = true; currentAppointment.setCloseAppointment(true);
+			 * currentAppointment.setState(Constant.APP_STATE_ATTENDED);
+			 * processService.saveAppointment(currentAppointment); message =
+			 * FacesUtil.getMessage("his_msg_message_med_ok");
+			 * FacesUtil.addInfo(message); refreshLists();
+			 * 
+			 * listAppointment = processService
+			 * .getListVwAppointmentByHistory(currentDoctor.getId());
+			 * appointmentModel = new VwAppointmentDataModel(listAppointment);
+			 * if (listAppointment.size() > 0) { selectedAppointment =
+			 * listAppointment.get(0); } }
+			 */
 		}
 	}
 
@@ -2028,20 +2055,31 @@ public class HistoryBacking extends BaseBacking {
 		}
 	}
 
-	public boolean isDisabledMedication() {
-		return listMedication.size() == 0 ? true : false;
+	public void printRemissiomAction() {
+		try {
+			GenerateFormulaPDF.PDF(currentAppointment.getId(),
+					Constant.MATERIAL_TYPE_THERAPY);
+		} catch (JRException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
-	public boolean isDisabledTherapy() {
-		return listTherapy.size() == 0 ? true : false;
-	}
-
-	public boolean isDisabledExam() {
-		return listExam.size() == 0 ? true : false;
-	}
-
-	public boolean isDisabledOtherMedication() {
-		return listOtherMedication.size() == 0 ? true : false;
+	public void saveNoteAction(ActionEvent event) {
+		CrmNote crmNote = new CrmNote();
+		crmNote.setCrmPatient(this.selectedPatient);
+		crmNote.setCrmDoctor(this.currentDoctor);
+		crmNote.setNote(this.noteDoctor);
+		crmNote.setNoteType(this.typeNote);
+		crmNote.setNoteDate(new Date());
+		processService.saveNotes(crmNote);
+		listNoteView.add(crmNote);
+		String message = FacesUtil.getMessage("msg_record_ok");
+		this.noteDoctor = null;
+		FacesUtil.addInfo(message);
 	}
 
 }
