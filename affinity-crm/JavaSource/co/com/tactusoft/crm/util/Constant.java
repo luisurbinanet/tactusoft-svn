@@ -57,6 +57,8 @@ public class Constant {
 
 	public static final String NOTE_TYPE_DOCTOR = "MEDICO";
 	public static final String NOTE_TYPE_NURSE = "ENFERMERA";
+	public static final String NOTE_TYPE_SUPPORT = "SOPORTE";
+	public static final String NOTE_TYPE_REMISSION = "REMISION";
 
 	public static final String TIME_TYPE_DOCTOR = "MEDICO";
 	public static final String TIME_TYPE_NURSE = "ENFERMERA";
