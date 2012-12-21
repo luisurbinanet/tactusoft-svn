@@ -353,13 +353,13 @@
 			emptyMessage="#{msg['glb_no_records_found']}">
 
 			<p:column headerText="#{msg['app_date']}">
-				<h:outputLabel value="#{rec.crmAppointment.startAppointmentDate}">
+				<h:outputLabel value="#{rec.noteDate}">
 					<f:convertDateTime pattern="dd/MM/yyyy" />
 				</h:outputLabel>
 			</p:column>
 
 			<p:column headerText="#{msg['app_doctor']}">
-				<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+				<h:outputLabel value="#{rec.crmDoctor.names}" />
 			</p:column>
 
 			<p:column headerText="#{msg['his_history_note_type']}">

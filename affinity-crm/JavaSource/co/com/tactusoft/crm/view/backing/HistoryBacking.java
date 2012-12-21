@@ -5,18 +5,17 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.faces.event.ActionEvent;
-import javax.faces.model.SelectItem;
 import javax.inject.Named;
 
 import net.sf.jasperreports.engine.JRException;
 
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.DateSelectEvent;
+import org.primefaces.event.TabChangeEvent;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.controller.bo.GenerateFormulaPDF;
@@ -24,6 +23,7 @@ import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmCie;
 import co.com.tactusoft.crm.model.entities.CrmCieMaterial;
 import co.com.tactusoft.crm.model.entities.CrmDiagnosis;
+import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmHistoryHistory;
 import co.com.tactusoft.crm.model.entities.CrmHistoryHomeopathic;
 import co.com.tactusoft.crm.model.entities.CrmHistoryOrganometry;
@@ -33,15 +33,19 @@ import co.com.tactusoft.crm.model.entities.CrmMaterialGroup;
 import co.com.tactusoft.crm.model.entities.CrmMedication;
 import co.com.tactusoft.crm.model.entities.CrmNote;
 import co.com.tactusoft.crm.model.entities.CrmOccupation;
-import co.com.tactusoft.crm.model.entities.CrmPatient;
+import co.com.tactusoft.crm.model.entities.VwAppointment;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.util.SAPEnvironment;
-import co.com.tactusoft.crm.view.datamodel.AppointmentDataModel;
 import co.com.tactusoft.crm.view.datamodel.CieDataModel;
 import co.com.tactusoft.crm.view.datamodel.DiagnosisDataModel;
+import co.com.tactusoft.crm.view.datamodel.HistoryHistoryDataModel;
+import co.com.tactusoft.crm.view.datamodel.HistoryHomeopathicDataModel;
+import co.com.tactusoft.crm.view.datamodel.HistoryOrganometryDataModel;
+import co.com.tactusoft.crm.view.datamodel.HistoryPhysiqueDataModel;
+import co.com.tactusoft.crm.view.datamodel.HistoryRecordDataModel;
 import co.com.tactusoft.crm.view.datamodel.MedicationDataModel;
-import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
+import co.com.tactusoft.crm.view.datamodel.VwAppointmentDataModel;
 import co.com.tactusoft.crm.view.datamodel.WSBeanDataModel;
 
 import com.tactusoft.webservice.client.beans.WSBean;
@@ -53,28 +57,38 @@ public class HistoryBacking extends BaseBacking {
 
 	private static final long serialVersionUID = 1L;
 
+	private CrmDoctor currentDoctor;
+	private CrmAppointment currentAppointment;
+
+	private List<VwAppointment> listAppointment;
+	private VwAppointmentDataModel appointmentModel;
+	private VwAppointment selectedAppointment;
+
+	private boolean modeEdit;
+	private boolean modeHistorial;
+	private String part;
+
+	private VwAppointmentDataModel historyAppointmentModel;
+	private HistoryHistoryDataModel historyHistoryModel;
+	private HistoryRecordDataModel historyRecordModel;
+	private HistoryHomeopathicDataModel historyHomeopathicModel;
+	private HistoryPhysiqueDataModel historyPhysiqueModel;
+	private HistoryOrganometryDataModel historyOrganometryModel;
+
 	private CrmHistoryHistory selectedHistoryHistory;
 	private CrmHistoryRecord selectedHistoryRecord;
 	private CrmHistoryHomeopathic selectedHistoryHomeopathic;
 	private CrmHistoryPhysique selectedHistoryPhysique;
 	private CrmHistoryOrganometry selectedHistoryOrganometry;
 
-	private List<CrmAppointment> listAppointment;
-	private AppointmentDataModel appointmentModel;
-	private CrmAppointment selectedAppointment;
-
-	private Boolean disabledSaveButton;
-
-	private boolean readOnlySelectedHistoryHistory;
-	private boolean readOnlySelectedHistoryRecord;
-	private boolean readOnlySelectedHistoryHomeopathic;
-	private boolean readOnlySelectedHistoryPhysique;
-	private boolean readOnlySelectedHistoryOrganometry;
-
-	public int age;
+	private int activeIndex = -1;
+	private BigDecimal idOccupation;
+	private String neighborhood;
+	private String typeHousing;
+	private int age;
+	private BigDecimal idMembershipType;
 	private double imc;
 	private String descImc;
-	private Date maxDate;
 
 	private int optionSearchCie;
 	private List<CrmCie> listCie;
@@ -103,6 +117,10 @@ public class HistoryBacking extends BaseBacking {
 	private MedicationDataModel medicationModel;
 	private CrmMedication[] selectedMedication;
 
+	private List<CrmMedication> listOtherMedication;
+	private MedicationDataModel otherMedicationModel;
+	private CrmMedication[] selectedOtherMedication;
+
 	private List<CrmMedication> listExam;
 	private MedicationDataModel examModel;
 	private CrmMedication[] selectedExam;
@@ -115,6 +133,7 @@ public class HistoryBacking extends BaseBacking {
 	private String titleMedication;
 	private int amount;
 	private String noteDoctor;
+	private boolean viewMode;
 	private List<CrmMaterialGroup> listMaterialGroup;
 	private List<CrmCieMaterial> listCieMaterial;
 
@@ -124,14 +143,146 @@ public class HistoryBacking extends BaseBacking {
 	private List<CrmMedication> listExamView;
 	private List<CrmNote> listNoteView;
 
-	private List<SelectItem> listOccupation;
-	private Map<BigDecimal, CrmOccupation> mapOccupation;
-	private BigDecimal idOccupation;
-	private String neighborhood;
-	private String typeHousing;
-
 	public HistoryBacking() {
 		newAction(null);
+	}
+
+	@PostConstruct
+	public void init() {
+		currentDoctor = processService.getCrmDoctor();
+		appointmentModel = null;
+		modeEdit = false;
+		modeHistorial = false;
+
+		listMaterialGroup = processService.getListMaterialGroup();
+		listCieMaterial = processService.getListCieMaterial();
+	}
+
+	public CrmDoctor getCurrentDoctor() {
+		return currentDoctor;
+	}
+
+	public void setCurrentDoctor(CrmDoctor currentDoctor) {
+		this.currentDoctor = currentDoctor;
+	}
+
+	public CrmAppointment getCurrentAppointment() {
+		return currentAppointment;
+	}
+
+	public void setCurrentAppointment(CrmAppointment currentAppointment) {
+		this.currentAppointment = currentAppointment;
+	}
+
+	public List<VwAppointment> getListAppointment() {
+		return listAppointment;
+	}
+
+	public void setListAppointment(List<VwAppointment> listAppointment) {
+		this.listAppointment = listAppointment;
+	}
+
+	public VwAppointmentDataModel getAppointmentModel() {
+		if (appointmentModel == null) {
+			if (currentDoctor != null) {
+				listAppointment = processService
+						.getListVwAppointmentByHistory(currentDoctor.getId());
+				appointmentModel = new VwAppointmentDataModel(listAppointment);
+				if (listAppointment.size() > 0) {
+					selectedAppointment = listAppointment.get(0);
+				}
+			}
+		}
+		return appointmentModel;
+	}
+
+	public void setAppointmentModel(VwAppointmentDataModel appointmentModel) {
+		this.appointmentModel = appointmentModel;
+	}
+
+	public VwAppointment getSelectedAppointment() {
+		return selectedAppointment;
+	}
+
+	public void setSelectedAppointment(VwAppointment selectedAppointment) {
+		this.selectedAppointment = selectedAppointment;
+	}
+
+	public boolean isModeEdit() {
+		return modeEdit;
+	}
+
+	public void setModeEdit(boolean modeEdit) {
+		this.modeEdit = modeEdit;
+	}
+
+	public boolean isModeHistorial() {
+		return modeHistorial;
+	}
+
+	public void setModeHistorial(boolean modeHistorial) {
+		this.modeHistorial = modeHistorial;
+	}
+
+	public String getPart() {
+		return part;
+	}
+
+	public void setPart(String part) {
+		this.part = part;
+	}
+
+	public VwAppointmentDataModel getHistoryAppointmentModel() {
+		return historyAppointmentModel;
+	}
+
+	public void setHistoryAppointmentModel(
+			VwAppointmentDataModel historyAppointmentModel) {
+		this.historyAppointmentModel = historyAppointmentModel;
+	}
+
+	public HistoryHistoryDataModel getHistoryHistoryModel() {
+		return historyHistoryModel;
+	}
+
+	public void setHistoryHistoryModel(
+			HistoryHistoryDataModel historyHistoryModel) {
+		this.historyHistoryModel = historyHistoryModel;
+	}
+
+	public HistoryRecordDataModel getHistoryRecordModel() {
+		return historyRecordModel;
+	}
+
+	public void setHistoryRecordModel(HistoryRecordDataModel historyRecordModel) {
+		this.historyRecordModel = historyRecordModel;
+	}
+
+	public HistoryHomeopathicDataModel getHistoryHomeopathicModel() {
+		return historyHomeopathicModel;
+	}
+
+	public void setHistoryHomeopathicModel(
+			HistoryHomeopathicDataModel historyHomeopathicModel) {
+		this.historyHomeopathicModel = historyHomeopathicModel;
+	}
+
+	public HistoryPhysiqueDataModel getHistoryPhysiqueModel() {
+		return historyPhysiqueModel;
+	}
+
+	public void setHistoryPhysiqueModel(
+			HistoryPhysiqueDataModel historyPhysiqueModel) {
+		this.historyPhysiqueModel = historyPhysiqueModel;
+	}
+
+	public HistoryOrganometryDataModel getHistoryOrganometryModel() {
+		return historyOrganometryModel;
+	}
+
+	public void setHistoryOrganometryModel(
+			HistoryOrganometryDataModel historyOrganometryModel) {
+		this.historyOrganometryModel = historyOrganometryModel;
 	}
 
 	public CrmHistoryHistory getSelectedHistoryHistory() {
@@ -178,81 +329,36 @@ public class HistoryBacking extends BaseBacking {
 		this.selectedHistoryOrganometry = selectedHistoryOrganometry;
 	}
 
-	public List<CrmAppointment> getListAppointment() {
-		return listAppointment;
+	public int getActiveIndex() {
+		return activeIndex;
 	}
 
-	public void setListAppointment(List<CrmAppointment> listAppointment) {
-		this.listAppointment = listAppointment;
+	public void setActiveIndex(int activeIndex) {
+		this.activeIndex = activeIndex;
 	}
 
-	public AppointmentDataModel getAppointmentModel() {
-		return appointmentModel;
+	public BigDecimal getIdOccupation() {
+		return idOccupation;
 	}
 
-	public void setAppointmentModel(AppointmentDataModel appointmentModel) {
-		this.appointmentModel = appointmentModel;
+	public void setIdOccupation(BigDecimal idOccupation) {
+		this.idOccupation = idOccupation;
 	}
 
-	public CrmAppointment getSelectedAppointment() {
-		return selectedAppointment;
+	public String getNeighborhood() {
+		return neighborhood;
 	}
 
-	public void setSelectedAppointment(CrmAppointment selectedAppointment) {
-		this.selectedAppointment = selectedAppointment;
+	public void setNeighborhood(String neighborhood) {
+		this.neighborhood = neighborhood;
 	}
 
-	public Boolean getDisabledSaveButton() {
-		return disabledSaveButton;
+	public String getTypeHousing() {
+		return typeHousing;
 	}
 
-	public void setDisabledSaveButton(Boolean disabledSaveButton) {
-		this.disabledSaveButton = disabledSaveButton;
-	}
-
-	public boolean isReadOnlySelectedHistoryHistory() {
-		return readOnlySelectedHistoryHistory;
-	}
-
-	public void setReadOnlySelectedHistoryHistory(
-			boolean readOnlySelectedHistoryHistory) {
-		this.readOnlySelectedHistoryHistory = readOnlySelectedHistoryHistory;
-	}
-
-	public boolean isReadOnlySelectedHistoryRecord() {
-		return readOnlySelectedHistoryRecord;
-	}
-
-	public void setReadOnlySelectedHistoryRecord(
-			boolean readOnlySelectedHistoryRecord) {
-		this.readOnlySelectedHistoryRecord = readOnlySelectedHistoryRecord;
-	}
-
-	public boolean isReadOnlySelectedHistoryHomeopathic() {
-		return readOnlySelectedHistoryHomeopathic;
-	}
-
-	public void setReadOnlySelectedHistoryHomeopathic(
-			boolean readOnlySelectedHistoryHomeopathic) {
-		this.readOnlySelectedHistoryHomeopathic = readOnlySelectedHistoryHomeopathic;
-	}
-
-	public boolean isReadOnlySelectedHistoryPhysique() {
-		return readOnlySelectedHistoryPhysique;
-	}
-
-	public void setReadOnlySelectedHistoryPhysique(
-			boolean readOnlySelectedHistoryPhysique) {
-		this.readOnlySelectedHistoryPhysique = readOnlySelectedHistoryPhysique;
-	}
-
-	public boolean isReadOnlySelectedHistoryOrganometry() {
-		return readOnlySelectedHistoryOrganometry;
-	}
-
-	public void setReadOnlySelectedHistoryOrganometry(
-			boolean readOnlySelectedHistoryOrganometry) {
-		this.readOnlySelectedHistoryOrganometry = readOnlySelectedHistoryOrganometry;
+	public void setTypeHousing(String typeHousing) {
+		this.typeHousing = typeHousing;
 	}
 
 	public int getAge() {
@@ -261,6 +367,14 @@ public class HistoryBacking extends BaseBacking {
 
 	public void setAge(int age) {
 		this.age = age;
+	}
+
+	public BigDecimal getIdMembershipType() {
+		return idMembershipType;
+	}
+
+	public void setIdMembershipType(BigDecimal idMembershipType) {
+		this.idMembershipType = idMembershipType;
 	}
 
 	public double getImc() {
@@ -279,12 +393,36 @@ public class HistoryBacking extends BaseBacking {
 		this.descImc = descImc;
 	}
 
-	public Date getMaxDate() {
-		return maxDate;
+	public List<CrmDiagnosis> getListDiagnosis() {
+		return listDiagnosis;
 	}
 
-	public void setMaxDate(Date maxDate) {
-		this.maxDate = maxDate;
+	public void setListDiagnosis(List<CrmDiagnosis> listDiagnosis) {
+		this.listDiagnosis = listDiagnosis;
+	}
+
+	public DiagnosisDataModel getDiagnosisModel() {
+		return diagnosisModel;
+	}
+
+	public void setDiagnosisModel(DiagnosisDataModel diagnosisModel) {
+		this.diagnosisModel = diagnosisModel;
+	}
+
+	public CrmDiagnosis[] getSelectedsDiagnosis() {
+		return selectedsDiagnosis;
+	}
+
+	public void setSelectedsDiagnosis(CrmDiagnosis[] selectedsDiagnosis) {
+		this.selectedsDiagnosis = selectedsDiagnosis;
+	}
+
+	public CrmDiagnosis getSelectedDiagnosis() {
+		return selectedDiagnosis;
+	}
+
+	public void setSelectedDiagnosis(CrmDiagnosis selectedDiagnosis) {
+		this.selectedDiagnosis = selectedDiagnosis;
 	}
 
 	public int getOptionSearchCie() {
@@ -343,36 +481,20 @@ public class HistoryBacking extends BaseBacking {
 		this.disabledAddCie = disabledAddCie;
 	}
 
-	public List<CrmDiagnosis> getListDiagnosis() {
-		return listDiagnosis;
+	public List<WSBean> getListAllBackupMaterial() {
+		return listAllBackupMaterial;
 	}
 
-	public void setListDiagnosis(List<CrmDiagnosis> listDiagnosis) {
-		this.listDiagnosis = listDiagnosis;
+	public void setListAllBackupMaterial(List<WSBean> listAllBackupMaterial) {
+		this.listAllBackupMaterial = listAllBackupMaterial;
 	}
 
-	public DiagnosisDataModel getDiagnosisModel() {
-		return diagnosisModel;
+	public List<WSBean> getListAllMaterial() {
+		return listAllMaterial;
 	}
 
-	public void setDiagnosisModel(DiagnosisDataModel diagnosisModel) {
-		this.diagnosisModel = diagnosisModel;
-	}
-
-	public CrmDiagnosis[] getSelectedsDiagnosis() {
-		return selectedsDiagnosis;
-	}
-
-	public void setSelectedsDiagnosis(CrmDiagnosis[] selectedsDiagnosis) {
-		this.selectedsDiagnosis = selectedsDiagnosis;
-	}
-
-	public CrmDiagnosis getSelectedDiagnosis() {
-		return selectedDiagnosis;
-	}
-
-	public void setSelectedDiagnosis(CrmDiagnosis selectedDiagnosis) {
-		this.selectedDiagnosis = selectedDiagnosis;
+	public void setListAllMaterial(List<WSBean> listAllMaterial) {
+		this.listAllMaterial = listAllMaterial;
 	}
 
 	public int getOptionSearchMaterial() {
@@ -455,36 +577,29 @@ public class HistoryBacking extends BaseBacking {
 		this.selectedMedication = selectedMedication;
 	}
 
-	public List<CrmMedication> getListTherapy() {
-		return listTherapy;
+	public List<CrmMedication> getListOtherMedication() {
+		return listOtherMedication;
 	}
 
-	public void setListTherapy(List<CrmMedication> listTherapy) {
-		this.listTherapy = listTherapy;
+	public void setListOtherMedication(List<CrmMedication> listOtherMedication) {
+		this.listOtherMedication = listOtherMedication;
 	}
 
-	public MedicationDataModel getTherapyModel() {
-		return therapyModel;
+	public MedicationDataModel getOtherMedicationModel() {
+		return otherMedicationModel;
 	}
 
-	public void setTherapyModel(MedicationDataModel therapyModel) {
-		this.therapyModel = therapyModel;
+	public void setOtherMedicationModel(MedicationDataModel otherMedicationModel) {
+		this.otherMedicationModel = otherMedicationModel;
 	}
 
-	public CrmMedication[] getSelectedTherapy() {
-		return selectedTherapy;
+	public CrmMedication[] getSelectedOtherMedication() {
+		return selectedOtherMedication;
 	}
 
-	public void setSelectedTherapy(CrmMedication[] selectedTherapy) {
-		this.selectedTherapy = selectedTherapy;
-	}
-
-	public List<WSBean> getListAllMaterial() {
-		return listAllMaterial;
-	}
-
-	public void setListAllMaterial(List<WSBean> listAllMaterial) {
-		this.listAllMaterial = listAllMaterial;
+	public void setSelectedOtherMedication(
+			CrmMedication[] selectedOtherMedication) {
+		this.selectedOtherMedication = selectedOtherMedication;
 	}
 
 	public List<CrmMedication> getListExam() {
@@ -511,6 +626,30 @@ public class HistoryBacking extends BaseBacking {
 		this.selectedExam = selectedExam;
 	}
 
+	public List<CrmMedication> getListTherapy() {
+		return listTherapy;
+	}
+
+	public void setListTherapy(List<CrmMedication> listTherapy) {
+		this.listTherapy = listTherapy;
+	}
+
+	public MedicationDataModel getTherapyModel() {
+		return therapyModel;
+	}
+
+	public void setTherapyModel(MedicationDataModel therapyModel) {
+		this.therapyModel = therapyModel;
+	}
+
+	public CrmMedication[] getSelectedTherapy() {
+		return selectedTherapy;
+	}
+
+	public void setSelectedTherapy(CrmMedication[] selectedTherapy) {
+		this.selectedTherapy = selectedTherapy;
+	}
+
 	public String getTypeMedication() {
 		return typeMedication;
 	}
@@ -526,6 +665,9 @@ public class HistoryBacking extends BaseBacking {
 			titleMedication = FacesUtil.getMessage("his_history_therapy");
 		} else if (typeMedication.equals(Constant.MATERIAL_TYPE_EXAMS)) {
 			titleMedication = FacesUtil.getMessage("his_history_examinations");
+		} else if (typeMedication.equals(Constant.MATERIAL_TYPE_OTHER_MEDICINE)) {
+			titleMedication = FacesUtil
+					.getMessage("his_history_other_medicaction");
 		}
 		return titleMedication;
 	}
@@ -548,6 +690,30 @@ public class HistoryBacking extends BaseBacking {
 
 	public void setNoteDoctor(String noteDoctor) {
 		this.noteDoctor = noteDoctor;
+	}
+
+	public boolean isViewMode() {
+		return viewMode;
+	}
+
+	public void setViewMode(boolean viewMode) {
+		this.viewMode = viewMode;
+	}
+
+	public List<CrmMaterialGroup> getListMaterialGroup() {
+		return listMaterialGroup;
+	}
+
+	public void setListMaterialGroup(List<CrmMaterialGroup> listMaterialGroup) {
+		this.listMaterialGroup = listMaterialGroup;
+	}
+
+	public List<CrmCieMaterial> getListCieMaterial() {
+		return listCieMaterial;
+	}
+
+	public void setListCieMaterial(List<CrmCieMaterial> listCieMaterial) {
+		this.listCieMaterial = listCieMaterial;
 	}
 
 	public List<CrmDiagnosis> getListDiagnosisView() {
@@ -590,98 +756,54 @@ public class HistoryBacking extends BaseBacking {
 		this.listNoteView = listNoteView;
 	}
 
-	public List<SelectItem> getListOccupation() {
-		if (listOccupation == null) {
-			listOccupation = new LinkedList<SelectItem>();
-			mapOccupation = new HashMap<BigDecimal, CrmOccupation>();
-			String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
-			listOccupation.add(new SelectItem(null, label));
-			for (CrmOccupation row : tablesService.getListOccupationActive()) {
-				mapOccupation.put(row.getId(), row);
-				listOccupation.add(new SelectItem(row.getId(), row.getName()));
+	public int getRenderedRecord() {
+		int result = 0;
+		if (selectedPatient == null) {
+			result = 0;
+		} else if (selectedPatient.getId() == null) {
+			result = 0;
+		} else {
+			if (selectedPatient.getAge() <= 5) {
+				result = 1;
+			} else {
+				if (selectedPatient.getGender().equals("W")) {
+					result = 2;
+				} else {
+					result = 3;
+				}
 			}
 		}
-		return listOccupation;
+		return result;
 	}
 
-	public void setListOccupation(List<SelectItem> listOccupation) {
-		this.listOccupation = listOccupation;
+	public Date getMaxDate() {
+		return new Date();
 	}
 
-	public Map<BigDecimal, CrmOccupation> getMapOccupation() {
-		return mapOccupation;
-	}
+	public void calculateIMCAction(ActionEvent event) {
+		double weight = selectedHistoryPhysique.getWeight().doubleValue();
+		double height = selectedHistoryPhysique.getHeight().doubleValue() / 100;
 
-	public void setMapOccupation(Map<BigDecimal, CrmOccupation> mapOccupation) {
-		this.mapOccupation = mapOccupation;
-	}
+		if (height > 0) {
+			imc = weight / (height * height);
+		} else {
+			imc = 0;
+		}
 
-	public BigDecimal getIdOccupation() {
-		return idOccupation;
-	}
-
-	public void setIdOccupation(BigDecimal idOccupation) {
-		this.idOccupation = idOccupation;
-	}
-
-	public String getNeighborhood() {
-		return neighborhood;
-	}
-
-	public void setNeighborhood(String neighborhood) {
-		this.neighborhood = neighborhood;
-	}
-
-	public String getTypeHousing() {
-		return typeHousing;
-	}
-
-	public void setTypeHousing(String typeHousing) {
-		this.typeHousing = typeHousing;
+		if (imc < 185) {
+			descImc = "INFERIOR";
+		} else if (imc >= 185 && imc <= 249) {
+			descImc = "NORMAL";
+		} else if (imc >= 250 && imc <= 299) {
+			descImc = "SOBREPESO";
+		} else if (imc >= 300) {
+			descImc = "OBESIDAD";
+		}
 	}
 
 	public void newAction(ActionEvent event) {
-		selectedHistoryHistory = new CrmHistoryHistory();
-		selectedHistoryRecord = new CrmHistoryRecord();
-		selectedHistoryHomeopathic = new CrmHistoryHomeopathic();
-		selectedHistoryPhysique = new CrmHistoryPhysique();
-		selectedHistoryOrganometry = new CrmHistoryOrganometry();
-
-		listAppointment = new ArrayList<CrmAppointment>();
-		appointmentModel = new AppointmentDataModel(listAppointment);
-		selectedAppointment = new CrmAppointment();
-
-		docPatient = null;
-		namePatient = null;
-		selectedDiagnosis = new CrmDiagnosis();
-		selectedsDiagnosis = null;
-
-		listPatient = new ArrayList<CrmPatient>();
-		patientModel = new PatientDataModel(listPatient);
-		selectedPatient = new CrmPatient();
-		selectedPatient.setCrmOccupation(new CrmOccupation());
-		selectedPatient.getCrmOccupation().setId(Constant.DEFAULT_VALUE);
-		idOccupation = null;
-		neighborhood = null;
-		typeHousing = null;
-
-		disabledSaveButton = true;
+		part = Constant.HISTORY_HISTORY;
 		optionSearchPatient = 1;
-		age = 0;
-		imc = 0;
-		descImc = null;
-
-		codeMaterial = null;
-		descMaterial = null;
-		optionSearchMaterial = 1;
-
-		readOnlySelectedHistoryHistory = true;
-		readOnlySelectedHistoryRecord = true;
-		readOnlySelectedHistoryHomeopathic = true;
-		readOnlySelectedHistoryPhysique = true;
-		readOnlySelectedHistoryOrganometry = true;
-
-		maxDate = new Date();
 
 		listDiagnosis = new ArrayList<CrmDiagnosis>();
 		diagnosisModel = new DiagnosisDataModel(listDiagnosis);
@@ -691,7 +813,7 @@ public class HistoryBacking extends BaseBacking {
 		therapyModel = new MedicationDataModel(listTherapy);
 		listExam = new ArrayList<CrmMedication>();
 		examModel = new MedicationDataModel(listExam);
-
+		viewMode = true;
 		typeMedication = Constant.MATERIAL_TYPE_MEDICINE;
 
 		listDiagnosisView = new ArrayList<CrmDiagnosis>();
@@ -699,6 +821,9 @@ public class HistoryBacking extends BaseBacking {
 		listTherapyView = new ArrayList<CrmMedication>();
 		listExamView = new ArrayList<CrmMedication>();
 		listNoteView = new ArrayList<CrmNote>();
+
+		selectedDiagnosis = new CrmDiagnosis();
+		selectedsDiagnosis = null;
 
 		SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
 		try {
@@ -712,111 +837,131 @@ public class HistoryBacking extends BaseBacking {
 		refreshMaterialFields();
 	}
 
-	public void searchAction(ActionEvent event) {
-		String message = null;
+	public void editAppointmentAction() {
+		modeEdit = true;
+		modeHistorial = false;
+		part = Constant.HISTORY_HISTORY;
+		activeIndex = -1;
 		age = 0;
+		imc = 0;
+		descImc = null;
 
-		if (selectedPatient == null
-				|| FacesUtil.isEmptyOrBlank(selectedPatient.getCodeSap())) {
-			message = FacesUtil.getMessage("his_msg_error_1");
-			FacesUtil.addError(message);
-		} else {
+		newAction(null);
 
-			listMaterialGroup = processService.getListMaterialGroup();
-			listCieMaterial = processService.getListCieMaterial();
-
-			if (selectedPatient.getCrmOccupation() == null) {
-				selectedPatient.setCrmOccupation(new CrmOccupation());
-				idOccupation = null;
-			} else {
-				idOccupation = selectedPatient.getCrmOccupation().getId();
-			}
-
-			neighborhood = selectedPatient.getNeighborhood();
-			typeHousing = selectedPatient.getTypeHousing();
-
-			if (selectedPatient.getBornDate() != null) {
-				age = calculateAge(selectedPatient.getBornDate());
-			}
-
-			listAppointment = processService.listAppointmentByPatient(
-					selectedPatient.getId(), "3,4");
-			appointmentModel = new AppointmentDataModel(listAppointment);
-
-			selectedHistoryHistory = processService
-					.getHistoryHistory(selectedPatient.getId());
-			selectedHistoryRecord = processService
-					.getHistoryRecord(selectedPatient.getId());
-			selectedHistoryHomeopathic = processService
-					.getHistoryHomeopathic(selectedPatient.getId());
-			selectedHistoryPhysique = processService
-					.getHistoryPhysique(selectedPatient.getId());
-			selectedHistoryOrganometry = processService
-					.getHistoryOrganometry(selectedPatient.getId());
-
-			refreshLists();
-			getRenderedRecord();
-
-			if (selectedPatient.getId() == null) {
-				disabledSaveButton = true;
-			} else {
-				disabledSaveButton = false;
-			}
-
-			readOnlySelectedHistoryHistory = selectedHistoryHistory.getId() != null ? true
-					: false;
-			readOnlySelectedHistoryRecord = selectedHistoryRecord.getId() != null ? true
-					: false;
-			readOnlySelectedHistoryHomeopathic = selectedHistoryHomeopathic
-					.getId() != null ? true : false;
-			readOnlySelectedHistoryPhysique = selectedHistoryPhysique.getId() != null ? true
-					: false;
-			readOnlySelectedHistoryOrganometry = selectedHistoryOrganometry
-					.getId() != null ? true : false;
-
-			if (selectedHistoryPhysique.getId() != null) {
-				calculateIMC();
-			}
-		}
-
-		listDiagnosis = new ArrayList<CrmDiagnosis>();
-		diagnosisModel = new DiagnosisDataModel(listDiagnosis);
-	}
-
-	private void refreshLists() {
-		listDiagnosisView = processService
-				.getListDiagnosisByPatient(selectedPatient.getId());
-
-		listMedicationView = new ArrayList<CrmMedication>();
-		listTherapyView = new ArrayList<CrmMedication>();
-		listExamView = new ArrayList<CrmMedication>();
-
-		List<CrmMedication> listAllMedication = processService
-				.getListMedicationByPatient(selectedPatient.getId());
-
-		for (CrmMedication row : listAllMedication) {
-			if (row.getMaterialType().equals(Constant.MATERIAL_TYPE_MEDICINE)) {
-				listMedicationView.add(row);
-			} else if (row.getMaterialType().equals(
-					Constant.MATERIAL_TYPE_THERAPY)) {
-				listTherapyView.add(row);
-			} else if (row.getMaterialType().equals(
-					Constant.MATERIAL_TYPE_EXAMS)) {
-				listExamView.add(row);
-			}
-		}
-
-		listNoteView = processService.getListNoteByPatient(selectedPatient
+		currentAppointment = processService.getAppointment(selectedAppointment
 				.getId());
+
+		selectedPatient = processService.getContactById(selectedAppointment
+				.getPatId());
+
+		refreshLists();
+
+		listDiagnosis = processService
+				.getListDiagnosisByAppointment(selectedAppointment.getId());
+		diagnosisModel = new DiagnosisDataModel(listDiagnosis);
+
+		listMedication = processService.getListMedicationByAppointment(
+				selectedAppointment.getId(), Constant.MATERIAL_TYPE_MEDICINE);
+		medicationModel = new MedicationDataModel(listMedication);
+
+		listOtherMedication = processService.getListMedicationByAppointment(
+				selectedAppointment.getId(),
+				Constant.MATERIAL_TYPE_OTHER_MEDICINE);
+		otherMedicationModel = new MedicationDataModel(listOtherMedication);
+
+		listTherapy = processService.getListMedicationByAppointment(
+				selectedAppointment.getId(), Constant.MATERIAL_TYPE_THERAPY);
+		therapyModel = new MedicationDataModel(listTherapy);
+
+		listExam = processService.getListMedicationByAppointment(
+				selectedAppointment.getId(), Constant.MATERIAL_TYPE_EXAMS);
+		examModel = new MedicationDataModel(listExam);
+
+		if (selectedPatient.getCrmOccupation() == null) {
+			selectedPatient.setCrmOccupation(new CrmOccupation());
+			idOccupation = null;
+		} else {
+			idOccupation = selectedPatient.getCrmOccupation().getId();
+		}
+
+		neighborhood = selectedPatient.getNeighborhood();
+		typeHousing = selectedPatient.getTypeHousing();
+
+		if (selectedPatient.getBornDate() != null) {
+			age = calculateAge(selectedPatient.getBornDate());
+		}
+
+		idMembershipType = selectedPatient.getIdMemberShip();
+
+		selectedHistoryHistory = processService
+				.getHistoryHistory(selectedAppointment.getId());
+		selectedHistoryHistory.setCrmPatient(selectedPatient);
+		selectedHistoryHistory.setCrmAppointment(currentAppointment);
+
+		selectedHistoryRecord = processService
+				.getHistoryRecord(selectedAppointment.getId());
+		selectedHistoryRecord.setCrmPatient(selectedPatient);
+		selectedHistoryRecord.setCrmAppointment(currentAppointment);
+
+		selectedHistoryHomeopathic = processService
+				.getHistoryHomeopathic(selectedAppointment.getId());
+		selectedHistoryHomeopathic.setBiotypology("");
+		selectedHistoryHomeopathic.setCrmPatient(selectedPatient);
+		selectedHistoryHomeopathic.setCrmAppointment(currentAppointment);
+
+		selectedHistoryPhysique = processService
+				.getHistoryPhysique(selectedAppointment.getId());
+		selectedHistoryPhysique.setCrmPatient(selectedPatient);
+		selectedHistoryPhysique.setCrmAppointment(currentAppointment);
+
+		selectedHistoryOrganometry = processService
+				.getHistoryOrganometry(selectedAppointment.getId());
+		selectedHistoryOrganometry.setCrmPatient(selectedPatient);
+		selectedHistoryOrganometry.setCrmAppointment(currentAppointment);
 	}
+
+	public void showHistorialAction() {
+		modeEdit = true;
+		modeHistorial = true;
+		selectedPatient = selectedPatientTemp;
+		refreshLists();
+	}
+
+	public void viewHistoryAction() {
+		RequestContext context = RequestContext.getCurrentInstance();
+		if (this.part.equals(Constant.HISTORY_HISTORY)) {
+			context.execute("dlgHistory.show()");
+		} else if (this.part.equals(Constant.HISTORY_RECORD)) {
+			context.execute("dlgRecord.show()");
+		} else if (this.part.equals(Constant.HISTORY_HOMEOPATHIC)) {
+			context.execute("dlgHomeopathic.show()");
+		} else if (this.part.equals(Constant.HISTORY_PHYSIQUE)) {
+			context.execute("dlgPhysique.show()");
+		} else if (this.part.equals(Constant.HISTORY_ORGANOMETRY)) {
+			context.execute("dlgOrganometry.show()");
+		}
+	}
+
+	public void onTabChange(TabChangeEvent event) {
+		this.part = event.getTab().getId();
+	}
+
+	public void handleBornDateSelect(DateSelectEvent event) {
+		Date bornDate = event.getDate();
+		age = calculateAge(bornDate);
+	}
+
+	private boolean noMessage = false;
+	private boolean validateSave = false;
 
 	public void saveAction(ActionEvent event) {
 		String field = null;
 		String message = null;
+		validateSave = false;
 
 		if (selectedPatient == null || selectedPatient.getId() == null) {
 			message = FacesUtil.getMessage("his_msg_error_1");
-			FacesUtil.addError(message);
+			FacesUtil.addWarn(message);
 		}
 
 		if (selectedPatient.getBornDate() == null) {
@@ -824,7 +969,7 @@ public class HistoryBacking extends BaseBacking {
 			message = FacesUtil.getMessage("title_patient_complementary");
 			message = message + " - "
 					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addError(message);
+			FacesUtil.addWarn(message);
 		}
 
 		if (idOccupation == null || idOccupation.intValue() == 0) {
@@ -832,7 +977,7 @@ public class HistoryBacking extends BaseBacking {
 			message = FacesUtil.getMessage("title_patient_complementary");
 			message = message + " - "
 					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addError(message);
+			FacesUtil.addWarn(message);
 		} else {
 			selectedPatient.setCrmOccupation(mapOccupation.get(idOccupation));
 		}
@@ -842,7 +987,7 @@ public class HistoryBacking extends BaseBacking {
 			message = FacesUtil.getMessage("title_patient_complementary");
 			message = message + " - "
 					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addError(message);
+			FacesUtil.addWarn(message);
 		} else {
 			selectedPatient.setNeighborhood(neighborhood);
 		}
@@ -852,7 +997,7 @@ public class HistoryBacking extends BaseBacking {
 			message = FacesUtil.getMessage("title_patient_complementary");
 			message = message + " - "
 					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addError(message);
+			FacesUtil.addWarn(message);
 		} else {
 			selectedPatient.setTypeHousing(typeHousing);
 		}
@@ -864,7 +1009,7 @@ public class HistoryBacking extends BaseBacking {
 				message = FacesUtil.getMessage("his_history_history");
 				message = message + " - "
 						+ FacesUtil.getMessage("glb_required", field);
-				FacesUtil.addError(message);
+				FacesUtil.addWarn(message);
 			}
 
 			if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getDisease())) {
@@ -872,7 +1017,7 @@ public class HistoryBacking extends BaseBacking {
 				message = FacesUtil.getMessage("his_history_history");
 				message = message + " - "
 						+ FacesUtil.getMessage("glb_required", field);
-				FacesUtil.addError(message);
+				FacesUtil.addWarn(message);
 			}
 
 			if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getResults())) {
@@ -880,7 +1025,7 @@ public class HistoryBacking extends BaseBacking {
 				message = FacesUtil.getMessage("his_history_history");
 				message = message + " - "
 						+ FacesUtil.getMessage("glb_required", field);
-				FacesUtil.addError(message);
+				FacesUtil.addWarn(message);
 			}
 
 			if (selectedHistoryRecord.getArthritis()
@@ -892,7 +1037,7 @@ public class HistoryBacking extends BaseBacking {
 				message = FacesUtil.getMessage("his_history_record");
 				message = message + " - "
 						+ FacesUtil.getMessage("glb_required", field);
-				FacesUtil.addError(message);
+				FacesUtil.addWarn(message);
 			}
 
 			if (selectedHistoryRecord.getCancer()
@@ -904,7 +1049,7 @@ public class HistoryBacking extends BaseBacking {
 				message = FacesUtil.getMessage("his_history_record");
 				message = message + " - "
 						+ FacesUtil.getMessage("glb_required", field);
-				FacesUtil.addError(message);
+				FacesUtil.addWarn(message);
 			}
 
 			if (selectedHistoryRecord.getPulmonary()
@@ -916,7 +1061,7 @@ public class HistoryBacking extends BaseBacking {
 				message = FacesUtil.getMessage("his_history_record");
 				message = message + " - "
 						+ FacesUtil.getMessage("glb_required", field);
-				FacesUtil.addError(message);
+				FacesUtil.addWarn(message);
 			}
 
 			if (selectedHistoryRecord.getDiabetes()
@@ -928,7 +1073,7 @@ public class HistoryBacking extends BaseBacking {
 				message = FacesUtil.getMessage("his_history_record");
 				message = message + " - "
 						+ FacesUtil.getMessage("glb_required", field);
-				FacesUtil.addError(message);
+				FacesUtil.addWarn(message);
 			}
 
 			if (selectedHistoryRecord.getHypertension()
@@ -940,7 +1085,7 @@ public class HistoryBacking extends BaseBacking {
 				message = FacesUtil.getMessage("his_history_record");
 				message = message + " - "
 						+ FacesUtil.getMessage("glb_required", field);
-				FacesUtil.addError(message);
+				FacesUtil.addWarn(message);
 			}
 
 			if (selectedHistoryRecord.getHospitalizations()
@@ -952,7 +1097,7 @@ public class HistoryBacking extends BaseBacking {
 				message = FacesUtil.getMessage("his_history_record");
 				message = message + " - "
 						+ FacesUtil.getMessage("glb_required", field);
-				FacesUtil.addError(message);
+				FacesUtil.addWarn(message);
 			}
 
 			if (selectedHistoryRecord.getAllergy()
@@ -964,7 +1109,7 @@ public class HistoryBacking extends BaseBacking {
 				message = FacesUtil.getMessage("his_history_record");
 				message = message + " - "
 						+ FacesUtil.getMessage("glb_required", field);
-				FacesUtil.addError(message);
+				FacesUtil.addWarn(message);
 			}
 
 			if (selectedHistoryRecord.getInfections()
@@ -976,7 +1121,7 @@ public class HistoryBacking extends BaseBacking {
 				message = FacesUtil.getMessage("his_history_record");
 				message = message + " - "
 						+ FacesUtil.getMessage("glb_required", field);
-				FacesUtil.addError(message);
+				FacesUtil.addWarn(message);
 			}
 		}
 
@@ -985,7 +1130,7 @@ public class HistoryBacking extends BaseBacking {
 			message = FacesUtil.getMessage("his_history_physique", field);
 			message = message + " - "
 					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addError(message);
+			FacesUtil.addWarn(message);
 		}
 
 		if (selectedHistoryPhysique.getRespiratoryRate() == 0) {
@@ -993,7 +1138,7 @@ public class HistoryBacking extends BaseBacking {
 			message = FacesUtil.getMessage("his_history_physique", field);
 			message = message + " - "
 					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addError(message);
+			FacesUtil.addWarn(message);
 		}
 
 		if (selectedHistoryPhysique.getHeight().intValue() == 0) {
@@ -1001,7 +1146,7 @@ public class HistoryBacking extends BaseBacking {
 			message = FacesUtil.getMessage("his_history_physique", field);
 			message = message + " - "
 					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addError(message);
+			FacesUtil.addWarn(message);
 		}
 
 		if (selectedHistoryPhysique.getWeight().intValue() == 0) {
@@ -1009,7 +1154,7 @@ public class HistoryBacking extends BaseBacking {
 			message = FacesUtil.getMessage("his_history_physique", field);
 			message = message + " - "
 					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addError(message);
+			FacesUtil.addWarn(message);
 		}
 
 		if (FacesUtil
@@ -1018,7 +1163,7 @@ public class HistoryBacking extends BaseBacking {
 			message = FacesUtil.getMessage("his_history_physique", field);
 			message = message + " - "
 					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addError(message);
+			FacesUtil.addWarn(message);
 		}
 
 		if (selectedHistoryOrganometry.getOrganometryCheck()) {
@@ -1028,12 +1173,13 @@ public class HistoryBacking extends BaseBacking {
 				message = FacesUtil.getMessage("his_organometry", field);
 				message = message + " - "
 						+ FacesUtil.getMessage("glb_required", field);
-				FacesUtil.addError(message);
+				FacesUtil.addWarn(message);
 			}
 		}
 
 		if (message == null) {
 
+			validateSave = true;
 			selectedHistoryHistory.setCrmPatient(selectedPatient);
 			selectedHistoryRecord.setCrmPatient(selectedPatient);
 			selectedHistoryHomeopathic.setCrmPatient(selectedPatient);
@@ -1222,62 +1368,67 @@ public class HistoryBacking extends BaseBacking {
 				if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique
 						.getGeneralState())) {
 					selectedHistoryPhysique
-							.setGeneralState(Constant.HISTORY_NORMAL);
+							.setGeneralState(Constant.HISTORY_NOT_REFER);
 				}
 
 				if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique
 						.getHeadNeck())) {
 					selectedHistoryPhysique
-							.setHeadNeck(Constant.HISTORY_NORMAL);
+							.setHeadNeck(Constant.HISTORY_NOT_REFER);
 				}
 
 				if (FacesUtil
 						.isEmptyOrBlank(selectedHistoryPhysique.getChest())) {
-					selectedHistoryPhysique.setChest(Constant.HISTORY_NORMAL);
+					selectedHistoryPhysique
+							.setChest(Constant.HISTORY_NOT_REFER);
 				}
 
 				if (FacesUtil
 						.isEmptyOrBlank(selectedHistoryPhysique.getLungs())) {
-					selectedHistoryPhysique.setLungs(Constant.HISTORY_NORMAL);
+					selectedHistoryPhysique
+							.setLungs(Constant.HISTORY_NOT_REFER);
 				}
 
 				if (FacesUtil
 						.isEmptyOrBlank(selectedHistoryPhysique.getHeart())) {
-					selectedHistoryPhysique.setHeart(Constant.HISTORY_NORMAL);
+					selectedHistoryPhysique
+							.setHeart(Constant.HISTORY_NOT_REFER);
 				}
 
 				if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique
 						.getAbdomen())) {
-					selectedHistoryPhysique.setAbdomen(Constant.HISTORY_NORMAL);
+					selectedHistoryPhysique
+							.setAbdomen(Constant.HISTORY_NOT_REFER);
 				}
 
 				if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique
 						.getGenitals())) {
 					selectedHistoryPhysique
-							.setGenitals(Constant.HISTORY_NORMAL);
+							.setGenitals(Constant.HISTORY_NOT_REFER);
 				}
 
 				if (FacesUtil
 						.isEmptyOrBlank(selectedHistoryPhysique.getOsteo())) {
-					selectedHistoryPhysique.setOsteo(Constant.HISTORY_NORMAL);
+					selectedHistoryPhysique
+							.setOsteo(Constant.HISTORY_NOT_REFER);
 				}
 
 				if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique.getTips())) {
-					selectedHistoryPhysique.setTips(Constant.HISTORY_NORMAL);
+					selectedHistoryPhysique.setTips(Constant.HISTORY_NOT_REFER);
 				}
 
 				if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique
 						.getHighlights())) {
 					selectedHistoryPhysique
-							.setHighlights(Constant.HISTORY_NORMAL);
+							.setHighlights(Constant.HISTORY_NOT_REFER);
 				}
 
 				if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique.getSkin())) {
-					selectedHistoryPhysique.setSkin(Constant.HISTORY_NORMAL);
+					selectedHistoryPhysique.setSkin(Constant.HISTORY_NOT_REFER);
 				}
 
 				if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique.getObs())) {
-					selectedHistoryPhysique.setObs(Constant.HISTORY_NORMAL);
+					selectedHistoryPhysique.setObs(Constant.HISTORY_NOT_REFER);
 				}
 
 				if (this.getRolePrincipal().equals(Constant.ROLE_DOCTOR)) {
@@ -1292,79 +1443,13 @@ public class HistoryBacking extends BaseBacking {
 						.saveHistoryPhysique(selectedHistoryPhysique);
 				result = processService
 						.saveHistoryOrganometry(selectedHistoryOrganometry);
-				message = FacesUtil.getMessage("msg_record_ok");
-				FacesUtil.addInfo(message);
-				/*
-				 * if (result == 0) { result = processService
-				 * .saveHistoryRecord(selectedHistoryRecord); if (result == 0) {
-				 * result = processService
-				 * .saveHistoryHomeopathic(selectedHistoryHomeopathic); if
-				 * (result == 0) { result = processService
-				 * .saveHistoryPhysique(selectedHistoryPhysique); if (result ==
-				 * 0) { result = processService
-				 * .saveHistoryOrganometry(selectedHistoryOrganometry); if
-				 * (result == 0) { message = FacesUtil
-				 * .getMessage("msg_record_ok"); FacesUtil.addInfo(message); }
-				 * else {
-				 * 
-				 * } } else {
-				 * 
-				 * } } else {
-				 * 
-				 * } } else {
-				 * 
-				 * } } else {
-				 * 
-				 * }
-				 */
-			}
-		}
-	}
 
-	public int getRenderedRecord() {
-		int result = 0;
-		if (selectedPatient == null) {
-			result = 0;
-		} else if (selectedPatient.getId() == null) {
-			result = 0;
-		} else {
-			if (selectedPatient.getAge() <= 5) {
-				result = 1;
-			} else {
-				if (selectedPatient.getGender().equals("W")) {
-					result = 2;
-				} else {
-					result = 3;
+				if (!noMessage) {
+					message = FacesUtil.getMessage("msg_record_ok");
+					FacesUtil.addInfo(message);
 				}
 			}
 		}
-		return result;
-	}
-
-	public void calculateIMC() {
-		double weight = selectedHistoryPhysique.getWeight().doubleValue();
-		double height = selectedHistoryPhysique.getHeight().doubleValue() / 100;
-
-		if (height > 0) {
-			imc = weight / (height * height);
-		} else {
-			imc = 0;
-		}
-
-		if (imc < 185) {
-			descImc = "INFERIOR";
-		} else if (imc >= 185 && imc <= 249) {
-			descImc = "NORMAL";
-		} else if (imc >= 250 && imc <= 299) {
-			descImc = "SOBREPESO";
-		} else if (imc >= 300) {
-			descImc = "OBESIDAD";
-		}
-	}
-
-	public void handleBornDateSelect(DateSelectEvent event) {
-		Date bornDate = event.getDate();
-		age = calculateAge(bornDate);
 	}
 
 	public void searchCIEAction(ActionEvent event) {
@@ -1393,7 +1478,7 @@ public class HistoryBacking extends BaseBacking {
 		BigDecimal id = new BigDecimal(listDiagnosis.size() + 1);
 		CrmDiagnosis diagnosis = new CrmDiagnosis();
 		diagnosis.setId(id);
-		diagnosis.setCrmAppointment(selectedAppointment);
+		diagnosis.setCrmAppointment(currentAppointment);
 		diagnosis.setCrmCie(selectedCie);
 		listDiagnosis.add(diagnosis);
 		diagnosisModel = new DiagnosisDataModel(listDiagnosis);
@@ -1489,7 +1574,7 @@ public class HistoryBacking extends BaseBacking {
 		BigDecimal id = new BigDecimal(listMedication.size() + 1);
 		CrmMedication medication = new CrmMedication();
 		medication.setId(id);
-		medication.setCrmAppointment(selectedAppointment);
+		medication.setCrmAppointment(currentAppointment);
 		medication.setCrmCie(selectedDiagnosis.getCrmCie());
 		medication.setCodMaterial(Integer.parseInt(selectedMaterial.getCode()));
 		medication.setDescMaterial(selectedMaterial.getNames());
@@ -1499,6 +1584,9 @@ public class HistoryBacking extends BaseBacking {
 		if (typeMedication.equals(Constant.MATERIAL_TYPE_MEDICINE)) {
 			listMedication.add(medication);
 			medicationModel = new MedicationDataModel(listMedication);
+		} else if (typeMedication.equals(Constant.MATERIAL_TYPE_OTHER_MEDICINE)) {
+			listOtherMedication.add(medication);
+			otherMedicationModel = new MedicationDataModel(listOtherMedication);
 		} else if (typeMedication.equals(Constant.MATERIAL_TYPE_THERAPY)) {
 			listTherapy.add(medication);
 			therapyModel = new MedicationDataModel(listTherapy);
@@ -1518,8 +1606,16 @@ public class HistoryBacking extends BaseBacking {
 		List<WSBean> listFilter = new ArrayList<WSBean>();
 		for (WSBean row : listMaterial) {
 			boolean filter = true;
-			if (typeMedication.equals(Constant.MATERIAL_TYPE_MEDICINE)) {
+			if (typeMedication.equals(Constant.MATERIAL_TYPE_MEDICINE)
+					|| typeMedication
+							.equals(Constant.MATERIAL_TYPE_OTHER_MEDICINE)) {
 				for (CrmMedication med : listMedication) {
+					if (Long.parseLong(row.getCode()) == med.getCodMaterial()) {
+						filter = false;
+						break;
+					}
+				}
+				for (CrmMedication med : listOtherMedication) {
 					if (Long.parseLong(row.getCode()) == med.getCodMaterial()) {
 						filter = false;
 						break;
@@ -1570,6 +1666,14 @@ public class HistoryBacking extends BaseBacking {
 		selectedTherapy = null;
 	}
 
+	public void removeOtherMedicationAction(ActionEvent event) {
+		for (CrmMedication row : selectedOtherMedication) {
+			listOtherMedication.remove(row);
+		}
+		otherMedicationModel = new MedicationDataModel(listOtherMedication);
+		selectedOtherMedication = null;
+	}
+
 	public void removeExamAction(ActionEvent event) {
 		for (CrmMedication row : selectedExam) {
 			listExam.remove(row);
@@ -1605,7 +1709,6 @@ public class HistoryBacking extends BaseBacking {
 
 	public void selectMedicationAction() {
 		this.typeMedication = Constant.MATERIAL_TYPE_MEDICINE;
-		refreshMaterialFields();
 
 		listAllMaterial = new ArrayList<WSBean>();
 		for (CrmCieMaterial row : listCieMaterial) {
@@ -1637,6 +1740,31 @@ public class HistoryBacking extends BaseBacking {
 		}
 
 		refreshListMedication();
+		refreshMaterialFields();
+	}
+
+	public void selectOtherMedicationAction(ActionEvent event) {
+		this.typeMedication = Constant.MATERIAL_TYPE_OTHER_MEDICINE;
+		listAllMaterial = new ArrayList<WSBean>();
+
+		for (WSBean material : listAllBackupMaterial) {
+			boolean validateGroup = false;
+			for (CrmMaterialGroup row : listMaterialGroup) {
+				if (row.getMaterialType().equals(
+						Constant.MATERIAL_TYPE_MEDICINE)
+						&& material.getType().equals(row.getGroup())) {
+					validateGroup = true;
+					break;
+				}
+			}
+
+			if (validateGroup) {
+				listAllMaterial.add(material);
+			}
+		}
+
+		refreshListMedication();
+		refreshMaterialFields();
 	}
 
 	public void selectTherapyAction(ActionEvent event) {
@@ -1681,12 +1809,71 @@ public class HistoryBacking extends BaseBacking {
 		refreshMaterialFields();
 	}
 
+	private void refreshLists() {
+		List<VwAppointment> listTempApp = processService
+				.getListByAppointmentByPatient(selectedAppointment.getPatId());
+		historyAppointmentModel = new VwAppointmentDataModel(listTempApp);
+
+		List<CrmHistoryHistory> listTempHistory = processService
+				.getListHistoryHistory(selectedAppointment.getPatId());
+		historyHistoryModel = new HistoryHistoryDataModel(listTempHistory);
+
+		List<CrmHistoryRecord> listTempRecord = processService
+				.getListHistoryRecord(selectedAppointment.getPatId());
+		historyRecordModel = new HistoryRecordDataModel(listTempRecord);
+
+		List<CrmHistoryHomeopathic> listTempHomeopathic = processService
+				.getListHistoryHomeopathic(selectedAppointment.getPatId());
+		historyHomeopathicModel = new HistoryHomeopathicDataModel(
+				listTempHomeopathic);
+
+		List<CrmHistoryPhysique> listTempPhysique = processService
+				.getListHistoryPhysique(selectedAppointment.getPatId());
+		historyPhysiqueModel = new HistoryPhysiqueDataModel(listTempPhysique);
+
+		List<CrmHistoryOrganometry> listTempOrganometry = processService
+				.getListHistoryOrganometry(selectedAppointment.getPatId());
+		historyOrganometryModel = new HistoryOrganometryDataModel(
+				listTempOrganometry);
+		listDiagnosisView = processService
+				.getListDiagnosisByPatient(selectedPatient.getId());
+
+		listMedicationView = new ArrayList<CrmMedication>();
+		listTherapyView = new ArrayList<CrmMedication>();
+		listExamView = new ArrayList<CrmMedication>();
+
+		List<CrmMedication> listAllMedication = processService
+				.getListMedicationByPatient(selectedPatient.getId());
+
+		for (CrmMedication row : listAllMedication) {
+			if (row.getMaterialType().equals(Constant.MATERIAL_TYPE_MEDICINE)
+					|| row.getMaterialType().equals(
+							Constant.MATERIAL_TYPE_OTHER_MEDICINE)) {
+				listMedicationView.add(row);
+			} else if (row.getMaterialType().equals(
+					Constant.MATERIAL_TYPE_THERAPY)) {
+				listTherapyView.add(row);
+			} else if (row.getMaterialType().equals(
+					Constant.MATERIAL_TYPE_EXAMS)) {
+				listExamView.add(row);
+			}
+		}
+
+		listNoteView = processService.getListNoteByPatient(selectedPatient
+				.getId());
+	}
+
 	public void closeAppointmentAction(ActionEvent event) {
 		String message = null;
 		boolean medicationTherapy = false;
 
+		noMessage = true;
+		saveAction(null);
+		noMessage = false;
+
 		if (this.getRolePrincipal().equals(Constant.ROLE_DOCTOR)) {
-			if (listDiagnosis.size() < 2) {
+
+			if (listDiagnosis.size() == 0) {
 				message = FacesUtil.getMessage("his_msg_message_dig_1");
 				FacesUtil.addWarn(message);
 			} else {
@@ -1697,11 +1884,46 @@ public class HistoryBacking extends BaseBacking {
 						break;
 					}
 				}
+
+				if (listMedication.size() == 0) {
+					message = FacesUtil.getMessage("his_msg_message_med_5");
+					FacesUtil.addWarn(message);
+				} else {
+					int idCie = listDiagnosis.get(0).getCrmCie().getId()
+							.intValue();
+					int numMedication = 0;
+					for (CrmMedication row : listMedication) {
+						if (row.getCrmCie().getId().intValue() == idCie) {
+							numMedication++;
+						}
+					}
+
+					int minMedication = currentAppointment
+							.getCrmProcedureDetail().getMinMedication();
+					int maxMedication = currentAppointment
+							.getCrmProcedureDetail().getMaxMedication();
+					if (minMedication > 0 && numMedication < minMedication) {
+						message = FacesUtil.getMessage("his_msg_message_med_1",
+								String.valueOf(minMedication));
+						FacesUtil.addWarn(message);
+					} else if (maxMedication > 0
+							&& numMedication > maxMedication) {
+						message = FacesUtil.getMessage("his_msg_message_med_3",
+								String.valueOf(maxMedication));
+						FacesUtil.addWarn(message);
+					}
+				}
 			}
 
-			if (listMedication.size() == 0) {
-				message = FacesUtil.getMessage("his_msg_message_med_1");
-				FacesUtil.addWarn(message);
+			if (listOtherMedication.size() > 0) {
+				for (CrmMedication row : listOtherMedication) {
+					if (FacesUtil.isEmptyOrBlank(row.getDiagnosis())
+							|| FacesUtil.isEmptyOrBlank(row.getPosology())) {
+						message = FacesUtil.getMessage("his_msg_message_med_4");
+						FacesUtil.addWarn(message);
+						break;
+					}
+				}
 			}
 
 			if (listTherapy.size() > 0) {
@@ -1715,31 +1937,43 @@ public class HistoryBacking extends BaseBacking {
 				medicationTherapy = true;
 			}
 
-			if (FacesUtil.isEmptyOrBlank(noteDoctor)) {
-				String field = FacesUtil.getMessage("his_history_note");
-				message = FacesUtil.getMessage("glb_required", field);
-				FacesUtil.addWarn(message);
-			}
+			/*
+			 * if (FacesUtil.isEmptyOrBlank(noteDoctor)) { String field =
+			 * FacesUtil.getMessage("his_history_note"); message =
+			 * FacesUtil.getMessage("glb_required", field);
+			 * FacesUtil.addWarn(message); }
+			 */
 
-			if (message == null) {
-				processService
-						.saveDiagnosis(selectedAppointment, listDiagnosis);
-				processService.saveMedication(selectedAppointment,
+			if (message == null && validateSave) {
+				processService.saveDiagnosis(currentAppointment, listDiagnosis);
+				processService.saveMedication(currentAppointment,
 						listMedication, Constant.MATERIAL_TYPE_MEDICINE);
-				processService.saveMedication(selectedAppointment, listTherapy,
+				processService.saveMedication(currentAppointment,
+						listOtherMedication,
+						Constant.MATERIAL_TYPE_OTHER_MEDICINE);
+				processService.saveMedication(currentAppointment, listTherapy,
 						Constant.MATERIAL_TYPE_THERAPY);
-				processService.saveMedication(selectedAppointment, listExam,
+				processService.saveMedication(currentAppointment, listExam,
 						Constant.MATERIAL_TYPE_EXAMS);
-				processService.saveNotes(selectedAppointment, noteDoctor,
+				processService.saveNotes(selectedPatient, noteDoctor,
 						Constant.NOTE_TYPE_DOCTOR);
 
-				selectedAppointment.setMedicationTherapy(medicationTherapy);
-				selectedAppointment.setCloseAppointment(true);
-				selectedAppointment.setState(Constant.APP_STATE_ATTENDED);
-				processService.saveAppointment(selectedAppointment);
+				viewMode = true;
+				currentAppointment.setMedicationTherapy(medicationTherapy);
+				currentAppointment.setCloseAppointment(true);
+				currentAppointment.setState(Constant.APP_STATE_ATTENDED);
+				processService.saveAppointment(currentAppointment);
 				message = FacesUtil.getMessage("his_msg_message_med_ok");
 				FacesUtil.addInfo(message);
 				refreshLists();
+
+				listAppointment = processService
+						.getListVwAppointmentByHistory(currentDoctor.getId());
+				appointmentModel = new VwAppointmentDataModel(listAppointment);
+				if (listAppointment.size() > 0) {
+					selectedAppointment = listAppointment.get(0);
+				}
+
 			}
 		} else if (this.getRolePrincipal().equals(Constant.ROLE_NURSE)) {
 			if (FacesUtil.isEmptyOrBlank(noteDoctor)) {
@@ -1747,22 +1981,30 @@ public class HistoryBacking extends BaseBacking {
 				message = FacesUtil.getMessage("glb_required", field);
 				FacesUtil.addWarn(message);
 			} else {
-				processService.saveNotes(selectedAppointment, noteDoctor,
+				processService.saveNotes(selectedPatient, noteDoctor,
 						Constant.NOTE_TYPE_NURSE);
 
-				selectedAppointment.setCloseAppointment(true);
-				selectedAppointment.setState(Constant.APP_STATE_ATTENDED);
-				processService.saveAppointment(selectedAppointment);
+				viewMode = true;
+				currentAppointment.setCloseAppointment(true);
+				currentAppointment.setState(Constant.APP_STATE_ATTENDED);
+				processService.saveAppointment(currentAppointment);
 				message = FacesUtil.getMessage("his_msg_message_med_ok");
 				FacesUtil.addInfo(message);
 				refreshLists();
+
+				listAppointment = processService
+						.getListVwAppointmentByHistory(currentDoctor.getId());
+				appointmentModel = new VwAppointmentDataModel(listAppointment);
+				if (listAppointment.size() > 0) {
+					selectedAppointment = listAppointment.get(0);
+				}
 			}
 		}
 	}
 
 	public void printFormulaAction() {
 		try {
-			GenerateFormulaPDF.PDF(selectedAppointment.getId(),
+			GenerateFormulaPDF.PDF(currentAppointment.getId(),
 					Constant.MATERIAL_TYPE_MEDICINE);
 		} catch (JRException e) {
 			e.printStackTrace();
@@ -1775,7 +2017,7 @@ public class HistoryBacking extends BaseBacking {
 
 	public void printFormulaTherapyAction() {
 		try {
-			GenerateFormulaPDF.PDF(selectedAppointment.getId(),
+			GenerateFormulaPDF.PDF(currentAppointment.getId(),
 					Constant.MATERIAL_TYPE_THERAPY);
 		} catch (JRException e) {
 			e.printStackTrace();
@@ -1798,27 +2040,8 @@ public class HistoryBacking extends BaseBacking {
 		return listExam.size() == 0 ? true : false;
 	}
 
-	public void editAppointmentAction() {
-		listDiagnosis = processService
-				.getListDiagnosisByAppointment(selectedAppointment.getId());
-		diagnosisModel = new DiagnosisDataModel(listDiagnosis);
-
-		listMedication = processService.getListMedicationByAppointment(
-				selectedAppointment.getId(), Constant.MATERIAL_TYPE_MEDICINE);
-		medicationModel = new MedicationDataModel(listMedication);
-
-		listTherapy = processService.getListMedicationByAppointment(
-				selectedAppointment.getId(), Constant.MATERIAL_TYPE_THERAPY);
-		therapyModel = new MedicationDataModel(listTherapy);
-
-		listExam = processService.getListMedicationByAppointment(
-				selectedAppointment.getId(), Constant.MATERIAL_TYPE_EXAMS);
-		examModel = new MedicationDataModel(listExam);
-
-		List<CrmNote> listNote = processService.getListNoteByAppointment(
-				selectedAppointment.getId(), Constant.NOTE_TYPE_DOCTOR);
-		if (listNote.size() > 0) {
-			this.noteDoctor = listNote.get(0).getNote();
-		}
+	public boolean isDisabledOtherMedication() {
+		return listOtherMedication.size() == 0 ? true : false;
 	}
+
 }

@@ -1432,13 +1432,13 @@ public class ProcessBo implements Serializable {
 		return i;
 	}
 
-	public Integer saveNotes(CrmAppointment appointment, String note,
-			String noteType) {
+	public Integer saveNotes(CrmPatient patient, String note, String noteType) {
 		CrmNote entity = new CrmNote();
 		entity.setId(getId(CrmNote.class));
-		entity.setCrmAppointment(appointment);
+		entity.setCrmPatient(patient);
 		entity.setNote(note);
 		entity.setNoteType(noteType);
+		entity.setNoteDate(new Date());
 		return this.persist(entity);
 	}
 
@@ -1474,21 +1474,10 @@ public class ProcessBo implements Serializable {
 						+ materialType + "' order by o.id");
 		return list;
 	}
-	
-	public List<CrmNote> getListNoteByPatient(BigDecimal idPatient) {
-		List<CrmNote> list = dao
-				.find("from CrmNote o where o.crmAppointment.crmPatient.id = "
-						+ idPatient
-						+ " order by o.crmAppointment.startAppointmentDate desc");
-		return list;
-	}
 
-	public List<CrmNote> getListNoteByAppointment(BigDecimal idAppointment,
-			String noteType) {
-		List<CrmNote> list = dao
-				.find("from CrmNote o where o.crmAppointment.id = "
-						+ idAppointment + " and noteType ='" + noteType
-						+ "' order by o.id desc");
+	public List<CrmNote> getListNoteByPatient(BigDecimal idPatient) {
+		List<CrmNote> list = dao.find("from CrmNote o where o.crmPatient.id = "
+				+ idPatient + " order by o.noteDate desc");
 		return list;
 	}
 

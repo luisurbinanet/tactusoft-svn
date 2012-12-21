@@ -394,7 +394,7 @@ public class DoctorAppointmentBacking extends BaseBacking {
 		HistoryBacking historyBacking = FacesUtil.findBean("historyBacking");
 		historyBacking.newAction(null);
 		historyBacking.setSelectedPatient(selectedAppointment.getCrmPatient());
-		historyBacking.searchAction(null);
+		historyBacking.showHistorialAction();
 
 		return "/pages/processes/history?faces-redirect=true";
 	}
@@ -446,7 +446,7 @@ public class DoctorAppointmentBacking extends BaseBacking {
 				historyBacking.newAction(null);
 				historyBacking.setSelectedPatient(selectedAppointment
 						.getCrmPatient());
-				historyBacking.searchAction(null);
+				historyBacking.showHistorialAction();
 
 				result = "/pages/processes/history?faces-redirect=true";
 			}
