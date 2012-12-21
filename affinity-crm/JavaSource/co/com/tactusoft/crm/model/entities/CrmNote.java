@@ -60,7 +60,7 @@ public class CrmNote implements java.io.Serializable {
 		this.crmPatient = crmPatient;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_doctor", nullable = false)
 	public CrmDoctor getCrmDoctor() {
 		return crmDoctor;
