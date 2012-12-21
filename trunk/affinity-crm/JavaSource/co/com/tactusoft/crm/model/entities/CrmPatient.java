@@ -564,7 +564,7 @@ public class CrmPatient implements java.io.Serializable {
 		this.crmAppointments = crmAppointments;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmAppointment")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmPatient")
 	public Set<CrmNote> getCrmNotes() {
 		return this.crmNotes;
 	}

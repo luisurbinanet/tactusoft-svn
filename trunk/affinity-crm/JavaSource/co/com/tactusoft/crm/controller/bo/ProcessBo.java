@@ -1432,13 +1432,8 @@ public class ProcessBo implements Serializable {
 		return i;
 	}
 
-	public Integer saveNotes(CrmPatient patient, String note, String noteType) {
-		CrmNote entity = new CrmNote();
+	public Integer saveNotes(CrmNote entity) {
 		entity.setId(getId(CrmNote.class));
-		entity.setCrmPatient(patient);
-		entity.setNote(note);
-		entity.setNoteType(noteType);
-		entity.setNoteDate(new Date());
 		return this.persist(entity);
 	}
 
