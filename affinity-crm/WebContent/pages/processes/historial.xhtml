@@ -9,7 +9,7 @@
 
 	<p:tab title="#{msg['his_history']}">
 		<p:dataTable id="tblHistoryAppointment" var="rec"
-			value="#{historyBackingNew.historyAppointmentModel}"
+			value="#{historyBacking.historyAppointmentModel}"
 			rowKey="#{rec.code}" style="width:100%" paginator="true" rows="10"
 			emptyMessage="#{msg['glb_no_records_found']}">
 
@@ -36,7 +36,7 @@
 
 	<p:tab title="#{msg['his_history_history']}">
 		<p:dataTable id="tblHistory" var="rec"
-			value="#{historyBackingNew.historyHistoryModel}" rowKey="#{rec.code}"
+			value="#{historyBacking.historyHistoryModel}" rowKey="#{rec.code}"
 			style="width:100%" paginator="true" rows="5"
 			emptyMessage="#{msg['glb_no_records_found']}">
 
@@ -60,7 +60,7 @@
 
 			<p:column style="width:4%">
 				<p:commandButton icon="ui-icon-search" title="#{msg['btn_view']}"
-					update=":form" action="#{historyBackingNew.editAppointmentAction}">
+					update=":form" action="#{historyBacking.editAppointmentAction}">
 
 				</p:commandButton>
 			</p:column>
@@ -70,7 +70,7 @@
 
 	<p:tab title="#{msg['his_history_record']}">
 		<p:dataTable id="tblRecord" var="rec"
-			value="#{historyBackingNew.historyRecordModel}" rowKey="#{rec.code}"
+			value="#{historyBacking.historyRecordModel}" rowKey="#{rec.code}"
 			style="width:100%" paginator="true" rows="5"
 			emptyMessage="#{msg['glb_no_records_found']}">
 
@@ -118,7 +118,7 @@
 
 			<p:column style="width:4%">
 				<p:commandButton icon="ui-icon-search" title="#{msg['btn_view']}"
-					update=":form" action="#{historyBackingNew.editAppointmentAction}">
+					update=":form" action="#{historyBacking.editAppointmentAction}">
 
 				</p:commandButton>
 			</p:column>
@@ -128,7 +128,7 @@
 
 	<p:tab title="#{msg['his_history_homeopathic']}">
 		<p:dataTable id="tblHomeopathic" var="rec"
-			value="#{historyBackingNew.historyHomeopathicModel}"
+			value="#{historyBacking.historyHomeopathicModel}"
 			rowKey="#{rec.code}" style="width:100%" paginator="true" rows="5"
 			emptyMessage="#{msg['glb_no_records_found']}">
 
@@ -167,8 +167,8 @@
 
 	<p:tab title="#{msg['his_history_physique']}">
 		<p:dataTable id="tblPhysique" var="rec"
-			value="#{historyBackingNew.historyPhysiqueModel}"
-			rowKey="#{rec.code}" style="width:100%" paginator="true" rows="5"
+			value="#{historyBacking.historyPhysiqueModel}" rowKey="#{rec.code}"
+			style="width:100%" paginator="true" rows="5"
 			emptyMessage="#{msg['glb_no_records_found']}">
 
 			<p:column headerText="#{msg['app_date']}">
@@ -207,7 +207,7 @@
 
 			<p:column style="width:4%">
 				<p:commandButton icon="ui-icon-search" title="#{msg['btn_view']}"
-					update=":form" action="#{historyBackingNew.editAppointmentAction}">
+					update=":form" action="#{historyBacking.editAppointmentAction}">
 
 				</p:commandButton>
 			</p:column>
@@ -217,7 +217,7 @@
 
 	<p:tab title="#{msg['his_history_organometry']}">
 		<p:dataTable id="tblOrganometry" var="rec"
-			value="#{historyBackingNew.historyOrganometryModel}"
+			value="#{historyBacking.historyOrganometryModel}"
 			rowKey="#{rec.code}" style="width:100%" paginator="true" rows="5"
 			emptyMessage="#{msg['glb_no_records_found']}">
 
@@ -242,8 +242,8 @@
 	</p:tab>
 
 	<p:tab id="tab7" title="#{msg['his_history_ip']}"
-		rendered="#{historyBackingNew.rolePrincipal eq 'DOCTOR'}">
-		<p:dataTable var="rec" value="#{historyBackingNew.listDiagnosisView}"
+		rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
+		<p:dataTable var="rec" value="#{historyBacking.listDiagnosisView}"
 			paginator="true" rows="15" style="width:100%"
 			emptyMessage="#{msg['glb_no_records_found']}">
 
@@ -266,8 +266,8 @@
 	</p:tab>
 
 	<p:tab id="tab8" title="#{msg['his_history_medicaction']}"
-		rendered="#{historyBackingNew.rolePrincipal eq 'DOCTOR'}">
-		<p:dataTable var="rec" value="#{historyBackingNew.listMedicationView}"
+		rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
+		<p:dataTable var="rec" value="#{historyBacking.listMedicationView}"
 			paginator="true" rows="15" style="width:100%"
 			emptyMessage="#{msg['glb_no_records_found']}">
 
@@ -293,8 +293,8 @@
 	</p:tab>
 
 	<p:tab id="tab9" title="#{msg['his_history_therapy']}"
-		rendered="#{historyBackingNew.rolePrincipal ne 'NURSE_AUX'}">
-		<p:dataTable var="rec" value="#{historyBackingNew.listTherapyView}"
+		rendered="#{historyBacking.rolePrincipal ne 'NURSE_AUX'}">
+		<p:dataTable var="rec" value="#{historyBacking.listTherapyView}"
 			paginator="true" rows="15" style="width:100%"
 			emptyMessage="#{msg['glb_no_records_found']}">
 
@@ -320,8 +320,8 @@
 	</p:tab>
 
 	<p:tab id="tab10" title="#{msg['his_history_examinations']}"
-		rendered="#{historyBackingNew.rolePrincipal eq 'DOCTOR'}">
-		<p:dataTable var="rec" value="#{historyBackingNew.listExamView}"
+		rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
+		<p:dataTable var="rec" value="#{historyBacking.listExamView}"
 			paginator="true" rows="15" style="width:100%"
 			emptyMessage="#{msg['glb_no_records_found']}">
 
@@ -347,8 +347,45 @@
 	</p:tab>
 
 	<p:tab id="tab11" title="#{msg['his_history_note']}"
-		rendered="#{historyBackingNew.rolePrincipal ne 'NURSE_AUX'}">
-		<p:dataTable var="rec" value="#{historyBackingNew.listNoteView}"
+		rendered="#{historyBacking.rolePrincipal ne 'NURSE_AUX'}">
+
+		<h:panelGrid columns="2" width="100%">
+			<p:outputLabel value="#{msg['his_history_note_type']}"
+				for="selMenuType" />
+			<p:selectOneMenu id="selMenuType" required="true"
+				label="#{msg['his_history_note_type']}"
+				value="#{historyBacking.typeNote}" style="width:400px;">
+
+				<p:ajax update="tab11" />
+
+				<f:selectItem itemValue="MEDICO"
+					itemDisabled="#{historyBacking.rolePrincipal ne 'DOCTOR'}"
+					itemLabel="#{msg['his_history_note_doctor']}" />
+				<f:selectItem itemValue="SOPORTE"
+					itemDisabled="#{historyBacking.rolePrincipal ne 'DOCTOR'}"
+					itemLabel="#{msg['his_history_note_support']}" />
+				<f:selectItem itemValue="ENFERMERA"
+					itemDisabled="#{historyBacking.rolePrincipal eq 'DOCTOR'}"
+					itemLabel="#{msg['his_history_note_nurse']}" />
+				<f:selectItem itemValue="REMISION"
+					itemDisabled="#{historyBacking.rolePrincipal ne 'DOCTOR'}"
+					itemLabel="#{msg['his_history_note_remission']}" />
+
+			</p:selectOneMenu>
+
+			<p:outputLabel value="#{msg['his_history_note']}" for="txtNote" />
+			<p:inputTextarea id="txtNote" rows="5" style="width:900px;"
+				value="#{historyBacking.noteDoctor}" required="true"
+				label="#{msg['his_history_note']}" />
+
+			<p:commandButton value="#{msg['btn_add']}" process="@this, tab11"
+				actionListener="#{historyBacking.saveNoteAction}"
+				update=":form:growl tab11" />
+		</h:panelGrid>
+
+		<p:spacer />
+
+		<p:dataTable var="rec" value="#{historyBacking.listNoteView}"
 			paginator="true" rows="15" style="width:100%"
 			emptyMessage="#{msg['glb_no_records_found']}">
 
@@ -366,8 +403,15 @@
 				<h:outputLabel value="#{rec.noteType}" />
 			</p:column>
 
-			<p:column headerText="#{msg['his_history_note']}" style="width:600px">
+			<p:column headerText="#{msg['his_history_note']}"
+				style="width:560px">
 				<h:outputLabel value="#{rec.note}" />
+			</p:column>
+
+			<p:column style="width:40px">
+				<p:commandButton title="#{msg['btn_print']}" icon="ui-icon-print"
+					actionListener="#{historyBacking.printRemissiomAction}"
+					disabled="#{rec.noteType ne 'REMISION'}" />
 			</p:column>
 		</p:dataTable>
 	</p:tab>
