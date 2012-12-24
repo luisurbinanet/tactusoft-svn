@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="formula" pageWidth="396" pageHeight="612" whenNoDataType="BlankPage" columnWidth="368" leftMargin="14" rightMargin="14" topMargin="14" bottomMargin="14" uuid="c92dc5a0-c2d1-42d0-bc28-ff2011c41d76">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="dts_diagnosis" uuid="4ce141d0-9d81-44b7-a340-59801b1bfcd1">
+		<parameter name="p_appointment" class="java.lang.String">
+			<defaultValueExpression><![CDATA[195]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select a.id_appointment,  b.description, a.posology
+from crm_diagnosis a join crm_cie b
+where a.id_cie = b.id and a.id_appointment = 195
+order by a.id]]>
+		</queryString>
+		<field name="id_appointment" class="java.math.BigDecimal"/>
+		<field name="description" class="java.lang.String"/>
+		<field name="posology" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="P_APPOINTMENT" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_IMAGE" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT 	b.id,
+		b.note note,
+		a.doc,
+		cast(b.note_date as Date) appointment_date,
+		concat(a.firstnames,' ', a.surnames) as name_patient,
+		c.names as name_doctor
+FROM crm_patient a JOIN crm_note b on b.id_patient = a.id
+JOIN crm_doctor c ON c.id = b.id_doctor
+WHERE b.id =$P{P_APPOINTMENT}  AND b.note_type = 'REMISION']]>
+	</queryString>
+	<field name="id" class="java.math.BigDecimal"/>
+	<field name="note" class="java.lang.String"/>
+	<field name="doc" class="java.lang.String"/>
+	<field name="appointment_date" class="java.sql.Date"/>
+	<field name="name_patient" class="java.lang.String"/>
+	<field name="name_doctor" class="java.lang.String"/>
+	<group name="group_cie">
+		<groupExpression><![CDATA[]]></groupExpression>
+	</group>
+	<title>
+		<band height="78" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement uuid="883b835c-535b-478c-b606-acf200a807c0" x="142" y="22" width="226" height="56" forecolor="#009999"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="b4aca9d4-ca72-4cd6-926e-a6112961b6d7" x="142" y="1" width="226" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="14" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Remisión Médica]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="fb85831b-54e6-420d-bfcd-274dc2ff4fc3" x="199" y="27" width="157" height="15"/>
+				<textElement>
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name_doctor}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="8cec013c-5405-40ee-bd83-8b0d7c90aa2a" x="153" y="27" width="46" height="15"/>
+				<textElement>
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<text><![CDATA[Médico:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="bcee59eb-f594-4346-b6d0-c7866c7a1f98" x="153" y="49" width="46" height="15"/>
+				<textElement>
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="61702f48-9bba-4e85-b708-edbce66e3d79" x="199" y="49" width="157" height="15"/>
+				<textElement>
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{appointment_date}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement uuid="da432f78-d87a-4002-a482-a63906fe4d24" positionType="Float" x="4" y="30" width="131" height="48"/>
+				<imageExpression><![CDATA[$P{P_IMAGE} + "/logo_naturizza.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="27" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="79a8848e-910c-4361-999f-df34709a3d55" x="0" y="4" width="60" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<text><![CDATA[Paciente:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="4837340c-f939-4456-a360-ac9d8c2d7b62" x="60" y="4" width="308" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name_patient}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="111" splitType="Stretch">
+			<textField>
+				<reportElement uuid="03f37f63-8641-4e17-9e8c-b2243365ca2a" x="0" y="0" width="368" height="111"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{note}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<lastPageFooter>
+		<band height="80">
+			<staticText>
+				<reportElement uuid="2642f2bd-2ae6-4290-a2f1-dacdc96f65c6" x="0" y="0" width="87" height="16"/>
+				<textElement>
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Recomendaciones:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3f0d2517-6e43-4779-8e9a-a67c2300dcc0" x="0" y="11" width="368" height="58"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[- No tomar bebidas negras, evitar el consumo de fritos.
+- No dejar los medicamentos cerca de equipos eléctricos o electrónicos (celulares, TV, computadores, etc.)
+- Antes de consumir los medicamentos agitarlos, dándole golpes secos con la palma de la mano.
+- No suspender los medicamentos alopáticos recetados por su médico de la EPS.
+- Caminar diariamente 1 hora.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="96e9d700-5ddb-48e5-8c30-56a3c2613dca" x="0" y="67" width="368" height="13"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Línea de Servicio Al Cliente 018000939393]]></text>
+			</staticText>
+		</band>
+	</lastPageFooter>
+</jasperReport>
