@@ -375,7 +375,7 @@
 
 			<p:outputLabel value="#{msg['his_history_note']}" for="txtNote" />
 			<p:inputTextarea id="txtNote" rows="5" style="width:900px;"
-				value="#{historyBacking.noteDoctor}" required="true"
+				value="#{historyBacking.noteDoctor}" required="false"
 				label="#{msg['his_history_note']}" />
 
 			<p:commandButton value="#{msg['btn_add']}" process="@this, tab11"
@@ -385,9 +385,9 @@
 
 		<p:spacer />
 
-		<p:dataTable var="rec" value="#{historyBacking.listNoteView}"
-			paginator="true" rows="15" style="width:100%"
-			emptyMessage="#{msg['glb_no_records_found']}">
+		<p:dataTable id="tblNotes" var="rec"
+			value="#{historyBacking.listNoteView}" paginator="true" rows="15"
+			style="width:100%" emptyMessage="#{msg['glb_no_records_found']}">
 
 			<p:column headerText="#{msg['app_date']}">
 				<h:outputLabel value="#{rec.noteDate}">
@@ -403,15 +403,17 @@
 				<h:outputLabel value="#{rec.noteType}" />
 			</p:column>
 
-			<p:column headerText="#{msg['his_history_note']}"
-				style="width:560px">
+			<p:column headerText="#{msg['his_history_note']}" style="width:560px">
 				<h:outputLabel value="#{rec.note}" />
 			</p:column>
 
 			<p:column style="width:40px">
 				<p:commandButton title="#{msg['btn_print']}" icon="ui-icon-print"
-					actionListener="#{historyBacking.printRemissiomAction}"
-					disabled="#{rec.noteType ne 'REMISION'}" />
+					action="#{historyBacking.printRemissiomAction}" ajax="false"
+					disabled="#{rec.noteType ne 'REMISION'}" process="@this,tblNotes">
+					<f:setPropertyActionListener value="#{rec}"
+						target="#{historyBacking.currentNote}" />
+				</p:commandButton>
 			</p:column>
 		</p:dataTable>
 	</p:tab>

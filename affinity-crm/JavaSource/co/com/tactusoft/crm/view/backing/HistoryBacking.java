@@ -59,6 +59,7 @@ public class HistoryBacking extends BaseBacking {
 
 	private CrmDoctor currentDoctor;
 	private CrmAppointment currentAppointment;
+	private CrmNote currentNote;
 
 	private List<VwAppointment> listAppointment;
 	private VwAppointmentDataModel appointmentModel;
@@ -173,6 +174,14 @@ public class HistoryBacking extends BaseBacking {
 
 	public void setCurrentAppointment(CrmAppointment currentAppointment) {
 		this.currentAppointment = currentAppointment;
+	}
+
+	public CrmNote getCurrentNote() {
+		return currentNote;
+	}
+
+	public void setCurrentNote(CrmNote currentNote) {
+		this.currentNote = currentNote;
 	}
 
 	public List<VwAppointment> getListAppointment() {
@@ -1843,28 +1852,28 @@ public class HistoryBacking extends BaseBacking {
 		}
 
 		List<VwAppointment> listTempApp = processService
-				.getListByAppointmentByPatient(selectedAppointment.getPatId());
+				.getListByAppointmentByPatient(selectedPatient.getId());
 		historyAppointmentModel = new VwAppointmentDataModel(listTempApp);
 
 		List<CrmHistoryHistory> listTempHistory = processService
-				.getListHistoryHistory(selectedAppointment.getPatId());
+				.getListHistoryHistory(selectedPatient.getId());
 		historyHistoryModel = new HistoryHistoryDataModel(listTempHistory);
 
 		List<CrmHistoryRecord> listTempRecord = processService
-				.getListHistoryRecord(selectedAppointment.getPatId());
+				.getListHistoryRecord(selectedPatient.getId());
 		historyRecordModel = new HistoryRecordDataModel(listTempRecord);
 
 		List<CrmHistoryHomeopathic> listTempHomeopathic = processService
-				.getListHistoryHomeopathic(selectedAppointment.getPatId());
+				.getListHistoryHomeopathic(selectedPatient.getId());
 		historyHomeopathicModel = new HistoryHomeopathicDataModel(
 				listTempHomeopathic);
 
 		List<CrmHistoryPhysique> listTempPhysique = processService
-				.getListHistoryPhysique(selectedAppointment.getPatId());
+				.getListHistoryPhysique(selectedPatient.getId());
 		historyPhysiqueModel = new HistoryPhysiqueDataModel(listTempPhysique);
 
 		List<CrmHistoryOrganometry> listTempOrganometry = processService
-				.getListHistoryOrganometry(selectedAppointment.getPatId());
+				.getListHistoryOrganometry(selectedPatient.getId());
 		historyOrganometryModel = new HistoryOrganometryDataModel(
 				listTempOrganometry);
 		listDiagnosisView = processService
@@ -1969,13 +1978,6 @@ public class HistoryBacking extends BaseBacking {
 				medicationTherapy = true;
 			}
 
-			/*
-			 * if (FacesUtil.isEmptyOrBlank(noteDoctor)) { String field =
-			 * FacesUtil.getMessage("his_history_note"); message =
-			 * FacesUtil.getMessage("glb_required", field);
-			 * FacesUtil.addWarn(message); }
-			 */
-
 			if (message == null && validateSave) {
 				processService.saveDiagnosis(currentAppointment, listDiagnosis);
 				processService.saveMedication(currentAppointment,
@@ -2057,8 +2059,7 @@ public class HistoryBacking extends BaseBacking {
 
 	public void printRemissiomAction() {
 		try {
-			GenerateFormulaPDF.PDF(currentAppointment.getId(),
-					Constant.MATERIAL_TYPE_THERAPY);
+			GenerateFormulaPDF.remissionPDF(currentNote.getId());
 		} catch (JRException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -2069,17 +2070,25 @@ public class HistoryBacking extends BaseBacking {
 	}
 
 	public void saveNoteAction(ActionEvent event) {
-		CrmNote crmNote = new CrmNote();
-		crmNote.setCrmPatient(this.selectedPatient);
-		crmNote.setCrmDoctor(this.currentDoctor);
-		crmNote.setNote(this.noteDoctor);
-		crmNote.setNoteType(this.typeNote);
-		crmNote.setNoteDate(new Date());
-		processService.saveNotes(crmNote);
-		listNoteView.add(crmNote);
-		String message = FacesUtil.getMessage("msg_record_ok");
-		this.noteDoctor = null;
-		FacesUtil.addInfo(message);
+		String message = null;
+
+		if (FacesUtil.isEmptyOrBlank(noteDoctor)) {
+			String field = FacesUtil.getMessage("his_history_note");
+			message = FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		} else {
+			CrmNote crmNote = new CrmNote();
+			crmNote.setCrmPatient(this.selectedPatient);
+			crmNote.setCrmDoctor(this.currentDoctor);
+			crmNote.setNote(this.noteDoctor);
+			crmNote.setNoteType(this.typeNote);
+			crmNote.setNoteDate(new Date());
+			processService.saveNotes(crmNote);
+			listNoteView.add(crmNote);
+			message = FacesUtil.getMessage("msg_record_ok");
+			this.noteDoctor = null;
+			FacesUtil.addInfo(message);
+		}
 	}
 
 }
