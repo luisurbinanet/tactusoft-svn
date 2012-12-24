@@ -58,4 +58,34 @@ public class GenerateFormulaPDF {
 		FacesContext.getCurrentInstance().responseComplete();
 	}
 
+	public static void remissionPDF(BigDecimal idNote) throws JRException,
+			IOException, SQLException {
+		String imagePath = FacesUtil.getRealPath("/images/");
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("P_APPOINTMENT", idNote.intValue());
+		param.put("P_IMAGE", imagePath);
+
+		SessionFactoryImpl sessionFactory = FacesUtil
+				.findBean("sessionFactory");
+		Connection connection = SessionFactoryUtils.getDataSource(
+				sessionFactory).getConnection();
+
+		String path = "/reports/remission.jasper";
+		String nameReport = "Remission.pdf";
+
+		String reportPath = FacesContext.getCurrentInstance()
+				.getExternalContext().getRealPath(path);
+		JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath,
+				param, connection);
+		HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext
+				.getCurrentInstance().getExternalContext().getResponse();
+		httpServletResponse.addHeader("Content-disposition",
+				"attachment; filename=" + nameReport);
+		ServletOutputStream servletOutputStream = httpServletResponse
+				.getOutputStream();
+		JasperExportManager.exportReportToPdfStream(jasperPrint,
+				servletOutputStream);
+		FacesContext.getCurrentInstance().responseComplete();
+	}
+
 }

@@ -26,7 +26,7 @@
 							oncomplete="dlgPatient.show()" update="dialogPatient" />
 						<p:commandButton icon="ui-icon-arrowreturnthick-1-w"
 							value="#{msg['btn_return']}" update="form"
-							rendered="#{historyBacking.modeHistorial}">
+							rendered="#{historyBacking.modeHistorial}" immediate="true">
 							<f:setPropertyActionListener value="false"
 								target="#{historyBacking.modeEdit}" />
 						</p:commandButton>
@@ -106,8 +106,7 @@
 								icon="ui-icon-print"
 								rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}"
 								value="#{msg['btn_print_medication']}" ajax="false"
-								action="#{historyBacking.printFormulaAction}"
-								process="@this, toolBar, accordion" />
+								action="#{historyBacking.printFormulaAction}" process="@this,toolBar" />
 							<p:commandButton
 								disabled="#{not historyBacking.currentAppointment.closeAppointment}"
 								icon="ui-icon-print"
@@ -1304,7 +1303,7 @@
 					widgetVar="confirmation">
 
 					<p:commandButton id="confirm" value="#{msg['btn_ok']}"
-						oncomplete="confirmation.hide()"
+						oncomplete="confirmation.hide()" process="@this,accordion"
 						update=":form:accordion :form:growl :form:toolBar"
 						actionListener="#{historyBacking.closeAppointmentAction}" />
 					<p:commandButton id="decline" value="#{msg['btn_cancel']}"
