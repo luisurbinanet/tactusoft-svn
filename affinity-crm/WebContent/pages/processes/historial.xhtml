@@ -60,7 +60,7 @@
 
 			<p:column style="width:4%">
 				<p:commandButton icon="ui-icon-search" title="#{msg['btn_view']}"
-					update=":form" action="#{historyBacking.editAppointmentAction}">
+					update=":form">
 
 				</p:commandButton>
 			</p:column>
@@ -118,7 +118,7 @@
 
 			<p:column style="width:4%">
 				<p:commandButton icon="ui-icon-search" title="#{msg['btn_view']}"
-					update=":form" action="#{historyBacking.editAppointmentAction}">
+					update=":form">
 
 				</p:commandButton>
 			</p:column>
@@ -207,7 +207,7 @@
 
 			<p:column style="width:4%">
 				<p:commandButton icon="ui-icon-search" title="#{msg['btn_view']}"
-					update=":form" action="#{historyBacking.editAppointmentAction}">
+					update=":form">
 
 				</p:commandButton>
 			</p:column>
@@ -288,6 +288,10 @@
 			<p:column headerText="#{msg['sal_material_amount']}"
 				style="width:100px">
 				<h:outputLabel value="#{rec.unit}" />
+			</p:column>
+
+			<p:column headerText="#{msg['cie_grp_diagnosis']}">
+				<h:outputLabel value="#{rec.crmCie.description}" />
 			</p:column>
 		</p:dataTable>
 	</p:tab>
@@ -380,7 +384,7 @@
 
 			<p:commandButton value="#{msg['btn_add']}" process="@this, tab11"
 				actionListener="#{historyBacking.saveNoteAction}"
-				update=":form:growl tab11" />
+				update=":form:growl txtNote tblNotes" />
 		</h:panelGrid>
 
 		<p:spacer />
