@@ -15,6 +15,7 @@ import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 
 import co.com.tactusoft.crm.controller.bo.ProcessBo;
@@ -111,7 +112,7 @@ public class BaseBacking implements Serializable {
 	protected List<SelectItem> listKin;
 	protected BigDecimal idKin;
 	protected Map<BigDecimal, CrmCountry> mapKin;
-	
+
 	protected List<SelectItem> listOccupation;
 	protected Map<BigDecimal, CrmOccupation> mapOccupation;
 	protected BigDecimal idOccupation;
@@ -139,7 +140,7 @@ public class BaseBacking implements Serializable {
 	public void setSelectedPatient(CrmPatient selectedPatient) {
 		this.selectedPatient = selectedPatient;
 	}
-	
+
 	public CrmPatient getSelectedPatientTemp() {
 		return selectedPatientTemp;
 	}
@@ -180,8 +181,10 @@ public class BaseBacking implements Serializable {
 		SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
 		CrmProfile profile = mapProfile.get(idProfile);
 
-		if ((optionSearchPatient == 1 && this.docPatient.isEmpty())
-				|| (optionSearchPatient == 2 && this.namePatient.isEmpty())) {
+		if ((optionSearchPatient == 1 && FacesUtil
+				.isEmptyOrBlank(this.docPatient))
+				|| (optionSearchPatient == 2 && FacesUtil
+						.isEmptyOrBlank(this.namePatient))) {
 
 			this.listPatient = new ArrayList<CrmPatient>();
 			this.patientModel = new PatientDataModel(listPatient);
@@ -209,23 +212,6 @@ public class BaseBacking implements Serializable {
 			} else {
 				listPatient = processService.getListPatientByNameOrDoc("NAMES",
 						this.namePatient.toUpperCase());
-
-				/*
-				 * result = CustomerExecute.findByName(sap.getUrlCustomer2(),
-				 * sap.getUsername(), sap.getPassword(), profile.getSociety(),
-				 * this.namePatient);
-				 * 
-				 * for (WSBean row : result) { boolean validate = true;
-				 * 
-				 * for (CrmPatient pat : listPatient) { if
-				 * (row.getCode().equals(pat.getCodeSap())) { validate = false;
-				 * break; } }
-				 * 
-				 * if (validate) { CrmPatient patient = new CrmPatient();
-				 * patient.setCodeSap(row.getCode());
-				 * patient.setNames(row.getNames()); listPatient.add(patient); }
-				 * }
-				 */
 			}
 
 			patientModel = new PatientDataModel(listPatient);
@@ -721,7 +707,7 @@ public class BaseBacking implements Serializable {
 	public String getRolePrincipal() {
 		return FacesUtil.getCurrentUserData().getRolePrincipal();
 	}
-	
+
 	public List<SelectItem> getListOccupation() {
 		if (listOccupation == null) {
 			listOccupation = new LinkedList<SelectItem>();
@@ -815,7 +801,7 @@ public class BaseBacking implements Serializable {
 			idCity = null;
 		}
 	}
-	
+
 	protected int calculateAge(Date bornDate) {
 		int age = 0;
 		if (bornDate != null) {
@@ -836,6 +822,17 @@ public class BaseBacking implements Serializable {
 			}
 		}
 		return age;
+	}
+
+	public void addPatient(ActionEvent event) {
+		boolean validate = true;
+		RequestContext context = RequestContext.getCurrentInstance();
+		if (selectedPatientTemp.getId() == null) {
+			validate = false;
+		} else {
+			selectedPatient = selectedPatientTemp;
+		}
+		context.addCallbackParam("validate", validate);
 	}
 
 }

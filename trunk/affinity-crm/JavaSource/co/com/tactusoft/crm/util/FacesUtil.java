@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.InetAddress;
@@ -15,6 +16,7 @@ import java.text.DateFormat;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
@@ -31,6 +33,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.MethodExpressionActionListener;
+import javax.faces.model.SelectItem;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -462,5 +465,33 @@ public class FacesUtil {
 			found = true;
 		}
 		return found;
+	}
+
+	public static List<SelectItem> entityToSelectItem(List<?> _items,
+			String _idMethod, String _descMethod) throws Exception {
+		List<SelectItem> items = new ArrayList<SelectItem>();
+
+		Method idMethod = null;
+		Method descMethod = null;
+
+		for (int i = 0; i < _items.size(); i++) {
+			Object item = _items.get(i);
+			// On the first run, initialize reflection methods for object
+			if (idMethod == null) {
+				Class<? extends Object> obj = item.getClass();
+				idMethod = obj.getMethod(_idMethod, new Class[] {});
+				descMethod = obj.getMethod(_descMethod, new Class[] {});
+			}
+			// invoke Methods
+			String id = (String) idMethod.invoke(item, new Object[] {});
+			String name = (String) descMethod.invoke(item, new Object[] {});
+
+			SelectItem selectItem = new SelectItem();
+			selectItem.setLabel(name);
+			selectItem.setValue(id.toString());
+			items.add(selectItem);
+		}
+		
+		return items;
 	}
 }

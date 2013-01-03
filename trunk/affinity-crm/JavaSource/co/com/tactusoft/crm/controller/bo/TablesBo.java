@@ -17,6 +17,7 @@ import co.com.tactusoft.crm.model.entities.AstTrunkDialpatterns;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmCampaign;
 import co.com.tactusoft.crm.model.entities.CrmCampaignDetail;
+import co.com.tactusoft.crm.model.entities.CrmCaseStudy;
 import co.com.tactusoft.crm.model.entities.CrmCie;
 import co.com.tactusoft.crm.model.entities.CrmCieMaterial;
 import co.com.tactusoft.crm.model.entities.CrmCity;
@@ -69,6 +70,10 @@ public class TablesBo implements Serializable {
 
 	public List<CrmDoctor> getListDoctor() {
 		return dao.find("from CrmDoctor o");
+	}
+	
+	public List<CrmCaseStudy> getListCaseStudy() {
+		return dao.find("from CrmCaseStudy o");
 	}
 
 	public List<CrmDoctor> getListDoctorActive() {
@@ -411,6 +416,10 @@ public class TablesBo implements Serializable {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmGuideline.class));
 		}
+		return this.persist(entity);
+	}
+	
+	public Integer saveCaseStudy(CrmCaseStudy entity) {
 		return this.persist(entity);
 	}
 
