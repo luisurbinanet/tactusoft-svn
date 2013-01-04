@@ -41,6 +41,7 @@ import co.com.tactusoft.crm.model.entities.CrmProfile;
 import co.com.tactusoft.crm.model.entities.CrmRegion;
 import co.com.tactusoft.crm.model.entities.CrmRole;
 import co.com.tactusoft.crm.model.entities.CrmSpeciality;
+import co.com.tactusoft.crm.model.entities.CrmTherapy;
 import co.com.tactusoft.crm.model.entities.CrmUser;
 import co.com.tactusoft.crm.model.entities.CrmUserBranch;
 import co.com.tactusoft.crm.model.entities.CrmUserProfile;
@@ -71,7 +72,7 @@ public class TablesBo implements Serializable {
 	public List<CrmDoctor> getListDoctor() {
 		return dao.find("from CrmDoctor o");
 	}
-	
+
 	public List<CrmCaseStudy> getListCaseStudy() {
 		return dao.find("from CrmCaseStudy o");
 	}
@@ -384,6 +385,10 @@ public class TablesBo implements Serializable {
 				+ idDiagnosis + " and state = 1");
 	}
 
+	public List<CrmTherapy> getListTherapy() {
+		return dao.find("from CrmTherapy where state = 1");
+	}
+
 	public Integer saveDoctor(CrmDoctor entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmDoctor.class));
@@ -418,7 +423,7 @@ public class TablesBo implements Serializable {
 		}
 		return this.persist(entity);
 	}
-	
+
 	public Integer saveCaseStudy(CrmCaseStudy entity) {
 		return this.persist(entity);
 	}

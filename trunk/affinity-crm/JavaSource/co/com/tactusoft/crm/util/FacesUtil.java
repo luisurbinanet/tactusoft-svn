@@ -468,30 +468,34 @@ public class FacesUtil {
 	}
 
 	public static List<SelectItem> entityToSelectItem(List<?> _items,
-			String _idMethod, String _descMethod) throws Exception {
-		List<SelectItem> items = new ArrayList<SelectItem>();
+			String _idMethod, String _descMethod) {
+		try {
+			List<SelectItem> items = new ArrayList<SelectItem>();
 
-		Method idMethod = null;
-		Method descMethod = null;
+			Method idMethod = null;
+			Method descMethod = null;
 
-		for (int i = 0; i < _items.size(); i++) {
-			Object item = _items.get(i);
-			// On the first run, initialize reflection methods for object
-			if (idMethod == null) {
-				Class<? extends Object> obj = item.getClass();
-				idMethod = obj.getMethod(_idMethod, new Class[] {});
-				descMethod = obj.getMethod(_descMethod, new Class[] {});
+			for (int i = 0; i < _items.size(); i++) {
+				Object item = _items.get(i);
+				// On the first run, initialize reflection methods for object
+				if (idMethod == null) {
+					Class<? extends Object> obj = item.getClass();
+					idMethod = obj.getMethod(_idMethod, new Class[] {});
+					descMethod = obj.getMethod(_descMethod, new Class[] {});
+				}
+				// invoke Methods
+				String id = (String) idMethod.invoke(item, new Object[] {});
+				String name = (String) descMethod.invoke(item, new Object[] {});
+
+				SelectItem selectItem = new SelectItem();
+				selectItem.setLabel(name);
+				selectItem.setValue(id.toString());
+				items.add(selectItem);
 			}
-			// invoke Methods
-			String id = (String) idMethod.invoke(item, new Object[] {});
-			String name = (String) descMethod.invoke(item, new Object[] {});
 
-			SelectItem selectItem = new SelectItem();
-			selectItem.setLabel(name);
-			selectItem.setValue(id.toString());
-			items.add(selectItem);
+			return items;
+		} catch (Exception ex) {
+			return null;
 		}
-		
-		return items;
 	}
 }

@@ -24,6 +24,7 @@ public class CrmNote implements java.io.Serializable {
 	private BigDecimal id;
 	private CrmPatient crmPatient;
 	private CrmDoctor crmDoctor;
+	private CrmNurse crmNurse;
 	private String noteType;
 	private String note;
 	private Date noteDate;
@@ -32,10 +33,11 @@ public class CrmNote implements java.io.Serializable {
 	}
 
 	public CrmNote(BigDecimal id, CrmPatient crmPatient, CrmDoctor crmDoctor,
-			String noteType, String note) {
+			CrmNurse crmNurse, String noteType, String note) {
 		this.id = id;
 		this.crmPatient = crmPatient;
 		this.crmDoctor = crmDoctor;
+		this.crmNurse = crmNurse;
 		this.noteType = noteType;
 		this.note = note;
 	}
@@ -61,13 +63,23 @@ public class CrmNote implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_doctor", nullable = false)
+	@JoinColumn(name = "id_doctor", nullable = true)
 	public CrmDoctor getCrmDoctor() {
 		return crmDoctor;
 	}
 
 	public void setCrmDoctor(CrmDoctor crmDoctor) {
 		this.crmDoctor = crmDoctor;
+	}
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "id_nurse", nullable = true)
+	public CrmNurse getCrmNurse() {
+		return crmNurse;
+	}
+
+	public void setCrmNurse(CrmNurse crmNurse) {
+		this.crmNurse = crmNurse;
 	}
 
 	@Column(name = "note_type", nullable = false, length = 45)

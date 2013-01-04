@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.event.ActionEvent;
+import javax.faces.model.SelectItem;
 import javax.inject.Named;
 
 import net.sf.jasperreports.engine.JRException;
@@ -32,7 +33,9 @@ import co.com.tactusoft.crm.model.entities.CrmHistoryRecord;
 import co.com.tactusoft.crm.model.entities.CrmMaterialGroup;
 import co.com.tactusoft.crm.model.entities.CrmMedication;
 import co.com.tactusoft.crm.model.entities.CrmNote;
+import co.com.tactusoft.crm.model.entities.CrmNurse;
 import co.com.tactusoft.crm.model.entities.CrmOccupation;
+import co.com.tactusoft.crm.model.entities.CrmTherapy;
 import co.com.tactusoft.crm.model.entities.VwAppointment;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
@@ -58,6 +61,7 @@ public class HistoryBacking extends BaseBacking {
 	private static final long serialVersionUID = 1L;
 
 	private CrmDoctor currentDoctor;
+	private CrmNurse currentNurse;
 	private CrmAppointment currentAppointment;
 	private CrmNote currentNote;
 
@@ -145,6 +149,8 @@ public class HistoryBacking extends BaseBacking {
 	private List<CrmMedication> listExamView;
 	private List<CrmNote> listNoteView;
 
+	private List<SelectItem> listNoteTherapyItem;
+
 	public HistoryBacking() {
 		newAction(null);
 	}
@@ -152,12 +158,25 @@ public class HistoryBacking extends BaseBacking {
 	@PostConstruct
 	public void init() {
 		currentDoctor = processService.getCrmDoctor();
+		if (currentDoctor == null) {
+			currentNurse = processService.getCrmNurse();
+		}
+
 		appointmentModel = null;
 		modeEdit = false;
 		modeHistorial = false;
 
 		listMaterialGroup = processService.getListMaterialGroup();
 		listCieMaterial = processService.getListCieMaterial();
+
+		List<CrmTherapy> listNoteTherapy = tablesService.getListTherapy();
+		listNoteTherapyItem = FacesUtil.entityToSelectItem(listNoteTherapy,
+				"getDescription", "getName");
+
+		if (listNoteTherapy.size() > 0) {
+			this.noteDoctor = listNoteTherapy.get(0).getDescription();
+		}
+
 	}
 
 	public CrmDoctor getCurrentDoctor() {
@@ -772,6 +791,14 @@ public class HistoryBacking extends BaseBacking {
 
 	public void setListNoteView(List<CrmNote> listNoteView) {
 		this.listNoteView = listNoteView;
+	}
+
+	public List<SelectItem> getListNoteTherapyItem() {
+		return listNoteTherapyItem;
+	}
+
+	public void setListNoteTherapyItem(List<SelectItem> listNoteTherapyItem) {
+		this.listNoteTherapyItem = listNoteTherapyItem;
 	}
 
 	public int getRenderedRecord() {
@@ -2009,29 +2036,6 @@ public class HistoryBacking extends BaseBacking {
 					} else if (this.getRolePrincipal().equals(
 							Constant.ROLE_NURSE)) {
 					}
-
-					/*
-					 * if (FacesUtil.isEmptyOrBlank(noteDoctor)) { String field
-					 * = FacesUtil.getMessage("his_history_note"); message =
-					 * FacesUtil.getMessage("glb_required", field);
-					 * FacesUtil.addWarn(message); } else {
-					 * processService.saveNotes(selectedPatient, noteDoctor,
-					 * Constant.NOTE_TYPE_NURSE);
-					 * 
-					 * viewMode = true;
-					 * currentAppointment.setCloseAppointment(true);
-					 * currentAppointment.setState(Constant.APP_STATE_ATTENDED);
-					 * processService.saveAppointment(currentAppointment);
-					 * message = FacesUtil.getMessage("his_msg_message_med_ok");
-					 * FacesUtil.addInfo(message); refreshLists();
-					 * 
-					 * listAppointment = processService
-					 * .getListVwAppointmentByHistory(currentDoctor.getId());
-					 * appointmentModel = new
-					 * VwAppointmentDataModel(listAppointment); if
-					 * (listAppointment.size() > 0) { selectedAppointment =
-					 * listAppointment.get(0); } }
-					 */
 				}
 
 			}
@@ -2087,6 +2091,7 @@ public class HistoryBacking extends BaseBacking {
 			CrmNote crmNote = new CrmNote();
 			crmNote.setCrmPatient(this.selectedPatient);
 			crmNote.setCrmDoctor(this.currentDoctor);
+			crmNote.setCrmNurse(this.currentNurse);
 			crmNote.setNote(this.noteDoctor);
 			crmNote.setNoteType(this.typeNote);
 			crmNote.setNoteDate(new Date());
