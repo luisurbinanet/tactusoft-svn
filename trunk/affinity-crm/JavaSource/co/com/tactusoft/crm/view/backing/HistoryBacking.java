@@ -137,7 +137,7 @@ public class HistoryBacking extends BaseBacking {
 	private String typeMedication;
 	private String titleMedication;
 	private int amount;
-	private String typeNote;
+	private String noteType;
 	private String noteDoctor;
 	private boolean viewMode;
 	private List<CrmMaterialGroup> listMaterialGroup;
@@ -157,26 +157,12 @@ public class HistoryBacking extends BaseBacking {
 
 	@PostConstruct
 	public void init() {
-		currentDoctor = processService.getCrmDoctor();
-		if (currentDoctor == null) {
-			currentNurse = processService.getCrmNurse();
-		}
-
 		appointmentModel = null;
 		modeEdit = false;
 		modeHistorial = false;
 
 		listMaterialGroup = processService.getListMaterialGroup();
 		listCieMaterial = processService.getListCieMaterial();
-
-		List<CrmTherapy> listNoteTherapy = tablesService.getListTherapy();
-		listNoteTherapyItem = FacesUtil.entityToSelectItem(listNoteTherapy,
-				"getDescription", "getName");
-
-		if (listNoteTherapy.size() > 0) {
-			this.noteDoctor = listNoteTherapy.get(0).getDescription();
-		}
-
 	}
 
 	public CrmDoctor getCurrentDoctor() {
@@ -216,10 +202,18 @@ public class HistoryBacking extends BaseBacking {
 			if (currentDoctor != null) {
 				listAppointment = processService
 						.getListVwAppointmentByHistory(currentDoctor.getId());
-				appointmentModel = new VwAppointmentDataModel(listAppointment);
-				if (listAppointment.size() > 0) {
-					selectedAppointment = listAppointment.get(0);
+			} else {
+				if (this.getRolePrincipal().equals(Constant.ROLE_NURSE_AUX)) {
+					BigDecimal idBranch = FacesUtil.getCurrentUserData()
+							.getListBranch().get(0).getId();
+					listAppointment = processService
+							.getListVwAppointmentByBranch(idBranch);
 				}
+			}
+
+			if (listAppointment.size() > 0) {
+				appointmentModel = new VwAppointmentDataModel(listAppointment);
+				selectedAppointment = listAppointment.get(0);
 			}
 		}
 		return appointmentModel;
@@ -713,12 +707,12 @@ public class HistoryBacking extends BaseBacking {
 		this.amount = amount;
 	}
 
-	public String getTypeNote() {
-		return typeNote;
+	public String getNoteType() {
+		return noteType;
 	}
 
-	public void setTypeNote(String typeNote) {
-		this.typeNote = typeNote;
+	public void setNoteType(String noteType) {
+		this.noteType = noteType;
 	}
 
 	public String getNoteDoctor() {
@@ -794,6 +788,21 @@ public class HistoryBacking extends BaseBacking {
 	}
 
 	public List<SelectItem> getListNoteTherapyItem() {
+		if (listNoteTherapyItem == null) {
+			List<CrmTherapy> listNoteTherapy;
+			currentDoctor = processService.getCrmDoctor();
+			if (currentDoctor == null) {
+				currentNurse = processService.getCrmNurse();
+				listNoteTherapy = tablesService.getListTherapyNurse();
+			} else {
+				listNoteTherapy = tablesService.getListTherapyMedical();
+			}
+
+			listNoteTherapyItem = FacesUtil.entityToSelectItem(listNoteTherapy,
+					"getDescription", "getName");
+
+			handleNoteTypeChange();
+		}
 		return listNoteTherapyItem;
 	}
 
@@ -867,6 +876,12 @@ public class HistoryBacking extends BaseBacking {
 	}
 
 	public void newAction(ActionEvent event) {
+		if (this.getRolePrincipal().equals(Constant.ROLE_DOCTOR)) {
+			this.noteType = Constant.NOTE_TYPE_DOCTOR;
+		} else {
+			this.noteType = Constant.NOTE_TYPE_NURSE;
+		}
+
 		part = Constant.HISTORY_HISTORY;
 		optionSearchPatient = 1;
 
@@ -889,6 +904,7 @@ public class HistoryBacking extends BaseBacking {
 
 		selectedDiagnosis = new CrmDiagnosis();
 		selectedsDiagnosis = null;
+		listNoteTherapyItem = null;
 
 		SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
 		try {
@@ -1374,12 +1390,6 @@ public class HistoryBacking extends BaseBacking {
 	}
 
 	private void refreshLists() {
-
-		if (this.getRolePrincipal().equals(Constant.ROLE_DOCTOR)) {
-			this.typeNote = Constant.NOTE_TYPE_DOCTOR;
-		} else {
-			this.typeNote = Constant.NOTE_TYPE_NURSE;
-		}
 
 		List<VwAppointment> listTempApp = processService
 				.getListByAppointmentByPatient(selectedPatient.getId());
@@ -2093,13 +2103,25 @@ public class HistoryBacking extends BaseBacking {
 			crmNote.setCrmDoctor(this.currentDoctor);
 			crmNote.setCrmNurse(this.currentNurse);
 			crmNote.setNote(this.noteDoctor);
-			crmNote.setNoteType(this.typeNote);
+			crmNote.setNoteType(this.noteType);
 			crmNote.setNoteDate(new Date());
 			processService.saveNotes(crmNote);
 			listNoteView.add(crmNote);
 			message = FacesUtil.getMessage("msg_record_ok");
 			this.noteDoctor = null;
 			FacesUtil.addInfo(message);
+		}
+	}
+
+	public void handleNoteTypeChange() {
+		if (this.noteType.equals(Constant.NOTE_TYPE_THERAPY)
+				|| this.noteType.equals(Constant.NOTE_TYPE_NURSE)) {
+			if (listNoteTherapyItem.size() > 0) {
+				this.noteDoctor = listNoteTherapyItem.get(0).getValue()
+						.toString();
+			}
+		} else {
+			this.noteDoctor = null;
 		}
 	}
 

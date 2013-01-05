@@ -359,14 +359,12 @@
 	<p:tab id="tab11" title="#{msg['his_history_note']}"
 		rendered="#{historyBacking.rolePrincipal ne 'NURSE_AUX'}">
 
-		<h:panelGrid columns="2" width="100%">
+		<h:panelGrid id="pnlNote" columns="2" width="100%">
 			<p:outputLabel value="#{msg['his_history_note_type']}"
 				for="selMenuType" />
 			<p:selectOneMenu id="selMenuType" required="true"
 				label="#{msg['his_history_note_type']}"
-				value="#{historyBacking.typeNote}" style="width:400px;">
-
-				<p:ajax update="tab11" />
+				value="#{historyBacking.noteType}" style="width:400px;">
 
 				<f:selectItem itemValue="MEDICO"
 					itemDisabled="#{historyBacking.rolePrincipal ne 'DOCTOR'}"
@@ -380,15 +378,20 @@
 				<f:selectItem itemValue="REMISION"
 					itemDisabled="#{historyBacking.rolePrincipal ne 'DOCTOR'}"
 					itemLabel="#{msg['his_history_note_remission']}" />
+				<f:selectItem itemValue="TERAPIA"
+					itemDisabled="#{historyBacking.rolePrincipal ne 'DOCTOR'}"
+					itemLabel="#{msg['his_history_note_therapy']}" />
+
+				<p:ajax update="pnlNote" process="@this"
+					listener="#{historyBacking.handleNoteTypeChange}" />
 
 			</p:selectOneMenu>
 
-			<p:outputLabel value="#{msg['his_history_therapy']}" for="selTherapy"
-				rendered="#{historyBacking.rolePrincipal ne 'DOCTOR'}" />
+			<p:outputLabel value="#{msg['his_history_therapy']}" for="selTherapy" />
 			<p:selectOneMenu id="selTherapy" required="true"
 				label="#{msg['his_history_therapy']}"
 				value="#{historyBacking.noteDoctor}" style="width:400px;"
-				rendered="#{historyBacking.rolePrincipal ne 'DOCTOR'}">
+				disabled="#{historyBacking.noteType ne 'ENFERMERA' and historyBacking.noteType ne 'TERAPIA'}">
 				<p:ajax update="txtNote" />
 				<f:selectItems value="#{historyBacking.listNoteTherapyItem}" />
 			</p:selectOneMenu>
@@ -415,8 +418,10 @@
 				</h:outputLabel>
 			</p:column>
 
-			<p:column headerText="#{msg['app_doctor']} / #{msg['prc_time_nurse']}">
-				<h:outputLabel value="#{rec.crmDoctor ne null?rec.crmDoctor.names:rec.crmNurse.names}" />
+			<p:column
+				headerText="#{msg['app_doctor']} / #{msg['prc_time_nurse']}">
+				<h:outputLabel
+					value="#{rec.crmDoctor ne null?rec.crmDoctor.names:rec.crmNurse.names}" />
 			</p:column>
 
 			<p:column headerText="#{msg['his_history_note_type']}">
