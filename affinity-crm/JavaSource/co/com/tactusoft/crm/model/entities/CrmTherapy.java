@@ -19,14 +19,19 @@ public class CrmTherapy implements java.io.Serializable {
 	private String name;
 	private String description;
 	private int state;
+	private int nurse;
+	private int medical;
 
 	public CrmTherapy() {
 	}
 
-	public CrmTherapy(String name, String description, int state) {
+	public CrmTherapy(String name, String description, int state, int nurse,
+			int medical) {
 		this.name = name;
 		this.description = description;
 		this.state = state;
+		this.nurse = nurse;
+		this.medical = medical;
 	}
 
 	@Id
@@ -65,6 +70,24 @@ public class CrmTherapy implements java.io.Serializable {
 
 	public void setState(int state) {
 		this.state = state;
+	}
+
+	@Column(name = "nurse", nullable = false)
+	public int getNurse() {
+		return this.nurse;
+	}
+
+	public void setNurse(int nurse) {
+		this.nurse = nurse;
+	}
+
+	@Column(name = "medical", nullable = false)
+	public int getMedical() {
+		return this.medical;
+	}
+
+	public void setMedical(int medical) {
+		this.medical = medical;
 	}
 
 }

@@ -385,8 +385,12 @@ public class TablesBo implements Serializable {
 				+ idDiagnosis + " and state = 1");
 	}
 
-	public List<CrmTherapy> getListTherapy() {
-		return dao.find("from CrmTherapy where state = 1");
+	public List<CrmTherapy> getListTherapyMedical() {
+		return dao.find("from CrmTherapy where state = 1 and medical = 1");
+	}
+
+	public List<CrmTherapy> getListTherapyNurse() {
+		return dao.find("from CrmTherapy where state = 1 and nurse = 1");
 	}
 
 	public Integer saveDoctor(CrmDoctor entity) {
