@@ -163,6 +163,8 @@ public class HistoryBacking extends BaseBacking {
 
 		listMaterialGroup = processService.getListMaterialGroup();
 		listCieMaterial = processService.getListCieMaterial();
+		
+		currentDoctor = processService.getCrmDoctor();
 	}
 
 	public CrmDoctor getCurrentDoctor() {
@@ -790,7 +792,6 @@ public class HistoryBacking extends BaseBacking {
 	public List<SelectItem> getListNoteTherapyItem() {
 		if (listNoteTherapyItem == null) {
 			List<CrmTherapy> listNoteTherapy;
-			currentDoctor = processService.getCrmDoctor();
 			if (currentDoctor == null) {
 				currentNurse = processService.getCrmNurse();
 				listNoteTherapy = tablesService.getListTherapyNurse();
