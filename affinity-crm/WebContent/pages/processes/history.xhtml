@@ -96,7 +96,8 @@
 							<p:commandButton value="#{msg['btn_close_appointment']}"
 								icon="ui-icon-locked" onclick="confirmation.show()"
 								disabled="#{historyBacking.currentAppointment.closeAppointment}"
-								process="@this, accordion" />
+								process="@this, accordion"
+								rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}" />
 							<p:commandButton icon="ui-icon-bookmark"
 								value="#{msg['btn_view_history']}" update="form"
 								oncomplete="dlgHistorial.show()"
@@ -106,7 +107,8 @@
 								icon="ui-icon-print"
 								rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}"
 								value="#{msg['btn_print_medication']}" ajax="false"
-								action="#{historyBacking.printFormulaAction}" process="@this,toolBar" />
+								action="#{historyBacking.printFormulaAction}"
+								process="@this,toolBar" />
 							<p:commandButton
 								disabled="#{not historyBacking.currentAppointment.closeAppointment}"
 								icon="ui-icon-print"
@@ -251,7 +253,8 @@
 
 						</p:tab>
 
-						<p:tab title="#{msg['his_history_history']}" id="HISTORY">
+						<p:tab title="#{msg['his_history_history']}" id="HISTORY"
+							rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
 
 							<h:panelGrid id="pnlHistory" columns="1" width="100%"
 								cellpadding="10">
@@ -314,7 +317,8 @@
 
 						</p:tab>
 
-						<p:tab title="#{msg['his_history_record']}" id="RECORD">
+						<p:tab title="#{msg['his_history_record']}" id="RECORD"
+							rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
 							<p:fieldset legend="#{msg['his_record_personal']}">
 								<h:panelGrid id="pnlPersonal" columns="3" width="100%">
 
@@ -664,7 +668,8 @@
 							</p:fieldset>
 						</p:tab>
 
-						<p:tab title="#{msg['his_history_homeopathic']}" id="HOMEOPATHIC">
+						<p:tab title="#{msg['his_history_homeopathic']}" id="HOMEOPATHIC"
+							rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
 							<p:fieldset legend="#{msg['his_homeopathic_biotipology']}">
 								<h:panelGrid width="100%">
 									<p:selectOneRadio id="options" layout="pageDirection"
@@ -883,7 +888,8 @@
 							</h:panelGrid>
 						</p:tab>
 
-						<p:tab title="#{msg['his_history_ip']}" id="IP">
+						<p:tab title="#{msg['his_history_ip']}" id="IP"
+							rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
 
 							<p:fieldset legend="#{msg['his_history_ip']}">
 
