@@ -83,6 +83,10 @@
 					<p:inputTextarea value="#{roleBacking.selected.description}"
 						style="width:100%" rows="3" />
 
+					<h:outputLabel value="#{msg['rol_open_app']}" />
+					<p:selectBooleanCheckbox
+						value="#{roleBacking.selected.openAppointment}" />
+
 					<h:outputLabel value="#{msg['glb_state']}"
 						rendered="#{roleBacking.selected.id!=null?true:false}" />
 					<p:selectOneMenu value="#{roleBacking.selected.state}"
