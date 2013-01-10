@@ -125,6 +125,10 @@
 						<h:outputLabel value="#{rec.crmProcedureDetail.name}" />
 					</p:column>
 
+					<p:column headerText="Cerrada">
+						<h:outputLabel value="#{rec.closeAppointment?'SI':'NO'}" />
+					</p:column>
+
 					<p:column headerText="#{msg['app_state']}">
 						<h:outputLabel
 							value="#{rec.state eq 1?'Agendada':rec.state eq 2?'Cancelada':rec.state eq 3?'Chequeada':rec.state eq 4?'Asistió a Consulta':'No Asistió a Consulta'}" />
@@ -150,6 +154,9 @@
 						<p:commandButton value="#{msg['btn_check_appointment']}"
 							icon="ui-icon-check" onclick="checkedDlg.show()"
 							disabled="#{(searchByPatientBacking.selectedAppointment.state eq 1?false:true) or searchByPatientBacking.selectedPatient.contact}" />
+						<p:commandButton value="#{msg['btn_open_appointment']}"
+							icon="ui-icon-folder-open" onclick="openAppDlg.show()"
+							disabled="#{searchByPatientBacking.selectedAppointment.state ne 4 or not searchByPatientBacking.selectedAppointment.closeAppointment}" />
 					</f:facet>
 
 				</p:dataTable>
@@ -282,6 +289,28 @@
 					</h:panelGrid>
 
 				</p:dialog>
+
+				<p:confirmDialog id="openAppDialog" message="#{msg['glb_question']}"
+					header="#{msg['title_app']}" severity="alert"
+					widgetVar="openAppDlg">
+
+					<h:panelGrid columns="1">
+
+						<h:outputLabel value="#{msg['app_obs']}" />
+						<h:inputTextarea rows="3" style="width:400px"
+							rendered="#{searchByPatientBacking.selectedAppointment eq null?false:true}"
+							value="#{searchByPatientBacking.selectedAppointment.obsOpened}" />
+
+						<f:facet name="footer">
+							<p:commandButton value="#{msg['glb_state_yes']}"
+								update=":form:selectedTable :form:growl"
+								oncomplete="openAppDlg.hide()"
+								actionListener="#{searchByPatientBacking.openAppointmentAction}" />
+							<p:commandButton value="#{msg['glb_state_no']}"
+								onclick="openAppDlg.hide()" type="button" />
+						</f:facet>
+					</h:panelGrid>
+				</p:confirmDialog>
 
 			</h:form>
 

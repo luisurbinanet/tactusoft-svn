@@ -72,7 +72,7 @@ public class ProcessBo implements Serializable {
 				+ "' and closeAppointment = 0)) and o.state in (3,4) "
 				+ "order by o.startAppointmentDate");
 	}
-	
+
 	public List<VwAppointment> getListVwAppointmentByBranch(BigDecimal branchId) {
 		String startDateString = FacesUtil.formatDate(new Date(), "yyyy-MM-dd")
 				+ " 00:00:00";
@@ -1255,8 +1255,12 @@ public class ProcessBo implements Serializable {
 		if (field.equals("DOC")) {
 			list = dao.find("from CrmPatient o where doc = '" + value + "'");
 		} else {
-			list = dao.find("from CrmPatient o where o.firstnames like '%"
-					+ value + "%' or o.surnames like '%" + value + "%'");
+			list = dao.find("FROM CrmPatient o WHERE o.firstnames LIKE '%"
+					+ value + "%' or o.surnames LIKE '%" + value
+					+ "%' OR UPPER(firstnames || ' ' || surnames) LIKE '%"
+					+ value
+					+ "%' OR UPPER(surnames || ' ' || firstnames) LIKE '%"
+					+ value + "%'");
 		}
 
 		return list;

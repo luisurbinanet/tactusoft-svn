@@ -32,6 +32,7 @@ public class CrmAppointment implements java.io.Serializable {
 	private CrmUser crmUserByIdUserCreate;
 	private CrmBranch crmBranch;
 	private CrmUser crmUserByIdUserCanceled;
+	private CrmUser crmUserByIdUserOpened;
 	private CrmDoctor crmDoctor;
 	private String code;
 	private String patientNames;
@@ -48,6 +49,8 @@ public class CrmAppointment implements java.io.Serializable {
 	private Date dateModified;
 	private Date dateChecked;
 	private Date dateCanceled;
+	private Date dateOpened;
+	private String obsOpened;
 	private Set<CrmDiagnosis> crmDiagnosises = new HashSet<CrmDiagnosis>(0);
 	private Set<CrmMedication> crmMedications = new HashSet<CrmMedication>(0);
 
@@ -73,12 +76,13 @@ public class CrmAppointment implements java.io.Serializable {
 			CrmUser crmUserByIdUserChecked, CrmPatient crmPatient,
 			CrmUser crmUserByIdUserModified, CrmUser crmUserByIdUserCreate,
 			CrmBranch crmBranch, CrmUser crmUserByIdUserCanceled,
-			CrmDoctor crmDoctor, String code, String patientNames,
-			Date startAppointmentDate, Date endAppointmentDate,
-			String codPublicity, String namePublicity, String obs,
-			Boolean untimely, Boolean closeAppointment,
+			CrmUser crmUserByIdUserOpened, CrmDoctor crmDoctor, String code,
+			String patientNames, Date startAppointmentDate,
+			Date endAppointmentDate, String codPublicity, String namePublicity,
+			String obs, Boolean untimely, Boolean closeAppointment,
 			Boolean medicationTherapy, int state, Date dateCreate,
 			Date dateModified, Date dateChecked, Date dateCanceled,
+			Date dateOpened, String obsOpened,
 			Set<CrmDiagnosis> crmDiagnosises, Set<CrmMedication> crmMedications) {
 		this.id = id;
 		this.crmProcedureDetail = crmProcedureDetail;
@@ -88,6 +92,7 @@ public class CrmAppointment implements java.io.Serializable {
 		this.crmUserByIdUserCreate = crmUserByIdUserCreate;
 		this.crmBranch = crmBranch;
 		this.crmUserByIdUserCanceled = crmUserByIdUserCanceled;
+		this.crmUserByIdUserOpened = crmUserByIdUserOpened;
 		this.crmDoctor = crmDoctor;
 		this.code = code;
 		this.patientNames = patientNames;
@@ -104,8 +109,10 @@ public class CrmAppointment implements java.io.Serializable {
 		this.dateModified = dateModified;
 		this.dateChecked = dateChecked;
 		this.dateCanceled = dateCanceled;
+		this.dateOpened = dateOpened;
 		this.crmDiagnosises = crmDiagnosises;
 		this.crmMedications = crmMedications;
+		this.obsOpened = obsOpened;
 	}
 
 	@Id
@@ -186,6 +193,16 @@ public class CrmAppointment implements java.io.Serializable {
 
 	public void setCrmUserByIdUserCanceled(CrmUser crmUserByIdUserCanceled) {
 		this.crmUserByIdUserCanceled = crmUserByIdUserCanceled;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_user_opened")
+	public CrmUser getCrmUserByIdUserOpened() {
+		return crmUserByIdUserOpened;
+	}
+
+	public void setCrmUserByIdUserOpened(CrmUser crmUserByIdUserOpened) {
+		this.crmUserByIdUserOpened = crmUserByIdUserOpened;
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -337,6 +354,25 @@ public class CrmAppointment implements java.io.Serializable {
 
 	public void setDateCanceled(Date dateCanceled) {
 		this.dateCanceled = dateCanceled;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "date_opened", length = 19)
+	public Date getDateOpened() {
+		return dateOpened;
+	}
+
+	public void setDateOpened(Date dateOpened) {
+		this.dateOpened = dateOpened;
+	}
+
+	@Column(name = "obs_opened", length = 65535)
+	public String getObsOpened() {
+		return obsOpened;
+	}
+
+	public void setObsOpened(String obsOpened) {
+		this.obsOpened = obsOpened;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmAppointment")
