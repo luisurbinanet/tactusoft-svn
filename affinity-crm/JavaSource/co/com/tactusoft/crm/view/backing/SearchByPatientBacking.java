@@ -229,6 +229,29 @@ public class SearchByPatientBacking extends BaseBacking {
 		FacesUtil.addInfo(message);
 	}
 
+	public void openAppointmentAction(ActionEvent actionEvent) {
+		String message = null;
+		if (FacesUtil.isEmptyOrBlank(this.selectedAppointment.getObsOpened())) {
+			String field = FacesUtil.getMessage("app_obs");
+			message = FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		} else {
+			String code = "";
+			selectedAppointment.setCrmUserByIdUserOpened(FacesUtil
+					.getCurrentUser());
+			selectedAppointment.setDateOpened(new Date());
+			selectedAppointment.setState(Constant.APP_STATE_CHECKED);
+			selectedAppointment.setCloseAppointment(false);
+			processService.saveAppointment(selectedAppointment);
+			code = selectedAppointment.getCode();
+
+			searchAppoinmentAction();
+
+			message = FacesUtil.getMessage("app_msg_open", code);
+			FacesUtil.addInfo(message);
+		}
+	}
+
 	public String addGoContactAction() {
 		ContactBacking contactBacking = FacesUtil.findBean("contactBacking");
 		contactBacking.setSelectedPatient(selectedPatient);
