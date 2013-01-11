@@ -28,6 +28,7 @@ public class CrmNote implements java.io.Serializable {
 	private String noteType;
 	private String note;
 	private Date noteDate;
+	private String otherNoteType;
 
 	public CrmNote() {
 	}
@@ -108,6 +109,15 @@ public class CrmNote implements java.io.Serializable {
 
 	public void setNoteDate(Date noteDate) {
 		this.noteDate = noteDate;
+	}
+
+	@Column(name = "other_note_type", length = 45)
+	public String getOtherNoteType() {
+		return otherNoteType;
+	}
+
+	public void setOtherNoteType(String otherNoteType) {
+		this.otherNoteType = otherNoteType;
 	}
 
 }

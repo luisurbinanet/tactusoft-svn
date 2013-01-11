@@ -25,6 +25,8 @@ public class CrmCountry implements java.io.Serializable {
 	private String currencyIso;
 	private Boolean automatic;
 	private String defaultDocType;
+	private Integer numPhone;
+	private Integer numCell;
 	private Set<CrmRegion> crmRegions = new HashSet<CrmRegion>(0);
 
 	public CrmCountry() {
@@ -38,13 +40,15 @@ public class CrmCountry implements java.io.Serializable {
 
 	public CrmCountry(BigDecimal id, String code, String name,
 			String currencyIso, Boolean automatic, String defaultDocType,
-			Set<CrmRegion> crmRegions) {
+			Integer numPhone, Integer numCell, Set<CrmRegion> crmRegions) {
 		this.id = id;
 		this.code = code;
 		this.name = name;
 		this.currencyIso = currencyIso;
 		this.automatic = automatic;
 		this.defaultDocType = defaultDocType;
+		this.numPhone = numPhone;
+		this.numCell = numCell;
 		this.crmRegions = crmRegions;
 	}
 
@@ -101,6 +105,24 @@ public class CrmCountry implements java.io.Serializable {
 
 	public void setDefaultDocType(String defaultDocType) {
 		this.defaultDocType = defaultDocType;
+	}
+
+	@Column(name = "num_phone")
+	public Integer getNumPhone() {
+		return numPhone;
+	}
+
+	public void setNumPhone(Integer numPhone) {
+		this.numPhone = numPhone;
+	}
+
+	@Column(name = "num_cell")
+	public Integer getNumCell() {
+		return numCell;
+	}
+
+	public void setNumCell(Integer numCell) {
+		this.numCell = numCell;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmCountry")

@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.event.ActionEvent;
@@ -150,6 +151,8 @@ public class HistoryBacking extends BaseBacking {
 	private List<CrmNote> listNoteView;
 
 	private List<SelectItem> listNoteTherapyItem;
+	private Map<Integer, Object> mapNoteTherapy;
+	private Integer idNoteTherapy;
 
 	public HistoryBacking() {
 		newAction(null);
@@ -163,7 +166,7 @@ public class HistoryBacking extends BaseBacking {
 
 		listMaterialGroup = processService.getListMaterialGroup();
 		listCieMaterial = processService.getListCieMaterial();
-		
+
 		currentDoctor = processService.getCrmDoctor();
 	}
 
@@ -213,7 +216,7 @@ public class HistoryBacking extends BaseBacking {
 				}
 			}
 
-			if (listAppointment.size() > 0) {
+			if (listAppointment != null && listAppointment.size() > 0) {
 				appointmentModel = new VwAppointmentDataModel(listAppointment);
 				selectedAppointment = listAppointment.get(0);
 			}
@@ -789,9 +792,10 @@ public class HistoryBacking extends BaseBacking {
 		this.listNoteView = listNoteView;
 	}
 
-	public List<SelectItem> getListNoteTherapyItem() {
+	public List<SelectItem> getListNoteTherapyItem() throws Exception {
 		if (listNoteTherapyItem == null) {
 			List<CrmTherapy> listNoteTherapy;
+
 			if (currentDoctor == null) {
 				currentNurse = processService.getCrmNurse();
 				listNoteTherapy = tablesService.getListTherapyNurse();
@@ -799,8 +803,13 @@ public class HistoryBacking extends BaseBacking {
 				listNoteTherapy = tablesService.getListTherapyMedical();
 			}
 
-			listNoteTherapyItem = FacesUtil.entityToSelectItem(listNoteTherapy,
-					"getDescription", "getName");
+			if (listNoteTherapy.size() > 0) {
+				idNoteTherapy = listNoteTherapy.get(0).getId();
+				listNoteTherapyItem = FacesUtil.entityToSelectItem(
+						listNoteTherapy, "getId", "getName");
+				mapNoteTherapy = FacesUtil.entityToMapInteger(listNoteTherapy,
+						"getId");
+			}
 
 			handleNoteTypeChange();
 		}
@@ -809,6 +818,22 @@ public class HistoryBacking extends BaseBacking {
 
 	public void setListNoteTherapyItem(List<SelectItem> listNoteTherapyItem) {
 		this.listNoteTherapyItem = listNoteTherapyItem;
+	}
+
+	public Map<Integer, Object> getMapNoteTherapy() {
+		return mapNoteTherapy;
+	}
+
+	public void setMapNoteTherapy(Map<Integer, Object> mapNoteTherapy) {
+		this.mapNoteTherapy = mapNoteTherapy;
+	}
+
+	public Integer getIdNoteTherapy() {
+		return idNoteTherapy;
+	}
+
+	public void setIdNoteTherapy(Integer idNoteTherapy) {
+		this.idNoteTherapy = idNoteTherapy;
 	}
 
 	public int getRenderedRecord() {
@@ -2106,6 +2131,13 @@ public class HistoryBacking extends BaseBacking {
 			crmNote.setNote(this.noteDoctor);
 			crmNote.setNoteType(this.noteType);
 			crmNote.setNoteDate(new Date());
+
+			if (this.noteType.equals("ENFERMERA")
+					|| this.noteType.equals("TERAPIA")) {
+				crmNote.setOtherNoteType(((CrmTherapy) mapNoteTherapy
+						.get(idNoteTherapy)).getName());
+			}
+
 			processService.saveNotes(crmNote);
 			listNoteView.add(crmNote);
 			message = FacesUtil.getMessage("msg_record_ok");
@@ -2117,12 +2149,19 @@ public class HistoryBacking extends BaseBacking {
 	public void handleNoteTypeChange() {
 		if (this.noteType.equals(Constant.NOTE_TYPE_THERAPY)
 				|| this.noteType.equals(Constant.NOTE_TYPE_NURSE)) {
-			if (listNoteTherapyItem.size() > 0) {
-				this.noteDoctor = listNoteTherapyItem.get(0).getValue()
-						.toString();
+			if (listNoteTherapyItem != null && listNoteTherapyItem.size() > 0) {
+				this.noteDoctor = ((CrmTherapy) mapNoteTherapy
+						.get(idNoteTherapy)).getDescription();
 			}
 		} else {
 			this.noteDoctor = null;
+		}
+	}
+
+	public void handleTherapyChange() {
+		if (listNoteTherapyItem != null && listNoteTherapyItem.size() > 0) {
+			this.noteDoctor = ((CrmTherapy) mapNoteTherapy.get(idNoteTherapy))
+					.getDescription();
 		}
 	}
 

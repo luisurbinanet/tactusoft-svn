@@ -117,6 +117,9 @@ public class BaseBacking implements Serializable {
 	protected Map<BigDecimal, CrmOccupation> mapOccupation;
 	protected BigDecimal idOccupation;
 
+	protected Integer numPhone;
+	protected Integer numCell;
+
 	public List<CrmPatient> getListPatient() {
 		return listPatient;
 	}
@@ -740,6 +743,22 @@ public class BaseBacking implements Serializable {
 
 	public void setIdOccupation(BigDecimal idOccupation) {
 		this.idOccupation = idOccupation;
+	}
+
+	public Integer getNumPhone() {
+		return numPhone;
+	}
+
+	public void setNumPhone(Integer numPhone) {
+		this.numPhone = numPhone;
+	}
+
+	public Integer getNumCell() {
+		return numCell;
+	}
+
+	public void setNumCell(Integer numCell) {
+		this.numCell = numCell;
 	}
 
 	public void newPatientAction(ActionEvent event) {

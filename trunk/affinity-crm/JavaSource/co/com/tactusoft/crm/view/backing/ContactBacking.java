@@ -96,8 +96,6 @@ public class ContactBacking extends BaseBacking {
 		this.selectedSendOptions = selectedSendOptions;
 	}
 
-	
-
 	public boolean isSaved() {
 		return saved;
 	}
@@ -314,6 +312,8 @@ public class ContactBacking extends BaseBacking {
 	public void handleCountryChange() {
 		if (idCountry != null) {
 			CrmCountry crmCountry = mapCountry.get(idCountry);
+			this.numCell = crmCountry.getNumCell();
+			this.numPhone = crmCountry.getNumPhone();
 			automatic = crmCountry.getAutomatic();
 
 			listRegion = new LinkedList<SelectItem>();

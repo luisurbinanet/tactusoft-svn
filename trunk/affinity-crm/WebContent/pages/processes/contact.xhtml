@@ -65,7 +65,7 @@
 						style="width:248px" required="true" label="#{msg['pat_country']}"
 						disabled="#{not contactBacking.newRecord}">
 						<f:selectItems value="#{contactBacking.listCountry}" />
-						<p:ajax update="selRegion selCity pnlDetail2"
+						<p:ajax update="selRegion selCity pnlDetail2 pnlDetail3"
 							listener="#{contactBacking.handleCountryChange}" />
 					</p:selectOneMenu>
 
@@ -137,17 +137,21 @@
 					<h:outputText value="#{msg['pat_phone_number']}" />
 					<p:inputText value="#{contactBacking.selectedPatient.phoneNumber}"
 						style="width:240px" label="#{msg['pat_phone_number']}"
-						required="false" maxlength="7">
-						<f:convertNumber integerOnly="true" />
-						<f:validateLength minimum="7" maximum="7" />
+						required="false" maxlength="#{contactBacking.numPhone}"
+						validatorMessage="#{msg['pat_phone_number']} #{msg['glb_invalid']}">
+						<f:validateRegex pattern="[0-9]*" />
+						<f:validateLength minimum="#{contactBacking.numPhone}"
+							maximum="#{contactBacking.numPhone}" />
 					</p:inputText>
 
 					<h:outputText value="#{msg['pat_cell_number']}" />
 					<p:inputText value="#{contactBacking.selectedPatient.cellNumber}"
 						style="width:240px" label="#{msg['pat_cell_number']}"
-						required="false" maxlength="10">
-						<f:convertNumber integerOnly="true" />
-						<f:validateLength minimum="10" maximum="10" />
+						required="false" maxlength="#{contactBacking.numCell}"
+						validatorMessage="#{msg['pat_phone_number']} #{msg['glb_invalid']}">
+						<f:validateRegex pattern="[0-9]*" />
+						<f:validateLength minimum="#{contactBacking.numCell}"
+							maximum="#{contactBacking.numCell}" />
 					</p:inputText>
 
 					<h:outputLabel value="#{msg['pat_sales_off']}" style="width:40%" />
