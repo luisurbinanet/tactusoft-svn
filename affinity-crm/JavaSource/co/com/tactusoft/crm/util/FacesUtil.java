@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -484,7 +485,12 @@ public class FacesUtil {
 					descMethod = obj.getMethod(_descMethod, new Class[] {});
 				}
 				// invoke Methods
-				String id = (String) idMethod.invoke(item, new Object[] {});
+				String id = null;
+				try {
+					id = (String) idMethod.invoke(item, new Object[] {});
+				} catch (ClassCastException ex) {
+					id = String.valueOf(idMethod.invoke(item, new Object[] {}));
+				}
 				String name = (String) descMethod.invoke(item, new Object[] {});
 
 				SelectItem selectItem = new SelectItem();
@@ -497,5 +503,47 @@ public class FacesUtil {
 		} catch (Exception ex) {
 			return null;
 		}
+	}
+
+	public static Map<BigDecimal, Object> entityToMap(List<?> list,
+			String getIdMethod) throws Exception {
+		Map<BigDecimal, Object> items = new HashMap<BigDecimal, Object>();
+
+		Method idMethod = null;
+
+		for (int index = 0; index < list.size(); index++) {
+			Object item = list.get(index);
+			// On the first run, initialize reflection methods for object
+			if (idMethod == null) {
+				Class<? extends Object> obj = item.getClass();
+				idMethod = obj.getMethod(getIdMethod, new Class[] {});
+			}
+			// invoke Methods
+			BigDecimal id = (BigDecimal) idMethod.invoke(item, new Object[] {});
+			items.put(id, item);
+		}
+
+		return items;
+	}
+
+	public static Map<Integer, Object> entityToMapInteger(List<?> list,
+			String getIdMethod) throws Exception {
+		Map<Integer, Object> items = new HashMap<Integer, Object>();
+
+		Method idMethod = null;
+
+		for (int index = 0; index < list.size(); index++) {
+			Object item = list.get(index);
+			// On the first run, initialize reflection methods for object
+			if (idMethod == null) {
+				Class<? extends Object> obj = item.getClass();
+				idMethod = obj.getMethod(getIdMethod, new Class[] {});
+			}
+			// invoke Methods
+			Integer id = (Integer) idMethod.invoke(item, new Object[] {});
+			items.put(id, item);
+		}
+
+		return items;
 	}
 }

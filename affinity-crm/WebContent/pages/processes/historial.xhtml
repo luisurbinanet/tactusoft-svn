@@ -170,7 +170,7 @@
 	</p:tab>
 
 	<p:tab title="#{msg['his_history_physique']}"
-		rendered="#{historyBacking.rolePrincipal ne 'NURSE_AUX'}">
+		rendered="#{historyBacking.rolePrincipal eq 'NURSE_AUX' or historyBacking.rolePrincipal eq 'DOCTOR'}">
 		<p:dataTable id="tblPhysique" var="rec"
 			value="#{historyBacking.historyPhysiqueModel}" rowKey="#{rec.code}"
 			style="width:100%" paginator="true" rows="5"
@@ -221,7 +221,7 @@
 	</p:tab>
 
 	<p:tab title="#{msg['his_history_organometry']}"
-		rendered="#{historyBacking.rolePrincipal ne 'NURSE_AUX'}">
+		rendered="#{historyBacking.rolePrincipal eq 'NURSE_AUX' or historyBacking.rolePrincipal eq 'DOCTOR'}">
 		<p:dataTable id="tblOrganometry" var="rec"
 			value="#{historyBacking.historyOrganometryModel}"
 			rowKey="#{rec.code}" style="width:100%" paginator="true" rows="5"
@@ -303,7 +303,7 @@
 	</p:tab>
 
 	<p:tab id="tab9" title="#{msg['his_history_therapy']}"
-		rendered="#{historyBacking.rolePrincipal ne 'NURSE_AUX'}">
+		rendered="#{historyBacking.rolePrincipal eq 'NURSE_AUX' or historyBacking.rolePrincipal eq 'DOCTOR'}">
 		<p:dataTable var="rec" value="#{historyBacking.listTherapyView}"
 			paginator="true" rows="15" style="width:100%"
 			emptyMessage="#{msg['glb_no_records_found']}">
@@ -357,7 +357,7 @@
 	</p:tab>
 
 	<p:tab id="tab11" title="#{msg['his_history_note']}"
-		rendered="#{historyBacking.rolePrincipal ne 'NURSE_AUX'}">
+		rendered="#{historyBacking.rolePrincipal eq 'NURSE' or historyBacking.rolePrincipal eq 'DOCTOR'}">
 
 		<h:panelGrid id="pnlNote" columns="2" width="100%">
 			<p:outputLabel value="#{msg['his_history_note_type']}"
@@ -390,10 +390,13 @@
 			<p:outputLabel value="#{msg['his_history_therapy']}" for="selTherapy" />
 			<p:selectOneMenu id="selTherapy" required="true"
 				label="#{msg['his_history_therapy']}"
-				value="#{historyBacking.noteDoctor}" style="width:400px;"
+				value="#{historyBacking.idNoteTherapy}" style="width:400px;"
 				disabled="#{historyBacking.noteType ne 'ENFERMERA' and historyBacking.noteType ne 'TERAPIA'}">
-				<p:ajax update="txtNote" />
+
 				<f:selectItems value="#{historyBacking.listNoteTherapyItem}" />
+
+				<p:ajax update="txtNote" process="@this"
+					listener="#{historyBacking.handleTherapyChange}" />
 			</p:selectOneMenu>
 
 			<p:outputLabel value="#{msg['his_history_note']}" for="txtNote" />
@@ -426,6 +429,10 @@
 
 			<p:column headerText="#{msg['his_history_note_type']}">
 				<h:outputLabel value="#{rec.noteType}" />
+			</p:column>
+
+			<p:column headerText="#{msg['his_history_therapy']}">
+				<h:outputLabel value="#{rec.otherNoteType}" />
 			</p:column>
 
 			<p:column headerText="#{msg['his_history_note']}" style="width:560px">

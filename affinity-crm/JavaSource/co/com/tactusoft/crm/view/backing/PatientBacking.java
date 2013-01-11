@@ -174,7 +174,9 @@ public class PatientBacking extends BaseBacking {
 		if (idCountry != null) {
 			CrmCountry crmCountry = mapCountry.get(idCountry);
 			automatic = crmCountry.getAutomatic();
-
+			this.numCell = crmCountry.getNumCell();
+			this.numPhone = crmCountry.getNumPhone();
+			
 			listRegion = new LinkedList<SelectItem>();
 			mapRegion = new HashMap<BigDecimal, CrmRegion>();
 

@@ -60,7 +60,7 @@
 						disabled="#{patientBacking.existsSAP}" style="width:248px"
 						required="true" label="#{msg['pat_country']}">
 						<f:selectItems value="#{patientBacking.listCountry}" />
-						<p:ajax update="selRegion selCity pnlDetail2"
+						<p:ajax update="selRegion selCity pnlDetail2 pnlDetail3"
 							listener="#{patientBacking.handleCountryChange}" />
 					</p:selectOneMenu>
 
@@ -165,23 +165,27 @@
 					<h:outputText value="#{msg['pat_phone_number']}" />
 					<p:inputText value="#{patientBacking.selected.phoneNumber}"
 						style="width:240px" label="#{msg['pat_phone_number']}"
-						required="true" maxlength="16">
-						<f:convertNumber integerOnly="true" />
-						<f:validateLength minimum="7" maximum="7" />
+						required="true" maxlength="#{patientBacking.numPhone}"
+						validatorMessage="#{msg['pat_phone_number']} #{msg['glb_invalid']}">
+						<f:validateRegex pattern="[0-9]*" />
+						<f:validateLength minimum="#{patientBacking.numPhone}"
+							maximum="#{patientBacking.numPhone}" />
+					</p:inputText>
+
+					<h:outputText value="#{msg['pat_cell_number']}" />
+					<p:inputText value="#{patientBacking.selected.cellNumber}"
+						style="width:240px" label="#{msg['pat_cell_number']}"
+						required="true" maxlength="#{patientBacking.numCell}"
+						validatorMessage="#{msg['pat_phone_number']} #{msg['glb_invalid']}">
+						<f:validateRegex pattern="[0-9]*" />
+						<f:validateLength minimum="#{patientBacking.numCell}"
+							maximum="#{patientBacking.numCell}" />
 					</p:inputText>
 
 					<h:outputText value="#{msg['pat_email']}" />
 					<p:inputText value="#{patientBacking.selected.email}"
 						style="width:240px" label="#{msg['pat_email']}"
 						validator="emailValidator" />
-
-					<h:outputText value="#{msg['pat_cell_number']}" />
-					<p:inputText value="#{patientBacking.selected.cellNumber}"
-						style="width:240px" label="#{msg['pat_cell_number']}"
-						required="true" maxlength="10">
-						<f:convertNumber integerOnly="true" />
-						<f:validateLength minimum="10" maximum="10" />
-					</p:inputText>
 
 					<h:outputLabel value="#{msg['pat_sales_off']}" style="width:40%" />
 					<p:selectOneMenu value="#{patientBacking.salesOff}"
