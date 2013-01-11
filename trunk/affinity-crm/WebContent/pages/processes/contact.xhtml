@@ -138,8 +138,7 @@
 					<p:inputText value="#{contactBacking.selectedPatient.phoneNumber}"
 						style="width:240px" label="#{msg['pat_phone_number']}"
 						required="false" maxlength="#{contactBacking.numPhone}"
-						validatorMessage="#{msg['pat_phone_number']} #{msg['glb_invalid']}">
-						<f:validateRegex pattern="[0-9]*" />
+						validator="numberValidator">
 						<f:validateLength minimum="#{contactBacking.numPhone}"
 							maximum="#{contactBacking.numPhone}" />
 					</p:inputText>
@@ -148,8 +147,7 @@
 					<p:inputText value="#{contactBacking.selectedPatient.cellNumber}"
 						style="width:240px" label="#{msg['pat_cell_number']}"
 						required="false" maxlength="#{contactBacking.numCell}"
-						validatorMessage="#{msg['pat_phone_number']} #{msg['glb_invalid']}">
-						<f:validateRegex pattern="[0-9]*" />
+						validator="numberValidator">
 						<f:validateLength minimum="#{contactBacking.numCell}"
 							maximum="#{contactBacking.numCell}" />
 					</p:inputText>
