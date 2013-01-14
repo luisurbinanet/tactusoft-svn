@@ -1394,6 +1394,66 @@
 
 				</p:dialog>
 
+				<p:dialog header="#{msg['his_history_note']}" widgetVar="dlgNote"
+					resizable="false" id="dialogNote" showEffect="fade"
+					hideEffect="explode" modal="true" width="600">
+
+					<h:panelGrid id="pnlNote" columns="2" width="100%">
+						<p:outputLabel value="#{msg['his_history_note_type']}"
+							for="selMenuType" />
+						<p:selectOneMenu id="selMenuType" required="true"
+							label="#{msg['his_history_note_type']}"
+							value="#{historyBacking.noteType}" style="width:400px;">
+
+							<f:selectItem itemValue="MEDICO"
+								itemDisabled="#{historyBacking.rolePrincipal ne 'DOCTOR'}"
+								itemLabel="#{msg['his_history_note_doctor']}" />
+							<f:selectItem itemValue="SOPORTE"
+								itemDisabled="#{historyBacking.rolePrincipal ne 'DOCTOR'}"
+								itemLabel="#{msg['his_history_note_support']}" />
+							<f:selectItem itemValue="ENFERMERA"
+								itemDisabled="#{historyBacking.rolePrincipal eq 'DOCTOR'}"
+								itemLabel="#{msg['his_history_note_nurse']}" />
+							<f:selectItem itemValue="REMISION"
+								itemDisabled="#{historyBacking.rolePrincipal ne 'DOCTOR'}"
+								itemLabel="#{msg['his_history_note_remission']}" />
+							<f:selectItem itemValue="TERAPIA"
+								itemDisabled="#{historyBacking.rolePrincipal ne 'DOCTOR'}"
+								itemLabel="#{msg['his_history_note_therapy']}" />
+
+							<p:ajax update="pnlNote" process="@this"
+								listener="#{historyBacking.handleNoteTypeChange}" />
+
+						</p:selectOneMenu>
+
+						<p:outputLabel value="#{msg['his_history_therapy']}"
+							for="selTherapy" />
+						<p:selectOneMenu id="selTherapy" required="true"
+							label="#{msg['his_history_therapy']}"
+							value="#{historyBacking.idNoteTherapy}" style="width:400px;"
+							disabled="#{historyBacking.noteType ne 'ENFERMERA' and historyBacking.noteType ne 'TERAPIA'}">
+
+							<f:selectItems value="#{historyBacking.listNoteTherapyItem}" />
+
+							<p:ajax update="pnlNote" process="@this"
+								listener="#{historyBacking.handleTherapyChange}" />
+						</p:selectOneMenu>
+
+						<p:outputLabel value="#{msg['his_history_note']}" for="txtNote" />
+						<p:inputTextarea id="txtNote" rows="5" style="width:400px;"
+							value="#{historyBacking.noteDoctor}" required="false"
+							label="#{msg['his_history_note']}"
+							rendered="#{not historyBacking.autoNote}" />
+						<p:panelGrid binding="#{historyBacking.containerComponent}"
+							rendered="#{historyBacking.autoNote}" style="width:400px;" />
+
+						<p:commandButton value="#{msg['btn_add']}" process="@this"
+							actionListener="#{historyBacking.saveNoteAction}"
+							update=":form:growl pnlNote" />
+					</h:panelGrid>
+
+				</p:dialog>
+
 			</h:form>
 
 		</p:panel>
