@@ -359,99 +359,52 @@
 	<p:tab id="tab11" title="#{msg['his_history_note']}"
 		rendered="#{historyBacking.rolePrincipal eq 'NURSE' or historyBacking.rolePrincipal eq 'DOCTOR'}">
 
-		<h:panelGrid id="pnlNote" columns="2" width="100%">
-			<p:outputLabel value="#{msg['his_history_note_type']}"
-				for="selMenuType" />
-			<p:selectOneMenu id="selMenuType" required="true"
-				label="#{msg['his_history_note_type']}"
-				value="#{historyBacking.noteType}" style="width:400px;">
+		<h:panelGrid width="100%">
 
-				<f:selectItem itemValue="MEDICO"
-					itemDisabled="#{historyBacking.rolePrincipal ne 'DOCTOR'}"
-					itemLabel="#{msg['his_history_note_doctor']}" />
-				<f:selectItem itemValue="SOPORTE"
-					itemDisabled="#{historyBacking.rolePrincipal ne 'DOCTOR'}"
-					itemLabel="#{msg['his_history_note_support']}" />
-				<f:selectItem itemValue="ENFERMERA"
-					itemDisabled="#{historyBacking.rolePrincipal eq 'DOCTOR'}"
-					itemLabel="#{msg['his_history_note_nurse']}" />
-				<f:selectItem itemValue="REMISION"
-					itemDisabled="#{historyBacking.rolePrincipal ne 'DOCTOR'}"
-					itemLabel="#{msg['his_history_note_remission']}" />
-				<f:selectItem itemValue="TERAPIA"
-					itemDisabled="#{historyBacking.rolePrincipal ne 'DOCTOR'}"
-					itemLabel="#{msg['his_history_note_therapy']}" />
+			<p:commandButton value="Crear Nota" onclick="dlgNote.show()" />
 
-				<p:ajax update="pnlNote" process="@this"
-					listener="#{historyBacking.handleNoteTypeChange}" />
+			<p:spacer />
 
-			</p:selectOneMenu>
+			<p:dataTable id="tblNotes" var="rec"
+				value="#{historyBacking.listNoteView}" paginator="true" rows="15"
+				style="width:100%" emptyMessage="#{msg['glb_no_records_found']}">
 
-			<p:outputLabel value="#{msg['his_history_therapy']}" for="selTherapy" />
-			<p:selectOneMenu id="selTherapy" required="true"
-				label="#{msg['his_history_therapy']}"
-				value="#{historyBacking.idNoteTherapy}" style="width:400px;"
-				disabled="#{historyBacking.noteType ne 'ENFERMERA' and historyBacking.noteType ne 'TERAPIA'}">
+				<p:column headerText="#{msg['app_date']}">
+					<h:outputLabel value="#{rec.noteDate}">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputLabel>
+				</p:column>
 
-				<f:selectItems value="#{historyBacking.listNoteTherapyItem}" />
+				<p:column
+					headerText="#{msg['app_doctor']} / #{msg['prc_time_nurse']}">
+					<h:outputLabel
+						value="#{rec.crmDoctor ne null?rec.crmDoctor.names:rec.crmNurse.names}" />
+				</p:column>
 
-				<p:ajax update="pnlNote" process="@this"
-					listener="#{historyBacking.handleTherapyChange}" />
-			</p:selectOneMenu>
+				<p:column headerText="#{msg['his_history_note_type']}">
+					<h:outputLabel value="#{rec.noteType}" />
+				</p:column>
 
-			<p:outputLabel value="#{msg['his_history_note']}" for="txtNote" />
-			<p:inputTextarea id="txtNote" rows="5" style="width:900px;"
-				value="#{historyBacking.noteDoctor}" required="false"
-				label="#{msg['his_history_note']}"
-				rendered="#{not historyBacking.autoNote}" />
-			<h:panelGrid rendered="#{historyBacking.autoNote}">
-				<p:panelGrid binding="#{historyBacking.containerComponent}" />
-			</h:panelGrid>
+				<p:column headerText="#{msg['his_history_therapy']}">
+					<h:outputLabel value="#{rec.otherNoteType}" />
+				</p:column>
 
-			<p:commandButton value="#{msg['btn_add']}" process="@this"
-				actionListener="#{historyBacking.saveNoteAction}"
-				update=":form:growl pnlNote tblNotes" />
+				<p:column headerText="#{msg['his_history_note']}"
+					style="width:560px">
+					<h:outputLabel value="#{rec.note}" />
+				</p:column>
+
+				<p:column style="width:40px">
+					<p:commandButton title="#{msg['btn_print']}" icon="ui-icon-print"
+						action="#{historyBacking.printRemissiomAction}" ajax="false"
+						disabled="#{rec.noteType ne 'REMISION'}" process="@this,tblNotes">
+						<f:setPropertyActionListener value="#{rec}"
+							target="#{historyBacking.currentNote}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+
 		</h:panelGrid>
-
-		<p:spacer />
-
-		<p:dataTable id="tblNotes" var="rec"
-			value="#{historyBacking.listNoteView}" paginator="true" rows="15"
-			style="width:100%" emptyMessage="#{msg['glb_no_records_found']}">
-
-			<p:column headerText="#{msg['app_date']}">
-				<h:outputLabel value="#{rec.noteDate}">
-					<f:convertDateTime pattern="dd/MM/yyyy" />
-				</h:outputLabel>
-			</p:column>
-
-			<p:column
-				headerText="#{msg['app_doctor']} / #{msg['prc_time_nurse']}">
-				<h:outputLabel
-					value="#{rec.crmDoctor ne null?rec.crmDoctor.names:rec.crmNurse.names}" />
-			</p:column>
-
-			<p:column headerText="#{msg['his_history_note_type']}">
-				<h:outputLabel value="#{rec.noteType}" />
-			</p:column>
-
-			<p:column headerText="#{msg['his_history_therapy']}">
-				<h:outputLabel value="#{rec.otherNoteType}" />
-			</p:column>
-
-			<p:column headerText="#{msg['his_history_note']}" style="width:560px">
-				<h:outputLabel value="#{rec.note}" />
-			</p:column>
-
-			<p:column style="width:40px">
-				<p:commandButton title="#{msg['btn_print']}" icon="ui-icon-print"
-					action="#{historyBacking.printRemissiomAction}" ajax="false"
-					disabled="#{rec.noteType ne 'REMISION'}" process="@this,tblNotes">
-					<f:setPropertyActionListener value="#{rec}"
-						target="#{historyBacking.currentNote}" />
-				</p:commandButton>
-			</p:column>
-		</p:dataTable>
 	</p:tab>
 
 </p:tabView>

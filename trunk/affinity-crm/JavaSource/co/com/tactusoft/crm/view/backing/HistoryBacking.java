@@ -2211,13 +2211,15 @@ public class HistoryBacking extends BaseBacking {
 				exit = false;
 			} else {
 				UIColumn col = new UIColumn();
+				col.setId("col_" + id);
 				HtmlOutputText ot = new HtmlOutputText();
+				ot.setId("output_" + id);
 				String subText = text.substring(index, pos);
 				ot.setValue(subText);
 				col.getChildren().add(ot);
 				HtmlInputText it = new HtmlInputText();
-				it.setValue("");
 				it.setId("text_" + id);
+				it.setValue("");
 				col.getChildren().add(it);
 
 				containerComponent.getChildren().add(col);
