@@ -395,18 +395,22 @@
 
 				<f:selectItems value="#{historyBacking.listNoteTherapyItem}" />
 
-				<p:ajax update="txtNote" process="@this"
+				<p:ajax update="pnlNote" process="@this"
 					listener="#{historyBacking.handleTherapyChange}" />
 			</p:selectOneMenu>
 
 			<p:outputLabel value="#{msg['his_history_note']}" for="txtNote" />
 			<p:inputTextarea id="txtNote" rows="5" style="width:900px;"
 				value="#{historyBacking.noteDoctor}" required="false"
-				label="#{msg['his_history_note']}" />
+				label="#{msg['his_history_note']}"
+				rendered="#{not historyBacking.autoNote}" />
+			<h:panelGrid rendered="#{historyBacking.autoNote}">
+				<p:panelGrid binding="#{historyBacking.containerComponent}" />
+			</h:panelGrid>
 
 			<p:commandButton value="#{msg['btn_add']}" process="@this"
 				actionListener="#{historyBacking.saveNoteAction}"
-				update=":form:growl txtNote tblNotes" />
+				update=":form:growl pnlNote tblNotes" />
 		</h:panelGrid>
 
 		<p:spacer />

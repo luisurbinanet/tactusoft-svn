@@ -1534,11 +1534,15 @@ public class ProcessBo implements Serializable {
 	public List<CrmPatient> getContactByName(String name) {
 		List<CrmPatient> list = null;
 		list = dao
-				.find("FROM CrmPatient o WHERE (o.firstnames like '%"
+				.find("FROM CrmPatient o WHERE o.firstnames LIKE '%"
 						+ name
-						+ "%' OR o.surnames like '%"
+						+ "%' or o.surnames LIKE '%"
 						+ name
-						+ "%') AND (o.doc IS NULL OR o.codeSap IS NULL OR o.doc = o.codeSap)");
+						+ "%' OR UPPER(firstnames || ' ' || surnames) LIKE '%"
+						+ name
+						+ "%' OR UPPER(surnames || ' ' || firstnames) LIKE '%"
+						+ name
+						+ "%' AND (o.doc IS NULL OR o.codeSap IS NULL OR o.doc = o.codeSap)");
 		return list;
 	}
 

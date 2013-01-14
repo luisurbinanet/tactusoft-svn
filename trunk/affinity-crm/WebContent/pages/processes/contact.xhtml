@@ -137,20 +137,12 @@
 					<h:outputText value="#{msg['pat_phone_number']}" />
 					<p:inputText value="#{contactBacking.selectedPatient.phoneNumber}"
 						style="width:240px" label="#{msg['pat_phone_number']}"
-						required="false" maxlength="#{contactBacking.numPhone}"
-						validator="numberValidator">
-						<f:validateLength minimum="#{contactBacking.numPhone}"
-							maximum="#{contactBacking.numPhone}" />
-					</p:inputText>
+						maxlength="#{contactBacking.numPhone}" validator="numberValidator" />
 
 					<h:outputText value="#{msg['pat_cell_number']}" />
 					<p:inputText value="#{contactBacking.selectedPatient.cellNumber}"
 						style="width:240px" label="#{msg['pat_cell_number']}"
-						required="false" maxlength="#{contactBacking.numCell}"
-						validator="numberValidator">
-						<f:validateLength minimum="#{contactBacking.numCell}"
-							maximum="#{contactBacking.numCell}" />
-					</p:inputText>
+						maxlength="#{contactBacking.numCell}" validator="numberValidator" />
 
 					<h:outputLabel value="#{msg['pat_sales_off']}" style="width:40%" />
 					<p:selectOneMenu value="#{contactBacking.salesOff}"
@@ -344,23 +336,18 @@
 						<h:outputText value="#{msg['pat_phone_number']}" />
 						<p:inputText value="#{contactBacking.selectedPatient.phoneNumber}"
 							style="width:240px" label="#{msg['pat_phone_number']}"
-							required="true" maxlength="7">
-							<f:convertNumber integerOnly="true" />
-							<f:validateLength minimum="7" maximum="7" />
-						</p:inputText>
+							maxlength="#{contactBacking.numPhone}"
+							validator="numberValidator" />
+
+						<h:outputText value="#{msg['pat_cell_number']}" />
+						<p:inputText value="#{contactBacking.selectedPatient.cellNumber}"
+							style="width:240px" label="#{msg['pat_cell_number']}"
+							maxlength="#{contactBacking.numCell}" validator="numberValidator" />
 
 						<h:outputText value="#{msg['pat_email']}" />
 						<p:inputText value="#{contactBacking.selectedPatient.email}"
 							style="width:240px" label="#{msg['pat_email']}"
 							validator="emailValidator" />
-
-						<h:outputText value="#{msg['pat_cell_number']}" />
-						<p:inputText value="#{contactBacking.selectedPatient.cellNumber}"
-							style="width:240px" label="#{msg['pat_cell_number']}"
-							required="true" maxlength="10">
-							<f:convertNumber integerOnly="true" />
-							<f:validateLength minimum="10" maximum="10" />
-						</p:inputText>
 
 						<h:outputLabel value="#{msg['pat_membership_type']}"
 							style="width:40%" />
