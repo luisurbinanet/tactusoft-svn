@@ -9,6 +9,10 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.faces.component.UIColumn;
+import javax.faces.component.html.HtmlInputText;
+import javax.faces.component.html.HtmlOutputText;
+import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.inject.Named;
@@ -153,6 +157,9 @@ public class HistoryBacking extends BaseBacking {
 	private List<SelectItem> listNoteTherapyItem;
 	private Map<Integer, Object> mapNoteTherapy;
 	private Integer idNoteTherapy;
+	private boolean autoNote;
+
+	private HtmlPanelGrid containerComponent;
 
 	public HistoryBacking() {
 		newAction(null);
@@ -168,6 +175,8 @@ public class HistoryBacking extends BaseBacking {
 		listCieMaterial = processService.getListCieMaterial();
 
 		currentDoctor = processService.getCrmDoctor();
+
+		containerComponent = new HtmlPanelGrid();
 	}
 
 	public CrmDoctor getCurrentDoctor() {
@@ -805,6 +814,7 @@ public class HistoryBacking extends BaseBacking {
 
 			if (listNoteTherapy.size() > 0) {
 				idNoteTherapy = listNoteTherapy.get(0).getId();
+				autoNote = listNoteTherapy.get(0).getAuto() == 1 ? true : false;
 				listNoteTherapyItem = FacesUtil.entityToSelectItem(
 						listNoteTherapy, "getId", "getName");
 				mapNoteTherapy = FacesUtil.entityToMapInteger(listNoteTherapy,
@@ -834,6 +844,22 @@ public class HistoryBacking extends BaseBacking {
 
 	public void setIdNoteTherapy(Integer idNoteTherapy) {
 		this.idNoteTherapy = idNoteTherapy;
+	}
+
+	public boolean isAutoNote() {
+		return autoNote;
+	}
+
+	public void setAutoNote(boolean autoNote) {
+		this.autoNote = autoNote;
+	}
+
+	public HtmlPanelGrid getContainerComponent() {
+		return containerComponent;
+	}
+
+	public void setContainerComponent(HtmlPanelGrid containerComponent) {
+		this.containerComponent = containerComponent;
 	}
 
 	public int getRenderedRecord() {
@@ -2156,13 +2182,49 @@ public class HistoryBacking extends BaseBacking {
 		} else {
 			this.noteDoctor = null;
 		}
+		handleTherapyChange();
 	}
 
 	public void handleTherapyChange() {
 		if (listNoteTherapyItem != null && listNoteTherapyItem.size() > 0) {
-			this.noteDoctor = ((CrmTherapy) mapNoteTherapy.get(idNoteTherapy))
-					.getDescription();
+			CrmTherapy currentTheraphy = (CrmTherapy) mapNoteTherapy
+					.get(idNoteTherapy);
+			this.noteDoctor = currentTheraphy.getDescription();
+			autoNote = currentTheraphy.getAuto() == 1 ? true : false;
+			if (autoNote) {
+				addComponent(this.noteDoctor);
+			}
 		}
 	}
 
+	public void addComponent(String text) {
+		// clean previous component
+		containerComponent.getChildren().clear();
+		boolean exit = true;
+		int id = 1;
+		int index = 0;
+
+		// dynamically add Child Components to Container Component
+		while (exit) {
+			int pos = text.indexOf(":" + id, index);
+			if (pos == -1) {
+				exit = false;
+			} else {
+				UIColumn col = new UIColumn();
+				HtmlOutputText ot = new HtmlOutputText();
+				String subText = text.substring(index, pos);
+				ot.setValue(subText);
+				col.getChildren().add(ot);
+				HtmlInputText it = new HtmlInputText();
+				it.setValue("");
+				it.setId("text_" + id);
+				col.getChildren().add(it);
+
+				containerComponent.getChildren().add(col);
+				id++;
+				index = pos + 2;
+			}
+		}
+
+	}
 }
