@@ -361,9 +361,13 @@
 
 		<h:panelGrid width="100%">
 
-			<p:commandButton value="Crear Nota" onclick="dlgNote.show()" />
+			<p:commandButton value="#{msg['btn_create_note']}"
+				actionListener="#{historyBacking.cleanNoteAction}"
+				oncomplete="dlgNote.show()" update=":form:dialogNote"
+				rendered="#{historyBacking.rolePrincipal eq 'NURSE' or historyBacking.rolePrincipal eq 'DOCTOR'}" />
 
-			<p:spacer />
+			<p:spacer
+				rendered="#{historyBacking.rolePrincipal eq 'NURSE' or historyBacking.rolePrincipal eq 'DOCTOR'}" />
 
 			<p:dataTable id="tblNotes" var="rec"
 				value="#{historyBacking.listNoteView}" paginator="true" rows="15"
