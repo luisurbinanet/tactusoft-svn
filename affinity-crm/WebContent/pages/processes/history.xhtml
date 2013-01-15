@@ -1396,12 +1396,12 @@
 
 				<p:dialog header="#{msg['his_history_note']}" widgetVar="dlgNote"
 					resizable="false" id="dialogNote" showEffect="fade"
-					hideEffect="explode" modal="true" width="600">
+					hideEffect="explode" modal="true" width="600" dynamic="true">
 
 					<h:panelGrid id="pnlNote" columns="2" width="100%">
 						<p:outputLabel value="#{msg['his_history_note_type']}"
 							for="selMenuType" />
-						<p:selectOneMenu id="selMenuType" required="true"
+						<p:selectOneMenu id="selMenuType"
 							label="#{msg['his_history_note_type']}"
 							value="#{historyBacking.noteType}" style="width:400px;">
 
@@ -1427,11 +1427,12 @@
 						</p:selectOneMenu>
 
 						<p:outputLabel value="#{msg['his_history_therapy']}"
-							for="selTherapy" />
-						<p:selectOneMenu id="selTherapy" required="true"
+							for="selTherapy"
+							rendered="#{historyBacking.noteType eq 'ENFERMERA' or historyBacking.noteType eq 'TERAPIA'}" />
+						<p:selectOneMenu id="selTherapy"
 							label="#{msg['his_history_therapy']}"
 							value="#{historyBacking.idNoteTherapy}" style="width:400px;"
-							disabled="#{historyBacking.noteType ne 'ENFERMERA' and historyBacking.noteType ne 'TERAPIA'}">
+							rendered="#{historyBacking.noteType eq 'ENFERMERA' or historyBacking.noteType eq 'TERAPIA'}">
 
 							<f:selectItems value="#{historyBacking.listNoteTherapyItem}" />
 
@@ -1439,17 +1440,19 @@
 								listener="#{historyBacking.handleTherapyChange}" />
 						</p:selectOneMenu>
 
-						<p:outputLabel value="#{msg['his_history_note']}" for="txtNote" />
+						<h:outputLabel value="#{msg['his_history_note']}" />
 						<p:inputTextarea id="txtNote" rows="5" style="width:400px;"
 							value="#{historyBacking.noteDoctor}" required="false"
 							label="#{msg['his_history_note']}"
 							rendered="#{not historyBacking.autoNote}" />
-						<p:panelGrid binding="#{historyBacking.containerComponent}"
+						<p:panelGrid id="pnlAutoNote"
+							binding="#{historyBacking.containerComponent}"
 							rendered="#{historyBacking.autoNote}" style="width:400px;" />
 
-						<p:commandButton value="#{msg['btn_add']}" process="@this"
+						<p:commandButton value="#{msg['btn_add']}" process="@this,pnlNote"
 							actionListener="#{historyBacking.saveNoteAction}"
-							update=":form:growl pnlNote" />
+							update=":form:growl pnlNote :form:j_idt322:tblNotes"
+							oncomplete="handleNoteComplete(xhr, status, args)" />
 					</h:panelGrid>
 
 				</p:dialog>
@@ -1457,6 +1460,18 @@
 			</h:form>
 
 		</p:panel>
+
+		<script type="text/javascript">
+			function handleNoteComplete(xhr, status, args) {
+				if (args.validationFailed || !args.saved) {
+					jQuery('dialogNote').effect("shake", {
+						times : 3
+					}, 100);
+				} else {
+					dlgNote.hide();
+				}
+			}
+		</script>
 
 	</ui:define>
 </ui:composition>

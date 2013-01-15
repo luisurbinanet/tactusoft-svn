@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.component.UIColumn;
+import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
@@ -904,6 +905,10 @@ public class HistoryBacking extends BaseBacking {
 
 	public boolean isDisabledOtherMedication() {
 		return listOtherMedication.size() == 0 ? true : false;
+	}
+
+	public boolean isDisabledNote() {
+		return listNoteTherapyItem.size() == 0 ? true : false;
 	}
 
 	public void calculateIMCAction(ActionEvent event) {
@@ -2142,47 +2147,18 @@ public class HistoryBacking extends BaseBacking {
 		}
 	}
 
-	public void saveNoteAction(ActionEvent event) {
-		String message = null;
-
-		if (FacesUtil.isEmptyOrBlank(noteDoctor)) {
-			String field = FacesUtil.getMessage("his_history_note");
-			message = FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addWarn(message);
-		} else {
-			CrmNote crmNote = new CrmNote();
-			crmNote.setCrmPatient(this.selectedPatient);
-			crmNote.setCrmDoctor(this.currentDoctor);
-			crmNote.setCrmNurse(this.currentNurse);
-			crmNote.setNote(this.noteDoctor);
-			crmNote.setNoteType(this.noteType);
-			crmNote.setNoteDate(new Date());
-
-			if (this.noteType.equals("ENFERMERA")
-					|| this.noteType.equals("TERAPIA")) {
-				crmNote.setOtherNoteType(((CrmTherapy) mapNoteTherapy
-						.get(idNoteTherapy)).getName());
-			}
-
-			processService.saveNotes(crmNote);
-			listNoteView.add(crmNote);
-			message = FacesUtil.getMessage("msg_record_ok");
-			this.noteDoctor = null;
-			FacesUtil.addInfo(message);
-		}
-	}
-
 	public void handleNoteTypeChange() {
 		if (this.noteType.equals(Constant.NOTE_TYPE_THERAPY)
 				|| this.noteType.equals(Constant.NOTE_TYPE_NURSE)) {
 			if (listNoteTherapyItem != null && listNoteTherapyItem.size() > 0) {
 				this.noteDoctor = ((CrmTherapy) mapNoteTherapy
 						.get(idNoteTherapy)).getDescription();
+				handleTherapyChange();
 			}
 		} else {
+			this.autoNote = false;
 			this.noteDoctor = null;
 		}
-		handleTherapyChange();
 	}
 
 	public void handleTherapyChange() {
@@ -2203,6 +2179,7 @@ public class HistoryBacking extends BaseBacking {
 		boolean exit = true;
 		int id = 1;
 		int index = 0;
+		int count = 0;
 
 		// dynamically add Child Components to Container Component
 		while (exit) {
@@ -2224,9 +2201,105 @@ public class HistoryBacking extends BaseBacking {
 
 				containerComponent.getChildren().add(col);
 				id++;
-				index = pos + 2;
+				count = String.valueOf(id).length() + 1;
+				index = pos + count;
+			}
+		}
+	}
+
+	public void saveNoteAction(ActionEvent event) {
+		RequestContext context = RequestContext.getCurrentInstance();
+		String message = null;
+		boolean saved = false;
+
+		if (this.autoNote) {
+			if (this.validateComponent()) {
+				message = FacesUtil.getMessage("glb_required_all");
+				FacesUtil.addWarn(message);
+			}
+		} else {
+			if (FacesUtil.isEmptyOrBlank(noteDoctor)) {
+				String field = FacesUtil.getMessage("his_history_note");
+				message = FacesUtil.getMessage("glb_required", field);
+				FacesUtil.addWarn(message);
 			}
 		}
 
+		if (message == null) {
+			CrmNote crmNote = new CrmNote();
+			crmNote.setCrmPatient(this.selectedPatient);
+			crmNote.setCrmDoctor(this.currentDoctor);
+			crmNote.setCrmNurse(this.currentNurse);
+			crmNote.setNote(this.noteDoctor);
+			crmNote.setNoteType(this.noteType);
+			crmNote.setNoteDate(new Date());
+
+			if (this.noteType.equals(Constant.NOTE_TYPE_NURSE)
+					|| this.noteType.equals(Constant.NOTE_TYPE_THERAPY)) {
+				crmNote.setOtherNoteType(((CrmTherapy) mapNoteTherapy
+						.get(idNoteTherapy)).getName());
+			}
+
+			processService.saveNotes(crmNote);
+			listNoteView.add(crmNote);
+			message = FacesUtil.getMessage("msg_record_ok");
+			this.noteDoctor = null;
+			FacesUtil.addInfo(message);
+			saved = true;
+		}
+
+		context.addCallbackParam("saved", saved);
+	}
+
+	public boolean validateComponent() {
+		String tmpText = this.noteDoctor;
+		int id = 1;
+		boolean required = false;
+
+		outerloop: for (UIComponent component : containerComponent
+				.getChildren()) {
+			List<UIComponent> list = (List<UIComponent>) component
+					.getChildren();
+			for (UIComponent component2 : list) {
+				try {
+					HtmlInputText it = (HtmlInputText) component2;
+					String value = it.getValue().toString();
+					if (!FacesUtil.isEmptyOrBlank(value)) {
+						tmpText = tmpText.replaceFirst(":" + id, value);
+						id++;
+					} else {
+						required = true;
+						break outerloop;
+					}
+				} catch (ClassCastException ex) {
+
+				}
+			}
+		}
+
+		if (!required) {
+			this.noteDoctor = tmpText;
+		}
+
+		return required;
+	}
+
+	public void cleanNoteAction(ActionEvent event) {
+		if (this.getRolePrincipal().equals(Constant.ROLE_DOCTOR)) {
+			this.noteType = Constant.NOTE_TYPE_DOCTOR;
+		} else {
+			this.noteType = Constant.NOTE_TYPE_NURSE;
+		}
+
+		if (this.noteType.equals(Constant.NOTE_TYPE_NURSE)
+				|| this.noteType.equals(Constant.NOTE_TYPE_THERAPY)) {
+			if (listNoteTherapyItem != null && listNoteTherapyItem.size() > 0) {
+				idNoteTherapy = Integer.parseInt(listNoteTherapyItem.get(0)
+						.getValue().toString());
+				handleTherapyChange();
+			}
+		} else {
+			this.autoNote = false;
+		}
 	}
 }
