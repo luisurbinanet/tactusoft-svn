@@ -695,7 +695,7 @@ public class ProcessBo implements Serializable {
 						+ doctor.getId()
 						+ " and o.crmBranch.id = "
 						+ idBranch
-						+ "  and o.crmDoctor.state = 1 order by o.day, o.startHour");
+						+ "  and o.crmDoctor.state = 1 and o.day !=1 order by o.day, o.startHour");
 
 		// Validar si Doctor tiene Horario
 		if (listDoctorSchedule.size() > 0) {
