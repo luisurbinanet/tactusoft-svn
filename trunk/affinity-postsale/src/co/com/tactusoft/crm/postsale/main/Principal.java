@@ -35,17 +35,19 @@ public class Principal {
 		String yesterdayString = Utils.formatDate(yesterdayDate, "yyyy-MM-dd");
 
 		Date tomorrowDate = null;
-		int tomorrow = currentDay + 1;
+		int tomorrow = currentDay + 2;
 		if (tomorrow != 1) {
-			tomorrowDate = Utils.addDaysToDate(currentDate, 1);
-		} else {
 			tomorrowDate = Utils.addDaysToDate(currentDate, 2);
+		} else {
+			tomorrowDate = Utils.addDaysToDate(currentDate, 3);
 		}
 		String tomorrowString = Utils.formatDate(tomorrowDate, "yyyy-MM-dd");
 
 		// ACTUALIZAR TODAS LAS CITAS QUE NO FUERON ATENDIDAS
-		if (Utils.getCurrentHour(currentDate) >= 16) {
+		if (Utils.getCurrentHour(currentDate) >= 20) {
 			dao.updateAppointment(currentDateString);
+		} else {
+			dao.updateAppointment(yesterdayString);
 		}
 
 		List<StorageBean> listStorage = new LinkedList<StorageBean>();
@@ -72,8 +74,7 @@ public class Principal {
 		List<CrmPatient> listControl = dao
 				.getListAppointmentControl(ago25DateString);
 		for (CrmPatient row : listControl) {
-			listStorage
-					.add(new StorageBean(row, null, "CONTROL"));
+			listStorage.add(new StorageBean(row, null, "CONTROL"));
 		}
 
 		// ORDENAR LISTA POR PACIENTE
