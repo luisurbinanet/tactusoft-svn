@@ -3,13 +3,14 @@ package co.com.tactusoft.crm.postsale.bo;
 import java.io.Serializable;
 import java.util.List;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
-import co.com.tactusoft.crm.model.entities.CrmCampaign;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmUser;
 
@@ -57,15 +58,41 @@ public class ProcessBO implements Serializable {
 
 	public CrmUser getUser(CrmBranch crmBranch) {
 		CrmUser result = new CrmUser();
-		List<CrmCampaign> list = dao
+		List<CrmUser> list = dao
 				.find("SELECT usr FROM CrmCampaign as cpg "
-						+ "RIGHT OUTER JOIN cpg.crmUser as usr GROUP BY cpg.crmUser ORDER BY COUNT(cpg)");
-		result = list.get(0).getCrmUser();
+						+ "RIGHT JOIN cpg.crmUser as usr "
+						+ "LEFT JOIN usr.crmUserBranchs as brc WITH brc.crmBranch.id = "
+						+ crmBranch.getId()
+						+ " GROUP BY usr ORDER BY COUNT(cpg)");
+		result = list.get(0);
 		return result;
 	}
 
 	public CrmBranch getBranch(CrmPatient crmPatient) {
 		CrmBranch result = new CrmBranch();
+		List<CrmBranch> list = dao
+				.find("SELECT o.crmBranch FROM CrmAppointment o WHERE o.crmPatient.id = "
+						+ crmPatient.getId()
+						+ " ORDER BY o.startAppointmentDate DESC");
+		if (list != null && list.size() > 0) {
+			result = list.get(0);
+		}
+		return result;
+	}
+
+	public int save(Object entity) {
+		int result = 0;
+		try {
+			result = dao.persist(entity);
+		} catch (RuntimeException ex) {
+			if (ex.getCause() instanceof ConstraintViolationException) {
+				result = -1;
+			} else if (ex.getCause() instanceof DataIntegrityViolationException) {
+				result = -2;
+			} else {
+				result = -3;
+			}
+		}
 		return result;
 	}
 

@@ -89,9 +89,6 @@ public class Principal {
 		});
 
 		if (listStorage.size() > 0) {
-
-			List<CrmCampaign> listCampaign = new LinkedList<CrmCampaign>();
-			List<CrmCampaignDetail> listCampaignDetail = new LinkedList<CrmCampaignDetail>();
 			CrmPatient crmPatient = listStorage.get(0).getCrmPatient();
 
 			// Primer Registro
@@ -104,14 +101,14 @@ public class Principal {
 			} else {
 				crmBranch = processBO.getBranch(crmPatient);
 			}
+			crmCampaign.setCrmBranch(crmBranch);
 			crmCampaign.setCrmUser(processBO.getUser(crmBranch));
 			crmCampaign.setDateCall(Utils.addDaysToDate(currentDate, 1));
 			crmCampaign.setState(1);
-			listCampaign.add(crmCampaign);
+			processBO.save(crmCampaign);
 
 			for (StorageBean row : listStorage) {
 				if (row.getCrmPatient() != crmPatient) {
-					listCampaignDetail = new LinkedList<CrmCampaignDetail>();
 
 					crmCampaign = new CrmCampaign();
 					crmCampaign.setCrmPatient(crmPatient);
@@ -121,18 +118,19 @@ public class Principal {
 					} else {
 						crmBranch = processBO.getBranch(crmPatient);
 					}
+					crmCampaign.setCrmBranch(crmBranch);
 					crmCampaign.setCrmUser(processBO.getUser(crmBranch));
 					crmCampaign
 							.setDateCall(Utils.addDaysToDate(currentDate, 1));
 					crmCampaign.setState(1);
-					listCampaign.add(crmCampaign);
+					processBO.save(crmCampaign);
 				}
 
 				CrmCampaignDetail crmCampaignDetail = new CrmCampaignDetail();
 				crmCampaignDetail.setCrmCampaign(crmCampaign);
 				crmCampaignDetail.setCrmAppointment(row.getCrmAppointment());
 				crmCampaignDetail.setCampaingType(row.getType());
-				listCampaignDetail.add(crmCampaignDetail);
+				processBO.save(crmCampaignDetail);
 
 				crmPatient = row.getCrmPatient();
 			}
