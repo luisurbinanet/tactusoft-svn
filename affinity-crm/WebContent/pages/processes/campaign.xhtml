@@ -44,6 +44,10 @@
 						</h:outputLabel>
 					</p:column>
 
+					<p:column headerText="#{msg['cam_branch']}">
+						<h:outputLabel value="#{rec.crmBranch.name}" />
+					</p:column>
+
 					<p:column headerText="#{msg['glb_state']}">
 						<h:outputLabel
 							value="#{rec.state==1?msg['crm_state_open']:msg['crm_state_close']}" />
@@ -67,6 +71,7 @@
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_save']}" icon="ui-icon-disk"
 							action="#{campaignBacking.saveAction}"
+							oncomplete="handleComplete(xhr, status, args)"
 							update="growl :form:recordTable" />
 						<p:commandButton value="#{msg['btn_close']}"
 							icon="ui-icon-closethick" update="growl :form:recordTable"
@@ -104,12 +109,24 @@
 							paginator="true" rows="10" style="width:100%"
 							emptyMessage="#{msg['glb_no_records_found']}">
 
-							<p:column headerText="#{msg['sal_material']}">
-								<h:outputLabel value="#{rec.descMaterial}" />
+							<p:column headerText="#{msg['cam_date']}">
+								<h:outputLabel
+									value="#{rec.crmAppointment.startAppointmentDate}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputLabel>
 							</p:column>
 
-							<p:column headerText="#{msg['sal_material_amount']}">
-								<h:outputLabel value="#{rec.unit}" />
+							<p:column headerText="#{msg['cam_procedure']}">
+								<h:outputLabel
+									value="#{rec.crmAppointment.crmProcedureDetail.name}" />
+							</p:column>
+
+							<p:column headerText="#{msg['cam_doctor']}">
+								<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+							</p:column>
+
+							<p:column headerText="#{msg['glb_state']}">
+								<h:outputLabel value="#{rec.descCampaingType}" />
 							</p:column>
 
 						</p:dataTable>
@@ -119,10 +136,11 @@
 						<h:panelGrid columns="2" width="100%">
 							<h:outputLabel value="#{msg['app_state']}" />
 							<p:selectOneMenu value="#{campaignBacking.selected.state}"
-								style="width:400px">
-								<f:selectItem itemValue="1" itemLabel="#{msg['glb_state_open']}" />
+								style="width:400px" required="true">
 								<f:selectItem itemValue="2"
 									itemLabel="#{msg['glb_state_close']}" />
+								<f:selectItem itemValue="3"
+									itemLabel="#{msg['cam_state_new_call']}" />
 							</p:selectOneMenu>
 							<h:outputLabel value="#{msg['pat_type_obs']}" />
 							<p:inputTextarea value="#{campaignBacking.selected.observation}"
@@ -136,6 +154,18 @@
 
 			</p:dialog>
 		</h:form>
+
+		<script type="text/javascript">
+			function handleComplete(xhr, status, args) {
+				if (args.validationFailed) {
+					jQuery('dialog').effect("shake", {
+						times : 3
+					}, 100);
+				} else {
+					dlg.hide();
+				}
+			}
+		</script>
 
 	</ui:define>
 </ui:composition>

@@ -90,10 +90,9 @@ public class TablesBo implements Serializable {
 	}
 
 	public List<CrmCampaign> getListCampaign() {
-		return dao
-				.find("from CrmCampaign where idUser = "
-						+ FacesUtil.getCurrentIdUsuario()
-						+ " order by state, dateCall");
+		return dao.find("FROM CrmCampaign o where o.crmUser.id = "
+				+ FacesUtil.getCurrentIdUsuario()
+				+ " AND o.state IN (1,3) ORDER BY o.state, o.dateCall");
 	}
 
 	public List<CrmCampaignDetail> getListCampaignDetail(BigDecimal idCampaign) {
