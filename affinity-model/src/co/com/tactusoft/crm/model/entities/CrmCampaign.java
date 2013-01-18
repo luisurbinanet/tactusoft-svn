@@ -21,35 +21,40 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "crm_campaign", catalog = "crm_db")
 public class CrmCampaign implements java.io.Serializable {
-
+	
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
-	private BigDecimal idUser;
-	private BigDecimal idBranch;
+	private CrmPatient crmPatient;
+	private CrmUser crmUser;
+	private CrmBranch crmBranch;
 	private Date dateCall;
 	private String observation;
-	private Integer state;
-	private CrmPatient crmPatient;
+	private int state;
 	private Set<CrmCampaignDetail> crmCampaignDetails = new HashSet<CrmCampaignDetail>(
 			0);
 
 	public CrmCampaign() {
 	}
 
-	public CrmCampaign(BigDecimal id, BigDecimal idUser, BigDecimal idBranch) {
+	public CrmCampaign(BigDecimal id, CrmPatient crmPatient, CrmUser crmUser,
+			CrmBranch crmBranch, int state) {
 		this.id = id;
-		this.idUser = idUser;
-		this.idBranch = idBranch;
+		this.crmPatient = crmPatient;
+		this.crmUser = crmUser;
+		this.crmBranch = crmBranch;
+		this.state = state;
 	}
 
-	public CrmCampaign(BigDecimal id, BigDecimal idPatient, BigDecimal idUser,
-			BigDecimal idBranch, String observation, CrmPatient crmPatient,
+	public CrmCampaign(BigDecimal id, CrmPatient crmPatient, CrmUser crmUser,
+			CrmBranch crmBranch, Date dateCall, String observation, int state,
 			Set<CrmCampaignDetail> crmCampaignDetails) {
 		this.id = id;
-		this.idUser = idUser;
-		this.idBranch = idBranch;
-		this.observation = observation;
 		this.crmPatient = crmPatient;
+		this.crmUser = crmUser;
+		this.crmBranch = crmBranch;
+		this.dateCall = dateCall;
+		this.observation = observation;
+		this.state = state;
 		this.crmCampaignDetails = crmCampaignDetails;
 	}
 
@@ -63,28 +68,40 @@ public class CrmCampaign implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "id_user", nullable = false, scale = 0)
-	public BigDecimal getIdUser() {
-		return this.idUser;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_patient", nullable = false)
+	public CrmPatient getCrmPatient() {
+		return this.crmPatient;
 	}
 
-	public void setIdUser(BigDecimal idUser) {
-		this.idUser = idUser;
+	public void setCrmPatient(CrmPatient crmPatient) {
+		this.crmPatient = crmPatient;
 	}
 
-	@Column(name = "id_branch", nullable = false, scale = 0)
-	public BigDecimal getIdBranch() {
-		return idBranch;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_user", nullable = false)
+	public CrmUser getCrmUser() {
+		return this.crmUser;
 	}
 
-	public void setIdBranch(BigDecimal idBranch) {
-		this.idBranch = idBranch;
+	public void setCrmUser(CrmUser crmUser) {
+		this.crmUser = crmUser;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_branch", nullable = false)
+	public CrmBranch getCrmBranch() {
+		return this.crmBranch;
+	}
+
+	public void setCrmBranch(CrmBranch crmBranch) {
+		this.crmBranch = crmBranch;
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "date_call", length = 19)
 	public Date getDateCall() {
-		return dateCall;
+		return this.dateCall;
 	}
 
 	public void setDateCall(Date dateCall) {
@@ -100,23 +117,13 @@ public class CrmCampaign implements java.io.Serializable {
 		this.observation = observation;
 	}
 
-	@Column(name = "state", nullable = false, scale = 0)
-	public Integer getState() {
-		return state;
+	@Column(name = "state", nullable = false)
+	public int getState() {
+		return this.state;
 	}
 
-	public void setState(Integer state) {
+	public void setState(int state) {
 		this.state = state;
-	}
-
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_patient")
-	public CrmPatient getCrmPatient() {
-		return crmPatient;
-	}
-
-	public void setCrmPatient(CrmPatient crmPatient) {
-		this.crmPatient = crmPatient;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmCampaign")
