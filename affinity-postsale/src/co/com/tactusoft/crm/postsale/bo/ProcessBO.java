@@ -8,7 +8,10 @@ import org.springframework.stereotype.Service;
 
 import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
+import co.com.tactusoft.crm.model.entities.CrmBranch;
+import co.com.tactusoft.crm.model.entities.CrmCampaign;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
+import co.com.tactusoft.crm.model.entities.CrmUser;
 
 @Service
 public class ProcessBO implements Serializable {
@@ -50,6 +53,20 @@ public class ProcessBO implements Serializable {
 				.find("SELECT DISTINCT o.crmPatient FROM CrmAppointment o WHERE o.crmProcedureDetail.id IN (2,6,8) "
 						+ " AND o.state IN (1,3,4) AND o.startAppointmentDate < '"
 						+ dateString + "T23:59:59.999+05:00'");
+	}
+
+	public CrmUser getUser(CrmBranch crmBranch) {
+		CrmUser result = new CrmUser();
+		List<CrmCampaign> list = dao
+				.find("SELECT usr FROM CrmCampaign as cpg "
+						+ "RIGHT OUTER JOIN cpg.crmUser as usr GROUP BY cpg.crmUser ORDER BY COUNT(cpg)");
+		result = list.get(0).getCrmUser();
+		return result;
+	}
+
+	public CrmBranch getBranch(CrmPatient crmPatient) {
+		CrmBranch result = new CrmBranch();
+		return result;
 	}
 
 }

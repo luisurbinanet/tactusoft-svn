@@ -1,9 +1,12 @@
 package co.com.tactusoft.crm.model.entities;
 
+import static javax.persistence.GenerationType.IDENTITY;
+
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -19,9 +22,9 @@ public class CrmCampaignDetail implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
 	private CrmCampaign crmCampaign;
+	private CrmAppointment crmAppointment;
 	private String codMaterial;
 	private String descMaterial;
-	private BigDecimal idAppointment;
 	private Integer days;
 	private String campaingType;
 
@@ -34,19 +37,20 @@ public class CrmCampaignDetail implements java.io.Serializable {
 	}
 
 	public CrmCampaignDetail(BigDecimal id, CrmCampaign crmCampaign,
-			String codMaterial, String descMaterial, BigDecimal idAppointment,
-			Integer days, String campaingType) {
+			CrmAppointment crmAppointment, String codMaterial,
+			String descMaterial, Integer days, String campaingType) {
 		this.id = id;
 		this.crmCampaign = crmCampaign;
 		this.codMaterial = codMaterial;
 		this.descMaterial = descMaterial;
-		this.idAppointment = idAppointment;
+		this.crmAppointment = crmAppointment;
 		this.days = days;
 		this.campaingType = campaingType;
 	}
 
 	@Id
-	@Column(name = "id", unique = true, nullable = false, scale = 0)
+	@GeneratedValue(strategy = IDENTITY)
+	@Column(name = "id", unique = true, nullable = false)
 	public BigDecimal getId() {
 		return this.id;
 	}
@@ -65,6 +69,16 @@ public class CrmCampaignDetail implements java.io.Serializable {
 		this.crmCampaign = crmCampaign;
 	}
 
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "id_appointment", nullable = false)
+	public CrmAppointment getCrmAppointment() {
+		return crmAppointment;
+	}
+
+	public void setCrmAppointment(CrmAppointment crmAppointment) {
+		this.crmAppointment = crmAppointment;
+	}
+
 	@Column(name = "cod_material", length = 18)
 	public String getCodMaterial() {
 		return this.codMaterial;
@@ -81,15 +95,6 @@ public class CrmCampaignDetail implements java.io.Serializable {
 
 	public void setDescMaterial(String descMaterial) {
 		this.descMaterial = descMaterial;
-	}
-
-	@Column(name = "id_appointment", scale = 0)
-	public BigDecimal getIdAppointment() {
-		return this.idAppointment;
-	}
-
-	public void setIdAppointment(BigDecimal idAppointment) {
-		this.idAppointment = idAppointment;
 	}
 
 	@Column(name = "days")
