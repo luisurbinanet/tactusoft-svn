@@ -47,7 +47,7 @@ public class ProcessBO implements Serializable {
 
 	public List<CrmPatient> getListAppointmentControl(String dateString) {
 		return dao
-				.find("SELECT DISTINCT o.crmPatient FROM CrmAppointment o WHERE o.crmProcedureDetail.id IN (2,5) "
+				.find("SELECT DISTINCT o.crmPatient FROM CrmAppointment o WHERE o.crmProcedureDetail.id IN (2,6,8) "
 						+ " AND o.state IN (1,3,4) AND o.startAppointmentDate < '"
 						+ dateString + "T23:59:59.999+05:00'");
 	}
