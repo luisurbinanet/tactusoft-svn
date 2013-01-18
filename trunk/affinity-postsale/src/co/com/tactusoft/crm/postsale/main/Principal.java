@@ -10,6 +10,8 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
+import co.com.tactusoft.crm.model.entities.CrmCampaign;
+import co.com.tactusoft.crm.model.entities.CrmCampaignDetail;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.postsale.bo.ProcessBO;
 import co.com.tactusoft.crm.postsale.util.Utils;
@@ -84,6 +86,27 @@ public class Principal {
 						- s2.getCrmPatient().getId().intValue();
 			}
 		});
+
+		if (listStorage.size() > 0) {
+
+			List<CrmCampaign> listCampaign = new LinkedList<CrmCampaign>();
+			List<CrmCampaignDetail> listCampaignDetail = new LinkedList<CrmCampaignDetail>();
+
+			CrmPatient crmPatient = listStorage.get(0).getCrmPatient();
+			for (StorageBean row : listStorage) {
+				if (row.getCrmPatient() != crmPatient) {
+					listCampaignDetail = new LinkedList<CrmCampaignDetail>();
+
+					CrmCampaign crmCampaign = new CrmCampaign();
+					listCampaign.add(crmCampaign);
+				}
+
+				CrmCampaignDetail crmCampaignDetail = new CrmCampaignDetail();
+				listCampaignDetail.add(crmCampaignDetail);
+
+				crmPatient = row.getCrmPatient();
+			}
+		}
 
 	}
 }

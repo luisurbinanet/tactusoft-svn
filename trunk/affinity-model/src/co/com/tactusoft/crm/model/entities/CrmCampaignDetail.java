@@ -21,18 +21,28 @@ public class CrmCampaignDetail implements java.io.Serializable {
 	private CrmCampaign crmCampaign;
 	private String codMaterial;
 	private String descMaterial;
-	private Integer unit;
+	private BigDecimal idAppointment;
+	private Integer days;
+	private String campaingType;
 
 	public CrmCampaignDetail() {
 	}
 
+	public CrmCampaignDetail(BigDecimal id, CrmCampaign crmCampaign) {
+		this.id = id;
+		this.crmCampaign = crmCampaign;
+	}
+
 	public CrmCampaignDetail(BigDecimal id, CrmCampaign crmCampaign,
-			String codMaterial, String descMaterial, Integer unit) {
+			String codMaterial, String descMaterial, BigDecimal idAppointment,
+			Integer days, String campaingType) {
 		this.id = id;
 		this.crmCampaign = crmCampaign;
 		this.codMaterial = codMaterial;
 		this.descMaterial = descMaterial;
-		this.unit = unit;
+		this.idAppointment = idAppointment;
+		this.days = days;
+		this.campaingType = campaingType;
 	}
 
 	@Id
@@ -55,7 +65,7 @@ public class CrmCampaignDetail implements java.io.Serializable {
 		this.crmCampaign = crmCampaign;
 	}
 
-	@Column(name = "cod_material", nullable = false, length = 18)
+	@Column(name = "cod_material", length = 18)
 	public String getCodMaterial() {
 		return this.codMaterial;
 	}
@@ -64,7 +74,7 @@ public class CrmCampaignDetail implements java.io.Serializable {
 		this.codMaterial = codMaterial;
 	}
 
-	@Column(name = "desc_material", nullable = false, length = 1000)
+	@Column(name = "desc_material", length = 1000)
 	public String getDescMaterial() {
 		return this.descMaterial;
 	}
@@ -73,13 +83,31 @@ public class CrmCampaignDetail implements java.io.Serializable {
 		this.descMaterial = descMaterial;
 	}
 
-	@Column(name = "unit")
-	public Integer getUnit() {
-		return unit;
+	@Column(name = "id_appointment", scale = 0)
+	public BigDecimal getIdAppointment() {
+		return this.idAppointment;
 	}
 
-	public void setUnit(Integer unit) {
-		this.unit = unit;
+	public void setIdAppointment(BigDecimal idAppointment) {
+		this.idAppointment = idAppointment;
+	}
+
+	@Column(name = "days")
+	public Integer getDays() {
+		return this.days;
+	}
+
+	public void setDays(Integer days) {
+		this.days = days;
+	}
+
+	@Column(name = "campaing_type", length = 30)
+	public String getCampaingType() {
+		return this.campaingType;
+	}
+
+	public void setCampaingType(String campaingType) {
+		this.campaingType = campaingType;
 	}
 
 }
