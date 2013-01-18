@@ -59,10 +59,12 @@ public class ProcessBO implements Serializable {
 	public CrmUser getUser(CrmBranch crmBranch) {
 		CrmUser result = new CrmUser();
 		List<CrmUser> list = dao
-				.find("SELECT usr FROM CrmCampaign as cpg "
-						+ "RIGHT JOIN cpg.crmUser as usr "
-						+ "LEFT JOIN usr.crmUserBranchs as brc WITH brc.crmBranch.id = "
+				.find("SELECT usr FROM CrmCampaign as cpg"
+						+ " RIGHT JOIN cpg.crmUser as usr"
+						+ " LEFT JOIN usr.crmUserBranchs as brc WITH brc.crmBranch.id = "
 						+ crmBranch.getId()
+						+ " JOIN usr.crmUserRoles as rol WITH rol.crmRole.id = 2"
+						+ " WHERE usr.state = 1"
 						+ " GROUP BY usr ORDER BY COUNT(cpg)");
 		result = list.get(0);
 		return result;
