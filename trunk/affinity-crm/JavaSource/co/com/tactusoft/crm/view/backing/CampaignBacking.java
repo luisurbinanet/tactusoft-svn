@@ -1,6 +1,7 @@
 package co.com.tactusoft.crm.view.backing;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -46,14 +47,7 @@ public class CampaignBacking implements Serializable {
 
 	public CampaignDataModel getModel() {
 		if (model == null) {
-			list = tableService.getListCampaign();
-			model = new CampaignDataModel(list);
-
-			if (list.size() > 0) {
-				selected = list.get(0);
-			}
-
-			isDisabledButton();
+			refreshList();
 		}
 		return model;
 	}
@@ -86,6 +80,21 @@ public class CampaignBacking implements Serializable {
 		this.modelDetail = modelDetail;
 	}
 
+	private void refreshList() {
+		List<CrmCampaign> listTemp = tableService.getListCampaign();
+		list = new LinkedList<CrmCampaign>();
+		if (listTemp.size() > 0) {
+			list.add(listTemp.get(0));
+		}
+		model = new CampaignDataModel(list);
+
+		if (list.size() > 0) {
+			selected = list.get(0);
+		}
+
+		isDisabledButton();
+	}
+
 	public void newAction() {
 		selected = new CrmCampaign();
 		selected.setState(Constant.STATE_ACTIVE);
@@ -96,8 +105,7 @@ public class CampaignBacking implements Serializable {
 
 		int result = tableService.saveCampaign(selected);
 		if (result == 0) {
-			list = tableService.getListCampaign();
-			model = new CampaignDataModel(list);
+			refreshList();
 			message = FacesUtil.getMessage("msg_record_ok");
 			FacesUtil.addInfo(message);
 		} else if (result == -1) {
