@@ -20,6 +20,9 @@ import co.com.tactusoft.crm.postsale.util.Utils;
 public class Principal {
 
 	public static void main(String[] args) {
+		System.out.println("INCIANDO PROCESO...");
+
+		System.out.println("CARGANDO BASE DE DATOS...");
 		BeanFactory beanFactory = new ClassPathXmlApplicationContext(
 				"spring-config.xml");
 		ProcessBO processBO = beanFactory.getBean(ProcessBO.class);
@@ -46,6 +49,7 @@ public class Principal {
 		}
 		String tomorrowString = Utils.formatDate(tomorrowDate, "yyyy-MM-dd");
 
+		System.out.println("ACTUALIZANDO CITAS...");
 		// ACTUALIZAR TODAS LAS CITAS QUE NO FUERON ATENDIDAS
 		if (Utils.getCurrentHour(currentDate) >= 20) {
 			processBO.updateAppointment(currentDateString);
@@ -55,6 +59,7 @@ public class Principal {
 
 		List<StorageBean> listStorage = new LinkedList<StorageBean>();
 
+		System.out.println("BUSCANDO CITAS INASISTIDAS...");
 		// INASISTENCIA DIA ANTERIOR
 		List<CrmAppointment> listNoAttendet = processBO
 				.getListAppointmentNoAttendet(yesterdayString);
@@ -63,6 +68,7 @@ public class Principal {
 					"NO_ATTENDET"));
 		}
 
+		System.out.println("BUSCANDO CITAS CONFIRMADAS...");
 		// CONFIRMADAS DIA SIGUIENTE
 		List<CrmAppointment> listConfirmed = processBO
 				.getListAppointmentConfirmed(tomorrowString);
@@ -71,6 +77,7 @@ public class Principal {
 					"CONFIRMED"));
 		}
 
+		System.out.println("BUSCANDO TERAPIAS EN ULTIMOS 25 DIAS...");
 		// SIN CITAS DE CONTROL EN 25 DÍAS
 		Date ago25Date = Utils.addDaysToDate(currentDate, -25);
 		String ago25DateString = Utils.formatDate(ago25Date, "yyyy-MM-dd");
@@ -88,6 +95,7 @@ public class Principal {
 			}
 		});
 
+		System.out.println("ASIGNANDO TAREAS..");
 		if (listStorage.size() > 0) {
 			CrmPatient crmPatient = listStorage.get(0).getCrmPatient();
 
@@ -108,10 +116,11 @@ public class Principal {
 			processBO.save(crmCampaign);
 
 			for (StorageBean row : listStorage) {
-				if (row.getCrmPatient() != crmPatient) {
+				if (row.getCrmPatient().getId().intValue() != crmPatient
+						.getId().intValue()) {
 
 					crmCampaign = new CrmCampaign();
-					crmCampaign.setCrmPatient(crmPatient);
+					crmCampaign.setCrmPatient(row.getCrmPatient());
 					crmBranch = new CrmBranch();
 					if (row.getCrmAppointment() != null) {
 						crmBranch = row.getCrmAppointment().getCrmBranch();
@@ -134,7 +143,11 @@ public class Principal {
 
 				crmPatient = row.getCrmPatient();
 			}
+		} else {
+			System.out.println("NO EXISTEN TAREAS..");
 		}
+
+		System.out.println("PROCESO TERMINADO");
 
 	}
 }
