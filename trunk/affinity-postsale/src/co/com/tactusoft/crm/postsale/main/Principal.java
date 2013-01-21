@@ -16,6 +16,8 @@ import co.com.tactusoft.crm.model.entities.CrmCampaignDetail;
 import co.com.tactusoft.crm.model.entities.CrmLog;
 import co.com.tactusoft.crm.model.entities.CrmLogDetail;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
+import co.com.tactusoft.crm.model.entities.CrmSapMedication;
+import co.com.tactusoft.crm.model.entities.VwAppointmentMedication;
 import co.com.tactusoft.crm.postsale.bo.ProcessBO;
 import co.com.tactusoft.crm.postsale.util.Utils;
 
@@ -118,6 +120,48 @@ public class Principal {
 				.getListAppointmentControl(ago25DateString);
 		for (CrmPatient row : listControl) {
 			listStorage.add(new StorageBean(row, null, "CONTROL"));
+		}
+
+		System.out.println("BUSCANDO MEDICAMENTOS Y TERAPIAS NO FACTURADAS");
+		// SIN CITAS DE CONTROL EN 25 DÍAS
+		crmLogDetail = new CrmLogDetail();
+		crmLogDetail.setCrmLog(crmLog);
+		crmLogDetail.setLogDate(new Date());
+		crmLogDetail
+				.setMessage("BUSCANDO MEDICAMENTOS Y TERAPIAS NO FACTURADAS");
+		processBO.save(crmLogDetail);
+
+		List<CrmAppointment> listClosed = processBO
+				.getListAppointmentClosed(yesterdayString);
+		for (CrmAppointment row : listClosed) {
+			String rowInitDate = Utils.formatDate(
+					row.getStartAppointmentDate(), "yyyy-MM-dd");
+			String endDate = Utils.formatDate(
+					Utils.addDaysToDate(row.getStartAppointmentDate(), 3),
+					"yyyy-MM-dd");
+
+			List<VwAppointmentMedication> listVwAppointmentMedication = processBO
+					.getListAppointmentMedicationByCode(row.getCode());
+
+			List<CrmSapMedication> listSapMedication = processBO
+					.getListSapMedicationByLoadState(row.getCrmPatient()
+							.getCodeSap(), row.getCrmProcedureDetail()
+							.getFormulaDocType(), rowInitDate, endDate);
+
+			for (VwAppointmentMedication row2 : listVwAppointmentMedication) {
+				boolean exists = false;
+				for (CrmSapMedication row3 : listSapMedication) {
+					if (row2.getId().getCodMaterial() == Long.parseLong(row3
+							.getIdMaterial())) {
+						exists = true;
+						break;
+					}
+				}
+
+				if (!exists) {
+					
+				}
+			}
 		}
 
 		// ORDENAR LISTA POR PACIENTE

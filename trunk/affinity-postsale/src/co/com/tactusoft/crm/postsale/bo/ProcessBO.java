@@ -12,7 +12,9 @@ import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
+import co.com.tactusoft.crm.model.entities.CrmSapMedication;
 import co.com.tactusoft.crm.model.entities.CrmUser;
+import co.com.tactusoft.crm.model.entities.VwAppointmentMedication;
 
 @Service
 public class ProcessBO implements Serializable {
@@ -56,6 +58,14 @@ public class ProcessBO implements Serializable {
 						+ dateString + "T23:59:59.999+05:00'");
 	}
 
+	public List<CrmAppointment> getListAppointmentClosed(String dateString) {
+		return dao
+				.find("FROM CrmAppointment WHERE state = 4 AND closeAppointment = 1 AND startAppointmentDate BETWEEN '"
+						+ dateString
+						+ "T00:00:00.000+05:00' and '"
+						+ dateString + "T23:59:59.999+05:00'");
+	}
+
 	public CrmUser getUser(CrmBranch crmBranch) {
 		CrmUser result = new CrmUser();
 		List<CrmUser> list = dao
@@ -80,6 +90,20 @@ public class ProcessBO implements Serializable {
 			result = list.get(0);
 		}
 		return result;
+	}
+
+	public List<CrmSapMedication> getListSapMedicationByLoadState(
+			String patient, String typeBill, String initDate, String endDate) {
+		return dao.find("FROM CrmSapMedication o WHERE o.idPatient = '"
+				+ patient + "' AND o.typeBill = '" + typeBill
+				+ "' AND o.dateBill >= '" + initDate + "' AND o.dateBill <= '"
+				+ endDate + "' AND o.status IS NULL ORDER BY o.id");
+	}
+
+	public List<VwAppointmentMedication> getListAppointmentMedicationByCode(
+			String code) {
+		return dao.find("FROM VwAppointmentMedication o WHERE code = '" + code
+				+ "'");
 	}
 
 	public int save(Object entity) {
