@@ -2,7 +2,6 @@ package co.com.tactusoft.crm.model.entities;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
-import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -21,42 +20,39 @@ import javax.persistence.Transient;
 public class CrmCampaignDetail implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private BigDecimal id;
+	private Integer id;
 	private CrmCampaign crmCampaign;
 	private CrmAppointment crmAppointment;
 	private String codMaterial;
 	private String descMaterial;
-	private Integer days;
 	private String campaingType;
 
 	public CrmCampaignDetail() {
 	}
 
-	public CrmCampaignDetail(BigDecimal id, CrmCampaign crmCampaign) {
-		this.id = id;
+	public CrmCampaignDetail(CrmCampaign crmCampaign, String campaingType) {
 		this.crmCampaign = crmCampaign;
+		this.campaingType = campaingType;
 	}
 
-	public CrmCampaignDetail(BigDecimal id, CrmCampaign crmCampaign,
+	public CrmCampaignDetail(CrmCampaign crmCampaign,
 			CrmAppointment crmAppointment, String codMaterial,
-			String descMaterial, Integer days, String campaingType) {
-		this.id = id;
+			String descMaterial, String campaingType) {
 		this.crmCampaign = crmCampaign;
+		this.crmAppointment = crmAppointment;
 		this.codMaterial = codMaterial;
 		this.descMaterial = descMaterial;
-		this.crmAppointment = crmAppointment;
-		this.days = days;
 		this.campaingType = campaingType;
 	}
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "id", unique = true, nullable = false)
-	public BigDecimal getId() {
+	public Integer getId() {
 		return this.id;
 	}
 
-	public void setId(BigDecimal id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -70,10 +66,10 @@ public class CrmCampaignDetail implements java.io.Serializable {
 		this.crmCampaign = crmCampaign;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_appointment", nullable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_appointment")
 	public CrmAppointment getCrmAppointment() {
-		return crmAppointment;
+		return this.crmAppointment;
 	}
 
 	public void setCrmAppointment(CrmAppointment crmAppointment) {
@@ -98,16 +94,7 @@ public class CrmCampaignDetail implements java.io.Serializable {
 		this.descMaterial = descMaterial;
 	}
 
-	@Column(name = "days")
-	public Integer getDays() {
-		return this.days;
-	}
-
-	public void setDays(Integer days) {
-		this.days = days;
-	}
-
-	@Column(name = "campaing_type", length = 30)
+	@Column(name = "campaing_type", nullable = false, length = 30)
 	public String getCampaingType() {
 		return this.campaingType;
 	}
@@ -118,7 +105,7 @@ public class CrmCampaignDetail implements java.io.Serializable {
 
 	@Transient
 	public String getDescCampaingType() {
-		return this.getCampaingType().equals("NO_ATTENDET") ? "No asistió a la cita"
+		return this.getCampaingType().equals("NO_ATTENDET") ? "No asisti— a la cita"
 				: this.getCampaingType().equals("CONFIRMED") ? "Confirmar la cita"
 						: "No ha asistido a control en 25 días";
 	}
