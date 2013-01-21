@@ -29,6 +29,8 @@ public class CrmProcedureDetail implements java.io.Serializable {
 	private Integer timeStretchers;
 	private Boolean noRepeat;
 	private Short noRepeatDays;
+	private String docType;
+	private String formulaDocType;
 	private Boolean availability;
 	private int minMedication;
 	private int maxMedication;
@@ -49,7 +51,8 @@ public class CrmProcedureDetail implements java.io.Serializable {
 	public CrmProcedureDetail(BigDecimal id, CrmProcedure crmProcedure,
 			String name, Integer timeDoctor, Integer timeNurses,
 			Integer timeStretchers, Boolean noRepeat, Short noRepeatDays,
-			int state, Set<CrmAppointment> crmAppointments) {
+			String docType, String formulaDocType, int state,
+			Set<CrmAppointment> crmAppointments) {
 		this.id = id;
 		this.crmProcedure = crmProcedure;
 		this.name = name;
@@ -58,6 +61,8 @@ public class CrmProcedureDetail implements java.io.Serializable {
 		this.timeStretchers = timeStretchers;
 		this.noRepeat = noRepeat;
 		this.noRepeatDays = noRepeatDays;
+		this.docType = docType;
+		this.formulaDocType = formulaDocType;
 		this.state = state;
 		this.crmAppointments = crmAppointments;
 	}
@@ -134,6 +139,24 @@ public class CrmProcedureDetail implements java.io.Serializable {
 
 	public void setNoRepeatDays(Short noRepeatDays) {
 		this.noRepeatDays = noRepeatDays;
+	}
+
+	@Column(name = "doc_type")
+	public String getDocType() {
+		return docType;
+	}
+
+	public void setDocType(String docType) {
+		this.docType = docType;
+	}
+
+	@Column(name = "formula_doc_type")
+	public String getFormulaDocType() {
+		return formulaDocType;
+	}
+
+	public void setFormulaDocType(String formulaDocType) {
+		this.formulaDocType = formulaDocType;
 	}
 
 	@Column(name = "availability")
