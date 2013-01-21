@@ -13,6 +13,8 @@ import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmCampaign;
 import co.com.tactusoft.crm.model.entities.CrmCampaignDetail;
+import co.com.tactusoft.crm.model.entities.CrmLog;
+import co.com.tactusoft.crm.model.entities.CrmLogDetail;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.postsale.bo.ProcessBO;
 import co.com.tactusoft.crm.postsale.util.Utils;
@@ -26,6 +28,11 @@ public class Principal {
 		BeanFactory beanFactory = new ClassPathXmlApplicationContext(
 				"spring-config.xml");
 		ProcessBO processBO = beanFactory.getBean(ProcessBO.class);
+
+		CrmLog crmLog = new CrmLog();
+		crmLog.setLogDate(new Date());
+		crmLog.setLogType("POSTVENTA");
+		processBO.save(crmLog);
 
 		Date currentDate = new Date();
 		String currentDateString = Utils.formatDate(currentDate, "yyyy-MM-dd");
@@ -51,6 +58,12 @@ public class Principal {
 
 		System.out.println("ACTUALIZANDO CITAS...");
 		// ACTUALIZAR TODAS LAS CITAS QUE NO FUERON ATENDIDAS
+		CrmLogDetail crmLogDetail = new CrmLogDetail();
+		crmLogDetail.setCrmLog(crmLog);
+		crmLogDetail.setLogDate(new Date());
+		crmLogDetail.setMessage("ACTUALIZANDO CITAS");
+		processBO.save(crmLogDetail);
+
 		if (Utils.getCurrentHour(currentDate) >= 20) {
 			processBO.updateAppointment(currentDateString);
 		} else {
@@ -61,6 +74,12 @@ public class Principal {
 
 		System.out.println("BUSCANDO CITAS INASISTIDAS...");
 		// INASISTENCIA DIA ANTERIOR
+		crmLogDetail = new CrmLogDetail();
+		crmLogDetail.setCrmLog(crmLog);
+		crmLogDetail.setLogDate(new Date());
+		crmLogDetail.setMessage("BUSCANDO CITAS INASISTIDAS");
+		processBO.save(crmLogDetail);
+
 		List<CrmAppointment> listNoAttendet = processBO
 				.getListAppointmentNoAttendet(yesterdayString);
 		for (CrmAppointment row : listNoAttendet) {
@@ -70,6 +89,12 @@ public class Principal {
 
 		System.out.println("BUSCANDO CITAS CONFIRMADAS...");
 		// CONFIRMADAS DIA SIGUIENTE
+		crmLogDetail = new CrmLogDetail();
+		crmLogDetail.setCrmLog(crmLog);
+		crmLogDetail.setLogDate(new Date());
+		crmLogDetail.setMessage("BUSCANDO CITAS CONFIRMADAS");
+		processBO.save(crmLogDetail);
+
 		List<CrmAppointment> listConfirmed = processBO
 				.getListAppointmentConfirmed(tomorrowString);
 		for (CrmAppointment row : listConfirmed) {
@@ -77,8 +102,16 @@ public class Principal {
 					"CONFIRMED"));
 		}
 
-		System.out.println("BUSCANDO TERAPIAS EN ULTIMOS 25 DIAS...");
+		System.out
+				.println("BUSCANDO PACIENTES CON MAS DE 25 DIAS SIN CITA CONTROL");
 		// SIN CITAS DE CONTROL EN 25 DÍAS
+		crmLogDetail = new CrmLogDetail();
+		crmLogDetail.setCrmLog(crmLog);
+		crmLogDetail.setLogDate(new Date());
+		crmLogDetail
+				.setMessage("BUSCANDO PACIENTES CON MAS DE 25 DIAS SIN CITA CONTROL");
+		processBO.save(crmLogDetail);
+
 		Date ago25Date = Utils.addDaysToDate(currentDate, -25);
 		String ago25DateString = Utils.formatDate(ago25Date, "yyyy-MM-dd");
 		List<CrmPatient> listControl = processBO
@@ -96,11 +129,18 @@ public class Principal {
 		});
 
 		System.out.println("ASIGNANDO TAREAS..");
+		crmLogDetail = new CrmLogDetail();
+		crmLogDetail.setCrmLog(crmLog);
+		crmLogDetail.setLogDate(new Date());
+		crmLogDetail.setMessage("ASIGNANDO TAREAS");
+		processBO.save(crmLogDetail);
+
 		if (listStorage.size() > 0) {
 			CrmPatient crmPatient = listStorage.get(0).getCrmPatient();
 
 			// Primer Registro
 			CrmCampaign crmCampaign = new CrmCampaign();
+			crmCampaign.setCrmLog(crmLog);
 			crmCampaign.setCrmPatient(crmPatient);
 			CrmBranch crmBranch = new CrmBranch();
 			if (listStorage.get(0).getCrmAppointment() != null) {
@@ -120,6 +160,7 @@ public class Principal {
 						.getId().intValue()) {
 
 					crmCampaign = new CrmCampaign();
+					crmCampaign.setCrmLog(crmLog);
 					crmCampaign.setCrmPatient(row.getCrmPatient());
 					crmBranch = new CrmBranch();
 					if (row.getCrmAppointment() != null) {
@@ -145,9 +186,19 @@ public class Principal {
 			}
 		} else {
 			System.out.println("NO EXISTEN TAREAS..");
+			crmLogDetail = new CrmLogDetail();
+			crmLogDetail.setCrmLog(crmLog);
+			crmLogDetail.setLogDate(new Date());
+			crmLogDetail.setMessage("NO EXISTEN TAREAS");
+			processBO.save(crmLogDetail);
 		}
 
 		System.out.println("PROCESO TERMINADO");
+		crmLogDetail = new CrmLogDetail();
+		crmLogDetail.setCrmLog(crmLog);
+		crmLogDetail.setLogDate(new Date());
+		crmLogDetail.setMessage("PROCESO TERMINADO");
+		processBO.save(crmLogDetail);
 
 	}
 }
