@@ -95,12 +95,7 @@ public class TablesBo implements Serializable {
 				+ " AND o.state IN (1,3) ORDER BY o.state, o.dateCall");
 	}
 
-	public List<CrmCampaignDetail> getListCampaignDetail(BigDecimal idCampaign) {
-		return dao.find("from CrmCampaignDetail where crmCampaign.id = "
-				+ idCampaign);
-	}
-
-	public List<CrmCampaignDetail> getListCampaign(BigDecimal idCampaign) {
+	public List<CrmCampaignDetail> getListCampaignDetail(Integer idCampaign) {
 		return dao.find("from CrmCampaignDetail where crmCampaign.id = "
 				+ idCampaign);
 	}
@@ -679,9 +674,6 @@ public class TablesBo implements Serializable {
 	}
 
 	public Integer saveCampaign(CrmCampaign entity) {
-		if (entity.getId() == null) {
-			entity.setId(getId(CrmCampaign.class));
-		}
 		return this.persist(entity);
 	}
 
