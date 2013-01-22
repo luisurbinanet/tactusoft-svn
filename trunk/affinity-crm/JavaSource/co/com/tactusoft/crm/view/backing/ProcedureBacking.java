@@ -246,7 +246,7 @@ public class ProcedureBacking extends BaseBacking {
 			if (message == null) {
 				listProcedureDetail.add(new CrmProcedureDetail(new BigDecimal(
 						-1), selected, this.name, timeDoctor, timeNurses,
-						timeStretchers, false, (short) 0,
+						timeStretchers, false, (short) 0, null, null,
 						Constant.STATE_ACTIVE, null));
 				modelProcedureDetail = new ProcedureDetailDataModel(
 						listProcedureDetail);

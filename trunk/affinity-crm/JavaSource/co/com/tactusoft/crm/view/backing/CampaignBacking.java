@@ -1,17 +1,22 @@
 package co.com.tactusoft.crm.view.backing;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.springframework.context.annotation.Scope;
 
+import co.com.tactusoft.crm.controller.bo.ParameterBo;
 import co.com.tactusoft.crm.controller.bo.TablesBo;
 import co.com.tactusoft.crm.model.entities.CrmCampaign;
 import co.com.tactusoft.crm.model.entities.CrmCampaignDetail;
+import co.com.tactusoft.crm.model.entities.CrmParameter;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.datamodel.CampaignDataModel;
@@ -26,6 +31,9 @@ public class CampaignBacking implements Serializable {
 	@Inject
 	private TablesBo tableService;
 
+	@Inject
+	private ParameterBo parameterService;
+
 	private List<CrmCampaign> list;
 	private CampaignDataModel model;
 	private CrmCampaign selected;
@@ -33,8 +41,20 @@ public class CampaignBacking implements Serializable {
 	private List<CrmCampaignDetail> listDetail;
 	private CampaignDetailDataModel modelDetail;
 
+	private Map<String, String> mapText;
+
 	public CampaignBacking() {
 		newAction();
+	}
+
+	@PostConstruct
+	public void init() {
+		List<CrmParameter> listParameter = parameterService
+				.getListParameterByGroup("CAMPAIGN");
+		mapText = new HashMap<String, String>();
+		for (CrmParameter row : listParameter) {
+			mapText.put(row.getCode(), row.getTextValue());
+		}
 	}
 
 	public List<CrmCampaign> getList() {
@@ -125,6 +145,16 @@ public class CampaignBacking implements Serializable {
 	public void generateDetail() {
 		listDetail = tableService.getListCampaignDetail(selected.getId());
 		modelDetail = new CampaignDetailDataModel(listDetail);
+	}
+
+	public String getDescCampaingType(String typeCampaign) {
+		return typeCampaign.equals("NO_ATTENDET") ? "No asistió a la cita"
+				: typeCampaign.equals("CONFIRMED") ? "Confirmar la cita"
+						: "No ha asistido a control";
+	}
+
+	public String getText(String typeCampaign) {
+		return mapText.get(typeCampaign);
 	}
 
 }
