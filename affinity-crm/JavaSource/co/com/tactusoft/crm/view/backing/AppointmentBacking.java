@@ -16,7 +16,7 @@ import javax.inject.Named;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
-import org.primefaces.event.DateSelectEvent;
+import org.primefaces.event.SelectEvent;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
@@ -70,6 +70,7 @@ public class AppointmentBacking extends BaseBacking {
 	private List<Candidate> listAppointment;
 	private CandidateDataModel modelAppointment;
 	private Candidate selectedCandidate;
+	private Candidate selectedCandidateTemp;
 
 	private boolean renderedForDate;
 	private boolean renderedForDoctor;
@@ -79,6 +80,7 @@ public class AppointmentBacking extends BaseBacking {
 	private String infoMessage;
 	private boolean saved;
 	private boolean edit;
+	private boolean validate;
 
 	private int minutes = 0;
 	private String timeType = null;
@@ -279,6 +281,14 @@ public class AppointmentBacking extends BaseBacking {
 		this.selectedCandidate = selectedCandidate;
 	}
 
+	public Candidate getSelectedCandidateTemp() {
+		return selectedCandidateTemp;
+	}
+
+	public void setSelectedCandidateTemp(Candidate selectedCandidateTemp) {
+		this.selectedCandidateTemp = selectedCandidateTemp;
+	}
+
 	public boolean isRenderedForDate() {
 		return renderedForDate;
 	}
@@ -335,6 +345,14 @@ public class AppointmentBacking extends BaseBacking {
 		this.edit = edit;
 	}
 
+	public boolean isValidate() {
+		return validate;
+	}
+
+	public void setValidate(boolean validate) {
+		this.validate = validate;
+	}
+
 	public String getInfoMessageDate() {
 		return infoMessageDate;
 	}
@@ -371,6 +389,7 @@ public class AppointmentBacking extends BaseBacking {
 		listAppointment = new LinkedList<Candidate>();
 		modelAppointment = new CandidateDataModel(listAppointment);
 		selectedCandidate = null;
+		selectedCandidateTemp = null;
 
 		infoMessage = null;
 		saved = false;
@@ -551,6 +570,10 @@ public class AppointmentBacking extends BaseBacking {
 		return result;
 	}
 
+	public void addAppointmentAction() {
+		this.selectedCandidate = this.selectedCandidateTemp;
+	}
+
 	public void searchAppointMentAction() {
 		CrmProcedureDetail procedureDetail = mapProcedureDetail
 				.get(idProcedureDetail);
@@ -614,13 +637,18 @@ public class AppointmentBacking extends BaseBacking {
 			}
 
 			modelAppointment = new CandidateDataModel(listAppointment);
+
 			if (listAppointment.size() > 0) {
-				selectedCandidate = listAppointment.get(0);
+				selectedCandidateTemp = listAppointment.get(0);
+			} else {
+				selectedCandidate = null;
+				selectedCandidateTemp = null;
 			}
 		} else {
 			listAppointment = new ArrayList<Candidate>();
 			modelAppointment = new CandidateDataModel(listAppointment);
 			selectedCandidate = null;
+			selectedCandidateTemp = null;
 			if (!validateNoRepeat) {
 				String message = procedureDetail.getNoRepeatDays().toString();
 				infoMessage = FacesUtil.getMessage("app_msg_error_procedure",
@@ -629,31 +657,66 @@ public class AppointmentBacking extends BaseBacking {
 		}
 	}
 
-	public void saveAction() {
+	public void valdiateAction() {
 		String appType = FacesUtil.getParam("APP_TYPE");
 		infoMessage = "";
+		validate = true;
 
 		// validar Selección Pauta
 		if (this.selectedWSGroupSellers.equals(Constant.DEFAULT_VALUE_STRING)) {
 			String field = FacesUtil.getMessage("app_seller_group");
 			infoMessage = FacesUtil.getMessage("glb_required", field);
+			validate = false;
 		}
 
 		// validar Selección Paciente
 		if (this.selectedPatient == null) {
 			infoMessage = FacesUtil.getMessage("app_msg_error_pat");
+			validate = false;
 		} else {
 			if (this.selectedPatient.getId() == null) {
 				infoMessage = FacesUtil.getMessage("app_msg_error_pat_sap");
+				validate = false;
 			}
 		}
 
 		// validar Selección Cita
 		if ((selectedCandidate == null) && (appType.equals("ORDINARY"))) {
 			infoMessage = FacesUtil.getMessage("app_msg_error_app");
+			validate = false;
+		}
+	}
+
+	public void saveAction() {
+		String appType = FacesUtil.getParam("APP_TYPE");
+		infoMessage = "";
+		validate = true;
+
+		// validar Selección Pauta
+		if (this.selectedWSGroupSellers.equals(Constant.DEFAULT_VALUE_STRING)) {
+			String field = FacesUtil.getMessage("app_seller_group");
+			infoMessage = FacesUtil.getMessage("glb_required", field);
+			validate = false;
 		}
 
-		if (infoMessage.equals("")) {
+		// validar Selección Paciente
+		if (this.selectedPatient == null) {
+			infoMessage = FacesUtil.getMessage("app_msg_error_pat");
+			validate = false;
+		} else {
+			if (this.selectedPatient.getId() == null) {
+				infoMessage = FacesUtil.getMessage("app_msg_error_pat_sap");
+				validate = false;
+			}
+		}
+
+		// validar Selección Cita
+		if ((selectedCandidate == null) && (appType.equals("ORDINARY"))) {
+			infoMessage = FacesUtil.getMessage("app_msg_error_app");
+			validate = false;
+		}
+
+		if (validate) {
 
 			CrmProcedureDetail procedureDetail = mapProcedureDetail
 					.get(idProcedureDetail);
@@ -734,10 +797,10 @@ public class AppointmentBacking extends BaseBacking {
 		}
 	}
 
-	public void handleDateSelect(DateSelectEvent event) {
+	public void handleDateSelect(SelectEvent event) {
 		Date date = FacesUtil.getDateWithoutTime(new Date());
 		if (event != null) {
-			date = event.getDate();
+			date = (Date) event.getObject();
 		}
 
 		ResultSearchDate resultSearchDate = processService
