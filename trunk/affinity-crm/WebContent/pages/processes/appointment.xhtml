@@ -18,26 +18,26 @@
 
 				<p:growl id="growl" showDetail="true" autoUpdate="true" />
 
-				<p:toolbar style="width:100%">
+				<p:toolbar id="toolBar" style="width:100%">
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
 							actionListener="#{appointmentBacking.newAction}" process="@this"
-							update="pnlDetail pnlDetail2 pnlDetail3 pnlDetail4 btnSaveOrder btnSearch" />
+							update="toolBar pnlDetail pnlDetail2 pnlDetail3 pnlDetail4" />
 						<p:commandButton value="#{msg['btn_add_patient']}"
 							icon="ui-icon-circle-check"
 							actionListener="#{appointmentBacking.newPatientAction}"
-							oncomplete="dlg2.show()" update=":editForm:dialog2" />
+							disabled="#{appointmentBacking.saved}" oncomplete="dlg2.show()"
+							update=":editForm:dialog2" />
 						<p:commandButton id="btnSearch" value="#{msg['btn_search_app']}"
 							icon="ui-icon-search" update=":editForm:dialog3 pnlDetail4"
 							action="#{appointmentBacking.searchAppointMentAction}"
-							disabled="#{appointmentBacking.disabledSearch}"
+							disabled="#{appointmentBacking.disabledSearch or appointmentBacking.saved}"
 							oncomplete="dlg3.show()" />
-						<p:commandButton id="btnSaveOrder" value="#{msg['btn_save']}"
-							icon="ui-icon-disk" action="#{appointmentBacking.saveAction}"
-							update="btnSaveOrder :editForm:conffirmation"
-							oncomplete="dlg.show()" disabled="#{appointmentBacking.saved}">
-							<f:param name="APP_TYPE" value="ORDINARY" />
-						</p:commandButton>
+						<p:commandButton id="btnSaveApp" value="#{msg['btn_save']}"
+							icon="ui-icon-disk" update=":editForm:dialogConfirmation"
+							oncomplete="dlgConfirmation.show()"
+							action="#{appointmentBacking.valdiateAction}"
+							disabled="#{appointmentBacking.saved or appointmentBacking.selectedCandidate == null}" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -181,7 +181,7 @@
 					showEffect="clip" hideEffect="clip" modal="true">
 
 					<p:ajax event="close"
-						update=":form:pnlDetail :form:pnlDetail2 :form:pnlDetail3 :form:pnlDetail4 :form:btnSaveOrder"
+						update=":form:pnlDetail :form:pnlDetail2 :form:pnlDetail3 :form:pnlDetail4 :form:btnSaveApp"
 						listener="#{appointmentBacking.handleClose}" />
 
 					<h:panelGrid width="100%">
@@ -287,7 +287,7 @@
 					<p:dataTable id="selectedTable" var="rec"
 						value="#{appointmentBacking.modelAppointment}" rowKey="#{rec.id}"
 						style="width:100%"
-						selection="#{appointmentBacking.selectedCandidate}"
+						selection="#{appointmentBacking.selectedCandidateTemp}"
 						paginator="true" rows="10"
 						emptyMessage="#{msg['glb_no_records_found']}">
 
@@ -317,28 +317,52 @@
 
 						<f:facet name="footer">
 							<p:commandButton value="#{msg['btn_add_app']}"
-								onclick="dlg3.hide()" update=":form:pnlDetail4" />
+								action="#{appointmentBacking.addAppointmentAction}"
+								oncomplete="dlg3.hide()" update=":form:pnlDetail4 :form:toolBar" />
 						</f:facet>
 
 					</p:dataTable>
 
 				</p:dialog>
+
+				<p:dialog id="dialogConfirmation" modal="true"
+					header="#{msg['title_appointment']}" severity="alert"
+					widgetVar="dlgConfirmation" width="450" resizable="false">
+
+					<h:outputLabel value="#{msg['glb_question']}"
+						rendered="#{appointmentBacking.validate}" />
+
+					<h:panelGrid width="100%">
+						<h:outputLabel value="#{appointmentBacking.infoMessage}"
+							rendered="#{not appointmentBacking.validate}"
+							style="text-align:center;font-size:large;font-weight:bold;" />
+						<p:spacer height="5" rendered="#{not appointmentBacking.validate}" />
+						<h:outputLabel value="#{appointmentBacking.detSelectedCandidate}"
+							rendered="#{appointmentBacking.validate}"
+							style="text-align:center;font-weight:bold;" />
+					</h:panelGrid>
+
+					<f:facet name="footer">
+
+						<p:commandButton value="#{msg['btn_ok']}"
+							oncomplete="dlgConfirmation.hide()"
+							update=":form:toolBar conffirmation"
+							action="#{appointmentBacking.saveAction}"
+							rendered="#{appointmentBacking.validate}">
+							<f:param name="APP_TYPE" value="ORDINARY" />
+						</p:commandButton>
+
+						<p:commandButton rendered="#{appointmentBacking.validate}"
+							value="#{msg['btn_cancel']}" onclick="dlgConfirmation.hide()"
+							type="button" />
+
+					</f:facet>
+
+				</p:dialog>
+
 			</h:form>
 
 		</p:panel>
-
-		<p:confirmDialog id="dialogAddPatient"
-			message="#{msg['pat_msg_exists_sap_3']}"
-			header="#{msg['pat_msg_no_exists']}" severity="alert"
-			widgetVar="dlgAddPatient">
-
-			<p:commandButton id="confirmAddPatient" value="#{msg['btn_ok']}"
-				oncomplete="dlgAddPatient.hide()"
-				action="#{appointmentBacking.searchRedirectPatient}" />
-			<p:commandButton id="declineAddPatient" value="#{msg['btn_cancel']}"
-				onclick="dlgAddPatient.hide()" type="button" />
-
-		</p:confirmDialog>
 
 		<script type="text/javascript">
 			function handleComplete(xhr, status, args) {

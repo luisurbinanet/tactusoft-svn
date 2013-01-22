@@ -14,7 +14,7 @@ import javax.faces.model.SelectItem;
 import javax.inject.Named;
 
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.ScheduleEntrySelectEvent;
+import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultScheduleModel;
 import org.primefaces.model.ScheduleModel;
@@ -461,8 +461,8 @@ public class DoctorAppointmentBacking extends BaseBacking {
 		return result;
 	}
 
-	public void onEventSelect(ScheduleEntrySelectEvent selectEvent) {
-		event = (DefaultScheduleEvent) selectEvent.getScheduleEvent();
+	public void onEventSelect(SelectEvent selectEvent) {
+		event = (DefaultScheduleEvent) selectEvent.getObject();
 		try {
 			selectedAppointment = (CrmAppointment) event.getData();
 		} catch (ClassCastException ex) {

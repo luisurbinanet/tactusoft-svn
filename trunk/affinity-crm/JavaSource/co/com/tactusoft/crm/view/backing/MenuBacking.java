@@ -48,23 +48,12 @@ public class MenuBacking implements Serializable {
 								.createMethodActionListener(
 										"#{menuBacking.actionPage}", Void.TYPE,
 										new Class[] { ActionEvent.class }));
-						// menuItem.setUrl(children.getPage());
 						submenu.getChildren().add(menuItem);
 					}
 				}
 				model.addSubmenu(submenu);
 			}
 		}
-
-		String closeLabel = FacesUtil.getMessage("btn_close");
-
-		MenuItem menuItem = new MenuItem();
-		menuItem.setValue(closeLabel);
-		menuItem.setIcon("ui-icon-close");
-		menuItem.setActionExpression(FacesUtil
-				.getMethodExpression("loginBacking.logout"));
-		model.addMenuItem(menuItem);
-
 	}
 
 	public MenuModel getModel() {
@@ -78,17 +67,17 @@ public class MenuBacking implements Serializable {
 	private void refreshBackings() {
 		PatientBacking patientBacking = FacesUtil.findBean("patientBacking");
 		patientBacking.newAction(null);
-		
+
 		ContactBacking contactBacking = FacesUtil.findBean("contactBacking");
 		contactBacking.newAction(null);
-		
+
 		HistoryBacking historyBacking = FacesUtil.findBean("historyBacking");
 		historyBacking.newAction(null);
 
 		AppointmentBacking appointmentBacking = FacesUtil
 				.findBean("appointmentBacking");
 		appointmentBacking.newAction(null);
-		
+
 		SearchByPatientBacking searchByPatientBacking = FacesUtil
 				.findBean("searchByPatientBacking");
 		searchByPatientBacking.newAction(null);

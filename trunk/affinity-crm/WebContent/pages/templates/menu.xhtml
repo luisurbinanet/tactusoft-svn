@@ -8,7 +8,13 @@
 <h:form id="formMenu">
 
 	<p:menubar rendered="#{loginBacking.authenticated}"
-		model="#{menuBacking.model}" style="width: 1150px;" />
+		model="#{menuBacking.model}" style="width: 1150px;">
+
+		<f:facet name="options">
+			<p:commandButton value="#{msg['btn_close']}" icon="ui-icon-close"
+				action="#{loginBacking.logout}" immediate="true" />
+		</f:facet>
+	</p:menubar>
 
 </h:form>
 

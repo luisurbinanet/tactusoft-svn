@@ -21,7 +21,7 @@ import javax.inject.Named;
 import net.sf.jasperreports.engine.JRException;
 
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.DateSelectEvent;
+import org.primefaces.event.SelectEvent;
 import org.primefaces.event.TabChangeEvent;
 import org.springframework.context.annotation.Scope;
 
@@ -1084,8 +1084,8 @@ public class HistoryBacking extends BaseBacking {
 		this.part = event.getTab().getId();
 	}
 
-	public void handleBornDateSelect(DateSelectEvent event) {
-		Date bornDate = event.getDate();
+	public void handleBornDateSelect(SelectEvent event) {
+		Date bornDate = (Date) event.getObject();
 		age = calculateAge(bornDate);
 	}
 
