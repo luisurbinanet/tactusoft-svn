@@ -26,11 +26,11 @@ public class ProcessBO implements Serializable {
 
 	public void updateAppointment(String dateString) {
 		dao.executeHQL("UPDATE CrmAppointment SET state = 4, closeAppointment = 1, dateModified = current_date()"
-				+ " WHERE state IN (3,4) AND startAppointmentDate < '"
+				+ " WHERE state IN (3,4) AND startAppointmentDate <= '"
 				+ dateString + " 23:59:59' AND closeAppointment = 0");
 
 		dao.executeHQL("UPDATE CrmAppointment SET state = 5, closeAppointment = 1, dateModified = current_date()"
-				+ " WHERE state = 1 AND startAppointmentDate < '"
+				+ " WHERE state = 1 AND startAppointmentDate <= '"
 				+ dateString
 				+ " 23:59:59'");
 	}
