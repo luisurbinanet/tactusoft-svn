@@ -35,8 +35,14 @@
 							<f:param name="APP_TYPE" value="ORDINARY" />
 						</p:commandButton>
 						<p:commandButton value="#{msg['btn_return']}"
+							rendered="#{appointmentBacking.fromPage eq 'SEARCH'}"
 							icon="ui-icon-document" action="#{menuBacking.actionPage}">
 							<f:param name="page" value="/pages/processes/searchByPatient.jsf" />
+						</p:commandButton>
+						<p:commandButton value="#{msg['btn_return']}"
+							rendered="#{appointmentBacking.fromPage eq 'CAMPAIGN'}"
+							icon="ui-icon-document" action="#{menuBacking.actionPage}">
+							<f:param name="page" value="/pages/processes/campaign.jsf" />
 						</p:commandButton>
 					</p:toolbarGroup>
 				</p:toolbar>
@@ -268,7 +274,8 @@
 
 						<f:facet name="footer">
 							<p:commandButton value="#{msg['btn_add_app']}"
-								onclick="dlg3.hide()" update=":form:pnlDetail4 :form:btnSaveOrder" />
+								onclick="dlg3.hide()"
+								update=":form:pnlDetail4 :form:btnSaveOrder" />
 						</f:facet>
 
 					</p:dataTable>

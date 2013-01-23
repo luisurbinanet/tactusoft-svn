@@ -1,12 +1,13 @@
 package co.com.tactusoft.crm.view.backing;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.controller.bo.ParameterBo;
 import co.com.tactusoft.crm.controller.bo.TablesBo;
+import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmCampaign;
 import co.com.tactusoft.crm.model.entities.CrmCampaignDetail;
 import co.com.tactusoft.crm.model.entities.CrmParameter;
@@ -29,19 +31,20 @@ public class CampaignBacking implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Inject
-	private TablesBo tableService;
+	protected TablesBo tableService;
 
 	@Inject
-	private ParameterBo parameterService;
+	protected ParameterBo parameterService;
 
-	private List<CrmCampaign> list;
-	private CampaignDataModel model;
-	private CrmCampaign selected;
+	protected List<CrmCampaign> list;
+	protected CampaignDataModel model;
+	protected CrmCampaign selected;
 
-	private List<CrmCampaignDetail> listDetail;
-	private CampaignDetailDataModel modelDetail;
+	protected List<CrmCampaignDetail> listDetail;
+	protected CampaignDetailDataModel modelDetail;
 
-	private Map<String, String> mapText;
+	protected Map<String, String> mapText;
+	protected CrmAppointment selectedAppointment;
 
 	public CampaignBacking() {
 		newAction();
@@ -55,6 +58,7 @@ public class CampaignBacking implements Serializable {
 		for (CrmParameter row : listParameter) {
 			mapText.put(row.getCode(), row.getTextValue());
 		}
+		refreshList();
 	}
 
 	public List<CrmCampaign> getList() {
@@ -66,9 +70,6 @@ public class CampaignBacking implements Serializable {
 	}
 
 	public CampaignDataModel getModel() {
-		if (model == null) {
-			refreshList();
-		}
 		return model;
 	}
 
@@ -100,19 +101,29 @@ public class CampaignBacking implements Serializable {
 		this.modelDetail = modelDetail;
 	}
 
-	private void refreshList() {
-		List<CrmCampaign> listTemp = tableService.getListCampaign();
-		list = new LinkedList<CrmCampaign>();
+	public Map<String, String> getMapText() {
+		return mapText;
+	}
+
+	public void setMapText(Map<String, String> mapText) {
+		this.mapText = mapText;
+	}
+
+	public CrmAppointment getSelectedAppointment() {
+		return selectedAppointment;
+	}
+
+	public void setSelectedAppointment(CrmAppointment selectedAppointment) {
+		this.selectedAppointment = selectedAppointment;
+	}
+
+	protected void refreshList() {
+		List<CrmCampaign> listTemp = tableService.getListCampaignActive();
 		if (listTemp.size() > 0) {
-			list.add(listTemp.get(0));
+			selected = listTemp.get(0);
+		} else {
+			selected = null;
 		}
-		model = new CampaignDataModel(list);
-
-		if (list.size() > 0) {
-			selected = list.get(0);
-		}
-
-		isDisabledButton();
 	}
 
 	public void newAction() {
@@ -137,11 +148,6 @@ public class CampaignBacking implements Serializable {
 		}
 	}
 
-	public boolean isDisabledButton() {
-		getModel();
-		return (this.list == null || this.list.size() == 0) ? true : false;
-	}
-
 	public void generateDetail() {
 		listDetail = tableService.getListCampaignDetail(selected.getId());
 		modelDetail = new CampaignDetailDataModel(listDetail);
@@ -157,4 +163,40 @@ public class CampaignBacking implements Serializable {
 		return mapText.get(typeCampaign);
 	}
 
+	public String editAppoinmnetAction() {
+		AppointmentBacking appointmentEditBacking = FacesUtil
+				.findBean("appointmentBacking");
+
+		appointmentEditBacking.newAction(null);
+		appointmentEditBacking.setSelected(selectedAppointment);
+		appointmentEditBacking.setSelectedPatient(selectedAppointment
+				.getCrmPatient());
+		appointmentEditBacking.setCurrentDate(selectedAppointment
+				.getStartAppointmentDate());
+		appointmentEditBacking.setIdBranch(selectedAppointment.getCrmBranch()
+				.getId());
+		appointmentEditBacking.handleBranchChange();
+		appointmentEditBacking.setIdProcedure(selectedAppointment
+				.getCrmProcedureDetail().getCrmProcedure().getId());
+		appointmentEditBacking.handleProcedureChange();
+		appointmentEditBacking.setIdProcedureDetail(selectedAppointment
+				.getCrmProcedureDetail().getId());
+		appointmentEditBacking.handleProcedureDetailChange();
+		appointmentEditBacking.setSelectedWSGroupSellers(selectedAppointment
+				.getCodPublicity());
+		appointmentEditBacking.setEdit(true);
+		appointmentEditBacking.setSaved(false);
+		appointmentEditBacking.setFromPage("CAMPAIGN");
+		for (SelectItem item : appointmentEditBacking.getListBranch()) {
+			long value = ((BigDecimal) item.getValue()).longValue();
+			if (value == selectedAppointment.getCrmBranch().getId().longValue()) {
+				appointmentEditBacking.setSaved(false);
+				break;
+			}
+		}
+		appointmentEditBacking.setIdBranch(selectedAppointment.getCrmBranch()
+				.getId());
+
+		return "/pages/processes/appointmentEdit.jsf?faces-redirect=true";
+	}
 }

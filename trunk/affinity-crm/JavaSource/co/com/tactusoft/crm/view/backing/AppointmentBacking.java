@@ -86,6 +86,8 @@ public class AppointmentBacking extends BaseBacking {
 	private String timeType = null;
 	private String infoMessageDate;
 
+	private String fromPage;
+
 	public AppointmentBacking() {
 		newAction(null);
 	}
@@ -361,6 +363,14 @@ public class AppointmentBacking extends BaseBacking {
 		this.infoMessageDate = infoMessageDate;
 	}
 
+	public String getFromPage() {
+		return fromPage;
+	}
+
+	public void setFromPage(String fromPage) {
+		this.fromPage = fromPage;
+	}
+
 	public void newAction(ActionEvent event) {
 		listBranch = null;
 
@@ -394,6 +404,7 @@ public class AppointmentBacking extends BaseBacking {
 		infoMessage = null;
 		saved = false;
 		edit = false;
+		fromPage = null;
 
 		if (listProcedureDetail != null) {
 			if (listProcedureDetail.size() > 0) {
