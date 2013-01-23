@@ -86,7 +86,7 @@ public class CrmCampaign implements java.io.Serializable {
 		this.crmPatient = crmPatient;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_user", nullable = false)
 	public CrmUser getCrmUser() {
 		return this.crmUser;
