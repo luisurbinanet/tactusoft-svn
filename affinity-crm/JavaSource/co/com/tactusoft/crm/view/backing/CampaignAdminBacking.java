@@ -22,9 +22,11 @@ public class CampaignAdminBacking extends CampaignBacking {
 	private static final long serialVersionUID = 1L;
 	private List<SelectItem> listUserItem;
 	private CrmUser crmUser;
+	private Integer status;
+	private Integer maxResults;
 
 	public CampaignAdminBacking() {
-
+		maxResults = 100;
 	}
 
 	public List<SelectItem> getListUserItem() {
@@ -43,6 +45,22 @@ public class CampaignAdminBacking extends CampaignBacking {
 		this.crmUser = crmUser;
 	}
 
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	public Integer getMaxResults() {
+		return maxResults;
+	}
+
+	public void setMaxResults(Integer maxResults) {
+		this.maxResults = maxResults;
+	}
+
 	@PostConstruct
 	public void init() {
 		List<CrmParameter> listParameter = parameterService
@@ -54,9 +72,13 @@ public class CampaignAdminBacking extends CampaignBacking {
 		refreshList();
 	}
 
+	public boolean isDisabled() {
+		return list.size() > 0 ? false : true;
+	}
+
 	@Override
 	protected void refreshList() {
-		list = tableService.getListCampaign();
+		list = tableService.getListCampaign(maxResults);
 		model = new CampaignDataModel(list);
 		if (list.size() > 0) {
 			selected = list.get(0);
@@ -77,6 +99,21 @@ public class CampaignAdminBacking extends CampaignBacking {
 		crmUser = new CrmUser();
 	}
 
+	public void searchAction() {
+		if (status == 0) {
+			refreshList();
+		} else {
+			list = tableService.getListCampaignByStatus(status.toString(),
+					maxResults);
+			model = new CampaignDataModel(list);
+			if (list.size() > 0) {
+				selected = list.get(0);
+			} else {
+				selected = null;
+			}
+		}
+	}
+
 	@Override
 	public void saveAction() {
 		String message = null;
@@ -94,8 +131,15 @@ public class CampaignAdminBacking extends CampaignBacking {
 			message = FacesUtil.getMessage("msg_record_unique_exception",
 					paramValue);
 			FacesUtil.addError(message);
-
 		}
+	}
+
+	public String getStatus(int status) {
+		return status == 1 ? FacesUtil.getMessage("crm_state_open")
+				: status == 2 ? FacesUtil.getMessage("crm_state_close")
+						: status == 3 ? FacesUtil
+								.getMessage("cam_state_new_call") : FacesUtil
+								.getMessage("cam_state_reallocate");
 	}
 
 }

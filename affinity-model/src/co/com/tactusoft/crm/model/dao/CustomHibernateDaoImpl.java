@@ -75,6 +75,17 @@ public class CustomHibernateDaoImpl implements CustomHibernateDao, Serializable 
 
 	@SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
+	public <T> List<T> find(String hql, int maxResults) {
+		Query query = getCurrentSession().createQuery(hql);
+		if (maxResults != -1) {
+			query.setMaxResults(maxResults);
+		}
+		final List<T> entities = query.list();
+		return entities;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Transactional(readOnly = true)
 	public <T> List<T> findNative(String sql, Class<T> clasz) {
 		final List<T> entities = getCurrentSession().createSQLQuery(sql)
 				.addEntity(clasz).list();
