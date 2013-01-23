@@ -10,7 +10,7 @@
 	<ui:define name="body">
 
 		<p:panel style="width:100%;height:600px;"
-			header="#{msg['title_campaign']}">
+			header="#{msg['title_campaign_admin']}">
 
 			<p:spacer height="10" />
 
@@ -20,28 +20,45 @@
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_edit']}" icon="ui-icon-pencil"
 							oncomplete="dlg.show()" update=":editForm:pnlDetail"
-							disabled="#{campaignBacking.selected == null}"
-							action="#{campaignBacking.generateDetail}" />
+							disabled="#{campaignAdminBacking.selected == null}"
+							action="#{campaignAdminBacking.generateDetail}" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
 				<p:spacer height="10" />
 
-				<p:fieldset id="fldCampaign" legend="Paciente Pendiente de Llamar">
-					<h:panelGrid columns="2" width="100%">
-						<h:outputLabel value="#{msg['cam_pat']}" />
-						<h:outputLabel
-							value="#{campaignBacking.selected.crmPatient.names}" />
+				<p:dataTable id="recordTable" var="rec"
+					value="#{campaignAdminBacking.model}" rowKey="#{rec.id}"
+					selection="#{campaignAdminBacking.selected}" paginator="true"
+					rows="10" style="width:100%"
+					emptyMessage="#{msg['glb_no_records_found']}">
 
-						<h:outputLabel value="#{msg['cam_date']}" />
-						<h:outputLabel value="#{campaignBacking.selected.dateCall}">
+					<p:column selectionMode="single" style="width:18px" />
+
+					<p:column headerText="#{msg['cam_pat']}">
+						<h:outputLabel value="#{rec.crmPatient.names}" />
+					</p:column>
+
+					<p:column headerText="#{msg['cam_date']}">
+						<h:outputLabel value="#{rec.dateCall}">
 							<f:convertDateTime pattern="dd/MM/yyyy" />
 						</h:outputLabel>
+					</p:column>
 
-						<h:outputLabel value="#{msg['cam_branch']}" />
-						<h:outputLabel value="#{campaignBacking.selected.crmBranch.name}" />
-					</h:panelGrid>
-				</p:fieldset>
+					<p:column headerText="#{msg['cam_branch']}">
+						<h:outputLabel value="#{rec.crmBranch.name}" />
+					</p:column>
+
+					<p:column headerText="#{msg['cam_user']}">
+						<h:outputLabel value="#{rec.crmUser.username}" />
+					</p:column>
+
+					<p:column headerText="#{msg['glb_state']}">
+						<h:outputLabel
+							value="#{rec.state==1?msg['crm_state_open']:msg['crm_state_close']}" />
+					</p:column>
+
+				</p:dataTable>
 
 			</h:form>
 
@@ -58,11 +75,11 @@
 				<p:toolbar style="width:100%">
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_save']}" icon="ui-icon-disk"
-							action="#{campaignBacking.saveAction}"
+							action="#{campaignAdminBacking.saveAction}"
 							oncomplete="handleComplete(xhr, status, args)"
-							update="growl :form:fldCampaign" />
+							update="growl :form:recordTable" />
 						<p:commandButton value="#{msg['btn_close']}"
-							icon="ui-icon-closethick" update="growl :form:fldCampaign"
+							icon="ui-icon-closethick" update="growl :form:recordTable"
 							process="@none" oncomplete="dlg.hide()" />
 					</p:toolbarGroup>
 				</p:toolbar>
@@ -75,17 +92,18 @@
 					<p:fieldset legend="#{msg['cam_pat']}">
 						<h:panelGrid columns="2" width="100%">
 							<h:outputLabel value="#{msg['pat_names']}" />
-							<p:inputText value="#{campaignBacking.selected.crmPatient.names}"
+							<p:inputText
+								value="#{campaignAdminBacking.selected.crmPatient.names}"
 								style="width:380px;background-color:#FFFF80;font-weight:bold;"
 								readonly="true" />
 							<h:outputLabel value="#{msg['pat_phone_number']}" />
 							<p:inputText
-								value="#{campaignBacking.selected.crmPatient.phoneNumber}"
+								value="#{campaignAdminBacking.selected.crmPatient.phoneNumber}"
 								style="width:380px;background-color:#FFFF80;font-weight:bold;"
 								readonly="true" />
 							<h:outputLabel value="#{msg['pat_cell_number']}" />
 							<p:inputText
-								value="#{campaignBacking.selected.crmPatient.cellNumber}"
+								value="#{campaignAdminBacking.selected.crmPatient.cellNumber}"
 								style="width:380px;background-color:#FFFF80;font-weight:bold;"
 								readonly="true" />
 						</h:panelGrid>
@@ -93,14 +111,14 @@
 
 					<p:spacer height="10" />
 
-					<p:dataGrid var="rec" value="#{campaignBacking.modelDetail}"
+					<p:dataGrid var="rec" value="#{campaignAdminBacking.modelDetail}"
 						columns="3" rows="3" paginator="true">
 
 						<p:fieldset style="height:180px;"
-							legend="#{campaignBacking.getDescCampaingType(rec.campaingType)}">
+							legend="#{campaignAdminBacking.getDescCampaingType(rec.campaingType)}">
 
 							<h:outputLabel
-								value="#{campaignBacking.getText(rec.campaingType)}"
+								value="#{campaignAdminBacking.getText(rec.campaingType)}"
 								style="font-size:14px;" />
 
 							<h:panelGrid columns="2" style="width:100%"
@@ -121,10 +139,10 @@
 							</h:panelGrid>
 
 							<p:commandButton value="#{msg['btn_edit_app']}"
-								action="#{campaignBacking.editAppoinmnetAction}"
+								action="#{campaignAdminBacking.editAppoinmnetAction}"
 								rendered="#{rec.campaingType ne 'CONTROL'}" immediate="true">
 								<f:setPropertyActionListener
-									target="#{campaignBacking.selectedAppointment}"
+									target="#{campaignAdminBacking.selectedAppointment}"
 									value="#{rec.crmAppointment}" />
 							</p:commandButton>
 
@@ -136,18 +154,20 @@
 
 					<h:panelGrid id="pnlAttributes" columns="2" width="100%">
 						<h:outputLabel value="#{msg['app_state']}" />
-						<p:selectOneMenu value="#{campaignBacking.selected.state}"
+						<p:selectOneMenu value="#{campaignAdminBacking.selected.state}"
 							style="width:400px" required="true">
 							<p:ajax update="pnlAttributes" />
 							<f:selectItem itemValue="2" itemLabel="#{msg['glb_state_close']}" />
 							<f:selectItem itemValue="3"
 								itemLabel="#{msg['cam_state_new_call']}" />
+							<f:selectItem itemValue="4"
+								itemLabel="#{msg['cam_state_reallocate']}" />
 						</p:selectOneMenu>
 						<h:outputLabel value="#{msg['cam_call_days']}"
-							rendered="#{campaignBacking.selected.state eq 3}" />
-						<p:selectOneMenu value="#{campaignBacking.selected.days}"
+							rendered="#{campaignAdminBacking.selected.state eq 3}" />
+						<p:selectOneMenu value="#{campaignAdminBacking.selected.days}"
 							style="width:400px"
-							rendered="#{campaignBacking.selected.state eq 3}">
+							rendered="#{campaignAdminBacking.selected.state eq 3}">
 							<f:selectItem itemValue="" itemLabel="#{msg['cam_days_not']}" />
 							<f:selectItem itemValue="5" itemLabel="#{msg['cam_days_5']}" />
 							<f:selectItem itemValue="10" itemLabel="#{msg['cam_days_10']}" />
@@ -155,8 +175,20 @@
 							<f:selectItem itemValue="25" itemLabel="#{msg['cam_days_25']}" />
 							<f:selectItem itemValue="30" itemLabel="#{msg['cam_days_30']}" />
 						</p:selectOneMenu>
-						<h:outputLabel value="#{msg['pat_type_obs']}" />
-						<p:inputTextarea value="#{campaignBacking.selected.observation}"
+						<h:outputLabel value="#{msg['cam_user']}"
+							rendered="#{campaignAdminBacking.selected.state eq 4}" />
+						<p:selectOneMenu value="#{campaignAdminBacking.crmUser.id}"
+							style="width:400px" required="true" label="#{msg['cam_user']}"
+							rendered="#{campaignAdminBacking.selected.state eq 4}">
+							<f:selectItem itemValue=""
+								itemLabel="#{msg['glb_default_value']}" />
+							<f:selectItems value="#{campaignAdminBacking.listUserItem}" />
+						</p:selectOneMenu>
+						<h:outputLabel value="#{msg['pat_type_obs']}"
+							rendered="#{campaignAdminBacking.selected.state ne 4}" />
+						<p:inputTextarea
+							rendered="#{campaignAdminBacking.selected.state ne 4}"
+							value="#{campaignAdminBacking.selected.observation}"
 							style="width:400px" rows="6" required="true"
 							label="#{msg['pat_type_obs']}" />
 					</h:panelGrid>

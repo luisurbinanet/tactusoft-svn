@@ -90,9 +90,18 @@ public class TablesBo implements Serializable {
 	}
 
 	public List<CrmCampaign> getListCampaign() {
+		return dao.find("FROM CrmCampaign o ORDER BY o.state, o.dateCall");
+	}
+
+	public List<CrmCampaign> getListCampaignActive() {
 		return dao.find("FROM CrmCampaign o where o.crmUser.id = "
 				+ FacesUtil.getCurrentIdUsuario()
 				+ " AND o.state IN (1,3) ORDER BY o.state, o.dateCall");
+	}
+
+	public List<CrmCampaign> getListCampaignByStatus(String status) {
+		return dao.find("FROM CrmCampaign o where o.state IN (" + status
+				+ ") ORDER BY o.state, o.dateCall");
 	}
 
 	public List<CrmCampaignDetail> getListCampaignDetail(Integer idCampaign) {
@@ -204,6 +213,13 @@ public class TablesBo implements Serializable {
 		return dao
 				.find("select o.crmUser from CrmUserBranch o where o.crmUser.state = 1 and o.crmBranch.id = "
 						+ idBranch);
+	}
+
+	public List<CrmUser> getListUserActiveByBranchAndCallCenter(
+			BigDecimal idBranch) {
+		return dao
+				.find("select o.crmUser from CrmUserBranch o join o.crmUser.crmUserRoles rol where o.crmUser.state = 1 and o.crmBranch.id = "
+						+ idBranch + " and rol.crmRole.id = 2");
 	}
 
 	public List<CrmDoctor> getDoctorByUser(BigDecimal idUser) {
