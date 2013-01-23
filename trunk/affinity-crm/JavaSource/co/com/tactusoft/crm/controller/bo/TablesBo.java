@@ -89,8 +89,9 @@ public class TablesBo implements Serializable {
 		return dao.find("from CrmGuideline");
 	}
 
-	public List<CrmCampaign> getListCampaign() {
-		return dao.find("FROM CrmCampaign o ORDER BY o.state, o.dateCall");
+	public List<CrmCampaign> getListCampaign(int maxResults) {
+		return dao.find("FROM CrmCampaign o ORDER BY o.state, o.dateCall",
+				maxResults);
 	}
 
 	public List<CrmCampaign> getListCampaignActive() {
@@ -99,9 +100,10 @@ public class TablesBo implements Serializable {
 				+ " AND o.state IN (1,3) ORDER BY o.state, o.dateCall");
 	}
 
-	public List<CrmCampaign> getListCampaignByStatus(String status) {
+	public List<CrmCampaign> getListCampaignByStatus(String status,
+			int maxResults) {
 		return dao.find("FROM CrmCampaign o where o.state IN (" + status
-				+ ") ORDER BY o.state, o.dateCall");
+				+ ") ORDER BY o.state, o.dateCall", maxResults);
 	}
 
 	public List<CrmCampaignDetail> getListCampaignDetail(Integer idCampaign) {
