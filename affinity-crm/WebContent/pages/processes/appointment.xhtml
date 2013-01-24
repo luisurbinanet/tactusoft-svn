@@ -181,7 +181,7 @@
 					showEffect="clip" hideEffect="clip" modal="true">
 
 					<p:ajax event="close"
-						update=":form:pnlDetail :form:pnlDetail2 :form:pnlDetail3 :form:pnlDetail4 :form:btnSaveApp"
+						update=":form:pnlDetail :form:pnlDetail2 :form:pnlDetail3 :form:pnlDetail4 :form:toolBar"
 						listener="#{appointmentBacking.handleClose}" />
 
 					<h:panelGrid width="100%">
@@ -345,7 +345,7 @@
 					<f:facet name="footer">
 
 						<p:commandButton value="#{msg['btn_ok']}"
-							oncomplete="dlgConfirmation.hide()"
+							oncomplete="dlgConfirmation.hide();dlg.show();"
 							update=":form:toolBar conffirmation"
 							action="#{appointmentBacking.saveAction}"
 							rendered="#{appointmentBacking.validate}">
