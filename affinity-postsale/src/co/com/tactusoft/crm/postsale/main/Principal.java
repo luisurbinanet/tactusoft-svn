@@ -31,6 +31,8 @@ public class Principal {
 				"spring-config.xml");
 		ProcessBO processBO = beanFactory.getBean(ProcessBO.class);
 
+		List<StorageBean> listStorage = new LinkedList<StorageBean>();
+
 		CrmLog crmLog = new CrmLog();
 		crmLog.setLogDate(new Date());
 		crmLog.setLogType("POSTVENTA");
@@ -71,8 +73,6 @@ public class Principal {
 		} else {
 			processBO.updateAppointment(yesterdayString);
 		}
-
-		List<StorageBean> listStorage = new LinkedList<StorageBean>();
 
 		System.out.println("BUSCANDO CITAS INASISTIDAS...");
 		// INASISTENCIA DIA ANTERIOR
@@ -159,7 +159,7 @@ public class Principal {
 				}
 
 				if (!exists) {
-					
+
 				}
 			}
 		}
