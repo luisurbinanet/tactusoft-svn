@@ -31,7 +31,7 @@
 						<p:commandButton id="btnSearch" value="#{msg['btn_search_app']}"
 							icon="ui-icon-search" update=":editForm:dialog3 pnlDetail4"
 							action="#{appointmentBacking.searchAppointMentAction}"
-							disabled="#{appointmentBacking.disabledSearch or appointmentBacking.saved}"
+							disabled="#{appointmentBacking.disabledSearch or appointmentBacking.saved or appointmentBacking.selectedPatient eq null}"
 							oncomplete="dlg3.show()" />
 						<p:commandButton id="btnSaveApp" value="#{msg['btn_save']}"
 							icon="ui-icon-disk" update=":editForm:dialogConfirmation"
@@ -245,7 +245,7 @@
 								update="pnlTable2 recordTable2 btnAddPatient"
 								action="#{appointmentBacking.searchPatientAction}" />
 							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
-								icon="ui-icon-plusthick" update=":form:pnlDetail"
+								icon="ui-icon-plusthick" update=":form:pnlDetail :form:toolBar"
 								oncomplete="handleComplete(xhr, status, args)"
 								actionListener="#{appointmentBacking.addPatient}"
 								disabled="#{appointmentBacking.disabledAddPatient}" />
