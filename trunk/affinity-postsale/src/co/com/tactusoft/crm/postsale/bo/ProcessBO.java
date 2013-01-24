@@ -60,9 +60,7 @@ public class ProcessBO implements Serializable {
 
 	public List<CrmAppointment> getListAppointmentClosed(String dateString) {
 		return dao
-				.find("FROM CrmAppointment WHERE state = 4 AND closeAppointment = 1 AND startAppointmentDate BETWEEN '"
-						+ dateString
-						+ "T00:00:00.000+05:00' and '"
+				.find("FROM CrmAppointment WHERE state = 4 AND closeAppointment = 1 AND startAppointmentDate <= '"
 						+ dateString + "T23:59:59.999+05:00'");
 	}
 
