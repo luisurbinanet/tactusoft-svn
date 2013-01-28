@@ -28,7 +28,7 @@ import org.springframework.context.annotation.Scope;
 import co.com.tactusoft.crm.controller.bo.GenerateFormulaPDF;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmCie;
-import co.com.tactusoft.crm.model.entities.CrmCieMaterial;
+//import co.com.tactusoft.crm.model.entities.CrmCieMaterial;
 import co.com.tactusoft.crm.model.entities.CrmDiagnosis;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmHistoryHistory;
@@ -147,7 +147,7 @@ public class HistoryBacking extends BaseBacking {
 	private String noteDoctor;
 	private boolean viewMode;
 	private List<CrmMaterialGroup> listMaterialGroup;
-	private List<CrmCieMaterial> listCieMaterial;
+	//private List<CrmCieMaterial> listCieMaterial;
 
 	private List<CrmDiagnosis> listDiagnosisView;
 	private List<CrmMedication> listMedicationView;
@@ -173,7 +173,7 @@ public class HistoryBacking extends BaseBacking {
 		modeHistorial = false;
 
 		listMaterialGroup = processService.getListMaterialGroup();
-		listCieMaterial = processService.getListCieMaterial();
+		//listCieMaterial = processService.getListCieMaterial();
 
 		currentDoctor = processService.getCrmDoctor();
 
@@ -754,13 +754,13 @@ public class HistoryBacking extends BaseBacking {
 		this.listMaterialGroup = listMaterialGroup;
 	}
 
-	public List<CrmCieMaterial> getListCieMaterial() {
+	/*public List<CrmCieMaterial> getListCieMaterial() {
 		return listCieMaterial;
 	}
 
 	public void setListCieMaterial(List<CrmCieMaterial> listCieMaterial) {
 		this.listCieMaterial = listCieMaterial;
-	}
+	}*/
 
 	public List<CrmDiagnosis> getListDiagnosisView() {
 		return listDiagnosisView;
@@ -942,6 +942,7 @@ public class HistoryBacking extends BaseBacking {
 		part = Constant.HISTORY_HISTORY;
 		optionSearchPatient = 1;
 
+		appointmentModel = null;
 		listDiagnosis = new ArrayList<CrmDiagnosis>();
 		diagnosisModel = new DiagnosisDataModel(listDiagnosis);
 		listMedication = new ArrayList<CrmMedication>();
@@ -1346,19 +1347,8 @@ public class HistoryBacking extends BaseBacking {
 
 	public void selectMedicationAction() {
 		this.typeMedication = Constant.MATERIAL_TYPE_MEDICINE;
-
-		listAllMaterial = new ArrayList<WSBean>();
-		for (CrmCieMaterial row : listCieMaterial) {
-			if (selectedDiagnosis.getCrmCie().getId().intValue() == row
-					.getCrmCie().getId().intValue()) {
-				listMaterial.add(new WSBean(row.getMaterial(), row
-						.getDescription()));
-				listAllMaterial.add(new WSBean(row.getMaterial(), row
-						.getDescription()));
-			}
-		}
-
 		if (listMaterial.size() == 0) {
+			listAllMaterial = new ArrayList<WSBean>();
 			for (WSBean material : listAllBackupMaterial) {
 				boolean validateGroup = false;
 				for (CrmMaterialGroup row : listMaterialGroup) {
@@ -2091,14 +2081,7 @@ public class HistoryBacking extends BaseBacking {
 						refreshLists();
 
 						if (event != null) {
-							listAppointment = processService
-									.getListVwAppointmentByHistory(currentDoctor
-											.getId());
-							appointmentModel = new VwAppointmentDataModel(
-									listAppointment);
-							if (listAppointment.size() > 0) {
-								selectedAppointment = listAppointment.get(0);
-							}
+							refreshAction();
 						}
 					} else if (this.getRolePrincipal().equals(
 							Constant.ROLE_NURSE)) {
@@ -2106,6 +2089,15 @@ public class HistoryBacking extends BaseBacking {
 				}
 
 			}
+		}
+	}
+
+	public void refreshAction() {
+		listAppointment = processService
+				.getListVwAppointmentByHistory(currentDoctor.getId());
+		appointmentModel = new VwAppointmentDataModel(listAppointment);
+		if (listAppointment.size() > 0) {
+			selectedAppointment = listAppointment.get(0);
 		}
 	}
 
