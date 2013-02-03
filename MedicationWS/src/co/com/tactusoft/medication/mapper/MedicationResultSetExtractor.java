@@ -14,6 +14,10 @@ public class MedicationResultSetExtractor implements ResultSetExtractor<Medicati
 	    Medication object = new Medication();
 	    object.setIdClienteCrm(rs.getString(1));
 	    object.setIdReceta(rs.getString(2));
+	    object.setIdMedico(rs.getString(3));
+	    object.setIdProductoCrm(rs.getString(4));
+	    object.setIdMaterialSAP(rs.getString(5));
+	    object.setCantidad(rs.getString(6));
 	    return object;
 	  }
 }
