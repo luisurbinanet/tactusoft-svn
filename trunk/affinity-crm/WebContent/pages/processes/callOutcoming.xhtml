@@ -30,7 +30,7 @@
 							disabled="#{callOutcomingBacking.searched or callOutcomingBacking.saved}" />
 						<p:commandButton value="#{msg['btn_call']}" icon="ui-icon-disk"
 							actionListener="#{callOutcomingBacking.callAction}"
-							update="growl toolBar pnlInfo" process="@this, txtPhone, txtInd"
+							update="growl toolBar pnlInfo pnlCallType" process="@this, txtPhone, txtInd"
 							disabled="#{not callOutcomingBacking.searched}" />
 						<p:commandButton value="#{msg['btn_save']}" icon="ui-icon-disk"
 							action="#{callOutcomingBacking.saveAction}" update="form"
@@ -61,11 +61,12 @@
 				<p:watermark for="txtInd" value="#{msg['cam_ind']}" />
 
 				<p:fieldset legend="#{msg['cam_final']}">
-					<h:panelGrid columns="2" width="100%">
+					<h:panelGrid id="pnlCallType" columns="2" width="100%">
 						<h:outputText value="#{msg['cam_call_level1']}" style="width:100%" />
 						<p:selectOneMenu id="selCallType"
 							value="#{callOutcomingBacking.idCallType}" style="width:500px"
-							required="true" label="#{msg['cam_call_level1']}">
+							required="true" label="#{msg['cam_call_level1']}"
+							disabled="#{not callOutcomingBacking.searched or callOutcomingBacking.saved}">
 							<f:selectItems value="#{callOutcomingBacking.listCallType}" />
 							<p:ajax listener="#{callOutcomingBacking.handleCallTypeChange}"
 								update="selCallTypeDetail" />
@@ -74,7 +75,8 @@
 						<p:selectOneMenu id="selCallTypeDetail"
 							value="#{callOutcomingBacking.idCallTypeDetail}"
 							style="width:500px" required="true"
-							label="#{msg['cam_call_level2']}">
+							label="#{msg['cam_call_level2']}"
+							disabled="#{not callOutcomingBacking.searched or callOutcomingBacking.saved}">
 							<f:selectItems value="#{callOutcomingBacking.listCallTypeDetail}" />
 							<p:ajax
 								listener="#{callOutcomingBacking.handleCallTypeDetailChange}" />
