@@ -12,7 +12,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmCall;
-import co.com.tactusoft.crm.model.entities.CrmCallFinal;
+import co.com.tactusoft.crm.model.entities.CrmCallType;
+import co.com.tactusoft.crm.model.entities.CrmCallTypeDetail;
 import co.com.tactusoft.crm.model.entities.CrmGuideline;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.util.Constant;
@@ -41,16 +42,20 @@ public class CapaignBo implements Serializable {
 				+ "' OR o.cellNumber = '" + phone + "'");
 	}
 
-	public List<CrmCallFinal> getListCallFinal(String type) {
-		return dao.find("from CrmCallFinal where typeCall = '" + type + "'");
+	public List<CrmCallType> getListCallType(String type) {
+		return dao.find("from CrmCallType where callType = '" + type + "'");
+	}
+	
+	public List<CrmCallTypeDetail> getListCallTypeDetail(Integer idCallType) {
+		return dao.find("from CrmCallTypeDetail where crmCallType.id = '" + idCallType + "'");
 	}
 
-	public List<CrmCallFinal> getListCallFinalIncoming() {
-		return getListCallFinal(Constant.CALLED_TYPE_IN);
+	public List<CrmCallType> getListCallTypeIncoming() {
+		return getListCallType(Constant.CALLED_TYPE_IN);
 	}
 
-	public List<CrmCallFinal> getListCallFinalOutcoming() {
-		return getListCallFinal(Constant.CALLE_TYPE_OUT);
+	public List<CrmCallType> getListCallTypeOutcoming() {
+		return getListCallType(Constant.CALLED_TYPE_OUT);
 	}
 
 	public CrmCall getListCallById(BigDecimal id) {
