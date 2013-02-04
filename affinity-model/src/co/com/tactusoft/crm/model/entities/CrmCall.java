@@ -16,10 +16,11 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name = "crm_call", catalog = "crm_db", uniqueConstraints = @UniqueConstraint(columnNames = "id_call"))
 public class CrmCall implements java.io.Serializable {
-
+	
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
-	private CrmCallFinal crmCallFinal;
+	private CrmPatient crmPatient;
+	private CrmCallTypeDetail crmCallTypeDetail;
 	private String idCall;
 	private String agentNumber;
 	private String callType;
@@ -27,30 +28,24 @@ public class CrmCall implements java.io.Serializable {
 	private String phone;
 	private String companyPhone;
 	private String remoteChannel;
-	private BigDecimal idPatient;
+	private BigDecimal idCallFinal;
 
 	public CrmCall() {
 	}
 
-	public CrmCall(BigDecimal id, String idCall, String agentNumber,
-			String callType, String idCampaign, String phone,
-			String companyPhone, String remoteChannel) {
+	public CrmCall(BigDecimal id, String idCall) {
 		this.id = id;
 		this.idCall = idCall;
-		this.agentNumber = agentNumber;
-		this.callType = callType;
-		this.idCampaign = idCampaign;
-		this.phone = phone;
-		this.companyPhone = companyPhone;
-		this.remoteChannel = remoteChannel;
 	}
 
-	public CrmCall(BigDecimal id, CrmCallFinal crmCallFinal, String idCall,
+	public CrmCall(BigDecimal id, CrmPatient crmPatient,
+			CrmCallTypeDetail crmCallTypeDetail, String idCall,
 			String agentNumber, String callType, String idCampaign,
 			String phone, String companyPhone, String remoteChannel,
-			BigDecimal idPatient) {
+			BigDecimal idCallFinal) {
 		this.id = id;
-		this.crmCallFinal = crmCallFinal;
+		this.crmPatient = crmPatient;
+		this.crmCallTypeDetail = crmCallTypeDetail;
 		this.idCall = idCall;
 		this.agentNumber = agentNumber;
 		this.callType = callType;
@@ -58,7 +53,7 @@ public class CrmCall implements java.io.Serializable {
 		this.phone = phone;
 		this.companyPhone = companyPhone;
 		this.remoteChannel = remoteChannel;
-		this.idPatient = idPatient;
+		this.idCallFinal = idCallFinal;
 	}
 
 	@Id
@@ -72,16 +67,26 @@ public class CrmCall implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_call_final")
-	public CrmCallFinal getCrmCallFinal() {
-		return this.crmCallFinal;
+	@JoinColumn(name = "id_patient")
+	public CrmPatient getCrmPatient() {
+		return this.crmPatient;
 	}
 
-	public void setCrmCallFinal(CrmCallFinal crmCallFinal) {
-		this.crmCallFinal = crmCallFinal;
+	public void setCrmPatient(CrmPatient crmPatient) {
+		this.crmPatient = crmPatient;
 	}
 
-	@Column(name = "id_call", unique = true, nullable = true, scale = 0)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_call_type")
+	public CrmCallTypeDetail getCrmCallTypeDetail() {
+		return this.crmCallTypeDetail;
+	}
+
+	public void setCrmCallTypeDetail(CrmCallTypeDetail crmCallTypeDetail) {
+		this.crmCallTypeDetail = crmCallTypeDetail;
+	}
+
+	@Column(name = "id_call", unique = true, nullable = false, length = 20)
 	public String getIdCall() {
 		return this.idCall;
 	}
@@ -90,7 +95,7 @@ public class CrmCall implements java.io.Serializable {
 		this.idCall = idCall;
 	}
 
-	@Column(name = "agent_number", nullable = true, length = 30)
+	@Column(name = "agent_number", length = 30)
 	public String getAgentNumber() {
 		return this.agentNumber;
 	}
@@ -99,7 +104,7 @@ public class CrmCall implements java.io.Serializable {
 		this.agentNumber = agentNumber;
 	}
 
-	@Column(name = "call_type", nullable = true, length = 45)
+	@Column(name = "call_type", length = 45)
 	public String getCallType() {
 		return this.callType;
 	}
@@ -108,7 +113,7 @@ public class CrmCall implements java.io.Serializable {
 		this.callType = callType;
 	}
 
-	@Column(name = "id_campaign", nullable = true, length = 45)
+	@Column(name = "id_campaign", length = 45)
 	public String getIdCampaign() {
 		return this.idCampaign;
 	}
@@ -117,7 +122,7 @@ public class CrmCall implements java.io.Serializable {
 		this.idCampaign = idCampaign;
 	}
 
-	@Column(name = "phone", nullable = true, length = 45)
+	@Column(name = "phone", length = 45)
 	public String getPhone() {
 		return this.phone;
 	}
@@ -126,16 +131,16 @@ public class CrmCall implements java.io.Serializable {
 		this.phone = phone;
 	}
 
-	@Column(name = "company_phone", nullable = true, length = 45)
+	@Column(name = "company_phone", length = 45)
 	public String getCompanyPhone() {
-		return companyPhone;
+		return this.companyPhone;
 	}
 
 	public void setCompanyPhone(String companyPhone) {
 		this.companyPhone = companyPhone;
 	}
 
-	@Column(name = "remote_channel", nullable = true, length = 45)
+	@Column(name = "remote_channel", length = 45)
 	public String getRemoteChannel() {
 		return this.remoteChannel;
 	}
@@ -144,13 +149,13 @@ public class CrmCall implements java.io.Serializable {
 		this.remoteChannel = remoteChannel;
 	}
 
-	@Column(name = "id_patient", scale = 0)
-	public BigDecimal getIdPatient() {
-		return this.idPatient;
+	@Column(name = "id_call_final", scale = 0)
+	public BigDecimal getIdCallFinal() {
+		return this.idCallFinal;
 	}
 
-	public void setIdPatient(BigDecimal idPatient) {
-		this.idPatient = idPatient;
+	public void setIdCallFinal(BigDecimal idCallFinal) {
+		this.idCallFinal = idCallFinal;
 	}
 
 }
