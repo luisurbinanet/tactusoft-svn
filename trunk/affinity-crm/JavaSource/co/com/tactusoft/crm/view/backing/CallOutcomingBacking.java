@@ -1,7 +1,6 @@
 package co.com.tactusoft.crm.view.backing;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +20,8 @@ import co.com.tactusoft.crm.controller.bo.CapaignBo;
 import co.com.tactusoft.crm.controller.bo.ParameterBo;
 import co.com.tactusoft.crm.model.entities.AstTrunkDialpatterns;
 import co.com.tactusoft.crm.model.entities.CrmCall;
-import co.com.tactusoft.crm.model.entities.CrmCallFinal;
+import co.com.tactusoft.crm.model.entities.CrmCallType;
+import co.com.tactusoft.crm.model.entities.CrmCallTypeDetail;
 import co.com.tactusoft.crm.model.entities.CrmParameter;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.VwCallRange;
@@ -46,9 +46,11 @@ public class CallOutcomingBacking extends ContactBacking {
 	private String phone;
 	private String indicative;
 
-	private List<SelectItem> listCallFinal;
-	private BigDecimal idCallFinal;
-	private Map<BigDecimal, CrmCallFinal> mapCallFinal;
+	private List<SelectItem> listCallType;
+	private List<SelectItem> listCallTypeDetail;
+	private Integer idCallType;
+	private Integer idCallTypeDetail;
+	private Map<Integer, CrmCallTypeDetail> mapCallTypeDetail;
 
 	public boolean searched;
 	public boolean called;
@@ -80,30 +82,6 @@ public class CallOutcomingBacking extends ContactBacking {
 
 	public void setNames(String names) {
 		this.names = names;
-	}
-
-	public List<SelectItem> getListCallFinal() {
-		return listCallFinal;
-	}
-
-	public void setListCallFinal(List<SelectItem> listCallFinal) {
-		this.listCallFinal = listCallFinal;
-	}
-
-	public BigDecimal getIdCallFinal() {
-		return idCallFinal;
-	}
-
-	public void setIdCallFinal(BigDecimal idCallFinal) {
-		this.idCallFinal = idCallFinal;
-	}
-
-	public Map<BigDecimal, CrmCallFinal> getMapCallFinal() {
-		return mapCallFinal;
-	}
-
-	public void setMapCallFinal(Map<BigDecimal, CrmCallFinal> mapCallFinal) {
-		this.mapCallFinal = mapCallFinal;
 	}
 
 	public boolean isSaved() {
@@ -164,9 +142,50 @@ public class CallOutcomingBacking extends ContactBacking {
 		this.agentNumber = agentNumber;
 	}
 
+	public List<SelectItem> getListCallType() {
+		return listCallType;
+	}
+
+	public void setListCallType(List<SelectItem> listCallType) {
+		this.listCallType = listCallType;
+	}
+
+	public List<SelectItem> getListCallTypeDetail() {
+		return listCallTypeDetail;
+	}
+
+	public void setListCallTypeDetail(List<SelectItem> listCallTypeDetail) {
+		this.listCallTypeDetail = listCallTypeDetail;
+	}
+
+	public Integer getIdCallType() {
+		return idCallType;
+	}
+
+	public void setIdCallType(Integer idCallType) {
+		this.idCallType = idCallType;
+	}
+
+	public Integer getIdCallTypeDetail() {
+		return idCallTypeDetail;
+	}
+
+	public void setIdCallTypeDetail(Integer idCallTypeDetail) {
+		this.idCallTypeDetail = idCallTypeDetail;
+	}
+
+	public Map<Integer, CrmCallTypeDetail> getMapCallTypeDetail() {
+		return mapCallTypeDetail;
+	}
+
+	public void setMapCallTypeDetail(
+			Map<Integer, CrmCallTypeDetail> mapCallTypeDetail) {
+		this.mapCallTypeDetail = mapCallTypeDetail;
+	}
+
 	@PostConstruct
 	public void init() {
-		generateCallFinal();
+		generateCallType();
 		listCallRange = tablesService.getVwCallRange();
 		listDialpatterns = tablesService.getListDialpatterns();
 
@@ -187,17 +206,18 @@ public class CallOutcomingBacking extends ContactBacking {
 		agentNumber = FacesUtil.getCurrentUser().getExtensionAgent();
 	}
 
-	private void generateCallFinal() {
-		listCallFinal = new ArrayList<SelectItem>();
-		mapCallFinal = new HashMap<BigDecimal, CrmCallFinal>();
-
+	private void generateCallType() {
+		listCallType = new ArrayList<SelectItem>();
 		String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
-		listCallFinal.add(new SelectItem(null, label));
-		for (CrmCallFinal row : capaignService.getListCallFinalOutcoming()) {
-			listCallFinal.add(new SelectItem(row.getId(), row.getCode() + " - "
-					+ row.getDescription()));
-			mapCallFinal.put(row.getId(), row);
+		listCallType.add(new SelectItem(null, label));
+
+		for (CrmCallType row : capaignService.getListCallTypeOutcoming()) {
+			listCallType.add(new SelectItem(row.getId(), row.getDescription()));
 		}
+
+		listCallTypeDetail = new ArrayList<SelectItem>();
+		mapCallTypeDetail = new HashMap<Integer, CrmCallTypeDetail>();
+		listCallTypeDetail.add(new SelectItem(null, label));
 	}
 
 	@Override
@@ -209,6 +229,8 @@ public class CallOutcomingBacking extends ContactBacking {
 		called = false;
 		saved = false;
 		tmpSelectedPatient = null;
+		idCallType = null;
+		idCallTypeDetail = null;
 	}
 
 	public void searchAction(ActionEvent event) {
@@ -280,14 +302,14 @@ public class CallOutcomingBacking extends ContactBacking {
 		call = new CrmCall();
 		call.setIdCall(idCall);
 		call.setAgentNumber(agentNumber);
-		call.setCallType(Constant.CALLE_TYPE_OUT);
-		call.setCrmCallFinal(mapCallFinal.get(idCallFinal));
+		call.setCallType(Constant.CALLED_TYPE_OUT);
+		call.setCrmCallTypeDetail(mapCallTypeDetail.get(idCallTypeDetail));
 		call.setPhone(phone);
 		call.setRemoteChannel(remoteChannel);
 
 		if (this.selectedPatient != null
 				&& this.selectedPatient.getId() != null) {
-			call.setIdPatient(this.selectedPatient.getId());
+			call.setCrmPatient(this.selectedPatient);
 		}
 		capaignService.saveCall(call);
 		String message = FacesUtil.getMessage("cam_msg_update_ok",
@@ -304,10 +326,29 @@ public class CallOutcomingBacking extends ContactBacking {
 		return "/pages/processes/appointment.jsf?faces-redirect=true";
 	}
 
-	public void handleFinalDetailChange() {
+	public void handleCallTypeChange() {
+		listCallTypeDetail = new ArrayList<SelectItem>();
+		mapCallTypeDetail = new HashMap<Integer, CrmCallTypeDetail>();
+		String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
+		listCallTypeDetail.add(new SelectItem(-1, label));
+		if (idCallType != null && idCallType != 0) {
+			for (CrmCallTypeDetail row : capaignService
+					.getListCallTypeDetail(idCallType)) {
+				listCallTypeDetail.add(new SelectItem(row.getId(), row
+						.getCode() + " - " + row.getDescription()));
+				mapCallTypeDetail.put(row.getId(), row);
+			}
+		}
+	}
+
+	public void handleCallTypeDetailChange() {
 		if (call != null) {
-			call.setCrmCallFinal(mapCallFinal.get(idCallFinal));
-			capaignService.saveCall(call);
+			if (idCallTypeDetail != null && idCallTypeDetail != 0) {
+				call.setCrmCallTypeDetail(mapCallTypeDetail
+						.get(idCallTypeDetail));
+				call.setCallType(Constant.CALLED_TYPE_OUT);
+				capaignService.saveCall(call);
+			}
 		}
 	}
 }

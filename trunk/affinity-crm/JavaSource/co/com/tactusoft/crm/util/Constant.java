@@ -71,8 +71,8 @@ public class Constant {
 	public static final String SCHEDULE_REMOVE = "REMOVE";
 	public static final String SCHEDULE_MAINTAIN = "MAINTAIN";
 
-	public static String CALLED_TYPE_IN = "incoming";
-	public static String CALLE_TYPE_OUT = "outgoing";
+	public static String CALLED_TYPE_IN = "INCOMING";
+	public static String CALLED_TYPE_OUT = "OUTCOMING";
 
 	public static String HISTORY_HISTORY = "HISTORY";
 	public static String HISTORY_RECORD = "RECORD";

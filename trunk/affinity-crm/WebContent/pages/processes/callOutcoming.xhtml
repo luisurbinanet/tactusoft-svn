@@ -53,21 +53,36 @@
 								value="#{callOutcomingBacking.phone}"
 								disabled="#{callOutcomingBacking.searched or callOutcomingBacking.called}" />
 						</h:panelGrid>
-						<h:outputText value="#{msg['cam_final']}" style="width:100%" />
-						<p:selectOneMenu id="selFinal"
-							value="#{callOutcomingBacking.idCallFinal}" style="width:500px"
-							required="true" label="#{msg['cam_final']}"
-							disabled="#{not callOutcomingBacking.searched or callOutcomingBacking.saved}">
-							<f:selectItems value="#{callOutcomingBacking.listCallFinal}" />
+					</h:panelGrid>
+				</p:fieldset>
+
+				<p:spacer />
+
+				<p:watermark for="txtInd" value="#{msg['cam_ind']}" />
+
+				<p:fieldset legend="#{msg['cam_final']}">
+					<h:panelGrid columns="2" width="100%">
+						<h:outputText value="#{msg['cam_call_level1']}" style="width:100%" />
+						<p:selectOneMenu id="selCallType"
+							value="#{callOutcomingBacking.idCallType}" style="width:500px"
+							required="true" label="#{msg['cam_call_level1']}">
+							<f:selectItems value="#{callOutcomingBacking.listCallType}" />
+							<p:ajax listener="#{callOutcomingBacking.handleCallTypeChange}"
+								update="selCallTypeDetail" />
+						</p:selectOneMenu>
+						<h:outputText value="#{msg['cam_call_level2']}" style="width:100%" />
+						<p:selectOneMenu id="selCallTypeDetail"
+							value="#{callOutcomingBacking.idCallTypeDetail}"
+							style="width:500px" required="true"
+							label="#{msg['cam_call_level2']}">
+							<f:selectItems value="#{callOutcomingBacking.listCallTypeDetail}" />
 							<p:ajax
-								listener="#{callOutcomingBacking.handleFinalDetailChange}" />
+								listener="#{callOutcomingBacking.handleCallTypeDetailChange}" />
 						</p:selectOneMenu>
 					</h:panelGrid>
 				</p:fieldset>
 
-				<p:watermark for="txtInd" value="#{msg['cam_ind']}" />
-
-				<p:spacer height="5" />
+				<p:spacer />
 
 				<h:panelGrid id="pnlContactList" columns="1" width="100%">
 

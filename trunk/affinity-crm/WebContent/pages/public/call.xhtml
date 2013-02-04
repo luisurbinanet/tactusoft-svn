@@ -11,7 +11,7 @@
 
 		<h:outputScript library="js" name="crm.js" />
 
-		<p:panel style="width:100%;height:700px;"
+		<p:panel style="width:100%;height:100%;"
 			header="#{msg['title_campaign']}">
 
 			<p:spacer height="5" />
@@ -32,13 +32,32 @@
 							style="width:100%" />
 						<h:outputText value="#{msg['cam_calls']}" style="width:100%" />
 						<h:outputText value="#{callBacking.calls}" style="width:100%" />
-						<h:outputText value="#{msg['cam_final']}" style="width:100%" />
-						<p:selectOneMenu id="selFinal" value="#{callBacking.idCallFinal}"
-							style="width:500px" required="true" label="#{msg['cam_final']}">
-							<f:selectItems value="#{callBacking.listCallFinal}" />
-							<p:ajax listener="#{callBacking.handleFinalDetailChange}" />
-						</p:selectOneMenu>
 					</h:panelGrid>
+
+					<p:fieldset legend="#{msg['cam_final']}">
+						<h:panelGrid columns="2" width="100%">
+							<h:outputText value="#{msg['cam_call_level1']}"
+								style="width:100%" />
+							<p:selectOneMenu id="selCallType"
+								value="#{callBacking.idCallType}" style="width:500px"
+								required="true" label="#{msg['cam_call_level1']}">
+								<f:selectItems value="#{callBacking.listCallType}" />
+								<p:ajax listener="#{callBacking.handleCallTypeChange}"
+									update="selCallTypeDetail" />
+							</p:selectOneMenu>
+							<h:outputText value="#{msg['cam_call_level2']}"
+								style="width:100%" />
+							<p:selectOneMenu id="selCallTypeDetail"
+								value="#{callBacking.idCallTypeDetail}" style="width:500px"
+								required="true" label="#{msg['cam_call_level2']}">
+								<f:selectItems value="#{callBacking.listCallTypeDetail}" />
+								<p:ajax listener="#{callBacking.handleCallTypeDetailChange}"/>
+							</p:selectOneMenu>
+						</h:panelGrid>
+					</p:fieldset>
+					
+					<p:spacer/>
+
 					<p:fieldset legend="#{msg['gui_libretto']}" toggleable="true"
 						toggleSpeed="500">
 						<h:outputText id="display" escape="false"
