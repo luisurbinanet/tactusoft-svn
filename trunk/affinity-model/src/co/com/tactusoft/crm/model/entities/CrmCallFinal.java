@@ -1,13 +1,10 @@
 package co.com.tactusoft.crm.model.entities;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -23,7 +20,6 @@ public class CrmCallFinal implements java.io.Serializable {
 	private String code;
 	private String description;
 	private String typeCall;
-	private Set<CrmCall> crmCalls = new HashSet<CrmCall>(0);
 
 	public CrmCallFinal() {
 	}
@@ -33,12 +29,11 @@ public class CrmCallFinal implements java.io.Serializable {
 	}
 
 	public CrmCallFinal(BigDecimal id, String code, String description,
-			String typeCall, Set<CrmCall> crmCalls) {
+			String typeCall) {
 		this.id = id;
 		this.code = code;
 		this.description = description;
 		this.typeCall = typeCall;
-		this.crmCalls = crmCalls;
 	}
 
 	@Id
@@ -76,15 +71,6 @@ public class CrmCallFinal implements java.io.Serializable {
 
 	public void setTypeCall(String typeCall) {
 		this.typeCall = typeCall;
-	}
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmCallFinal")
-	public Set<CrmCall> getCrmCalls() {
-		return this.crmCalls;
-	}
-
-	public void setCrmCalls(Set<CrmCall> crmCalls) {
-		this.crmCalls = crmCalls;
 	}
 
 }
