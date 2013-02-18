@@ -244,7 +244,7 @@
 					<p:dataTable id="selectedTable" var="rec"
 						value="#{appointmentBacking.modelAppointment}" rowKey="#{rec.id}"
 						style="width:100%"
-						selection="#{appointmentBacking.selectedCandidate}"
+						selection="#{appointmentBacking.selectedCandidateTemp}"
 						paginator="true" rows="10"
 						emptyMessage="#{msg['glb_no_records_found']}">
 
@@ -274,6 +274,7 @@
 
 						<f:facet name="footer">
 							<p:commandButton value="#{msg['btn_add_app']}"
+								action="#{appointmentBacking.addAppointmentAction}"
 								onclick="dlg3.hide()"
 								update=":form:pnlDetail4 :form:btnSaveOrder" />
 						</f:facet>

@@ -172,9 +172,15 @@ public class SearchByPatientBacking extends BaseBacking {
 				.getCrmPatient());
 		appointmentEditBacking.setCurrentDate(selectedAppointment
 				.getStartAppointmentDate());
+		for (SelectItem item : appointmentEditBacking.getListBranch()) {
+			long value = ((BigDecimal) item.getValue()).longValue();
+			if (value == selectedAppointment.getCrmBranch().getId().longValue()) {
+				appointmentEditBacking.setSaved(false);
+				break;
+			}
+		}
 		appointmentEditBacking.setIdBranch(selectedAppointment.getCrmBranch()
 				.getId());
-		appointmentEditBacking.handleBranchChange();
 		appointmentEditBacking.setIdProcedure(selectedAppointment
 				.getCrmProcedureDetail().getCrmProcedure().getId());
 		appointmentEditBacking.handleProcedureChange();
@@ -186,15 +192,8 @@ public class SearchByPatientBacking extends BaseBacking {
 		appointmentEditBacking.setEdit(true);
 		appointmentEditBacking.setSaved(false);
 		appointmentEditBacking.setFromPage("SEARCH");
-		for (SelectItem item : appointmentEditBacking.getListBranch()) {
-			long value = ((BigDecimal) item.getValue()).longValue();
-			if (value == selectedAppointment.getCrmBranch().getId().longValue()) {
-				appointmentEditBacking.setSaved(false);
-				break;
-			}
-		}
-		appointmentEditBacking.setIdBranch(selectedAppointment.getCrmBranch()
-				.getId());
+		
+		appointmentEditBacking.handleBranchChange();
 
 		return "/pages/processes/appointmentEdit.jsf?faces-redirect=true";
 	}
