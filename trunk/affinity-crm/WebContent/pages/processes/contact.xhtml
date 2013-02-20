@@ -31,7 +31,7 @@
 							icon="ui-icon-disk" action="#{contactBacking.saveAction}"
 							update="growl toolBar pnlDetail pnlDetail2 pnlDetail3"
 							process="toolBar pnlDetail pnlDetail2 pnlDetail3" />
-						<p:commandButton value="#{msg['btn_update']}" process="@this"
+						<p:commandButton value="#{msg['btn_update']}" process="@this,selsalesOff"
 							icon="ui-icon-refresh" oncomplete="updateDlg.show()"
 							update="updateDialog" disabled="#{contactBacking.newRecord}" />
 						<p:splitButton icon="ui-icon-arrowrefresh-1-w"
@@ -145,7 +145,7 @@
 						maxlength="#{contactBacking.numCell}" validator="numberValidator" />
 
 					<h:outputLabel value="#{msg['pat_sales_off']}" style="width:40%" />
-					<p:selectOneMenu value="#{contactBacking.salesOff}"
+					<p:selectOneMenu id="selsalesOff" value="#{contactBacking.salesOff}"
 						style="width:248px">
 						<f:selectItems value="#{contactBacking.listBranch}" />
 					</p:selectOneMenu>
