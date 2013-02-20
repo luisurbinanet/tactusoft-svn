@@ -165,20 +165,12 @@
 					<h:outputText value="#{msg['pat_phone_number']}" />
 					<p:inputText value="#{patientBacking.selected.phoneNumber}"
 						style="width:240px" label="#{msg['pat_phone_number']}"
-						required="true" maxlength="#{patientBacking.numPhone}"
-						validator="numberValidator">
-						<f:validateLength minimum="#{patientBacking.numPhone}"
-							maximum="#{patientBacking.numPhone}" />
-					</p:inputText>
+						maxlength="#{patientBacking.numPhone}" validator="numberValidator" />
 
 					<h:outputText value="#{msg['pat_cell_number']}" />
 					<p:inputText value="#{patientBacking.selected.cellNumber}"
 						style="width:240px" label="#{msg['pat_cell_number']}"
-						required="true" maxlength="#{patientBacking.numCell}"
-						validator="numberValidator">
-						<f:validateLength minimum="#{patientBacking.numCell}"
-							maximum="#{patientBacking.numCell}" />
-					</p:inputText>
+						maxlength="#{patientBacking.numCell}" validator="numberValidator" />
 
 					<h:outputText value="#{msg['pat_email']}" />
 					<p:inputText value="#{patientBacking.selected.email}"
