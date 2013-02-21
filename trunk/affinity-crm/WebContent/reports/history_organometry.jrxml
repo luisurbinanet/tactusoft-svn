@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="history_organometry" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="258c62b7-639f-43e7-ac7b-c289802e1be2">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="P_ID_PATIENT" class="java.math.BigDecimal">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+a.id,
+b.start_appointment_date,
+CASE organometry_check
+ WHEN '0' THEN 'NO'
+ WHEN '1' THEN 'SI'
+END AS "Se tienen resultados del exámen?",
+organometry_analysis "Análisis"
+FROM crm_db.crm_history_organometry a JOIN crm_db.crm_appointment b on a.id_appointment = b.id
+WHERE a.id_patient = $P{P_ID_PATIENT}
+ORDER by b.start_appointment_date DESC]]>
+	</queryString>
+	<field name="id" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="start_appointment_date" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Se tienen resultados del exámen?" class="java.lang.String"/>
+	<field name="Análisis" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="cccfadfe-8d80-4b4f-b9cf-727267a05009" x="0" y="0" width="552" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Exámen Organométrico]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="ed1b7d1a-c512-4e53-8ad3-fa73dc9b5448" x="1" y="19" width="554" height="1"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="91" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="e1ed9247-c63e-4e37-8b9e-1b3b97f0ce65" x="0" y="4" width="63" height="20"/>
+				<textElement/>
+				<text><![CDATA[Cita del día:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="d82c8a93-5427-4d2d-b895-7722b051e68b" x="63" y="4" width="489" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{start_appointment_date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ece62d12-263d-4e81-b75d-1bce2b434f82" x="168" y="24" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Se tienen resultados del exámen?}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="f832738f-349b-41e8-a11d-5b81b475980d" x="1" y="24" width="167" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Se tienen resultados del exámen?]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="d14b6720-e72b-4d5b-a40d-df36d1755e51" x="168" y="44" width="384" height="47"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Análisis}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="eff1c2f7-2393-4f2f-b892-986cffb77c35" x="1" y="44" width="167" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Análisis]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>
