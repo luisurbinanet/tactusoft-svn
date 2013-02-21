@@ -2126,6 +2126,18 @@ public class HistoryBacking extends BaseBacking {
 			e.printStackTrace();
 		}
 	}
+	
+	public void printHistoryAction() {
+		try {
+			GenerateFormulaPDF.historyPDF(currentAppointment.getCrmPatient().getId());
+		} catch (JRException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void printRemissiomAction() {
 		try {
