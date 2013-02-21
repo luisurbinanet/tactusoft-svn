@@ -88,4 +88,36 @@ public class GenerateFormulaPDF {
 		FacesContext.getCurrentInstance().responseComplete();
 	}
 
+	public static void historyPDF(BigDecimal idPatient) throws JRException,
+			IOException, SQLException {
+		String imagePath = FacesUtil.getRealPath("/images/");
+		String subreportsPath = FacesUtil.getRealPath("/reports/") + "/";
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("P_ID_PATIENT", idPatient);
+		param.put("SUBREPORT_DIR", subreportsPath);
+		param.put("P_IMAGE", imagePath);
+
+		SessionFactoryImpl sessionFactory = FacesUtil
+				.findBean("sessionFactory");
+		Connection connection = SessionFactoryUtils.getDataSource(
+				sessionFactory).getConnection();
+
+		String path = "/reports/history.jasper";
+		String nameReport = "HistoriaClinica" + idPatient + ".pdf";
+
+		String reportPath = FacesContext.getCurrentInstance()
+				.getExternalContext().getRealPath(path);
+		JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath,
+				param, connection);
+		HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext
+				.getCurrentInstance().getExternalContext().getResponse();
+		httpServletResponse.addHeader("Content-disposition",
+				"attachment; filename=" + nameReport);
+		ServletOutputStream servletOutputStream = httpServletResponse
+				.getOutputStream();
+		JasperExportManager.exportReportToPdfStream(jasperPrint,
+				servletOutputStream);
+		FacesContext.getCurrentInstance().responseComplete();
+	}
+
 }

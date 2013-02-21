@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="history_homeophatic" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="258c62b7-639f-43e7-ac7b-c289802e1be2">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="P_ID_PATIENT" class="java.math.BigDecimal">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+a.id,
+b.start_appointment_date,
+CASE biotypology
+ WHEN '1' THEN 'Carbónico: Linfático - Endomórfico'
+ WHEN '2' THEN 'Sulfúrico: Bilioso - Mesomófico'
+ WHEN '3' THEN 'Fosfórico: Nervioso - Ectomórfico'
+ WHEN '4' THEN 'Fluórico: Sanguíneo - Asimétrico'
+ ELSE 'NO'
+END AS "Biotipología",
+mental "Síntomas Mentales",
+special "Síntomas Particulares",
+general "Síntomas Generales",
+miasm "Tenedencia Mismática"
+FROM crm_db.crm_history_homeopathic a JOIN crm_db.crm_appointment b on a.id_appointment = b.id
+WHERE a.id_patient = $P{P_ID_PATIENT}
+ORDER by b.start_appointment_date DESC]]>
+	</queryString>
+	<field name="id" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="start_appointment_date" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Biotipología" class="java.lang.String"/>
+	<field name="Síntomas Mentales" class="java.lang.String"/>
+	<field name="Síntomas Particulares" class="java.lang.String"/>
+	<field name="Síntomas Generales" class="java.lang.String"/>
+	<field name="Tenedencia Mismática" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="cccfadfe-8d80-4b4f-b9cf-727267a05009" x="0" y="0" width="552" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Historia Homeopática]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="ed1b7d1a-c512-4e53-8ad3-fa73dc9b5448" x="1" y="19" width="554" height="1"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="128" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="e1ed9247-c63e-4e37-8b9e-1b3b97f0ce65" x="0" y="4" width="63" height="20"/>
+				<textElement/>
+				<text><![CDATA[Cita del día:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="d82c8a93-5427-4d2d-b895-7722b051e68b" x="63" y="4" width="489" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{start_appointment_date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="2f1108d7-ee6d-49b4-a285-b21f1ef76fbb" x="135" y="24" width="417" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Biotipología}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="58ef5a7f-9f18-4bf4-89c6-9f23a843fda3" x="1" y="24" width="134" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Biotipología]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="aa790ea3-c2e7-41fa-aefa-34a6f4da1395" x="135" y="44" width="417" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Síntomas Mentales}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="9eb22e87-733a-4abd-8922-18fe37fa45e5" x="1" y="44" width="134" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Síntomas Mentales]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="3366c071-bc4d-4f36-aa88-3268dc0091e9" x="135" y="64" width="417" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Síntomas Particulares}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="9bb37918-7541-4751-82de-2f490724413c" x="1" y="64" width="134" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Síntomas Particulares]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="417a211f-a7b5-4ff9-bdc9-073a300aa7c6" x="135" y="84" width="417" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Síntomas Generales}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="21f13313-49ad-4753-ae89-21262eb8b839" x="135" y="104" width="417" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Tenedencia Mismática}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="04d01bae-f8d9-45f9-87da-4c3c4a191277" x="1" y="104" width="134" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tenedencia Mismática]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="26b66302-46f6-4d63-90a8-bdb55809c089" x="1" y="84" width="134" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Síntomas Generales]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

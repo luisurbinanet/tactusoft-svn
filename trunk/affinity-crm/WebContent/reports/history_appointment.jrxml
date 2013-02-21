@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="history_appointment" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="258c62b7-639f-43e7-ac7b-c289802e1be2">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="P_ID_PATIENT" class="java.math.BigDecimal">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+a.id,
+a.code,
+id_branch,
+b.name branch_name,
+id_procedure_detail,
+d.name name_procedure,
+id_doctor,
+c.names doctor_name,
+start_appointment_date,
+end_appointment_date,
+name_publicity,
+obs
+FROM crm_db.crm_appointment a JOIN crm_db.crm_branch b ON a.id_branch = b.id
+JOIN crm_db.crm_doctor c ON a.id_doctor = c.id
+JOIN crm_db.crm_procedure_detail d ON a.id_procedure_detail = d.id
+WHERE a.id_patient = $P{P_ID_PATIENT} AND a.state IN (3,4)
+ORDER BY start_appointment_date DESC]]>
+	</queryString>
+	<field name="id" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="code" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_branch" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="branch_name" class="java.lang.String"/>
+	<field name="id_procedure_detail" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="name_procedure" class="java.lang.String"/>
+	<field name="id_doctor" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="doctor_name" class="java.lang.String"/>
+	<field name="start_appointment_date" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="end_appointment_date" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="name_publicity" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="obs" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="28">
+			<staticText>
+				<reportElement uuid="cccfadfe-8d80-4b4f-b9cf-727267a05009" x="0" y="0" width="552" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Citas Asistidas]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="58f281aa-ffff-4d05-9fd2-e37e052029db" x="0" y="0" width="134" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sucursal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cce3fbb9-fc4c-43f0-bf40-c4cb8529f1fe" x="134" y="0" width="142" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Procedimiento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="df80d5a3-bc21-472c-a802-118b80fbfe0c" x="276" y="0" width="165" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Doctor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d2bc2163-b2bc-4e85-bb16-0c8297dd3ff1" x="441" y="0" width="111" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha cita]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="5a494137-5d45-431c-8e1f-23eb8c61d800" x="0" y="20" width="552" height="1"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="23" splitType="Stretch">
+			<textField>
+				<reportElement uuid="2b45ec28-f461-4451-bb45-b5de7cb5b818" x="0" y="0" width="134" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{branch_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a6227d3c-542d-4a4a-85c8-ccb804a8bf1d" x="134" y="0" width="142" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{name_procedure}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7d6930c0-fd14-47a8-a96f-d13408cf0fda" x="276" y="0" width="165" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{doctor_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="20f251c5-791f-4c2e-8c77-7979da560a12" x="441" y="3" width="111" height="17"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{start_appointment_date}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

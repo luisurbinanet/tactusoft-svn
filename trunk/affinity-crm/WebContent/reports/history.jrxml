@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="history" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fd0c4e58-f656-4c05-98c1-fe624cdd738d">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="99"/>
+	<parameter name="P_ID_PATIENT" class="java.math.BigDecimal">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/Users/CSARMIENTO/Documents/Desarrollo/workspace/affinity-crm/WebContent/reports/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_IMAGE" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT a.id,
+doc,
+code_sap,
+doc_type,
+firstnames,
+surnames,
+born_date,
+CASE gender
+ WHEN 'W' THEN 'Femenino'
+ WHEN 'M' THEN 'Masculino'
+END AS gender,
+id_occupation,
+address,
+zip_code,
+neighborhood,
+phone_number,
+cell_number,
+email,
+CASE type_housing
+ WHEN 'U' THEN 'Urbana'
+ WHEN 'R' THEN 'Rural'
+END AS type_housing,
+guardian,
+guardian_address,
+guardian_relationship,
+guardian_telephone,
+obs,
+cycle,
+send_phone,
+send_email,
+send_postal,
+send_sms,
+sales_org,
+id_user_create,
+date_create,
+id_user_modified,
+date_modified,
+id_profile,
+a.id_country,
+b.name country_name,
+a.id_region,
+c.name region_name,
+a.id_city,
+d.name city_name,
+id_marital_state,
+e.item_value marital_name,
+id_membership,
+id_eps
+FROM crm_db.crm_patient a JOIN crm_db.crm_country b ON a.id_country = b.id
+JOIN crm_db.crm_region c ON a.id_region = c.id
+JOIN crm_db.crm_city d ON a.id_city = d.id
+LEFT JOIN crm_db.crm_domain e ON a.id_marital_state = e.id
+WHERE a.id = $P{P_ID_PATIENT}]]>
+	</queryString>
+	<field name="id" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="doc" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="code_sap" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="doc_type" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="firstnames" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="surnames" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="born_date" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gender" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_occupation" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="address" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="zip_code" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="neighborhood" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="phone_number" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cell_number" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="email" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="type_housing" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="guardian" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="guardian_address" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="guardian_relationship" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="guardian_telephone" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="obs" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cycle" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="send_phone" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="send_email" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="send_postal" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="send_sms" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="sales_org" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_user_create" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="date_create" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_user_modified" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="date_modified" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_profile" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_country" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="country_name" class="java.lang.String"/>
+	<field name="id_region" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="region_name" class="java.lang.String"/>
+	<field name="id_city" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="city_name" class="java.lang.String"/>
+	<field name="id_marital_state" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="marital_name" class="java.lang.String"/>
+	<field name="id_membership" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_eps" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<title>
+		<band height="187" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="b6247123-2949-4c63-91ac-6dd3bf90b121" x="178" y="0" width="377" height="50"/>
+				<textElement textAlignment="Center">
+					<font size="24"/>
+				</textElement>
+				<text><![CDATA[Historia Clínica]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="135b0c44-ff68-4ccd-82a1-b64fceed7c93" x="480" y="50" width="73" height="20"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="e7cb1707-0d57-47da-aef5-18b182cb34e2" x="426" y="50" width="54" height="20"/>
+				<textElement/>
+				<text><![CDATA[Impreso:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2ebeecc3-c2c6-4916-a69c-d1d62bcb6f84" x="0" y="87" width="148" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Documento de Identificación]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="a2bd8bc5-a458-49af-8960-4f33bb8bd601" x="148" y="87" width="139" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{doc}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="bd08fb2b-1bf8-4eea-83de-6c5e55e0da80" x="0" y="107" width="148" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombres]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="c41f6684-6a9c-4fa8-9481-0201dd711be9" x="148" y="107" width="139" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{firstnames}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="219671ae-3054-46d3-a956-634b8fcee6cd" x="287" y="107" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Apellidos]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="d525809d-a6a0-4b73-a3a1-2caba7bd4368" x="387" y="107" width="166" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{surnames}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="6ddb276d-fdb9-47ac-888e-06fe51f75757" x="0" y="127" width="148" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de Nacimiento]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="11321da4-217c-496d-a81d-7f2f1bb85872" x="148" y="127" width="139" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{born_date}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="7e34871f-1616-4bb0-8432-ead1e6df8eaf" x="287" y="127" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Género]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="21f90206-3fc4-48db-a5f2-c317676d8c25" x="387" y="127" width="166" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{gender}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="81050934-c8d2-403b-a9f1-63e2649cd1b0" x="287" y="87" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código SAP]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="72b68527-5c8f-4243-bd93-44637173cb43" x="387" y="87" width="166" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{code_sap}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="08dd75ec-bdca-41fd-a57f-e6cbaf64c446" x="287" y="147" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[País]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="9ef52551-8896-4f5f-acad-1846d9ed722d" x="387" y="147" width="166" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{country_name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="cad4d353-bca2-4596-bafc-682ee25f2c81" x="0" y="167" width="148" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Región]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="4013ba16-a761-4c63-9120-e56d15ec3c81" x="148" y="167" width="139" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{region_name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="728ff690-20a9-4026-85d3-5cdadc44858f" x="287" y="167" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ciudad]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="5e6e87b0-9b34-48ed-8507-b83f36d9dd68" x="387" y="167" width="166" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{city_name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="47386e58-56e7-4f03-afdf-a69fba305b29" x="0" y="147" width="148" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estado Civil]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="09f9c50d-7d32-4245-9b75-b4e56d2353f0" x="148" y="147" width="139" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{marital_name}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement uuid="06cace0b-9400-46c1-9373-b501021e5f5e" positionType="Float" x="0" y="2" width="131" height="48"/>
+				<imageExpression><![CDATA[$P{P_IMAGE} + "/logo_naturizza.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="21" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="52" splitType="Stretch">
+			<subreport>
+				<reportElement uuid="74bc7440-0a64-4fa8-a759-bdb141707586" x="0" y="0" width="555" height="52"/>
+				<subreportParameter name="P_ID_PATIENT">
+					<subreportParameterExpression><![CDATA[$P{P_ID_PATIENT}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "history_appointment.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="21">
+			<subreport>
+				<reportElement uuid="8fe6bb95-d5c5-47e8-bc5b-3eada62cc336" x="0" y="0" width="555" height="20"/>
+				<subreportParameter name="P_ID_PATIENT">
+					<subreportParameterExpression><![CDATA[$P{P_ID_PATIENT}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "history_history.jasper"]]></subreportExpression>
+			</subreport>
+			<break>
+				<reportElement uuid="74177dd1-f16e-4275-b0a1-9676b0ccf5a2" x="0" y="20" width="553" height="1"/>
+			</break>
+		</band>
+		<band height="20">
+			<subreport>
+				<reportElement uuid="1c35e71f-33f0-4854-bf40-fa1625fb928c" x="0" y="0" width="555" height="20"/>
+				<subreportParameter name="P_GENDER">
+					<subreportParameterExpression><![CDATA[$F{gender}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="P_ID_PATIENT">
+					<subreportParameterExpression><![CDATA[$P{P_ID_PATIENT}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "history_record.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="50">
+			<subreport>
+				<reportElement uuid="472d52ad-adfa-47c8-8e10-9cf4c88f3211" x="0" y="0" width="555" height="50"/>
+				<subreportParameter name="P_ID_PATIENT">
+					<subreportParameterExpression><![CDATA[$P{P_ID_PATIENT}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "history_homeophatic.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="1e9ad24f-f244-4468-9eb1-77a71af487a3" x="438" y="0" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="96dd0890-ee73-4ace-9004-35c28aa1272b" x="518" y="0" width="40" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>
