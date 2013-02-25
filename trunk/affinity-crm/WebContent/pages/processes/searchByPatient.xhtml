@@ -156,6 +156,7 @@
 							disabled="#{(searchByPatientBacking.selectedAppointment.state eq 1?false:true) or searchByPatientBacking.selectedPatient.contact}" />
 						<p:commandButton value="#{msg['btn_open_appointment']}"
 							icon="ui-icon-folder-open" onclick="openAppDlg.show()"
+							rendered="#{searchByPatientBacking.openAppointment}"
 							disabled="#{searchByPatientBacking.selectedAppointment.state ne 4 or not searchByPatientBacking.selectedAppointment.closeAppointment}" />
 					</f:facet>
 

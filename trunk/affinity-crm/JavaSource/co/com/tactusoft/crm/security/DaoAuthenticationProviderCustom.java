@@ -82,10 +82,14 @@ public class DaoAuthenticationProviderCustom extends
 						.getName()));
 			}
 			user.setRoles(listGrantedAuthority);
+			user.setOpenAppointment(false);
 
 			String idRoles = "";
 			for (CrmRole row : listRole) {
 				idRoles = idRoles + row.getId() + ",";
+				if (row.getOpenAppointment() && !user.isOpenAppointment()) {
+					user.setOpenAppointment(true);
+				}
 			}
 
 			idRoles = idRoles.substring(0, idRoles.length() - 1);

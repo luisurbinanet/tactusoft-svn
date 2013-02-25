@@ -39,6 +39,7 @@ public class UserData implements UserDetails {
 	private CrmPatient selectedPatient;
 	private String rolePrincipal;
 	private int numCalls;
+	private boolean openAppointment;
 
 	private boolean accountNonExpired = true;
 	private boolean credentialsNonExpired = true;
@@ -187,6 +188,14 @@ public class UserData implements UserDetails {
 
 	public void setNumCalls(int numCalls) {
 		this.numCalls = numCalls;
+	}
+
+	public boolean isOpenAppointment() {
+		return openAppointment;
+	}
+
+	public void setOpenAppointment(boolean openAppointment) {
+		this.openAppointment = openAppointment;
 	}
 
 	@Override

@@ -711,6 +711,10 @@ public class BaseBacking implements Serializable {
 		return FacesUtil.getCurrentUserData().getRolePrincipal();
 	}
 
+	public boolean isOpenAppointment() {
+		return FacesUtil.getCurrentUserData().isOpenAppointment();
+	}
+
 	public List<SelectItem> getListOccupation() {
 		if (listOccupation == null) {
 			listOccupation = new LinkedList<SelectItem>();
