@@ -897,10 +897,28 @@ public class ProcessBo implements Serializable {
 
 		if (listCrmDoctorWithoutApp.size() > 0) {
 			CrmDoctor doctor = listCrmDoctorWithoutApp.get(0);
-			result.add(new Candidate(1, doctor, selectedDate, endTime, branch
-					.getName(), procedureDetail.getName()));
+
+			List<CrmDoctorException> listDoctorException = dao
+					.find("from CrmDoctorException o where o.crmDoctor.id = "
+							+ doctor.getId() + " and '" + dateTimeString
+							+ "' between startHour and endHour");
+
+			if (listDoctorException.size() == 0) {
+				result.add(new Candidate(1, doctor, selectedDate, endTime,
+						branch.getName(), procedureDetail.getName()));
+			} else {
+				message = FacesUtil.getMessage("app_msg_error_1");
+			}
 		} else {
 			for (VwDoctorHour row : listDoctorHour) {
+
+				List<CrmDoctorException> listDoctorException = dao
+						.find("from CrmDoctorException o where o.crmDoctor.id = "
+								+ row.getId().getIdDoctor()
+								+ " and startHour >= '"
+								+ dateString
+								+ "T00:00:00.000+05:00' and startHour <= '"
+								+ dateString + "T23:59:59.999+05:00'");
 
 				List<CrmDoctorSchedule> listDoctorSchedule = dao
 						.find("from CrmDoctorSchedule o where o.crmDoctor.state = 1 and o.day = "
@@ -944,6 +962,11 @@ public class ProcessBo implements Serializable {
 								candidatesHours, listApp,
 								FacesUtil.getDateWithoutTime(selectedDate),
 								timeType);
+
+						if (validate) {
+							validate = validateException(listDoctorException,
+									selectedDate, candidatesHours);
+						}
 
 						if (validate) {
 							CrmDoctor doctor = (CrmDoctor) dao.find(
