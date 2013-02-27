@@ -911,14 +911,12 @@ public class ProcessBo implements Serializable {
 			}
 		} else {
 			for (VwDoctorHour row : listDoctorHour) {
-
 				List<CrmDoctorException> listDoctorException = dao
 						.find("from CrmDoctorException o where o.crmDoctor.id = "
 								+ row.getId().getIdDoctor()
-								+ " and startHour >= '"
-								+ dateString
-								+ "T00:00:00.000+05:00' and startHour <= '"
-								+ dateString + "T23:59:59.999+05:00'");
+								+ " and '"
+								+ dateTimeString
+								+ "' between startHour and endHour");
 
 				List<CrmDoctorSchedule> listDoctorSchedule = dao
 						.find("from CrmDoctorSchedule o where o.crmDoctor.state = 1 and o.day = "
@@ -931,7 +929,8 @@ public class ProcessBo implements Serializable {
 								+ timeString
 								+ "' between o.startHour and o.endHour)");
 
-				if (listDoctorSchedule.size() > 0) {
+				if (listDoctorSchedule.size() > 0
+						&& listDoctorException.size() == 0) {
 					List<CrmAppointment> listApp = dao
 							.find("from CrmAppointment o where cast(o.startAppointmentDate as date) = '"
 									+ dateString
@@ -964,11 +963,6 @@ public class ProcessBo implements Serializable {
 								timeType);
 
 						if (validate) {
-							validate = validateException(listDoctorException,
-									selectedDate, candidatesHours);
-						}
-
-						if (validate) {
 							CrmDoctor doctor = (CrmDoctor) dao.find(
 									"from CrmDoctor o where o.id = "
 											+ row.getId().getIdDoctor()).get(0);
@@ -979,6 +973,8 @@ public class ProcessBo implements Serializable {
 						}
 					}
 
+				} else {
+					message = FacesUtil.getMessage("app_msg_error_1");
 				}
 			}
 		}
