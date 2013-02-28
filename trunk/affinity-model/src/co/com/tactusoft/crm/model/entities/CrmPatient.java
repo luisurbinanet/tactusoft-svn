@@ -68,6 +68,7 @@ public class CrmPatient implements java.io.Serializable {
 	private BigDecimal idMaritalState;
 	private BigDecimal idMemberShip;
 	private BigDecimal idEps;
+	private String ticket;
 	private Set<CrmHistoryPhysique> crmHistoryPhysiques = new HashSet<CrmHistoryPhysique>(
 			0);
 	private Set<CrmHistoryHomeopathic> crmHistoryHomeopathics = new HashSet<CrmHistoryHomeopathic>(
@@ -504,6 +505,15 @@ public class CrmPatient implements java.io.Serializable {
 
 	public void setIdEps(BigDecimal idEps) {
 		this.idEps = idEps;
+	}
+
+	@Column(name = "ticket", length = 45)
+	public String getTicket() {
+		return ticket;
+	}
+
+	public void setTicket(String ticket) {
+		this.ticket = ticket;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmPatient")
