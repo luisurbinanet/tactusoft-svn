@@ -34,6 +34,7 @@ import co.com.tactusoft.crm.model.entities.CrmNurse;
 import co.com.tactusoft.crm.model.entities.CrmOccupation;
 import co.com.tactusoft.crm.model.entities.CrmPage;
 import co.com.tactusoft.crm.model.entities.CrmPageRole;
+import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProcedure;
 import co.com.tactusoft.crm.model.entities.CrmProcedureBranch;
 import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
@@ -703,6 +704,16 @@ public class TablesBo implements Serializable {
 	public void removeSchedule(BigDecimal idBranch, BigDecimal idDoctor) {
 		dao.executeHQL("delete from CrmDoctorSchedule where crmBranch.id = "
 				+ idBranch + " and crmDoctor.id = " + idDoctor);
+	}
+
+	public boolean isValidateTicket(String ticket) {
+		List<CrmPatient> list = dao.find("from CrmPatient where ticket = '"
+				+ ticket + "'");
+		if (list.size() > 0) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	public int remove(Object entity) {

@@ -124,6 +124,11 @@ public class ContactBacking extends BaseBacking {
 
 	public void saveAction() {
 		String message = null;
+		boolean validateTicket = true;
+
+		if (this.isEnabledTicket()) {
+			validateTicket = tablesService.isValidateTicket(selectedPatient.getTicket());
+		}
 
 		if (FacesUtil.isEmptyOrBlank(selectedPatient.getPhoneNumber())
 				&& FacesUtil.isEmptyOrBlank(selectedPatient.getCellNumber())) {
@@ -146,6 +151,9 @@ public class ContactBacking extends BaseBacking {
 						+ FacesUtil.getMessage("glb_length", field,
 								String.valueOf(this.numCell));
 
+				FacesUtil.addError(message);
+			} else if (!validateTicket) {
+				message = FacesUtil.getMessage("con_msg_ticket_fail");
 				FacesUtil.addError(message);
 			} else {
 

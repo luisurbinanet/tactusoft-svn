@@ -31,9 +31,10 @@
 							icon="ui-icon-disk" action="#{contactBacking.saveAction}"
 							update="growl toolBar pnlDetail pnlDetail2 pnlDetail3"
 							process="toolBar pnlDetail pnlDetail2 pnlDetail3" />
-						<p:commandButton value="#{msg['btn_update']}" process="@this,selsalesOff"
-							icon="ui-icon-refresh" oncomplete="updateDlg.show()"
-							update="updateDialog" disabled="#{contactBacking.newRecord}" />
+						<p:commandButton value="#{msg['btn_update']}"
+							process="@this,selsalesOff" icon="ui-icon-refresh"
+							oncomplete="updateDlg.show()" update="updateDialog"
+							disabled="#{contactBacking.newRecord}" />
 						<p:splitButton icon="ui-icon-arrowrefresh-1-w"
 							value="#{msg['btn_actions']}"
 							disabled="#{contactBacking.selectedPatient.id == null?true:false}">
@@ -145,14 +146,20 @@
 						maxlength="#{contactBacking.numCell}" validator="numberValidator" />
 
 					<h:outputLabel value="#{msg['pat_sales_off']}" style="width:40%" />
-					<p:selectOneMenu id="selsalesOff" value="#{contactBacking.salesOff}"
-						style="width:248px">
+					<p:selectOneMenu id="selsalesOff"
+						value="#{contactBacking.salesOff}" style="width:248px">
 						<f:selectItems value="#{contactBacking.listBranch}" />
 					</p:selectOneMenu>
 
 					<h:outputText value="#{msg['pat_type_obs']}" />
 					<p:inputTextarea value="#{contactBacking.selectedPatient.obs}"
 						style="width:240px" rows="4" />
+
+					<h:outputText value="#{msg['pat_ticket']}"
+						rendered="#{contactBacking.enabledTicket}" />
+					<p:inputText value="#{contactBacking.selectedPatient.ticket}"
+						rendered="#{contactBacking.enabledTicket}" style="width:240px"
+						label="#{msg['pat_ticket']}" required="true" />
 				</h:panelGrid>
 
 				<p:dialog header="#{msg['btn_search']}" widgetVar="searchDlg"
