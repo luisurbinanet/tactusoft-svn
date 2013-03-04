@@ -1541,8 +1541,9 @@ public class ProcessBo implements Serializable {
 
 	public CrmPatient getContactByDoc(String doc) {
 		List<CrmPatient> list = null;
-		list = dao.find("FROM CrmPatient o WHERE o.doc = '" + doc
-				+ "' AND o.codeSap = '" + doc + "'");
+		/*list = dao.find("FROM CrmPatient o WHERE o.doc = '" + doc
+				+ "' AND o.codeSap = '" + doc + "'");*/
+		list = dao.find("FROM CrmPatient o WHERE o.doc = '" + doc + "'");
 		if (list.size() > 0) {
 			return list.get(0);
 		} else {
@@ -1561,7 +1562,7 @@ public class ProcessBo implements Serializable {
 						+ name
 						+ "%' OR UPPER(surnames || ' ' || firstnames) LIKE '%"
 						+ name
-						+ "%' AND (o.doc IS NULL OR o.codeSap IS NULL OR o.doc = o.codeSap)");
+						+ "%'");
 		return list;
 	}
 
