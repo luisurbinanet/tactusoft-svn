@@ -104,6 +104,11 @@ public class ContactBacking extends BaseBacking {
 		this.saved = saved;
 	}
 
+	public boolean isDisabledTicket() {
+		return this.selectedPatient != null
+				&& !FacesUtil.isEmptyOrBlank(this.selectedPatient.getTicket());
+	}
+
 	public void newAction(ActionEvent event) {
 		selectedPatient = new CrmPatient();
 		selectedPatient.setCrmProfile(new CrmProfile());
@@ -126,8 +131,11 @@ public class ContactBacking extends BaseBacking {
 		String message = null;
 		boolean validateTicket = true;
 
-		if (this.isEnabledTicket()) {
-			validateTicket = tablesService.isValidateTicket(selectedPatient.getTicket());
+		if (!FacesUtil.isEmptyOrBlank(selectedPatient.getTicket())
+				&& this.selectedPatient.getId() == null) {
+			validateTicket = tablesService.isValidateTicket(selectedPatient
+					.getTicket());
+			this.selectedPatient.setTicket(null);
 		}
 
 		if (FacesUtil.isEmptyOrBlank(selectedPatient.getPhoneNumber())

@@ -10,7 +10,7 @@
 	<ui:define name="body">
 
 		<p:panel style="width:100%;height:700px;"
-			header="#{msg['title_contact']}">
+			header="#{msg['title_contact_ticket']}">
 
 			<p:spacer height="5" />
 
@@ -104,7 +104,7 @@
 						rendered="#{!contactBacking.automatic or !contactBacking.newRecord}" />
 					<p:inputText id="txtDoc"
 						value="#{contactBacking.selectedPatient.doc}" style="width:240px;"
-						label="#{msg['pat_code']}" maxlength="16"
+						label="#{msg['pat_code']}" maxlength="16" required="true"
 						rendered="#{!contactBacking.automatic or !contactBacking.newRecord}" />
 
 					<h:outputText style="width:240px"
@@ -154,6 +154,11 @@
 					<h:outputText value="#{msg['pat_type_obs']}" />
 					<p:inputTextarea value="#{contactBacking.selectedPatient.obs}"
 						style="width:240px" rows="4" />
+
+					<h:outputText value="#{msg['pat_ticket']}" />
+					<p:inputText value="#{contactBacking.selectedPatient.ticket}"
+						style="width:240px" label="#{msg['pat_ticket']}" required="true"
+						disabled="#{contactBacking.disabledTicket}" />
 				</h:panelGrid>
 
 				<p:dialog header="#{msg['btn_search']}" widgetVar="searchDlg"
