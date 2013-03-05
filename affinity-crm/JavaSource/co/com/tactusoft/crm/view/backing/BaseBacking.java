@@ -858,8 +858,4 @@ public class BaseBacking implements Serializable {
 		context.addCallbackParam("validate", validate);
 	}
 
-	public boolean isEnabledTicket() {
-		return FacesUtil.getParameterTextValue("ENABLED_TICKET").equals("SI");
-	}
-
 }
