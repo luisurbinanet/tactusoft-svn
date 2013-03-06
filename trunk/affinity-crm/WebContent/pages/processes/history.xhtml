@@ -1108,7 +1108,9 @@
 					<h:panelGrid id="pnlHistorial"
 						rendered="#{historyBacking.modeHistorial}" width="100%">
 
-						<ui:include src="historial.xhtml" />
+						<ui:include src="historial.xhtml">
+							<ui:param name="prefix" value="pnlHistorial" />
+						</ui:include>
 
 					</h:panelGrid>
 
@@ -1118,7 +1120,9 @@
 					resizable="true" draggable="true" width="1000" height="400"
 					header="#{msg['btn_view_history']}">
 
-					<ui:include src="historial.xhtml" />
+					<ui:include src="historial.xhtml">
+						<ui:param name="prefix" value="dlgHistorial" />
+					</ui:include>
 
 				</p:dialog>
 
@@ -1459,7 +1463,7 @@
 
 						<p:commandButton value="#{msg['btn_add']}" process="@this,pnlNote"
 							actionListener="#{historyBacking.saveNoteAction}"
-							update=":form:growl pnlNote :form:j_idt322:tblNotes"
+							update=":form:growl pnlNote :form:pnlHistorial_tabview:tblNotes :form:dlgHistorial_tabview:tblNotes"
 							oncomplete="handleNoteComplete(xhr, status, args)" />
 					</h:panelGrid>
 

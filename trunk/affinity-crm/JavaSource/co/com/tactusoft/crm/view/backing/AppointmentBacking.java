@@ -511,7 +511,7 @@ public class AppointmentBacking extends BaseBacking {
 		CrmProcedureDetail procedureDetail = mapProcedureDetail
 				.get(idProcedureDetail);
 
-		if (procedureDetail.getTimeDoctor() == 0) {
+		if (!procedureDetail.isAvailability()) {
 			idSearch = Constant.APP_TYPE_FOR_DATE_VALUE;
 			renderedDoctorWithoutTime = false;
 		} else {
@@ -552,12 +552,43 @@ public class AppointmentBacking extends BaseBacking {
 			this.renderedForDate = false;
 			this.renderedForDoctor = true;
 			this.disabledSearch = false;
-
 		} else {
 			disabledSearch = false;
 			this.renderedForDate = false;
 			this.renderedForDoctor = false;
 			this.disabledSearch = true;
+		}
+	}
+
+	public void handleDateSelect(SelectEvent event) {
+		Date date = FacesUtil.getDateWithoutTime(new Date());
+		if (event != null) {
+			date = (Date) event.getObject();
+		}
+
+		CrmProcedureDetail procedureDetail = mapProcedureDetail
+				.get(idProcedureDetail);
+
+		ResultSearchDate resultSearchDate = processService
+				.getListcandidatesHours(date, mapBranch.get(idBranch), minutes,
+						timeType, procedureDetail.isAvailability());
+		List<Date> list = resultSearchDate.getListDate();
+		infoMessageDate = resultSearchDate.getMessage();
+
+		listTimes = new ArrayList<SelectItem>();
+		String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
+		listTimes.add(new SelectItem(null, label));
+
+		for (Date row : list) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(row);
+			int hour = calendar.get(Calendar.HOUR_OF_DAY);
+			int minute = calendar.get(Calendar.MINUTE);
+
+			SelectItem item = new SelectItem();
+			item.setValue(row.getTime());
+			item.setLabel(hour + ":" + (minute == 0 ? "00" : minute));
+			listTimes.add(item);
 		}
 	}
 
@@ -805,35 +836,6 @@ public class AppointmentBacking extends BaseBacking {
 
 				saved = true;
 			}
-		}
-	}
-
-	public void handleDateSelect(SelectEvent event) {
-		Date date = FacesUtil.getDateWithoutTime(new Date());
-		if (event != null) {
-			date = (Date) event.getObject();
-		}
-
-		ResultSearchDate resultSearchDate = processService
-				.getListcandidatesHours(date, mapBranch.get(idBranch), minutes,
-						timeType);
-		List<Date> list = resultSearchDate.getListDate();
-		infoMessageDate = resultSearchDate.getMessage();
-
-		listTimes = new ArrayList<SelectItem>();
-		String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
-		listTimes.add(new SelectItem(null, label));
-
-		for (Date row : list) {
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(row);
-			int hour = calendar.get(Calendar.HOUR_OF_DAY);
-			int minute = calendar.get(Calendar.MINUTE);
-
-			SelectItem item = new SelectItem();
-			item.setValue(row.getTime());
-			item.setLabel(hour + ":" + (minute == 0 ? "00" : minute));
-			listTimes.add(item);
 		}
 	}
 

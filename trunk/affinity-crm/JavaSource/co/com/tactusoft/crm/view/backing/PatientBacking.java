@@ -23,6 +23,7 @@ import co.com.tactusoft.crm.util.SAPEnvironment;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 
 import com.tactusoft.webservice.client.beans.WSBean;
+import com.tactusoft.webservice.client.beans.WSBeanPatient;
 import com.tactusoft.webservice.client.execute.CustomerExecute;
 
 @Named
@@ -87,7 +88,8 @@ public class PatientBacking extends BaseBacking {
 		return selectedPatientSendOptions;
 	}
 
-	public void setselectedPatientSendOptions(List<String> selectedPatientSendOptions) {
+	public void setselectedPatientSendOptions(
+			List<String> selectedPatientSendOptions) {
 		this.selectedPatientSendOptions = selectedPatientSendOptions;
 	}
 
@@ -122,7 +124,7 @@ public class PatientBacking extends BaseBacking {
 	public void setAutomatic(boolean automatic) {
 		this.automatic = automatic;
 	}
-	
+
 	public Map<BigDecimal, CrmCountry> getMapCountry() {
 		return mapCountry;
 	}
@@ -213,12 +215,61 @@ public class PatientBacking extends BaseBacking {
 		listPatient = new LinkedList<CrmPatient>();
 		patientModel = new PatientDataModel(listPatient);
 		tmpSelectedPatient = new CrmPatient();
+		existsSAP = false;
 		if (optionSearchPatient == 1) {
 			tmpSelectedPatient = processService.getContactByDoc(docPatient);
 			if (tmpSelectedPatient.getId() != null) {
 				listPatient.add(tmpSelectedPatient);
 				patientModel = new PatientDataModel(listPatient);
 				disabledAddPatient = false;
+			} else {
+				SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
+				CrmProfile profile = mapProfile.get(this.idProfile);
+				tmpSelectedPatient.setCrmProfile(profile);
+
+				List<WSBean> listPatientSAP = CustomerExecute.findByDoc(
+						sap.getUrlCustomer2(), sap.getUsername(),
+						sap.getPassword(), profile.getSociety(),
+						this.docPatient);
+
+				if (listPatientSAP.size() > 0) {
+					String codeSap = listPatientSAP.get(0).getCode();
+
+					WSBeanPatient customer = CustomerExecute.getDetailcomplete(
+							sap.getUrlCustomer2(), sap.getUsername(),
+							sap.getPassword(), codeSap, profile.getSalesOrg(),
+							profile.getDistrChan(), profile.getDivision());
+
+					if (customer != null) {
+						existsSAP = true;
+						tmpSelectedPatient.setDoc(this.docPatient);
+						tmpSelectedPatient.setCodeSap(customer.getCodeSap());
+						tmpSelectedPatient.setFirstnames(customer
+								.getFirstname());
+						tmpSelectedPatient.setSurnames(customer.getLastname());
+						tmpSelectedPatient.setAddress(customer.getAddress());
+						tmpSelectedPatient.setPhoneNumber(customer
+								.getPhoneNumber());
+						tmpSelectedPatient.setEmail(customer.getEmail());
+						tmpSelectedPatient.setZipCode(customer.getZipCode());
+						tmpSelectedPatient.setCycle(false);
+
+						for (Map.Entry<BigDecimal, CrmCountry> entry : mapCountry
+								.entrySet()) {
+							if (customer.getCountry().equalsIgnoreCase(
+									entry.getValue().getCode())) {
+								idCountry = entry.getValue().getId();
+								tmpSelectedPatient.setIdCountry(idCountry);
+								break;
+							}
+						}
+
+						newRecord = false;
+
+						listPatient.add(tmpSelectedPatient);
+						patientModel = new PatientDataModel(listPatient);
+					}
+				}
 			}
 		} else {
 			listPatient = processService.getContactByName(namePatient
@@ -236,9 +287,16 @@ public class PatientBacking extends BaseBacking {
 		newRecord = false;
 		idCountry = selectedPatient.getIdCountry();
 		handleCountryChange();
-		idRegion = selectedPatient.getIdRegion();
-		handleRegionChange();
-		idCity = selectedPatient.getIdCity();
+
+		if (existsSAP) {
+			String message = FacesUtil.getMessage("pat_msg_exists_sap");
+			FacesUtil.addWarn(message);
+			handleRegionChange();
+		} else {
+			idRegion = selectedPatient.getIdRegion();
+			handleRegionChange();
+			idCity = selectedPatient.getIdCity();
+		}
 	}
 
 	public void saveAction() {
@@ -251,7 +309,8 @@ public class PatientBacking extends BaseBacking {
 		} else {
 			if ((!FacesUtil.isEmptyOrBlank(selectedPatient.getPhoneNumber()) && selectedPatient
 					.getPhoneNumber().length() < this.numPhone)
-					|| (!FacesUtil.isEmptyOrBlank(selectedPatient.getCellNumber()) && selectedPatient
+					|| (!FacesUtil.isEmptyOrBlank(selectedPatient
+							.getCellNumber()) && selectedPatient
 							.getCellNumber().length() < this.numCell)) {
 
 				String field = FacesUtil.getMessage("pat_phone_number");
@@ -297,7 +356,8 @@ public class PatientBacking extends BaseBacking {
 							direccion = direccion.substring(0, 34);
 						}
 
-						if (FacesUtil.isEmptyOrBlank(selectedPatient.getZipCode())) {
+						if (FacesUtil.isEmptyOrBlank(selectedPatient
+								.getZipCode())) {
 							selectedPatient.setZipCode("00000");
 						}
 
@@ -346,9 +406,10 @@ public class PatientBacking extends BaseBacking {
 									selectedPatient.getZipCode(),
 									selectedPatient.getPhoneNumber(),
 									selectedPatient.getCellNumber(),
-									selectedPatient.getEmail(), crmCountry.getCode(),
-									crmCity.getName(), crmRegion.getCode(),
-									"D001", profile.getSalesOrg(),
+									selectedPatient.getEmail(),
+									crmCountry.getCode(), crmCity.getName(),
+									crmRegion.getCode(), "D001",
+									profile.getSalesOrg(),
 									profile.getDistrChan(),
 									profile.getDivision(),
 									profile.getSociety(), this.salesOff, "01",
@@ -361,7 +422,8 @@ public class PatientBacking extends BaseBacking {
 						}
 
 						if (codeSap.isEmpty()) {
-							processService.removePatient(selectedPatient.getId());
+							processService.removePatient(selectedPatient
+									.getId());
 							message = FacesUtil.getMessage("pat_msg_error_cnx");
 							FacesUtil.addError(message);
 						} else {
@@ -371,15 +433,17 @@ public class PatientBacking extends BaseBacking {
 								message = FacesUtil.getMessage("pat_msg_ok",
 										codeSap);
 							} else {
-								selectedPatient.setCrmUserByIdUserModified(FacesUtil
-										.getCurrentUser());
+								selectedPatient
+										.setCrmUserByIdUserModified(FacesUtil
+												.getCurrentUser());
 								message = FacesUtil.getMessage(
 										"pat_msg_update_ok", codeSap);
 							}
 
 							if (!existsSAP) {
-								processService.savePatient(selectedPatient, automatic,
-										existsSAP, crmCountry.getCode());
+								processService.savePatient(selectedPatient,
+										automatic, existsSAP,
+										crmCountry.getCode());
 							}
 							FacesUtil.addInfo(message);
 

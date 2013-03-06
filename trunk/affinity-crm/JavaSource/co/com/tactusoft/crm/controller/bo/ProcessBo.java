@@ -352,7 +352,7 @@ public class ProcessBo implements Serializable {
 	}
 
 	public ResultSearchDate getListcandidatesHours(Date currentDate,
-			CrmBranch branch, int minutes, String timeType) {
+			CrmBranch branch, int minutes, String timeType, boolean availability) {
 		List<Date> result = new ArrayList<Date>();
 		String message = null;
 
@@ -360,13 +360,16 @@ public class ProcessBo implements Serializable {
 
 		String dateString = FacesUtil.formatDate(currentDate, "yyyy-MM-dd");
 		// Buscar Citas
-		List<CrmAppointment> listApp = dao
-				.find("from CrmAppointment o where (o.startAppointmentDate between '"
-						+ dateString
-						+ "T00:00:00.000+05:00' and '"
-						+ dateString
-						+ "T23:59:59.999+05:00') and o.state in (1,3,4,5) and o.crmProcedureDetail.availability = TRUE and o.crmBranch.id = "
-						+ idBranch + " order by o.startAppointmentDate");
+		List<CrmAppointment> listApp = new ArrayList<CrmAppointment>();
+		if (availability) {
+			listApp = dao
+					.find("from CrmAppointment o where (o.startAppointmentDate between '"
+							+ dateString
+							+ "T00:00:00.000+05:00' and '"
+							+ dateString
+							+ "T23:59:59.999+05:00') and o.state in (1,3,4,5) and o.crmProcedureDetail.availability = TRUE and o.crmBranch.id = "
+							+ idBranch + " order by o.startAppointmentDate");
+		}
 
 		// Validar Festivo
 		List<CrmHoliday> listHoliday = getListHoliday(currentDate, idBranch);
@@ -1541,8 +1544,10 @@ public class ProcessBo implements Serializable {
 
 	public CrmPatient getContactByDoc(String doc) {
 		List<CrmPatient> list = null;
-		/*list = dao.find("FROM CrmPatient o WHERE o.doc = '" + doc
-				+ "' AND o.codeSap = '" + doc + "'");*/
+		/*
+		 * list = dao.find("FROM CrmPatient o WHERE o.doc = '" + doc +
+		 * "' AND o.codeSap = '" + doc + "'");
+		 */
 		list = dao.find("FROM CrmPatient o WHERE o.doc = '" + doc + "'");
 		if (list.size() > 0) {
 			return list.get(0);
@@ -1553,16 +1558,11 @@ public class ProcessBo implements Serializable {
 
 	public List<CrmPatient> getContactByName(String name) {
 		List<CrmPatient> list = null;
-		list = dao
-				.find("FROM CrmPatient o WHERE o.firstnames LIKE '%"
-						+ name
-						+ "%' or o.surnames LIKE '%"
-						+ name
-						+ "%' OR UPPER(firstnames || ' ' || surnames) LIKE '%"
-						+ name
-						+ "%' OR UPPER(surnames || ' ' || firstnames) LIKE '%"
-						+ name
-						+ "%'");
+		list = dao.find("FROM CrmPatient o WHERE o.firstnames LIKE '%" + name
+				+ "%' or o.surnames LIKE '%" + name
+				+ "%' OR UPPER(firstnames || ' ' || surnames) LIKE '%" + name
+				+ "%' OR UPPER(surnames || ' ' || firstnames) LIKE '%" + name
+				+ "%'");
 		return list;
 	}
 

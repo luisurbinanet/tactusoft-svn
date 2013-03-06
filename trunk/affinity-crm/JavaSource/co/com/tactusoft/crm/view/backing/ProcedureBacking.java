@@ -44,6 +44,7 @@ public class ProcedureBacking extends BaseBacking {
 	private Integer timeStretchers;
 	private boolean noRepeat;
 	private Short noRepeatDays;
+	private boolean availability;
 
 	private DualListModel<CrmBranch> listModelBranch;
 
@@ -158,6 +159,14 @@ public class ProcedureBacking extends BaseBacking {
 		this.noRepeatDays = noRepeatDays;
 	}
 
+	public boolean isAvailability() {
+		return availability;
+	}
+
+	public void setAvailability(boolean availability) {
+		this.availability = availability;
+	}
+
 	public List<SelectItem> getListWSGroupSellers() {
 		if (listWSGroupSellers == null) {
 			List<WSBean> result = FacesUtil.getCurrentUserData()
@@ -244,10 +253,23 @@ public class ProcedureBacking extends BaseBacking {
 			}
 
 			if (message == null) {
-				listProcedureDetail.add(new CrmProcedureDetail(new BigDecimal(
-						-1), selected, this.name, timeDoctor, timeNurses,
-						timeStretchers, false, (short) 0, null, null,
-						Constant.STATE_ACTIVE, null));
+
+				if (availability) {
+					this.timeDoctor = 0;
+				}
+
+				CrmProcedureDetail crmProcedureDetail = new CrmProcedureDetail();
+				crmProcedureDetail.setId(new BigDecimal(-1));
+				crmProcedureDetail.setCrmProcedure(selected);
+				crmProcedureDetail.setName(this.name);
+				crmProcedureDetail.setTimeDoctor(this.timeDoctor);
+				crmProcedureDetail.setTimeNurses(this.timeNurses);
+				crmProcedureDetail.setTimeStretchers(this.timeStretchers);
+				crmProcedureDetail.setNoRepeat(this.noRepeat);
+				crmProcedureDetail.setNoRepeatDays(noRepeatDays);
+				crmProcedureDetail.setAvailability(availability);
+				crmProcedureDetail.setState(Constant.STATE_ACTIVE);
+
 				modelProcedureDetail = new ProcedureDetailDataModel(
 						listProcedureDetail);
 
@@ -255,6 +277,9 @@ public class ProcedureBacking extends BaseBacking {
 				this.timeDoctor = 0;
 				this.timeNurses = 0;
 				this.timeStretchers = 0;
+				this.noRepeat = false;
+				this.noRepeatDays = 0;
+				this.availability = false;
 			}
 		} catch (NumberFormatException e) {
 			message = FacesUtil.getMessage("prc_msg_error_times");

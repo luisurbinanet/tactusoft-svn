@@ -204,13 +204,18 @@ public class BaseBacking implements Serializable {
 					result = CustomerExecute.findByDoc(sap.getUrlCustomer2(),
 							sap.getUsername(), sap.getPassword(),
 							profile.getSociety(), this.docPatient);
-
-					for (WSBean row : result) {
-						CrmPatient patient = new CrmPatient();
-						patient.setCodeSap(row.getCode());
-						patient.setNames(row.getNames());
-						listPatient.add(patient);
+					
+					if(result.size() > 0){
+						String message = FacesUtil.getMessage("pat_msg_exists_sap_2");
+						FacesUtil.addWarn(message);
 					}
+
+					//for (WSBean row : result) {
+						//CrmPatient patient = new CrmPatient();
+						//patient.setCodeSap(row.getCode());
+						//patient.setNames(row.getNames());
+						//listPatient.add(patient);
+					//}
 				}
 			} else {
 				listPatient = processService.getListPatientByNameOrDoc("NAMES",
