@@ -850,8 +850,9 @@ public class AppointmentBacking extends BaseBacking {
 
 	public String searchRedirectPatient() {
 		PatientBacking patientBacking = FacesUtil.findBean("patientBacking");
-		patientBacking.setSelected(new CrmPatient());
-		patientBacking.setDocSearch(this.docPatient);
+		patientBacking.setSelectedPatient(new CrmPatient());
+		patientBacking.setOptionSearchPatient(1);
+		patientBacking.setDocPatient(this.docPatient);
 		patientBacking.searchAction();
 		return "/pages/processes/patient?faces-redirect=true";
 	}

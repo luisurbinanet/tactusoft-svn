@@ -672,6 +672,10 @@ public class BaseBacking implements Serializable {
 	public List<SelectItem> getListKin() {
 		if (listKin == null) {
 			listKin = new LinkedList<SelectItem>();
+			String labelDefaultValue = FacesUtil
+					.getMessage(Constant.DEFAULT_LABEL);
+			listKin.add(new SelectItem(Constant.DEFAULT_VALUE,
+					labelDefaultValue));
 			for (CrmDomain row : tablesService.getListDomain("PARENTESCO")) {
 				listKin.add(new SelectItem(row.getId(), row.getItemValue()));
 			}
