@@ -31,7 +31,7 @@ public class CrmProcedureDetail implements java.io.Serializable {
 	private Short noRepeatDays;
 	private String docType;
 	private String formulaDocType;
-	private Boolean availability;
+	private boolean availability;
 	private int minMedication;
 	private int maxMedication;
 	private int state;
@@ -51,8 +51,8 @@ public class CrmProcedureDetail implements java.io.Serializable {
 	public CrmProcedureDetail(BigDecimal id, CrmProcedure crmProcedure,
 			String name, Integer timeDoctor, Integer timeNurses,
 			Integer timeStretchers, Boolean noRepeat, Short noRepeatDays,
-			String docType, String formulaDocType, int state,
-			Set<CrmAppointment> crmAppointments) {
+			String docType, String formulaDocType, boolean availability,
+			int state, Set<CrmAppointment> crmAppointments) {
 		this.id = id;
 		this.crmProcedure = crmProcedure;
 		this.name = name;
@@ -61,6 +61,7 @@ public class CrmProcedureDetail implements java.io.Serializable {
 		this.timeStretchers = timeStretchers;
 		this.noRepeat = noRepeat;
 		this.noRepeatDays = noRepeatDays;
+		this.availability = availability;
 		this.docType = docType;
 		this.formulaDocType = formulaDocType;
 		this.state = state;
@@ -160,12 +161,12 @@ public class CrmProcedureDetail implements java.io.Serializable {
 	}
 
 	@Column(name = "availability")
-	public Boolean getAvailability() {
-		return availability;
+	public void setAvailability(boolean availability) {
+		this.availability = availability;
 	}
 
-	public void setAvailability(Boolean availability) {
-		this.availability = availability;
+	public boolean isAvailability() {
+		return availability;
 	}
 
 	@Column(name = "min_medication")
