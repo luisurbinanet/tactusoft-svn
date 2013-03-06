@@ -210,6 +210,7 @@ public class DoctorExceptionBacking implements Serializable {
 		list = new LinkedList<CrmDoctorException>();
 		model = new DoctorExceptionDataModel(list);
 		disabledSearch = true;
+		selectedDoctor = mapDoctor.get(idDoctor);
 
 		if (idDoctor.intValue() != -1) {
 			disabled = false;
