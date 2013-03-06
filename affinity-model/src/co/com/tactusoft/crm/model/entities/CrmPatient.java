@@ -52,6 +52,7 @@ public class CrmPatient implements java.io.Serializable {
 	private BigDecimal idCountry;
 	private BigDecimal idRegion;
 	private BigDecimal idCity;
+	private BigDecimal idGuardianType;
 	private String guardian;
 	private String guardianAddress;
 	private String guardianRelationship;
@@ -359,6 +360,15 @@ public class CrmPatient implements java.io.Serializable {
 
 	public void setIdCity(BigDecimal idCity) {
 		this.idCity = idCity;
+	}
+
+	@Column(name = "id_guardian_type")
+	public BigDecimal getIdGuardianType() {
+		return idGuardianType;
+	}
+
+	public void setIdGuardianType(BigDecimal idGuardianType) {
+		this.idGuardianType = idGuardianType;
 	}
 
 	@Column(name = "guardian")
