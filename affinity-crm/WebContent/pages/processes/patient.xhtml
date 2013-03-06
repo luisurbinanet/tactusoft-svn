@@ -254,7 +254,7 @@
 								process="@this, txtDocSearch, txtNameSearch, radioSearch, optDocSearch, txtNameSearch" />
 							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
 								icon="ui-icon-plusthick"
-								update="pnlDetail pnlDetail2 pnlDetail3 toolBar"
+								update="pnlDetail pnlDetail2 pnlDetail3 toolBar growl"
 								actionListener="#{patientBacking.addPatientAction}"
 								process="@this, scpSearchPatient" oncomplete="searchDlg.hide();"
 								disabled="#{patientBacking.disabledAddPatient}" />

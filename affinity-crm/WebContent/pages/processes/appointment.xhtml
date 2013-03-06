@@ -242,7 +242,7 @@
 
 							<p:commandButton value="#{msg['btn_search']}"
 								icon="ui-icon-search"
-								update="pnlTable2 recordTable2 btnAddPatient"
+								update="pnlTable2 recordTable2 btnAddPatient :form:growl"
 								action="#{appointmentBacking.searchPatientAction}" />
 							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
 								icon="ui-icon-plusthick" update=":form:pnlDetail :form:toolBar"

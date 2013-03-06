@@ -5,9 +5,10 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions">
 
-<p:tabView style="width:100%;height:100%">
+<p:tabView style="width:100%;height:100%" dynamic="true"
+	id="#{prefix}_tabview">
 
-	<p:tab title="#{msg['his_history']}"
+	<p:tab id="tab1" title="#{msg['his_history']}"
 		rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
 		<p:dataTable id="tblHistoryAppointment" var="rec"
 			value="#{historyBacking.historyAppointmentModel}"
@@ -35,7 +36,7 @@
 		</p:dataTable>
 	</p:tab>
 
-	<p:tab title="#{msg['his_history_history']}"
+	<p:tab id="tab2" title="#{msg['his_history_history']}"
 		rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
 		<p:dataTable id="tblHistory" var="rec"
 			value="#{historyBacking.historyHistoryModel}" rowKey="#{rec.code}"
@@ -70,7 +71,7 @@
 		</p:dataTable>
 	</p:tab>
 
-	<p:tab title="#{msg['his_history_record']}"
+	<p:tab id="tab3" title="#{msg['his_history_record']}"
 		rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
 		<p:dataTable id="tblRecord" var="rec"
 			value="#{historyBacking.historyRecordModel}" rowKey="#{rec.code}"
@@ -129,7 +130,7 @@
 		</p:dataTable>
 	</p:tab>
 
-	<p:tab title="#{msg['his_history_homeopathic']}"
+	<p:tab id="tab4" title="#{msg['his_history_homeopathic']}"
 		rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
 		<p:dataTable id="tblHomeopathic" var="rec"
 			value="#{historyBacking.historyHomeopathicModel}"
@@ -169,7 +170,7 @@
 		</p:dataTable>
 	</p:tab>
 
-	<p:tab title="#{msg['his_history_physique']}"
+	<p:tab id="tab5" title="#{msg['his_history_physique']}"
 		rendered="#{historyBacking.rolePrincipal eq 'NURSE_AUX' or historyBacking.rolePrincipal eq 'DOCTOR'}">
 		<p:dataTable id="tblPhysique" var="rec"
 			value="#{historyBacking.historyPhysiqueModel}" rowKey="#{rec.code}"
@@ -220,7 +221,7 @@
 		</p:dataTable>
 	</p:tab>
 
-	<p:tab title="#{msg['his_history_organometry']}"
+	<p:tab id="tab6" title="#{msg['his_history_organometry']}"
 		rendered="#{historyBacking.rolePrincipal eq 'NURSE_AUX' or historyBacking.rolePrincipal eq 'DOCTOR'}">
 		<p:dataTable id="tblOrganometry" var="rec"
 			value="#{historyBacking.historyOrganometryModel}"
@@ -412,5 +413,4 @@
 	</p:tab>
 
 </p:tabView>
-
 </html>
