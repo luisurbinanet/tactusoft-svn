@@ -90,8 +90,7 @@
 
 					<p:dataTable id="selectedTable" var="rec"
 						value="#{doctorAppointmentBacking.appointmentModel}"
-						rowKey="#{rec.code}" style="width:100%"
-						paginator="true" rows="10"
+						rowKey="#{rec.code}" style="width:100%" paginator="true" rows="10"
 						emptyMessage="#{msg['glb_no_records_found']}">
 
 						<p:column selectionMode="single" style="width:18px" />
@@ -112,6 +111,10 @@
 
 						<p:column headerText="#{msg['app_procedure']}">
 							<h:outputLabel value="#{rec.crmProcedureDetail.name}" />
+						</p:column>
+
+						<p:column headerText="#{msg['cam_pat']}">
+							<h:outputLabel value="#{rec.crmPatient.names}" />
 						</p:column>
 
 						<f:facet name="footer">
@@ -172,14 +175,16 @@
 
 				<script type="text/javascript">
 					function handleSaveRequest(xhr, status, args) {
-						if(args.validationFailed || !args.saved) {
-							jQuery('#appUntimelyDialog').effect("shake", { times:3 }, 100);
+						if (args.validationFailed || !args.saved) {
+							jQuery('#appUntimelyDialog').effect("shake", {
+								times : 3
+							}, 100);
 						} else {
 							appUntimelyDlg.hide();
 						}
 					}
 				</script>
-				
+
 			</h:form>
 
 		</p:panel>
