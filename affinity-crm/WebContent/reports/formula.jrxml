@@ -104,7 +104,7 @@ order by a.id]]>
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[select a.id_appointment,
+		<![CDATA[select  c.id,a.id_appointment,
 		b.description desc_cie,
 		a.id_cie,
 		c.unit,
@@ -124,7 +124,7 @@ join crm_doctor f on d.id_doctor = f.id
 join crm_branch g on d.id_branch = g.id
 where a.id_appointment = $P{P_APPOINTMENT} and c.material_type = 'MEDICAMENTO'
 UNION
-select c.id_appointment,
+select  c.id,c.id_appointment,
 		c.diagnosis desc_cie,
 		0 id_cie,
 		c.unit,
@@ -141,16 +141,34 @@ join crm_appointment d on c.id_appointment = d.id
 join crm_patient e on d.id_patient = e.id
 join crm_doctor f on d.id_doctor = f.id
 join crm_branch g on d.id_branch = g.id
-where c.id_appointment = $P{P_APPOINTMENT} and c.material_type = 'OTRO_MEDICAMENTO']]>
+where c.id_appointment = $P{P_APPOINTMENT} and c.material_type = 'OTRO_MEDICAMENTO'
+ORDER BY 1]]>
 	</queryString>
-	<field name="id_appointment" class="java.math.BigDecimal"/>
+	<field name="id" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_appointment" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="desc_cie" class="java.lang.String"/>
-	<field name="id_cie" class="java.math.BigDecimal"/>
-	<field name="unit" class="java.lang.Integer"/>
-	<field name="cod_material" class="java.lang.Long"/>
-	<field name="desc_material" class="java.lang.String"/>
-	<field name="posology" class="java.lang.String"/>
-	<field name="doc" class="java.lang.String"/>
+	<field name="id_cie" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="unit" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cod_material" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="desc_material" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="posology" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="doc" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="appointment_date" class="java.sql.Date"/>
 	<field name="name_patient" class="java.lang.String"/>
 	<field name="name_doctor" class="java.lang.String"/>
