@@ -457,12 +457,18 @@ public class TablesBo implements Serializable {
 		if (result == 0) {
 			if (doctor != null) {
 				doctor.setCrmUser(entity);
-				saveDoctor(doctor);
+				result = saveDoctor(doctor);
+				if (result != 0) {
+					result = -2;
+				}
 			}
 
 			if (nurse != null) {
 				nurse.setCrmUser(entity);
-				saveNurse(nurse);
+				result = saveNurse(nurse);
+				if (result != 0) {
+					result = -3;
+				}
 			}
 		}
 

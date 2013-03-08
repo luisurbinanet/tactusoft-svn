@@ -382,22 +382,12 @@ public class ProcessBo implements Serializable {
 			if (currentDay != 1) {// Si no es domingo
 
 				// Buscar horarios
-				List<CrmDoctorSchedule> listCrmDoctorSchedule = null;
-				if (timeType.equals(Constant.TIME_TYPE_DOCTOR)) {
-					listCrmDoctorSchedule = dao
-							.find("from CrmDoctorSchedule o where o.crmBranch.id = "
-									+ idBranch
-									+ " and o.day = "
-									+ currentDay
-									+ " and o.crmDoctor.id <> 0 and o.crmDoctor.state = 1");
-				} else {
-					listCrmDoctorSchedule = dao
-							.find("from CrmDoctorSchedule o where o.crmBranch.id = "
-									+ idBranch
-									+ " and o.day = "
-									+ currentDay
-									+ " and o.crmDoctor.id = 0");
-				}
+				List<CrmDoctorSchedule> listCrmDoctorSchedule = dao
+						.find("from CrmDoctorSchedule o where o.crmBranch.id = "
+								+ idBranch
+								+ " and o.day = "
+								+ currentDay
+								+ " and o.crmDoctor.state = 1");
 
 				if (listCrmDoctorSchedule.size() > 0) {
 

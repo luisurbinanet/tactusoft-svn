@@ -245,7 +245,7 @@ public class UserBacking extends BaseBacking {
 
 			int result = tablesService.saveUser(selected, crmDoctor, crmNurse);
 
-			if (result == 0) {
+			if (result != -1) {
 				tablesService.saveUserBranch(selected,
 						listBranchUser.getTarget());
 				tablesService.saveUserRole(selected, listRole.getTarget());
@@ -253,7 +253,16 @@ public class UserBacking extends BaseBacking {
 						listUserProfile.getTarget());
 				list = tablesService.getListUser();
 				model = new UserDataModel(list);
+
 				message = FacesUtil.getMessage("msg_record_ok");
+
+				if (result == -2) {
+					message = message
+							+ FacesUtil.getMessage("usr_msg_error_doctor");
+				} else if (result == -3) {
+					message = message
+							+ FacesUtil.getMessage("usr_msg_error_nurse");
+				}
 				FacesUtil.addInfo(message);
 			} else if (result == -1) {
 				String paramValue = FacesUtil.getMessage("usr_username");
