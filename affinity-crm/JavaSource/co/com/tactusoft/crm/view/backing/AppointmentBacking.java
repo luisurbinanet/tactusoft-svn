@@ -512,11 +512,11 @@ public class AppointmentBacking extends BaseBacking {
 				.get(idProcedureDetail);
 
 		if (!procedureDetail.isAvailability()) {
-			idSearch = Constant.APP_TYPE_FOR_DATE_VALUE;
-			renderedDoctorWithoutTime = false;
+			idSearch = Constant.APP_TYPE_FOR_DOCTOR_VALUE;
+			renderedForDate = false;
 		} else {
 			idSearch = Constant.DEFAULT_VALUE;
-			renderedDoctorWithoutTime = true;
+			renderedForDate = true;
 		}
 
 		if ((procedureDetail.getTimeDoctor() > procedureDetail.getTimeNurses())
