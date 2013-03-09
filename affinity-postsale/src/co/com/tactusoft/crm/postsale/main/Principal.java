@@ -150,8 +150,9 @@ public class Principal {
 							.getCodeSap(), row.getCrmProcedureDetail()
 							.getFormulaDocType(), rowInitDate, endDate);
 
-			for (VwAppointmentMedication row2 : listVwAppointmentMedication) {
-				if (listSapMedication.size() > 0) {
+			if (listSapMedication.size() > 0) {
+				for (VwAppointmentMedication row2 : listVwAppointmentMedication) {
+
 					boolean exists = false;
 					int index = 0;
 					while (!exists && index < listSapMedication.size()) {
@@ -169,13 +170,14 @@ public class Principal {
 										.getCodMaterial()), row2
 										.getDescMaterial()));
 					}
-				} else {
-					for (VwAppointmentMedication row4 : listVwAppointmentMedication) {
-						listStorage.add(new StorageBean(row.getCrmPatient(),
-								row, "MEDICATION", String.valueOf(row4.getId()
-										.getCodMaterial()), row4
-										.getDescMaterial()));
-					}
+				}
+			} else {
+				for (VwAppointmentMedication row4 : listVwAppointmentMedication) {
+					listStorage
+							.add(new StorageBean(row.getCrmPatient(), row,
+									"MEDICATION", String.valueOf(row4.getId()
+											.getCodMaterial()), row4
+											.getDescMaterial()));
 				}
 			}
 		}
@@ -218,7 +220,7 @@ public class Principal {
 				crmCampaign.setState(1);
 				processBO.save(crmCampaign);
 			}
-			
+
 			for (StorageBean row : listStorage) {
 				crmBranch = new CrmBranch();
 				if (row.getCrmAppointment() != null) {
