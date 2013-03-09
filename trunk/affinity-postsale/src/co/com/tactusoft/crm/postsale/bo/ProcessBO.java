@@ -74,7 +74,7 @@ public class ProcessBO implements Serializable {
 		return dao
 				.find("FROM CrmAppointment o WHERE state = 4 AND closeAppointment = 1 AND startAppointmentDate <= '"
 						+ dateString
-						+ "T23:59:59.999+05:00'");
+						+ "T23:59:59.999+05:00' and o.crmBranch.id=155");
 	}
 
 	public CrmUser getUser(CrmBranch crmBranch) {
