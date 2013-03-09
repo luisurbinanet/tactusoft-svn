@@ -43,6 +43,9 @@ public class CampaignBacking implements Serializable {
 	protected List<CrmCampaignDetail> listDetail;
 	protected CampaignDetailDataModel modelDetail;
 
+	protected List<CrmCampaignDetail> listDetailMedication;
+	protected CampaignDetailDataModel modelDetailMedication;
+
 	protected Map<String, String> mapText;
 	protected CrmAppointment selectedAppointment;
 
@@ -101,6 +104,24 @@ public class CampaignBacking implements Serializable {
 		this.modelDetail = modelDetail;
 	}
 
+	public List<CrmCampaignDetail> getListDetailMedication() {
+		return listDetailMedication;
+	}
+
+	public void setListDetailMedication(
+			List<CrmCampaignDetail> listDetailMedication) {
+		this.listDetailMedication = listDetailMedication;
+	}
+
+	public CampaignDetailDataModel getModelDetailMedication() {
+		return modelDetailMedication;
+	}
+
+	public void setModelDetailMedication(
+			CampaignDetailDataModel modelDetailMedication) {
+		this.modelDetailMedication = modelDetailMedication;
+	}
+
 	public Map<String, String> getMapText() {
 		return mapText;
 	}
@@ -151,12 +172,25 @@ public class CampaignBacking implements Serializable {
 	public void generateDetail() {
 		listDetail = tableService.getListCampaignDetail(selected.getId());
 		modelDetail = new CampaignDetailDataModel(listDetail);
+
+		listDetailMedication = tableService
+				.getListCampaignDetailMedication(selected.getId());
+		modelDetailMedication = new CampaignDetailDataModel(
+				listDetailMedication);
+		if (listDetailMedication.size() > 0) {
+			listDetail.add(listDetailMedication.get(0));
+		}
+	}
+
+	public boolean isRenderedMedication() {
+		return listDetailMedication != null && listDetailMedication.size() > 0;
 	}
 
 	public String getDescCampaingType(String typeCampaign) {
 		return typeCampaign.equals("NO_ATTENDET") ? "No asistió a la cita"
 				: typeCampaign.equals("CONFIRMED") ? "Confirmar la cita"
-						: "No ha asistido a control";
+						: typeCampaign.equals("CONTROL") ? "No ha asistido a control"
+								: "Medicamentos NO adquiridos";
 	}
 
 	public String getText(String typeCampaign) {

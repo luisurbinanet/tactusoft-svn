@@ -104,7 +104,7 @@
 								style="font-size:14px;" />
 
 							<h:panelGrid columns="2" style="width:100%"
-								rendered="#{rec.campaingType ne 'CONTROL'}">
+								rendered="#{rec.campaingType ne 'CONTROL' and rec.campaingType ne 'MEDICATION'}">
 								<h:outputLabel value="#{msg['cam_date']}"
 									style="font-size:12px;font-weight:bold;" />
 								<h:outputLabel
@@ -120,9 +120,20 @@
 									style="font-size:12px;font-weight:bold;" />
 							</h:panelGrid>
 
+							<p:dataTable rendered="#{campaignBacking.renderedMedication}"
+								value="#{campaignBacking.modelDetailMedication}" rows="2"
+								paginator="true" var="item">
+
+								<p:column headerText="Medicamentos">
+									<h:outputLabel value="#{item.descMaterial}" />
+								</p:column>
+
+							</p:dataTable>
+
 							<p:commandButton value="#{msg['btn_edit_app']}"
 								action="#{campaignBacking.editAppoinmnetAction}"
-								rendered="#{rec.campaingType ne 'CONTROL'}" immediate="true">
+								rendered="#{rec.campaingType ne 'CONTROL' and rec.campaingType ne 'MEDICATION'}"
+								immediate="true">
 								<f:setPropertyActionListener
 									target="#{campaignBacking.selectedAppointment}"
 									value="#{rec.crmAppointment}" />

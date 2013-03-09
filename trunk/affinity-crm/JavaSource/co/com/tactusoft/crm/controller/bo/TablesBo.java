@@ -96,9 +96,10 @@ public class TablesBo implements Serializable {
 	}
 
 	public List<CrmCampaign> getListCampaignActive() {
-		return dao.find("FROM CrmCampaign o where o.crmUser.id = "
-				+ FacesUtil.getCurrentIdUsuario()
-				+ " AND o.state IN (1,3) ORDER BY o.state, o.dateCall");
+		return dao
+				.find("FROM CrmCampaign o where o.crmUser.id = "
+						+ FacesUtil.getCurrentIdUsuario()
+						+ " AND o.state IN (1,3) ORDER BY o.state, o.dateCall");
 	}
 
 	public List<CrmCampaign> getListCampaignByStatus(String status,
@@ -109,7 +110,13 @@ public class TablesBo implements Serializable {
 
 	public List<CrmCampaignDetail> getListCampaignDetail(Integer idCampaign) {
 		return dao.find("from CrmCampaignDetail where crmCampaign.id = "
-				+ idCampaign);
+				+ idCampaign + "and campaingType <> 'MEDICATION'");
+	}
+
+	public List<CrmCampaignDetail> getListCampaignDetailMedication(
+			Integer idCampaign) {
+		return dao.find("from CrmCampaignDetail where crmCampaign.id = "
+				+ idCampaign + "and campaingType = 'MEDICATION'");
 	}
 
 	public List<CrmNurse> getListNurseActive() {
