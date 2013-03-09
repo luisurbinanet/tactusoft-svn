@@ -35,5 +35,19 @@ public class Utils {
 		int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
 		return currentHour;
 	}
+	
+	public static String lpad(String valueToPad, char filler, int size) {
+		char[] array = new char[size];
+
+		int len = size - valueToPad.length();
+
+		for (int i = 0; i < len; i++)
+			array[i] = filler;
+
+		valueToPad.getChars(0, valueToPad.length(), array,
+				size - valueToPad.length());
+
+		return String.valueOf(array);
+	}
 
 }

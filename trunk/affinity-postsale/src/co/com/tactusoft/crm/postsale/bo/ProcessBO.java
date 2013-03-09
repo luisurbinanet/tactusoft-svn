@@ -51,30 +51,43 @@ public class ProcessBO implements Serializable {
 						+ dateString + "T23:59:59.999+05:00'");
 	}
 
-	public List<CrmPatient> getListAppointmentControl(String dateString) {
-		return dao
-				.find("SELECT DISTINCT o.crmPatient FROM CrmAppointment o WHERE o.crmProcedureDetail.id IN (2,6,8) "
-						+ " AND o.state IN (1,3,4) AND o.startAppointmentDate < '"
-						+ dateString + "T23:59:59.999+05:00'");
+	public List<CrmAppointment> getListAppointmentControl(String dateString) {
+		String sql = "select distinct b.* "
+				+ "from crm_db.crm_appointment b inner join crm_db.crm_patient a on b.id_patient=a.id  "
+				+ "where (b.id_procedure_detail in (2 , 6 , 8))  "
+				+ "and (b.state in (1 , 3 , 4))  "
+				+ "and b.start_appointment_date<'"
+				+ dateString
+				+ "' and b.id  = (select max(d.id) "
+				+ "from crm_db.crm_appointment d inner join crm_db.crm_patient c on d.id_patient=c.id  "
+				+ "where (d.id_procedure_detail in (2 , 6 , 8))  "
+				+ "and (d.state in (1 , 3 , 4))  "
+				+ "and d.start_appointment_date<'"
+				+ dateString
+				+ "' and c.id = a.id) "
+				+ "and b.id not in (select e.id_appointment from crm_campaign_detail e where e.campaing_type='CONTROL')";
+
+		return dao.findNative(sql, CrmAppointment.class);
 	}
 
 	public List<CrmAppointment> getListAppointmentClosed(String dateString) {
 		return dao
-				.find("FROM CrmAppointment WHERE state = 4 AND closeAppointment = 1 AND startAppointmentDate <= '"
-						+ dateString + "T23:59:59.999+05:00'");
+				.find("FROM CrmAppointment o WHERE state = 4 AND closeAppointment = 1 AND startAppointmentDate <= '"
+						+ dateString
+						+ "T23:59:59.999+05:00'");
 	}
 
 	public CrmUser getUser(CrmBranch crmBranch) {
-		CrmUser result = new CrmUser();
-		List<CrmUser> list = dao
-				.find("SELECT usr FROM CrmCampaign as cpg"
-						+ " RIGHT JOIN cpg.crmUser as usr"
-						+ " LEFT JOIN usr.crmUserBranchs as brc WITH brc.crmBranch.id = "
-						+ crmBranch.getId()
-						+ " JOIN usr.crmUserRoles as rol WITH rol.crmRole.id = 2"
-						+ " WHERE usr.state = 1"
-						+ " GROUP BY usr ORDER BY COUNT(cpg)");
-		result = list.get(0);
+		CrmUser result = null;
+		List<CrmUser> list = dao.find("SELECT usr FROM CrmCampaign as cpg"
+				+ " RIGHT JOIN cpg.crmUser as usr"
+				+ " LEFT JOIN usr.crmUserBranchs as brc "
+				+ " JOIN usr.crmUserRoles as rol WITH rol.crmRole.id = 2"
+				+ " WHERE usr.state = 1 AND brc.crmBranch.id = "
+				+ crmBranch.getId() + " GROUP BY usr ORDER BY COUNT(cpg)");
+		if (list.size() > 0) {
+			result = list.get(0);
+		}
 		return result;
 	}
 

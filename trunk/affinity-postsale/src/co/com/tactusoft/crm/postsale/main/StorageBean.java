@@ -11,16 +11,27 @@ public class StorageBean implements Serializable {
 	private CrmPatient crmPatient;
 	private CrmAppointment crmAppointment;
 	private String type;
+	private String medicationCode;
+	private String medicationName;
 
-	public StorageBean(){
-		
+	public StorageBean() {
+
 	}
-	
+
 	public StorageBean(CrmPatient crmPatient, CrmAppointment crmAppointment,
 			String type) {
 		this.crmPatient = crmPatient;
 		this.crmAppointment = crmAppointment;
 		this.type = type;
+	}
+
+	public StorageBean(CrmPatient crmPatient, CrmAppointment crmAppointment,
+			String type, String medicationCode, String medicationName) {
+		this.crmPatient = crmPatient;
+		this.crmAppointment = crmAppointment;
+		this.type = type;
+		this.medicationCode = medicationCode;
+		this.medicationName = medicationName;
 	}
 
 	public String getType() {
@@ -45,6 +56,22 @@ public class StorageBean implements Serializable {
 
 	public void setCrmAppointment(CrmAppointment crmAppointment) {
 		this.crmAppointment = crmAppointment;
+	}
+
+	public String getMedicationCode() {
+		return medicationCode;
+	}
+
+	public void setMedicationCode(String medicationCode) {
+		this.medicationCode = medicationCode;
+	}
+
+	public String getMedicationName() {
+		return medicationName;
+	}
+
+	public void setMedicationName(String medicationName) {
+		this.medicationName = medicationName;
 	}
 
 }
