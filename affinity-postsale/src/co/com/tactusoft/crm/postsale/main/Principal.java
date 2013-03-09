@@ -17,6 +17,7 @@ import co.com.tactusoft.crm.model.entities.CrmLog;
 import co.com.tactusoft.crm.model.entities.CrmLogDetail;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmSapMedication;
+import co.com.tactusoft.crm.model.entities.CrmUser;
 import co.com.tactusoft.crm.model.entities.VwAppointmentMedication;
 import co.com.tactusoft.crm.postsale.bo.ProcessBO;
 import co.com.tactusoft.crm.postsale.util.Utils;
@@ -116,10 +117,11 @@ public class Principal {
 
 		Date ago25Date = Utils.addDaysToDate(currentDate, -25);
 		String ago25DateString = Utils.formatDate(ago25Date, "yyyy-MM-dd");
-		List<CrmPatient> listControl = processBO
+		List<CrmAppointment> listControl = processBO
 				.getListAppointmentControl(ago25DateString);
-		for (CrmPatient row : listControl) {
-			listStorage.add(new StorageBean(row, null, "CONTROL"));
+		for (CrmAppointment row : listControl) {
+			listStorage
+					.add(new StorageBean(row.getCrmPatient(), row, "CONTROL"));
 		}
 
 		System.out.println("BUSCANDO MEDICAMENTOS Y TERAPIAS NO FACTURADAS");
@@ -149,17 +151,31 @@ public class Principal {
 							.getFormulaDocType(), rowInitDate, endDate);
 
 			for (VwAppointmentMedication row2 : listVwAppointmentMedication) {
-				boolean exists = false;
-				for (CrmSapMedication row3 : listSapMedication) {
-					if (row2.getId().getCodMaterial() == Long.parseLong(row3
-							.getIdMaterial())) {
-						exists = true;
-						break;
+				if (listSapMedication.size() > 0) {
+					boolean exists = false;
+					int index = 0;
+					while (!exists && index < listSapMedication.size()) {
+						Long materialLong = Long.parseLong(listSapMedication
+								.get(index).getIdMaterial());
+						if (row2.getId().getCodMaterial() == materialLong) {
+							exists = true;
+						}
+						index++;
 					}
-				}
 
-				if (!exists) {
-
+					if (!exists) {
+						listStorage.add(new StorageBean(row.getCrmPatient(),
+								row, "MEDICATION", String.valueOf(row2.getId()
+										.getCodMaterial()), row2
+										.getDescMaterial()));
+					}
+				} else {
+					for (VwAppointmentMedication row4 : listVwAppointmentMedication) {
+						listStorage.add(new StorageBean(row.getCrmPatient(),
+								row, "MEDICATION", String.valueOf(row4.getId()
+										.getCodMaterial()), row4
+										.getDescMaterial()));
+					}
 				}
 			}
 		}
@@ -181,11 +197,6 @@ public class Principal {
 
 		if (listStorage.size() > 0) {
 			CrmPatient crmPatient = listStorage.get(0).getCrmPatient();
-
-			// Primer Registro
-			CrmCampaign crmCampaign = new CrmCampaign();
-			crmCampaign.setCrmLog(crmLog);
-			crmCampaign.setCrmPatient(crmPatient);
 			CrmBranch crmBranch = new CrmBranch();
 			if (listStorage.get(0).getCrmAppointment() != null) {
 				crmBranch = listStorage.get(0).getCrmAppointment()
@@ -193,38 +204,56 @@ public class Principal {
 			} else {
 				crmBranch = processBO.getBranch(crmPatient);
 			}
-			crmCampaign.setCrmBranch(crmBranch);
-			crmCampaign.setCrmUser(processBO.getUser(crmBranch));
-			crmCampaign.setDateCall(Utils.addDaysToDate(currentDate, 1));
-			crmCampaign.setState(1);
-			processBO.save(crmCampaign);
+			CrmUser crmUser = processBO.getUser(crmBranch);
 
+			// Primer Registro
+			CrmCampaign crmCampaign = new CrmCampaign();
+			if (crmUser != null) {
+				crmCampaign.setCrmLog(crmLog);
+				crmCampaign.setCrmPatient(crmPatient);
+
+				crmCampaign.setCrmBranch(crmBranch);
+				crmCampaign.setCrmUser(processBO.getUser(crmBranch));
+				crmCampaign.setDateCall(Utils.addDaysToDate(currentDate, 1));
+				crmCampaign.setState(1);
+				processBO.save(crmCampaign);
+			}
+			
 			for (StorageBean row : listStorage) {
+				crmBranch = new CrmBranch();
+				if (row.getCrmAppointment() != null) {
+					crmBranch = row.getCrmAppointment().getCrmBranch();
+				} else {
+					crmBranch = processBO.getBranch(crmPatient);
+				}
+				crmUser = processBO.getUser(crmBranch);
+
 				if (row.getCrmPatient().getId().intValue() != crmPatient
 						.getId().intValue()) {
 
-					crmCampaign = new CrmCampaign();
-					crmCampaign.setCrmLog(crmLog);
-					crmCampaign.setCrmPatient(row.getCrmPatient());
-					crmBranch = new CrmBranch();
-					if (row.getCrmAppointment() != null) {
-						crmBranch = row.getCrmAppointment().getCrmBranch();
-					} else {
-						crmBranch = processBO.getBranch(crmPatient);
+					if (crmUser != null) {
+						crmCampaign = new CrmCampaign();
+						crmCampaign.setCrmLog(crmLog);
+						crmCampaign.setCrmPatient(row.getCrmPatient());
+						crmCampaign.setCrmBranch(crmBranch);
+						crmCampaign.setCrmUser(crmUser);
+						crmCampaign.setDateCall(Utils.addDaysToDate(
+								currentDate, 1));
+						crmCampaign.setState(1);
+						processBO.save(crmCampaign);
 					}
-					crmCampaign.setCrmBranch(crmBranch);
-					crmCampaign.setCrmUser(processBO.getUser(crmBranch));
-					crmCampaign
-							.setDateCall(Utils.addDaysToDate(currentDate, 1));
-					crmCampaign.setState(1);
-					processBO.save(crmCampaign);
 				}
 
-				CrmCampaignDetail crmCampaignDetail = new CrmCampaignDetail();
-				crmCampaignDetail.setCrmCampaign(crmCampaign);
-				crmCampaignDetail.setCrmAppointment(row.getCrmAppointment());
-				crmCampaignDetail.setCampaingType(row.getType());
-				processBO.save(crmCampaignDetail);
+				if (crmUser != null) {
+					CrmCampaignDetail crmCampaignDetail = new CrmCampaignDetail();
+					crmCampaignDetail.setCrmCampaign(crmCampaign);
+					crmCampaignDetail
+							.setCrmAppointment(row.getCrmAppointment());
+					crmCampaignDetail.setCampaingType(row.getType());
+					crmCampaignDetail.setCodMaterial(row.getMedicationCode());
+					crmCampaignDetail.setDescMaterial(row.getMedicationName());
+					processBO.save(crmCampaignDetail);
+				}
 
 				crmPatient = row.getCrmPatient();
 			}
