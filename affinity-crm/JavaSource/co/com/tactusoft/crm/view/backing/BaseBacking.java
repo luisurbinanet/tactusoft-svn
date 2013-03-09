@@ -119,6 +119,9 @@ public class BaseBacking implements Serializable {
 
 	protected Integer numPhone;
 	protected Integer numCell;
+	
+	protected String typeHousing;
+	protected String neighborhood;
 
 	public List<CrmPatient> getListPatient() {
 		return listPatient;
@@ -772,6 +775,22 @@ public class BaseBacking implements Serializable {
 
 	public void setNumCell(Integer numCell) {
 		this.numCell = numCell;
+	}
+	
+	public String getTypeHousing() {
+		return typeHousing;
+	}
+
+	public void setTypeHousing(String typeHousing) {
+		this.typeHousing = typeHousing;
+	}
+
+	public String getNeighborhood() {
+		return neighborhood;
+	}
+
+	public void setNeighborhood(String neighborhood) {
+		this.neighborhood = neighborhood;
 	}
 
 	public void newPatientAction(ActionEvent event) {

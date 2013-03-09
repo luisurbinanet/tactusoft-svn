@@ -2,7 +2,6 @@ package co.com.tactusoft.crm.view.backing;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,7 +16,6 @@ import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
-import co.com.tactusoft.crm.model.entities.CrmOccupation;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
@@ -34,12 +32,6 @@ public class AppointmentPatientBacking extends BaseBacking {
 	private AppointmentDataModel appointmentModel;
 	private CrmAppointment[] selectedsAppointment;
 	private CrmAppointment selectedAppointment;
-
-	private List<SelectItem> listOccupation;
-	private Map<BigDecimal, CrmOccupation> mapOccupation;
-	private BigDecimal idOccupation;
-	private String typeHousing;
-	private String neighborhood;
 
 	private List<SelectItem> listDoctor;
 	private Map<BigDecimal, CrmDoctor> mapDoctor;
@@ -89,56 +81,6 @@ public class AppointmentPatientBacking extends BaseBacking {
 
 	public void setDisabledSaveButton(boolean disabledSaveButton) {
 		this.disabledSaveButton = disabledSaveButton;
-	}
-
-	public List<SelectItem> getListOccupation() {
-		if (listOccupation == null) {
-			listOccupation = new LinkedList<SelectItem>();
-			mapOccupation = new HashMap<BigDecimal, CrmOccupation>();
-			String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
-			listOccupation.add(new SelectItem(null, label));
-			for (CrmOccupation row : tablesService.getListOccupationActive()) {
-				mapOccupation.put(row.getId(), row);
-				listOccupation.add(new SelectItem(row.getId(), row.getName()));
-			}
-		}
-		return listOccupation;
-	}
-
-	public void setListOccupation(List<SelectItem> listOccupation) {
-		this.listOccupation = listOccupation;
-	}
-
-	public Map<BigDecimal, CrmOccupation> getMapOccupation() {
-		return mapOccupation;
-	}
-
-	public void setMapOccupation(Map<BigDecimal, CrmOccupation> mapOccupation) {
-		this.mapOccupation = mapOccupation;
-	}
-
-	public BigDecimal getIdOccupation() {
-		return idOccupation;
-	}
-
-	public void setIdOccupation(BigDecimal idOccupation) {
-		this.idOccupation = idOccupation;
-	}
-
-	public String getTypeHousing() {
-		return typeHousing;
-	}
-
-	public void setTypeHousing(String typeHousing) {
-		this.typeHousing = typeHousing;
-	}
-
-	public String getNeighborhood() {
-		return neighborhood;
-	}
-
-	public void setNeighborhood(String neighborhood) {
-		this.neighborhood = neighborhood;
 	}
 
 	public List<SelectItem> getListDoctor() {
@@ -301,7 +243,7 @@ public class AppointmentPatientBacking extends BaseBacking {
 	public void addPatientAction(ActionEvent event) {
 		searchAppoinmnetConfirmedAction();
 	}
-	
+
 	public void addPatientWithoutValidAction(ActionEvent event) {
 		searchAppoinmnetConfirmedWithoutValidAction();
 	}

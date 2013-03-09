@@ -152,7 +152,9 @@
 							icon="ui-icon-closethick" onclick="cancelDlg.show()"
 							disabled="#{searchByPatientBacking.selectedAppointment.state eq 1?false:true}" />
 						<p:commandButton value="#{msg['btn_check_appointment']}"
+							actionListener="#{searchByPatientBacking.generateListDoctor}"
 							icon="ui-icon-check" onclick="checkedDlg.show()"
+							update=":editForm:checkedPanel"
 							disabled="#{(searchByPatientBacking.selectedAppointment.state eq 1?false:true) or searchByPatientBacking.selectedPatient.contact}" />
 						<p:commandButton value="#{msg['btn_open_appointment']}"
 							icon="ui-icon-folder-open" onclick="openAppDlg.show()"
@@ -263,18 +265,60 @@
 					</h:panelGrid>
 				</p:confirmDialog>
 
-				<p:confirmDialog id="checkedDialog" message="#{msg['glb_question']}"
-					header="#{msg['title_app']}" severity="alert"
-					widgetVar="checkedDlg">
+				<p:dialog id="checkedDialog" modal="true" resizable="false"
+					header="#{msg['title_app']}" widgetVar="checkedDlg">
 
-					<p:commandButton value="#{msg['glb_state_yes']}"
-						update=":form:selectedTable :form:growl"
-						oncomplete="checkedDlg.hide()"
-						actionListener="#{searchByPatientBacking.checkAppointmentAction}" />
-					<p:commandButton value="#{msg['glb_state_no']}"
-						onclick="checkedDlg.hide()" type="button" />
+					<h:panelGrid id="checkedPanel" width="100%">
 
-				</p:confirmDialog>
+						<p:fieldset legend="#{msg['title_patient_complementary']}"
+							rendered="#{searchByPatientBacking.renderedFields}">
+							<h:panelGrid columns="2" width="100%" cellspacing="5">
+								<h:outputLabel value="#{msg['pat_occupation']}" />
+								<p:selectOneMenu value="#{searchByPatientBacking.idOccupation}"
+									style="width:408px" label="#{msg['pat_occupation']}">
+									<f:selectItems value="#{searchByPatientBacking.listOccupation}" />
+								</p:selectOneMenu>
+
+								<h:outputLabel value="#{msg['pat_neighborhood']}" />
+								<p:inputText maxlength="45"
+									value="#{searchByPatientBacking.neighborhood}"
+									style="width:400px" label="#{msg['pat_neighborhood']}" />
+
+								<h:outputLabel value="#{msg['pat_type_housing']}" />
+								<p:selectOneMenu value="#{searchByPatientBacking.typeHousing}"
+									style="width:408px" label="#{msg['pat_type_housing']}">
+									<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										itemValue="" />
+									<f:selectItem itemLabel="#{msg['pat_type_housing_u']}"
+										itemValue="U" />
+									<f:selectItem itemLabel="#{msg['pat_type_housing_r']}"
+										itemValue="R" />
+								</p:selectOneMenu>
+							</h:panelGrid>
+						</p:fieldset>
+
+						<p:spacer />
+
+						<p:fieldset legend="#{msg['doc_confir']}">
+							<p:selectOneMenu style="width:520px"
+								value="#{searchByPatientBacking.idDoctor}">
+								<f:selectItems value="#{searchByPatientBacking.listDoctor}" />
+							</p:selectOneMenu>
+						</p:fieldset>
+
+						<p:spacer />
+
+						<h:panelGrid columns="2">
+							<p:commandButton value="#{msg['btn_ok']}"
+								update=":form:selectedTable :form:growl :form:selectedTable"
+								oncomplete="handleSaveRequest(xhr, status, args)"
+								actionListener="#{searchByPatientBacking.checkAppointmentAction}" />
+							<p:commandButton value="#{msg['btn_close']}"
+								onclick="confirmDlg.hide()" type="button" process="@this" />
+						</h:panelGrid>
+					</h:panelGrid>
+
+				</p:dialog>
 
 				<p:dialog header="#{msg['app_obs']}" widgetVar="obsDialog"
 					resizable="false" id="obsDlg" showEffect="fade"
@@ -312,6 +356,18 @@
 						</f:facet>
 					</h:panelGrid>
 				</p:confirmDialog>
+
+				<script type="text/javascript">
+					function handleSaveRequest(xhr, status, args) {
+						if (args.validationFailed || !args.saved) {
+							jQuery('#checkedDialog').effect("shake", {
+								times : 3
+							}, 100);
+						} else {
+							checkedDlg.hide();
+						}
+					}
+				</script>
 
 			</h:form>
 
