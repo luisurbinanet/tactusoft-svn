@@ -3,16 +3,20 @@ package co.com.tactusoft.crm.view.backing;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.inject.Named;
 
+import org.primefaces.context.RequestContext;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
+import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
@@ -36,6 +40,10 @@ public class SearchByPatientBacking extends BaseBacking {
 	private CrmAppointment selectedAppointment;
 
 	private boolean disabledSaveButton;
+
+	private List<SelectItem> listDoctor;
+	private Map<BigDecimal, CrmDoctor> mapDoctor;
+	private BigDecimal idDoctor;
 
 	public SearchByPatientBacking() {
 		newAction(null);
@@ -105,6 +113,30 @@ public class SearchByPatientBacking extends BaseBacking {
 		this.disabledSaveButton = disabledSaveButton;
 	}
 
+	public List<SelectItem> getListDoctor() {
+		return listDoctor;
+	}
+
+	public void setListDoctor(List<SelectItem> listDoctor) {
+		this.listDoctor = listDoctor;
+	}
+
+	public Map<BigDecimal, CrmDoctor> getMapDoctor() {
+		return mapDoctor;
+	}
+
+	public void setMapDoctor(Map<BigDecimal, CrmDoctor> mapDoctor) {
+		this.mapDoctor = mapDoctor;
+	}
+
+	public BigDecimal getIdDoctor() {
+		return idDoctor;
+	}
+
+	public void setIdDoctor(BigDecimal idDoctor) {
+		this.idDoctor = idDoctor;
+	}
+
 	public void newAction(ActionEvent event) {
 		listAppointment = new LinkedList<CrmAppointment>();
 		appointmentModel = new AppointmentDataModel(listAppointment);
@@ -138,6 +170,24 @@ public class SearchByPatientBacking extends BaseBacking {
 		listStates.add(new SelectItem(Constant.APP_STATE_ATTENDED, message));
 		message = FacesUtil.getMessage(Constant.APP_STATE_NOATTENDED_LABEL);
 		listStates.add(new SelectItem(Constant.APP_STATE_NOATTENDED, message));
+	}
+
+	public void generateListDoctor(ActionEvent event) {
+		listDoctor = new LinkedList<SelectItem>();
+		mapDoctor = new LinkedHashMap<BigDecimal, CrmDoctor>();
+		for (CrmDoctor row : tablesService
+				.getListDoctorByBranch(selectedAppointment.getCrmBranch()
+						.getId())) {
+			mapDoctor.put(row.getId(), row);
+			listDoctor.add(new SelectItem(row.getId(), row.getNames()));
+		}
+
+		idDoctor = selectedAppointment.getCrmDoctor().getId();
+		if (selectedPatient.getCrmOccupation() != null) {
+			idOccupation = selectedPatient.getCrmOccupation().getId();
+		}
+		typeHousing = selectedPatient.getTypeHousing();
+		neighborhood = selectedPatient.getNeighborhood();
 	}
 
 	public void searchAppoinmentAction() {
@@ -192,7 +242,7 @@ public class SearchByPatientBacking extends BaseBacking {
 		appointmentEditBacking.setEdit(true);
 		appointmentEditBacking.setSaved(false);
 		appointmentEditBacking.setFromPage("SEARCH");
-		
+
 		appointmentEditBacking.handleBranchChange();
 
 		return "/pages/processes/appointmentEdit.jsf?faces-redirect=true";
@@ -215,18 +265,44 @@ public class SearchByPatientBacking extends BaseBacking {
 	}
 
 	public void checkAppointmentAction(ActionEvent actionEvent) {
+		String message = null;
 		String code = "";
-		selectedAppointment.setCrmUserByIdUserChecked(FacesUtil
-				.getCurrentUser());
-		selectedAppointment.setDateChecked(new Date());
-		selectedAppointment.setState(Constant.APP_STATE_CHECKED);
-		processService.saveAppointment(selectedAppointment);
-		code = selectedAppointment.getCode();
+		boolean saved = false;
 
-		searchAppoinmentAction();
+		if (idOccupation == null || idOccupation.intValue() == 0
+				|| FacesUtil.isEmptyOrBlank(neighborhood)
+				|| FacesUtil.isEmptyOrBlank(typeHousing)) {
+			message = FacesUtil.getMessage("glb_required_all");
+			FacesUtil.addWarn(message);
+		} else {
 
-		String message = FacesUtil.getMessage("app_msg_check", code);
-		FacesUtil.addInfo(message);
+			if (selectedPatient.getCrmOccupation() == null) {
+				selectedPatient.setTypeHousing(typeHousing);
+				selectedPatient.setNeighborhood(neighborhood);
+				selectedPatient.setCrmOccupation(mapOccupation
+						.get(idOccupation));
+				processService.savePatient(selectedPatient, false, false, null);
+			}
+
+			CrmDoctor doctor = mapDoctor.get(idDoctor);
+			selectedAppointment.setCrmDoctor(doctor);
+
+			selectedAppointment.setCrmUserByIdUserChecked(FacesUtil
+					.getCurrentUser());
+			selectedAppointment.setDateChecked(new Date());
+			selectedAppointment.setState(Constant.APP_STATE_CHECKED);
+			processService.saveAppointment(selectedAppointment);
+			code = selectedAppointment.getCode();
+
+			searchAppoinmentAction();
+
+			message = FacesUtil.getMessage("app_msg_check", code);
+			FacesUtil.addInfo(message);
+			saved = true;
+		}
+
+		RequestContext context = RequestContext.getCurrentInstance();
+		context.addCallbackParam("saved", saved);
 	}
 
 	public void openAppointmentAction(ActionEvent actionEvent) {
@@ -257,6 +333,19 @@ public class SearchByPatientBacking extends BaseBacking {
 		contactBacking.setSelectedPatient(selectedPatient);
 		contactBacking.setNewRecord(false);
 		return "/pages/processes/contact?faces-redirect=true";
+	}
+
+	public boolean isRenderedFields() {
+		boolean result = false;
+		if (selectedAppointment != null
+				&& selectedAppointment.getCrmPatient() != null) {
+			if (selectedAppointment.getCrmPatient().getCrmOccupation() == null) {
+				result = true;
+			}
+		} else {
+			result = false;
+		}
+		return result;
 	}
 
 }
