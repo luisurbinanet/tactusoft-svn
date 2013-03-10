@@ -43,6 +43,7 @@ public class DoctorExceptionBacking implements Serializable {
 
 	private boolean disabled;
 	private boolean disabledSearch;
+	private boolean disabledNew;
 
 	public DoctorExceptionBacking() {
 		newAction();
@@ -143,6 +144,14 @@ public class DoctorExceptionBacking implements Serializable {
 		this.disabledSearch = disabledSearch;
 	}
 
+	public boolean isDisabledNew() {
+		return disabledNew;
+	}
+
+	public void setDisabledNew(boolean disabledNew) {
+		this.disabledNew = disabledNew;
+	}
+
 	public void newAction() {
 		selected = new CrmDoctorException();
 		selectedDate = new Date();
@@ -150,6 +159,7 @@ public class DoctorExceptionBacking implements Serializable {
 		idDoctor = Constant.DEFAULT_VALUE;
 		disabled = true;
 		disabledSearch = true;
+		disabledNew = true;
 	}
 
 	public void saveAction() {
@@ -170,7 +180,7 @@ public class DoctorExceptionBacking implements Serializable {
 
 		int result = tableService.saveDoctorException(selected);
 		if (result == 0) {
-			list = tableService.getListDoctorExceptionByDoctor(idDoctor);
+			list = tableService.getListDoctorExceptionByDoctor(selectedDoctor.getId());
 			model = new DoctorExceptionDataModel(list);
 			message = FacesUtil.getMessage("msg_record_ok");
 			FacesUtil.addInfo(message);
@@ -194,6 +204,8 @@ public class DoctorExceptionBacking implements Serializable {
 			selected = new CrmDoctorException();
 			disabledSearch = true;
 		}
+		
+		disabledNew = false;
 	}
 
 	public void removeAction() {
@@ -217,6 +229,8 @@ public class DoctorExceptionBacking implements Serializable {
 		} else {
 			disabled = true;
 		}
+		
+		disabledNew = true;
 	}
 
 }

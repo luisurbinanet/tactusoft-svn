@@ -141,6 +141,18 @@ public class HolidayBacking implements Serializable {
 		}
 	}
 
+	public void removeAction() {
+		String message = null;
+		tablesService.removeHoliday(selected);
+		list.remove(selected);
+		model = new HolidayDataModel(list);
+		if (list.size() > 0) {
+			selected = list.get(0);
+		}
+		message = FacesUtil.getMessage("msg_record_ok");
+		FacesUtil.addInfo(message);
+	}
+
 	public void generateListAction(ActionEvent event) {
 		List<CrmBranch> listSelectedsBranch = tablesService
 				.getListBranchByHoliday(selected.getId());

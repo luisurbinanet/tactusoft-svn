@@ -96,10 +96,9 @@ public class TablesBo implements Serializable {
 	}
 
 	public List<CrmCampaign> getListCampaignActive() {
-		return dao
-				.find("FROM CrmCampaign o where o.crmUser.id = "
-						+ FacesUtil.getCurrentIdUsuario()
-						+ " AND o.state IN (1,3) ORDER BY o.state, o.dateCall");
+		return dao.find("FROM CrmCampaign o where o.crmUser.id = "
+				+ FacesUtil.getCurrentIdUsuario()
+				+ " AND o.state IN (1,3) ORDER BY o.state, o.dateCall");
 	}
 
 	public List<CrmCampaign> getListCampaignByStatus(String status,
@@ -705,6 +704,10 @@ public class TablesBo implements Serializable {
 		return this.persist(entity);
 	}
 
+	public int removeHoliday(BigDecimal id) {
+		return dao.executeHQL("delete from CrmHoliday where id = " + id);
+	}
+
 	public Integer saveCampaign(CrmCampaign entity) {
 		return this.persist(entity);
 	}
@@ -717,6 +720,13 @@ public class TablesBo implements Serializable {
 	public void removeSchedule(BigDecimal idBranch, BigDecimal idDoctor) {
 		dao.executeHQL("delete from CrmDoctorSchedule where crmBranch.id = "
 				+ idBranch + " and crmDoctor.id = " + idDoctor);
+	}
+
+	public int removeHoliday(CrmHoliday entity) {
+		dao.executeHQL("delete from CrmHolidayBranch o where o.crmHoliday.id = "
+				+ entity.getId());
+		return dao.executeHQL("delete from CrmHoliday o where id = "
+				+ entity.getId());
 	}
 
 	public boolean isValidateTicket(String ticket) {

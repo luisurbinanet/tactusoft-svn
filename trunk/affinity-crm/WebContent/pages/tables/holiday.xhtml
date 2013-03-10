@@ -25,6 +25,8 @@
 							oncomplete="dlg.show()"
 							update=":editForm:pnlDetail :editForm:recordTable2"
 							actionListener="#{holidayBacking.generateListAction}" />
+						<p:commandButton value="#{msg['btn_delete']}"
+							icon="ui-icon-closethick" oncomplete="confirmDlg.show()" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -89,7 +91,8 @@
 
 				</h:panelGrid>
 
-				<p:dataTable id="recordTable2" var="rec" selection="#{holidayBacking.selectedsBranch}"
+				<p:dataTable id="recordTable2" var="rec"
+					selection="#{holidayBacking.selectedsBranch}"
 					value="#{holidayBacking.modelHolidayBranch}" rowKey="#{rec.id}"
 					paginator="true" rows="10" style="width:100%">
 
@@ -106,6 +109,18 @@
 				</p:dataTable>
 
 			</p:dialog>
+
+			<p:confirmDialog id="confirmDialog" message="#{msg['glb_question']}"
+				header="#{msg['title_holiday']}" severity="alert" widgetVar="confirmDlg">
+
+				<p:commandButton id="confirm" value="#{msg['glb_state_yes']}"
+					oncomplete="confirmDlg.hide()" update=":form:recordTable :editForm:growl"
+					actionListener="#{holidayBacking.removeAction}"
+					style="font-weight:bold;" />
+				<p:commandButton id="decline" value="#{msg['glb_state_no']}"
+					onclick="holidayBacking.hide()" type="button" />
+
+			</p:confirmDialog>
 		</h:form>
 
 	</ui:define>
