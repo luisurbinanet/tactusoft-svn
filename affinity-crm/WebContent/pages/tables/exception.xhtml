@@ -21,7 +21,7 @@
 						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
 							action="#{doctorExceptionBacking.newAction}"
 							oncomplete="dlg.show()" update=":editForm:pnlDetail"
-							disabled="#{doctorExceptionBacking.disabled}" />
+							disabled="#{doctorExceptionBacking.disabledNew}" />
 						<p:commandButton value="#{msg['btn_edit']}" icon="ui-icon-pencil"
 							oncomplete="dlg.show()" update=":editForm:pnlDetail"
 							disabled="#{doctorExceptionBacking.disabledSearch}" />
@@ -92,7 +92,8 @@
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_save']}" icon="ui-icon-disk"
 							action="#{doctorExceptionBacking.saveAction}"
-							update="growl :form:recordTable" />
+							update="growl :form:recordTable"
+							oncomplete="handleSaveRequest(xhr, status, args);" />
 						<p:commandButton value="#{msg['btn_close']}"
 							icon="ui-icon-closethick" update="growl :form:recordTable"
 							process="@none" oncomplete="dlg.hide()" />
@@ -132,6 +133,18 @@
 				</h:panelGrid>
 
 			</p:dialog>
+
+			<script type="text/javascript">
+				function handleSaveRequest(xhr, status, args) {
+					if (args.validationFailed) {
+						jQuery('#dialog').effect("shake", {
+							times : 3
+						}, 100);
+					} else {
+						dlg.hide();
+					}
+				}
+			</script>
 		</h:form>
 
 	</ui:define>
