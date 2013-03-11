@@ -73,8 +73,7 @@ public class ProcessBO implements Serializable {
 	public List<CrmAppointment> getListAppointmentClosed(String dateString) {
 		return dao
 				.find("FROM CrmAppointment o WHERE state = 4 AND closeAppointment = 1 AND startAppointmentDate <= '"
-						+ dateString
-						+ "T23:59:59.999+05:00'");
+						+ dateString + "T23:59:59.999+05:00'");
 	}
 
 	public CrmUser getUser(CrmBranch crmBranch) {
@@ -101,6 +100,10 @@ public class ProcessBO implements Serializable {
 			result = list.get(0);
 		}
 		return result;
+	}
+
+	public void updateCrmSapMedication() {
+		dao.executeHQL("UPDATE CrmSapMedication SET status = 'PROCESADO'");
 	}
 
 	public List<CrmSapMedication> getListSapMedicationByLoadState(
