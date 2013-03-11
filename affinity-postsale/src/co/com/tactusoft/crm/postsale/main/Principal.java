@@ -268,6 +268,8 @@ public class Principal {
 			processBO.save(crmLogDetail);
 		}
 
+		processBO.updateCrmSapMedication();
+
 		System.out.println("PROCESO TERMINADO");
 		crmLogDetail = new CrmLogDetail();
 		crmLogDetail.setCrmLog(crmLog);
