@@ -128,7 +128,7 @@
 				<p:dataTable id="selectedTable" var="rec"
 					value="#{appointmentSearchBacking.appointmentModel}"
 					rowKey="#{rec.code}" style="width:1100px;overflow:scroll;"
-					paginator="true" rows="20"
+					paginator="true" rows="20" resizableColumns="true"
 					emptyMessage="#{msg['glb_no_records_found']}" scrollable="true">
 
 					<p:column>
@@ -151,19 +151,26 @@
 						</f:facet>
 						<h:outputLabel value="#{rec.patSurnames}" />
 					</p:column>
-
-					<p:column>
-						<f:facet name="header">
-							<h:outputText value="#{msg['pat_send_phone']}" />
-						</f:facet>
-						<h:outputLabel value="#{rec.patPhoneNumber}" />
-					</p:column>
-
+					
 					<p:column>
 						<f:facet name="header">
 							<h:outputText value="#{msg['pat_names']}" />
 						</f:facet>
 						<h:outputLabel value="#{rec.patFirstnames}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['pat_phone_number']}" />
+						</f:facet>
+						<h:outputLabel value="#{rec.patPhoneNumber}" />
+					</p:column>
+					
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['pat_cell_number']}" />
+						</f:facet>
+						<h:outputLabel value="#{rec.patCellNumber}" />
 					</p:column>
 
 					<p:column>
