@@ -1477,9 +1477,10 @@
 
 					<h:panelGrid id="pnlConsent" columns="2" width="100%">
 						<h:outputLabel value="#{msg['con_date_informed']}" />
-						<p:calendar value="#{historyBacking.consentDate}"
+						<p:calendar value="#{historyBacking.consentDate}" required="true"
 							id="calConsentDate" showOn="button" navigator="true"
-							pattern="dd/MM/yyyy" readonlyInput="true" locale="es" />
+							pattern="dd/MM/yyyy" readonlyInput="true" locale="es"
+							label="#{msg['con_date_informed']}" />
 
 						<h:outputLabel value="#{msg['con_consent']}" />
 						<p:fileUpload cancelLabel="#{msg['file_cancel']}"
@@ -1487,7 +1488,7 @@
 							uploadLabel="#{msg['file_upload']}" label="#{msg['file_choose']}"
 							fileUploadListener="#{historyBacking.handleFileUpload}"
 							mode="advanced" sizeLimit="10000000" auto="true"
-							allowTypes="/(\.|\/)(pdf|doc|docx)$/" />
+							allowTypes="/(\.|\/)(pdf)$/" />
 
 						<p:commandButton value="#{msg['btn_add']}"
 							process="@this,pnlConsent"
