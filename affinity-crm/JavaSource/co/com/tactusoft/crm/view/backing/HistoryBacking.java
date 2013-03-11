@@ -1,5 +1,6 @@
 package co.com.tactusoft.crm.view.backing;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -21,13 +22,17 @@ import javax.inject.Named;
 import net.sf.jasperreports.engine.JRException;
 
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.TabChangeEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.controller.bo.GenerateFormulaPDF;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmCie;
+import co.com.tactusoft.crm.model.entities.CrmConsent;
 //import co.com.tactusoft.crm.model.entities.CrmCieMaterial;
 import co.com.tactusoft.crm.model.entities.CrmDiagnosis;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
@@ -147,18 +152,22 @@ public class HistoryBacking extends BaseBacking {
 	private String noteDoctor;
 	private boolean viewMode;
 	private List<CrmMaterialGroup> listMaterialGroup;
-	//private List<CrmCieMaterial> listCieMaterial;
+	// private List<CrmCieMaterial> listCieMaterial;
 
 	private List<CrmDiagnosis> listDiagnosisView;
 	private List<CrmMedication> listMedicationView;
 	private List<CrmMedication> listTherapyView;
 	private List<CrmMedication> listExamView;
 	private List<CrmNote> listNoteView;
+	private List<CrmConsent> listConsentView;
 
 	private List<SelectItem> listNoteTherapyItem;
 	private Map<Integer, Object> mapNoteTherapy;
 	private Integer idNoteTherapy;
 	private boolean autoNote;
+
+	private byte[] consentFile;
+	private Date consentDate;
 
 	private HtmlPanelGrid containerComponent;
 
@@ -173,7 +182,7 @@ public class HistoryBacking extends BaseBacking {
 		modeHistorial = false;
 
 		listMaterialGroup = processService.getListMaterialGroup();
-		//listCieMaterial = processService.getListCieMaterial();
+		// listCieMaterial = processService.getListCieMaterial();
 
 		currentDoctor = processService.getCrmDoctor();
 
@@ -754,13 +763,13 @@ public class HistoryBacking extends BaseBacking {
 		this.listMaterialGroup = listMaterialGroup;
 	}
 
-	/*public List<CrmCieMaterial> getListCieMaterial() {
-		return listCieMaterial;
-	}
-
-	public void setListCieMaterial(List<CrmCieMaterial> listCieMaterial) {
-		this.listCieMaterial = listCieMaterial;
-	}*/
+	/*
+	 * public List<CrmCieMaterial> getListCieMaterial() { return
+	 * listCieMaterial; }
+	 * 
+	 * public void setListCieMaterial(List<CrmCieMaterial> listCieMaterial) {
+	 * this.listCieMaterial = listCieMaterial; }
+	 */
 
 	public List<CrmDiagnosis> getListDiagnosisView() {
 		return listDiagnosisView;
@@ -800,6 +809,14 @@ public class HistoryBacking extends BaseBacking {
 
 	public void setListNoteView(List<CrmNote> listNoteView) {
 		this.listNoteView = listNoteView;
+	}
+
+	public List<CrmConsent> getListConsentView() {
+		return listConsentView;
+	}
+
+	public void setListConsentView(List<CrmConsent> listConsentView) {
+		this.listConsentView = listConsentView;
 	}
 
 	public List<SelectItem> getListNoteTherapyItem() throws Exception {
@@ -853,6 +870,22 @@ public class HistoryBacking extends BaseBacking {
 
 	public void setAutoNote(boolean autoNote) {
 		this.autoNote = autoNote;
+	}
+
+	public byte[] getConsentFile() {
+		return consentFile;
+	}
+
+	public void setConsentFile(byte[] consentFile) {
+		this.consentFile = consentFile;
+	}
+
+	public Date getConsentDate() {
+		return consentDate;
+	}
+
+	public void setConsentDate(Date consentDate) {
+		this.consentDate = consentDate;
 	}
 
 	public HtmlPanelGrid getContainerComponent() {
@@ -959,6 +992,7 @@ public class HistoryBacking extends BaseBacking {
 		listTherapyView = new ArrayList<CrmMedication>();
 		listExamView = new ArrayList<CrmMedication>();
 		listNoteView = new ArrayList<CrmNote>();
+		listConsentView = new ArrayList<CrmConsent>();
 
 		selectedDiagnosis = new CrmDiagnosis();
 		selectedsDiagnosis = null;
@@ -1489,6 +1523,8 @@ public class HistoryBacking extends BaseBacking {
 
 		listNoteView = processService.getListNoteByPatient(selectedPatient
 				.getId());
+		listConsentView = processService
+				.getListConsentByPatient(selectedPatient.getId());
 	}
 
 	public void closeAppointmentAction(ActionEvent event) {
@@ -2126,10 +2162,11 @@ public class HistoryBacking extends BaseBacking {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void printHistoryAction() {
 		try {
-			GenerateFormulaPDF.historyPDF(currentAppointment.getCrmPatient().getId());
+			GenerateFormulaPDF.historyPDF(currentAppointment.getCrmPatient()
+					.getId());
 		} catch (JRException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -2305,5 +2342,45 @@ public class HistoryBacking extends BaseBacking {
 		} else {
 			this.autoNote = false;
 		}
+	}
+
+	public void newConsentAction(ActionEvent event) {
+		this.consentFile = null;
+		this.consentDate = null;
+	}
+
+	public void handleFileUpload(FileUploadEvent event) {
+		this.consentFile = event.getFile().getContents();
+	}
+
+	public void saveConsentAction() {
+		RequestContext context = RequestContext.getCurrentInstance();
+		String message = null;
+		boolean saved = false;
+		CrmConsent crmConsent = new CrmConsent();
+
+		if (consentFile != null) {
+			crmConsent.setCrmPatient(this.selectedPatient);
+			crmConsent.setConsentFile(consentFile);
+			crmConsent.setDateInformed(consentDate);
+			processService.persist(crmConsent);
+			listConsentView.add(crmConsent);
+			saved = true;
+			message = FacesUtil.getMessage("msg_record_ok");
+			FacesUtil.addInfo(message);
+		} else {
+			saved = false;
+			String field = FacesUtil.getMessage("con_consent");
+			message = FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		}
+
+		context.addCallbackParam("saved", saved);
+	}
+
+	public StreamedContent getFile(byte[] consentFile) {
+		StreamedContent file = new DefaultStreamedContent(
+				new ByteArrayInputStream(consentFile), "application/pdf", "consentimiento.pdf");
+		return file;
 	}
 }

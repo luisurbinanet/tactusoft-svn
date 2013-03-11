@@ -1470,6 +1470,34 @@
 
 				</p:dialog>
 
+				<p:dialog header="#{msg['his_history_consent']}"
+					widgetVar="dlgConsent" resizable="false" id="dialogConsent"
+					showEffect="fade" hideEffect="explode" modal="true" width="600"
+					dynamic="true">
+
+					<h:panelGrid id="pnlConsent" columns="2" width="100%">
+						<h:outputLabel value="#{msg['con_date_informed']}" />
+						<p:calendar value="#{historyBacking.consentDate}"
+							id="calConsentDate" showOn="button" navigator="true"
+							pattern="dd/MM/yyyy" readonlyInput="true" locale="es" />
+
+						<h:outputLabel value="#{msg['con_consent']}" />
+						<p:fileUpload cancelLabel="#{msg['file_cancel']}"
+							invalidFileMessage="#{msg['file_invalid_size']}"
+							uploadLabel="#{msg['file_upload']}" label="#{msg['file_choose']}"
+							fileUploadListener="#{historyBacking.handleFileUpload}"
+							mode="advanced" sizeLimit="10000000" auto="true"
+							allowTypes="/(\.|\/)(pdf|doc|docx)$/" />
+
+						<p:commandButton value="#{msg['btn_add']}"
+							process="@this,pnlConsent"
+							actionListener="#{historyBacking.saveConsentAction}"
+							update=":form:growl pnlNote :form:pnlHistorial_tabview:tblConsent :form:dlgHistorial_tabview:tblConsent"
+							oncomplete="handleConsentComplete(xhr, status, args)" />
+					</h:panelGrid>
+
+				</p:dialog>
+
 			</h:form>
 
 		</p:panel>
@@ -1483,6 +1511,24 @@
 				} else {
 					dlgNote.hide();
 				}
+			}
+
+			function handleConsentComplete(xhr, status, args) {
+				if (args.validationFailed || !args.saved) {
+					jQuery('dialogConsent').effect("shake", {
+						times : 3
+					}, 100);
+				} else {
+					dlgConsent.hide();
+				}
+			}
+			
+			function start() {
+			    statusDialog.show();
+			}
+
+			function stop() {
+			    statusDialog.hide();
 			}
 		</script>
 
