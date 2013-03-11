@@ -412,5 +412,38 @@
 		</h:panelGrid>
 	</p:tab>
 
+	<p:tab id="tab12" title="#{msg['his_history_consent']}"
+		rendered="#{historyBacking.rolePrincipal eq 'NURSE' or historyBacking.rolePrincipal eq 'DOCTOR'}">
+
+		<h:panelGrid width="100%">
+			<p:commandButton value="#{msg['btn_add']}"
+				actionListener="#{historyBacking.newConsentAction}"
+				oncomplete="dlgConsent.show()" update=":form:dialogConsent"
+				rendered="#{historyBacking.rolePrincipal eq 'NURSE' or historyBacking.rolePrincipal eq 'DOCTOR'}" />
+
+			<p:spacer />
+
+			<p:dataTable id="tblConsent" var="rec"
+				value="#{historyBacking.listConsentView}" paginator="true" rows="15"
+				style="width:100%" emptyMessage="#{msg['glb_no_records_found']}">
+
+				<p:column headerText="#{msg['con_date_informed']}" width="80%">
+					<h:outputLabel value="#{rec.dateInformed}">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputLabel>
+				</p:column>
+
+				<p:column headerText="#{msg['con_consent']}" width="20%">
+					<p:commandButton id="downloadLink" value="#{msg['btn_download']}"
+						ajax="false" icon="ui-icon-carat-1-s"
+						onclick="PrimeFaces.monitorDownload(start, stop)">
+						<p:fileDownload value="#{historyBacking.getFile(rec.consentFile)}" />
+					</p:commandButton>
+
+				</p:column>
+			</p:dataTable>
+		</h:panelGrid>
+	</p:tab>
+
 </p:tabView>
 </html>

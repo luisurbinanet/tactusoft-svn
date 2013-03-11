@@ -18,6 +18,7 @@ import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmCie;
 import co.com.tactusoft.crm.model.entities.CrmCieMaterial;
+import co.com.tactusoft.crm.model.entities.CrmConsent;
 import co.com.tactusoft.crm.model.entities.CrmDiagnosis;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmDoctorException;
@@ -1503,6 +1504,13 @@ public class ProcessBo implements Serializable {
 	public List<CrmNote> getListNoteByPatient(BigDecimal idPatient) {
 		List<CrmNote> list = dao.find("from CrmNote o where o.crmPatient.id = "
 				+ idPatient + " order by o.noteDate desc");
+		return list;
+	}
+
+	public List<CrmConsent> getListConsentByPatient(BigDecimal idPatient) {
+		List<CrmConsent> list = dao
+				.find("from CrmConsent o where o.crmPatient.id = " + idPatient
+						+ " order by o.dateInformed desc");
 		return list;
 	}
 
