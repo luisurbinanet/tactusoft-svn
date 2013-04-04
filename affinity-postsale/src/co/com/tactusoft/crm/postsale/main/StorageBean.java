@@ -13,6 +13,7 @@ public class StorageBean implements Serializable {
 	private String type;
 	private String medicationCode;
 	private String medicationName;
+	private int unit;
 
 	public StorageBean() {
 
@@ -26,12 +27,13 @@ public class StorageBean implements Serializable {
 	}
 
 	public StorageBean(CrmPatient crmPatient, CrmAppointment crmAppointment,
-			String type, String medicationCode, String medicationName) {
+			String type, String medicationCode, String medicationName, int unit) {
 		this.crmPatient = crmPatient;
 		this.crmAppointment = crmAppointment;
 		this.type = type;
 		this.medicationCode = medicationCode;
 		this.medicationName = medicationName;
+		this.unit = unit;
 	}
 
 	public String getType() {
@@ -72,6 +74,14 @@ public class StorageBean implements Serializable {
 
 	public void setMedicationName(String medicationName) {
 		this.medicationName = medicationName;
+	}
+
+	public int getUnit() {
+		return unit;
+	}
+
+	public void setUnit(int unit) {
+		this.unit = unit;
 	}
 
 }
