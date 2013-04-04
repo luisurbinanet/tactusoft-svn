@@ -25,6 +25,7 @@ public class CrmCampaignDetail implements java.io.Serializable {
 	private String codMaterial;
 	private String descMaterial;
 	private String campaingType;
+	private int unit;
 
 	public CrmCampaignDetail() {
 	}
@@ -36,12 +37,13 @@ public class CrmCampaignDetail implements java.io.Serializable {
 
 	public CrmCampaignDetail(CrmCampaign crmCampaign,
 			CrmAppointment crmAppointment, String codMaterial,
-			String descMaterial, String campaingType) {
+			String descMaterial, String campaingType, int unit) {
 		this.crmCampaign = crmCampaign;
 		this.crmAppointment = crmAppointment;
 		this.codMaterial = codMaterial;
 		this.descMaterial = descMaterial;
 		this.campaingType = campaingType;
+		this.unit = unit;
 	}
 
 	@Id
@@ -100,6 +102,15 @@ public class CrmCampaignDetail implements java.io.Serializable {
 
 	public void setCampaingType(String campaingType) {
 		this.campaingType = campaingType;
+	}
+
+	@Column(name = "unit", nullable = true)
+	public int getUnit() {
+		return unit;
+	}
+
+	public void setUnit(int unit) {
+		this.unit = unit;
 	}
 
 }
