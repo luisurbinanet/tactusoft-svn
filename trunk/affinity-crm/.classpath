@@ -13,6 +13,7 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/affinity-model"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/spring_hibernate_libs"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/affinity-model"/>
 	<classpathentry kind="output" path="WebContent/WEB-INF/classes"/>
 </classpath>
