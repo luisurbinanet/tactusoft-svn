@@ -16,6 +16,7 @@ import org.primefaces.context.RequestContext;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
+import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.util.Constant;
@@ -220,17 +221,24 @@ public class SearchByPatientBacking extends BaseBacking {
 		appointmentEditBacking.setSelected(selectedAppointment);
 		appointmentEditBacking.setSelectedPatient(selectedAppointment
 				.getCrmPatient());
-		appointmentEditBacking.setCurrentDate(selectedAppointment
-				.getStartAppointmentDate());
-		for (SelectItem item : appointmentEditBacking.getListBranch()) {
-			long value = ((BigDecimal) item.getValue()).longValue();
-			if (value == selectedAppointment.getCrmBranch().getId().longValue()) {
+		appointmentEditBacking.setCurrentDate(new Date());
+
+		appointmentEditBacking.setListBranch(new LinkedList<SelectItem>());
+		appointmentEditBacking
+				.setMapBranch(new LinkedHashMap<BigDecimal, CrmBranch>());
+		for (CrmBranch row : FacesUtil.getCurrentUserData().getListBranch()) {
+			appointmentEditBacking.getMapBranch().put(row.getId(), row);
+			appointmentEditBacking.getListBranch().add(
+					new SelectItem(row.getId(), row.getName()));
+			if (row.getId().longValue() == selectedAppointment.getCrmBranch()
+					.getId().longValue()) {
 				appointmentEditBacking.setSaved(false);
 				break;
 			}
 		}
 		appointmentEditBacking.setIdBranch(selectedAppointment.getCrmBranch()
 				.getId());
+		appointmentEditBacking.handleBranchChange();
 		appointmentEditBacking.setIdProcedure(selectedAppointment
 				.getCrmProcedureDetail().getCrmProcedure().getId());
 		appointmentEditBacking.handleProcedureChange();
