@@ -262,7 +262,15 @@ public class ContactBacking extends BaseBacking {
 	public void updateAction(ActionEvent event) {
 		String message = null;
 
-		if (FacesUtil.isEmptyOrBlank(selectedPatient.getPhoneNumber())
+		CrmProfile profile = selectedPatient.getCrmProfile();
+		CrmCountry crmCountry = mapCountry.get(selectedPatient.getIdCountry());
+		CrmRegion crmRegion = mapRegion.get(selectedPatient.getIdRegion());
+		CrmCity crmCity = mapCity.get(selectedPatient.getIdCity());
+
+		if (crmCountry == null || crmRegion == null || crmCity == null) {
+			message = FacesUtil.getMessage("pat_msg_country");
+			FacesUtil.addError(message);
+		} else if (FacesUtil.isEmptyOrBlank(selectedPatient.getPhoneNumber())
 				&& FacesUtil.isEmptyOrBlank(selectedPatient.getCellNumber())) {
 			message = FacesUtil.getMessage("pat_msg_phone");
 			FacesUtil.addError(message);
@@ -286,9 +294,6 @@ public class ContactBacking extends BaseBacking {
 			saved = false;
 			String codeSap = null;
 			SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
-			CrmProfile profile = selectedPatient.getCrmProfile();
-			CrmCountry crmCountry = mapCountry.get(selectedPatient
-					.getIdCountry());
 
 			List<WSBean> listCustomer = CustomerExecute.findByDoc(
 					sap.getUrlCustomer2(), sap.getUsername(),
@@ -304,9 +309,6 @@ public class ContactBacking extends BaseBacking {
 			if (selectedPatient.getGender().equals("W")) {
 				tratamiento = "Señora";
 			}
-
-			CrmRegion crmRegion = mapRegion.get(selectedPatient.getIdRegion());
-			CrmCity crmCity = mapCity.get(selectedPatient.getIdCity());
 
 			String address = selectedPatient.getAddress();
 			if (address.length() > 35) {
