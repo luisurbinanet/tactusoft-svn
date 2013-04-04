@@ -36,6 +36,7 @@ public class VwAppointmentMedication implements java.io.Serializable {
 	private String doctorCode;
 	private String doctorNames;
 	private String descMaterial;
+	private int unitMaterial;
 
 	public VwAppointmentMedication() {
 	}
@@ -46,7 +47,7 @@ public class VwAppointmentMedication implements java.io.Serializable {
 			String patFirstnames, String patPhoneNumber, String patCellNumber,
 			String email, BigDecimal branchId, String branchCode,
 			String branchName, String branchSociety, BigDecimal doctorId,
-			String doctorCode, String doctorNames, String descMaterial) {
+			String doctorCode, String doctorNames, String descMaterial, int unitMaterial) {
 		this.id = id;
 		this.code = code;
 		this.startAppointmentDate = startAppointmentDate;
@@ -67,6 +68,7 @@ public class VwAppointmentMedication implements java.io.Serializable {
 		this.doctorCode = doctorCode;
 		this.doctorNames = doctorNames;
 		this.descMaterial = descMaterial;
+		this.unitMaterial = unitMaterial;
 	}
 
 	public VwAppointmentMedication(VwAppointmentMedicationId id) {
@@ -253,4 +255,12 @@ public class VwAppointmentMedication implements java.io.Serializable {
 		this.descMaterial = descMaterial;
 	}
 
+	@Column(name = "unit_material")
+	public int getUnitMaterial() {
+		return unitMaterial;
+	}
+
+	public void setUnitMaterial(int unitMaterial) {
+		this.unitMaterial = unitMaterial;
+	}
 }
