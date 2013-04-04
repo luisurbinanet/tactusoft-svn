@@ -28,6 +28,7 @@ public class Principal {
 		System.out.println("INCIANDO PROCESO...");
 
 		System.out.println("CARGANDO BASE DE DATOS...");
+		@SuppressWarnings("resource")
 		BeanFactory beanFactory = new ClassPathXmlApplicationContext(
 				"spring-config.xml");
 		ProcessBO processBO = beanFactory.getBean(ProcessBO.class);
@@ -168,16 +169,16 @@ public class Principal {
 						listStorage.add(new StorageBean(row.getCrmPatient(),
 								row, "MEDICATION", String.valueOf(row2.getId()
 										.getCodMaterial()), row2
-										.getDescMaterial()));
+										.getDescMaterial(), row2
+										.getUnitMaterial()));
 					}
 				}
 			} else {
 				for (VwAppointmentMedication row4 : listVwAppointmentMedication) {
-					listStorage
-							.add(new StorageBean(row.getCrmPatient(), row,
-									"MEDICATION", String.valueOf(row4.getId()
-											.getCodMaterial()), row4
-											.getDescMaterial()));
+					listStorage.add(new StorageBean(row.getCrmPatient(), row,
+							"MEDICATION", String.valueOf(row4.getId()
+									.getCodMaterial()), row4.getDescMaterial(),
+							row4.getUnitMaterial()));
 				}
 			}
 		}
@@ -254,6 +255,7 @@ public class Principal {
 					crmCampaignDetail.setCampaingType(row.getType());
 					crmCampaignDetail.setCodMaterial(row.getMedicationCode());
 					crmCampaignDetail.setDescMaterial(row.getMedicationName());
+					crmCampaignDetail.setUnit(row.getUnit());
 					processBO.save(crmCampaignDetail);
 				}
 
