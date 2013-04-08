@@ -119,7 +119,7 @@ public class BaseBacking implements Serializable {
 
 	protected Integer numPhone;
 	protected Integer numCell;
-	
+
 	protected String typeHousing;
 	protected String neighborhood;
 
@@ -207,18 +207,19 @@ public class BaseBacking implements Serializable {
 					result = CustomerExecute.findByDoc(sap.getUrlCustomer2(),
 							sap.getUsername(), sap.getPassword(),
 							profile.getSociety(), this.docPatient);
-					
-					if(result.size() > 0){
-						String message = FacesUtil.getMessage("pat_msg_exists_sap_2");
+
+					if (result.size() > 0) {
+						String message = FacesUtil
+								.getMessage("pat_msg_exists_sap_2");
 						FacesUtil.addWarn(message);
 					}
 
-					//for (WSBean row : result) {
-						//CrmPatient patient = new CrmPatient();
-						//patient.setCodeSap(row.getCode());
-						//patient.setNames(row.getNames());
-						//listPatient.add(patient);
-					//}
+					// for (WSBean row : result) {
+					// CrmPatient patient = new CrmPatient();
+					// patient.setCodeSap(row.getCode());
+					// patient.setNames(row.getNames());
+					// listPatient.add(patient);
+					// }
 				}
 			} else {
 				listPatient = processService.getListPatientByNameOrDoc("NAMES",
@@ -727,6 +728,10 @@ public class BaseBacking implements Serializable {
 		return FacesUtil.getCurrentUserData().isOpenAppointment();
 	}
 
+	public boolean isPrintFormula() {
+		return FacesUtil.getCurrentUserData().isPrintFormula();
+	}
+
 	public List<SelectItem> getListOccupation() {
 		if (listOccupation == null) {
 			listOccupation = new LinkedList<SelectItem>();
@@ -776,7 +781,7 @@ public class BaseBacking implements Serializable {
 	public void setNumCell(Integer numCell) {
 		this.numCell = numCell;
 	}
-	
+
 	public String getTypeHousing() {
 		return typeHousing;
 	}

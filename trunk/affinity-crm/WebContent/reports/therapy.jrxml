@@ -101,7 +101,7 @@ order by a.id]]>
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<parameter name="P_IMAGE" class="java.lang.String">
-		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["/Users/CSARMIENTO/Documents/Desarrollo/workspace/affinity-crm/WebContent/images"]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[select c.id_appointment,
@@ -113,6 +113,7 @@ order by a.id]]>
 		'' posology,
 		e.doc,
 		cast(d.start_appointment_date as Date) appointment_date,
+                     e.doc as doc_patient,
 		concat(e.firstnames,' ', e.surnames) as name_patient,
 		f.names as name_doctor,
 		concat(g.code, ' - ',g.name) as name_branch
@@ -124,15 +125,30 @@ join crm_branch g on d.id_branch = g.id
 where c.id_appointment = $P{P_APPOINTMENT} and c.material_type = 'TERAPIA'
 order by c.id]]>
 	</queryString>
-	<field name="id_appointment" class="java.math.BigDecimal"/>
+	<field name="id_appointment" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="desc_cie" class="java.lang.String"/>
-	<field name="id_cie" class="java.lang.Long"/>
-	<field name="unit" class="java.lang.Integer"/>
-	<field name="cod_material" class="java.lang.Long"/>
-	<field name="desc_material" class="java.lang.String"/>
-	<field name="posology" class="java.lang.String"/>
-	<field name="doc" class="java.lang.String"/>
+	<field name="id_cie" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="unit" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cod_material" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="desc_material" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="posology" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="doc" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="appointment_date" class="java.sql.Date"/>
+	<field name="doc_patient" class="java.lang.String"/>
 	<field name="name_patient" class="java.lang.String"/>
 	<field name="name_doctor" class="java.lang.String"/>
 	<field name="name_branch" class="java.lang.String"/>
@@ -226,14 +242,14 @@ order by c.id]]>
 				<text><![CDATA[Terapias]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="79a8848e-910c-4361-999f-df34709a3d55" x="0" y="4" width="60" height="20"/>
+				<reportElement uuid="79a8848e-910c-4361-999f-df34709a3d55" x="0" y="4" width="49" height="20"/>
 				<textElement>
 					<font fontName="Arial" size="10"/>
 				</textElement>
 				<text><![CDATA[Paciente:]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="4837340c-f939-4456-a360-ac9d8c2d7b62" x="60" y="4" width="308" height="20"/>
+				<reportElement uuid="4837340c-f939-4456-a360-ac9d8c2d7b62" x="135" y="4" width="233" height="20"/>
 				<textElement>
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
@@ -245,6 +261,13 @@ order by c.id]]>
 					<pen lineWidth="2.0" lineStyle="Double"/>
 				</graphicElement>
 			</line>
+			<textField>
+				<reportElement uuid="40f44567-0763-4f0b-8125-2a4ed95270bb" x="49" y="4" width="76" height="20"/>
+				<textElement>
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{doc_patient}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<detail>

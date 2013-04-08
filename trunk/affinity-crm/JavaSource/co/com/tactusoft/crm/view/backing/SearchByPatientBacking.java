@@ -1,6 +1,8 @@
 package co.com.tactusoft.crm.view.backing;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -12,16 +14,21 @@ import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.inject.Named;
 
+import net.sf.jasperreports.engine.JRException;
+
 import org.primefaces.context.RequestContext;
 import org.springframework.context.annotation.Scope;
 
+import co.com.tactusoft.crm.controller.bo.GenerateFormulaPDF;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
+import co.com.tactusoft.crm.model.entities.CrmMedication;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.datamodel.AppointmentDataModel;
+import co.com.tactusoft.crm.view.datamodel.MedicationDataModel;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 
 @Named
@@ -45,6 +52,9 @@ public class SearchByPatientBacking extends BaseBacking {
 	private List<SelectItem> listDoctor;
 	private Map<BigDecimal, CrmDoctor> mapDoctor;
 	private BigDecimal idDoctor;
+
+	private List<CrmMedication> listMedication;
+	private MedicationDataModel medicationModel;
 
 	public SearchByPatientBacking() {
 		newAction(null);
@@ -138,6 +148,35 @@ public class SearchByPatientBacking extends BaseBacking {
 		this.idDoctor = idDoctor;
 	}
 
+	public List<CrmMedication> getListMedication() {
+		return listMedication;
+	}
+
+	public void setListMedication(List<CrmMedication> listMedication) {
+		this.listMedication = listMedication;
+	}
+
+	public MedicationDataModel getMedicationModel() {
+		return medicationModel;
+	}
+
+	public void setMedicationModel(MedicationDataModel medicationModel) {
+		this.medicationModel = medicationModel;
+	}
+
+	public boolean isRenderedFields() {
+		boolean result = false;
+		if (selectedAppointment != null
+				&& selectedAppointment.getCrmPatient() != null) {
+			if (selectedAppointment.getCrmPatient().getCrmOccupation() == null) {
+				result = true;
+			}
+		} else {
+			result = false;
+		}
+		return result;
+	}
+
 	public void newAction(ActionEvent event) {
 		listAppointment = new LinkedList<CrmAppointment>();
 		appointmentModel = new AppointmentDataModel(listAppointment);
@@ -208,6 +247,13 @@ public class SearchByPatientBacking extends BaseBacking {
 
 	public boolean isDisabledAppointment() {
 		if (this.listAppointment.size() == 0) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isDisabledPrintFormula() {
+		if (this.listAppointment == null || this.listAppointment.size() == 0) {
 			return true;
 		}
 		return false;
@@ -343,17 +389,23 @@ public class SearchByPatientBacking extends BaseBacking {
 		return "/pages/processes/contact?faces-redirect=true";
 	}
 
-	public boolean isRenderedFields() {
-		boolean result = false;
-		if (selectedAppointment != null
-				&& selectedAppointment.getCrmPatient() != null) {
-			if (selectedAppointment.getCrmPatient().getCrmOccupation() == null) {
-				result = true;
-			}
-		} else {
-			result = false;
+	public void searchMedicationAction() {
+		listMedication = processService.getListMedicationByAppointment(
+				selectedAppointment.getId(), Constant.MATERIAL_TYPE_MEDICINE);
+		medicationModel = new MedicationDataModel(listMedication);
+	}
+
+	public void printFormulaAction() {
+		try {
+			GenerateFormulaPDF.PDF(selectedAppointment.getId(),
+					Constant.MATERIAL_TYPE_MEDICINE);
+		} catch (JRException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
-		return result;
 	}
 
 }

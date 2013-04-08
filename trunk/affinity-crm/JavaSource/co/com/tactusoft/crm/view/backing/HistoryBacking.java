@@ -79,6 +79,7 @@ public class HistoryBacking extends BaseBacking {
 	private List<VwAppointment> listAppointment;
 	private VwAppointmentDataModel appointmentModel;
 	private VwAppointment selectedAppointment;
+	private VwAppointment selectedAppointmentPrint;
 
 	private boolean modeEdit;
 	private boolean modeHistorial;
@@ -203,6 +204,23 @@ public class HistoryBacking extends BaseBacking {
 
 	public void setCurrentAppointment(CrmAppointment currentAppointment) {
 		this.currentAppointment = currentAppointment;
+	}
+
+	public CrmNurse getCurrentNurse() {
+		return currentNurse;
+	}
+
+	public void setCurrentNurse(CrmNurse currentNurse) {
+		this.currentNurse = currentNurse;
+	}
+
+	public VwAppointment getSelectedAppointmentPrint() {
+		return selectedAppointmentPrint;
+	}
+
+	public void setSelectedAppointmentPrint(
+			VwAppointment selectedAppointmentPrint) {
+		this.selectedAppointmentPrint = selectedAppointmentPrint;
 	}
 
 	public CrmNote getCurrentNote() {
@@ -2150,6 +2168,19 @@ public class HistoryBacking extends BaseBacking {
 		}
 	}
 
+	public void printFormulaHistorialAction() {
+		try {
+			GenerateFormulaPDF.PDF(selectedAppointmentPrint.getId(),
+					Constant.MATERIAL_TYPE_MEDICINE);
+		} catch (JRException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void printFormulaTherapyAction() {
 		try {
 			GenerateFormulaPDF.PDF(currentAppointment.getId(),
@@ -2380,7 +2411,8 @@ public class HistoryBacking extends BaseBacking {
 
 	public StreamedContent getFile(byte[] consentFile) {
 		StreamedContent file = new DefaultStreamedContent(
-				new ByteArrayInputStream(consentFile), "application/pdf", "consentimiento.pdf");
+				new ByteArrayInputStream(consentFile), "application/pdf",
+				"consentimiento.pdf");
 		return file;
 	}
 }

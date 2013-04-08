@@ -3,6 +3,7 @@
 	<name>affinity-crm</name>
 	<comment></comment>
 	<projects>
+		<project>affinity-model</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

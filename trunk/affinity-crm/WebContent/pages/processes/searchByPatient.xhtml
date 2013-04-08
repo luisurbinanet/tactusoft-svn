@@ -141,6 +141,15 @@
 							<f:setPropertyActionListener value="#{rec}"
 								target="#{searchByPatientBacking.selectedAppointment}" />
 						</p:commandButton>
+						<p:commandButton update=":editForm:formulaDisplay"
+							oncomplete="formulaDlg.show()" icon="ui-icon-print"
+							title="#{msg['btn_print_medication']}"
+							action="#{searchByPatientBacking.searchMedicationAction}"
+							disabled="#{rec.state ne 4 or not rec.closeAppointment}"
+							rendered="#{searchByPatientBacking.printFormula}">
+							<f:setPropertyActionListener value="#{rec}"
+								target="#{searchByPatientBacking.selectedAppointment}" />
+						</p:commandButton>
 					</p:column>
 
 					<f:facet name="footer">
@@ -356,6 +365,49 @@
 						</f:facet>
 					</h:panelGrid>
 				</p:confirmDialog>
+
+				<p:dialog header="#{msg['btn_print_medication']}"
+					widgetVar="formulaDlg" resizable="false" id="formulaDialog"
+					showEffect="fade" hideEffect="explode" modal="true" dynamic="true">
+
+					<p:toolbar style="width:100%">
+						<p:toolbarGroup align="left">
+							<p:commandButton value="#{msg['btn_print']}" icon="ui-icon-print"
+								disabled="#{searchByPatientBacking.disabledPrintFormula}"
+								action="#{searchByPatientBacking.printFormulaAction}" />
+						</p:toolbarGroup>
+					</p:toolbar>
+
+					<p:spacer />
+
+					<h:panelGrid id="formulaDisplay" columns="1" cellpadding="4"
+						style="margin:0 auto;" width="100%">
+
+						<p:dataTable id="dtbMedication" var="rec"
+							value="#{searchByPatientBacking.medicationModel}"
+							rowKey="#{rec.id}" paginator="true" rows="15" style="width:100%"
+							emptyMessage="#{msg['glb_no_records_found']}">
+
+							<p:column headerText="#{msg['cie_grp_diagnosis']}">
+								<h:outputLabel value="#{rec.crmCie.description}" />
+							</p:column>
+
+							<p:column headerText="#{msg['sal_material_code']}">
+								<h:outputLabel value="#{rec.codMaterial}" />
+							</p:column>
+
+							<p:column headerText="#{msg['cie_grp_medication']}">
+								<h:outputLabel value="#{rec.descMaterial}" />
+							</p:column>
+
+							<p:column headerText="#{msg['sal_material_amount']}">
+								<h:outputLabel value="#{rec.unit}" />
+							</p:column>
+						</p:dataTable>
+
+					</h:panelGrid>
+
+				</p:dialog>
 
 				<script type="text/javascript">
 					function handleSaveRequest(xhr, status, args) {
