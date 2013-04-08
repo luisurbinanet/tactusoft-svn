@@ -33,6 +33,16 @@
 				<h:outputLabel value="#{rec.prcDetName}" />
 			</p:column>
 
+			<p:column style="width:4%">
+				<p:commandButton icon="ui-icon-print"
+					title="#{msg['btn_print_medication']}"
+					action="#{historyBacking.printFormulaHistorialAction}"
+					disabled="#{rec.state ne 4 or rec.closeAppointment eq 0}">
+					<f:setPropertyActionListener value="#{rec}"
+						target="#{historyBacking.selectedAppointmentPrint}" />
+				</p:commandButton>
+			</p:column>
+
 		</p:dataTable>
 	</p:tab>
 

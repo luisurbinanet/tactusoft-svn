@@ -87,6 +87,10 @@
 					<p:selectBooleanCheckbox
 						value="#{roleBacking.selected.openAppointment}" />
 
+					<h:outputLabel value="#{msg['rol_print_formula']}" />
+					<p:selectBooleanCheckbox
+						value="#{roleBacking.selected.printFormula}" />
+
 					<h:outputLabel value="#{msg['glb_state']}"
 						rendered="#{roleBacking.selected.id!=null?true:false}" />
 					<p:selectOneMenu value="#{roleBacking.selected.state}"

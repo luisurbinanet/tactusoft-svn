@@ -101,7 +101,7 @@ order by a.id]]>
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<parameter name="P_IMAGE" class="java.lang.String">
-		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["/Users/CSARMIENTO/Documents/Desarrollo/workspace/affinity-crm/WebContent/images"]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[select  c.id,a.id_appointment,
@@ -114,6 +114,7 @@ order by a.id]]>
 		e.doc,
 		cast(d.start_appointment_date as Date) appointment_date,
 		concat(e.firstnames,' ', e.surnames) as name_patient,
+		e.doc as doc_patient,
 		f.names as name_doctor,
 		concat(g.code, ' - ',g.name) as name_branch
 from crm_diagnosis a join crm_cie b on a.id_cie = b.id
@@ -134,6 +135,7 @@ select  c.id,c.id_appointment,
 		e.doc,
 		cast(d.start_appointment_date as Date) appointment_date,
 		concat(e.firstnames,' ', e.surnames) as name_patient,
+        e.doc as doc_patient,
 		f.names as name_doctor,
 		concat(g.code, ' - ',g.name) as name_branch
 from crm_medication c
@@ -171,6 +173,9 @@ ORDER BY 1]]>
 	</field>
 	<field name="appointment_date" class="java.sql.Date"/>
 	<field name="name_patient" class="java.lang.String"/>
+	<field name="doc_patient" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="name_doctor" class="java.lang.String"/>
 	<field name="name_branch" class="java.lang.String"/>
 	<group name="group_cie">
@@ -270,14 +275,14 @@ ORDER BY 1]]>
 				<text><![CDATA[Posología]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="79a8848e-910c-4361-999f-df34709a3d55" x="0" y="4" width="60" height="20"/>
+				<reportElement uuid="79a8848e-910c-4361-999f-df34709a3d55" x="0" y="4" width="48" height="20"/>
 				<textElement>
 					<font fontName="Arial" size="10"/>
 				</textElement>
 				<text><![CDATA[Paciente:]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="4837340c-f939-4456-a360-ac9d8c2d7b62" x="60" y="4" width="308" height="20"/>
+				<reportElement uuid="4837340c-f939-4456-a360-ac9d8c2d7b62" x="122" y="4" width="246" height="20"/>
 				<textElement>
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
@@ -289,6 +294,13 @@ ORDER BY 1]]>
 					<pen lineWidth="2.0" lineStyle="Double"/>
 				</graphicElement>
 			</line>
+			<textField>
+				<reportElement uuid="6491ee03-fae5-4f3e-8d79-8c4529348a26" x="52" y="4" width="62" height="20"/>
+				<textElement>
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{doc_patient}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<detail>

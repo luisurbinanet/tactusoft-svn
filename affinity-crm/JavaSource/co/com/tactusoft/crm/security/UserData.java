@@ -40,6 +40,7 @@ public class UserData implements UserDetails {
 	private String rolePrincipal;
 	private int numCalls;
 	private boolean openAppointment;
+	private boolean printFormula;
 
 	private boolean accountNonExpired = true;
 	private boolean credentialsNonExpired = true;
@@ -196,6 +197,14 @@ public class UserData implements UserDetails {
 
 	public void setOpenAppointment(boolean openAppointment) {
 		this.openAppointment = openAppointment;
+	}
+
+	public boolean isPrintFormula() {
+		return printFormula;
+	}
+
+	public void setPrintFormula(boolean printFormula) {
+		this.printFormula = printFormula;
 	}
 
 	@Override
