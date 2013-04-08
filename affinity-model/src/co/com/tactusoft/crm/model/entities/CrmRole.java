@@ -27,6 +27,7 @@ public class CrmRole implements java.io.Serializable {
 	private String name;
 	private String description;
 	private Boolean openAppointment;
+	private Boolean printFormula;
 	private int state;
 	private Set<CrmPageRole> crmPageRoles = new HashSet<CrmPageRole>(0);
 	private Set<CrmUserRole> crmUserRoles = new HashSet<CrmUserRole>(0);
@@ -41,13 +42,15 @@ public class CrmRole implements java.io.Serializable {
 	}
 
 	public CrmRole(BigDecimal id, CrmPage crmPage, String name,
-			String description, Boolean openAppointment, int state, Set<CrmPageRole> crmPageRoles,
+			String description, Boolean openAppointment, Boolean printFormula,
+			int state, Set<CrmPageRole> crmPageRoles,
 			Set<CrmUserRole> crmUserRoles) {
 		this.id = id;
 		this.crmPage = crmPage;
 		this.name = name;
 		this.description = description;
 		this.openAppointment = openAppointment;
+		this.printFormula = printFormula;
 		this.state = state;
 		this.crmPageRoles = crmPageRoles;
 		this.crmUserRoles = crmUserRoles;
@@ -90,7 +93,7 @@ public class CrmRole implements java.io.Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	@Column(name = "open_appointment")
 	public Boolean getOpenAppointment() {
 		return openAppointment;
@@ -98,6 +101,15 @@ public class CrmRole implements java.io.Serializable {
 
 	public void setOpenAppointment(Boolean openAppointment) {
 		this.openAppointment = openAppointment;
+	}
+
+	@Column(name = "print_formula")
+	public Boolean getPrintFormula() {
+		return printFormula;
+	}
+
+	public void setPrintFormula(Boolean printFormula) {
+		this.printFormula = printFormula;
 	}
 
 	@Column(name = "state", nullable = false)
