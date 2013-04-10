@@ -73,7 +73,10 @@
 
 			<p:column style="width:4%">
 				<p:commandButton icon="ui-icon-search" title="#{msg['btn_view']}"
-					update=":form" />
+					update=":form:dialogHistory" oncomplete="dlgHistory.show();">
+					<f:setPropertyActionListener value="#{rec}"
+						target="#{historyBacking.selectedHistoryHistory}" />
+				</p:commandButton>
 			</p:column>
 
 		</p:dataTable>
@@ -126,13 +129,6 @@
 
 			<p:column headerText="#{msg['his_rec_per_infections']}">
 				<h:outputLabel value="#{rec.infections?'SI':'NO'}" />
-			</p:column>
-
-			<p:column style="width:4%">
-				<p:commandButton icon="ui-icon-search" title="#{msg['btn_view']}"
-					update=":form">
-
-				</p:commandButton>
 			</p:column>
 
 		</p:dataTable>
@@ -221,7 +217,10 @@
 
 			<p:column style="width:4%">
 				<p:commandButton icon="ui-icon-search" title="#{msg['btn_view']}"
-					update=":form:dialogPhysique" oncomplete="dlgPhysique.show();" />
+					update=":form:dialogPhysique" oncomplete="dlgPhysique.show();">
+					<f:setPropertyActionListener value="#{rec}"
+						target="#{historyBacking.selectedHistoryPhysique}" />
+				</p:commandButton>
 			</p:column>
 
 		</p:dataTable>

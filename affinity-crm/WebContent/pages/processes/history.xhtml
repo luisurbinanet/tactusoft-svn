@@ -724,10 +724,6 @@
 						</p:tab>
 
 						<p:tab title="#{msg['his_history_physique']}" id="PHYSIQUE">
-							<p:panelGrid id="pnlPhysique" columns="1" style="width:100%">
-
-							</p:panelGrid>
-
 							<h:panelGrid columns="4" width="100%"
 								columnClasses="width25per,width25per,width25per,width25per">
 
@@ -1502,7 +1498,151 @@
 				<p:dialog id="dialogPhysique"
 					header="#{msg['his_history_physique']}" widgetVar="dlgPhysique"
 					dynamic="true" modal="true">
-					<h:panelGrid width="100%"></h:panelGrid>
+
+					<h:panelGrid columns="4" width="100%"
+						columnClasses="width25per,width25per,width25per,width25per">
+
+						<h:outputLabel value="#{msg['his_physique_heart_rate']}" />
+						<h:outputLabel
+							value="#{historyBacking.selectedHistoryPhysique.heartRate} puls" />
+
+						<h:outputLabel value="#{msg['his_physique_respiratory_rate']}" />
+						<h:outputLabel
+							value="#{historyBacking.selectedHistoryPhysique.respiratoryRate} resp/min" />
+
+						<h:outputLabel value="#{msg['his_physique_height']}" />
+						<h:outputLabel
+							value="#{historyBacking.selectedHistoryPhysique.height} cm" />
+
+						<h:outputLabel value="#{msg['his_physique_weight']}" />
+						<h:outputLabel
+							svalue="#{historyBacking.selectedHistoryPhysique.weight} kg" />
+
+						<h:outputLabel value="#{msg['his_physique_blood_pressure']}" />
+						<h:outputLabel
+							value="#{historyBacking.selectedHistoryPhysique.bloodPressure}" />
+
+					</h:panelGrid>
+
+					<h:panelGrid columns="2" width="100%"
+						columnClasses="width25per,width75per">
+
+						<h:outputLabel value="#{msg['his_physique_general_state']}" />
+						<h:inputTextarea style="width:500px" rows="3" disabled="true"
+							value="#{historyBacking.selectedHistoryPhysique.generalState}" />
+
+						<h:outputLabel value="#{msg['his_physique_head_neck']}" />
+						<h:inputTextarea style="width:500px" rows="3" disabled="true"
+							value="#{historyBacking.selectedHistoryPhysique.headNeck}" />
+
+						<h:outputLabel value="#{msg['his_physique_chest']}" />
+						<h:inputTextarea style="width:500px" rows="3" disabled="true"
+							value="#{historyBacking.selectedHistoryPhysique.chest}" />
+
+						<h:outputLabel value="#{msg['his_physique_lungs']}" />
+						<h:inputTextarea style="width:500px" rows="3" disabled="true"
+							value="#{historyBacking.selectedHistoryPhysique.lungs}" />
+
+						<h:outputLabel value="#{msg['his_physique_heart']}" />
+						<h:inputTextarea style="width:500px" rows="3" disabled="true"
+							value="#{historyBacking.selectedHistoryPhysique.heart}" />
+
+						<h:outputLabel value="#{msg['his_physique_abdomen']}" />
+						<h:inputTextarea style="width:500px" rows="3" disabled="true"
+							value="#{historyBacking.selectedHistoryPhysique.abdomen}" />
+
+						<h:outputLabel value="#{msg['his_physique_genitals']}" />
+						<h:inputTextarea style="width:500px" rows="3" disabled="true"
+							value="#{historyBacking.selectedHistoryPhysique.genitals}" />
+
+						<h:outputLabel value="#{msg['his_physique_osteo']}" />
+						<h:inputTextarea style="width:500px" rows="3" disabled="true"
+							value="#{historyBacking.selectedHistoryPhysique.osteo}" />
+
+						<h:outputLabel value="#{msg['his_physique_tips']}" />
+						<h:inputTextarea style="width:500px" rows="3" disabled="true"
+							value="#{historyBacking.selectedHistoryPhysique.tips}" />
+
+						<h:outputLabel value="#{msg['his_physique_highlights']}" />
+						<h:inputTextarea style="width:500px" rows="3" disabled="true"
+							value="#{historyBacking.selectedHistoryPhysique.highlights}" />
+
+						<h:outputLabel value="#{msg['his_physique_skin']}" />
+						<h:inputTextarea style="width:500px" rows="3" disabled="true"
+							value="#{historyBacking.selectedHistoryPhysique.skin}" />
+
+						<h:outputLabel value="#{msg['his_history_obs']}" />
+						<h:inputTextarea style="width:500px" rows="3" disabled="true"
+							value="#{historyBacking.selectedHistoryPhysique.obs}" />
+					</h:panelGrid>
+				</p:dialog>
+
+				<p:dialog id="dialogHistory" header="#{msg['his_history_history']}"
+					widgetVar="dlgHistory" dynamic="true" modal="true" width="650">
+
+					<h:panelGrid columns="1" width="100%" cellpadding="10">
+
+						<h:panelGrid columns="2" style="width:100%"
+							columnClasses="width25per,width75per">
+
+							<h:outputText value="#{msg['his_history_reason']}" />
+							<p:inputTextarea style="width:500px" rows="3" disabled="true"
+								value="#{historyBacking.selectedHistoryHistory.reason}" />
+
+							<h:outputText value="#{msg['his_history_disease']}" />
+							<p:inputTextarea style="width:500px" rows="3" disabled="true"
+								value="#{historyBacking.selectedHistoryHistory.disease}" />
+
+							<h:outputText value="#{msg['his_history_results']}" />
+							<p:inputTextarea style="width:500px" rows="3" disabled="true"
+								value="#{historyBacking.selectedHistoryHistory.results}" />
+
+						</h:panelGrid>
+
+						<p:spacer height="10" />
+
+						<p:panelGrid columns="2" style="width:90%"
+							columnClasses="width25per,width75per">
+
+							<f:facet name="header">
+								<h:outputLabel value="#{msg['his_history_review']}" />
+							</f:facet>
+
+							<h:outputLabel value="#{msg['his_history_head']}" />
+							<p:inputTextarea style="width:500px" rows="3" disabled="true"
+								value="#{historyBacking.selectedHistoryHistory.head}" />
+
+							<h:outputLabel value="#{msg['his_history_orl']}" />
+							<p:inputTextarea style="width:500px" rows="3" disabled="true"
+								value="#{historyBacking.selectedHistoryHistory.orl}" />
+
+							<h:outputLabel value="#{msg['his_history_cr']}" />
+							<p:inputTextarea style="width:500px" rows="3" disabled="true"
+								value="#{historyBacking.selectedHistoryHistory.cr}" />
+
+							<h:outputLabel value="#{msg['his_history_gi']}" />
+							<p:inputTextarea style="width:500px" rows="3" disabled="true"
+								value="#{historyBacking.selectedHistoryHistory.gi}" />
+
+							<h:outputLabel value="#{msg['his_history_neuromuscular']}" />
+							<p:inputTextarea style="width:500px" rows="3" disabled="true"
+								value="#{historyBacking.selectedHistoryHistory.neuromuscular}" />
+
+							<h:outputLabel value="#{msg['his_history_gu']}" />
+							<p:inputTextarea style="width:500px" rows="3" disabled="true"
+								value="#{historyBacking.selectedHistoryHistory.gu}" />
+
+							<h:outputLabel value="#{msg['his_history_psychiatric']}" />
+							<p:inputTextarea style="width:500px" rows="3" disabled="true"
+								value="#{historyBacking.selectedHistoryHistory.psychiatric}" />
+
+							<h:outputLabel value="#{msg['his_history_skin']}" />
+							<p:inputTextarea style="width:500px" rows="3" disabled="true"
+								value="#{historyBacking.selectedHistoryHistory.skin}" />
+						</p:panelGrid>
+
+					</h:panelGrid>
+
 				</p:dialog>
 
 			</h:form>
