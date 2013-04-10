@@ -1499,6 +1499,12 @@
 
 				</p:dialog>
 
+				<p:dialog id="dialogPhysique"
+					header="#{msg['his_history_physique']}" widgetVar="dlgPhysique"
+					dynamic="true" modal="true">
+					<h:panelGrid width="100%"></h:panelGrid>
+				</p:dialog>
+
 			</h:form>
 
 		</p:panel>
@@ -1523,13 +1529,13 @@
 					dlgConsent.hide();
 				}
 			}
-			
+
 			function start() {
-			    statusDialog.show();
+				statusDialog.show();
 			}
 
 			function stop() {
-			    statusDialog.hide();
+				statusDialog.hide();
 			}
 		</script>
 
