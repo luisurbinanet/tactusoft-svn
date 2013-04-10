@@ -73,9 +73,7 @@
 
 			<p:column style="width:4%">
 				<p:commandButton icon="ui-icon-search" title="#{msg['btn_view']}"
-					update=":form">
-
-				</p:commandButton>
+					update=":form" />
 			</p:column>
 
 		</p:dataTable>
@@ -223,9 +221,7 @@
 
 			<p:column style="width:4%">
 				<p:commandButton icon="ui-icon-search" title="#{msg['btn_view']}"
-					update=":form">
-
-				</p:commandButton>
+					update=":form:dialogPhysique" oncomplete="dlgPhysique.show();" />
 			</p:column>
 
 		</p:dataTable>
@@ -449,11 +445,11 @@
 						onclick="PrimeFaces.monitorDownload(start, stop)">
 						<p:fileDownload value="#{historyBacking.getFile(rec.consentFile)}" />
 					</p:commandButton>
-
 				</p:column>
 			</p:dataTable>
 		</h:panelGrid>
 	</p:tab>
 
 </p:tabView>
+
 </html>
