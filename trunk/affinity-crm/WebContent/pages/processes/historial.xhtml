@@ -131,6 +131,14 @@
 				<h:outputLabel value="#{rec.infections?'SI':'NO'}" />
 			</p:column>
 
+			<p:column style="width:4%">
+				<p:commandButton icon="ui-icon-search" title="#{msg['btn_view']}"
+					update=":form:dialogRecord" oncomplete="dlgRecord.show();">
+					<f:setPropertyActionListener value="#{rec}"
+						target="#{historyBacking.selectedHistoryRecord}" />
+				</p:commandButton>
+			</p:column>
+
 		</p:dataTable>
 	</p:tab>
 
