@@ -17,7 +17,7 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "crm_sap_medication", catalog = "crm_db")
 public class CrmSapMedication implements java.io.Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 	private CrmSapMedicationId id;
 	private Date dateBill;
@@ -32,6 +32,7 @@ public class CrmSapMedication implements java.io.Serializable {
 	private BigDecimal idSalesOff;
 	private String idInterlocutor;
 	private String userSap;
+	private BigDecimal idAppointment;
 	private String status;
 
 	public CrmSapMedication() {
@@ -181,6 +182,15 @@ public class CrmSapMedication implements java.io.Serializable {
 
 	public void setUserSap(String userSap) {
 		this.userSap = userSap;
+	}
+
+	@Column(name = "id_appointment", scale = 0)
+	public BigDecimal getIdAppointment() {
+		return idAppointment;
+	}
+
+	public void setIdAppointment(BigDecimal idAppointment) {
+		this.idAppointment = idAppointment;
 	}
 
 	@Column(name = "status", length = 30)
