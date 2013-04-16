@@ -1,6 +1,7 @@
 package co.com.tactusoft.crm.postsale.bo;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.hibernate.exception.ConstraintViolationException;
@@ -72,7 +73,9 @@ public class ProcessBO implements Serializable {
 
 	public List<CrmAppointment> getListAppointmentClosed(String dateString) {
 		return dao
-				.find("FROM CrmAppointment o WHERE state = 4 AND closeAppointment = 1 AND startAppointmentDate <= '"
+				.find("FROM CrmAppointment o WHERE state = 4 AND closeAppointment = 1 AND startAppointmentDate BETWEEN  '"
+						+ dateString
+						+ "T00:00:00.001+05:00' AND '"
 						+ dateString + "T23:59:59.999+05:00'");
 	}
 
@@ -107,11 +110,32 @@ public class ProcessBO implements Serializable {
 	}
 
 	public List<CrmSapMedication> getListSapMedicationByLoadState(
-			String patient, String typeBill, String initDate, String endDate) {
-		return dao.find("FROM CrmSapMedication o WHERE o.idPatient = '"
-				+ patient + "' AND o.typeBill = '" + typeBill
+			CrmPatient patient, String typeBill, String initDate, String endDate) {
+		return dao.find("FROM CrmSapMedication o WHERE (o.idPatient = '"
+				+ patient.getCodeSap() + "' OR docPatient = '"
+				+ patient.getDoc() + "') AND o.typeBill = '" + typeBill
 				+ "' AND o.dateBill >= '" + initDate + "' AND o.dateBill <= '"
 				+ endDate + "' AND o.status IS NULL ORDER BY o.id");
+	}
+
+	public List<CrmSapMedication> getListSapAppointmentByLoadState(
+			CrmPatient patient, String initDate, String endDate) {
+		return dao.find("FROM CrmSapMedication o WHERE (o.idPatient = '"
+				+ patient.getCodeSap() + "' OR docPatient = '"
+				+ patient.getDoc() + "') AND o.dateBill >= '" + initDate
+				+ "' AND o.dateBill <= '" + endDate
+				+ "' AND o.status IS NULL ORDER BY o.id");
+	}
+
+	public int updateSapMedicationByLoadState(CrmPatient patient,
+			String initDate, String endDate, BigDecimal idAppointment) {
+		return dao
+				.executeHQL("UPDATE CrmSapMedication o SET o.idAppointment = "
+						+ idAppointment + " WHERE (o.idPatient = '"
+						+ patient.getCodeSap() + "' OR docPatient = '"
+						+ patient.getDoc() + "') AND o.dateBill >= '"
+						+ initDate + "' AND o.dateBill <= '" + endDate
+						+ "' AND o.status IS NULL ORDER BY o.id");
 	}
 
 	public List<VwAppointmentMedication> getListAppointmentMedicationByCode(

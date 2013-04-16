@@ -147,9 +147,9 @@ public class Principal {
 					.getListAppointmentMedicationByCode(row.getCode());
 
 			List<CrmSapMedication> listSapMedication = processBO
-					.getListSapMedicationByLoadState(row.getCrmPatient()
-							.getCodeSap(), row.getCrmProcedureDetail()
-							.getFormulaDocType(), rowInitDate, endDate);
+					.getListSapMedicationByLoadState(row.getCrmPatient(), row
+							.getCrmProcedureDetail().getFormulaDocType(),
+							rowInitDate, endDate);
 
 			if (listSapMedication.size() > 0) {
 				for (VwAppointmentMedication row2 : listVwAppointmentMedication) {
@@ -180,6 +180,15 @@ public class Principal {
 									.getCodMaterial()), row4.getDescMaterial(),
 							row4.getUnitMaterial()));
 				}
+			}
+
+			List<CrmSapMedication> listSapAppointment = processBO
+					.getListSapAppointmentByLoadState(row.getCrmPatient(),
+							rowInitDate, endDate);
+
+			if (listSapAppointment.size() > 0) {
+				processBO.updateSapMedicationByLoadState(row.getCrmPatient(),
+						rowInitDate, endDate, row.getId());
 			}
 		}
 
