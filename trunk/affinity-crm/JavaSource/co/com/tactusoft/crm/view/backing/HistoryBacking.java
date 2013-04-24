@@ -2147,11 +2147,13 @@ public class HistoryBacking extends BaseBacking {
 	}
 
 	public void refreshAction() {
-		listAppointment = processService
-				.getListVwAppointmentByHistory(currentDoctor.getId());
-		appointmentModel = new VwAppointmentDataModel(listAppointment);
-		if (listAppointment.size() > 0) {
-			selectedAppointment = listAppointment.get(0);
+		if (currentDoctor != null) {
+			listAppointment = processService
+					.getListVwAppointmentByHistory(currentDoctor.getId());
+			appointmentModel = new VwAppointmentDataModel(listAppointment);
+			if (listAppointment.size() > 0) {
+				selectedAppointment = listAppointment.get(0);
+			}
 		}
 	}
 
