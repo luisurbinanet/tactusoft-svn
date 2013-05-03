@@ -164,15 +164,16 @@ public class Asterisk {
 	public static void main(String[] args) throws IOException,
 			AuthenticationFailedException, TimeoutException {
 
-		Asterisk asterisk = new Asterisk("192.168.1.20", 5038, "admin",
-				"lukro9753");
+		Asterisk asterisk = new Asterisk("192.168.1.251", 5038, "crmaffinity",
+				"4dm1n.aff");
 
 		/*
 		 * Asterisk asterisk = new Asterisk("192.168.1.22", 5038, "crmaffinity",
 		 * "4dm1n.aff");
 		 */
-		asterisk.callAction("SIP/N2P6737/011573112510963", "6503", "123");
-		// System.out.println(asterisk.getNumCalls());
+		//asterisk.callAction("SIP/N2P6737/011573112510963", "7005", "123");
+		asterisk.callAction("SIP/GWMovTigo/033003044115", "7005", "cSIkGm0dy1cr9atH7");
+		System.out.println(asterisk.getNumCalls());
 	}
 
 }

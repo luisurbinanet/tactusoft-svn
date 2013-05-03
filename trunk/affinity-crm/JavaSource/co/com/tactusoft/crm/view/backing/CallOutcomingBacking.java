@@ -261,6 +261,12 @@ public class CallOutcomingBacking extends ContactBacking {
 							phoneWithIndicative = dial.getPrependDigits()
 									+ phone;
 						}
+
+						if (row.getPrefix() == 0
+								&& !FacesUtil.isEmptyOrBlank(indicative)) {
+							phoneWithIndicative = phone;
+						}
+
 						remoteChannel = row.getCallNumber().replace(
 								"numero_a_marcar", phoneWithIndicative);
 						break;
