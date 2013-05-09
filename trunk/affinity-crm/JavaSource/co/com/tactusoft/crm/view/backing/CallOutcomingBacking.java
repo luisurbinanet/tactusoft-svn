@@ -1,6 +1,5 @@
 package co.com.tactusoft.crm.view.backing;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,8 +11,8 @@ import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.asteriskjava.manager.AuthenticationFailedException;
-import org.asteriskjava.manager.TimeoutException;
+import org.asteriskjava.live.ManagerCommunicationException;
+import org.asteriskjava.live.NoSuchChannelException;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.controller.bo.CapaignBo;
@@ -245,6 +244,8 @@ public class CallOutcomingBacking extends ContactBacking {
 
 	public void callAction(ActionEvent event) {
 		remoteChannel = null;
+		call = null;
+
 		String phoneWithIndicative = phone;
 		if (!FacesUtil.isEmptyOrBlank(indicative)) {
 			phoneWithIndicative = indicative + phoneWithIndicative;
@@ -285,16 +286,17 @@ public class CallOutcomingBacking extends ContactBacking {
 
 			Asterisk asterisk = new Asterisk(asteriskHost, asteriskPort,
 					asteriskUser, asteriskPassword);
+
 			try {
-				asterisk.callAction(remoteChannel, agentNumber, idCall);
+				asterisk.callActionAplication(remoteChannel, agentNumber, idCall);
 				called = true;
-			} catch (IOException e) {
+				call = new CrmCall();
+			} catch (ManagerCommunicationException e) {
 				called = false;
-			} catch (AuthenticationFailedException e) {
-				called = false;
-			} catch (TimeoutException e) {
+			} catch (NoSuchChannelException e) {
 				called = false;
 			}
+
 		} else {
 			called = false;
 			searched = false;
@@ -305,7 +307,6 @@ public class CallOutcomingBacking extends ContactBacking {
 
 	@Override
 	public void saveAction() {
-		call = new CrmCall();
 		call.setIdCall(idCall);
 		call.setAgentNumber(agentNumber);
 		call.setCallType(Constant.CALLED_TYPE_OUT);
@@ -349,12 +350,7 @@ public class CallOutcomingBacking extends ContactBacking {
 
 	public void handleCallTypeDetailChange() {
 		if (call != null) {
-			if (idCallTypeDetail != null && idCallTypeDetail != 0) {
-				call.setCrmCallTypeDetail(mapCallTypeDetail
-						.get(idCallTypeDetail));
-				call.setCallType(Constant.CALLED_TYPE_OUT);
-				capaignService.saveCall(call);
-			}
+			this.saveAction();
 		}
 	}
 }
