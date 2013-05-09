@@ -98,7 +98,7 @@ public class TablesBo implements Serializable {
 	public List<CrmCampaign> getListCampaignActive() {
 		return dao.find("FROM CrmCampaign o where o.crmUser.id = "
 				+ FacesUtil.getCurrentIdUsuario()
-				+ " AND o.state IN (1,3) ORDER BY o.state, o.dateCall");
+				+ " AND o.state IN (1,3) ORDER BY o.state, o.dateCall", 1);
 	}
 
 	public List<CrmCampaign> getListCampaignByStatus(String status,

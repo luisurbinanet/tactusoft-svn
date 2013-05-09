@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.asteriskjava.live.ManagerCommunicationException;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.controller.bo.ParameterBo;
@@ -61,14 +62,19 @@ public class TimerBacking {
 				public void run() {
 					Asterisk asterisk = new Asterisk(asteriskHost,
 							asteriskPort, asteriskUser, asteriskPassword);
-					asterisk.run();
-					CrmParameter crmParameter = parameterService
-							.getParameter("NUM_CALLS");
-					crmParameter.setTextValue(asterisk.getNumCalls());
-					crmParameter.setDescription("Última Actualización: "
-							+ new Date());
-					parameterService.saveParameter(crmParameter);
-					//System.out.println("LLamadas: " + asterisk.getNumCalls());
+					try {
+						asterisk.run();
+						CrmParameter crmParameter = parameterService
+								.getParameter("NUM_CALLS");
+						crmParameter.setTextValue(asterisk.getNumCalls());
+						crmParameter.setDescription("Última Actualización: "
+								+ new Date());
+						parameterService.saveParameter(crmParameter);
+					} catch (ManagerCommunicationException e) {
+						e.printStackTrace();
+					}
+					// System.out.println("LLamadas: " +
+					// asterisk.getNumCalls());
 				}
 			}, 0L, 60000L);
 		}

@@ -170,7 +170,7 @@ public class CampaignBacking implements Serializable {
 	}
 
 	public void generateDetail() {
-		listDetail = tableService.getListCampaignDetail(selected.getId());
+		listDetail = selected.getCrmCampaignDetails();
 		modelDetail = new CampaignDetailDataModel(listDetail);
 
 		listDetailMedication = tableService
