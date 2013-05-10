@@ -30,7 +30,8 @@
 							disabled="#{callOutcomingBacking.searched or callOutcomingBacking.saved}" />
 						<p:commandButton value="#{msg['btn_call']}" icon="ui-icon-disk"
 							actionListener="#{callOutcomingBacking.callAction}"
-							update="growl toolBar pnlInfo pnlCallType" process="@this, txtPhone, txtInd"
+							update="growl toolBar pnlInfo pnlCallType"
+							process="@this, txtPhone, txtInd"
 							disabled="#{not callOutcomingBacking.searched}" />
 						<p:commandButton value="#{msg['btn_save']}" icon="ui-icon-disk"
 							action="#{callOutcomingBacking.saveAction}" update="form"
@@ -66,7 +67,7 @@
 						<p:selectOneMenu id="selCallType"
 							value="#{callOutcomingBacking.idCallType}" style="width:500px"
 							required="true" label="#{msg['cam_call_level1']}"
-							disabled="#{not callOutcomingBacking.searched or callOutcomingBacking.saved}">
+							disabled="#{not callOutcomingBacking.called}">
 							<f:selectItems value="#{callOutcomingBacking.listCallType}" />
 							<p:ajax listener="#{callOutcomingBacking.handleCallTypeChange}"
 								update="selCallTypeDetail" />
@@ -76,9 +77,9 @@
 							value="#{callOutcomingBacking.idCallTypeDetail}"
 							style="width:500px" required="true"
 							label="#{msg['cam_call_level2']}"
-							disabled="#{not callOutcomingBacking.searched or callOutcomingBacking.saved}">
+							disabled="#{not callOutcomingBacking.called}">
 							<f:selectItems value="#{callOutcomingBacking.listCallTypeDetail}" />
-							<p:ajax
+							<p:ajax update="growl"
 								listener="#{callOutcomingBacking.handleCallTypeDetailChange}" />
 						</p:selectOneMenu>
 					</h:panelGrid>

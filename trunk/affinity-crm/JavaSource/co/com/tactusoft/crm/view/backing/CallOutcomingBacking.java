@@ -1,6 +1,7 @@
 package co.com.tactusoft.crm.view.backing;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,6 +69,8 @@ public class CallOutcomingBacking extends ContactBacking {
 	private int asteriskPort;
 	private String asteriskUser;
 	private String asteriskPassword;
+	private Date callDate;
+	private String asteriskId;
 
 	public CallOutcomingBacking() {
 		searched = false;
@@ -182,6 +185,102 @@ public class CallOutcomingBacking extends ContactBacking {
 		this.mapCallTypeDetail = mapCallTypeDetail;
 	}
 
+	public CapaignBo getCapaignService() {
+		return capaignService;
+	}
+
+	public void setCapaignService(CapaignBo capaignService) {
+		this.capaignService = capaignService;
+	}
+
+	public ParameterBo getParameterService() {
+		return parameterService;
+	}
+
+	public void setParameterService(ParameterBo parameterService) {
+		this.parameterService = parameterService;
+	}
+
+	public CrmCall getCall() {
+		return call;
+	}
+
+	public void setCall(CrmCall call) {
+		this.call = call;
+	}
+
+	public List<VwCallRange> getListCallRange() {
+		return listCallRange;
+	}
+
+	public void setListCallRange(List<VwCallRange> listCallRange) {
+		this.listCallRange = listCallRange;
+	}
+
+	public List<AstTrunkDialpatterns> getListDialpatterns() {
+		return listDialpatterns;
+	}
+
+	public void setListDialpatterns(List<AstTrunkDialpatterns> listDialpatterns) {
+		this.listDialpatterns = listDialpatterns;
+	}
+
+	public String getRemoteChannel() {
+		return remoteChannel;
+	}
+
+	public void setRemoteChannel(String remoteChannel) {
+		this.remoteChannel = remoteChannel;
+	}
+
+	public String getIdCall() {
+		return idCall;
+	}
+
+	public void setIdCall(String idCall) {
+		this.idCall = idCall;
+	}
+
+	public String getAsteriskHost() {
+		return asteriskHost;
+	}
+
+	public void setAsteriskHost(String asteriskHost) {
+		this.asteriskHost = asteriskHost;
+	}
+
+	public int getAsteriskPort() {
+		return asteriskPort;
+	}
+
+	public void setAsteriskPort(int asteriskPort) {
+		this.asteriskPort = asteriskPort;
+	}
+
+	public String getAsteriskUser() {
+		return asteriskUser;
+	}
+
+	public void setAsteriskUser(String asteriskUser) {
+		this.asteriskUser = asteriskUser;
+	}
+
+	public String getAsteriskPassword() {
+		return asteriskPassword;
+	}
+
+	public void setAsteriskPassword(String asteriskPassword) {
+		this.asteriskPassword = asteriskPassword;
+	}
+
+	public Date getCallDate() {
+		return callDate;
+	}
+
+	public void setCallDate(Date callDate) {
+		this.callDate = callDate;
+	}
+
 	@PostConstruct
 	public void init() {
 		generateCallType();
@@ -245,6 +344,7 @@ public class CallOutcomingBacking extends ContactBacking {
 	public void callAction(ActionEvent event) {
 		remoteChannel = null;
 		call = null;
+		asteriskId = null;
 
 		String phoneWithIndicative = phone;
 		if (!FacesUtil.isEmptyOrBlank(indicative)) {
@@ -288,9 +388,13 @@ public class CallOutcomingBacking extends ContactBacking {
 					asteriskUser, asteriskPassword);
 
 			try {
-				asterisk.callActionAplication(remoteChannel, agentNumber, idCall);
+				asteriskId = asterisk.callActionAplication(remoteChannel,
+						agentNumber, idCall);
 				called = true;
 				call = new CrmCall();
+				idCallType = null;
+				idCallTypeDetail = null;
+				callDate = new Date();
 			} catch (ManagerCommunicationException e) {
 				called = false;
 			} catch (NoSuchChannelException e) {
@@ -308,11 +412,13 @@ public class CallOutcomingBacking extends ContactBacking {
 	@Override
 	public void saveAction() {
 		call.setIdCall(idCall);
-		call.setAgentNumber(agentNumber);
+		call.setAgentNumber("Agent/" + agentNumber);
 		call.setCallType(Constant.CALLED_TYPE_OUT);
 		call.setCrmCallTypeDetail(mapCallTypeDetail.get(idCallTypeDetail));
 		call.setPhone(phone);
 		call.setRemoteChannel(remoteChannel);
+		call.setCallDate(callDate);
+		call.setAsteriskId(asteriskId);
 
 		if (this.selectedPatient != null
 				&& this.selectedPatient.getId() != null) {
