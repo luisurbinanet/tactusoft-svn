@@ -129,8 +129,7 @@ public class Asterisk {
 		AsteriskChannel request = asteriskServer.originateToApplication(
 				channel, "queue", "8" + agent, new Long(60000));
 		if (request != null) {
-			result = request.getCallerId().getName()
-					+ request.getCallerId().getNumber();
+			result = request.getId();
 		}
 		return result;
 	}
