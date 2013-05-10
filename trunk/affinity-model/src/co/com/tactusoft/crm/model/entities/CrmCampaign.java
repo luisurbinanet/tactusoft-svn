@@ -2,9 +2,9 @@ package co.com.tactusoft.crm.model.entities;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,7 +24,7 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "crm_campaign", catalog = "crm_db")
 public class CrmCampaign implements java.io.Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private CrmPatient crmPatient;
@@ -35,8 +35,7 @@ public class CrmCampaign implements java.io.Serializable {
 	private String observation;
 	private Integer days;
 	private int state;
-	private Set<CrmCampaignDetail> crmCampaignDetails = new HashSet<CrmCampaignDetail>(
-			0);
+	private List<CrmCampaignDetail> crmCampaignDetails = new ArrayList<CrmCampaignDetail>();
 
 	public CrmCampaign() {
 	}
@@ -53,7 +52,7 @@ public class CrmCampaign implements java.io.Serializable {
 
 	public CrmCampaign(CrmPatient crmPatient, CrmUser crmUser, CrmLog crmLog,
 			CrmBranch crmBranch, Date dateCall, String observation,
-			Integer days, int state, Set<CrmCampaignDetail> crmCampaignDetails) {
+			Integer days, int state, List<CrmCampaignDetail> crmCampaignDetails) {
 		this.crmPatient = crmPatient;
 		this.crmUser = crmUser;
 		this.crmLog = crmLog;
@@ -153,12 +152,12 @@ public class CrmCampaign implements java.io.Serializable {
 		this.state = state;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmCampaign")
-	public Set<CrmCampaignDetail> getCrmCampaignDetails() {
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "crmCampaign")
+	public List<CrmCampaignDetail> getCrmCampaignDetails() {
 		return this.crmCampaignDetails;
 	}
 
-	public void setCrmCampaignDetails(Set<CrmCampaignDetail> crmCampaignDetails) {
+	public void setCrmCampaignDetails(List<CrmCampaignDetail> crmCampaignDetails) {
 		this.crmCampaignDetails = crmCampaignDetails;
 	}
 

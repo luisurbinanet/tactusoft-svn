@@ -15,14 +15,17 @@ public class VwCallRange implements Serializable {
 	private String expressionRegular;
 	private String callNumber;
 	private Integer trunkid;
+	private Integer prefix;
 
 	public VwCallRange() {
 
 	}
 
-	public VwCallRange(String expressionRegular, String callNumber, Integer trunkid) {
+	public VwCallRange(String expressionRegular, String callNumber,
+			Integer trunkid, Integer prefix) {
 		this.expressionRegular = expressionRegular;
 		this.callNumber = callNumber;
+		this.prefix = prefix;
 	}
 
 	@Id
@@ -52,4 +55,14 @@ public class VwCallRange implements Serializable {
 	public void setTrunkid(Integer trunkid) {
 		this.trunkid = trunkid;
 	}
+
+	@Column(name = "prefix")
+	public Integer getPrefix() {
+		return prefix;
+	}
+
+	public void setPrefix(Integer prefix) {
+		this.prefix = prefix;
+	}
+
 }
