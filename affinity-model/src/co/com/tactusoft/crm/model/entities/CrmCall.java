@@ -1,6 +1,8 @@
 package co.com.tactusoft.crm.model.entities;
 
 import java.math.BigDecimal;
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
 /**
@@ -16,7 +20,7 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name = "crm_call", catalog = "crm_db", uniqueConstraints = @UniqueConstraint(columnNames = "id_call"))
 public class CrmCall implements java.io.Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
 	private CrmPatient crmPatient;
@@ -29,6 +33,7 @@ public class CrmCall implements java.io.Serializable {
 	private String companyPhone;
 	private String remoteChannel;
 	private BigDecimal idCallFinal;
+	private Date callDate;
 
 	public CrmCall() {
 	}
@@ -42,7 +47,7 @@ public class CrmCall implements java.io.Serializable {
 			CrmCallTypeDetail crmCallTypeDetail, String idCall,
 			String agentNumber, String callType, String idCampaign,
 			String phone, String companyPhone, String remoteChannel,
-			BigDecimal idCallFinal) {
+			BigDecimal idCallFinal, Date callDate) {
 		this.id = id;
 		this.crmPatient = crmPatient;
 		this.crmCallTypeDetail = crmCallTypeDetail;
@@ -54,6 +59,7 @@ public class CrmCall implements java.io.Serializable {
 		this.companyPhone = companyPhone;
 		this.remoteChannel = remoteChannel;
 		this.idCallFinal = idCallFinal;
+		this.callDate = callDate;
 	}
 
 	@Id
@@ -156,6 +162,16 @@ public class CrmCall implements java.io.Serializable {
 
 	public void setIdCallFinal(BigDecimal idCallFinal) {
 		this.idCallFinal = idCallFinal;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "call_date", length = 19)
+	public Date getCallDate() {
+		return callDate;
+	}
+
+	public void setCallDate(Date callDate) {
+		this.callDate = callDate;
 	}
 
 }
