@@ -202,6 +202,15 @@
 							<f:facet name="sourceCaption">#{msg['usr_profile']}</f:facet>
 							<f:facet name="targetCaption">#{msg['glb_target_caption']}</f:facet>
 						</p:pickList>
+
+						<p:pickList var="row" value="#{userBacking.listBranchPostsale}"
+							converter="branchConverter" itemValue="#{row}"
+							itemLabel="#{row.name} (#{row.society})" showSourceFilter="true"
+							showTargetFilter="true" filterMatchMode="contains">
+
+							<f:facet name="sourceCaption">#{msg['usr_branch_postsale']}</f:facet>
+							<f:facet name="targetCaption">#{msg['glb_target_caption']}</f:facet>
+						</p:pickList>
 					</h:panelGrid>
 				</p:scrollPanel>
 
