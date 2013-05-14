@@ -97,11 +97,11 @@ public class TablesBo implements Serializable {
 	}
 
 	public List<CrmCampaign> getListCampaignActive() {
-		return dao.find(
-				"FROM CrmCampaign o where o.crmUser.id = "
+		return dao
+				.find("FROM CrmCampaign o where o.crmUser.id = "
 						+ FacesUtil.getCurrentIdUsuario()
-						+ " AND o.state IN (1,3) ORDER BY o.state, o.dateCall",
-				1);
+						+ " AND o.state IN (1,3) ORDER BY o.state, o.dateCall, orderField",
+						1);
 	}
 
 	public List<CrmCampaign> getListCampaignByStatus(String status,
@@ -293,7 +293,7 @@ public class TablesBo implements Serializable {
 				.find("select o.crmBranch from CrmUserBranch o where o.crmUser.id = "
 						+ idUser);
 	}
-	
+
 	public List<CrmBranch> getListBranchPostsaleByUser(BigDecimal idUser) {
 		return dao
 				.find("select o.crmBranch from CrmUserBranchPostsale o where o.crmUser.id = "
@@ -577,8 +577,9 @@ public class TablesBo implements Serializable {
 
 		return i;
 	}
-	
-	public Integer saveUserBranchPostsale(CrmUser entity, List<CrmBranch> listBranch) {
+
+	public Integer saveUserBranchPostsale(CrmUser entity,
+			List<CrmBranch> listBranch) {
 		int i = 0;
 
 		dao.executeHQL("delete from CrmUserBranchPostsale o where o.crmUser.id = "
