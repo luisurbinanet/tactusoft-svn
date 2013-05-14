@@ -35,6 +35,10 @@ public class CrmBranch implements java.io.Serializable {
 			0);
 	private Set<CrmAppointment> crmAppointments = new HashSet<CrmAppointment>(0);
 	private Set<CrmUserBranch> crmUserBranchs = new HashSet<CrmUserBranch>(0);
+	private Set<CrmDoctorException> crmDoctorException = new HashSet<CrmDoctorException>(
+			0);
+	private Set<CrmUserBranchPostsale> crmUserBranchPostales = new HashSet<CrmUserBranchPostsale>(
+			0);
 
 	public CrmBranch() {
 	}
@@ -184,4 +188,22 @@ public class CrmBranch implements java.io.Serializable {
 		this.crmUserBranchs = crmUserBranchs;
 	}
 
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmBranch")
+	public Set<CrmDoctorException> getCrmDoctorException() {
+		return crmDoctorException;
+	}
+
+	public void setCrmDoctorException(Set<CrmDoctorException> crmDoctorException) {
+		this.crmDoctorException = crmDoctorException;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmBranch")
+	public Set<CrmUserBranchPostsale> getCrmUserBranchPostales() {
+		return crmUserBranchPostales;
+	}
+
+	public void setCrmUserBranchPostales(
+			Set<CrmUserBranchPostsale> crmUserBranchPostales) {
+		this.crmUserBranchPostales = crmUserBranchPostales;
+	}
 }

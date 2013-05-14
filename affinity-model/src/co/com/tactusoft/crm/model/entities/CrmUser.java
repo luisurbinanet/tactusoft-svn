@@ -3,6 +3,7 @@ package co.com.tactusoft.crm.model.entities;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,7 +20,7 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name = "crm_user", catalog = "crm_db", uniqueConstraints = @UniqueConstraint(columnNames = "username"))
 public class CrmUser implements java.io.Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
 	private CrmDepartment crmDepartment;
@@ -34,6 +35,8 @@ public class CrmUser implements java.io.Serializable {
 	private String extensionAgent;
 	private int state;
 	private Set<CrmUserBranch> crmUserBranchs = new HashSet<CrmUserBranch>(0);
+	private Set<CrmUserBranchPostsale> crmUserBranchPostales = new HashSet<CrmUserBranchPostsale>(
+			0);
 	private Set<CrmDoctor> crmDoctors = new HashSet<CrmDoctor>(0);
 	private Set<CrmUserProfile> crmUserProfiles = new HashSet<CrmUserProfile>(0);
 	private Set<CrmAppointment> crmAppointmentsForIdUserChecked = new HashSet<CrmAppointment>(
@@ -50,6 +53,7 @@ public class CrmUser implements java.io.Serializable {
 	private Set<CrmUserRole> crmUserRoles = new HashSet<CrmUserRole>(0);
 	private Set<CrmPatient> crmPatientsForIdUserCreate = new HashSet<CrmPatient>(
 			0);
+	private Set<CrmCampaign> crmCampaigns = new HashSet<CrmCampaign>(0);
 
 	public CrmUser() {
 	}
@@ -196,7 +200,7 @@ public class CrmUser implements java.io.Serializable {
 	public void setExtension(String extension) {
 		this.extension = extension;
 	}
-	
+
 	@Column(name = "extension_agent")
 	public String getExtensionAgent() {
 		return extensionAgent;
@@ -222,6 +226,16 @@ public class CrmUser implements java.io.Serializable {
 
 	public void setCrmUserBranchs(Set<CrmUserBranch> crmUserBranchs) {
 		this.crmUserBranchs = crmUserBranchs;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmUser")
+	public Set<CrmUserBranchPostsale> getCrmUserBranchPostales() {
+		return crmUserBranchPostales;
+	}
+
+	public void setCrmUserBranchPostales(
+			Set<CrmUserBranchPostsale> crmUserBranchPostales) {
+		this.crmUserBranchPostales = crmUserBranchPostales;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmUser")
@@ -320,4 +334,13 @@ public class CrmUser implements java.io.Serializable {
 		this.crmPatientsForIdUserCreate = crmPatientsForIdUserCreate;
 	}
 
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmUser")
+	public Set<CrmCampaign> getCrmCampaigns() {
+		return crmCampaigns;
+	}
+
+	public void setCrmCampaigns(Set<CrmCampaign> crmCampaigns) {
+		this.crmCampaigns = crmCampaigns;
+	}
+	
 }
