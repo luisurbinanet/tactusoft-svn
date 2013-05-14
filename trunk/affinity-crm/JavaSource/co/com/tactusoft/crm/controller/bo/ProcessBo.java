@@ -252,17 +252,22 @@ public class ProcessBo implements Serializable {
 		for (CrmDoctorException row : listDoctorException) {
 			if (date.compareTo(row.getStartHour()) >= 0
 					&& date.compareTo(row.getEndHour()) <= 0) {
-				Calendar startCalendar = Calendar.getInstance();
-				startCalendar.setTime(row.getStartHour());
-				int startDay = startCalendar.get(Calendar.DAY_OF_YEAR);
+				return false;
+			}
+		}
 
-				Calendar endCalendar = Calendar.getInstance();
-				endCalendar.setTime(row.getEndHour());
-				int endDay = endCalendar.get(Calendar.DAY_OF_YEAR);
+		return true;
+	}
 
-				if (endDay > startDay) {
-					return false;
-				}
+	private boolean validateException(
+			List<CrmDoctorException> listDoctorException, Date date,
+			CrmDoctor crmDoctor) {
+		for (CrmDoctorException row : listDoctorException) {
+			if (date.compareTo(row.getStartHour()) >= 0
+					&& date.compareTo(row.getEndHour()) <= 0
+					&& row.getCrmDoctor().getId().intValue() == crmDoctor
+							.getId().intValue()) {
+				return false;
 			}
 		}
 
@@ -414,6 +419,13 @@ public class ProcessBo implements Serializable {
 
 				if (listCrmDoctorSchedule.size() > 0) {
 
+					List<CrmDoctorException> listDoctorException = dao
+							.find("from CrmDoctorException o where '"
+									+ dateString
+									+ "' between Date(startHour) and Date(endHour)"
+									+ " and (o.crmBranch.id is null OR o.crmBranch.id = "
+									+ idBranch + ")");
+
 					Date minHour = null;
 					Date maxHour = null;
 
@@ -448,7 +460,13 @@ public class ProcessBo implements Serializable {
 								if ((scheduleInitHour.compareTo(row
 										.getStartHour()) >= 0)
 										&& (scheduleInitHour.compareTo(row
-												.getEndHour()) < 0)) {
+												.getEndHour()) < 0)
+										&& validateException(
+												listDoctorException,
+												FacesUtil.addHourToDate(
+														currentDate,
+														scheduleInitHour),
+												row.getCrmDoctor())) {
 									numInteractions++;
 								}
 							}
@@ -755,7 +773,9 @@ public class ProcessBo implements Serializable {
 								+ doctor.getId()
 								+ " and '"
 								+ dateString
-								+ "' between startHour and endHour");
+								+ "' between Date(startHour) and Date(endHour)"
+								+ " and (o.crmBranch.id is null OR o.crmBranch.id = "
+								+ idBranch + ")");
 
 				if ((calendar.get(Calendar.DAY_OF_WEEK) != 1)
 						&& (this.validateHoliday(listHoliday, currentDate))
@@ -848,6 +868,15 @@ public class ProcessBo implements Serializable {
 		return resultSearchAppointment;
 	}
 
+	private List<CrmDoctorException> getListCrmDoctorException(
+			BigDecimal idDoctor, String dateTimeString, BigDecimal idBranch) {
+		return dao.find("from CrmDoctorException o where o.crmDoctor.id = "
+				+ idDoctor + " and '" + dateTimeString
+				+ "' between startHour and endHour"
+				+ " and (o.crmBranch.id is null OR o.crmBranch.id = "
+				+ idBranch + ")");
+	}
+
 	public ResultSearchAppointment getScheduleAppointmentForDate(
 			CrmBranch branch, Date selectedDate,
 			CrmProcedureDetail procedureDetail) {
@@ -923,30 +952,22 @@ public class ProcessBo implements Serializable {
 
 		if (listCrmDoctorWithoutApp.size() > 0) {
 			for (CrmDoctor doctor : listCrmDoctorWithoutApp) {
-				List<CrmDoctorException> listDoctorException = dao
-						.find("from CrmDoctorException o where o.crmDoctor.id = "
-								+ doctor.getId()
-								+ " and '"
-								+ dateTimeString
-								+ "' between startHour and endHour");
+				List<CrmDoctorException> listDoctorException = getListCrmDoctorException(
+						doctor.getId(), dateTimeString, idBranch);
 
 				if (listDoctorException.size() == 0) {
 					result.add(new Candidate(1, doctor, selectedDate, endTime,
 							branch.getName(), procedureDetail.getName()));
 					message = null;
 					break;
-				} else {
-					message = FacesUtil.getMessage("app_msg_error_1");
 				}
 			}
-		} else {
+		}
+
+		if (result.size() == 0) {
 			for (VwDoctorHour row : listDoctorHour) {
-				List<CrmDoctorException> listDoctorException = dao
-						.find("from CrmDoctorException o where o.crmDoctor.id = "
-								+ row.getId().getIdDoctor()
-								+ " and '"
-								+ dateTimeString
-								+ "' between startHour and endHour");
+				List<CrmDoctorException> listDoctorException = getListCrmDoctorException(
+						row.getId().getIdDoctor(), dateTimeString, idBranch);
 
 				List<CrmDoctorSchedule> listDoctorSchedule = dao
 						.find("from CrmDoctorSchedule o where o.crmDoctor.state = 1 and o.day = "

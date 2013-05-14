@@ -51,7 +51,7 @@ public class SecurityBo implements Serializable {
 	public List<CrmBranch> getListBranchByUser(BigDecimal idUser) {
 		return dao
 				.find("select o.crmBranch from CrmUserBranch o where o.crmUser.id = "
-						+ idUser);
+						+ idUser + " and o.crmBranch.society = '1000'");
 	}
 
 	public List<CrmRole> getListCrmRole() {
