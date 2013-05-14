@@ -35,6 +35,7 @@ public class CrmCampaign implements java.io.Serializable {
 	private String observation;
 	private Integer days;
 	private int state;
+	private int orderField;
 	private List<CrmCampaignDetail> crmCampaignDetails = new ArrayList<CrmCampaignDetail>();
 
 	public CrmCampaign() {
@@ -150,6 +151,15 @@ public class CrmCampaign implements java.io.Serializable {
 
 	public void setState(int state) {
 		this.state = state;
+	}
+
+	@Column(name = "order_field")
+	public int getOrderField() {
+		return orderField;
+	}
+
+	public void setOrderField(int orderField) {
+		this.orderField = orderField;
 	}
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "crmCampaign")
