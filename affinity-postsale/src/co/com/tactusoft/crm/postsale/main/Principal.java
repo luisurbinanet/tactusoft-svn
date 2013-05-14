@@ -217,9 +217,10 @@ public class Principal {
 			} else {
 				crmBranch = processBO.getBranch(crmPatient);
 			}
-			
+
 			Date callDate = Utils.addDaysToDate(currentDate, 1);
-			String callDateString = FacesUtil.formatDate(callDate, "yyyy-MM-dd");
+			String callDateString = FacesUtil
+					.formatDate(callDate, "yyyy-MM-dd");
 			CrmUser crmUser = processBO.getUser(crmBranch, callDateString);
 
 			// Primer Registro
@@ -236,6 +237,7 @@ public class Principal {
 				processBO.save(crmCampaign);
 			}
 
+			int orderField = 99;
 			for (StorageBean row : listStorage) {
 				crmBranch = new CrmBranch();
 				if (row.getCrmAppointment() != null) {
@@ -249,6 +251,10 @@ public class Principal {
 						.getId().intValue()) {
 
 					if (crmUser != null) {
+						crmCampaign.setOrderField(orderField);
+						processBO.save(crmCampaign);
+
+						orderField = 99;
 						crmCampaign = new CrmCampaign();
 						crmCampaign.setCrmLog(crmLog);
 						crmCampaign.setCrmPatient(row.getCrmPatient());
@@ -262,6 +268,21 @@ public class Principal {
 				}
 
 				if (crmUser != null) {
+					int type = 0;
+					if (row.getType().equals("CONFIRMED")) {
+						type = 0;
+					} else if (row.getType().equals("NO_ATTENDET")) {
+						type = 1;
+					} else if (row.getType().equals("CONTROL")) {
+						type = 2;
+					} else {
+						type = 3;
+					}
+
+					if (type < orderField) {
+						orderField = type;
+					}
+
 					CrmCampaignDetail crmCampaignDetail = new CrmCampaignDetail();
 					crmCampaignDetail.setCrmCampaign(crmCampaign);
 					crmCampaignDetail
@@ -275,6 +296,10 @@ public class Principal {
 
 				crmPatient = row.getCrmPatient();
 			}
+
+			// El ultimo
+			crmCampaign.setOrderField(orderField);
+			processBO.save(crmCampaign);
 		} else {
 			System.out.println("NO EXISTEN TAREAS..");
 			crmLogDetail = new CrmLogDetail();
@@ -292,6 +317,5 @@ public class Principal {
 		crmLogDetail.setLogDate(new Date());
 		crmLogDetail.setMessage("PROCESO TERMINADO");
 		processBO.save(crmLogDetail);
-
 	}
 }
