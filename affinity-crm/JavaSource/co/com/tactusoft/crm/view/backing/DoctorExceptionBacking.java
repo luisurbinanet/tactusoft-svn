@@ -1,6 +1,5 @@
 package co.com.tactusoft.crm.view.backing;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
@@ -8,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -15,6 +15,7 @@ import javax.inject.Named;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.controller.bo.TablesBo;
+import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmDoctorException;
 import co.com.tactusoft.crm.util.Constant;
@@ -23,7 +24,7 @@ import co.com.tactusoft.crm.view.datamodel.DoctorExceptionDataModel;
 
 @Named
 @Scope("view")
-public class DoctorExceptionBacking implements Serializable {
+public class DoctorExceptionBacking extends BaseBacking {
 
 	private static final long serialVersionUID = 1L;
 
@@ -38,12 +39,13 @@ public class DoctorExceptionBacking implements Serializable {
 	private Map<BigDecimal, CrmDoctor> mapDoctor;
 	private CrmDoctor selectedDoctor;
 	private BigDecimal idDoctor;
-	private Date selectedDate;
 	private Date currentDate;
 
 	private boolean disabled;
 	private boolean disabledSearch;
 	private boolean disabledNew;
+
+	private List<String> listBranchSelected;
 
 	public DoctorExceptionBacking() {
 		newAction();
@@ -70,9 +72,6 @@ public class DoctorExceptionBacking implements Serializable {
 	}
 
 	public void setSelected(CrmDoctorException selected) {
-		if (selected != null) {
-			this.selectedDate = selected.getStartHour();
-		}
 		this.selected = selected;
 	}
 
@@ -112,14 +111,6 @@ public class DoctorExceptionBacking implements Serializable {
 		this.idDoctor = idDoctor;
 	}
 
-	public Date getSelectedDate() {
-		return selectedDate;
-	}
-
-	public void setSelectedDate(Date selectedDate) {
-		this.selectedDate = selectedDate;
-	}
-
 	public Date getCurrentDate() {
 		return currentDate;
 	}
@@ -152,14 +143,22 @@ public class DoctorExceptionBacking implements Serializable {
 		this.disabledNew = disabledNew;
 	}
 
+	public List<String> getListBranchSelected() {
+		return listBranchSelected;
+	}
+
+	public void setListBranchSelected(List<String> listBranchSelected) {
+		this.listBranchSelected = listBranchSelected;
+	}
+
 	public void newAction() {
 		selected = new CrmDoctorException();
-		selectedDate = new Date();
 		currentDate = new Date();
 		idDoctor = Constant.DEFAULT_VALUE;
 		disabled = true;
 		disabledSearch = true;
 		disabledNew = true;
+		listBranchSelected = new LinkedList<String>();
 	}
 
 	public void saveAction() {
@@ -169,18 +168,27 @@ public class DoctorExceptionBacking implements Serializable {
 			selected.setCrmDoctor(selectedDoctor);
 		}
 
-		Date startHourCompleted = FacesUtil.addHourToDate(selectedDate,
-				selected.getStartHour());
+		int result = 0;
+		if (listBranchSelected.size() == listCrmBranch.size()) {
+			selected.setCrmBranch(null);
+			result = tableService.saveDoctorException(selected);
+		} else {
+			int i = 0;
+			for (String id : listBranchSelected) {
+				if (i > 0) {
+					selected.setId(null);
+				}
+				CrmBranch crmBranch = new CrmBranch();
+				crmBranch.setId(new BigDecimal(id));
+				selected.setCrmBranch(crmBranch);
+				result = tableService.saveDoctorException(selected);
+				i++;
+			}
+		}
 
-		Date endHourCompleted = FacesUtil.addHourToDate(selectedDate,
-				selected.getEndHour());
-
-		selected.setStartHour(startHourCompleted);
-		selected.setEndHour(endHourCompleted);
-
-		int result = tableService.saveDoctorException(selected);
 		if (result == 0) {
-			list = tableService.getListDoctorExceptionByDoctor(selectedDoctor.getId());
+			list = tableService.getListDoctorExceptionByDoctor(selectedDoctor
+					.getId());
 			model = new DoctorExceptionDataModel(list);
 			message = FacesUtil.getMessage("msg_record_ok");
 			FacesUtil.addInfo(message);
@@ -204,15 +212,30 @@ public class DoctorExceptionBacking implements Serializable {
 			selected = new CrmDoctorException();
 			disabledSearch = true;
 		}
-		
+
 		disabledNew = false;
+	}
+
+	public void editAction(ActionEvent event) {
+		listBranchSelected = new LinkedList<String>();
+		if (selected.getCrmBranch() == null) {
+			for (SelectItem brc : listCrmBranch) {
+				String id = brc.getValue().toString();
+				listBranchSelected.add(id);
+			}
+		} else {
+			listBranchSelected.add(selected.getCrmBranch().getId().toString());
+		}
 	}
 
 	public void removeAction() {
 		if (selected != null) {
-			tableService.remove(selected);
+			tableService.remove("CrmDoctorException", selected.getId());
 			list = tableService.getListDoctorExceptionByDoctor(idDoctor);
 			model = new DoctorExceptionDataModel(list);
+			if (list.size() > 0) {
+				selected = list.get(0);
+			}
 			String message = FacesUtil.getMessage("msg_record_ok");
 			FacesUtil.addInfo(message);
 		}
@@ -229,7 +252,6 @@ public class DoctorExceptionBacking implements Serializable {
 		} else {
 			disabled = true;
 		}
-		
 		disabledNew = true;
 	}
 

@@ -20,10 +20,11 @@
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
 							action="#{doctorExceptionBacking.newAction}"
-							oncomplete="dlg.show()" update=":editForm:pnlDetail"
+							oncomplete="dlg.show()" update=":editForm:dialog"
 							disabled="#{doctorExceptionBacking.disabledNew}" />
 						<p:commandButton value="#{msg['btn_edit']}" icon="ui-icon-pencil"
 							oncomplete="dlg.show()" update=":editForm:pnlDetail"
+							actionListener="#{doctorExceptionBacking.editAction}"
 							disabled="#{doctorExceptionBacking.disabledSearch}" />
 						<p:commandButton value="#{msg['btn_search']}"
 							icon="ui-icon-search" update="toolBar recordTable"
@@ -40,7 +41,8 @@
 
 				<h:panelGrid columns="2" width="100%">
 					<p:outputLabel for="selDoctor" value="#{msg['exp_doctor']}" />
-					<p:selectOneMenu id="selDoctor"
+					<p:selectOneMenu id="selDoctor" filter="true"
+						filterMatchMode="contains"
 						value="#{doctorExceptionBacking.idDoctor}" style="width:450px;">
 						<f:selectItems value="#{doctorExceptionBacking.listDoctor}" />
 						<p:ajax update="toolBar recordTable"
@@ -56,21 +58,20 @@
 
 					<p:column selectionMode="single" style="width:18px" />
 
-					<p:column headerText="#{msg['exp_date']}">
+					<p:column headerText="#{msg['app_branch']}">
+						<h:outputLabel
+							value="#{rec.crmBranch==null?'Todas':rec.crmBranch.name}" />
+					</p:column>
+
+					<p:column headerText="#{msg['src_star_date']}">
 						<h:outputLabel value="#{rec.startHour}">
-							<f:convertDateTime pattern="dd/MM/yyyy" />
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
 						</h:outputLabel>
 					</p:column>
 
-					<p:column headerText="#{msg['exp_star_hour']}">
-						<h:outputLabel value="#{rec.startHour}">
-							<f:convertDateTime pattern="HH:mm" />
-						</h:outputLabel>
-					</p:column>
-
-					<p:column headerText="#{msg['exp_end_hour']}">
+					<p:column headerText="#{msg['src_end_date']}">
 						<h:outputLabel value="#{rec.endHour}">
-							<f:convertDateTime pattern="HH:mm" />
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
 						</h:outputLabel>
 					</p:column>
 
@@ -109,26 +110,27 @@
 					<h:outputText id="outDoctor"
 						value="#{doctorExceptionBacking.selectedDoctor.names}" />
 
-					<h:outputLabel value="#{msg['exp_date']}" />
-					<p:calendar id="calDate"
-						value="#{doctorExceptionBacking.selectedDate}" required="true"
-						label="#{msg['hol_date']}" readonlyInput="true"
-						pattern="dd/MM/yyyy" showOn="button" navigator="true"
+					<h:outputLabel value="#{msg['src_star_date']}" />
+					<p:calendar id="calStarDate"
+						value="#{doctorExceptionBacking.selected.startHour}"
+						required="true" label="#{msg['hol_date']}" readonlyInput="true"
+						pattern="dd/MM/yyyy HH:mm" showOn="button" navigator="true"
 						mindate="#{doctorExceptionBacking.currentDate}" locale="es" />
 
-					<h:outputLabel value="#{msg['exp_star_hour']}" />
-					<p:inputMask mask="99:99"
-						value="#{doctorExceptionBacking.selected.startHour}"
-						required="true" label="#{msg['exp_star_hour']}">
-						<f:convertDateTime pattern="HH:mm" />
-					</p:inputMask>
-
-					<h:outputLabel value="#{msg['exp_end_hour']}" />
-					<p:inputMask mask="99:99"
+					<h:outputLabel value="#{msg['src_end_date']}" />
+					<p:calendar id="calEndDate"
 						value="#{doctorExceptionBacking.selected.endHour}" required="true"
-						label="#{msg['exp_end_hour']}">
-						<f:convertDateTime pattern="HH:mm" />
-					</p:inputMask>
+						label="#{msg['hol_date']}" readonlyInput="true"
+						pattern="dd/MM/yyyy HH:mm" showOn="button" navigator="true"
+						mindate="#{doctorExceptionBacking.currentDate}" locale="es" />
+
+					<h:outputLabel value="#{msg['app_branch']}" />
+					<p:selectCheckboxMenu label="#{msg['app_branch']}" filter="true"
+						filterText="Filter" filterMatchMode="contains"
+						panelStyle="width:220px" required="true"
+						value="#{doctorExceptionBacking.listBranchSelected}">
+						<f:selectItems value="#{doctorExceptionBacking.listCrmBranch}" />
+					</p:selectCheckboxMenu>
 
 				</h:panelGrid>
 
