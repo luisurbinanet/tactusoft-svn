@@ -40,6 +40,7 @@ public class UserBacking extends BaseBacking {
 	private DualListModel<CrmRole> listRole;
 	private DualListModel<CrmBranch> listBranchUser;
 	private DualListModel<CrmProfile> listUserProfile;
+	private DualListModel<CrmBranch> listBranchPostsale;
 
 	private String password;
 	private CrmDoctor crmDoctor;
@@ -125,6 +126,15 @@ public class UserBacking extends BaseBacking {
 		this.listUserProfile = listUserProfile;
 	}
 
+	public DualListModel<CrmBranch> getListBranchPostsale() {
+		return listBranchPostsale;
+	}
+
+	public void setListBranchPostsale(
+			DualListModel<CrmBranch> listBranchPostsale) {
+		this.listBranchPostsale = listBranchPostsale;
+	}
+
 	public String getPassword() {
 		return password;
 	}
@@ -149,6 +159,7 @@ public class UserBacking extends BaseBacking {
 		listBranchUser = new DualListModel<CrmBranch>();
 		listRole = new DualListModel<CrmRole>();
 		listUserProfile = new DualListModel<CrmProfile>();
+		listBranchPostsale = new DualListModel<CrmBranch>();
 		generateListAction(null);
 
 		rolePrincipal = Constant.ROLE_USER;
@@ -251,6 +262,8 @@ public class UserBacking extends BaseBacking {
 				tablesService.saveUserRole(selected, listRole.getTarget());
 				tablesService.saveUserProfile(selected,
 						listUserProfile.getTarget());
+				tablesService.saveUserBranchPostsale(selected,
+						listBranchPostsale.getTarget());
 				list = tablesService.getListUser();
 				model = new UserDataModel(list);
 
@@ -280,6 +293,8 @@ public class UserBacking extends BaseBacking {
 		List<CrmRole> listSourceRole = new LinkedList<CrmRole>();
 		List<CrmProfile> listTargetProfile = new LinkedList<CrmProfile>();
 		List<CrmProfile> listSourceProfile = new LinkedList<CrmProfile>();
+		List<CrmBranch> listTargetBranchPostsale = new LinkedList<CrmBranch>();
+		List<CrmBranch> listSourceBranchPostsale = new LinkedList<CrmBranch>();
 
 		if (selected != null && selected.getId() != null) {
 
@@ -362,6 +377,23 @@ public class UserBacking extends BaseBacking {
 					listSourceProfile.add(row);
 				}
 			}
+
+			listTargetBranchPostsale = tablesService
+					.getListBranchPostsaleByUser(selected.getId());
+			for (CrmBranch row : FacesUtil.getCurrentUserData()
+					.getListBranchAll()) {
+				boolean exits = false;
+				for (CrmBranch avb : listTargetBranchPostsale) {
+					if (avb.getId().intValue() == row.getId().intValue()) {
+						exits = true;
+						break;
+					}
+				}
+
+				if (!exits) {
+					listSourceBranchPostsale.add(row);
+				}
+			}
 		} else {
 			if (tablesService != null) {
 				listSourceBranch = tablesService.getListBranchActive();
@@ -375,6 +407,8 @@ public class UserBacking extends BaseBacking {
 		listRole = new DualListModel<CrmRole>(listSourceRole, listTargetRole);
 		listUserProfile = new DualListModel<CrmProfile>(listSourceProfile,
 				listTargetProfile);
+		listBranchPostsale = new DualListModel<CrmBranch>(
+				listSourceBranchPostsale, listTargetBranchPostsale);
 	}
 
 	public void updatePasswordAction() {

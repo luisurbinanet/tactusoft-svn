@@ -45,6 +45,7 @@ import co.com.tactusoft.crm.model.entities.CrmSpeciality;
 import co.com.tactusoft.crm.model.entities.CrmTherapy;
 import co.com.tactusoft.crm.model.entities.CrmUser;
 import co.com.tactusoft.crm.model.entities.CrmUserBranch;
+import co.com.tactusoft.crm.model.entities.CrmUserBranchPostsale;
 import co.com.tactusoft.crm.model.entities.CrmUserProfile;
 import co.com.tactusoft.crm.model.entities.CrmUserRole;
 import co.com.tactusoft.crm.model.entities.DatesBean;
@@ -290,6 +291,12 @@ public class TablesBo implements Serializable {
 	public List<CrmBranch> getListBranchByUser(BigDecimal idUser) {
 		return dao
 				.find("select o.crmBranch from CrmUserBranch o where o.crmUser.id = "
+						+ idUser);
+	}
+	
+	public List<CrmBranch> getListBranchPostsaleByUser(BigDecimal idUser) {
+		return dao
+				.find("select o.crmBranch from CrmUserBranchPostsale o where o.crmUser.id = "
 						+ idUser);
 	}
 
@@ -563,6 +570,23 @@ public class TablesBo implements Serializable {
 		for (CrmBranch branch : listBranch) {
 			CrmUserBranch crmUserBranch = new CrmUserBranch();
 			crmUserBranch.setId(getId(CrmUserBranch.class));
+			crmUserBranch.setCrmUser(entity);
+			crmUserBranch.setCrmBranch(branch);
+			this.persist(crmUserBranch);
+		}
+
+		return i;
+	}
+	
+	public Integer saveUserBranchPostsale(CrmUser entity, List<CrmBranch> listBranch) {
+		int i = 0;
+
+		dao.executeHQL("delete from CrmUserBranchPostsale o where o.crmUser.id = "
+				+ entity.getId());
+
+		for (CrmBranch branch : listBranch) {
+			CrmUserBranchPostsale crmUserBranch = new CrmUserBranchPostsale();
+			crmUserBranch.setId(getId(CrmUserBranchPostsale.class));
 			crmUserBranch.setCrmUser(entity);
 			crmUserBranch.setCrmBranch(branch);
 			this.persist(crmUserBranch);
