@@ -21,6 +21,7 @@ import co.com.tactusoft.crm.model.entities.CrmUser;
 import co.com.tactusoft.crm.model.entities.VwAppointmentMedication;
 import co.com.tactusoft.crm.postsale.bo.ProcessBO;
 import co.com.tactusoft.crm.postsale.util.Utils;
+import co.com.tactusoft.crm.util.FacesUtil;
 
 public class Principal {
 
@@ -216,7 +217,10 @@ public class Principal {
 			} else {
 				crmBranch = processBO.getBranch(crmPatient);
 			}
-			CrmUser crmUser = processBO.getUser(crmBranch);
+			
+			Date callDate = Utils.addDaysToDate(currentDate, 1);
+			String callDateString = FacesUtil.formatDate(callDate, "yyyy-MM-dd");
+			CrmUser crmUser = processBO.getUser(crmBranch, callDateString);
 
 			// Primer Registro
 			CrmCampaign crmCampaign = new CrmCampaign();
@@ -225,8 +229,9 @@ public class Principal {
 				crmCampaign.setCrmPatient(crmPatient);
 
 				crmCampaign.setCrmBranch(crmBranch);
-				crmCampaign.setCrmUser(processBO.getUser(crmBranch));
-				crmCampaign.setDateCall(Utils.addDaysToDate(currentDate, 1));
+				crmCampaign.setCrmUser(processBO.getUser(crmBranch,
+						callDateString));
+				crmCampaign.setDateCall(callDate);
 				crmCampaign.setState(1);
 				processBO.save(crmCampaign);
 			}
@@ -238,7 +243,7 @@ public class Principal {
 				} else {
 					crmBranch = processBO.getBranch(crmPatient);
 				}
-				crmUser = processBO.getUser(crmBranch);
+				crmUser = processBO.getUser(crmBranch, callDateString);
 
 				if (row.getCrmPatient().getId().intValue() != crmPatient
 						.getId().intValue()) {

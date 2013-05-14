@@ -38,18 +38,20 @@ public class ProcessBO implements Serializable {
 
 	public List<CrmAppointment> getListAppointmentNoAttendet(String dateString) {
 		return dao
-				.find("FROM CrmAppointment WHERE state = 5 AND startAppointmentDate BETWEEN '"
+				.find("FROM CrmAppointment o WHERE state = 5 AND startAppointmentDate BETWEEN '"
 						+ dateString
 						+ "T00:00:00.000+05:00' and '"
-						+ dateString + "T23:59:59.999+05:00'");
+						+ dateString
+						+ "T23:59:59.999+05:00' AND o.crmBranch.id = 155");
 	}
 
 	public List<CrmAppointment> getListAppointmentConfirmed(String dateString) {
 		return dao
-				.find("FROM CrmAppointment WHERE state = 1 AND startAppointmentDate BETWEEN '"
+				.find("FROM CrmAppointment o WHERE state = 1 AND startAppointmentDate BETWEEN '"
 						+ dateString
 						+ "T00:00:00.000+05:00' and '"
-						+ dateString + "T23:59:59.999+05:00'");
+						+ dateString
+						+ "T23:59:59.999+05:00' AND o.crmBranch.id = 155");
 	}
 
 	public List<CrmAppointment> getListAppointmentControl(String dateString) {
@@ -66,7 +68,7 @@ public class ProcessBO implements Serializable {
 				+ "and d.start_appointment_date<'"
 				+ dateString
 				+ "' and c.id = a.id) "
-				+ "and b.id not in (select e.id_appointment from crm_campaign_detail e where e.campaing_type='CONTROL')";
+				+ "and b.id not in (select e.id_appointment from crm_campaign_detail e where e.campaing_type='CONTROL')  AND b.id_branch = 155";
 
 		return dao.findNative(sql, CrmAppointment.class);
 	}
@@ -76,17 +78,20 @@ public class ProcessBO implements Serializable {
 				.find("FROM CrmAppointment o WHERE state = 4 AND closeAppointment = 1 AND startAppointmentDate BETWEEN  '"
 						+ dateString
 						+ "T00:00:00.001+05:00' AND '"
-						+ dateString + "T23:59:59.999+05:00'");
+						+ dateString
+						+ "T23:59:59.999+05:00' AND o.crmBranch.id = 155");
 	}
 
-	public CrmUser getUser(CrmBranch crmBranch) {
+	public CrmUser getUser(CrmBranch crmBranch, String date) {
 		CrmUser result = null;
-		List<CrmUser> list = dao.find("SELECT usr FROM CrmCampaign as cpg"
-				+ " RIGHT JOIN cpg.crmUser as usr"
-				+ " LEFT JOIN usr.crmUserBranchs as brc "
-				+ " JOIN usr.crmUserRoles as rol WITH rol.crmRole.id = 2"
-				+ " WHERE usr.state = 1 AND brc.crmBranch.id = "
-				+ crmBranch.getId() + " GROUP BY usr ORDER BY COUNT(cpg)");
+		List<CrmUser> list = dao.findNative("SELECT b.* "
+				+ "FROM crm_db.crm_campaign a  "
+				+ "right outer JOIN crm_db.crm_user b  "
+				+ "ON (a.id_user=b.id and date(a.date_call)='" + date + "') "
+				+ "left outer JOIN crm_db.crm_user_branch_postsale c  "
+				+ "ON b.id=c.id_user WHERE b.state=1 and c.id_branch="
+				+ crmBranch.getId() + " GROUP BY b.id ORDER BY count(a.id)",
+				CrmUser.class);
 		if (list.size() > 0) {
 			result = list.get(0);
 		}
