@@ -34,6 +34,7 @@ public class CrmCall implements java.io.Serializable {
 	private String remoteChannel;
 	private BigDecimal idCallFinal;
 	private Date callDate;
+	private String asteriskId;
 
 	public CrmCall() {
 	}
@@ -47,7 +48,7 @@ public class CrmCall implements java.io.Serializable {
 			CrmCallTypeDetail crmCallTypeDetail, String idCall,
 			String agentNumber, String callType, String idCampaign,
 			String phone, String companyPhone, String remoteChannel,
-			BigDecimal idCallFinal, Date callDate) {
+			BigDecimal idCallFinal, Date callDate, String asteriskId) {
 		this.id = id;
 		this.crmPatient = crmPatient;
 		this.crmCallTypeDetail = crmCallTypeDetail;
@@ -60,6 +61,7 @@ public class CrmCall implements java.io.Serializable {
 		this.remoteChannel = remoteChannel;
 		this.idCallFinal = idCallFinal;
 		this.callDate = callDate;
+		this.asteriskId = asteriskId;
 	}
 
 	@Id
@@ -172,6 +174,15 @@ public class CrmCall implements java.io.Serializable {
 
 	public void setCallDate(Date callDate) {
 		this.callDate = callDate;
+	}
+
+	@Column(name = "asterisk_id", length = 20)
+	public String getAsteriskId() {
+		return asteriskId;
+	}
+
+	public void setAsteriskId(String asteriskId) {
+		this.asteriskId = asteriskId;
 	}
 
 }

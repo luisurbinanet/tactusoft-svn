@@ -2,6 +2,7 @@ package co.com.tactusoft.crm.model.entities;
 
 import java.math.BigDecimal;
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -24,16 +25,18 @@ public class CrmDoctorException implements java.io.Serializable {
 	private CrmDoctor crmDoctor;
 	private Date startHour;
 	private Date endHour;
+	private CrmBranch crmBranch;
 
 	public CrmDoctorException() {
 	}
 
 	public CrmDoctorException(BigDecimal id, CrmDoctor crmDoctor,
-			Date startHour, Date endHour) {
+			Date startHour, Date endHour, CrmBranch crmBranch) {
 		this.id = id;
 		this.crmDoctor = crmDoctor;
 		this.startHour = startHour;
 		this.endHour = endHour;
+		this.crmBranch = crmBranch;
 	}
 
 	@Id
@@ -74,6 +77,16 @@ public class CrmDoctorException implements java.io.Serializable {
 
 	public void setEndHour(Date endHour) {
 		this.endHour = endHour;
+	}
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "id_branch")
+	public CrmBranch getCrmBranch() {
+		return crmBranch;
+	}
+
+	public void setCrmBranch(CrmBranch crmBranch) {
+		this.crmBranch = crmBranch;
 	}
 
 }
