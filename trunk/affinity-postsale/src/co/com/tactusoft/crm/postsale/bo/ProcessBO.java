@@ -41,8 +41,7 @@ public class ProcessBO implements Serializable {
 				.find("FROM CrmAppointment o WHERE state = 5 AND startAppointmentDate BETWEEN '"
 						+ dateString
 						+ "T00:00:00.000+05:00' and '"
-						+ dateString
-						+ "T23:59:59.999+05:00' AND o.crmBranch.id = 155");
+						+ dateString + "T23:59:59.999+05:00'");
 	}
 
 	public List<CrmAppointment> getListAppointmentConfirmed(String dateString) {
@@ -50,8 +49,7 @@ public class ProcessBO implements Serializable {
 				.find("FROM CrmAppointment o WHERE state = 1 AND startAppointmentDate BETWEEN '"
 						+ dateString
 						+ "T00:00:00.000+05:00' and '"
-						+ dateString
-						+ "T23:59:59.999+05:00' AND o.crmBranch.id = 155");
+						+ dateString + "T23:59:59.999+05:00'");
 	}
 
 	public List<CrmAppointment> getListAppointmentControl(String dateString) {
@@ -68,7 +66,7 @@ public class ProcessBO implements Serializable {
 				+ "and d.start_appointment_date<'"
 				+ dateString
 				+ "' and c.id = a.id) "
-				+ "and b.id not in (select e.id_appointment from crm_campaign_detail e where e.campaing_type='CONTROL')  AND b.id_branch = 155";
+				+ "and b.id not in (select e.id_appointment from crm_campaign_detail e where e.campaing_type='CONTROL')";
 
 		return dao.findNative(sql, CrmAppointment.class);
 	}
@@ -78,8 +76,7 @@ public class ProcessBO implements Serializable {
 				.find("FROM CrmAppointment o WHERE state = 4 AND closeAppointment = 1 AND startAppointmentDate BETWEEN  '"
 						+ dateString
 						+ "T00:00:00.001+05:00' AND '"
-						+ dateString
-						+ "T23:59:59.999+05:00' AND o.crmBranch.id = 155");
+						+ dateString + "T23:59:59.999+05:00'");
 	}
 
 	public CrmUser getUser(CrmBranch crmBranch, String date) {
