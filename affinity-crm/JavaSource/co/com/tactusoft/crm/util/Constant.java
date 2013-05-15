@@ -79,5 +79,7 @@ public class Constant {
 	public static String HISTORY_HOMEOPATHIC = "HOMEOPATHIC";
 	public static String HISTORY_PHYSIQUE = "PHYSIQUE";
 	public static String HISTORY_ORGANOMETRY = "ORGANOMETRY";
+	
+	public static final int INCREASE_MIN = 10;
 
 }
