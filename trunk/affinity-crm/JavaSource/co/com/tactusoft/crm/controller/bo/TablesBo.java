@@ -260,7 +260,7 @@ public class TablesBo implements Serializable {
 
 	public List<CrmBranch> getListBranchActive1000() {
 		return dao
-				.find("from CrmBranch o where o.state = 1 and society = '1000'");
+				.find("from CrmBranch o where o.state = 1 and society IN ('1000','3000')");
 	}
 
 	public List<CrmOccupation> getListOccupation() {
