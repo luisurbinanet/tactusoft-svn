@@ -183,4 +183,10 @@ public class CampaignAdminBacking extends CampaignBacking {
 								.getMessage("cam_state_reallocate");
 	}
 
+	public void handleDateSelect() {
+		if (startDate.compareTo(endDate) > 0) {
+			endDate = startDate;
+		}
+	}
+
 }

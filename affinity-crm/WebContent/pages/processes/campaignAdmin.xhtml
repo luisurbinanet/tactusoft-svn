@@ -66,6 +66,20 @@
 						<f:selectItem itemValue="-1"
 							itemLabel="#{msg['app_num_records_all']}" />
 					</p:selectOneMenu>
+
+					<h:outputLabel value="#{msg['src_star_date']}" style="width:40%" />
+					<p:calendar value="#{campaignAdminBacking.startDate}"
+						label="#{msg['src_star_date']}" readonlyInput="true"
+						pattern="dd/MM/yyyy" showOn="button" navigator="true" locale="es">
+						<p:ajax event="dateSelect" update="calEndDate"
+							listener="#{campaignAdminBacking.handleDateSelect}" />
+					</p:calendar>
+
+					<h:outputLabel value="#{msg['src_end_date']}" style="width:40%" />
+					<p:calendar id="calEndDate" value="#{campaignAdminBacking.endDate}"
+						label="#{msg['src_end_date']}" readonlyInput="true"
+						pattern="dd/MM/yyyy" showOn="button" navigator="true" locale="es"
+						mindate="#{campaignAdminBacking.startDate}" />
 				</h:panelGrid>
 
 				<p:spacer height="5" />
