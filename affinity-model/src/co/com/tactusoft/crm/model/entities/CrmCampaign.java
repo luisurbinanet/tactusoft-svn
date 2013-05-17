@@ -34,26 +34,29 @@ public class CrmCampaign implements java.io.Serializable {
 	private Date dateCall;
 	private String observation;
 	private Integer days;
-	private int state;
-	private int orderField;
+	private Integer state;
+	private Integer orderField;
+	private Integer poll;
 	private List<CrmCampaignDetail> crmCampaignDetails = new ArrayList<CrmCampaignDetail>();
 
 	public CrmCampaign() {
 	}
 
 	public CrmCampaign(CrmPatient crmPatient, CrmUser crmUser, CrmLog crmLog,
-			CrmBranch crmBranch, Date dateCall, int state) {
+			CrmBranch crmBranch, Date dateCall, Integer state, Integer poll) {
 		this.crmPatient = crmPatient;
 		this.crmUser = crmUser;
 		this.crmLog = crmLog;
 		this.crmBranch = crmBranch;
 		this.dateCall = dateCall;
 		this.state = state;
+		this.poll = poll;
 	}
 
 	public CrmCampaign(CrmPatient crmPatient, CrmUser crmUser, CrmLog crmLog,
 			CrmBranch crmBranch, Date dateCall, String observation,
-			Integer days, int state, List<CrmCampaignDetail> crmCampaignDetails) {
+			Integer days, Integer state, Integer poll,
+			List<CrmCampaignDetail> crmCampaignDetails) {
 		this.crmPatient = crmPatient;
 		this.crmUser = crmUser;
 		this.crmLog = crmLog;
@@ -62,6 +65,7 @@ public class CrmCampaign implements java.io.Serializable {
 		this.observation = observation;
 		this.days = days;
 		this.state = state;
+		this.poll = poll;
 		this.crmCampaignDetails = crmCampaignDetails;
 	}
 
@@ -145,21 +149,30 @@ public class CrmCampaign implements java.io.Serializable {
 	}
 
 	@Column(name = "state", nullable = false)
-	public int getState() {
+	public Integer getState() {
 		return this.state;
 	}
 
-	public void setState(int state) {
+	public void setState(Integer state) {
 		this.state = state;
 	}
 
 	@Column(name = "order_field")
-	public int getOrderField() {
+	public Integer getOrderField() {
 		return orderField;
 	}
 
-	public void setOrderField(int orderField) {
+	public void setOrderField(Integer orderField) {
 		this.orderField = orderField;
+	}
+
+	@Column(name = "poll")
+	public Integer getPoll() {
+		return poll;
+	}
+
+	public void setPoll(Integer poll) {
+		this.poll = poll;
 	}
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "crmCampaign")
