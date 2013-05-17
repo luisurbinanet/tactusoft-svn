@@ -891,4 +891,17 @@ public class BaseBacking implements Serializable {
 		context.addCallbackParam("validate", validate);
 	}
 
+	protected String getStringSelecteds(List<String> listCrmBranch) {
+		String result = "";
+		for (String row : listCrmBranch) {
+			result = result + row + ",";
+		}
+
+		if (result.trim().length() > 0) {
+			result = result.substring(0, result.length() - 1);
+		}
+
+		return result;
+	}
+
 }

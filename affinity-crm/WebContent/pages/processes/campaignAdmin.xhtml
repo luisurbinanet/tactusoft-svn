@@ -16,10 +16,12 @@
 
 			<h:form id="form">
 
+				<p:growl id="growl" showDetail="true" />
+
 				<p:toolbar id="toolBar" style="width:100%">
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_search']}"
-							icon="ui-icon-search" update=":form:recordTable toolBar"
+							icon="ui-icon-search" update=":form:recordTable toolBar growl"
 							action="#{campaignAdminBacking.searchAction}" />
 						<p:commandButton value="#{msg['btn_edit']}" icon="ui-icon-pencil"
 							oncomplete="dlg.show()" update=":editForm:pnlDetail"
@@ -31,6 +33,15 @@
 				<p:spacer height="5" />
 
 				<h:panelGrid width="100%" columns="2">
+
+					<h:outputLabel value="#{msg['doc_branch']}" />
+					<p:selectCheckboxMenu
+						value="#{campaignAdminBacking.listCrmBranchSelected}"
+						label="#{msg['doc_branch']}" filter="true" style="width:400px"
+						filterMatchMode="contains" panelStyle="width:400px">
+						<f:selectItems value="#{campaignAdminBacking.listCrmBranch}" />
+					</p:selectCheckboxMenu>
+
 					<h:outputLabel value="#{msg['app_state']}" />
 					<p:selectOneMenu value="#{campaignAdminBacking.status}"
 						style="width:400px">
@@ -102,8 +113,6 @@
 
 		<h:form id="editForm">
 
-			<p:growl id="growl" showDetail="true" />
-
 			<p:dialog header="#{msg['msg_detail']}" widgetVar="dlg"
 				resizable="false" id="dialog" showEffect="fade" hideEffect="explode"
 				modal="true" width="550">
@@ -113,9 +122,9 @@
 						<p:commandButton value="#{msg['btn_save']}" icon="ui-icon-disk"
 							action="#{campaignAdminBacking.saveAction}"
 							oncomplete="handleComplete(xhr, status, args)"
-							update="growl :form:recordTable" />
+							update=":form:growl :form:recordTable" />
 						<p:commandButton value="#{msg['btn_close']}"
-							icon="ui-icon-closethick" update="growl :form:recordTable"
+							icon="ui-icon-closethick" update=":form:growl :form:recordTable"
 							process="@none" oncomplete="dlg.hide()" />
 					</p:toolbarGroup>
 				</p:toolbar>

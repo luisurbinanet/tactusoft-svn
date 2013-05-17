@@ -1,6 +1,5 @@
 package co.com.tactusoft.crm.view.backing;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +25,7 @@ import co.com.tactusoft.crm.view.datamodel.CampaignDetailDataModel;
 
 @Named
 @Scope("view")
-public class CampaignBacking implements Serializable {
+public class CampaignBacking extends BaseBacking {
 
 	private static final long serialVersionUID = 1L;
 

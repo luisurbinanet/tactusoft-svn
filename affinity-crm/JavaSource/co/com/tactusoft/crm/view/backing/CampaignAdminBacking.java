@@ -1,6 +1,8 @@
 package co.com.tactusoft.crm.view.backing;
 
+import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -24,9 +26,22 @@ public class CampaignAdminBacking extends CampaignBacking {
 	private CrmUser crmUser;
 	private Integer status;
 	private Integer maxResults;
+	private List<String> listCrmBranchSelected;
+	private Date startDate;
+	private Date endDate;
+	private List<String> listStatus = new LinkedList<String>();
+	private String statusString;
 
 	public CampaignAdminBacking() {
+		startDate = new Date();
+		endDate = new Date();
 		maxResults = 100;
+
+		listStatus.add("1");
+		listStatus.add("2");
+		listStatus.add("3");
+
+		statusString = getStringSelecteds(listStatus);
 	}
 
 	public List<SelectItem> getListUserItem() {
@@ -61,6 +76,22 @@ public class CampaignAdminBacking extends CampaignBacking {
 		this.maxResults = maxResults;
 	}
 
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
 	@PostConstruct
 	public void init() {
 		List<CrmParameter> listParameter = parameterService
@@ -69,20 +100,18 @@ public class CampaignAdminBacking extends CampaignBacking {
 		for (CrmParameter row : listParameter) {
 			mapText.put(row.getCode(), row.getTextValue());
 		}
-		refreshList();
 	}
 
 	public boolean isDisabled() {
-		return list.size() > 0 ? false : true;
+		return list != null && list.size() > 0 ? false : true;
 	}
 
-	@Override
-	protected void refreshList() {
-		list = tableService.getListCampaign(maxResults);
-		model = new CampaignDataModel(list);
-		if (list.size() > 0) {
-			selected = list.get(0);
-		}
+	public List<String> getListCrmBranchSelected() {
+		return listCrmBranchSelected;
+	}
+
+	public void setListCrmBranchSelected(List<String> listCrmBranchSelected) {
+		this.listCrmBranchSelected = listCrmBranchSelected;
 	}
 
 	@Override
@@ -100,17 +129,29 @@ public class CampaignAdminBacking extends CampaignBacking {
 	}
 
 	public void searchAction() {
-		if (status == 0) {
-			refreshList();
-		} else {
-			list = tableService.getListCampaignByStatus(status.toString(),
-					maxResults);
+		if (listCrmBranchSelected.size() > 0) {
+			String startDateString = FacesUtil.formatDate(startDate,
+					"yyyy-MM-dd");
+			String endDateString = FacesUtil.formatDate(endDate, "yyyy-MM-dd");
+			String branchs = getStringSelecteds(this.listCrmBranchSelected);
+
+			statusString = status.toString();
+			if (status == 0) {
+				statusString = getStringSelecteds(listStatus);
+			}
+
+			list = tableService.getListCampaignByStatus(branchs,
+					startDateString, endDateString, statusString, maxResults);
 			model = new CampaignDataModel(list);
 			if (list.size() > 0) {
 				selected = list.get(0);
 			} else {
 				selected = null;
 			}
+
+		} else {
+			String message = FacesUtil.getMessage("app_no_branch");
+			FacesUtil.addWarn(message);
 		}
 	}
 
@@ -123,7 +164,7 @@ public class CampaignAdminBacking extends CampaignBacking {
 		}
 		int result = tableService.saveCampaign(selected);
 		if (result == 0) {
-			refreshList();
+			searchAction();
 			message = FacesUtil.getMessage("msg_record_ok");
 			FacesUtil.addInfo(message);
 		} else if (result == -1) {

@@ -53,7 +53,7 @@
 
 			<p:dialog header="#{msg['msg_detail']}" widgetVar="dlg"
 				resizable="false" id="dialog" showEffect="fade" hideEffect="explode"
-				modal="true" width="700" height="600">
+				modal="true" width="900" height="600">
 
 				<p:toolbar style="width:100%">
 					<p:toolbarGroup align="left">
@@ -135,7 +135,7 @@
 								<p:column headerText="#{msg['cam_medication']}">
 									<h:outputLabel value="#{item.descMaterial}" />
 								</p:column>
-								
+
 								<p:column headerText="#{msg['sal_material_amount']}">
 									<h:outputLabel value="#{item.unit}" />
 								</p:column>
@@ -177,6 +177,12 @@
 							<f:selectItem itemValue="15" itemLabel="#{msg['cam_days_15']}" />
 							<f:selectItem itemValue="25" itemLabel="#{msg['cam_days_25']}" />
 							<f:selectItem itemValue="30" itemLabel="#{msg['cam_days_30']}" />
+						</p:selectOneMenu>
+						<h:outputLabel value="#{msg['cam_call_poll']}" />
+						<p:selectOneMenu value="#{campaignBacking.selected.poll}"
+							style="width:400px">
+							<f:selectItem itemValue="0" itemLabel="No" />
+							<f:selectItem itemValue="1" itemLabel="Si" />
 						</p:selectOneMenu>
 						<h:outputLabel value="#{msg['pat_type_obs']}" />
 						<p:inputTextarea value="#{campaignBacking.selected.observation}"
