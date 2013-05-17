@@ -91,11 +91,6 @@ public class TablesBo implements Serializable {
 		return dao.find("from CrmGuideline");
 	}
 
-	public List<CrmCampaign> getListCampaign(int maxResults) {
-		return dao.find("FROM CrmCampaign o ORDER BY o.state, o.dateCall",
-				maxResults);
-	}
-
 	public List<CrmCampaign> getListCampaignActive() {
 		return dao
 				.find("FROM CrmCampaign o where o.crmUser.id = "
@@ -104,14 +99,16 @@ public class TablesBo implements Serializable {
 						1);
 	}
 
-	public List<CrmCampaign> getListCampaignByStatus(String status,
-			int maxResults) {
-		return dao.find("FROM CrmCampaign o where o.state IN (" + status
+	public List<CrmCampaign> getListCampaignByStatus(String branchs,
+			String startDate, String endDate, String status, int maxResults) {
+		return dao.find("FROM CrmCampaign o WHERE o.crmBranch.id IN ("
+				+ branchs + ") AND Date(o.dateCall) BETWEEN '" + startDate
+				+ "' AND '" + endDate + "' AND o.state IN (" + status
 				+ ") ORDER BY o.state, o.dateCall", maxResults);
 	}
 
 	public List<CrmCampaignDetail> getListCampaignDetail(Integer idCampaign) {
-		return dao.find("from CrmCampaignDetail where crmCampaign.id = "
+		return dao.find("from CrmCampaignDetail where  crmCampaign.id = "
 				+ idCampaign + "and campaingType <> 'MEDICATION'");
 	}
 

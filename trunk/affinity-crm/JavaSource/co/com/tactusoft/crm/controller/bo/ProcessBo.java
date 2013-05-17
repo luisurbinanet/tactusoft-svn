@@ -316,7 +316,7 @@ public class ProcessBo implements Serializable {
 				}
 			}
 
-			if (contValidate > 1) {
+			if (contValidate > 2) {
 				if (timeType.equals(Constant.TIME_TYPE_DOCTOR)) {
 					result = false;
 					break;
@@ -372,7 +372,7 @@ public class ProcessBo implements Serializable {
 			}
 		}
 
-		if (contValidate > 1) {
+		if (contValidate > 2) {
 			result = false;
 		}
 
@@ -539,7 +539,7 @@ public class ProcessBo implements Serializable {
 
 						calendar = Calendar.getInstance();
 						calendar.setTime(scheduleInitHour);
-						calendar.add(Calendar.MINUTE, minutes);
+						calendar.add(Calendar.MINUTE, Constant.INCREASE_MIN);
 						scheduleInitHour = calendar.getTime();
 
 						if (scheduleInitHour.compareTo(maxHour) >= 0) {
@@ -846,7 +846,11 @@ public class ProcessBo implements Serializable {
 									}
 								}
 
-								initHour = new Date(endHour.getTime());
+								calendar2 = Calendar.getInstance();
+								calendar2.setTime(initHour);
+								calendar2.add(Calendar.MINUTE,
+										Constant.INCREASE_MIN);
+								initHour = calendar2.getTime();
 							}
 						}
 					}
