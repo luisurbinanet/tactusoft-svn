@@ -1081,7 +1081,7 @@ public class ProcessBo implements Serializable {
 			endCalendar.setTime(row.getEndHour());
 			int endDay = endCalendar.get(Calendar.DAY_OF_YEAR);
 
-			if (endDay > startDay) {
+			if (endDay >= startDay) {
 				result = false;
 			} else {
 
@@ -1153,10 +1153,15 @@ public class ProcessBo implements Serializable {
 
 			// Buscar horarios Doctor
 			List<CrmDoctorSchedule> listDoctorSchedule = dao
-					.find("from CrmDoctorSchedule o where o.day = " + day
-							+ " and o.crmDoctor.id = " + idDoctor
-							+ " and o.endHour <= '1900-01-01T" + hourString
-							+ ".000+05:00'" + " order by o.day, o.startHour");
+					.find("from CrmDoctorSchedule o where o.day = "
+							+ day
+							+ " and o.crmDoctor.id = "
+							+ idDoctor
+							+ " AND o.crmBranch.id = "
+							+ idBranch
+							+ " AND '"
+							+ hourString
+							+ "' BETWEEN o.startHour AND o.endHour order by o.day, o.startHour");
 
 			// Validar si Doctor tiene Horario
 			if (listDoctorSchedule.size() > 0) {

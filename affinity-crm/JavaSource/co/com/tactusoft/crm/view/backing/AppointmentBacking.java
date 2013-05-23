@@ -769,7 +769,7 @@ public class AppointmentBacking extends BaseBacking {
 			int validateApp = 0;
 			if (appType.equals("ORDINARY")) {
 				validateApp = processService.validateAppointmentForDate(
-						selected.getCrmBranch().getId(),
+						branch.getId(),
 						selectedCandidate.getStartDate(),
 						selectedCandidate.getEndDate(), procedureDetail,
 						selectedCandidate.getDoctor().getId(),

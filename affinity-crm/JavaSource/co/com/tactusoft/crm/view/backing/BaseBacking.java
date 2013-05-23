@@ -389,8 +389,8 @@ public class BaseBacking implements Serializable {
 		if (listCrmBranch == null) {
 			listCrmBranch = new LinkedList<SelectItem>();
 			mapCrmBranch = new LinkedHashMap<BigDecimal, CrmBranch>();
-			String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
-			listCrmBranch.add(new SelectItem(Constant.DEFAULT_VALUE, label));
+			//String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
+			//listCrmBranch.add(new SelectItem(Constant.DEFAULT_VALUE, label));
 			for (CrmBranch row : tablesService.getListBranchActive1000()) {
 				mapCrmBranch.put(row.getId(), row);
 				listCrmBranch.add(new SelectItem(row.getId(), row.getName()
