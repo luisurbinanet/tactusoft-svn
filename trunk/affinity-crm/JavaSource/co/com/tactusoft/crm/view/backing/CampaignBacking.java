@@ -1,6 +1,7 @@
 package co.com.tactusoft.crm.view.backing;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -169,13 +170,27 @@ public class CampaignBacking extends BaseBacking {
 	}
 
 	public void generateDetail() {
-		listDetail = selected.getCrmCampaignDetails();
-		modelDetail = new CampaignDetailDataModel(listDetail);
+		List<CrmCampaignDetail> listDetailAll = selected
+				.getCrmCampaignDetails();
 
-		listDetailMedication = tableService
-				.getListCampaignDetailMedication(selected.getId());
+		listDetail = new ArrayList<CrmCampaignDetail>();
+		for (CrmCampaignDetail row : listDetailAll) {
+			if (!row.getCampaingType().equals("MEDICATION")) {
+				listDetail.add(row);
+			}
+		}
+
+		listDetailMedication = new ArrayList<CrmCampaignDetail>();
+		for (CrmCampaignDetail row : listDetailAll) {
+			if (row.getCampaingType().equals("MEDICATION")) {
+				listDetailMedication.add(row);
+			}
+		}
+
+		modelDetail = new CampaignDetailDataModel(listDetail);
 		modelDetailMedication = new CampaignDetailDataModel(
 				listDetailMedication);
+
 		if (listDetailMedication.size() > 0) {
 			listDetail.add(listDetailMedication.get(0));
 		}
