@@ -447,10 +447,14 @@ public class ProcessBo implements Serializable {
 						}
 					}
 
-					Date scheduleInitHour = minHour;
+					Date scheduleInitHour = FacesUtil.addMinutesToDate(minHour,
+							0);
 
 					boolean end = false;
 					do {
+						Date scheduleEndHour = FacesUtil.addMinutesToDate(
+								scheduleInitHour, minutes);
+
 						int numapp = 0;
 						if (timeType.equals(Constant.TIME_TYPE_DOCTOR)) {
 							// Validar Hora
@@ -459,8 +463,8 @@ public class ProcessBo implements Serializable {
 							for (CrmDoctorSchedule row : listCrmDoctorSchedule) {
 								if ((scheduleInitHour.compareTo(row
 										.getStartHour()) >= 0)
-										&& (scheduleInitHour.compareTo(row
-												.getEndHour()) < 0)
+										&& (scheduleEndHour.compareTo(row
+												.getEndHour()) <= 0)
 										&& validateException(
 												listDoctorException,
 												FacesUtil.addHourToDate(
@@ -472,10 +476,6 @@ public class ProcessBo implements Serializable {
 							}
 
 							if (numInteractions > 0) {
-								calendar = Calendar.getInstance();
-								calendar.setTime(scheduleInitHour);
-								calendar.add(Calendar.MINUTE, minutes);
-								Date scheduleEndHour = calendar.getTime();
 								scheduleEndHour = FacesUtil.addHourToDate(
 										currentDate, scheduleEndHour);
 
@@ -505,10 +505,6 @@ public class ProcessBo implements Serializable {
 						} else if (timeType
 								.equals(Constant.TIME_TYPE_STRETCHERS)) {
 
-							calendar = Calendar.getInstance();
-							calendar.setTime(scheduleInitHour);
-							calendar.add(Calendar.MINUTE, minutes);
-							Date scheduleEndHour = calendar.getTime();
 							scheduleEndHour = FacesUtil.addHourToDate(
 									currentDate, scheduleEndHour);
 
@@ -820,8 +816,7 @@ public class ProcessBo implements Serializable {
 
 								if (validate) {
 									validate = validateException(
-											listDoctorException, currentDate,
-											candidatesHours);
+											listDoctorException, initHour);
 
 									if (FacesUtil
 											.getDateWithoutTime(new Date())
@@ -1062,66 +1057,6 @@ public class ProcessBo implements Serializable {
 						+ "order by o.startAppointmentDate");
 
 		return listApp.size();
-	}
-
-	private boolean validateException(
-			List<CrmDoctorException> listDoctorException, Date currentDate,
-			List<Date> candidatesHours) {
-
-		boolean result = true;
-
-		int count = 0;
-		List<Date> ocupatedHours = new ArrayList<Date>();
-		for (CrmDoctorException row : listDoctorException) {
-			Calendar startCalendar = Calendar.getInstance();
-			startCalendar.setTime(row.getStartHour());
-			int startDay = startCalendar.get(Calendar.DAY_OF_YEAR);
-
-			Calendar endCalendar = Calendar.getInstance();
-			endCalendar.setTime(row.getEndHour());
-			int endDay = endCalendar.get(Calendar.DAY_OF_YEAR);
-
-			if (endDay >= startDay) {
-				result = false;
-			} else {
-
-				Date dateRow = FacesUtil.getDateWithoutTime(row.getStartHour());
-				if (currentDate.getTime() == dateRow.getTime()) {
-					long diff = row.getEndHour().getTime()
-							- row.getStartHour().getTime();
-					double diffInMin = diff / ((double) 1000 * 60);
-					int size = (int) (diffInMin / Constant.INTERVAL_TIME_APPOINTMENT) + 1;
-					ocupatedHours.add(new Date(row.getStartHour().getTime()));
-					count++;
-					for (int k = 1; k < size; k++) {
-						Calendar calendar2 = Calendar.getInstance();
-						calendar2.setTime(ocupatedHours.get(count - 1));
-						calendar2.add(Calendar.MINUTE,
-								Constant.INTERVAL_TIME_APPOINTMENT);
-						ocupatedHours.add(calendar2.getTime());
-						count++;
-					}
-				}
-
-				// validar
-				int contValidate = 0;
-				for (Date ocup : ocupatedHours) {
-					for (Date cand : candidatesHours) {
-						if (cand.compareTo(ocup) == 0) {
-							contValidate++;
-							break;
-						}
-					}
-				}
-
-				if (contValidate > 1) {
-					result = false;
-					break;
-				}
-			}
-		}
-
-		return result;
 	}
 
 	public int validateAppointmentForDate(BigDecimal idBranch, Date starDate,
