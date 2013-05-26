@@ -122,6 +122,8 @@ public class BaseBacking implements Serializable {
 
 	protected String typeHousing;
 	protected String neighborhood;
+	
+	protected Date today;
 
 	public List<CrmPatient> getListPatient() {
 		return listPatient;
@@ -796,6 +798,14 @@ public class BaseBacking implements Serializable {
 
 	public void setNeighborhood(String neighborhood) {
 		this.neighborhood = neighborhood;
+	}
+
+	public Date getToday() {
+		return today;
+	}
+
+	public void setToday(Date today) {
+		this.today = today;
 	}
 
 	public void newPatientAction(ActionEvent event) {

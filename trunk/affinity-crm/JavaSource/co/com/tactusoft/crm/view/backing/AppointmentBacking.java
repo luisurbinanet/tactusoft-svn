@@ -413,6 +413,8 @@ public class AppointmentBacking extends BaseBacking {
 				handleProcedureDetailChange();
 			}
 		}
+
+		today = new Date();
 	}
 
 	public void handleBranchChange() {
@@ -435,10 +437,11 @@ public class AppointmentBacking extends BaseBacking {
 			mapDoctor.put(row.getId(), row);
 			listDoctor.add(new SelectItem(row.getId(), row.getNames()));
 		}
+
+		currentDate = new Date();
 	}
 
 	public void handleProcedureChange() {
-
 		if (listProcedure.size() > 0) {
 			String codPublicity = mapProcedure.get(idProcedure)
 					.getCodPublicity();
@@ -545,8 +548,6 @@ public class AppointmentBacking extends BaseBacking {
 			this.renderedForDate = true;
 			this.renderedForDoctor = false;
 			this.disabledSearch = false;
-
-			currentDate = new Date();
 			handleDateSelect(null);
 		} else if (this.idSearch.intValue() == Constant.APP_TYPE_FOR_DOCTOR_VALUE
 				.intValue()) {
@@ -562,7 +563,7 @@ public class AppointmentBacking extends BaseBacking {
 	}
 
 	public void handleDateSelect(SelectEvent event) {
-		Date date = FacesUtil.getDateWithoutTime(new Date());
+		Date date = FacesUtil.getDateWithoutTime(currentDate);
 		if (event != null) {
 			date = (Date) event.getObject();
 		}
@@ -769,8 +770,7 @@ public class AppointmentBacking extends BaseBacking {
 			int validateApp = 0;
 			if (appType.equals("ORDINARY")) {
 				validateApp = processService.validateAppointmentForDate(
-						branch.getId(),
-						selectedCandidate.getStartDate(),
+						branch.getId(), selectedCandidate.getStartDate(),
 						selectedCandidate.getEndDate(), procedureDetail,
 						selectedCandidate.getDoctor().getId(),
 						selectedPatient.getId(), timeType, edit);

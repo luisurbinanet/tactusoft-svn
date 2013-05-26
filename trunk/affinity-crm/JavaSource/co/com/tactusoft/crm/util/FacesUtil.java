@@ -318,20 +318,6 @@ public class FacesUtil {
 		return calendar.getTime();
 	}
 
-	public static Date addDaysToDate(Date date, int days) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date);
-		calendar.add(Calendar.DATE, days);
-		return calendar.getTime();
-	}
-
-	public static Date addMinutesToDate(Date date, int hours) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date);
-		calendar.add(Calendar.MINUTE, hours);
-		return calendar.getTime();
-	}
-
 	public static String formatDate(Date date, String format) {
 		String stringDate = null;
 		DateFormat formatter;
@@ -545,5 +531,20 @@ public class FacesUtil {
 		}
 
 		return items;
+	}
+
+	public static Date addTime(Date date, int type, int amount) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(type, amount);
+		return calendar.getTime();
+	}
+
+	public static Date addDaysToDate(Date date, int days) {
+		return addTime(date, Calendar.DATE, days);
+	}
+
+	public static Date addMinutesToDate(Date date, int minutes) {
+		return addTime(date, Calendar.MINUTE, minutes);
 	}
 }
