@@ -128,7 +128,7 @@
 			<p:dialog header="#{msg['prc_detail']}"
 				widgetVar="dlgProcedureDetail" resizable="false"
 				id="dialogProcedureDetail" showEffect="fade" hideEffect="explode"
-				modal="true" width="1050">
+				modal="true" width="1100">
 
 				<p:toolbar style="width:100%">
 					<p:toolbarGroup align="left">
@@ -176,6 +176,9 @@
 
 					<h:outputText value="#{msg['prc_availability']}" />
 					<p:selectBooleanCheckbox value="#{procedureBacking.availability}" />
+
+					<h:outputText value="#{msg['prc_study_case']}" />
+					<p:selectBooleanCheckbox value="#{procedureBacking.caseStudy}" />
 
 					<p:commandButton value="#{msg['btn_add']}"
 						action="#{procedureBacking.addProcedureDetailAction}"
@@ -228,6 +231,10 @@
 
 					<p:column headerText="#{msg['prc_availability']}">
 						<p:selectBooleanCheckbox value="#{rec.availability}" />
+					</p:column>
+
+					<p:column headerText="#{msg['prc_study_case']}">
+						<p:selectBooleanCheckbox value="#{rec.caseStudy}" />
 					</p:column>
 
 					<p:column style="width:80px"

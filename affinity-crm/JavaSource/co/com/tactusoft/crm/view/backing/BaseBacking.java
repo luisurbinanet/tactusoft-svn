@@ -124,6 +124,7 @@ public class BaseBacking implements Serializable {
 	protected String neighborhood;
 	
 	protected Date today;
+	protected Date todayMax;
 
 	public List<CrmPatient> getListPatient() {
 		return listPatient;
@@ -806,6 +807,14 @@ public class BaseBacking implements Serializable {
 
 	public void setToday(Date today) {
 		this.today = today;
+	}
+
+	public Date getTodayMax() {
+		return todayMax;
+	}
+
+	public void setTodayMax(Date todayMax) {
+		this.todayMax = todayMax;
 	}
 
 	public void newPatientAction(ActionEvent event) {

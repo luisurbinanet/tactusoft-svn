@@ -547,4 +547,15 @@ public class FacesUtil {
 	public static Date addMinutesToDate(Date date, int minutes) {
 		return addTime(date, Calendar.MINUTE, minutes);
 	}
+
+	public static Date addHoursToDate(Date date, int hours) {
+		return addTime(date, Calendar.HOUR_OF_DAY, hours);
+	}
+
+	public static int getDayOfWeek(Date date) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		int currentDay = calendar.get(Calendar.DAY_OF_WEEK);
+		return currentDay;
+	}
 }

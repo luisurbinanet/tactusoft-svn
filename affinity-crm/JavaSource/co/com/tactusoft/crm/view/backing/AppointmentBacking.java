@@ -2,7 +2,6 @@ package co.com.tactusoft.crm.view.backing;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -16,7 +15,6 @@ import javax.inject.Named;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
-import org.primefaces.event.SelectEvent;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
@@ -29,7 +27,6 @@ import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.beans.Candidate;
 import co.com.tactusoft.crm.view.beans.ResultSearchAppointment;
-import co.com.tactusoft.crm.view.beans.ResultSearchDate;
 import co.com.tactusoft.crm.view.datamodel.CandidateDataModel;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 
@@ -415,6 +412,8 @@ public class AppointmentBacking extends BaseBacking {
 		}
 
 		today = new Date();
+		todayMax = FacesUtil.addHoursToDate(
+				FacesUtil.getDateWithoutTime(today), 18);
 	}
 
 	public void handleBranchChange() {
@@ -548,7 +547,6 @@ public class AppointmentBacking extends BaseBacking {
 			this.renderedForDate = true;
 			this.renderedForDoctor = false;
 			this.disabledSearch = false;
-			handleDateSelect(null);
 		} else if (this.idSearch.intValue() == Constant.APP_TYPE_FOR_DOCTOR_VALUE
 				.intValue()) {
 			this.renderedForDate = false;
@@ -559,38 +557,6 @@ public class AppointmentBacking extends BaseBacking {
 			this.renderedForDate = false;
 			this.renderedForDoctor = false;
 			this.disabledSearch = true;
-		}
-	}
-
-	public void handleDateSelect(SelectEvent event) {
-		Date date = FacesUtil.getDateWithoutTime(currentDate);
-		if (event != null) {
-			date = (Date) event.getObject();
-		}
-
-		CrmProcedureDetail procedureDetail = mapProcedureDetail
-				.get(idProcedureDetail);
-
-		ResultSearchDate resultSearchDate = processService
-				.getListcandidatesHours(date, mapBranch.get(idBranch), minutes,
-						timeType, procedureDetail.isAvailability());
-		List<Date> list = resultSearchDate.getListDate();
-		infoMessageDate = resultSearchDate.getMessage();
-
-		listTimes = new ArrayList<SelectItem>();
-		String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
-		listTimes.add(new SelectItem(null, label));
-
-		for (Date row : list) {
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(row);
-			int hour = calendar.get(Calendar.HOUR_OF_DAY);
-			int minute = calendar.get(Calendar.MINUTE);
-
-			SelectItem item = new SelectItem();
-			item.setValue(row.getTime());
-			item.setLabel(hour + ":" + (minute == 0 ? "00" : minute));
-			listTimes.add(item);
 		}
 	}
 
@@ -629,14 +595,6 @@ public class AppointmentBacking extends BaseBacking {
 		} else if (selectedPatient.getId() == null) {
 			infoMessage = FacesUtil.getMessage("pat_msg_exists_sap_2");
 		} else {
-
-			if (this.renderedForDate) {
-				if (currentTime == 0) {
-					String field = FacesUtil.getMessage("app_start_hour");
-					infoMessage = FacesUtil.getMessage("glb_required", field);
-				}
-			}
-
 			if (procedureDetail.getNoRepeat()
 					&& procedureDetail.getNoRepeatDays() > 0
 					&& infoMessage == null) {
@@ -644,13 +602,7 @@ public class AppointmentBacking extends BaseBacking {
 						selectedPatient.getId(), procedureDetail.getId());
 				if (maxDate != null) {
 					maxDate = FacesUtil.getDateWithoutTime(maxDate);
-					Date currentDate = null;
-					if (this.renderedForDate) {
-						currentDate = new Date(this.currentTime);
-					} else {
-						currentDate = new Date(this.currentDate.getTime());
-					}
-
+					Date currentDate = new Date(this.currentDate.getTime());
 					currentDate = FacesUtil.getDateWithoutTime(currentDate);
 					long diff = currentDate.getTime() - maxDate.getTime();
 					diff = diff / (1000 * 60 * 60 * 24);
@@ -665,7 +617,8 @@ public class AppointmentBacking extends BaseBacking {
 			if (this.renderedForDate) {
 				ResultSearchAppointment resultSearchAppointment = processService
 						.getScheduleAppointmentForDate(mapBranch.get(idBranch),
-								new Date(this.currentTime), procedureDetail);
+								this.currentDate, procedureDetail, minutes,
+								timeType, this.appointmentsNumber);
 				listAppointment = resultSearchAppointment.getListCandidate();
 				infoMessage = resultSearchAppointment.getMessage();
 			} else if (this.renderedForDoctor) {
@@ -701,7 +654,7 @@ public class AppointmentBacking extends BaseBacking {
 		}
 	}
 
-	public void valdiateAction() {
+	public void validateAction() {
 		String appType = FacesUtil.getParam("APP_TYPE");
 		infoMessage = "";
 		validate = true;

@@ -30,7 +30,8 @@ public class Constant {
 	public static String APP_TYPE_FOR_DATE_DESC = "app_for_date";
 	public static String APP_TYPE_FOR_DOCTOR_DESC = "app_for_doctor";
 
-	public static final Integer INTERVAL_TIME_APPOINTMENT = 5;
+	public static final int INTERVAL_TIME_APPOINTMENT = 5;
+	public static final int INCREASE_MIN = 10;
 
 	public static final int STATE_APP_ACTIVE = 1;
 	public static final int STATE_APP_CANCEl = 3;
@@ -79,7 +80,4 @@ public class Constant {
 	public static String HISTORY_HOMEOPATHIC = "HOMEOPATHIC";
 	public static String HISTORY_PHYSIQUE = "PHYSIQUE";
 	public static String HISTORY_ORGANOMETRY = "ORGANOMETRY";
-	
-	public static final int INCREASE_MIN = 10;
-
 }

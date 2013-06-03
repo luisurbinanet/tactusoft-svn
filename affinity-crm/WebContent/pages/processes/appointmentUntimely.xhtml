@@ -87,9 +87,9 @@
 					<h:outputLabel id="lblCurrentDate" value="#{msg['app_date']}" />
 					<p:calendar value="#{appointmentBacking.currentDate}"
 						id="calCurrentDate" showOn="button" navigator="true"
-						pattern="dd/MM/yyyy HH:mm" readonlyInput="true"
-						mindate="#{appointmentBacking.currentDate}" minHour="8"
-						maxHour="18" locale="es"/>
+						pattern="dd/MM/yyyy HH:mm" readonlyInput="true" 
+						mindate="#{appointmentBacking.today}" minHour="8" maxHour="18"
+						locale="es" maxdate="#{appointmentBacking.todayMax}" />
 
 					<h:outputLabel value="#{msg['app_doctor']}" />
 					<p:selectOneMenu id="selDoctor" style="width:700px"

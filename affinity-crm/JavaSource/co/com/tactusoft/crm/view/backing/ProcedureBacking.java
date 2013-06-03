@@ -45,6 +45,7 @@ public class ProcedureBacking extends BaseBacking {
 	private boolean noRepeat;
 	private Short noRepeatDays;
 	private boolean availability;
+	private boolean caseStudy;
 
 	private DualListModel<CrmBranch> listModelBranch;
 
@@ -167,6 +168,14 @@ public class ProcedureBacking extends BaseBacking {
 		this.availability = availability;
 	}
 
+	public boolean isCaseStudy() {
+		return caseStudy;
+	}
+
+	public void setCaseStudy(boolean caseStudy) {
+		this.caseStudy = caseStudy;
+	}
+
 	public List<SelectItem> getListWSGroupSellers() {
 		if (listWSGroupSellers == null) {
 			List<WSBean> result = FacesUtil.getCurrentUserData()
@@ -268,6 +277,7 @@ public class ProcedureBacking extends BaseBacking {
 				crmProcedureDetail.setNoRepeat(this.noRepeat);
 				crmProcedureDetail.setNoRepeatDays(noRepeatDays);
 				crmProcedureDetail.setAvailability(availability);
+				crmProcedureDetail.setCaseStudy(caseStudy);
 				crmProcedureDetail.setState(Constant.STATE_ACTIVE);
 
 				modelProcedureDetail = new ProcedureDetailDataModel(
@@ -280,6 +290,7 @@ public class ProcedureBacking extends BaseBacking {
 				this.noRepeat = false;
 				this.noRepeatDays = 0;
 				this.availability = false;
+				this.caseStudy = false;
 			}
 		} catch (NumberFormatException e) {
 			message = FacesUtil.getMessage("prc_msg_error_times");

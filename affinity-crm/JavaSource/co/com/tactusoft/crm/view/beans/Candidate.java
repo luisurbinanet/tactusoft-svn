@@ -9,9 +9,6 @@ import co.com.tactusoft.crm.util.FacesUtil;
 
 public class Candidate implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private int id;
 	private CrmDoctor doctor;

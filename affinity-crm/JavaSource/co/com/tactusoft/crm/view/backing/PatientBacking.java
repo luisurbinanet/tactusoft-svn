@@ -441,6 +441,15 @@ public class PatientBacking extends BaseBacking {
 							}
 
 							if (!existsSAP) {
+								selectedPatient.setFirstnames(selectedPatient
+										.getFirstnames().toUpperCase());
+								selectedPatient.setSurnames(selectedPatient
+										.getSurnames().toUpperCase());
+								selectedPatient.setAddress(selectedPatient
+										.getAddress().toUpperCase());
+								selectedPatient.setNeighborhood(selectedPatient
+										.getNeighborhood().toUpperCase());
+
 								processService.savePatient(selectedPatient,
 										automatic, existsSAP,
 										crmCountry.getCode());

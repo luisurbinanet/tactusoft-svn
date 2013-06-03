@@ -83,8 +83,8 @@ public class Asterisk {
 		int calls = 0;
 		try {
 			for (AsteriskChannel asteriskChannel : asteriskServer.getChannels()) {
-				// System.out.println(asteriskChannel);
-				asteriskChannel.getAccount();
+				System.out.println(asteriskChannel);
+				
 			}
 
 			try {
@@ -141,9 +141,11 @@ public class Asterisk {
 		Asterisk asterisk = new Asterisk("192.168.1.251", 5038, "crmaffinity",
 				"4dm1n.aff");
 
-		// asterisk.callAction("SIP/N2P6737/011573112510963", "7005", "123");
+		/* asterisk.callAction("SIP/N2P6737/011573112510963", "7005", "123");
 		asterisk.callActionAplication("SIP/Lyric-MovTigo/3003044115", "7005",
-				"cSIkGm0dy1cr9atH7");
+				"cSIkGm0dy1cr9atH7");*/
+		
+		asterisk.run();
 
 		System.out.println(asterisk.getNumCalls());
 	}

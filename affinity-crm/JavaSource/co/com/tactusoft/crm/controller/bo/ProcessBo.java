@@ -36,7 +36,6 @@ import co.com.tactusoft.crm.model.entities.CrmNurse;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
 import co.com.tactusoft.crm.model.entities.VwAppointment;
-import co.com.tactusoft.crm.model.entities.VwDoctorHour;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.beans.Candidate;
@@ -295,12 +294,9 @@ public class ProcessBo implements Serializable {
 						.getTime()));
 				count++;
 				for (int k = 1; k < size; k++) {
-					Calendar calendar2 = Calendar.getInstance();
-					calendar2 = Calendar.getInstance();
-					calendar2.setTime(ocupatedHours.get(count - 1));
-					calendar2.add(Calendar.MINUTE,
-							Constant.INTERVAL_TIME_APPOINTMENT);
-					ocupatedHours.add(calendar2.getTime());
+					ocupatedHours.add(FacesUtil.addMinutesToDate(
+							ocupatedHours.get(count - 1),
+							Constant.INTERVAL_TIME_APPOINTMENT));
 					count++;
 				}
 			}
@@ -353,11 +349,9 @@ public class ProcessBo implements Serializable {
 		ocupatedHours.add(new Date(startTime.getTime()));
 		count++;
 		for (int k = 1; k < size; k++) {
-			Calendar calendar2 = Calendar.getInstance();
-			calendar2 = Calendar.getInstance();
-			calendar2.setTime(ocupatedHours.get(count - 1));
-			calendar2.add(Calendar.MINUTE, Constant.INTERVAL_TIME_APPOINTMENT);
-			ocupatedHours.add(calendar2.getTime());
+			ocupatedHours.add(FacesUtil.addMinutesToDate(
+					ocupatedHours.get(count - 1),
+					Constant.INTERVAL_TIME_APPOINTMENT));
 			count++;
 		}
 
@@ -533,10 +527,8 @@ public class ProcessBo implements Serializable {
 
 						}
 
-						calendar = Calendar.getInstance();
-						calendar.setTime(scheduleInitHour);
-						calendar.add(Calendar.MINUTE, Constant.INCREASE_MIN);
-						scheduleInitHour = calendar.getTime();
+						scheduleInitHour = FacesUtil.addMinutesToDate(
+								scheduleInitHour, Constant.INCREASE_MIN);
 
 						if (scheduleInitHour.compareTo(maxHour) >= 0) {
 							end = true;
@@ -840,12 +832,8 @@ public class ProcessBo implements Serializable {
 										break outer;
 									}
 								}
-
-								calendar2 = Calendar.getInstance();
-								calendar2.setTime(initHour);
-								calendar2.add(Calendar.MINUTE,
+								initHour = FacesUtil.addMinutesToDate(initHour,
 										Constant.INCREASE_MIN);
-								initHour = calendar2.getTime();
 							}
 						}
 					}
@@ -867,167 +855,140 @@ public class ProcessBo implements Serializable {
 		return resultSearchAppointment;
 	}
 
-	private List<CrmDoctorException> getListCrmDoctorException(
-			BigDecimal idDoctor, String dateTimeString, BigDecimal idBranch) {
-		return dao.find("from CrmDoctorException o where o.crmDoctor.id = "
-				+ idDoctor + " and '" + dateTimeString
-				+ "' between startHour and endHour"
-				+ " and (o.crmBranch.id is null OR o.crmBranch.id = "
-				+ idBranch + ")");
-	}
-
 	public ResultSearchAppointment getScheduleAppointmentForDate(
-			CrmBranch branch, Date selectedDate,
-			CrmProcedureDetail procedureDetail) {
+			CrmBranch branch, Date date, CrmProcedureDetail procedureDetail,
+			int minutes, String timeType, int appointmentsNumber) {
 		List<Candidate> result = new ArrayList<Candidate>();
 		String message = null;
 
-		int minutes = 0;
-		String timeType = null;
-		if ((procedureDetail.getTimeDoctor() > procedureDetail.getTimeNurses())
-				&& (procedureDetail.getTimeDoctor() > procedureDetail
-						.getTimeStretchers())) {
-			minutes = procedureDetail.getTimeDoctor();
-			timeType = Constant.TIME_TYPE_DOCTOR;
-		} else if ((procedureDetail.getTimeNurses() > procedureDetail
-				.getTimeDoctor())
-				&& (procedureDetail.getTimeNurses() > procedureDetail
-						.getTimeStretchers())) {
-			minutes = procedureDetail.getTimeNurses();
-			timeType = Constant.TIME_TYPE_NURSE;
-		} else {
-			minutes = procedureDetail.getTimeStretchers();
-			timeType = Constant.TIME_TYPE_STRETCHERS;
-		}
-
-		String dateString = FacesUtil.formatDate(selectedDate, "yyyy-MM-dd");
-		String timeString = FacesUtil.formatDate(selectedDate, "HH:mm:ss");
-		String dateTimeString = FacesUtil.formatDate(selectedDate,
-				"yyyy-MM-dd HH:mm:ss");
 		BigDecimal idBranch = branch.getId();
+		Date currentDate = FacesUtil.getDateWithoutTime(date);
 
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(selectedDate);
-		int currentDay = calendar.get(Calendar.DAY_OF_WEEK);
+		int id = 0;
+		out: do {
+			String dateString = FacesUtil.formatDate(currentDate, "yyyy-MM-dd");
 
-		calendar.add(Calendar.MINUTE, minutes);
-		Date endTime = calendar.getTime();
-
-		List<VwDoctorHour> listDoctorHour = null;
-		List<CrmDoctor> listCrmDoctorWithoutApp = null;
-		if (timeType.equals(Constant.TIME_TYPE_DOCTOR)) {
-			listDoctorHour = dao
-					.find("from VwDoctorHour o where o.id.idBranch = "
-							+ idBranch + " and o.id.onlyDate = '" + dateString
-							+ "' and o.id.idDoctor <> 0 order by rand()");
-			listCrmDoctorWithoutApp = dao
-					.find("select distinct c from CrmDoctorSchedule a inner join a.crmDoctor as c where a.crmDoctor.id <> 0 and a.crmDoctor.state = 1 and a.day = "
-							+ currentDay
-							+ " and ('"
-							+ timeString
-							+ "' between a.startHour and a.endHour) "
-							+ " and a.crmBranch.id = "
-							+ idBranch
-							+ " and a.crmDoctor.id not in (select b.crmDoctor.id from CrmAppointment b where b.state in (1,3,4,5) and cast(b.startAppointmentDate as date) = '"
-							+ dateString
-							+ "' and b.crmProcedureDetail.availability = true ) order by rand()");
-		} else {
-			listDoctorHour = dao
-					.find("from VwDoctorHour o where o.id.idBranch = "
-							+ idBranch + " and o.id.onlyDate = '" + dateString
-							+ "' and o.id.idDoctor = 0 order by rand()");
-			listCrmDoctorWithoutApp = dao
-					.find("select distinct c from CrmDoctorSchedule a inner join a.crmDoctor as c where a.crmDoctor.id = 0 and a.crmDoctor.state = 1 and a.day = "
-							+ currentDay
-							+ " and ('"
-							+ timeString
-							+ "' between a.startHour and a.endHour) "
-							+ " and a.crmBranch.id = "
-							+ idBranch
-							+ " and a.crmDoctor.id not in (select b.crmDoctor.id from CrmAppointment b where b.state in (1,3,4,5) and cast(b.startAppointmentDate as date) = '"
-							+ dateString
-							+ "' and b.crmProcedureDetail.availability = true ) order by rand()");
-		}
-
-		if (listCrmDoctorWithoutApp.size() > 0) {
-			for (CrmDoctor doctor : listCrmDoctorWithoutApp) {
-				List<CrmDoctorException> listDoctorException = getListCrmDoctorException(
-						doctor.getId(), dateTimeString, idBranch);
-
-				if (listDoctorException.size() == 0) {
-					result.add(new Candidate(1, doctor, selectedDate, endTime,
-							branch.getName(), procedureDetail.getName()));
-					message = null;
-					break;
-				}
-			}
-		}
-
-		if (result.size() == 0) {
-			for (VwDoctorHour row : listDoctorHour) {
-				List<CrmDoctorException> listDoctorException = getListCrmDoctorException(
-						row.getId().getIdDoctor(), dateTimeString, idBranch);
-
-				List<CrmDoctorSchedule> listDoctorSchedule = dao
-						.find("from CrmDoctorSchedule o where o.crmDoctor.state = 1 and o.day = "
-								+ currentDay
-								+ " and o.crmBranch.id = "
-								+ idBranch
-								+ " and o.crmDoctor.id = "
-								+ row.getId().getIdDoctor()
-								+ " and ('"
-								+ timeString
-								+ "' between o.startHour and o.endHour)");
-
-				if (listDoctorSchedule.size() > 0
-						&& listDoctorException.size() == 0) {
-					List<CrmAppointment> listApp = dao
-							.find("from CrmAppointment o where cast(o.startAppointmentDate as date) = '"
-									+ dateString
-									+ "' and ('"
-									+ dateTimeString
-									+ "' between o.startAppointmentDate and o.endAppointmentDate) and o.crmDoctor.id = "
-									+ row.getId().getIdDoctor()
-									+ " and o.crmBranch.id = "
+			// Validar Festivo
+			List<CrmHoliday> listHoliday = getListHoliday(currentDate, idBranch);
+			if (listHoliday.size() == 0) {
+				int currentDay = FacesUtil.getDayOfWeek(currentDate);
+				if (currentDay != 1) {// Si no es domingo
+					// Buscar horarios
+					List<CrmDoctorSchedule> listCrmDoctorSchedule = dao
+							.find("FROM CrmDoctorSchedule o WHERE o.crmBranch.id = "
 									+ idBranch
-									+ " and o.state in (1,3,4,5) and o.crmProcedureDetail.availability = TRUE "
-									+ "order by o.startAppointmentDate");
+									+ " AND o.day = "
+									+ currentDay
+									+ " AND o.crmDoctor.state = 1 ORDER BY o.startHour");
 
-					if (listApp.size() == 0) {
-						CrmDoctor doctor = (CrmDoctor) dao.find(
-								"from CrmDoctor o where o.id = "
-										+ row.getId().getIdDoctor()).get(0);
-						result.add(new Candidate(1, doctor, selectedDate,
-								endTime, branch.getName(), procedureDetail
-										.getName()));
-						break;
-					} else {
-						// Iterar Horas Candidatas
-						List<Date> candidatesHours = getListcandidatesHours(
-								selectedDate, endTime);
+					if (listCrmDoctorSchedule.size() > 0) {
+						List<CrmDoctorException> listDoctorException = dao
+								.find("FROM CrmDoctorException o WHERE o.crmDoctor.state = 1 AND '"
+										+ dateString
+										+ "' between Date(startHour) AND Date(endHour)"
+										+ " AND (o.crmBranch.id is null OR o.crmBranch.id = "
+										+ idBranch + ")");
 
-						// tactu
-						boolean validate = validateAvailabilitySchedule(
-								candidatesHours, listApp,
-								FacesUtil.getDateWithoutTime(selectedDate),
-								timeType);
+						for (CrmDoctorSchedule schedule : listCrmDoctorSchedule) {
+							String startDateScheduleString = FacesUtil
+									.formatDate(FacesUtil.addHourToDate(
+											currentDate,
+											schedule.getStartHour()),
+											"yyyy-MM-dd HH:mm:ss");
 
-						if (validate) {
-							CrmDoctor doctor = (CrmDoctor) dao.find(
-									"from CrmDoctor o where o.id = "
-											+ row.getId().getIdDoctor()).get(0);
-							result.add(new Candidate(1, doctor, selectedDate,
-									endTime, branch.getName(), procedureDetail
-											.getName()));
-							break;
+							String endDateScheduleString = FacesUtil
+									.formatDate(
+											FacesUtil.addHourToDate(
+													currentDate,
+													schedule.getEndHour()),
+											"yyyy-MM-dd HH:mm:ss");
+
+							// Buscar Citas
+							List<CrmAppointment> listApp = new ArrayList<CrmAppointment>();
+							if (procedureDetail.isAvailability()) {
+								listApp = dao
+										.find("FROM CrmAppointment o WHERE (o.startAppointmentDate between '"
+												+ startDateScheduleString
+												+ "' AND '"
+												+ endDateScheduleString
+												+ "') AND o.state in (1,3,4,5) AND "
+												+ " o.crmProcedureDetail.availability = TRUE and o.crmBranch.id = "
+												+ idBranch
+												+ "AND o.crmDoctor.id = "
+												+ schedule.getCrmDoctor()
+														.getId()
+												+ " ORDER BY o.startAppointmentDate");
+							}
+
+							Date scheduleInitHour = FacesUtil.addHourToDate(
+									currentDate, schedule.getStartHour());
+
+							Date maxHour = FacesUtil.addHourToDate(currentDate,
+									schedule.getEndHour());
+
+							boolean exit = false;
+							do {
+								Date scheduleEndHour = FacesUtil
+										.addMinutesToDate(scheduleInitHour,
+												minutes);
+
+								List<Date> candidatesHours = getListcandidatesHours(
+										scheduleInitHour, scheduleEndHour);
+
+								boolean validateException = validateException(
+										listDoctorException, scheduleInitHour,
+										schedule.getCrmDoctor());
+
+								if (validateException) {
+									boolean validate = true;
+									for (CrmAppointment row : listApp) {
+										validate = validateAvailabilitySchedule(
+												candidatesHours,
+												row.getStartAppointmentDate(),
+												row.getEndAppointmentDate());
+
+										if (!validate) {
+											validate = false;
+											break;
+										}
+									}
+
+									if (validate
+											&& new Date()
+													.compareTo(scheduleInitHour) <= 0) {
+										result.add(new Candidate(id, schedule
+												.getCrmDoctor(),
+												scheduleInitHour,
+												scheduleEndHour, branch
+														.getName(),
+												procedureDetail.getName()));
+										id++;
+									}
+								}
+
+								scheduleInitHour = FacesUtil
+										.addMinutesToDate(scheduleInitHour,
+												Constant.INCREASE_MIN);
+
+								if (scheduleInitHour.compareTo(maxHour) >= 0) {
+									exit = true;
+								}
+
+								if (id == appointmentsNumber) {
+									break out;
+								}
+
+							} while (!exit);
+
+							if (id == appointmentsNumber) {
+								break out;
+							}
 						}
 					}
-
-				} else {
-					message = FacesUtil.getMessage("app_msg_error_1");
 				}
 			}
-		}
+			currentDate = FacesUtil.addDaysToDate(currentDate, 1);
+		} while (id < appointmentsNumber);
 
 		ResultSearchAppointment resultSearchAppointment = new ResultSearchAppointment();
 		resultSearchAppointment.setListCandidate(result);
@@ -1224,7 +1185,6 @@ public class ProcessBo implements Serializable {
 	public List<VwAppointment> getListAppointmentByCriteria(String where) {
 		List<VwAppointment> list = dao.find(where
 				+ " order by o.startAppointmentDate asc");
-
 		return list;
 	}
 
