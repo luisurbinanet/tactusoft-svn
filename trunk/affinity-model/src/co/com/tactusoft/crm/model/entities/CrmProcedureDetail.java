@@ -34,6 +34,7 @@ public class CrmProcedureDetail implements java.io.Serializable {
 	private boolean availability;
 	private int minMedication;
 	private int maxMedication;
+	private boolean caseStudy;
 	private int state;
 	private Set<CrmAppointment> crmAppointments = new HashSet<CrmAppointment>(0);
 
@@ -159,14 +160,14 @@ public class CrmProcedureDetail implements java.io.Serializable {
 	public void setFormulaDocType(String formulaDocType) {
 		this.formulaDocType = formulaDocType;
 	}
-
+	
 	@Column(name = "availability")
-	public void setAvailability(boolean availability) {
-		this.availability = availability;
-	}
-
 	public boolean isAvailability() {
 		return availability;
+	}
+	
+	public void setAvailability(boolean availability) {
+		this.availability = availability;
 	}
 
 	@Column(name = "min_medication")
@@ -185,6 +186,15 @@ public class CrmProcedureDetail implements java.io.Serializable {
 
 	public void setMaxMedication(int maxMedication) {
 		this.maxMedication = maxMedication;
+	}
+
+	@Column(name = "case_study")
+	public boolean isCaseStudy() {
+		return caseStudy;
+	}
+
+	public void setCaseStudy(boolean caseStudy) {
+		this.caseStudy = caseStudy;
 	}
 
 	@Column(name = "state", nullable = false)

@@ -72,7 +72,7 @@ public class CrmDoctorSchedule implements java.io.Serializable {
 		this.crmBranch = crmBranch;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_doctor", nullable = false)
 	public CrmDoctor getCrmDoctor() {
 		return this.crmDoctor;

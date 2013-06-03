@@ -26,6 +26,7 @@ public class CrmDoctor implements java.io.Serializable {
 	private CrmSpeciality crmSpeciality;
 	private String code;
 	private String names;
+	private String medicalLicense;
 	private int state;
 	private Set<CrmAppointment> crmAppointments = new HashSet<CrmAppointment>(0);
 	private Set<CrmDoctorSchedule> crmDoctorSchedules = new HashSet<CrmDoctorSchedule>(
@@ -108,6 +109,15 @@ public class CrmDoctor implements java.io.Serializable {
 
 	public void setNames(String names) {
 		this.names = names;
+	}
+
+	@Column(name = "medical_license", length = 100)
+	public String getMedicalLicense() {
+		return medicalLicense;
+	}
+
+	public void setMedicalLicense(String medicalLicense) {
+		this.medicalLicense = medicalLicense;
 	}
 
 	@Column(name = "state", nullable = false)

@@ -62,6 +62,7 @@ public class VwAppointment implements java.io.Serializable {
 	private int closeAppointment;
 	private String publicityCode;
 	private String publicityName;
+	private int untimely;
 
 	public VwAppointment() {
 	}
@@ -573,6 +574,14 @@ public class VwAppointment implements java.io.Serializable {
 	public void setPublicityName(String publicityName) {
 		this.publicityName = publicityName;
 	}
-	
-	
+
+	@Column(name = "untimely")
+	public int getUntimely() {
+		return untimely;
+	}
+
+	public void setUntimely(int untimely) {
+		this.untimely = untimely;
+	}
+
 }
