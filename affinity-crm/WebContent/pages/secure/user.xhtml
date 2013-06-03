@@ -44,11 +44,13 @@
 						<h:outputLabel value="#{rec.username}" />
 					</p:column>
 
-					<p:column headerText="#{msg['usr_names']}">
+					<p:column headerText="#{msg['usr_names']}" filterBy="#{rec.names}"
+						filterMatchMode="contains">
 						<h:outputLabel value="#{rec.names}" />
 					</p:column>
 
-					<p:column headerText="#{msg['usr_surnames']}">
+					<p:column headerText="#{msg['usr_surnames']}"
+						filterBy="#{rec.surnames}" filterMatchMode="contains">
 						<h:outputLabel value="#{rec.surnames}" />
 					</p:column>
 

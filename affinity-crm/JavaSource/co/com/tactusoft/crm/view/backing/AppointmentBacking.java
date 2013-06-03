@@ -15,11 +15,13 @@ import javax.inject.Named;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
+import org.primefaces.event.SelectEvent;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
+import co.com.tactusoft.crm.model.entities.CrmHoliday;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProcedure;
 import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
@@ -539,6 +541,23 @@ public class AppointmentBacking extends BaseBacking {
 		}
 
 		handleSearchChange();
+		selectedCandidate = null;
+	}
+
+	public void handleDateSelect(SelectEvent event) {
+		if (event != null) {
+			currentDate = (Date) event.getObject();
+		} else {
+			currentDate = FacesUtil.getDateWithoutTime(today);
+		}
+
+		List<CrmHoliday> listHoliday = processService.getListHoliday(
+				currentDate, idBranch);
+		if (listHoliday.size() > 0) {
+			infoMessageDate = FacesUtil.getMessage("app_msg_error_1");
+		} else {
+			infoMessageDate = null;
+		}
 	}
 
 	public void handleSearchChange() {
@@ -547,11 +566,13 @@ public class AppointmentBacking extends BaseBacking {
 			this.renderedForDate = true;
 			this.renderedForDoctor = false;
 			this.disabledSearch = false;
+			handleDateSelect(null);
 		} else if (this.idSearch.intValue() == Constant.APP_TYPE_FOR_DOCTOR_VALUE
 				.intValue()) {
 			this.renderedForDate = false;
 			this.renderedForDoctor = true;
 			this.disabledSearch = false;
+			handleDateSelect(null);
 		} else {
 			disabledSearch = false;
 			this.renderedForDate = false;
