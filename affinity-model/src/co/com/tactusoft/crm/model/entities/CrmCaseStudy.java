@@ -1,13 +1,13 @@
 package co.com.tactusoft.crm.model.entities;
 
-import static javax.persistence.GenerationType.IDENTITY;
+// Generated 03-jun-2013 11:22:06 by Hibernate Tools 4.0.0
 
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -24,48 +24,22 @@ public class CrmCaseStudy implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private Integer id;
-	private CrmDoctor crmDoctor;
-	private CrmPatient crmPatient;
+	private CrmCie crmCie;
+	private CrmAppointment crmAppointment;
 	private Date startDate;
-	private Date endDate;
-	private String patology;
 	private String reason;
-	private String perc1;
-	private String perc2;
-	private String perc3;
-	private String perc4;
-	private String criteria;
+	private int percent;
 
 	public CrmCaseStudy() {
 	}
 
-	public CrmCaseStudy(CrmDoctor crmDoctor, CrmPatient crmPatient,
-			Date startDate, Date endDate, String patology, String reason,
-			String criteria) {
-		this.crmDoctor = crmDoctor;
-		this.crmPatient = crmPatient;
+	public CrmCaseStudy(CrmCie crmCie, CrmAppointment crmAppointment,
+			Date startDate, String reason, int percent) {
+		this.crmCie = crmCie;
+		this.crmAppointment = crmAppointment;
 		this.startDate = startDate;
-		this.endDate = endDate;
-		this.patology = patology;
 		this.reason = reason;
-		this.criteria = criteria;
-	}
-
-	public CrmCaseStudy(CrmDoctor crmDoctor, CrmPatient crmPatient,
-			Date startDate, Date endDate, String patology, String reason,
-			String perc1, String perc2, String perc3, String perc4,
-			String criteria) {
-		this.crmDoctor = crmDoctor;
-		this.crmPatient = crmPatient;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.patology = patology;
-		this.reason = reason;
-		this.perc1 = perc1;
-		this.perc2 = perc2;
-		this.perc3 = perc3;
-		this.perc4 = perc4;
-		this.criteria = criteria;
+		this.percent = percent;
 	}
 
 	@Id
@@ -80,23 +54,23 @@ public class CrmCaseStudy implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_doctor", nullable = false)
-	public CrmDoctor getCrmDoctor() {
-		return this.crmDoctor;
+	@JoinColumn(name = "id_diagnosis", nullable = false)
+	public CrmCie getCrmCie() {
+		return this.crmCie;
 	}
 
-	public void setCrmDoctor(CrmDoctor crmDoctor) {
-		this.crmDoctor = crmDoctor;
+	public void setCrmCie(CrmCie crmCie) {
+		this.crmCie = crmCie;
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_patient", nullable = false)
-	public CrmPatient getCrmPatient() {
-		return this.crmPatient;
+	@JoinColumn(name = "id_appointment", nullable = false)
+	public CrmAppointment getCrmAppointment() {
+		return this.crmAppointment;
 	}
 
-	public void setCrmPatient(CrmPatient crmPatient) {
-		this.crmPatient = crmPatient;
+	public void setCrmAppointment(CrmAppointment crmAppointment) {
+		this.crmAppointment = crmAppointment;
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -109,25 +83,6 @@ public class CrmCaseStudy implements java.io.Serializable {
 		this.startDate = startDate;
 	}
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "end_date", nullable = false, length = 19)
-	public Date getEndDate() {
-		return this.endDate;
-	}
-
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-
-	@Column(name = "patology", nullable = false, length = 65535)
-	public String getPatology() {
-		return this.patology;
-	}
-
-	public void setPatology(String patology) {
-		this.patology = patology;
-	}
-
 	@Column(name = "reason", nullable = false, length = 65535)
 	public String getReason() {
 		return this.reason;
@@ -137,49 +92,13 @@ public class CrmCaseStudy implements java.io.Serializable {
 		this.reason = reason;
 	}
 
-	@Column(name = "perc_1", length = 3)
-	public String getPerc1() {
-		return this.perc1;
+	@Column(name = "percent", nullable = false)
+	public int getPercent() {
+		return this.percent;
 	}
 
-	public void setPerc1(String perc1) {
-		this.perc1 = perc1;
-	}
-
-	@Column(name = "perc_2", length = 3)
-	public String getPerc2() {
-		return this.perc2;
-	}
-
-	public void setPerc2(String perc2) {
-		this.perc2 = perc2;
-	}
-
-	@Column(name = "perc_3", length = 3)
-	public String getPerc3() {
-		return this.perc3;
-	}
-
-	public void setPerc3(String perc3) {
-		this.perc3 = perc3;
-	}
-
-	@Column(name = "perc_4", length = 3)
-	public String getPerc4() {
-		return this.perc4;
-	}
-
-	public void setPerc4(String perc4) {
-		this.perc4 = perc4;
-	}
-
-	@Column(name = "criteria", nullable = false, length = 65535)
-	public String getCriteria() {
-		return this.criteria;
-	}
-
-	public void setCriteria(String criteria) {
-		this.criteria = criteria;
+	public void setPercent(int percent) {
+		this.percent = percent;
 	}
 
 }
