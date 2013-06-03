@@ -55,7 +55,8 @@
 					widgetVar="confirmDlg">
 
 					<p:commandButton id="confirm" value="#{msg['glb_state_yes']}"
-						oncomplete="confirmDlg.hide()" update="recordTable :editForm:growl"
+						oncomplete="confirmDlg.hide()"
+						update="recordTable :editForm:growl"
 						actionListener="#{doctorBacking.removeAction}"
 						style="font-weight:bold;" />
 					<p:commandButton id="decline" value="#{msg['glb_state_no']}"
@@ -119,6 +120,11 @@
 						style="width:250px" label="#{msg['doc_names']}"
 						rendered="#{doctorBacking.selected.id ne null?true:false}"
 						readonly="true" />
+
+					<h:outputLabel value="#{msg['doc_medical_license']}" />
+					<p:inputText value="#{doctorBacking.selected.medicalLicense}"
+						style="width:250px" label="#{msg['doc_medical_license']}"
+						required="true" />
 
 					<h:outputLabel value="#{msg['doc_speciality']}" />
 					<p:selectOneMenu value="#{doctorBacking.selected.crmSpeciality.id}"

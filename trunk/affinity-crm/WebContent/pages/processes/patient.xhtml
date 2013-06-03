@@ -101,7 +101,9 @@
 						value="#{patientBacking.selectedPatient.doc}" style="width:240px;"
 						label="#{msg['pat_code']}" required="true"
 						readonly="#{patientBacking.existsSAP}" maxlength="16"
-						rendered="#{!patientBacking.automatic or (!patientBacking.automatic and patientBacking.existsSAP)}" />
+						rendered="#{!patientBacking.automatic or (!patientBacking.automatic and patientBacking.existsSAP)}">
+						<pe:keyFilter regEx="/[\d]/" />
+					</p:inputText>
 
 					<h:outputLabel id="lblDocAutomatic"
 						value="#{msg['pat_autonumeric']}"
@@ -132,12 +134,16 @@
 					<h:outputLabel value="#{msg['pat_names']}" />
 					<p:inputText value="#{patientBacking.selectedPatient.firstnames}"
 						maxlength="35" style="width:240px" label="#{msg['pat_names']}"
-						required="true" />
+						required="true">
+						<pe:keyFilter regEx="/[a-zA-Z\s]/i" />
+					</p:inputText>
 
 					<h:outputLabel value="#{msg['pat_surnames']}" />
 					<p:inputText value="#{patientBacking.selectedPatient.surnames}"
 						maxlength="35" style="width:240px" label="#{msg['pat_surnames']}"
-						required="true" />
+						required="true">
+						<pe:keyFilter regEx="/[a-zA-Z\s]/i" />
+					</p:inputText>
 
 					<h:outputText value="#{msg['glb_gender']}" />
 					<p:selectOneMenu value="#{patientBacking.selectedPatient.gender}"
@@ -167,12 +173,16 @@
 					<h:outputText value="#{msg['pat_phone_number']}" />
 					<p:inputText value="#{patientBacking.selectedPatient.phoneNumber}"
 						style="width:240px" label="#{msg['pat_phone_number']}"
-						maxlength="#{patientBacking.numPhone}" validator="numberValidator" />
+						maxlength="#{patientBacking.numPhone}" validator="numberValidator">
+						<pe:keyFilter regEx="/[\d]/" />
+					</p:inputText>
 
 					<h:outputText value="#{msg['pat_cell_number']}" />
 					<p:inputText value="#{patientBacking.selectedPatient.cellNumber}"
 						style="width:240px" label="#{msg['pat_cell_number']}"
-						maxlength="#{patientBacking.numCell}" validator="numberValidator" />
+						maxlength="#{patientBacking.numCell}" validator="numberValidator">
+						<pe:keyFilter regEx="/[\d]/" />
+					</p:inputText>
 
 					<h:outputText value="#{msg['pat_email']}" />
 					<p:inputText value="#{patientBacking.selectedPatient.email}"
