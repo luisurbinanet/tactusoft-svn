@@ -36,7 +36,7 @@
 						<p:commandButton id="btnSaveApp" value="#{msg['btn_save']}"
 							icon="ui-icon-disk" update=":editForm:dialogConfirmation"
 							oncomplete="dlgConfirmation.show()"
-							action="#{appointmentBacking.valdiateAction}"
+							action="#{appointmentBacking.validateAction}"
 							disabled="#{appointmentBacking.saved or appointmentBacking.selectedCandidate == null}" />
 					</p:toolbarGroup>
 				</p:toolbar>
@@ -67,7 +67,7 @@
 						filterMatchMode="contains" panelStyle="width:700px"
 						value="#{appointmentBacking.idBranch}">
 						<f:selectItems value="#{appointmentBacking.listBranch}" />
-						<p:ajax update="pnlDetail pnlDetail2"
+						<p:ajax update="pnlDetail pnlDetail2 pnlDetail4"
 							listener="#{appointmentBacking.handleBranchChange}" />
 					</p:selectOneMenu>
 
@@ -75,7 +75,7 @@
 					<p:selectOneMenu style="width:700px"
 						value="#{appointmentBacking.idProcedure}">
 						<f:selectItems value="#{appointmentBacking.listProcedure}" />
-						<p:ajax update="pnlDetail pnlDetail2 btnSearch"
+						<p:ajax update="pnlDetail pnlDetail2 pnlDetail4 btnSearch"
 							listener="#{appointmentBacking.handleProcedureChange}" />
 					</p:selectOneMenu>
 
@@ -83,7 +83,7 @@
 					<p:selectOneMenu id="selProcedureDetail" style="width:700px"
 						value="#{appointmentBacking.idProcedureDetail}">
 						<f:selectItems value="#{appointmentBacking.listProcedureDetail}" />
-						<p:ajax update="pnlDetail pnlDetail2 btnSearch"
+						<p:ajax update="pnlDetail pnlDetail2 pnlDetail4 btnSearch"
 							listener="#{appointmentBacking.handleProcedureDetailChange}" />
 					</p:selectOneMenu>
 
@@ -116,7 +116,11 @@
 							pattern="dd/MM/yyyy" readonlyInput="true"
 							mindate="#{appointmentBacking.today}"
 							rendered="#{appointmentBacking.renderedForDate or appointmentBacking.renderedForDoctor}"
-							locale="es"/>
+							locale="es">
+							<p:ajax event="dateSelect"
+								listener="#{appointmentBacking.handleDateSelect}"
+								update="lblMessageDate" />
+						</p:calendar>
 						<h:outputLabel id="lblMessageDate" style="font-weight:bold;"
 							value="#{appointmentBacking.infoMessageDate}"
 							rendered="#{appointmentBacking.renderedForDate}" />

@@ -40,7 +40,6 @@ import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.beans.Candidate;
 import co.com.tactusoft.crm.view.beans.ResultSearchAppointment;
-import co.com.tactusoft.crm.view.beans.ResultSearchDate;
 
 @Named
 public class ProcessBo implements Serializable {
@@ -228,13 +227,11 @@ public class ProcessBo implements Serializable {
 						+ idBranch);
 	}
 
-	private List<CrmHoliday> getListHoliday(Date date, BigDecimal idBranch) {
+	public List<CrmHoliday> getListHoliday(Date date, BigDecimal idBranch) {
 		String currenDate = FacesUtil.formatDate(date, "yyyy-MM-dd");
 		return dao
 				.find("select o.crmHoliday from CrmHolidayBranch o where o.crmHoliday.holiday = '"
-						+ currenDate
-						+ "T00:00:00.000+05:00' and o.crmBranch.id = "
-						+ idBranch);
+						+ currenDate + "' and o.crmBranch.id = " + idBranch);
 	}
 
 	private boolean validateHoliday(List<CrmHoliday> list, Date date) {
@@ -371,180 +368,6 @@ public class ProcessBo implements Serializable {
 		}
 
 		return result;
-	}
-
-	public ResultSearchDate getListcandidatesHours(Date currentDate,
-			CrmBranch branch, int minutes, String timeType, boolean availability) {
-		List<Date> result = new ArrayList<Date>();
-		String message = null;
-
-		BigDecimal idBranch = branch.getId();
-
-		String dateString = FacesUtil.formatDate(currentDate, "yyyy-MM-dd");
-		// Buscar Citas
-		List<CrmAppointment> listApp = new ArrayList<CrmAppointment>();
-		if (availability) {
-			listApp = dao
-					.find("from CrmAppointment o where (o.startAppointmentDate between '"
-							+ dateString
-							+ "T00:00:00.000+05:00' and '"
-							+ dateString
-							+ "T23:59:59.999+05:00') and o.state in (1,3,4,5) and o.crmProcedureDetail.availability = TRUE and o.crmBranch.id = "
-							+ idBranch + " order by o.startAppointmentDate");
-		}
-
-		// Validar Festivo
-		List<CrmHoliday> listHoliday = getListHoliday(currentDate, idBranch);
-		if (listHoliday.size() == 0) {
-
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(currentDate);
-			int currentDay = calendar.get(Calendar.DAY_OF_WEEK);
-
-			if (currentDay != 1) {// Si no es domingo
-
-				// Buscar horarios
-				List<CrmDoctorSchedule> listCrmDoctorSchedule = dao
-						.find("from CrmDoctorSchedule o where o.crmBranch.id = "
-								+ idBranch
-								+ " and o.day = "
-								+ currentDay
-								+ " and o.crmDoctor.state = 1");
-
-				if (listCrmDoctorSchedule.size() > 0) {
-
-					List<CrmDoctorException> listDoctorException = dao
-							.find("from CrmDoctorException o where '"
-									+ dateString
-									+ "' between Date(startHour) and Date(endHour)"
-									+ " and (o.crmBranch.id is null OR o.crmBranch.id = "
-									+ idBranch + ")");
-
-					Date minHour = null;
-					Date maxHour = null;
-
-					for (CrmDoctorSchedule row : listCrmDoctorSchedule) {
-						if (minHour != null) {
-							if (row.getStartHour().compareTo(minHour) < 0) {
-								minHour = row.getStartHour();
-							}
-						} else {
-							minHour = row.getStartHour();
-						}
-
-						if (maxHour != null) {
-							if (row.getEndHour().compareTo(maxHour) > 0) {
-								maxHour = row.getEndHour();
-							}
-						} else {
-							maxHour = row.getEndHour();
-						}
-					}
-
-					Date scheduleInitHour = FacesUtil.addMinutesToDate(minHour,
-							0);
-
-					boolean end = false;
-					do {
-						Date scheduleEndHour = FacesUtil.addMinutesToDate(
-								scheduleInitHour, minutes);
-
-						int numapp = 0;
-						if (timeType.equals(Constant.TIME_TYPE_DOCTOR)) {
-							// Validar Hora
-							int numInteractions = 0;
-
-							for (CrmDoctorSchedule row : listCrmDoctorSchedule) {
-								if ((scheduleInitHour.compareTo(row
-										.getStartHour()) >= 0)
-										&& (scheduleEndHour.compareTo(row
-												.getEndHour()) <= 0)
-										&& validateException(
-												listDoctorException,
-												FacesUtil.addHourToDate(
-														currentDate,
-														scheduleInitHour),
-												row.getCrmDoctor())) {
-									numInteractions++;
-								}
-							}
-
-							if (numInteractions > 0) {
-								scheduleEndHour = FacesUtil.addHourToDate(
-										currentDate, scheduleEndHour);
-
-								List<Date> candidatesHours = getListcandidatesHours(
-										FacesUtil.addHourToDate(currentDate,
-												scheduleInitHour),
-										scheduleEndHour);
-
-								for (CrmAppointment row : listApp) {
-									boolean validate = validateAvailabilitySchedule(
-											candidatesHours,
-											row.getStartAppointmentDate(),
-											row.getEndAppointmentDate());
-									if (!validate) {
-										numapp++;
-									}
-								}
-
-								if (numapp < numInteractions) {
-									Date time = FacesUtil.addHourToDate(
-											currentDate, scheduleInitHour);
-									if (time.compareTo(new Date()) > 0) {
-										result.add(time);
-									}
-								}
-							}
-						} else if (timeType
-								.equals(Constant.TIME_TYPE_STRETCHERS)) {
-
-							scheduleEndHour = FacesUtil.addHourToDate(
-									currentDate, scheduleEndHour);
-
-							List<Date> candidatesHours = getListcandidatesHours(
-									FacesUtil.addHourToDate(currentDate,
-											scheduleInitHour), scheduleEndHour);
-
-							for (CrmAppointment row : listApp) {
-								boolean validate = validateAvailabilitySchedule(
-										candidatesHours,
-										row.getStartAppointmentDate(),
-										row.getEndAppointmentDate());
-								if (!validate) {
-									numapp++;
-								}
-							}
-
-							if ((branch.getStretchers() > 0)
-									&& (numapp < branch.getStretchers())) {
-								Date time = FacesUtil.addHourToDate(
-										currentDate, scheduleInitHour);
-								if (time.compareTo(new Date()) > 0) {
-									result.add(time);
-								}
-							}
-
-						}
-
-						scheduleInitHour = FacesUtil.addMinutesToDate(
-								scheduleInitHour, Constant.INCREASE_MIN);
-
-						if (scheduleInitHour.compareTo(maxHour) >= 0) {
-							end = true;
-						}
-					} while (!end);
-				}
-			}
-		} else {
-			message = FacesUtil.getMessage("app_msg_error_1");
-		}
-
-		ResultSearchDate resultSearchDate = new ResultSearchDate();
-		resultSearchDate.setListDate(result);
-		resultSearchDate.setMessage(message);
-
-		return resultSearchDate;
 	}
 
 	public List<Candidate> getListOccupatedHours(Date currentDate,
@@ -1205,6 +1028,18 @@ public class ProcessBo implements Serializable {
 		List<CrmNurse> list = dao
 				.find("from CrmNurse o where o.state = 1 and o.crmUser.id = "
 						+ idUser);
+		if (list.size() > 0) {
+			return list.get(0);
+		} else {
+			return null;
+		}
+	}
+
+	public CrmAppointment getFirstAppointmentbyPatient(BigDecimal idPatient) {
+		List<CrmAppointment> list = dao
+				.find("FROM CrmAppointment o WHERE o.crmPatient.id = "
+						+ idPatient
+						+ " AND state IN (3,4) ORDER BY o.startAppointmentDate", 1);
 		if (list.size() > 0) {
 			return list.get(0);
 		} else {
