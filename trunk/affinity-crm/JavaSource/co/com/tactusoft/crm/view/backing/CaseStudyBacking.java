@@ -87,8 +87,8 @@ public class CaseStudyBacking extends BaseBacking implements Serializable {
 			FacesUtil.addError(message);
 			validate = false;
 		} else {
-			selected.setCrmPatient(selectedPatient);
-			selected.setCrmDoctor(crmDoctor);
+			//selected.setCrmPatient(selectedPatient);
+			//selected.setCrmDoctor(crmDoctor);
 			int result = tablesService.saveCaseStudy(selected);
 			if (result == 0) {
 				list = tablesService.getListCaseStudy();

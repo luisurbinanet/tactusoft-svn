@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,9 +32,9 @@ import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.controller.bo.GenerateFormulaPDF;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
+import co.com.tactusoft.crm.model.entities.CrmCaseStudy;
 import co.com.tactusoft.crm.model.entities.CrmCie;
 import co.com.tactusoft.crm.model.entities.CrmConsent;
-//import co.com.tactusoft.crm.model.entities.CrmCieMaterial;
 import co.com.tactusoft.crm.model.entities.CrmDiagnosis;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmHistoryHistory;
@@ -64,6 +65,8 @@ import co.com.tactusoft.crm.view.datamodel.WSBeanDataModel;
 
 import com.tactusoft.webservice.client.beans.WSBean;
 import com.tactusoft.webservice.client.execute.CustomListsExecute;
+
+//import co.com.tactusoft.crm.model.entities.CrmCieMaterial;
 
 @Named
 @Scope("session")
@@ -153,7 +156,6 @@ public class HistoryBacking extends BaseBacking {
 	private String noteDoctor;
 	private boolean viewMode;
 	private List<CrmMaterialGroup> listMaterialGroup;
-	// private List<CrmCieMaterial> listCieMaterial;
 
 	private List<CrmDiagnosis> listDiagnosisView;
 	private List<CrmMedication> listMedicationView;
@@ -166,6 +168,13 @@ public class HistoryBacking extends BaseBacking {
 	private Map<Integer, Object> mapNoteTherapy;
 	private Integer idNoteTherapy;
 	private boolean autoNote;
+
+	private CrmCaseStudy selectedCaseStudy;
+	private List<CrmCie> listCaseStudyCieTemp;
+	private List<SelectItem> listCaseStudyCie;
+	private List<String> listCaseStudyHistoryTemp;
+	private List<SelectItem> listCaseStudyHistory;
+	private BigDecimal idCaseStudyCie;
 
 	private byte[] consentFile;
 	private Date consentDate;
@@ -181,12 +190,8 @@ public class HistoryBacking extends BaseBacking {
 		appointmentModel = null;
 		modeEdit = false;
 		modeHistorial = false;
-
 		listMaterialGroup = processService.getListMaterialGroup();
-		// listCieMaterial = processService.getListCieMaterial();
-
 		currentDoctor = processService.getCrmDoctor();
-
 		containerComponent = new HtmlPanelGrid();
 	}
 
@@ -890,6 +895,55 @@ public class HistoryBacking extends BaseBacking {
 		this.autoNote = autoNote;
 	}
 
+	public CrmCaseStudy getSelectedCaseStudy() {
+		return selectedCaseStudy;
+	}
+
+	public List<CrmCie> getListCaseStudyCieTemp() {
+		return listCaseStudyCieTemp;
+	}
+
+	public void setListCaseStudyCieTemp(List<CrmCie> listCaseStudyCieTemp) {
+		this.listCaseStudyCieTemp = listCaseStudyCieTemp;
+	}
+
+	public List<SelectItem> getListCaseStudyCie() {
+		return listCaseStudyCie;
+	}
+
+	public void setListCaseStudyCie(List<SelectItem> listCaseStudyCie) {
+		this.listCaseStudyCie = listCaseStudyCie;
+	}
+
+	public List<String> getListCaseStudyHistoryTemp() {
+		return listCaseStudyHistoryTemp;
+	}
+
+	public void setListCaseStudyHistoryTemp(
+			List<String> listCaseStudyHistoryTemp) {
+		this.listCaseStudyHistoryTemp = listCaseStudyHistoryTemp;
+	}
+
+	public List<SelectItem> getListCaseStudyHistory() {
+		return listCaseStudyHistory;
+	}
+
+	public void setListCaseStudyHistory(List<SelectItem> listCaseStudyHistory) {
+		this.listCaseStudyHistory = listCaseStudyHistory;
+	}
+
+	public void setSelectedCaseStudy(CrmCaseStudy selectedCaseStudy) {
+		this.selectedCaseStudy = selectedCaseStudy;
+	}
+
+	public BigDecimal getIdCaseStudyCie() {
+		return idCaseStudyCie;
+	}
+
+	public void setIdCaseStudyCie(BigDecimal idCaseStudyCie) {
+		this.idCaseStudyCie = idCaseStudyCie;
+	}
+
 	public byte[] getConsentFile() {
 		return consentFile;
 	}
@@ -1026,6 +1080,11 @@ public class HistoryBacking extends BaseBacking {
 
 		refreshCieFields();
 		refreshMaterialFields();
+
+		selectedCaseStudy = new CrmCaseStudy();
+		listCaseStudyCie = new ArrayList<SelectItem>();
+		listCaseStudyHistory = new ArrayList<SelectItem>();
+		idCaseStudyCie = null;
 	}
 
 	public void editAppointmentAction() {
@@ -1109,6 +1168,22 @@ public class HistoryBacking extends BaseBacking {
 				.getHistoryOrganometry(selectedAppointment.getId());
 		selectedHistoryOrganometry.setCrmPatient(selectedPatient);
 		selectedHistoryOrganometry.setCrmAppointment(currentAppointment);
+
+		if (currentAppointment.getCrmProcedureDetail().isCaseStudy()) {
+			Date firstDate = FacesUtil.getDateWithoutTime(processService
+					.getFirstAppointmentbyPatient(selectedPatient.getId())
+					.getStartAppointmentDate());
+			selectedCaseStudy.setCrmAppointment(currentAppointment);
+			selectedCaseStudy.setStartDate(firstDate);
+
+			listCaseStudyCieTemp = processService
+					.getListCieByPatient(selectedPatient.getId());
+
+			listCaseStudyHistoryTemp = processService
+					.getListHistoryByPatient(selectedPatient.getId());
+			refreshCaseStudyCie();
+			refreshCaseStudyHistory();
+		}
 	}
 
 	public void showHistorialAction() {
@@ -1176,6 +1251,7 @@ public class HistoryBacking extends BaseBacking {
 		diagnosis.setCrmCie(selectedCie);
 		listDiagnosis.add(diagnosis);
 		diagnosisModel = new DiagnosisDataModel(listDiagnosis);
+		refreshCaseStudyCie();
 		refreshListCie();
 	}
 
@@ -1226,6 +1302,7 @@ public class HistoryBacking extends BaseBacking {
 			}
 		}
 		diagnosisModel = new DiagnosisDataModel(listDiagnosis);
+		refreshCaseStudyCie();
 	}
 
 	// Medication
@@ -1754,7 +1831,26 @@ public class HistoryBacking extends BaseBacking {
 			if (FacesUtil.isEmptyOrBlank(selectedHistoryOrganometry
 					.getOrganometryAnalysis())) {
 				field = FacesUtil.getMessage("his_organometry_analysis");
-				message = FacesUtil.getMessage("his_organometry", field);
+				message = FacesUtil
+						.getMessage("his_history_organometry", field);
+				message = message + " - "
+						+ FacesUtil.getMessage("glb_required", field);
+				FacesUtil.addWarn(message);
+			}
+		}
+
+		if (currentAppointment.getCrmProcedureDetail().isCaseStudy()) {
+			if (idCaseStudyCie == null || idCaseStudyCie.intValue() == 0) {
+				field = FacesUtil.getMessage("cst_patology");
+				message = FacesUtil.getMessage("title_case_study", field);
+				message = message + " - "
+						+ FacesUtil.getMessage("glb_required", field);
+				FacesUtil.addWarn(message);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedCaseStudy.getReason())) {
+				field = FacesUtil.getMessage("cst_reason");
+				message = FacesUtil.getMessage("title_case_study", field);
 				message = message + " - "
 						+ FacesUtil.getMessage("glb_required", field);
 				FacesUtil.addWarn(message);
@@ -2117,6 +2213,8 @@ public class HistoryBacking extends BaseBacking {
 								listTherapy, Constant.MATERIAL_TYPE_THERAPY);
 						processService.saveMedication(currentAppointment,
 								listExam, Constant.MATERIAL_TYPE_EXAMS);
+						processService.saveStudyCase(selectedCaseStudy,
+								idCaseStudyCie);
 
 						viewMode = true;
 						currentAppointment
@@ -2416,5 +2514,51 @@ public class HistoryBacking extends BaseBacking {
 				new ByteArrayInputStream(consentFile), "application/pdf",
 				"consentimiento.pdf");
 		return file;
+	}
+
+	public void refreshCaseStudyCie() {
+		listCaseStudyCie = new ArrayList<SelectItem>();
+		Map<BigDecimal, String> mapCie = new HashMap<BigDecimal, String>();
+		for (CrmDiagnosis row : listDiagnosis) {
+			mapCie.put(row.getCrmCie().getId(), row.getCrmCie()
+					.getDescription());
+		}
+
+		for (CrmCie row : listCaseStudyCieTemp) {
+			mapCie.put(row.getId(), row.getDescription());
+		}
+
+		for (Map.Entry<BigDecimal, String> entry : mapCie.entrySet()) {
+			listCaseStudyCie.add(new SelectItem(entry.getKey(), entry
+					.getValue()));
+		}
+	}
+
+	public void refreshCaseStudyHistory() {
+		listCaseStudyHistory = new ArrayList<SelectItem>();
+		for (String row : listCaseStudyHistoryTemp) {
+			listCaseStudyHistory.add(new SelectItem(row, row));
+		}
+	}
+
+	public void handleTabChange() {
+		refreshCaseStudyHistory();
+		if (!FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getReason())) {
+			boolean exists = false;
+			for (SelectItem row : listCaseStudyHistory) {
+				if (row.getValue()
+						.toString()
+						.toUpperCase()
+						.equals(selectedHistoryHistory.getReason()
+								.toUpperCase())) {
+					exists = true;
+					break;
+				}
+			}
+			if (!exists) {
+				listCaseStudyHistory.add(new SelectItem(selectedHistoryHistory
+						.getReason(), selectedHistoryHistory.getReason()));
+			}
+		}
 	}
 }
