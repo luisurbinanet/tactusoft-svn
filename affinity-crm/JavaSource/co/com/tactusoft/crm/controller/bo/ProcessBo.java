@@ -16,6 +16,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
+import co.com.tactusoft.crm.model.entities.CrmCaseStudy;
 import co.com.tactusoft.crm.model.entities.CrmCie;
 import co.com.tactusoft.crm.model.entities.CrmCieMaterial;
 import co.com.tactusoft.crm.model.entities.CrmConsent;
@@ -1039,12 +1040,27 @@ public class ProcessBo implements Serializable {
 		List<CrmAppointment> list = dao
 				.find("FROM CrmAppointment o WHERE o.crmPatient.id = "
 						+ idPatient
-						+ " AND state IN (3,4) ORDER BY o.startAppointmentDate", 1);
+						+ " AND state IN (3,4) ORDER BY o.startAppointmentDate",
+						1);
 		if (list.size() > 0) {
 			return list.get(0);
 		} else {
 			return null;
 		}
+	}
+
+	public List<CrmCie> getListCieByPatient(BigDecimal idPatient) {
+		List<CrmCie> list = dao
+				.find("SELECT o.crmCie FROM CrmDiagnosis o WHERE o.crmAppointment.crmPatient.id = "
+						+ idPatient + " ORDER BY o.crmCie.description");
+		return list;
+	}
+
+	public List<String> getListHistoryByPatient(BigDecimal idPatient) {
+		List<String> list = dao
+				.find("SELECT o.reason FROM CrmHistoryHistory o WHERE o.crmAppointment.crmPatient.id = "
+						+ idPatient + " ORDER BY o.reason");
+		return list;
 	}
 
 	public int savePatient(CrmPatient entity, boolean automatic,
@@ -1272,6 +1288,13 @@ public class ProcessBo implements Serializable {
 
 	public Integer saveNotes(CrmNote entity) {
 		entity.setId(getId(CrmNote.class));
+		return this.persist(entity);
+	}
+
+	public Integer saveStudyCase(CrmCaseStudy entity, BigDecimal idDiagnosis) {
+		CrmCie crmCie = new CrmCie();
+		crmCie.setId(idDiagnosis);
+		entity.setCrmCie(crmCie);
 		return this.persist(entity);
 	}
 

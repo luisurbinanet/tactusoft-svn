@@ -178,6 +178,10 @@
 						activeIndex="#{historyBacking.activeIndex}"
 						rendered="#{not historyBacking.modeHistorial}">
 
+						<p:ajax event="tabChange"
+							listener="#{historyBacking.handleTabChange}"
+							update=":form:accordion:pnlStudyCase" />
+
 						<p:tab title="#{msg['title_patient_complementary']}"
 							id="PATIENT_COMPLEMENTARY">
 
@@ -945,7 +949,7 @@
 										<p:commandButton value="#{msg['btn_delete']}"
 											disabled="#{historyBacking.disabledDiagnosis}"
 											icon="ui-icon-closethick"
-											update="dtbDiagnosis :form:accordion:dtbOtherMedication :form:accordion:dtbTherapy :form:accordion:dtbExamns"
+											update="dtbDiagnosis :form:accordion:dtbOtherMedication :form:accordion:dtbTherapy :form:accordion:dtbExamns :form:accordion:pnlStudyCase"
 											actionListener="#{historyBacking.removeDiagnosisAction}" />
 									</f:facet>
 
@@ -1099,10 +1103,56 @@
 
 						</p:tab>
 
-						<p:tab title="#{msg['title_case_study']}" id="CASE_STUDY"
+						<p:tab title="#{msg['title_case_study']}" id="STUDY_CASE"
 							rendered="#{historyBacking.rolePrincipal eq 'DOCTOR' and historyBacking.currentAppointment.crmProcedureDetail.caseStudy}">
-							
-							
+
+							<p:fieldset>
+								<h:panelGrid id="pnlStudyCase" columns="2" cellpadding="4"
+									style="margin:0 auto;" width="100%">
+
+									<h:outputLabel value="#{msg['cst_start_date']}"
+										style="width:100%" />
+									<h:outputLabel style="width:100%"
+										value="#{historyBacking.selectedCaseStudy.startDate}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputLabel>
+
+									<p:outputLabel value="#{msg['cst_patology']}"
+										for="cmbDiagnosisCaseStudyCie" />
+									<p:selectOneMenu id="cmbDiagnosisCaseStudyCie"
+										value="#{historyBacking.idCaseStudyCie}" style="width:600px">
+										<f:selectItem itemValue=""
+											itemLabel="#{msg['glb_default_value']}" />
+										<f:selectItems value="#{historyBacking.listCaseStudyCie}" />
+									</p:selectOneMenu>
+
+									<p:outputLabel value="#{msg['cst_reason']}"
+										for="cmbDiagnosisCaseStudyHistory" />
+									<p:selectOneMenu id="cmbDiagnosisCaseStudyHistory"
+										value="#{historyBacking.selectedCaseStudy.reason}"
+										style="width:600px">
+										<f:selectItem itemValue=""
+											itemLabel="#{msg['glb_default_value']}" />
+										<f:selectItems value="#{historyBacking.listCaseStudyHistory}" />
+									</p:selectOneMenu>
+
+									<h:outputLabel value="#{msg['cst_perc']}" />
+									<p:selectOneMenu style="width:600px"
+										value="#{historyBacking.selectedCaseStudy.percent}">
+										<f:selectItem itemValue="0" itemLabel="0%" />
+										<f:selectItem itemValue="10" itemLabel="10%" />
+										<f:selectItem itemValue="20" itemLabel="50%" />
+										<f:selectItem itemValue="30" itemLabel="30%" />
+										<f:selectItem itemValue="40" itemLabel="40%" />
+										<f:selectItem itemValue="50" itemLabel="50%" />
+										<f:selectItem itemValue="60" itemLabel="60%" />
+										<f:selectItem itemValue="70" itemLabel="70%" />
+										<f:selectItem itemValue="80" itemLabel="80%" />
+										<f:selectItem itemValue="90" itemLabel="90%" />
+										<f:selectItem itemValue="100" itemLabel="100%" />
+									</p:selectOneMenu>
+								</h:panelGrid>
+							</p:fieldset>
 
 						</p:tab>
 
@@ -1157,13 +1207,12 @@
 
 						<f:facet name="footer">
 							<p:spacer height="10" />
-
 							<p:commandButton value="#{msg['btn_search']}"
 								icon="ui-icon-search" update="pnlTable3 recordTable3 btnAddCIE"
 								actionListener="#{historyBacking.searchCIEAction}" />
 							<p:commandButton id="btnAddCIE" value="#{msg['btn_add']}"
 								icon="ui-icon-plusthick"
-								update="recordTable3 :form:accordion:dtbDiagnosis :form:accordion:dtbTherapy :form:accordion:dtbOtherMedication :form:accordion:dtbExamns"
+								update="recordTable3 :form:accordion:dtbDiagnosis :form:accordion:dtbTherapy :form:accordion:dtbOtherMedication :form:accordion:dtbExamns :form:accordion:pnlStudyCase"
 								actionListener="#{historyBacking.addCieAction}"
 								disabled="#{historyBacking.disabledAddCie}" />
 						</f:facet>
