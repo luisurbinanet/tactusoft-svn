@@ -57,7 +57,7 @@ public class AppointmentBacking extends BaseBacking {
 	private CrmProcedureDetail procedureDetail;
 
 	private List<SelectItem> listTherapyMaterials;
-	private Map<BigDecimal, VwTherapyMaterials> mapTherapyMaterials;
+	private Map<Long, VwTherapyMaterials> mapTherapyMaterials;
 	private BigDecimal idTherapyMaterials;
 
 	private List<SelectItem> listSearch;
@@ -178,12 +178,12 @@ public class AppointmentBacking extends BaseBacking {
 		this.listTherapyMaterials = listTherapyMaterials;
 	}
 
-	public Map<BigDecimal, VwTherapyMaterials> getMapTherapyMaterials() {
+	public Map<Long, VwTherapyMaterials> getMapTherapyMaterials() {
 		return mapTherapyMaterials;
 	}
 
 	public void setMapTherapyMaterials(
-			Map<BigDecimal, VwTherapyMaterials> mapTherapyMaterials) {
+			Map<Long, VwTherapyMaterials> mapTherapyMaterials) {
 		this.mapTherapyMaterials = mapTherapyMaterials;
 	}
 
@@ -564,7 +564,7 @@ public class AppointmentBacking extends BaseBacking {
 				listTherapyMaterials = new ArrayList<SelectItem>();
 				listTherapyMaterials.add(new SelectItem(
 						Constant.DEFAULT_VALUE_STRING, label));
-				mapTherapyMaterials = new LinkedHashMap<BigDecimal, VwTherapyMaterials>();
+				mapTherapyMaterials = new LinkedHashMap<Long, VwTherapyMaterials>();
 				for (VwTherapyMaterials row : listTherapyMaterialsTemp) {
 					mapTherapyMaterials.put(row.getId(), row);
 					listTherapyMaterials.add(new SelectItem(row.getId(), row
@@ -845,8 +845,7 @@ public class AppointmentBacking extends BaseBacking {
 				if (procedureDetail.isDependent()) {
 					VwTherapyMaterials vwTherapyMaterials = mapTherapyMaterials
 							.get(idTherapyMaterials);
-					selected.setSapMaterialCode(vwTherapyMaterials
-							.getCodMaterial());
+					selected.setSapMaterialCode(vwTherapyMaterials.getId());
 					selected.setSapMaterialDesc(vwTherapyMaterials
 							.getDescMaterial());
 				}

@@ -248,7 +248,7 @@
 								action="#{appointmentBacking.searchPatientAction}" />
 							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
 								icon="ui-icon-plusthick"
-								update=":form:pnlDetail :form:pnlDetail2 :form:toolBar"
+								update=":form:pnlDetail :form:pnlDetail2 :form:pnlDetail3 :form:toolBar"
 								oncomplete="handleComplete(xhr, status, args)"
 								actionListener="#{appointmentBacking.addPatient}"
 								disabled="#{appointmentBacking.disabledAddPatient}" />
