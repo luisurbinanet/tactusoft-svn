@@ -346,8 +346,8 @@ public class ProcedureBacking extends BaseBacking {
 		if (message == null) {
 			int result = tablesService.saveProcedure(selected);
 			if (result == 0) {
-				tablesService.saveProcedureBranch(selected,
-						listModelBranch.getTarget());
+				/*tablesService.saveProcedureBranch(selected,
+						listModelBranch.getTarget());*/
 
 				list = tablesService.getListProcedure();
 				model = new ProcedureDataModel(list);
@@ -373,8 +373,8 @@ public class ProcedureBacking extends BaseBacking {
 		if (message == null) {
 			tablesService.saveProcedureDetail(selected, listProcedureDetail);
 
-			tablesService.saveProcedureBranch(selected,
-					listModelBranch.getTarget());
+			/*tablesService.saveProcedureBranch(selected,
+					listModelBranch.getTarget());*/
 
 			list = tablesService.getListProcedure();
 			model = new ProcedureDataModel(list);

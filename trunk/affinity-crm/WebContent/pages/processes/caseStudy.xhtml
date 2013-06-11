@@ -9,37 +9,27 @@
 
 	<ui:define name="body">
 
-		<p:panel style="width:100%;height:600px;"
+		<p:panel style="width:1150px;height:600px;"
 			header="#{msg['title_case_study']}">
 
 			<p:spacer height="5" />
 
 			<h:form id="form">
 
-				<p:toolbar style="width:100%">
-					<p:toolbarGroup align="left">
-						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
-							action="#{caseStudyBacking.newAction}" oncomplete="dlg.show()"
-							update=":editForm:pnlDetail :editForm:dialog"
-							disabled="#{caseStudyBacking.disabledNew}" />
-					</p:toolbarGroup>
-				</p:toolbar>
-
-				<p:spacer height="10" />
-
 				<p:dataTable id="recordTable" var="rec"
 					value="#{caseStudyBacking.model}" rowKey="#{rec.id}"
-					selection="#{caseStudyBacking.selected}" paginator="true" rows="10"
-					style="width:100%" emptyMessage="#{msg['glb_no_records_found']}">
+					resizableColumns="true" selection="#{caseStudyBacking.selected}"
+					paginator="true" rows="10" style="width:100%"
+					emptyMessage="#{msg['glb_no_records_found']}">
 
 					<p:column selectionMode="single" style="width:18px" />
 
 					<p:column headerText="#{msg['app_doctor']}">
-						<h:outputLabel value="#{rec.crmDoctor.names}" />
+						<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
 					</p:column>
 
 					<p:column headerText="#{msg['cam_pat']}">
-						<h:outputLabel value="#{rec.crmPatient.names}" />
+						<h:outputLabel value="#{rec.crmAppointment.crmPatient.names}" />
 					</p:column>
 
 					<p:column headerText="#{msg['cst_start_date']}">
@@ -49,21 +39,21 @@
 					</p:column>
 
 					<p:column headerText="#{msg['cst_end_date']}">
-						<h:outputLabel value="#{rec.endDate}">
+						<h:outputLabel value="#{rec.crmAppointment.startAppointmentDate}">
 							<f:convertDateTime pattern="dd/MM/yyyy" />
 						</h:outputLabel>
 					</p:column>
 
+					<p:column headerText="#{msg['cst_perc']}">
+						<h:outputLabel value="#{rec.percent}" />
+					</p:column>
+
 					<p:column headerText="#{msg['cst_patology']}">
-						<h:outputLabel value="#{rec.patology}" />
+						<h:outputLabel value="#{rec.crmCie.description}" />
 					</p:column>
 
 					<p:column headerText="#{msg['cst_reason']}">
 						<h:outputLabel value="#{rec.reason}" />
-					</p:column>
-
-					<p:column headerText="#{msg['cst_criteria']}">
-						<h:outputLabel value="#{rec.criteria}" />
 					</p:column>
 
 				</p:dataTable>
@@ -75,118 +65,6 @@
 		<h:form id="editForm">
 
 			<p:growl id="growl" showDetail="true" />
-
-			<p:dialog header="#{msg['msg_detail']}" widgetVar="dlg"
-				resizable="false" id="dialog" showEffect="fade" hideEffect="explode"
-				modal="true" width="700" dynamic="true">
-
-				<p:toolbar style="width:100%">
-					<p:toolbarGroup align="left">
-						<p:commandButton value="#{msg['btn_save']}" icon="ui-icon-disk"
-							action="#{caseStudyBacking.saveAction}"
-							update="growl :form:recordTable"
-							oncomplete="handleComplete2(xhr, status, args)"
-							rendered="#{caseStudyBacking.selected.id==null}" />
-						<p:commandButton value="#{msg['btn_add_patient']}"
-							icon="ui-icon-circle-check"
-							actionListener="#{caseStudyBacking.newPatientAction}"
-							oncomplete="dlgPatient.show()" update="pnlDetail"
-							rendered="#{caseStudyBacking.selected.id==null}" process="@this" />
-						<p:commandButton value="#{msg['btn_close']}"
-							icon="ui-icon-closethick" update="growl :form:recordTable"
-							process="@none" oncomplete="dlg.hide()" />
-					</p:toolbarGroup>
-				</p:toolbar>
-
-				<p:spacer height="10" />
-
-				<h:panelGrid id="pnlDetail" columns="2" cellpadding="4"
-					style="margin:0 auto;" width="100%">
-
-					<h:outputLabel
-						value="#{caseStudyBacking.selectedPatient.contact?msg['pat_phone_number']:msg['pat_sap_code']}"
-						rendered="#{caseStudyBacking.selectedPatient eq null?false:true}" />
-					<p:inputText
-						value="#{caseStudyBacking.selectedPatient.contact?caseStudyBacking.selectedPatient.phoneNumber:caseStudyBacking.selectedPatient.codeSap}"
-						style="width:350px;background-color:#FFFF80;font-weight:bold;"
-						readonly="true"
-						rendered="#{caseStudyBacking.selectedPatient eq null?false:true}" />
-
-					<h:outputLabel value="#{msg['pat_names']}"
-						rendered="#{caseStudyBacking.selectedPatient eq null?false:true}" />
-					<p:inputText value="#{caseStudyBacking.selectedPatient.names}"
-						style="width:350px;background-color:#FFFF80;font-weight:bold;"
-						readonly="true"
-						rendered="#{caseStudyBacking.selectedPatient eq null?false:true}" />
-
-					<p:outputLabel value="#{msg['cst_start_date']}" style="width:40%"
-						for="calSD" />
-					<p:calendar id="calSD" required="true"
-						value="#{caseStudyBacking.selected.startDate}"
-						label="#{msg['cst_start_date']}" readonlyInput="true"
-						pattern="dd/MM/yyyy" showOn="button" navigator="true" locale="es" />
-
-					<p:outputLabel value="#{msg['cst_end_date']}" style="width:40%"
-						for="calED" />
-					<p:calendar id="calED" value="#{caseStudyBacking.selected.endDate}"
-						label="#{msg['cst_end_date']}" readonlyInput="true"
-						required="true" pattern="dd/MM/yyyy" showOn="button"
-						navigator="true" locale="es" />
-
-					<p:outputLabel value="#{msg['cst_patology']}" for="txtPatology" />
-					<h:inputTextarea id="txtPatology"
-						value="#{caseStudyBacking.selected.patology}" style="width:100%"
-						label="#{msg['cst_patology']}" rows="3" required="true" />
-
-					<p:outputLabel value="#{msg['cst_reason']}" for="txtReason" />
-					<h:inputTextarea id="txtReason"
-						value="#{caseStudyBacking.selected.reason}" style="width:100%"
-						label="#{msg['cst_reason']}" rows="3" required="true" />
-
-					<h:outputLabel value="#{msg['cst_perc1']}" />
-					<p:selectOneMenu value="#{caseStudyBacking.selected.perc1}">
-						<f:selectItem itemValue="5" itemLabel="5%" />
-						<f:selectItem itemValue="25" itemLabel="25%" />
-						<f:selectItem itemValue="50" itemLabel="50%" />
-						<f:selectItem itemValue="75" itemLabel="75%" />
-						<f:selectItem itemValue="100" itemLabel="100%" />
-					</p:selectOneMenu>
-
-					<h:outputLabel value="#{msg['cst_perc2']}" />
-					<p:selectOneMenu value="#{caseStudyBacking.selected.perc2}">
-						<f:selectItem itemValue="5" itemLabel="5%" />
-						<f:selectItem itemValue="25" itemLabel="25%" />
-						<f:selectItem itemValue="50" itemLabel="50%" />
-						<f:selectItem itemValue="75" itemLabel="75%" />
-						<f:selectItem itemValue="100" itemLabel="100%" />
-					</p:selectOneMenu>
-
-					<h:outputLabel value="#{msg['cst_perc3']}" />
-					<p:selectOneMenu value="#{caseStudyBacking.selected.perc3}">
-						<f:selectItem itemValue="5" itemLabel="5%" />
-						<f:selectItem itemValue="25" itemLabel="25%" />
-						<f:selectItem itemValue="50" itemLabel="50%" />
-						<f:selectItem itemValue="75" itemLabel="75%" />
-						<f:selectItem itemValue="100" itemLabel="100%" />
-					</p:selectOneMenu>
-
-					<h:outputLabel value="#{msg['cst_perc4']}" />
-					<p:selectOneMenu value="#{caseStudyBacking.selected.perc4}">
-						<f:selectItem itemValue="5" itemLabel="5%" />
-						<f:selectItem itemValue="25" itemLabel="25%" />
-						<f:selectItem itemValue="50" itemLabel="50%" />
-						<f:selectItem itemValue="75" itemLabel="75%" />
-						<f:selectItem itemValue="100" itemLabel="100%" />
-					</p:selectOneMenu>
-
-					<p:outputLabel value="#{msg['cst_criteria']}" for="txtCriteria" />
-					<h:inputTextarea id="txtCriteria"
-						value="#{caseStudyBacking.selected.criteria}" style="width:100%"
-						label="#{msg['cst_criteria']}" rows="3" required="true" />
-
-				</h:panelGrid>
-
-			</p:dialog>
 
 			<p:dialog header="#{msg['sal_patient']}" widgetVar="dlgPatient"
 				resizable="false" id="dialogPatient" showEffect="fade"
@@ -235,7 +113,7 @@
 							process="@this,customPanel"
 							action="#{caseStudyBacking.searchPatientAction}" />
 						<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
-							icon="ui-icon-plusthick" update=":editForm:pnlDetail"
+							icon="ui-icon-plusthick"
 							oncomplete="handleComplete(xhr, status, args)"
 							actionListener="#{caseStudyBacking.addPatient}"
 							process="@this,dialogPatient"

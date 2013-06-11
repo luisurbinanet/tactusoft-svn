@@ -37,6 +37,7 @@ import co.com.tactusoft.crm.model.entities.CrmNurse;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
 import co.com.tactusoft.crm.model.entities.VwAppointment;
+import co.com.tactusoft.crm.model.entities.VwTherapyMaterials;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.beans.Candidate;
@@ -1085,18 +1086,21 @@ public class ProcessBo implements Serializable {
 		dao.executeHQL("delete from CrmPatient o where o.id = " + id);
 	}
 
-	public List<CrmPatient> getListPatientByNameOrDoc(String field, String value) {
+	public List<CrmPatient> getListPatientByField(String field, String value) {
 		List<CrmPatient> list = null;
 
 		if (field.equals("DOC")) {
-			list = dao.find("from CrmPatient o where doc = '" + value + "'");
-		} else {
+			list = dao.find("FROM CrmPatient o WHERE doc = '" + value + "'");
+		} else if (field.equals("NAMES")) {
 			list = dao.find("FROM CrmPatient o WHERE o.firstnames LIKE '%"
 					+ value + "%' or o.surnames LIKE '%" + value
 					+ "%' OR UPPER(firstnames || ' ' || surnames) LIKE '%"
 					+ value
 					+ "%' OR UPPER(surnames || ' ' || firstnames) LIKE '%"
 					+ value + "%'");
+		} else if (field.equals("PHONE")) {
+			list = dao.find("FROM CrmPatient o WHERE phoneNumber = '" + value
+					+ "' OR cellNumber = '" + value + "'");
 		}
 
 		return list;
@@ -1399,6 +1403,12 @@ public class ProcessBo implements Serializable {
 				"SELECT count(*) FROM CrmPatient o WHERE o.doc = '" + doc
 						+ "' AND o.codeSap = '" + doc + "'").get(0);
 		return result;
+	}
+
+	public List<VwTherapyMaterials> getListVwTherapyMaterials(
+			BigDecimal idPatient) {
+		return dao.find("FROM VwTherapyMaterials o WHERE o.idPatient = "
+				+ idPatient);
 	}
 
 	public int persist(Object entity) {

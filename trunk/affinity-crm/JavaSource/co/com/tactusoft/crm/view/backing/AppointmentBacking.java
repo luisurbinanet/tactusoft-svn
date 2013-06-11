@@ -25,6 +25,7 @@ import co.com.tactusoft.crm.model.entities.CrmHoliday;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProcedure;
 import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
+import co.com.tactusoft.crm.model.entities.VwTherapyMaterials;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.beans.Candidate;
@@ -53,6 +54,11 @@ public class AppointmentBacking extends BaseBacking {
 	private List<SelectItem> listProcedureDetail;
 	private Map<BigDecimal, CrmProcedureDetail> mapProcedureDetail;
 	private BigDecimal idProcedureDetail;
+	private CrmProcedureDetail procedureDetail;
+
+	private List<SelectItem> listTherapyMaterials;
+	private Map<BigDecimal, VwTherapyMaterials> mapTherapyMaterials;
+	private BigDecimal idTherapyMaterials;
 
 	private List<SelectItem> listSearch;
 	private BigDecimal idSearch;
@@ -108,9 +114,9 @@ public class AppointmentBacking extends BaseBacking {
 				listBranch.add(new SelectItem(row.getId(), row.getName()));
 			}
 
+			idBranch = null;
 			if (listBranch.size() > 0) {
 				idBranch = (BigDecimal) listBranch.get(0).getValue();
-				handleBranchChange();
 			}
 		}
 		return listBranch;
@@ -162,6 +168,31 @@ public class AppointmentBacking extends BaseBacking {
 
 	public List<SelectItem> getListProcedureDetail() {
 		return listProcedureDetail;
+	}
+
+	public List<SelectItem> getListTherapyMaterials() {
+		return listTherapyMaterials;
+	}
+
+	public void setListTherapyMaterials(List<SelectItem> listTherapyMaterials) {
+		this.listTherapyMaterials = listTherapyMaterials;
+	}
+
+	public Map<BigDecimal, VwTherapyMaterials> getMapTherapyMaterials() {
+		return mapTherapyMaterials;
+	}
+
+	public void setMapTherapyMaterials(
+			Map<BigDecimal, VwTherapyMaterials> mapTherapyMaterials) {
+		this.mapTherapyMaterials = mapTherapyMaterials;
+	}
+
+	public BigDecimal getIdTherapyMaterials() {
+		return idTherapyMaterials;
+	}
+
+	public void setIdTherapyMaterials(BigDecimal idTherapyMaterials) {
+		this.idTherapyMaterials = idTherapyMaterials;
 	}
 
 	public void setListProcedureDetail(List<SelectItem> listProcedureDetail) {
@@ -370,6 +401,10 @@ public class AppointmentBacking extends BaseBacking {
 		this.fromPage = fromPage;
 	}
 
+	public boolean isDependProcedureDetail() {
+		return procedureDetail != null ? procedureDetail.isDependent() : false;
+	}
+
 	public void newAction(ActionEvent event) {
 		listBranch = null;
 
@@ -393,6 +428,7 @@ public class AppointmentBacking extends BaseBacking {
 		optionSearchPatient = 1;
 		docPatient = "";
 		namePatient = "";
+		telPatient = "";
 		selectedWSGroupSellers = "-1";
 
 		listAppointment = new LinkedList<Candidate>();
@@ -405,13 +441,11 @@ public class AppointmentBacking extends BaseBacking {
 		edit = false;
 		fromPage = null;
 
-		if (listProcedureDetail != null) {
-			if (listProcedureDetail.size() > 0) {
-				idProcedureDetail = (BigDecimal) listProcedureDetail.get(0)
-						.getValue();
-				handleProcedureDetailChange();
-			}
-		}
+		String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
+		listProcedureDetail = new ArrayList<SelectItem>();
+		listProcedureDetail.add(new SelectItem(Constant.DEFAULT_VALUE, label));
+		idProcedureDetail = null;
+		procedureDetail = new CrmProcedureDetail();
 
 		today = new Date();
 		todayMax = FacesUtil.addHoursToDate(
@@ -419,17 +453,22 @@ public class AppointmentBacking extends BaseBacking {
 	}
 
 	public void handleBranchChange() {
-		listProcedure = new LinkedList<SelectItem>();
-		mapProcedure = new LinkedHashMap<BigDecimal, CrmProcedure>();
-		for (CrmProcedure row : tablesService
-				.getListProcedureByBranch(idBranch)) {
-			mapProcedure.put(row.getId(), row);
-			listProcedure.add(new SelectItem(row.getId(), row.getName()));
+		listProcedureDetail = new LinkedList<SelectItem>();
+		mapProcedureDetail = new LinkedHashMap<BigDecimal, CrmProcedureDetail>();
+		List<CrmProcedureDetail> listProcedureDetailTemp = tablesService
+				.getListProcedureByBranch(idBranch);
+		if (listProcedureDetailTemp != null) {
+			for (CrmProcedureDetail row : listProcedureDetailTemp) {
+				mapProcedureDetail.put(row.getId(), row);
+				listProcedureDetail.add(new SelectItem(row.getId(), row
+						.getName()));
+			}
 		}
 
-		if (listProcedure.size() > 0) {
-			idProcedure = (BigDecimal) listProcedure.get(0).getValue();
-			handleProcedureChange();
+		if (listProcedureDetail.size() > 0) {
+			idProcedureDetail = (BigDecimal) listProcedureDetail.get(0)
+					.getValue();
+			handleProcedureDetailChange();
 		}
 
 		listDoctor = new LinkedList<SelectItem>();
@@ -442,10 +481,37 @@ public class AppointmentBacking extends BaseBacking {
 		currentDate = new Date();
 	}
 
-	public void handleProcedureChange() {
-		if (listProcedure.size() > 0) {
-			String codPublicity = mapProcedure.get(idProcedure)
-					.getCodPublicity();
+	public void handleProcedureDetailChange() {
+		if (listProcedureDetail.size() > 0) {
+			String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
+			try {
+				String codeBranch = mapBranch.get(idBranch).getCode();
+
+				List<WSBean> result = FacesUtil.getCurrentUserData()
+						.getListWSGroupSellers();
+
+				listWSGroupSellers = new ArrayList<SelectItem>();
+				mapWSGroupSellers = new TreeMap<String, String>();
+				listWSGroupSellers.add(new SelectItem(
+						Constant.DEFAULT_VALUE_STRING, label));
+				for (WSBean row : result) {
+					if (row.getBranch().equals(codeBranch)) {
+						mapWSGroupSellers.put(row.getCode(), row.getNames());
+						listWSGroupSellers.add(new SelectItem(row.getCode(),
+								row.getNames()));
+					}
+				}
+			} catch (Exception ex) {
+				listWSGroupSellers = new ArrayList<SelectItem>();
+				listWSGroupSellers.add(new SelectItem(
+						Constant.DEFAULT_VALUE_STRING, label));
+			}
+
+			selectedWSGroupSellers = "-1";
+
+			procedureDetail = mapProcedureDetail.get(idProcedureDetail);
+
+			String codPublicity = procedureDetail.getCodPublicity();
 			if (!FacesUtil.isEmptyOrBlank(codPublicity)
 					&& !codPublicity.equals(Constant.DEFAULT_VALUE_STRING)) {
 
@@ -464,84 +530,53 @@ public class AppointmentBacking extends BaseBacking {
 				mapWSGroupSellers.put(codPublicity, namePublicity);
 				listWSGroupSellers.add(new SelectItem(codPublicity,
 						namePublicity));
-			} else {
-				String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
-				try {
-
-					String codeBranch = mapBranch.get(idBranch).getCode();
-
-					List<WSBean> result = FacesUtil.getCurrentUserData()
-							.getListWSGroupSellers();
-
-					listWSGroupSellers = new ArrayList<SelectItem>();
-					mapWSGroupSellers = new TreeMap<String, String>();
-					listWSGroupSellers.add(new SelectItem(
-							Constant.DEFAULT_VALUE_STRING, label));
-					for (WSBean row : result) {
-						if (row.getBranch().equals(codeBranch)) {
-							mapWSGroupSellers
-									.put(row.getCode(), row.getNames());
-							listWSGroupSellers.add(new SelectItem(
-									row.getCode(), row.getNames()));
-						}
-					}
-				} catch (Exception ex) {
-					listWSGroupSellers = new ArrayList<SelectItem>();
-					listWSGroupSellers.add(new SelectItem(
-							Constant.DEFAULT_VALUE_STRING, label));
-				}
-
-				selectedWSGroupSellers = "-1";
 			}
+
+			if (!procedureDetail.isAvailability()) {
+				idSearch = Constant.APP_TYPE_FOR_DOCTOR_VALUE;
+				renderedForDate = false;
+				renderedDoctorWithoutTime = false;
+			} else {
+				idSearch = Constant.DEFAULT_VALUE;
+				renderedDoctorWithoutTime = true;
+			}
+
+			if ((procedureDetail.getTimeDoctor() > procedureDetail
+					.getTimeNurses())
+					&& (procedureDetail.getTimeDoctor() > procedureDetail
+							.getTimeStretchers())) {
+				minutes = procedureDetail.getTimeDoctor();
+				timeType = Constant.TIME_TYPE_DOCTOR;
+			} else if ((procedureDetail.getTimeNurses() > procedureDetail
+					.getTimeDoctor())
+					&& (procedureDetail.getTimeNurses() > procedureDetail
+							.getTimeStretchers())) {
+				minutes = procedureDetail.getTimeNurses();
+				timeType = Constant.TIME_TYPE_NURSE;
+			} else {
+				minutes = procedureDetail.getTimeStretchers();
+				timeType = Constant.TIME_TYPE_STRETCHERS;
+			}
+
+			if (procedureDetail.isDependent()) {
+				List<VwTherapyMaterials> listTherapyMaterialsTemp = processService
+						.getListVwTherapyMaterials(selectedPatient.getId());
+				listTherapyMaterials = new ArrayList<SelectItem>();
+				listTherapyMaterials.add(new SelectItem(
+						Constant.DEFAULT_VALUE_STRING, label));
+				mapTherapyMaterials = new LinkedHashMap<BigDecimal, VwTherapyMaterials>();
+				for (VwTherapyMaterials row : listTherapyMaterialsTemp) {
+					mapTherapyMaterials.put(row.getId(), row);
+					listTherapyMaterials.add(new SelectItem(row.getId(), row
+							.getDescMaterial()));
+				}
+			} else {
+				listTherapyMaterials = new ArrayList<SelectItem>();
+			}
+
+			handleSearchChange();
+			selectedCandidate = null;
 		}
-
-		listProcedureDetail = new LinkedList<SelectItem>();
-		mapProcedureDetail = new LinkedHashMap<BigDecimal, CrmProcedureDetail>();
-		for (CrmProcedureDetail row : tablesService
-				.getListProcedureDetailByProcedure(idProcedure)) {
-			mapProcedureDetail.put(row.getId(), row);
-			listProcedureDetail.add(new SelectItem(row.getId(), row.getName()));
-		}
-
-		if (listProcedureDetail.size() > 0) {
-			idProcedureDetail = (BigDecimal) listProcedureDetail.get(0)
-					.getValue();
-		}
-
-		handleProcedureDetailChange();
-	}
-
-	public void handleProcedureDetailChange() {
-		CrmProcedureDetail procedureDetail = mapProcedureDetail
-				.get(idProcedureDetail);
-
-		if (!procedureDetail.isAvailability()) {
-			idSearch = Constant.APP_TYPE_FOR_DOCTOR_VALUE;
-			renderedForDate = false;
-			renderedDoctorWithoutTime = false;
-		} else {
-			idSearch = Constant.DEFAULT_VALUE;
-			renderedDoctorWithoutTime = true;
-		}
-
-		if ((procedureDetail.getTimeDoctor() > procedureDetail.getTimeNurses())
-				&& (procedureDetail.getTimeDoctor() > procedureDetail
-						.getTimeStretchers())) {
-			minutes = procedureDetail.getTimeDoctor();
-			timeType = Constant.TIME_TYPE_DOCTOR;
-		} else if ((procedureDetail.getTimeNurses() > procedureDetail
-				.getTimeDoctor())
-				&& (procedureDetail.getTimeNurses() > procedureDetail
-						.getTimeStretchers())) {
-			minutes = procedureDetail.getTimeNurses();
-			timeType = Constant.TIME_TYPE_NURSE;
-		} else {
-			minutes = procedureDetail.getTimeStretchers();
-			timeType = Constant.TIME_TYPE_STRETCHERS;
-		}
-
-		handleSearchChange();
-		selectedCandidate = null;
 	}
 
 	public void handleDateSelect(SelectEvent event) {
@@ -606,8 +641,6 @@ public class AppointmentBacking extends BaseBacking {
 	}
 
 	public void searchAppointMentAction() {
-		CrmProcedureDetail procedureDetail = mapProcedureDetail
-				.get(idProcedureDetail);
 		boolean validateNoRepeat = true;
 		infoMessage = null;
 
@@ -687,6 +720,15 @@ public class AppointmentBacking extends BaseBacking {
 			validate = false;
 		}
 
+		// Tipo de procedimiento
+		if (this.procedureDetail.isDependent()
+				&& this.idTherapyMaterials.intValue() == Constant.DEFAULT_VALUE
+						.intValue()) {
+			String field = FacesUtil.getMessage("app_procedure_type");
+			infoMessage = FacesUtil.getMessage("glb_required", field);
+			validate = false;
+		}
+
 		// validar Selección Paciente
 		if (this.selectedPatient == null) {
 			infoMessage = FacesUtil.getMessage("app_msg_error_pat");
@@ -735,10 +777,6 @@ public class AppointmentBacking extends BaseBacking {
 		}
 
 		if (validate) {
-
-			CrmProcedureDetail procedureDetail = mapProcedureDetail
-					.get(idProcedureDetail);
-
 			CrmBranch branch = mapBranch.get(idBranch);
 
 			int validateApp = 0;
@@ -804,6 +842,15 @@ public class AppointmentBacking extends BaseBacking {
 				selected.setCrmUserByIdUserCreate(FacesUtil.getCurrentUser());
 				selected.setDateCreate(new Date());
 
+				if (procedureDetail.isDependent()) {
+					VwTherapyMaterials vwTherapyMaterials = mapTherapyMaterials
+							.get(idTherapyMaterials);
+					selected.setSapMaterialCode(vwTherapyMaterials
+							.getCodMaterial());
+					selected.setSapMaterialDesc(vwTherapyMaterials
+							.getDescMaterial());
+				}
+
 				CrmAppointment crmAppointment = processService
 						.saveAppointment(selected);
 				infoMessage = FacesUtil.getMessage("app_msg_ok",
@@ -821,6 +868,7 @@ public class AppointmentBacking extends BaseBacking {
 			validate = false;
 		} else {
 			selectedPatient = selectedPatientTemp;
+			handleBranchChange();
 		}
 		context.addCallbackParam("validate", validate);
 	}
