@@ -22,8 +22,6 @@ public class CrmProcedure implements java.io.Serializable {
 	private BigDecimal id;
 	private String name;
 	private String description;
-	private String codPublicity;
-	private boolean dependent;
 	private int state;
 	private Set<CrmProcedureBranch> crmProcedureBranchs = new HashSet<CrmProcedureBranch>(
 			0);
@@ -40,14 +38,12 @@ public class CrmProcedure implements java.io.Serializable {
 	}
 
 	public CrmProcedure(BigDecimal id, String name, String description,
-			String codPublicity, boolean dependent, int state,
+			 int state,
 			Set<CrmProcedureBranch> crmProcedureBranchs,
 			Set<CrmProcedureDetail> crmProcedureDetails) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
-		this.codPublicity = codPublicity;
-		this.dependent = dependent;
 		this.state = state;
 		this.crmProcedureBranchs = crmProcedureBranchs;
 		this.crmProcedureDetails = crmProcedureDetails;
@@ -79,24 +75,6 @@ public class CrmProcedure implements java.io.Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	@Column(name = "cod_publicity", length = 4)
-	public String getCodPublicity() {
-		return this.codPublicity;
-	}
-
-	public void setCodPublicity(String codPublicity) {
-		this.codPublicity = codPublicity;
-	}
-	
-	@Column(name = "dependent")
-	public boolean isDependent() {
-		return dependent;
-	}
-
-	public void setDependent(boolean dependent) {
-		this.dependent = dependent;
 	}
 
 	@Column(name = "state", nullable = false)

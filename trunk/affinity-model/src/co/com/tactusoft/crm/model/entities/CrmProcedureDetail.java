@@ -35,6 +35,8 @@ public class CrmProcedureDetail implements java.io.Serializable {
 	private int minMedication;
 	private int maxMedication;
 	private boolean caseStudy;
+	private String codPublicity;
+	private boolean dependent;
 	private int state;
 	private Set<CrmAppointment> crmAppointments = new HashSet<CrmAppointment>(0);
 
@@ -53,7 +55,8 @@ public class CrmProcedureDetail implements java.io.Serializable {
 			String name, Integer timeDoctor, Integer timeNurses,
 			Integer timeStretchers, Boolean noRepeat, Short noRepeatDays,
 			String docType, String formulaDocType, boolean availability,
-			int state, Set<CrmAppointment> crmAppointments) {
+			String codPublicity, boolean dependent, int state,
+			Set<CrmAppointment> crmAppointments) {
 		this.id = id;
 		this.crmProcedure = crmProcedure;
 		this.name = name;
@@ -65,6 +68,8 @@ public class CrmProcedureDetail implements java.io.Serializable {
 		this.availability = availability;
 		this.docType = docType;
 		this.formulaDocType = formulaDocType;
+		this.codPublicity = codPublicity;
+		this.dependent = dependent;
 		this.state = state;
 		this.crmAppointments = crmAppointments;
 	}
@@ -160,12 +165,12 @@ public class CrmProcedureDetail implements java.io.Serializable {
 	public void setFormulaDocType(String formulaDocType) {
 		this.formulaDocType = formulaDocType;
 	}
-	
+
 	@Column(name = "availability")
 	public boolean isAvailability() {
 		return availability;
 	}
-	
+
 	public void setAvailability(boolean availability) {
 		this.availability = availability;
 	}
@@ -186,6 +191,24 @@ public class CrmProcedureDetail implements java.io.Serializable {
 
 	public void setMaxMedication(int maxMedication) {
 		this.maxMedication = maxMedication;
+	}
+	
+	@Column(name = "cod_publicity", length = 4)
+	public String getCodPublicity() {
+		return this.codPublicity;
+	}
+
+	public void setCodPublicity(String codPublicity) {
+		this.codPublicity = codPublicity;
+	}
+	
+	@Column(name = "dependent")
+	public boolean isDependent() {
+		return dependent;
+	}
+
+	public void setDependent(boolean dependent) {
+		this.dependent = dependent;
 	}
 
 	@Column(name = "case_study")

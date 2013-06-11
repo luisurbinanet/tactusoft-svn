@@ -18,13 +18,13 @@ public class CrmProcedureBranch implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
-	private CrmProcedure crmProcedure;
+	private CrmProcedureDetail crmProcedure;
 	private CrmBranch crmBranch;
 
 	public CrmProcedureBranch() {
 	}
 
-	public CrmProcedureBranch(BigDecimal id, CrmProcedure crmProcedure,
+	public CrmProcedureBranch(BigDecimal id, CrmProcedureDetail crmProcedure,
 			CrmBranch crmBranch) {
 		this.id = id;
 		this.crmProcedure = crmProcedure;
@@ -43,11 +43,11 @@ public class CrmProcedureBranch implements java.io.Serializable {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_procedure", nullable = false)
-	public CrmProcedure getCrmProcedure() {
+	public CrmProcedureDetail getCrmProcedure() {
 		return this.crmProcedure;
 	}
 
-	public void setCrmProcedure(CrmProcedure crmProcedure) {
+	public void setCrmProcedure(CrmProcedureDetail crmProcedure) {
 		this.crmProcedure = crmProcedure;
 	}
 
