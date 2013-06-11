@@ -105,7 +105,9 @@
 					<p:inputText id="txtDoc"
 						value="#{contactBacking.selectedPatient.doc}" style="width:240px;"
 						label="#{msg['pat_code']}" maxlength="16"
-						rendered="#{!contactBacking.automatic or !contactBacking.newRecord}" />
+						rendered="#{!contactBacking.automatic or !contactBacking.newRecord}">
+						<pe:keyFilter regEx="/[\d]/" />
+					</p:inputText>
 
 					<h:outputText style="width:240px"
 						rendered="#{!contactBacking.automatic or !contactBacking.newRecord}" />
@@ -120,12 +122,16 @@
 					<h:outputLabel value="#{msg['pat_names']}" />
 					<p:inputText value="#{contactBacking.selectedPatient.firstnames}"
 						maxlength="35" style="width:240px" label="#{msg['pat_names']}"
-						required="true" />
+						required="true">
+						<pe:keyFilter regEx="/[a-zA-Z\s]/i" />
+					</p:inputText>
 
 					<h:outputLabel value="#{msg['pat_surnames']}" />
 					<p:inputText value="#{contactBacking.selectedPatient.surnames}"
 						maxlength="35" style="width:240px" label="#{msg['pat_surnames']}"
-						required="true" />
+						required="true">
+						<pe:keyFilter regEx="/[a-zA-Z\s]/i" />
+					</p:inputText>
 
 					<h:outputText value="#{msg['glb_gender']}" />
 					<p:selectOneMenu value="#{contactBacking.selectedPatient.gender}"
@@ -138,12 +144,16 @@
 					<h:outputText value="#{msg['pat_phone_number']}" />
 					<p:inputText value="#{contactBacking.selectedPatient.phoneNumber}"
 						style="width:240px" label="#{msg['pat_phone_number']}"
-						maxlength="#{contactBacking.numPhone}" validator="numberValidator" />
+						maxlength="#{contactBacking.numPhone}" validator="numberValidator">
+						<pe:keyFilter regEx="/[\d]/" />
+					</p:inputText>
 
 					<h:outputText value="#{msg['pat_cell_number']}" />
 					<p:inputText value="#{contactBacking.selectedPatient.cellNumber}"
 						style="width:240px" label="#{msg['pat_cell_number']}"
-						maxlength="#{contactBacking.numCell}" validator="numberValidator" />
+						maxlength="#{contactBacking.numCell}" validator="numberValidator">
+						<pe:keyFilter regEx="/[\d]/" />
+					</p:inputText>
 
 					<h:outputLabel value="#{msg['pat_sales_off']}" style="width:40%" />
 					<p:selectOneMenu id="selsalesOff"

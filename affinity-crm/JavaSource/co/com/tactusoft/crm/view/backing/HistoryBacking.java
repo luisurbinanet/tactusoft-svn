@@ -66,8 +66,6 @@ import co.com.tactusoft.crm.view.datamodel.WSBeanDataModel;
 import com.tactusoft.webservice.client.beans.WSBean;
 import com.tactusoft.webservice.client.execute.CustomListsExecute;
 
-//import co.com.tactusoft.crm.model.entities.CrmCieMaterial;
-
 @Named
 @Scope("session")
 public class HistoryBacking extends BaseBacking {
@@ -1345,6 +1343,7 @@ public class HistoryBacking extends BaseBacking {
 		medication.setCrmCie(selectedDiagnosis.getCrmCie());
 		medication.setCodMaterial(Integer.parseInt(selectedMaterial.getCode()));
 		medication.setDescMaterial(selectedMaterial.getNames());
+		medication.setSapMaterialType(selectedMaterial.getType());
 		medication.setMaterialType(typeMedication);
 		medication.setUnit(amount);
 
@@ -1864,6 +1863,11 @@ public class HistoryBacking extends BaseBacking {
 			selectedHistoryHomeopathic.setCrmPatient(selectedPatient);
 			selectedHistoryPhysique.setCrmPatient(selectedPatient);
 			selectedHistoryOrganometry.setCrmPatient(selectedPatient);
+
+			if (!FacesUtil.isEmptyOrBlank(selectedPatient.getNeighborhood())) {
+				selectedPatient.setNeighborhood(selectedPatient
+						.getNeighborhood().toUpperCase());
+			}
 
 			int result = processService.savePatient(selectedPatient, false,
 					false, null);
@@ -2524,8 +2528,10 @@ public class HistoryBacking extends BaseBacking {
 					.getDescription());
 		}
 
-		for (CrmCie row : listCaseStudyCieTemp) {
-			mapCie.put(row.getId(), row.getDescription());
+		if (listCaseStudyCieTemp != null) {
+			for (CrmCie row : listCaseStudyCieTemp) {
+				mapCie.put(row.getId(), row.getDescription());
+			}
 		}
 
 		for (Map.Entry<BigDecimal, String> entry : mapCie.entrySet()) {
@@ -2536,8 +2542,10 @@ public class HistoryBacking extends BaseBacking {
 
 	public void refreshCaseStudyHistory() {
 		listCaseStudyHistory = new ArrayList<SelectItem>();
-		for (String row : listCaseStudyHistoryTemp) {
-			listCaseStudyHistory.add(new SelectItem(row, row));
+		if (listCaseStudyHistoryTemp != null) {
+			for (String row : listCaseStudyHistoryTemp) {
+				listCaseStudyHistory.add(new SelectItem(row, row));
+			}
 		}
 	}
 

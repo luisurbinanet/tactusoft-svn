@@ -58,6 +58,7 @@ public class BaseBacking implements Serializable {
 	protected CrmPatient selectedPatientTemp;
 	protected String docPatient;
 	protected String namePatient;
+	protected String telPatient;
 	protected int optionSearchPatient;
 	protected boolean disabledAddPatient;
 
@@ -122,7 +123,7 @@ public class BaseBacking implements Serializable {
 
 	protected String typeHousing;
 	protected String neighborhood;
-	
+
 	protected Date today;
 	protected Date todayMax;
 
@@ -174,6 +175,14 @@ public class BaseBacking implements Serializable {
 		this.namePatient = namePatient;
 	}
 
+	public String getTelPatient() {
+		return telPatient;
+	}
+
+	public void setTelPatient(String telPatient) {
+		this.telPatient = telPatient;
+	}
+
 	public int getOptionSearchPatient() {
 		return optionSearchPatient;
 	}
@@ -187,9 +196,6 @@ public class BaseBacking implements Serializable {
 	}
 
 	public void searchPatientAction() {
-		SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
-		CrmProfile profile = mapProfile.get(idProfile);
-
 		if ((optionSearchPatient == 1 && FacesUtil
 				.isEmptyOrBlank(this.docPatient))
 				|| (optionSearchPatient == 2 && FacesUtil
@@ -203,30 +209,41 @@ public class BaseBacking implements Serializable {
 			List<WSBean> result = null;
 
 			if (optionSearchPatient == 1) {
-				listPatient = processService.getListPatientByNameOrDoc("DOC",
+				listPatient = processService.getListPatientByField("DOC",
 						this.docPatient);
 
 				if (listPatient.size() == 0) {
-					result = CustomerExecute.findByDoc(sap.getUrlCustomer2(),
-							sap.getUsername(), sap.getPassword(),
-							profile.getSociety(), this.docPatient);
+					try {
+						SAPEnvironment sap = FacesUtil
+								.findBean("SAPEnvironment");
+						CrmProfile profile = mapProfile.get(idProfile);
+						result = CustomerExecute.findByDoc(
+								sap.getUrlCustomer2(), sap.getUsername(),
+								sap.getPassword(), profile.getSociety(),
+								this.docPatient);
 
-					if (result.size() > 0) {
-						String message = FacesUtil
-								.getMessage("pat_msg_exists_sap_2");
-						FacesUtil.addWarn(message);
+						if (result.size() > 0) {
+							String message = FacesUtil
+									.getMessage("pat_msg_exists_sap_2");
+							FacesUtil.addWarn(message);
+						}
+
+						// for (WSBean row : result) {
+						// CrmPatient patient = new CrmPatient();
+						// patient.setCodeSap(row.getCode());
+						// patient.setNames(row.getNames());
+						// listPatient.add(patient);
+						// }
+					} catch (Exception ex) {
+
 					}
-
-					// for (WSBean row : result) {
-					// CrmPatient patient = new CrmPatient();
-					// patient.setCodeSap(row.getCode());
-					// patient.setNames(row.getNames());
-					// listPatient.add(patient);
-					// }
 				}
-			} else {
-				listPatient = processService.getListPatientByNameOrDoc("NAMES",
+			} else if (optionSearchPatient == 2) {
+				listPatient = processService.getListPatientByField("NAMES",
 						this.namePatient.toUpperCase());
+			} else {
+				listPatient = processService.getListPatientByField("PHONE",
+						this.telPatient);
 			}
 
 			patientModel = new PatientDataModel(listPatient);
@@ -392,8 +409,8 @@ public class BaseBacking implements Serializable {
 		if (listCrmBranch == null) {
 			listCrmBranch = new LinkedList<SelectItem>();
 			mapCrmBranch = new LinkedHashMap<BigDecimal, CrmBranch>();
-			//String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
-			//listCrmBranch.add(new SelectItem(Constant.DEFAULT_VALUE, label));
+			// String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
+			// listCrmBranch.add(new SelectItem(Constant.DEFAULT_VALUE, label));
 			for (CrmBranch row : tablesService.getListBranchActive1000()) {
 				mapCrmBranch.put(row.getId(), row);
 				listCrmBranch.add(new SelectItem(row.getId(), row.getName()

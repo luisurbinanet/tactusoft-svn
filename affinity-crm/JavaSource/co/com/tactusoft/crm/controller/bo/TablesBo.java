@@ -76,7 +76,14 @@ public class TablesBo implements Serializable {
 	}
 
 	public List<CrmCaseStudy> getListCaseStudy() {
-		return dao.find("from CrmCaseStudy o");
+		return dao.findNative("SELECT a.* FROM crm_db.crm_case_study a  "
+				+ "JOIN crm_appointment b ON a.id_appointment = b.id "
+				+ "JOIN crm_patient c ON b.id_patient = c.id "
+				+ "WHERE a.id_appointment = ( "
+				+ "SELECT MAX(d.id_appointment) FROM crm_case_study d "
+				+ "JOIN crm_appointment e ON d.id_appointment = e.id "
+				+ "JOIN crm_patient f ON e.id_patient = f.id "
+				+ "WHERE e.id_patient = b.id_patient)", CrmCaseStudy.class);
 	}
 
 	public List<CrmDoctor> getListDoctorActive() {
@@ -331,23 +338,10 @@ public class TablesBo implements Serializable {
 		return dao.find("from CrmProcedure o where o.state = 1");
 	}
 
-	public List<CrmProcedure> getListProcedureByBranch(BigDecimal idBranch) {
+	public List<CrmProcedureDetail> getListProcedureByBranch(BigDecimal idBranch) {
 		return dao
 				.find("select o.crmProcedure from CrmProcedureBranch o where o.crmProcedure.state = 1 and o.crmBranch.id = "
 						+ idBranch);
-	}
-
-	public List<CrmProcedureDetail> getListProcedureDetailByBranch(
-			BigDecimal idBranch) {
-		String complementary = "(";
-		List<CrmProcedure> list = getListProcedureByBranch(idBranch);
-		for (CrmProcedure item : list) {
-			complementary = complementary + item.getId() + ",";
-		}
-		complementary = complementary.substring(0, complementary.length() - 1)
-				+ ")";
-		return dao.find("from CrmProcedureDetail o where o.crmProcedure.id in "
-				+ complementary + " order by o.name");
 	}
 
 	public List<VwProcedure> getListVwProcedureByBranch(BigDecimal idBranch) {
@@ -675,7 +669,7 @@ public class TablesBo implements Serializable {
 		return i;
 	}
 
-	public Integer saveProcedureBranch(CrmProcedure entity, List<CrmBranch> list) {
+	public Integer saveProcedureBranch(CrmProcedureDetail entity, List<CrmBranch> list) {
 		int i = 0;
 
 		dao.executeHQL("delete from CrmProcedureBranch o where o.crmProcedure.id = "

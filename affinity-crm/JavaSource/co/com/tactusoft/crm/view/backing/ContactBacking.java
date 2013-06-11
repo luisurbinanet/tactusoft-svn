@@ -135,7 +135,6 @@ public class ContactBacking extends BaseBacking {
 				&& this.selectedPatient.getId() == null) {
 			validateTicket = tablesService.isValidateTicket(selectedPatient
 					.getTicket());
-			this.selectedPatient.setTicket(null);
 		}
 
 		if (FacesUtil.isEmptyOrBlank(selectedPatient.getPhoneNumber())
@@ -161,6 +160,7 @@ public class ContactBacking extends BaseBacking {
 
 				FacesUtil.addError(message);
 			} else if (!validateTicket) {
+				this.selectedPatient.setTicket(null);
 				message = FacesUtil.getMessage("con_msg_ticket_fail");
 				FacesUtil.addError(message);
 			} else {
@@ -208,8 +208,10 @@ public class ContactBacking extends BaseBacking {
 				selectedPatient.setDocType(docType);
 
 				try {
-					selectedPatient.setCrmOccupation(mapOccupation
-							.get(idOccupation));
+					selectedPatient.setFirstnames(selectedPatient
+							.getFirstnames().toUpperCase());
+					selectedPatient.setSurnames(selectedPatient
+							.getSurnames().toUpperCase());
 					processService.savePatient(selectedPatient, automatic
 							&& newRecord, false, crmCountry.getCode());
 					message = FacesUtil.getMessage("con_msg_update_ok",

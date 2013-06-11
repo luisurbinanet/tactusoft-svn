@@ -447,8 +447,6 @@ public class PatientBacking extends BaseBacking {
 										.getSurnames().toUpperCase());
 								selectedPatient.setAddress(selectedPatient
 										.getAddress().toUpperCase());
-								selectedPatient.setNeighborhood(selectedPatient
-										.getNeighborhood().toUpperCase());
 
 								processService.savePatient(selectedPatient,
 										automatic, existsSAP,

@@ -6,7 +6,10 @@
 	xmlns:pe="http://primefaces.org/ui/extensions">
 
 <p:tabView style="width:100%;height:100%" dynamic="true"
-	id="#{prefix}_tabview">
+	id="#{prefix}_tabview"
+	rendered="#{historyBacking.rolePrincipal eq 'DOCTOR' 
+	or historyBacking.rolePrincipal eq 'NURSE' 
+	or historyBacking.rolePrincipal eq 'NURSE_AUX'}">
 
 	<p:tab id="tab1" title="#{msg['his_history']}"
 		rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">

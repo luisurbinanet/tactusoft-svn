@@ -285,9 +285,6 @@ public class SearchByPatientBacking extends BaseBacking {
 		appointmentEditBacking.setIdBranch(selectedAppointment.getCrmBranch()
 				.getId());
 		appointmentEditBacking.handleBranchChange();
-		appointmentEditBacking.setIdProcedure(selectedAppointment
-				.getCrmProcedureDetail().getCrmProcedure().getId());
-		appointmentEditBacking.handleProcedureChange();
 		appointmentEditBacking.setIdProcedureDetail(selectedAppointment
 				.getCrmProcedureDetail().getId());
 		appointmentEditBacking.handleProcedureDetailChange();
