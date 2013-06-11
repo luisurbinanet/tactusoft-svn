@@ -22,6 +22,7 @@ public class CrmMedication implements java.io.Serializable {
 	private CrmCie crmCie;
 	private long codMaterial;
 	private String descMaterial;
+	private String sapMaterialType;
 	private int unit;
 	private String materialType;
 	private String diagnosis;
@@ -32,26 +33,28 @@ public class CrmMedication implements java.io.Serializable {
 	}
 
 	public CrmMedication(BigDecimal id, CrmAppointment crmAppointment,
-			CrmCie crmCie, long codMaterial, String descMaterial, int unit,
-			String materialType) {
+			CrmCie crmCie, long codMaterial, String descMaterial,
+			String sapMaterialType, int unit, String materialType) {
 		this.id = id;
 		this.crmAppointment = crmAppointment;
 		this.crmCie = crmCie;
 		this.codMaterial = codMaterial;
 		this.descMaterial = descMaterial;
+		this.sapMaterialType = sapMaterialType;
 		this.unit = unit;
 		this.materialType = materialType;
 	}
 
 	public CrmMedication(BigDecimal id, CrmAppointment crmAppointment,
-			CrmCie crmCie, long codMaterial, String descMaterial, int unit,
-			String materialType, String diagnosis, BigDecimal price,
-			String posology) {
+			CrmCie crmCie, long codMaterial, String descMaterial,
+			String sapMaterialType, int unit, String materialType,
+			String diagnosis, BigDecimal price, String posology) {
 		this.id = id;
 		this.crmAppointment = crmAppointment;
 		this.crmCie = crmCie;
 		this.codMaterial = codMaterial;
 		this.descMaterial = descMaterial;
+		this.sapMaterialType = sapMaterialType;
 		this.unit = unit;
 		this.materialType = materialType;
 		this.diagnosis = diagnosis;
@@ -105,6 +108,15 @@ public class CrmMedication implements java.io.Serializable {
 
 	public void setDescMaterial(String descMaterial) {
 		this.descMaterial = descMaterial;
+	}
+
+	@Column(name = "sap_material_type", nullable = false, length = 4)
+	public String getSapMaterialType() {
+		return sapMaterialType;
+	}
+
+	public void setSapMaterialType(String sapMaterialType) {
+		this.sapMaterialType = sapMaterialType;
 	}
 
 	@Column(name = "unit", nullable = false)

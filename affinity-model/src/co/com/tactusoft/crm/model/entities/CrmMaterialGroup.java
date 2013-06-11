@@ -14,11 +14,12 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "crm_material_group", catalog = "crm_db", uniqueConstraints = @UniqueConstraint(columnNames = {
 		"id", "material_type" }))
 public class CrmMaterialGroup implements java.io.Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
 	private String materialType;
 	private String group;
+	private BigDecimal idProcedureDetail;
 
 	public CrmMaterialGroup() {
 	}
@@ -28,10 +29,12 @@ public class CrmMaterialGroup implements java.io.Serializable {
 		this.materialType = materialType;
 	}
 
-	public CrmMaterialGroup(BigDecimal id, String materialType, String group) {
+	public CrmMaterialGroup(BigDecimal id, String materialType, String group,
+			BigDecimal idProcedureDetail) {
 		this.id = id;
 		this.materialType = materialType;
 		this.group = group;
+		this.idProcedureDetail = idProcedureDetail;
 	}
 
 	@Id
@@ -62,4 +65,12 @@ public class CrmMaterialGroup implements java.io.Serializable {
 		this.group = group;
 	}
 
+	@Column(name = "id_procedure_detail", scale = 0)
+	public BigDecimal getIdProcedureDetail() {
+		return idProcedureDetail;
+	}
+
+	public void setIdProcedureDetail(BigDecimal idProcedureDetail) {
+		this.idProcedureDetail = idProcedureDetail;
+	}
 }

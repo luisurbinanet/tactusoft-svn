@@ -51,6 +51,8 @@ public class CrmAppointment implements java.io.Serializable {
 	private Date dateCanceled;
 	private Date dateOpened;
 	private String obsOpened;
+	private Long sapMaterialCode;
+	private String sapMaterialDesc;
 	private Set<CrmDiagnosis> crmDiagnosises = new HashSet<CrmDiagnosis>(0);
 	private Set<CrmMedication> crmMedications = new HashSet<CrmMedication>(0);
 
@@ -373,6 +375,24 @@ public class CrmAppointment implements java.io.Serializable {
 
 	public void setObsOpened(String obsOpened) {
 		this.obsOpened = obsOpened;
+	}
+
+	@Column(name = "sap_material_code")
+	public Long getSapMaterialCode() {
+		return sapMaterialCode;
+	}
+
+	public void setSapMaterialCode(Long sapMaterialCode) {
+		this.sapMaterialCode = sapMaterialCode;
+	}
+
+	@Column(name = "sap_material_desc", length = 1000)
+	public String getSapMaterialDesc() {
+		return sapMaterialDesc;
+	}
+
+	public void setSapMaterialDesc(String sapMaterialDesc) {
+		this.sapMaterialDesc = sapMaterialDesc;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmAppointment")
