@@ -12,9 +12,6 @@ import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
 public class ProcedureDetailDataModel extends ListDataModel<CrmProcedureDetail>
 		implements SelectableDataModel<CrmProcedureDetail>, Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public ProcedureDetailDataModel() {
@@ -27,9 +24,6 @@ public class ProcedureDetailDataModel extends ListDataModel<CrmProcedureDetail>
 	@SuppressWarnings("unchecked")
 	@Override
 	public CrmProcedureDetail getRowData(String rowKey) {
-		// In a real app, a more efficient way like a query by rowKey should be
-		// implemented to deal with huge data
-
 		List<CrmProcedureDetail> list = (List<CrmProcedureDetail>) getWrappedData();
 
 		for (CrmProcedureDetail row : list) {

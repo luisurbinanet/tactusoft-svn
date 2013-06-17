@@ -649,7 +649,7 @@ public class AppointmentBacking extends BaseBacking {
 		} else if (selectedPatient.getId() == null) {
 			infoMessage = FacesUtil.getMessage("pat_msg_exists_sap_2");
 		} else {
-			if (procedureDetail.getNoRepeat()
+			if (procedureDetail.isNoRepeat()
 					&& procedureDetail.getNoRepeatDays() > 0
 					&& infoMessage == null) {
 				Date maxDate = processService.getMaxDateByProcedure(
