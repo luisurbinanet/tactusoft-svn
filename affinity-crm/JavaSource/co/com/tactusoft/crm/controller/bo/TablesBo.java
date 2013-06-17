@@ -51,6 +51,7 @@ import co.com.tactusoft.crm.model.entities.CrmUserRole;
 import co.com.tactusoft.crm.model.entities.DatesBean;
 import co.com.tactusoft.crm.model.entities.VwCallRange;
 import co.com.tactusoft.crm.model.entities.VwProcedure;
+import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 
 import com.tactusoft.webservice.client.beans.WSBean;
@@ -155,8 +156,8 @@ public class TablesBo implements Serializable {
 	}
 
 	public List<CrmDoctorSchedule> getListScheduleByDoctor(BigDecimal idDoctor) {
-		return dao.find("from CrmDoctorSchedule o where o.crmDoctor.id = "
-				+ idDoctor);
+		return dao.find("FROM CrmDoctorSchedule o where o.crmDoctor.id = "
+				+ idDoctor + " ORDER BY o.day, o.startHour");
 	}
 
 	public List<CrmDoctorSchedule> getListScheduleByBranch(BigDecimal idBranch) {
@@ -346,6 +347,10 @@ public class TablesBo implements Serializable {
 
 	public List<VwProcedure> getListVwProcedureByBranch(BigDecimal idBranch) {
 		return dao.find("from VwProcedure o where o.idBranch = " + idBranch);
+	}
+
+	public List<CrmProcedureDetail> getListProcedureDetail() {
+		return dao.find("from CrmProcedureDetail o");
 	}
 
 	public List<CrmProcedureDetail> getListProcedureDetailByProcedure(
@@ -654,6 +659,16 @@ public class TablesBo implements Serializable {
 		return this.persist(entity);
 	}
 
+	public Integer saveProcedureDetail(CrmProcedureDetail entity) {
+		if (entity.getId() == null) {
+			entity.setId(getId(CrmProcedureDetail.class));
+			CrmProcedure procedure = new CrmProcedure();
+			procedure.setId(Constant.DEFAULT_VALUE);
+			entity.setCrmProcedure(procedure);
+		}
+		return this.persist(entity);
+	}
+
 	public Integer saveProcedureDetail(CrmProcedure entity,
 			List<CrmProcedureDetail> listSchedule) {
 		int i = 0;
@@ -669,7 +684,8 @@ public class TablesBo implements Serializable {
 		return i;
 	}
 
-	public Integer saveProcedureBranch(CrmProcedureDetail entity, List<CrmBranch> list) {
+	public Integer saveProcedureBranch(CrmProcedureDetail entity,
+			List<CrmBranch> list) {
 		int i = 0;
 
 		dao.executeHQL("delete from CrmProcedureBranch o where o.crmProcedure.id = "

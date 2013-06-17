@@ -12,22 +12,16 @@
 		<p:panel style="width:100%;height:100%;"
 			header="#{msg['title_procedure']}">
 
-			<p:spacer height="5" />
-
 			<h:form id="form">
 
 				<p:toolbar style="width:100%">
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
-							action="#{procedureBacking.newAction}" oncomplete="dlg.show()"
-							update=":editForm:dialog" />
+							actionListener="#{procedureBacking.newAction}"
+							oncomplete="dlg.show()" update=":editForm:dialog" />
 						<p:commandButton value="#{msg['btn_edit']}" icon="ui-icon-pencil"
-							oncomplete="dlg.show()" update=":editForm:dialog"
-							actionListener="#{procedureBacking.generateListAction}" />
-						<p:commandButton value="#{msg['prc_detail']}"
-							icon="ui-icon-pencil" oncomplete="dlgProcedureDetail.show()"
-							update=":editForm:dialogProcedureDetail"
-							actionListener="#{procedureBacking.generateListDetailAction}" />
+							actionListener="#{procedureBacking.viewAction}"
+							oncomplete="dlg.show()" update=":editForm:dialog" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -44,8 +38,28 @@
 						<h:outputLabel value="#{rec.name}" />
 					</p:column>
 
-					<p:column headerText="#{msg['prc_descr']}">
-						<h:outputLabel value="#{rec.description}" />
+					<p:column headerText="#{msg['prc_time_doctor']}">
+						<h:outputLabel value="#{rec.timeDoctor}" />
+					</p:column>
+
+					<p:column headerText="#{msg['prc_time_nurse']}">
+						<h:outputLabel value="#{rec.timeNurses}" />
+					</p:column>
+
+					<p:column headerText="#{msg['prc_time_stretcher']}">
+						<h:outputLabel value="#{rec.timeStretchers}" />
+					</p:column>
+
+					<p:column headerText="#{msg['prc_availability']}">
+						<h:outputLabel value="#{rec.availability?'SI':'NO'}" />
+					</p:column>
+
+					<p:column headerText="#{msg['prc_study_case']}">
+						<h:outputLabel value="#{rec.caseStudy?'SI':'NO'}" />
+					</p:column>
+
+					<p:column headerText="#{msg['prc_dependent']}">
+						<h:outputLabel value="#{rec.dependent?'SI':'NO'}" />
 					</p:column>
 
 					<p:column headerText="#{msg['glb_state']}">
@@ -57,214 +71,113 @@
 
 			</h:form>
 
-		</p:panel>
+			<h:form id="editForm">
+				<p:growl id="growl" showDetail="true" />
 
-		<h:form id="editForm">
+				<p:dialog header="#{msg['prc_detail']}" widgetVar="dlg"
+					resizable="false" id="dialog" showEffect="fade"
+					hideEffect="explode" modal="true" width="500">
 
-			<p:growl id="growl" showDetail="true" />
+					<p:toolbar style="width:100%">
+						<p:toolbarGroup align="left">
+							<p:commandButton value="#{msg['btn_save']}" icon="ui-icon-disk"
+								action="#{procedureBacking.saveAction}"
+								oncomplete="handleComplete(xhr, status, args)"
+								update="growl :form:recordTable" />
+						</p:toolbarGroup>
+					</p:toolbar>
 
-			<p:dialog header="#{msg['msg_detail']}" widgetVar="dlg"
-				resizable="false" id="dialog" showEffect="fade" hideEffect="explode"
-				modal="true" width="1000">
+					<p:spacer height="5" />
 
-				<p:toolbar style="width:100%">
-					<p:toolbarGroup align="left">
-						<p:commandButton value="#{msg['btn_save']}" icon="ui-icon-disk"
-							action="#{procedureBacking.saveAction}"
-							update="growl :form:recordTable" />
-					</p:toolbarGroup>
-				</p:toolbar>
+					<h:panelGrid id="pnlProcedureDetail" columns="2" cellpadding="2"
+						style="margin:0 auto;" width="100%">
 
-				<p:spacer height="5" />
+						<h:outputLabel value="#{msg['prc_name']}" />
+						<p:inputText value="#{procedureBacking.selected.name}" />
 
-				<h:panelGrid id="pnlDetail" columns="4" cellpadding="4"
-					style="margin:0 auto;" width="100%">
+						<h:outputLabel value="#{msg['prc_time_doctor']}" />
+						<pe:inputNumber value="#{procedureBacking.selected.timeDoctor}"
+							symbol=" Min" symbolPosition="s" decimalPlaces="0"
+							style="width:70px" />
 
-					<h:outputLabel value="#{msg['prc_name']}" />
-					<p:inputText value="#{procedureBacking.selected.name}"
-						style="width:350px" label="#{msg['prc_name']}" required="true" />
+						<h:outputLabel value="#{msg['prc_time_nurse']}" />
+						<pe:inputNumber value="#{procedureBacking.selected.timeNurses}"
+							symbol=" Min" symbolPosition="s" decimalPlaces="0"
+							style="width:70px" />
 
-					<h:outputLabel value="#{msg['prc_descr']}" />
-					<p:inputTextarea value="#{procedureBacking.selected.description}"
-						style="width:350px" label="#{msg['prc_descr']}" required="true"
-						rows="2" />
+						<h:outputLabel value="#{msg['prc_time_stretcher']}" />
+						<pe:inputNumber
+							value="#{procedureBacking.selected.timeStretchers}" symbol=" Min"
+							symbolPosition="s" decimalPlaces="0" style="width:70px" />
 
-					<h:outputLabel value="#{msg['glb_state']}"
-						rendered="#{procedureBacking.selected.id!=null?true:false}" />
-					<p:selectOneMenu value="#{procedureBacking.selected.state}"
-						style="width:350px"
-						rendered="#{procedureBacking.selected.id!=null?true:false}">
-						<f:selectItem itemValue="1" itemLabel="#{msg['glb_state_active']}" />
-						<f:selectItem itemValue="0"
-							itemLabel="#{msg['glb_state_inactive']}" />
-					</p:selectOneMenu>
+						<h:outputText value="#{msg['prc_noRepeat']}" />
+						<h:panelGrid columns="2">
+							<p:selectBooleanCheckbox
+								value="#{procedureBacking.selected.noRepeat}">
+								<p:ajax update="txtNoRepeatDays" />
+							</p:selectBooleanCheckbox>
+							<pe:inputNumber id="txtNoRepeatDays"
+								disabled="#{not procedureBacking.selected.noRepeat}"
+								value="#{procedureBacking.selected.noRepeatDays}" symbol=" Días"
+								symbolPosition="s" decimalPlaces="0" style="width:80px"
+								minValue="0" />
+						</h:panelGrid>
 
+						<h:outputText value="#{msg['prc_availability']}" />
+						<p:selectBooleanCheckbox
+							value="#{procedureBacking.selected.availability}" />
 
-					<h:outputLabel value="#{msg['prc_seller_group']}" />
-					<p:selectOneMenu style="width:350px"
-						value="#{procedureBacking.selected.codPublicity}">
-						<f:selectItems value="#{procedureBacking.listWSGroupSellers}" />
-					</p:selectOneMenu>
+						<h:outputText value="#{msg['prc_study_case']}" />
+						<p:selectBooleanCheckbox
+							value="#{procedureBacking.selected.caseStudy}" />
 
-				</h:panelGrid>
+						<h:outputText value="#{msg['prc_dependent']}" />
+						<p:selectBooleanCheckbox
+							value="#{procedureBacking.selected.dependent}" />
 
-				<h:panelGrid columns="4" cellpadding="4" style="margin:0 auto;"
-					width="100%">
-					<h:outputLabel value="" />
-					<h:outputLabel value="" />
-
-					<p:pickList var="row" value="#{procedureBacking.listModelBranch}"
-						converter="branchConverter" itemValue="#{row}"
-						itemLabel="#{row.name} (#{row.society})" showSourceFilter="true"
-						showTargetFilter="true" filterMatchMode="contains">
-
-						<f:facet name="sourceCaption">#{msg['usr_branch']}</f:facet>
-						<f:facet name="targetCaption">#{msg['glb_target_caption']}</f:facet>
-					</p:pickList>
-				</h:panelGrid>
-
-			</p:dialog>
-
-			<p:dialog header="#{msg['prc_detail']}"
-				widgetVar="dlgProcedureDetail" resizable="false"
-				id="dialogProcedureDetail" showEffect="fade" hideEffect="explode"
-				modal="true" width="1100">
-
-				<p:toolbar style="width:100%">
-					<p:toolbarGroup align="left">
-						<p:commandButton value="#{msg['btn_save']}" icon="ui-icon-disk"
-							action="#{procedureBacking.saveDetailAction}"
-							update="growl :form:recordTable" />
-					</p:toolbarGroup>
-				</p:toolbar>
-
-				<p:spacer height="5" />
-
-				<h:panelGrid id="pnlProcedureDetail" columns="2" cellpadding="2"
-					style="margin:0 auto;" width="100%">
-
-					<h:outputLabel value="#{msg['prc_name']}" />
-					<p:inputText value="#{procedureBacking.name}" style="width:300px"
-						label="#{msg['prc_name']}" />
-
-					<h:outputLabel value="#{msg['prc_time_doctor']}" />
-					<pe:inputNumber value="#{procedureBacking.timeDoctor}"
-						symbol=" Min" symbolPosition="s" decimalPlaces="0"
-						style="width:80px" />
-
-					<h:outputLabel value="#{msg['prc_time_nurse']}" />
-					<pe:inputNumber value="#{procedureBacking.timeNurses}"
-						symbol=" Min" symbolPosition="s" decimalPlaces="0"
-						style="width:80px" />
-
-					<h:outputLabel value="#{msg['prc_time_stretcher']}" />
-					<pe:inputNumber value="#{procedureBacking.timeStretchers}"
-						symbol=" Min" symbolPosition="s" decimalPlaces="0"
-						style="width:80px" />
-
-					<h:outputText value="#{msg['prc_noRepeat']}" />
-					<h:panelGrid columns="2">
-						<p:selectBooleanCheckbox value="#{procedureBacking.noRepeat}">
-							<p:ajax update="txtNoRepeatDays" />
-						</p:selectBooleanCheckbox>
-						<pe:inputNumber id="txtNoRepeatDays"
-							disabled="#{not procedureBacking.noRepeat}"
-							value="#{procedureBacking.noRepeatDays}" symbol=" Días"
-							symbolPosition="s" decimalPlaces="0" style="width:80px"
-							minValue="0" />
-					</h:panelGrid>
-
-					<h:outputText value="#{msg['prc_availability']}" />
-					<p:selectBooleanCheckbox value="#{procedureBacking.availability}" />
-
-					<h:outputText value="#{msg['prc_study_case']}" />
-					<p:selectBooleanCheckbox value="#{procedureBacking.caseStudy}" />
-
-					<p:commandButton value="#{msg['btn_add']}"
-						action="#{procedureBacking.addProcedureDetailAction}"
-						update="growl recordTableDetail pnlProcedureDetail" />
-				</h:panelGrid>
-
-				<p:spacer height="5" />
-
-				<p:dataTable id="recordTableDetail" var="rec"
-					value="#{procedureBacking.modelProcedureDetail}" rowKey="#{rec.id}"
-					paginator="true" rows="5" style="width:100%"
-					emptyMessage="#{msg['glb_no_records_found']}">
-
-					<p:column headerText="#{msg['prc_name']}">
-						<h:outputLabel value="#{rec.name}" />
-					</p:column>
-
-					<p:column headerText="#{msg['prc_time_doctor']}">
-						<p:inplace>
-							<pe:inputNumber value="#{rec.timeDoctor}" symbol=" Min"
-								symbolPosition="s" decimalPlaces="0" style="width:70px" />
-						</p:inplace>
-					</p:column>
-
-					<p:column headerText="#{msg['prc_time_nurse']}">
-						<p:inplace>
-							<pe:inputNumber value="#{rec.timeNurses}" symbol=" Min"
-								symbolPosition="s" decimalPlaces="0" style="width:70px" />
-						</p:inplace>
-					</p:column>
-
-					<p:column headerText="#{msg['prc_time_stretcher']}">
-						<p:inplace>
-							<pe:inputNumber value="#{rec.timeStretchers}" symbol=" Min"
-								symbolPosition="s" decimalPlaces="0" style="width:70px" />
-						</p:inplace>
-					</p:column>
-
-					<p:column headerText="#{msg['prc_noRepeat']}">
-						<p:selectBooleanCheckbox value="#{rec.noRepeat}" />
-					</p:column>
-
-					<p:column style="width:80px"
-						headerText="#{msg['prc_noRepeatDays']}">
-						<p:inplace>
-							<pe:inputNumber value="#{rec.noRepeatDays}" symbol=" Días"
-								symbolPosition="s" decimalPlaces="0" style="width:70px" />
-						</p:inplace>
-					</p:column>
-
-					<p:column headerText="#{msg['prc_availability']}">
-						<p:selectBooleanCheckbox value="#{rec.availability}" />
-					</p:column>
-
-					<p:column headerText="#{msg['prc_study_case']}">
-						<p:selectBooleanCheckbox value="#{rec.caseStudy}" />
-					</p:column>
-
-					<p:column style="width:80px"
-						headerText="#{msg['prc_min_medicamento']}">
-						<p:inplace>
-							<pe:inputNumber value="#{rec.minMedication}" symbolPosition="s"
-								decimalPlaces="0" style="width:70px" />
-						</p:inplace>
-					</p:column>
-
-					<p:column style="width:80px"
-						headerText="#{msg['prc_max_medicamento']}">
-						<p:inplace>
-							<pe:inputNumber value="#{rec.maxMedication}" symbolPosition="s"
-								decimalPlaces="0" style="width:70px" />
-						</p:inplace>
-					</p:column>
-
-					<p:column headerText="#{msg['glb_state']}">
-						<p:selectOneMenu value="#{rec.state}">
+						<h:outputLabel value="#{msg['glb_state']}"
+							rendered="#{procedureBacking.selected.id!=null?true:false}" />
+						<p:selectOneMenu value="#{procedureBacking.selected.state}"
+							style="width:350px"
+							rendered="#{procedureBacking.selected.id!=null?true:false}">
 							<f:selectItem itemValue="1"
 								itemLabel="#{msg['glb_state_active']}" />
 							<f:selectItem itemValue="0"
 								itemLabel="#{msg['glb_state_inactive']}" />
 						</p:selectOneMenu>
-					</p:column>
 
-				</p:dataTable>
-			</p:dialog>
-		</h:form>
+					</h:panelGrid>
+
+					<h:panelGrid columns="4" cellpadding="4" style="margin:0 auto;"
+						width="100%">
+						<h:outputLabel value="" />
+						<h:outputLabel value="" />
+
+						<p:pickList var="row" value="#{procedureBacking.listModelBranch}"
+							converter="branchConverter" itemValue="#{row}"
+							itemLabel="#{row.name} (#{row.society})" showSourceFilter="true"
+							showTargetFilter="true" filterMatchMode="contains">
+
+							<f:facet name="sourceCaption">#{msg['usr_branch']}</f:facet>
+							<f:facet name="targetCaption">#{msg['glb_target_caption']}</f:facet>
+						</p:pickList>
+					</h:panelGrid>
+				</p:dialog>
+			</h:form>
+
+		</p:panel>
+
+		<script type="text/javascript">
+			function handleComplete(xhr, status, args) {
+				if (!args.validate) {
+					jQuery('dialog').effect("shake", {
+						times : 3
+					}, 100);
+				} else {
+					dlg.hide();
+				}
+			}
+		</script>
 
 	</ui:define>
 </ui:composition>
