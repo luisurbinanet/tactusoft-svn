@@ -161,6 +161,7 @@ public class HistoryBacking extends BaseBacking {
 	private List<CrmMedication> listExamView;
 	private List<CrmNote> listNoteView;
 	private List<CrmConsent> listConsentView;
+	private List<CrmCaseStudy> listSuccessStoryView;
 
 	private List<SelectItem> listNoteTherapyItem;
 	private Map<Integer, Object> mapNoteTherapy;
@@ -840,6 +841,14 @@ public class HistoryBacking extends BaseBacking {
 		this.listConsentView = listConsentView;
 	}
 
+	public List<CrmCaseStudy> getListSuccessStoryView() {
+		return listSuccessStoryView;
+	}
+
+	public void setListSuccessStoryView(List<CrmCaseStudy> listSuccessStoryView) {
+		this.listSuccessStoryView = listSuccessStoryView;
+	}
+
 	public List<SelectItem> getListNoteTherapyItem() throws Exception {
 		if (listNoteTherapyItem == null) {
 			List<CrmTherapy> listNoteTherapy;
@@ -1063,6 +1072,7 @@ public class HistoryBacking extends BaseBacking {
 		listExamView = new ArrayList<CrmMedication>();
 		listNoteView = new ArrayList<CrmNote>();
 		listConsentView = new ArrayList<CrmConsent>();
+		listSuccessStoryView = new ArrayList<CrmCaseStudy>();
 
 		selectedDiagnosis = new CrmDiagnosis();
 		selectedsDiagnosis = null;
@@ -1619,6 +1629,8 @@ public class HistoryBacking extends BaseBacking {
 				.getId());
 		listConsentView = processService
 				.getListConsentByPatient(selectedPatient.getId());
+		listSuccessStoryView = processService
+				.getListSuccessStoryByPatient(selectedPatient.getId());
 	}
 
 	public void closeAppointmentAction(ActionEvent event) {

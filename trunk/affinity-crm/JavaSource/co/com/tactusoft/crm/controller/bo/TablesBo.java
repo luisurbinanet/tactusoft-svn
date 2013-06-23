@@ -271,6 +271,13 @@ public class TablesBo implements Serializable {
 				.find("from CrmBranch o where o.state = 1 and society IN ('1000','3000')");
 	}
 
+	public List<CrmBranch> getListBranchSelected() {
+		return dao
+				.find("SELECT o.crmBranch FROM CrmUserBranch o WHERE o.crmUser.id = "
+						+ FacesUtil.getCurrentIdUsuario()
+						+ " AND o.crmBranch.state = 1 AND o.crmBranch.society IN ('1000','3000')");
+	}
+
 	public List<CrmOccupation> getListOccupation() {
 		return dao.find("from CrmOccupation o");
 	}

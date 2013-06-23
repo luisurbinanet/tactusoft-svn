@@ -93,7 +93,8 @@
 						style="margin:0 auto;" width="100%">
 
 						<h:outputLabel value="#{msg['prc_name']}" />
-						<p:inputText value="#{procedureBacking.selected.name}" />
+						<p:inputText value="#{procedureBacking.selected.name}"
+							style="width:350px" />
 
 						<h:outputLabel value="#{msg['prc_time_doctor']}" />
 						<pe:inputNumber value="#{procedureBacking.selected.timeDoctor}"
@@ -134,6 +135,12 @@
 						<h:outputText value="#{msg['prc_dependent']}" />
 						<p:selectBooleanCheckbox
 							value="#{procedureBacking.selected.dependent}" />
+
+						<h:outputLabel value="#{msg['prc_seller_group']}" />
+						<p:selectOneMenu style="width:350px"
+							value="#{procedureBacking.selected.codPublicity}">
+							<f:selectItems value="#{procedureBacking.listWSGroupSellers}" />
+						</p:selectOneMenu>
 
 						<h:outputLabel value="#{msg['glb_state']}"
 							rendered="#{procedureBacking.selected.id!=null?true:false}" />

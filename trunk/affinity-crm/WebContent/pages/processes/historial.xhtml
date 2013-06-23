@@ -460,6 +460,45 @@
 		</h:panelGrid>
 	</p:tab>
 
+	<p:tab id="tab13" title="#{msg['title_case_study']}"
+		rendered="#{historyBacking.rolePrincipal eq 'NURSE' or historyBacking.rolePrincipal eq 'DOCTOR'}">
+
+		<p:dataTable id="tblSuccessStory" var="rec"
+			value="#{historyBacking.listSuccessStoryView}"
+			resizableColumns="true" paginator="true" rows="15" style="width:100%"
+			emptyMessage="#{msg['glb_no_records_found']}">
+
+			<p:column headerText="#{msg['app_doctor']}">
+				<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+			</p:column>
+
+			<p:column headerText="#{msg['cst_start_date']}">
+				<h:outputLabel value="#{rec.startDate}">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+				</h:outputLabel>
+			</p:column>
+
+			<p:column headerText="#{msg['cst_end_date']}">
+				<h:outputLabel value="#{rec.crmAppointment.startAppointmentDate}">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+				</h:outputLabel>
+			</p:column>
+
+			<p:column headerText="#{msg['cst_perc']}">
+				<h:outputLabel value="#{rec.percent}" />
+			</p:column>
+
+			<p:column headerText="#{msg['cst_patology']}">
+				<h:outputLabel value="#{rec.crmCie.description}" />
+			</p:column>
+
+			<p:column headerText="#{msg['cst_reason']}">
+				<h:outputLabel value="#{rec.reason}" />
+			</p:column>
+
+		</p:dataTable>
+	</p:tab>
+
 </p:tabView>
 
 </html>
