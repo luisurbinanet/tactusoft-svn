@@ -73,6 +73,9 @@ public class BaseBacking implements Serializable {
 	protected Map<String, String> mapWSDoctor;
 	protected String selectedWSDoctor;
 
+	protected List<CrmBranch> listBranchObject;
+	protected CrmBranch[] selectedsBranchObject;
+
 	protected List<SelectItem> listCrmBranch;
 	protected Map<BigDecimal, CrmBranch> mapCrmBranch;
 	protected BigDecimal idBranch;
@@ -199,7 +202,9 @@ public class BaseBacking implements Serializable {
 		if ((optionSearchPatient == 1 && FacesUtil
 				.isEmptyOrBlank(this.docPatient))
 				|| (optionSearchPatient == 2 && FacesUtil
-						.isEmptyOrBlank(this.namePatient))) {
+						.isEmptyOrBlank(this.namePatient))
+				|| (optionSearchPatient == 3 && FacesUtil
+						.isEmptyOrBlank(this.telPatient))) {
 
 			this.listPatient = new ArrayList<CrmPatient>();
 			this.patientModel = new PatientDataModel(listPatient);
@@ -411,7 +416,7 @@ public class BaseBacking implements Serializable {
 			mapCrmBranch = new LinkedHashMap<BigDecimal, CrmBranch>();
 			// String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
 			// listCrmBranch.add(new SelectItem(Constant.DEFAULT_VALUE, label));
-			for (CrmBranch row : tablesService.getListBranchActive1000()) {
+			for (CrmBranch row : listBranchObject) {
 				mapCrmBranch.put(row.getId(), row);
 				listCrmBranch.add(new SelectItem(row.getId(), row.getName()
 						+ " (" + row.getSociety() + ")"));
@@ -422,6 +427,26 @@ public class BaseBacking implements Serializable {
 
 	public void setListCrmBranch(List<SelectItem> listCrmBranch) {
 		this.listCrmBranch = listCrmBranch;
+	}
+
+	public List<CrmBranch> getListBranchObject() {
+		if (listBranchObject == null) {
+			listBranchObject = tablesService.getListBranchSelected();
+		}
+
+		return listBranchObject;
+	}
+
+	public CrmBranch[] getSelectedsBranchObject() {
+		return selectedsBranchObject;
+	}
+
+	public void setSelectedsBranchObject(CrmBranch[] selectedsBranchObject) {
+		this.selectedsBranchObject = selectedsBranchObject;
+	}
+
+	public void setListBranchObject(List<CrmBranch> listBranchObject) {
+		this.listBranchObject = listBranchObject;
 	}
 
 	public Map<BigDecimal, CrmBranch> getMapCrmBranch() {
@@ -485,14 +510,19 @@ public class BaseBacking implements Serializable {
 			listWSGroupSellers = new ArrayList<SelectItem>();
 			mapWSGroupSellers = new LinkedHashMap<String, String>();
 
+			for (WSBean row : result) {
+				mapWSGroupSellers.put(row.getCode(), row.getNames());
+			}
+
 			String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
 			listWSGroupSellers.add(new SelectItem(
 					Constant.DEFAULT_VALUE_STRING, label));
-			for (WSBean row : result) {
-				mapWSGroupSellers.put(row.getCode(), row.getNames());
-				listWSGroupSellers.add(new SelectItem(row.getCode(), row
-						.getNames()));
+
+			for (Map.Entry<String, String> entry : mapWSGroupSellers.entrySet()) {
+				listWSGroupSellers.add(new SelectItem(entry.getKey(), entry
+						.getKey() + " - " + entry.getValue()));
 			}
+
 		}
 		return listWSGroupSellers;
 	}

@@ -24,32 +24,13 @@
 							value="#{msg['btn_search_app']}" icon="ui-icon-search"
 							update="selectedTable growl btnExport"
 							actionListener="#{appointmentSearchBacking.searchAppoinmentAction}" />
+						<p:commandButton id="btnBranch" oncomplete="branchDlg.show();"
+							value="#{msg['usr_branch']}" icon="ui-icon-bookmark" />
 						<p:commandButton id="btnExport" oncomplete="exportDlg.show();"
 							value="#{msg['btn_export']}" icon="ui-icon-disk"
 							disabled="#{appointmentSearchBacking.disabledExport}" />
 					</p:toolbarGroup>
 				</p:toolbar>
-
-				<p:spacer height="10" />
-
-				<p:fieldset legend="#{msg['app_branch']}" collapsed="true"
-					toggleable="true">
-					<h:panelGrid id="pnlBranch" columns="1">
-						<h:panelGrid columns="2">
-							<p:selectBooleanCheckbox value="#{appointmentSearchBacking.all}">
-								<p:ajax listener="#{appointmentSearchBacking.handleAllChange}"
-									update="pnlBranch pnlDetail" />
-							</p:selectBooleanCheckbox>
-							<h:outputText value="#{msg['glb_gender_all']}" />
-						</h:panelGrid>
-						<p:selectManyCheckbox
-							value="#{appointmentSearchBacking.listSelectedBranch}">
-							<f:selectItems value="#{appointmentSearchBacking.listBranch}" />
-							<p:ajax listener="#{appointmentSearchBacking.handleBranchChange}"
-								update="pnlBranch selDoctor selProcedure" icon="ui-icon-refresh" />
-						</p:selectManyCheckbox>
-					</h:panelGrid>
-				</p:fieldset>
 
 				<h:panelGrid id="pnlDetail" columns="4" cellpadding="4"
 					style="margin:0 auto;" width="100%">
@@ -213,7 +194,7 @@
 					</p:column>
 
 					<p:column headerText="#{msg['app_untimely_1']}">
-						<h:outputLabel value="#{rec.untimely}" />
+						<h:outputLabel value="#{rec.untimely eq 1?'SI':'NO'}" />
 					</p:column>
 
 					<p:column headerText="#{msg['app_seller_group']}">
@@ -262,6 +243,42 @@
 
 				</p:dataTable>
 
+				<p:dialog id="branchDialog" widgetVar="branchDlg" modal="true"
+					closable="true" header="#{msg['usr_branch']}">
+
+					<p:toolbar id="toolBar" style="width:100%">
+						<p:toolbarGroup align="left">
+							<p:commandButton id="btnAdd" value="#{msg['btn_add']}"
+								icon="ui-icon-plusthick" update=":form:pnlDetail growl"
+								oncomplete="handleComplete(xhr, status, args)"
+								actionListener="#{appointmentSearchBacking.addBranchAction(true)}" />
+						</p:toolbarGroup>
+					</p:toolbar>
+
+					<p:spacer />
+
+					<p:dataTable id="selectedTableBranch" var="rec"
+						value="#{appointmentSearchBacking.listBranchObject}"
+						rowKey="#{rec.id}" style="width:100%"
+						selection="#{appointmentSearchBacking.selectedsBranchObject}"
+						paginator="true" rows="10"
+						emptyMessage="#{msg['glb_no_records_found']}">
+
+						<p:column selectionMode="multiple" style="width:18px" />
+
+						<p:column headerText="#{msg['bra_sales_off']}"
+							filterBy="#{rec.code}" filterMatchMode="contains">
+							<h:outputLabel value="#{rec.code}" />
+						</p:column>
+
+						<p:column headerText="#{msg['bra_name']}" filterBy="#{rec.name}"
+							filterMatchMode="contains">
+							<h:outputLabel value="#{rec.name}" />
+						</p:column>
+					</p:dataTable>
+
+				</p:dialog>
+
 				<p:dialog id="exportDialog" widgetVar="exportDlg" modal="true"
 					closable="true" header="#{msg['btn_export']}">
 
@@ -301,6 +318,16 @@
 			</h:form>
 
 		</p:panel>
+
+		<script type="text/javascript">
+			function handleComplete(xhr, status, args) {
+				if (args.validate) {
+					branchDlg.hide();
+				} else {
+					branchDlg.show();
+				}
+			}
+		</script>
 
 	</ui:define>
 </ui:composition>

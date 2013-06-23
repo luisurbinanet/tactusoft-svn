@@ -1348,6 +1348,13 @@ public class ProcessBo implements Serializable {
 		return list;
 	}
 
+	public List<CrmCaseStudy> getListSuccessStoryByPatient(BigDecimal idPatient) {
+		List<CrmCaseStudy> list = dao
+				.find("from CrmCaseStudy o where o.crmAppointment.crmPatient.id = "
+						+ idPatient + " order by o.id desc");
+		return list;
+	}
+
 	public Date getMaxDateByProcedure(BigDecimal idPatient,
 			BigDecimal idProcedureDetail) {
 		Date result = null;

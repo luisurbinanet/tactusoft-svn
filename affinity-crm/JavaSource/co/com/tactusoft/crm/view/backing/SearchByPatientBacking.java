@@ -190,6 +190,7 @@ public class SearchByPatientBacking extends BaseBacking {
 		optionSearchPatient = 1;
 		docPatient = "";
 		namePatient = "";
+		telPatient = "";
 		startDate = new Date();
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(startDate);
@@ -210,6 +211,8 @@ public class SearchByPatientBacking extends BaseBacking {
 		listStates.add(new SelectItem(Constant.APP_STATE_ATTENDED, message));
 		message = FacesUtil.getMessage(Constant.APP_STATE_NOATTENDED_LABEL);
 		listStates.add(new SelectItem(Constant.APP_STATE_NOATTENDED, message));
+
+		selectedsBranchObject = null;
 	}
 
 	public void generateListDoctor(ActionEvent event) {

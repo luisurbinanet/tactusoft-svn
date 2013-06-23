@@ -39,7 +39,8 @@
 						<h:outputLabel value="#{rec.code}" />
 					</p:column>
 
-					<p:column headerText="#{msg['bra_name']}" filterBy="#{rec.name}">
+					<p:column headerText="#{msg['bra_name']}" filterBy="#{rec.name}"
+						filterMatchMode="contains">
 						<h:outputLabel value="#{rec.name}" />
 					</p:column>
 

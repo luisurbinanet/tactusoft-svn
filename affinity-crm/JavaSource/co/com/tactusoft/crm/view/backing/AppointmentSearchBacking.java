@@ -12,6 +12,7 @@ import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.inject.Named;
 
+import org.primefaces.context.RequestContext;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
@@ -31,12 +32,10 @@ public class AppointmentSearchBacking extends BaseBacking {
 
 	private String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL_ALL);
 
-	private List<SelectItem> listBranch;
 	private List<SelectItem> listDoctor;
 	private List<SelectItem> listProcedure;
 	private List<SelectItem> listStates;
 
-	private List<String> listSelectedBranch;
 	private BigDecimal idDoctor;
 	private BigDecimal idProcedure;
 	private boolean dates;
@@ -55,24 +54,6 @@ public class AppointmentSearchBacking extends BaseBacking {
 
 	public AppointmentSearchBacking() {
 		newAction(null);
-	}
-
-	public List<SelectItem> getListBranch() {
-		if (listBranch == null) {
-			listBranch = new LinkedList<SelectItem>();
-			for (CrmBranch row : FacesUtil.getCurrentUserData().getListBranch()) {
-				listBranch.add(new SelectItem(row.getId(), row.getCode()
-						+ " - " + row.getName()));
-			}
-
-			idBranch = Constant.DEFAULT_VALUE;
-			handleBranchChange();
-		}
-		return listBranch;
-	}
-
-	public void setListBranch(List<SelectItem> listBranch) {
-		this.listBranch = listBranch;
 	}
 
 	public List<SelectItem> getListDoctor() {
@@ -97,14 +78,6 @@ public class AppointmentSearchBacking extends BaseBacking {
 
 	public void setListStates(List<SelectItem> listStates) {
 		this.listStates = listStates;
-	}
-
-	public List<String> getListSelectedBranch() {
-		return listSelectedBranch;
-	}
-
-	public void setListSelectedBranch(List<String> listSelectedBranch) {
-		this.listSelectedBranch = listSelectedBranch;
 	}
 
 	public BigDecimal getIdBranch() {
@@ -247,29 +220,9 @@ public class AppointmentSearchBacking extends BaseBacking {
 		listStates.add(new SelectItem(Constant.APP_STATE_NOATTENDED, message));
 	}
 
-	public void handleAllChange() {
-		if (all) {
-			listSelectedBranch = new LinkedList<String>();
-			for (SelectItem item : listBranch) {
-				listSelectedBranch.add(item.getValue().toString());
-			}
-		} else {
-			listSelectedBranch = null;
-		}
-
-		handleBranchChange();
-	}
-
-	public void handleBranchChange() {
-		if (listSelectedBranch != null) {
-			if (listBranch.size() == listSelectedBranch.size()) {
-				this.all = true;
-			} else {
-				this.all = false;
-			}
-		} else {
-			this.all = false;
-		}
+	public void addBranchAction(boolean exception) {
+		boolean validate = true;
+		RequestContext context = RequestContext.getCurrentInstance();
 
 		listDoctor = new LinkedList<SelectItem>();
 		listDoctor.add(new SelectItem(Constant.DEFAULT_VALUE, label));
@@ -283,16 +236,16 @@ public class AppointmentSearchBacking extends BaseBacking {
 		Map<BigDecimal, String> mapDoctor = new HashMap<BigDecimal, String>();
 		Map<BigDecimal, String> mapProcedure = new HashMap<BigDecimal, String>();
 
-		if (listSelectedBranch != null) {
-			for (String idBranch : listSelectedBranch) {
+		if (selectedsBranchObject != null && selectedsBranchObject.length > 0) {
+			for (CrmBranch crmranch : selectedsBranchObject) {
 
 				for (CrmDoctor row : tablesService
-						.getListDoctorByBranch(new BigDecimal(idBranch))) {
+						.getListDoctorByBranch(crmranch.getId())) {
 					mapDoctor.put(row.getId(), row.getNames());
 				}
 
 				for (VwProcedure row : tablesService
-						.getListVwProcedureByBranch(new BigDecimal(idBranch))) {
+						.getListVwProcedureByBranch(crmranch.getId())) {
 					mapProcedure.put(row.getId(), row.getNameProcedure()
 							+ " - " + row.getNameProcedureDetail());
 				}
@@ -307,12 +260,18 @@ public class AppointmentSearchBacking extends BaseBacking {
 				listProcedure.add(new SelectItem(entry.getKey(), entry
 						.getValue()));
 			}
+		} else {
+			if (exception) {
+				validate = false;
+				String message = FacesUtil.getMessage("app_no_branch");
+				FacesUtil.addInfo(message);
+			}
 		}
+		context.addCallbackParam("validate", validate);
 	}
 
 	public void searchAppoinmentAction(ActionEvent event) {
-
-		if (listSelectedBranch != null && listSelectedBranch.size() > 0) {
+		if (selectedsBranchObject != null && selectedsBranchObject.length > 0) {
 			String where = "from VwAppointment o where 1 = 1 ";
 
 			if (dates) {
@@ -337,10 +296,11 @@ public class AppointmentSearchBacking extends BaseBacking {
 						+ endDateCreateString + "T23:59:59.999+05:00')";
 			}
 
-			if (listSelectedBranch != null && listSelectedBranch.size() > 0) {
+			if (selectedsBranchObject != null
+					&& selectedsBranchObject.length > 0) {
 				String branchs = " and o.branchId in (";
-				for (String idBranch : listSelectedBranch) {
-					branchs = branchs + idBranch + ",";
+				for (CrmBranch crmBranch : selectedsBranchObject) {
+					branchs = branchs + crmBranch.getId() + ",";
 				}
 				branchs = branchs.substring(0, branchs.length() - 1) + ")";
 				where = where + branchs;
@@ -373,15 +333,6 @@ public class AppointmentSearchBacking extends BaseBacking {
 					where = where + " and o.prcDetId = "
 							+ idProcedure.intValue();
 				}
-			} else {
-				String branchs = " and o.branchId in (";
-				for (SelectItem item : listBranch) {
-					if (((BigDecimal) item.getValue()).intValue() != -1) {
-						branchs = branchs + item.getValue() + ",";
-					}
-				}
-				branchs = branchs.substring(0, branchs.length() - 1) + ")";
-				where = where + branchs;
 			}
 
 			if (state != -1) {
