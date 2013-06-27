@@ -210,8 +210,8 @@ public class ContactBacking extends BaseBacking {
 				try {
 					selectedPatient.setFirstnames(selectedPatient
 							.getFirstnames().toUpperCase());
-					selectedPatient.setSurnames(selectedPatient
-							.getSurnames().toUpperCase());
+					selectedPatient.setSurnames(selectedPatient.getSurnames()
+							.toUpperCase());
 					processService.savePatient(selectedPatient, automatic
 							&& newRecord, false, crmCountry.getCode());
 					message = FacesUtil.getMessage("con_msg_update_ok",
@@ -436,6 +436,8 @@ public class ContactBacking extends BaseBacking {
 		AppointmentBacking appointmentBacking = FacesUtil
 				.findBean("appointmentBacking");
 		appointmentBacking.setSelectedPatient(selectedPatient);
+		appointmentBacking.getListBranch();
+		appointmentBacking.handleBranchChange();
 		return "/pages/processes/appointment.jsf?faces-redirect=true";
 	}
 

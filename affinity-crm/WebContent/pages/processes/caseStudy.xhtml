@@ -16,6 +16,32 @@
 
 			<h:form id="form">
 
+				<p:growl id="growl" showDetail="true" />
+
+				<p:toolbar style="width:100%">
+					<p:toolbarGroup align="left">
+						<p:commandButton id="btnSearch" value="#{msg['btn_search']}"
+							icon="ui-icon-search" update="recordTable growl"
+							actionListener="#{caseStudyBacking.searchAction}" />
+						<p:commandButton id="btnBranch" oncomplete="branchDlg.show();"
+							value="#{msg['usr_branch']}" icon="ui-icon-bookmark" />
+					</p:toolbarGroup>
+				</p:toolbar>
+				
+				<p:spacer height="5" />
+
+				<h:panelGrid id="pnlDetail" columns="2" cellpadding="4"
+					style="margin:0 auto;" width="100%">
+
+					<h:outputLabel value="#{msg['app_doctor']}" />
+					<p:selectOneMenu id="selDoctor" style="width:400px"
+						value="#{caseStudyBacking.idDoctor}">
+						<f:selectItems value="#{caseStudyBacking.listDoctor}" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+				
+				<p:spacer height="5" />
+
 				<p:dataTable id="recordTable" var="rec"
 					value="#{caseStudyBacking.model}" rowKey="#{rec.id}"
 					resizableColumns="true" selection="#{caseStudyBacking.selected}"
@@ -58,92 +84,123 @@
 
 				</p:dataTable>
 
-			</h:form>
 
-		</p:panel>
+				<p:dialog id="branchDialog" widgetVar="branchDlg" modal="true"
+					closable="true" header="#{msg['usr_branch']}">
 
-		<h:form id="editForm">
+					<p:toolbar id="toolBar" style="width:100%">
+						<p:toolbarGroup align="left">
+							<p:commandButton id="btnAdd" value="#{msg['btn_add']}"
+								icon="ui-icon-plusthick" update="pnlDetail growl"
+								oncomplete="handleComplete(xhr, status, args)"
+								actionListener="#{caseStudyBacking.addBranchAction(true)}" />
+						</p:toolbarGroup>
+					</p:toolbar>
 
-			<p:growl id="growl" showDetail="true" />
+					<p:spacer />
 
-			<p:dialog header="#{msg['sal_patient']}" widgetVar="dlgPatient"
-				resizable="false" id="dialogPatient" showEffect="fade"
-				hideEffect="explode" modal="true" width="600">
-
-				<h:panelGrid columns="2" width="100%">
-
-					<p:outputPanel id="customPanel">
-						<p:selectOneRadio id="customRadio"
-							value="#{caseStudyBacking.optionSearchPatient}" layout="custom">
-							<f:selectItem itemLabel="#{msg['sal_key_press_doc']}"
-								itemValue="1" />
-							<f:selectItem itemLabel="#{msg['sal_key_press_nom']}"
-								itemValue="2" />
-						</p:selectOneRadio>
-
-						<h:panelGrid columns="2" width="100%" cellspacing="10">
-							<h:outputText value="#{msg['usr_profile']}" />
-							<p:selectOneMenu value="#{caseStudyBacking.idProfile}"
-								style="width:500px" required="true"
-								label="#{msg['usr_profile']}">
-								<f:selectItems value="#{caseStudyBacking.listProfile}" />
-							</p:selectOneMenu>
-						</h:panelGrid>
-
-						<h:panelGrid id="pnlTxt" columns="3" width="100%">
-							<p:radioButton id="opt1" for="customRadio" itemIndex="0" />
-							<h:outputLabel for="opt1" value="#{msg['sal_key_press_doc']}" />
-							<p:inputText id="txtDoc" value="#{caseStudyBacking.docPatient}"
-								style="width:100%" />
-
-							<p:radioButton id="opt2" for="customRadio" itemIndex="1" />
-							<h:outputLabel for="opt2" value="#{msg['sal_key_press_nom']}" />
-							<p:inputText id="txtName" value="#{caseStudyBacking.namePatient}"
-								style="width:100%" />
-
-						</h:panelGrid>
-					</p:outputPanel>
-
-					<f:facet name="footer">
-						<p:spacer height="10" />
-
-						<p:commandButton value="#{msg['btn_search']}"
-							icon="ui-icon-search"
-							update="pnlTable2 recordTable2 btnAddPatient"
-							process="@this,customPanel"
-							action="#{caseStudyBacking.searchPatientAction}" />
-						<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
-							icon="ui-icon-plusthick"
-							oncomplete="handleComplete(xhr, status, args)"
-							actionListener="#{caseStudyBacking.addPatient}"
-							process="@this,dialogPatient"
-							disabled="#{caseStudyBacking.disabledAddPatient}" />
-					</f:facet>
-				</h:panelGrid>
-
-				<p:spacer height="10" />
-				<p:scrollPanel id="pnlTable2" style="width:580px;height:300px">
-					<p:dataTable id="recordTable2" var="rec"
-						value="#{caseStudyBacking.patientModel}" rowKey="#{rec.id}"
-						selection="#{caseStudyBacking.selectedPatientTemp}"
-						paginator="true" rows="15" style="width:570px"
+					<p:dataTable id="selectedTableBranch" var="rec"
+						value="#{caseStudyBacking.listBranchObject}" rowKey="#{rec.id}"
+						style="width:100%"
+						selection="#{caseStudyBacking.selectedsBranchObject}"
+						paginator="true" rows="10"
 						emptyMessage="#{msg['glb_no_records_found']}">
 
-						<p:column selectionMode="single" style="width:18px" />
+						<p:column selectionMode="multiple" style="width:18px" />
 
-						<p:column headerText="#{msg['pat_sap_code']}">
-							<h:outputLabel value="#{rec.codeSap}" />
+						<p:column headerText="#{msg['bra_sales_off']}"
+							filterBy="#{rec.code}" filterMatchMode="contains">
+							<h:outputLabel value="#{rec.code}" />
 						</p:column>
 
-						<p:column headerText="#{msg['pat_names']}">
-							<h:outputLabel value="#{rec.names}" />
+						<p:column headerText="#{msg['bra_name']}" filterBy="#{rec.name}"
+							filterMatchMode="contains">
+							<h:outputLabel value="#{rec.name}" />
 						</p:column>
-
 					</p:dataTable>
-				</p:scrollPanel>
 
-			</p:dialog>
-		</h:form>
+				</p:dialog>
+
+				<p:dialog header="#{msg['sal_patient']}" widgetVar="dlgPatient"
+					resizable="false" id="dialogPatient" showEffect="fade"
+					hideEffect="explode" modal="true" width="600">
+
+					<h:panelGrid columns="2" width="100%">
+
+						<p:outputPanel id="customPanel">
+							<p:selectOneRadio id="customRadio"
+								value="#{caseStudyBacking.optionSearchPatient}" layout="custom">
+								<f:selectItem itemLabel="#{msg['sal_key_press_doc']}"
+									itemValue="1" />
+								<f:selectItem itemLabel="#{msg['sal_key_press_nom']}"
+									itemValue="2" />
+							</p:selectOneRadio>
+
+							<h:panelGrid columns="2" width="100%" cellspacing="10">
+								<h:outputText value="#{msg['usr_profile']}" />
+								<p:selectOneMenu value="#{caseStudyBacking.idProfile}"
+									style="width:500px" required="true"
+									label="#{msg['usr_profile']}">
+									<f:selectItems value="#{caseStudyBacking.listProfile}" />
+								</p:selectOneMenu>
+							</h:panelGrid>
+
+							<h:panelGrid id="pnlTxt" columns="3" width="100%">
+								<p:radioButton id="opt1" for="customRadio" itemIndex="0" />
+								<h:outputLabel for="opt1" value="#{msg['sal_key_press_doc']}" />
+								<p:inputText id="txtDoc" value="#{caseStudyBacking.docPatient}"
+									style="width:100%" />
+
+								<p:radioButton id="opt2" for="customRadio" itemIndex="1" />
+								<h:outputLabel for="opt2" value="#{msg['sal_key_press_nom']}" />
+								<p:inputText id="txtName"
+									value="#{caseStudyBacking.namePatient}" style="width:100%" />
+
+							</h:panelGrid>
+						</p:outputPanel>
+
+						<f:facet name="footer">
+							<p:spacer height="10" />
+
+							<p:commandButton value="#{msg['btn_search']}"
+								icon="ui-icon-search"
+								update="pnlTable2 recordTable2 btnAddPatient"
+								process="@this,customPanel"
+								action="#{caseStudyBacking.searchPatientAction}" />
+							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
+								icon="ui-icon-plusthick"
+								oncomplete="handleComplete(xhr, status, args)"
+								actionListener="#{caseStudyBacking.addPatient}"
+								process="@this,dialogPatient"
+								disabled="#{caseStudyBacking.disabledAddPatient}" />
+						</f:facet>
+					</h:panelGrid>
+
+					<p:spacer height="10" />
+
+					<p:scrollPanel id="pnlTable2" style="width:580px;height:300px">
+						<p:dataTable id="recordTable2" var="rec"
+							value="#{caseStudyBacking.patientModel}" rowKey="#{rec.id}"
+							selection="#{caseStudyBacking.selectedPatientTemp}"
+							paginator="true" rows="15" style="width:570px"
+							emptyMessage="#{msg['glb_no_records_found']}">
+
+							<p:column selectionMode="single" style="width:18px" />
+
+							<p:column headerText="#{msg['pat_sap_code']}">
+								<h:outputLabel value="#{rec.codeSap}" />
+							</p:column>
+
+							<p:column headerText="#{msg['pat_names']}">
+								<h:outputLabel value="#{rec.names}" />
+							</p:column>
+
+						</p:dataTable>
+					</p:scrollPanel>
+
+				</p:dialog>
+			</h:form>
+		</p:panel>
 
 		<script type="text/javascript">
 			function handleComplete(xhr, status, args) {
@@ -157,6 +214,14 @@
 			function handleComplete2(xhr, status, args) {
 				if (args.validate) {
 					dlg.hide();
+				}
+			}
+
+			function handleComplete(xhr, status, args) {
+				if (args.validate) {
+					branchDlg.hide();
+				} else {
+					branchDlg.show();
 				}
 			}
 		</script>

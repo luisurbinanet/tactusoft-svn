@@ -24,12 +24,14 @@ import co.com.tactusoft.crm.controller.bo.TablesBo;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmCity;
 import co.com.tactusoft.crm.model.entities.CrmCountry;
+import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmDomain;
 import co.com.tactusoft.crm.model.entities.CrmOccupation;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
 import co.com.tactusoft.crm.model.entities.CrmRegion;
 import co.com.tactusoft.crm.model.entities.CrmSpeciality;
+import co.com.tactusoft.crm.model.entities.VwProcedure;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.util.SAPEnvironment;
@@ -130,6 +132,16 @@ public class BaseBacking implements Serializable {
 	protected Date today;
 	protected Date todayMax;
 
+	protected List<SelectItem> listDoctor;
+	protected List<SelectItem> listProcedure;
+	protected List<SelectItem> listStates;
+
+	protected BigDecimal idDoctor;
+	protected BigDecimal idProcedure;
+
+	protected String DEFAULT_LABEL_ALL = FacesUtil
+			.getMessage(Constant.DEFAULT_LABEL_ALL);
+
 	public List<CrmPatient> getListPatient() {
 		return listPatient;
 	}
@@ -196,6 +208,46 @@ public class BaseBacking implements Serializable {
 
 	public void setDisabledAddPatient(boolean disabledAddPatient) {
 		this.disabledAddPatient = disabledAddPatient;
+	}
+
+	public List<SelectItem> getListDoctor() {
+		return listDoctor;
+	}
+
+	public void setListDoctor(List<SelectItem> listDoctor) {
+		this.listDoctor = listDoctor;
+	}
+
+	public List<SelectItem> getListProcedure() {
+		return listProcedure;
+	}
+
+	public void setListProcedure(List<SelectItem> listProcedure) {
+		this.listProcedure = listProcedure;
+	}
+
+	public List<SelectItem> getListStates() {
+		return listStates;
+	}
+
+	public void setListStates(List<SelectItem> listStates) {
+		this.listStates = listStates;
+	}
+
+	public BigDecimal getIdDoctor() {
+		return idDoctor;
+	}
+
+	public void setIdDoctor(BigDecimal idDoctor) {
+		this.idDoctor = idDoctor;
+	}
+
+	public BigDecimal getIdProcedure() {
+		return idProcedure;
+	}
+
+	public void setIdProcedure(BigDecimal idProcedure) {
+		this.idProcedure = idProcedure;
 	}
 
 	public void searchPatientAction() {
@@ -416,7 +468,7 @@ public class BaseBacking implements Serializable {
 			mapCrmBranch = new LinkedHashMap<BigDecimal, CrmBranch>();
 			// String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
 			// listCrmBranch.add(new SelectItem(Constant.DEFAULT_VALUE, label));
-			for (CrmBranch row : listBranchObject) {
+			for (CrmBranch row : tablesService.getListBranchActive1000()) {
 				mapCrmBranch.put(row.getId(), row);
 				listCrmBranch.add(new SelectItem(row.getId(), row.getName()
 						+ " (" + row.getSociety() + ")"));
@@ -968,6 +1020,58 @@ public class BaseBacking implements Serializable {
 		}
 
 		return result;
+	}
+
+	public void addBranchAction(boolean exception) {
+		boolean validate = true;
+		RequestContext context = RequestContext.getCurrentInstance();
+
+		listDoctor = new LinkedList<SelectItem>();
+		listDoctor
+				.add(new SelectItem(Constant.DEFAULT_VALUE, DEFAULT_LABEL_ALL));
+
+		listProcedure = new LinkedList<SelectItem>();
+		listProcedure.add(new SelectItem(Constant.DEFAULT_VALUE,
+				DEFAULT_LABEL_ALL));
+
+		idDoctor = Constant.DEFAULT_VALUE;
+		idProcedure = Constant.DEFAULT_VALUE;
+
+		Map<BigDecimal, String> mapDoctor = new HashMap<BigDecimal, String>();
+		Map<BigDecimal, String> mapProcedure = new HashMap<BigDecimal, String>();
+
+		if (selectedsBranchObject != null && selectedsBranchObject.length > 0) {
+			for (CrmBranch crmranch : selectedsBranchObject) {
+
+				for (CrmDoctor row : tablesService
+						.getListDoctorByBranch(crmranch.getId())) {
+					mapDoctor.put(row.getId(), row.getNames());
+				}
+
+				for (VwProcedure row : tablesService
+						.getListVwProcedureByBranch(crmranch.getId())) {
+					mapProcedure.put(row.getId(), row.getNameProcedure()
+							+ " - " + row.getNameProcedureDetail());
+				}
+			}
+
+			for (Map.Entry<BigDecimal, String> entry : mapDoctor.entrySet()) {
+				listDoctor
+						.add(new SelectItem(entry.getKey(), entry.getValue()));
+			}
+
+			for (Map.Entry<BigDecimal, String> entry : mapProcedure.entrySet()) {
+				listProcedure.add(new SelectItem(entry.getKey(), entry
+						.getValue()));
+			}
+		} else {
+			if (exception) {
+				validate = false;
+				String message = FacesUtil.getMessage("app_no_branch");
+				FacesUtil.addInfo(message);
+			}
+		}
+		context.addCallbackParam("validate", validate);
 	}
 
 }

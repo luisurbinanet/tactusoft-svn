@@ -7,10 +7,10 @@
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["C://Users//csarmiento//Documents//CRM//"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["E:\\CRM\\workspace\\affinity-crm\\WebContent\\reports\\"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="P_IMAGE" class="java.lang.String">
-		<defaultValueExpression><![CDATA["C:/Users/csarmiento/Pictures"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["E:\\CRM\\workspace\\affinity-crm\\WebContent\\images\\"]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT a.id,
@@ -249,7 +249,7 @@ WHERE a.id = $P{P_ID_PATIENT}]]>
 				</textElement>
 				<text><![CDATA[Fecha de Nacimiento]]></text>
 			</staticText>
-			<textField isBlankWhenNull="true">
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement uuid="11321da4-217c-496d-a81d-7f2f1bb85872" x="148" y="127" width="139" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{born_date}]]></textFieldExpression>

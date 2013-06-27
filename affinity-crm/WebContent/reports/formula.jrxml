@@ -101,7 +101,7 @@ order by a.id]]>
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<parameter name="P_IMAGE" class="java.lang.String">
-		<defaultValueExpression><![CDATA["/Users/CSARMIENTO/Documents/Desarrollo/workspace/affinity-crm/WebContent/images"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["E:\\CRM\\workspace\\affinity-crm\\WebContent\\images\\"]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[select  c.id,a.id_appointment,
@@ -306,7 +306,7 @@ ORDER BY 1]]>
 	<detail>
 		<band height="34" splitType="Stretch">
 			<textField>
-				<reportElement uuid="bb682a46-b8b7-4d50-a9ce-f2dedd3dfead" x="122" y="0" width="103" height="34"/>
+				<reportElement uuid="bb682a46-b8b7-4d50-a9ce-f2dedd3dfead" x="122" y="0" width="103" height="34" isPrintWhenDetailOverflows="true"/>
 				<textElement>
 					<font fontName="Arial" size="9"/>
 				</textElement>
@@ -319,14 +319,14 @@ ORDER BY 1]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{unit}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isStretchWithOverflow="true">
 				<reportElement uuid="6734ef12-a28c-4963-8b42-50c6bfe9fd5a" isPrintRepeatedValues="false" x="4" y="0" width="96" height="34"/>
 				<textElement>
 					<font fontName="Arial" size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{desc_cie}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isStretchWithOverflow="true">
 				<reportElement uuid="c97e21ae-df63-46d9-97f0-3c16107d05e1" isPrintRepeatedValues="false" x="235" y="0" width="133" height="34"/>
 				<textElement>
 					<font fontName="Arial" size="9"/>

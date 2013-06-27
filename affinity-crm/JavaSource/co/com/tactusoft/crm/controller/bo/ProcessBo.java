@@ -757,6 +757,10 @@ public class ProcessBo implements Serializable {
 										.addMinutesToDate(scheduleInitHour,
 												minutes);
 
+								if (scheduleEndHour.compareTo(maxHour) > 0) {
+									break;
+								}
+
 								List<Date> candidatesHours = getListcandidatesHours(
 										scheduleInitHour, scheduleEndHour);
 
@@ -794,10 +798,6 @@ public class ProcessBo implements Serializable {
 								scheduleInitHour = FacesUtil
 										.addMinutesToDate(scheduleInitHour,
 												Constant.INCREASE_MIN);
-
-								if (scheduleInitHour.compareTo(maxHour) >= 0) {
-									exit = true;
-								}
 
 								if (id == appointmentsNumber) {
 									break out;
