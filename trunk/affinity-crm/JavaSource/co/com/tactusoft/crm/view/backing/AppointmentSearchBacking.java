@@ -3,23 +3,18 @@ package co.com.tactusoft.crm.view.backing;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.inject.Named;
 
-import org.primefaces.context.RequestContext;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
-import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.VwAppointment;
-import co.com.tactusoft.crm.model.entities.VwProcedure;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.datamodel.VwAppointmentDataModel;
@@ -30,14 +25,6 @@ public class AppointmentSearchBacking extends BaseBacking {
 
 	private static final long serialVersionUID = 1L;
 
-	private String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL_ALL);
-
-	private List<SelectItem> listDoctor;
-	private List<SelectItem> listProcedure;
-	private List<SelectItem> listStates;
-
-	private BigDecimal idDoctor;
-	private BigDecimal idProcedure;
 	private boolean dates;
 	private Date startDate;
 	private Date endDate;
@@ -50,58 +37,8 @@ public class AppointmentSearchBacking extends BaseBacking {
 	private VwAppointmentDataModel appointmentModel;
 	private CrmAppointment selectedAppointment;
 
-	private boolean all;
-
 	public AppointmentSearchBacking() {
 		newAction(null);
-	}
-
-	public List<SelectItem> getListDoctor() {
-		return listDoctor;
-	}
-
-	public void setListDoctor(List<SelectItem> listDoctor) {
-		this.listDoctor = listDoctor;
-	}
-
-	public List<SelectItem> getListProcedure() {
-		return listProcedure;
-	}
-
-	public void setListProcedure(List<SelectItem> listProcedure) {
-		this.listProcedure = listProcedure;
-	}
-
-	public List<SelectItem> getListStates() {
-		return listStates;
-	}
-
-	public void setListStates(List<SelectItem> listStates) {
-		this.listStates = listStates;
-	}
-
-	public BigDecimal getIdBranch() {
-		return idBranch;
-	}
-
-	public void setIdBranch(BigDecimal idBranch) {
-		this.idBranch = idBranch;
-	}
-
-	public BigDecimal getIdDoctor() {
-		return idDoctor;
-	}
-
-	public void setIdDoctor(BigDecimal idDoctor) {
-		this.idDoctor = idDoctor;
-	}
-
-	public BigDecimal getIdProcedure() {
-		return idProcedure;
-	}
-
-	public void setIdProcedure(BigDecimal idProcedure) {
-		this.idProcedure = idProcedure;
 	}
 
 	public boolean isDates() {
@@ -184,14 +121,6 @@ public class AppointmentSearchBacking extends BaseBacking {
 		this.selectedAppointment = selectedAppointment;
 	}
 
-	public boolean isAll() {
-		return all;
-	}
-
-	public void setAll(boolean all) {
-		this.all = all;
-	}
-
 	public void newAction(ActionEvent event) {
 		listAppointment = new LinkedList<VwAppointment>();
 		appointmentModel = new VwAppointmentDataModel(listAppointment);
@@ -220,55 +149,7 @@ public class AppointmentSearchBacking extends BaseBacking {
 		listStates.add(new SelectItem(Constant.APP_STATE_NOATTENDED, message));
 	}
 
-	public void addBranchAction(boolean exception) {
-		boolean validate = true;
-		RequestContext context = RequestContext.getCurrentInstance();
-
-		listDoctor = new LinkedList<SelectItem>();
-		listDoctor.add(new SelectItem(Constant.DEFAULT_VALUE, label));
-
-		listProcedure = new LinkedList<SelectItem>();
-		listProcedure.add(new SelectItem(Constant.DEFAULT_VALUE, label));
-
-		idDoctor = Constant.DEFAULT_VALUE;
-		idProcedure = Constant.DEFAULT_VALUE;
-
-		Map<BigDecimal, String> mapDoctor = new HashMap<BigDecimal, String>();
-		Map<BigDecimal, String> mapProcedure = new HashMap<BigDecimal, String>();
-
-		if (selectedsBranchObject != null && selectedsBranchObject.length > 0) {
-			for (CrmBranch crmranch : selectedsBranchObject) {
-
-				for (CrmDoctor row : tablesService
-						.getListDoctorByBranch(crmranch.getId())) {
-					mapDoctor.put(row.getId(), row.getNames());
-				}
-
-				for (VwProcedure row : tablesService
-						.getListVwProcedureByBranch(crmranch.getId())) {
-					mapProcedure.put(row.getId(), row.getNameProcedure()
-							+ " - " + row.getNameProcedureDetail());
-				}
-			}
-
-			for (Map.Entry<BigDecimal, String> entry : mapDoctor.entrySet()) {
-				listDoctor
-						.add(new SelectItem(entry.getKey(), entry.getValue()));
-			}
-
-			for (Map.Entry<BigDecimal, String> entry : mapProcedure.entrySet()) {
-				listProcedure.add(new SelectItem(entry.getKey(), entry
-						.getValue()));
-			}
-		} else {
-			if (exception) {
-				validate = false;
-				String message = FacesUtil.getMessage("app_no_branch");
-				FacesUtil.addInfo(message);
-			}
-		}
-		context.addCallbackParam("validate", validate);
-	}
+	
 
 	public void searchAppoinmentAction(ActionEvent event) {
 		if (selectedsBranchObject != null && selectedsBranchObject.length > 0) {

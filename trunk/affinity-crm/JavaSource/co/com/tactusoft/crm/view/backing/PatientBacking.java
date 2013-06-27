@@ -478,6 +478,8 @@ public class PatientBacking extends BaseBacking {
 		AppointmentBacking appointmentBacking = FacesUtil
 				.findBean("appointmentBacking");
 		appointmentBacking.setSelectedPatient(selectedPatient);
+		appointmentBacking.getListBranch();
+		appointmentBacking.handleBranchChange();
 		return "/pages/processes/appointment.jsf?faces-redirect=true";
 	}
 

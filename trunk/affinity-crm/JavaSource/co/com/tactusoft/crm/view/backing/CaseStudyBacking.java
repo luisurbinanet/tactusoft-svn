@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 
-import org.primefaces.context.RequestContext;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.model.entities.CrmCaseStudy;
@@ -33,6 +33,9 @@ public class CaseStudyBacking extends BaseBacking implements Serializable {
 	@PostConstruct
 	public void init() {
 		crmDoctor = processService.getCrmDoctor();
+		if (crmDoctor != null) {
+
+		}
 	}
 
 	public List<CrmCaseStudy> getList() {
@@ -44,14 +47,6 @@ public class CaseStudyBacking extends BaseBacking implements Serializable {
 	}
 
 	public CaseStudyDataModel getModel() {
-		if (model == null) {
-			list = tablesService.getListCaseStudy();
-			model = new CaseStudyDataModel(list);
-
-			if (list.size() > 0) {
-				selected = list.get(0);
-			}
-		}
 		return model;
 	}
 
@@ -76,33 +71,21 @@ public class CaseStudyBacking extends BaseBacking implements Serializable {
 		optionSearchPatient = 1;
 		docPatient = "";
 		namePatient = "";
+		selectedsBranchObject = null;
 	}
 
-	public void saveAction() {
-		String message = null;
-		boolean validate = true;
-		RequestContext context = RequestContext.getCurrentInstance();
-		if (selectedPatientTemp == null) {
-			message = FacesUtil.getMessage("app_msg_error_pat");
-			FacesUtil.addError(message);
-			validate = false;
-		} else {
-			//selected.setCrmPatient(selectedPatient);
-			//selected.setCrmDoctor(crmDoctor);
-			int result = tablesService.saveCaseStudy(selected);
-			if (result == 0) {
-				list = tablesService.getListCaseStudy();
-				model = new CaseStudyDataModel(list);
-				message = FacesUtil.getMessage("msg_record_ok");
-				FacesUtil.addInfo(message);
-			} else if (result == -1) {
-				String paramValue = FacesUtil.getMessage("pro_code");
-				message = FacesUtil.getMessage("msg_record_unique_exception",
-						paramValue);
-				FacesUtil.addError(message);
+	public void searchAction(ActionEvent event) {
+		if (selectedsBranchObject != null && selectedsBranchObject.length > 0) {
+			list = tablesService.getListCaseStudy();
+			model = new CaseStudyDataModel(list);
+
+			if (list.size() > 0) {
+				selected = list.get(0);
 			}
+		} else {
+			String message = FacesUtil.getMessage("app_no_branch");
+			FacesUtil.addInfo(message);
 		}
-		context.addCallbackParam("validate", validate);
 	}
 
 }
