@@ -27,7 +27,7 @@ public class CrmProcedureDetail implements java.io.Serializable {
 	private Integer timeDoctor;
 	private Integer timeNurses;
 	private Integer timeStretchers;
-	private Boolean noRepeat;
+	private boolean noRepeat;
 	private Short noRepeatDays;
 	private String docType;
 	private String formulaDocType;
@@ -53,7 +53,7 @@ public class CrmProcedureDetail implements java.io.Serializable {
 
 	public CrmProcedureDetail(BigDecimal id, CrmProcedure crmProcedure,
 			String name, Integer timeDoctor, Integer timeNurses,
-			Integer timeStretchers, Boolean noRepeat, Short noRepeatDays,
+			Integer timeStretchers, boolean noRepeat, Short noRepeatDays,
 			String docType, String formulaDocType, boolean availability,
 			String codPublicity, boolean dependent, int state,
 			Set<CrmAppointment> crmAppointments) {
@@ -131,11 +131,11 @@ public class CrmProcedureDetail implements java.io.Serializable {
 	}
 
 	@Column(name = "no_repeat")
-	public Boolean getNoRepeat() {
+	public boolean isNoRepeat() {
 		return this.noRepeat;
 	}
 
-	public void setNoRepeat(Boolean noRepeat) {
+	public void setNoRepeat(boolean noRepeat) {
 		this.noRepeat = noRepeat;
 	}
 

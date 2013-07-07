@@ -15,8 +15,7 @@ import javax.persistence.Table;
 public class VwTherapyMaterials implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private BigDecimal id;
-	private long codMaterial;
+	private Long id;
 	private String descMaterial;
 	private String sapMaterialType;
 	private BigDecimal idPatient;
@@ -24,18 +23,16 @@ public class VwTherapyMaterials implements java.io.Serializable {
 	public VwTherapyMaterials() {
 	}
 
-	public VwTherapyMaterials(BigDecimal id, long codMaterial,
+	public VwTherapyMaterials(Long id, 
 			String descMaterial, BigDecimal idPatient) {
 		this.id = id;
-		this.codMaterial = codMaterial;
 		this.descMaterial = descMaterial;
 		this.idPatient = idPatient;
 	}
 
-	public VwTherapyMaterials(BigDecimal id, long codMaterial,
+	public VwTherapyMaterials(Long id, 
 			String descMaterial, String sapMaterialType, BigDecimal idPatient) {
 		this.id = id;
-		this.codMaterial = codMaterial;
 		this.descMaterial = descMaterial;
 		this.sapMaterialType = sapMaterialType;
 		this.idPatient = idPatient;
@@ -43,21 +40,12 @@ public class VwTherapyMaterials implements java.io.Serializable {
 
 	@Id
 	@Column(name = "id", nullable = false, scale = 0)
-	public BigDecimal getId() {
+	public Long getId() {
 		return this.id;
 	}
 
-	public void setId(BigDecimal id) {
+	public void setId(Long id) {
 		this.id = id;
-	}
-
-	@Column(name = "cod_material", nullable = false)
-	public long getCodMaterial() {
-		return this.codMaterial;
-	}
-
-	public void setCodMaterial(long codMaterial) {
-		this.codMaterial = codMaterial;
 	}
 
 	@Column(name = "desc_material", nullable = false, length = 1000)
