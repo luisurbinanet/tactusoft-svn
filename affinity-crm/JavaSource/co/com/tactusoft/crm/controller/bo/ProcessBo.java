@@ -36,11 +36,13 @@ import co.com.tactusoft.crm.model.entities.CrmNote;
 import co.com.tactusoft.crm.model.entities.CrmNurse;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
+import co.com.tactusoft.crm.model.entities.IndPatientAppointment;
 import co.com.tactusoft.crm.model.entities.VwAppointment;
 import co.com.tactusoft.crm.model.entities.VwTherapyMaterials;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.beans.Candidate;
+import co.com.tactusoft.crm.view.beans.OpportunityAgenda;
 import co.com.tactusoft.crm.view.beans.ResultSearchAppointment;
 
 @Named
@@ -1432,4 +1434,319 @@ public class ProcessBo implements Serializable {
 		return result;
 	}
 
+	private List<CrmProcedureDetail> getListProcedureByBranch(
+			BigDecimal idBranch) {
+		return dao
+				.find("select o.crmProcedure from CrmProcedureBranch o where o.crmProcedure.state = 1 and o.crmBranch.id = "
+						+ idBranch + " ORDER BY o.crmProcedure.name");
+	}
+
+	public List<OpportunityAgenda> getListOpportunityAgenda(
+			CrmBranch[] listBranch, Date startDate, Date endDate) {
+
+		List<OpportunityAgenda> result = new ArrayList<OpportunityAgenda>();
+		List<Candidate> listCandidate = new ArrayList<Candidate>();
+		int appointmentsNumber = 3;
+
+		for (CrmBranch branch : listBranch) {
+			BigDecimal idBranch = branch.getId();
+			List<CrmProcedureDetail> listProcedureByBranch = getListProcedureByBranch(branch
+					.getId());
+			boolean noAppointment = true;
+			for (CrmProcedureDetail procedureDetail : listProcedureByBranch) {
+				noAppointment = true;
+				int minutes;
+				if ((procedureDetail.getTimeDoctor() > procedureDetail
+						.getTimeNurses())
+						&& (procedureDetail.getTimeDoctor() > procedureDetail
+								.getTimeStretchers())) {
+					minutes = procedureDetail.getTimeDoctor();
+				} else if ((procedureDetail.getTimeNurses() > procedureDetail
+						.getTimeDoctor())
+						&& (procedureDetail.getTimeNurses() > procedureDetail
+								.getTimeStretchers())) {
+					minutes = procedureDetail.getTimeNurses();
+				} else {
+					minutes = procedureDetail.getTimeStretchers();
+				}
+
+				listCandidate = new ArrayList<Candidate>();
+				Date currentDate = FacesUtil.getDateWithoutTime(startDate);
+
+				int id = 0;
+				out: do {
+					String dateString = FacesUtil.formatDate(currentDate,
+							"yyyy-MM-dd");
+
+					// Validar Festivo
+					List<CrmHoliday> listHoliday = getListHoliday(currentDate,
+							idBranch);
+					if (listHoliday.size() == 0) {
+						int currentDay = FacesUtil.getDayOfWeek(currentDate);
+						if (currentDay != 1) {// Si no es domingo
+							// Buscar horarios
+							List<CrmDoctorSchedule> listCrmDoctorSchedule = dao
+									.find("FROM CrmDoctorSchedule o WHERE o.crmBranch.id = "
+											+ idBranch
+											+ " AND o.day = "
+											+ currentDay
+											+ " AND o.crmDoctor.state = 1 ORDER BY o.startHour");
+
+							if (listCrmDoctorSchedule.size() > 0) {
+								List<CrmDoctorException> listDoctorException = dao
+										.find("FROM CrmDoctorException o WHERE o.crmDoctor.state = 1 AND '"
+												+ dateString
+												+ "' between Date(startHour) AND Date(endHour)"
+												+ " AND (o.crmBranch.id is null OR o.crmBranch.id = "
+												+ idBranch + ")");
+
+								for (CrmDoctorSchedule schedule : listCrmDoctorSchedule) {
+									String startDateScheduleString = FacesUtil
+											.formatDate(
+													FacesUtil
+															.addHourToDate(
+																	currentDate,
+																	schedule.getStartHour()),
+													"yyyy-MM-dd HH:mm:ss");
+
+									String endDateScheduleString = FacesUtil
+											.formatDate(
+													FacesUtil
+															.addHourToDate(
+																	currentDate,
+																	schedule.getEndHour()),
+													"yyyy-MM-dd HH:mm:ss");
+
+									// Buscar Citas
+									List<CrmAppointment> listApp = new ArrayList<CrmAppointment>();
+									if (procedureDetail.isAvailability()) {
+										listApp = dao
+												.find("FROM CrmAppointment o WHERE (o.startAppointmentDate between '"
+														+ startDateScheduleString
+														+ "' AND '"
+														+ endDateScheduleString
+														+ "') AND o.state in (1,3,4,5) AND "
+														+ " o.crmProcedureDetail.availability = TRUE and o.crmBranch.id = "
+														+ idBranch
+														+ "AND o.crmDoctor.id = "
+														+ schedule
+																.getCrmDoctor()
+																.getId()
+														+ " ORDER BY o.startAppointmentDate");
+									}
+
+									Date scheduleInitHour = FacesUtil
+											.addHourToDate(currentDate,
+													schedule.getStartHour());
+
+									Date maxHour = FacesUtil.addHourToDate(
+											currentDate, schedule.getEndHour());
+
+									boolean exit = false;
+									do {
+										Date scheduleEndHour = FacesUtil
+												.addMinutesToDate(
+														scheduleInitHour,
+														minutes);
+
+										if (scheduleEndHour.compareTo(maxHour) > 0) {
+											break;
+										}
+
+										List<Date> candidatesHours = getListcandidatesHours(
+												scheduleInitHour,
+												scheduleEndHour);
+
+										boolean validateException = validateException(
+												listDoctorException,
+												scheduleInitHour,
+												schedule.getCrmDoctor());
+
+										if (validateException) {
+											boolean validate = true;
+											for (CrmAppointment row : listApp) {
+												validate = validateAvailabilitySchedule(
+														candidatesHours,
+														row.getStartAppointmentDate(),
+														row.getEndAppointmentDate());
+
+												if (!validate) {
+													validate = false;
+													break;
+												}
+											}
+
+											if (validate
+													&& new Date()
+															.compareTo(scheduleInitHour) <= 0) {
+												listCandidate
+														.add(new Candidate(
+																id,
+																schedule.getCrmDoctor(),
+																scheduleInitHour,
+																scheduleEndHour,
+																branch.getName(),
+																procedureDetail
+																		.getName()));
+												id++;
+											}
+										}
+
+										scheduleInitHour = FacesUtil
+												.addMinutesToDate(
+														scheduleInitHour,
+														Constant.INCREASE_MIN);
+
+										if (id == appointmentsNumber) {
+											break out;
+										}
+
+									} while (!exit);
+
+									if (id == appointmentsNumber) {
+										break out;
+									}
+								}
+							}
+						}
+					}
+
+					currentDate = FacesUtil.addDaysToDate(currentDate, 1);
+					listCandidate = new ArrayList<Candidate>();
+					id = 0;
+					if (currentDate.compareTo(endDate) == 0) {
+						noAppointment = false;
+						break;
+					}
+				} while (id < appointmentsNumber);
+
+				if (noAppointment) {
+					result.add(new OpportunityAgenda(branch, procedureDetail,
+							currentDate));
+				}
+			}
+		}
+		return result;
+	}
+
+	public List<IndPatientAppointment> getListIndPatientAppointment(
+			CrmBranch[] listBranch, Date startDate, Date endDate) {
+		String branchs = "";
+		for (CrmBranch crmBranch : listBranch) {
+			branchs = branchs + crmBranch.getId() + ",";
+		}
+		branchs = branchs.substring(0, branchs.length() - 1);
+		String sql = "SELECT @row\\:=@row + 1 as id,"
+				+ "a.id_branch, c.name branch_name, "
+				+ "a.id_patient, b.doc doc_patient, CONCAT(TRIM(b.surnames), ' ', TRIM(b.firstnames)) name_patient, "
+				+ "a.id_procedure_detail, d.name procedure_name, count(*) num "
+				+ "FROM crm_appointment a JOIN crm_patient b ON (a.id_patient = b.id) "
+				+ "JOIN crm_branch c ON (a.id_branch = c.id) "
+				+ "JOIN crm_procedure_detail d ON (a.id_procedure_detail = d.id), (SELECT @row\\:=0) r "
+				+ "WHERE a.state IN (3,4) AND a.id_branch IN (" + branchs
+				+ ") AND Date(a.start_appointment_date) BETWEEN '"
+				+ FacesUtil.formatDate(startDate, "YYYY-MM-dd") + "' AND '"
+				+ FacesUtil.formatDate(endDate, "YYYY-MM-dd")
+				+ "' GROUP BY id_patient, id_branch " + "ORDER by 1,6,5";
+		List<IndPatientAppointment> result = dao.findNative(sql,
+				IndPatientAppointment.class);
+		return result;
+	}
+
+	public List<CrmAppointment> getListAppointment100(CrmBranch[] listBranch,
+			Date startDate, Date endDate) {
+		String branchs = "";
+		for (CrmBranch crmBranch : listBranch) {
+			branchs = branchs + crmBranch.getId() + ",";
+		}
+		branchs = branchs.substring(0, branchs.length() - 1);
+
+		String sql = "SELECT * "
+				+ "FROM crm_appointment a "
+				+ "WHERE a.state  = 4 AND a.id_branch IN ("
+				+ branchs
+				+ ") AND Date(a.start_appointment_date) BETWEEN '"
+				+ FacesUtil.formatDate(startDate, "YYYY-MM-dd")
+				+ "' AND '"
+				+ FacesUtil.formatDate(endDate, "YYYY-MM-dd")
+				+ "' AND (SELECT COUNT(1) FROM crm_medication b WHERE b.id_appointment = a.id) = "
+				+ "(SELECT COUNT(1) FROM crm_sap_medication c WHERE c.id_appointment = a.id) "
+				+ "ORDER BY 1,6,4";
+
+		List<CrmAppointment> result = dao.findNative(sql, CrmAppointment.class);
+		return result;
+	}
+
+	public List<CrmAppointment> getListAppointment5099(CrmBranch[] listBranch,
+			Date startDate, Date endDate) {
+		String branchs = "";
+		for (CrmBranch crmBranch : listBranch) {
+			branchs = branchs + crmBranch.getId() + ",";
+		}
+		branchs = branchs.substring(0, branchs.length() - 1);
+
+		String sql = "SELECT * "
+				+ "FROM crm_appointment a "
+				+ "WHERE a.state  = 4 AND a.id_branch IN ("
+				+ branchs
+				+ ") AND Date(a.start_appointment_date) BETWEEN '"
+				+ FacesUtil.formatDate(startDate, "YYYY-MM-dd")
+				+ "' AND '"
+				+ FacesUtil.formatDate(endDate, "YYYY-MM-dd")
+				+ "' AND (SELECT COUNT(1) FROM crm_sap_medication  b WHERE b.id_appointment = a.id) >= "
+				+ "((SELECT COUNT(1) FROM crm_medication c WHERE c.id_appointment = a.id)/2) "
+				+ "AND (SELECT COUNT(1) FROM crm_sap_medication c WHERE c.id_appointment = a.id) < "
+				+ "(SELECT COUNT(1) FROM crm_medication b WHERE b.id_appointment = a.id) "
+				+ "ORDER BY 1,6,4";
+
+		List<CrmAppointment> result = dao.findNative(sql, CrmAppointment.class);
+		return result;
+	}
+
+	public List<CrmAppointment> getListAppointment50(CrmBranch[] listBranch,
+			Date startDate, Date endDate) {
+		String branchs = "";
+		for (CrmBranch crmBranch : listBranch) {
+			branchs = branchs + crmBranch.getId() + ",";
+		}
+		branchs = branchs.substring(0, branchs.length() - 1);
+
+		String sql = "SELECT * "
+				+ "FROM crm_appointment a "
+				+ "WHERE a.state  = 4 AND a.id_branch IN ("
+				+ branchs
+				+ ") AND Date(a.start_appointment_date) BETWEEN '"
+				+ FacesUtil.formatDate(startDate, "YYYY-MM-dd")
+				+ "' AND '"
+				+ FacesUtil.formatDate(endDate, "YYYY-MM-dd")
+				+ "' AND (SELECT COUNT(1) FROM crm_sap_medication  b WHERE b.id_appointment = a.id) < "
+				+ "((SELECT COUNT(1) FROM crm_medication c WHERE c.id_appointment = a.id)/2) "
+				+ "ORDER BY 1,6,4";
+
+		List<CrmAppointment> result = dao.findNative(sql, CrmAppointment.class);
+		return result;
+	}
+
+	public List<CrmAppointment> getListAppointment0(CrmBranch[] listBranch,
+			Date startDate, Date endDate) {
+		String branchs = "";
+		for (CrmBranch crmBranch : listBranch) {
+			branchs = branchs + crmBranch.getId() + ",";
+		}
+		branchs = branchs.substring(0, branchs.length() - 1);
+
+		String sql = "SELECT * "
+				+ "FROM crm_appointment a "
+				+ "WHERE a.state  = 4 AND a.id_branch IN ("
+				+ branchs
+				+ ") AND Date(a.start_appointment_date) BETWEEN '"
+				+ FacesUtil.formatDate(startDate, "YYYY-MM-dd")
+				+ "' AND '"
+				+ FacesUtil.formatDate(endDate, "YYYY-MM-dd")
+				+ "' AND (SELECT COUNT(1) FROM crm_sap_medication c WHERE c.id_appointment = a.id) = 0 "
+				+ "ORDER BY 1,6,4";
+
+		List<CrmAppointment> result = dao.findNative(sql, CrmAppointment.class);
+		return result;
+	}
 }
