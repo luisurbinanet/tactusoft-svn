@@ -1,0 +1,401 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="../templates/common.xhtml">
+
+	<ui:define name="body">
+
+		<p:panel style="width:100%;height:100%"
+			header="#{msg['title_indicators']}">
+
+			<p:spacer height="5" />
+
+			<h:form id="form">
+
+				<p:growl id="growl" showDetail="true" />
+
+				<p:toolbar style="width:100%">
+					<p:toolbarGroup align="left">
+						<p:commandButton id="btnSearch" value="#{msg['btn_search']}"
+							icon="ui-icon-search"
+							update="selectedTable selectedTableControlNum selectedTableSale1 selectedTableSale2 selectedTableSale3 selectedTableSale4 growl btnExport"
+							actionListener="#{indicatorsBacking.searchAction}" />
+						<p:commandButton id="btnBranch" oncomplete="branchDlg.show();"
+							value="#{msg['usr_branch']}" icon="ui-icon-bookmark" />
+						<p:commandButton id="btnExport" oncomplete="exportDlg.show();"
+							value="#{msg['btn_export']}" icon="ui-icon-disk"
+							disabled="#{indicatorsBacking.disabledExport}" />
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="5" />
+
+				<h:panelGrid id="pnlDetail" columns="2" cellpadding="4"
+					style="margin:0 auto;" width="100%">
+
+					<h:outputLabel value="#{msg['ind_type']}" style="width:40%" />
+					<p:selectOneMenu value="#{indicatorsBacking.type}">
+						<p:ajax update="pnlResults" />
+						<f:selectItem itemValue="0" itemLabel="#{msg['ind_1']}" />
+						<f:selectItem itemValue="1" itemLabel="#{msg['ind_2']}" />
+						<f:selectItem itemValue="2" itemLabel="#{msg['ind_3']}" />
+					</p:selectOneMenu>
+
+					<h:outputLabel value="#{msg['src_star_date']}" style="width:40%" />
+					<p:calendar id="calSD" value="#{indicatorsBacking.startDate}"
+						label="#{msg['src_star_date']}" readonlyInput="true"
+						pattern="dd/MM/yyyy" showOn="button" navigator="true" locale="es"
+						required="true" />
+
+					<h:outputLabel value="#{msg['src_end_date']}" style="width:40%" />
+					<p:calendar id="calED" value="#{indicatorsBacking.endDate}"
+						label="#{msg['src_end_date']}" readonlyInput="true"
+						pattern="dd/MM/yyyy" showOn="button" navigator="true" locale="es"
+						required="true" />
+				</h:panelGrid>
+
+				<p:spacer height="5" />
+
+				<h:panelGrid id="pnlResults" width="100%">
+
+					<p:dataTable id="selectedTable" var="rec"
+						value="#{indicatorsBacking.listOpportunityAgenda}"
+						rowKey="#{rec.code}" style="width:100%;" paginator="true"
+						rows="20" resizableColumns="true"
+						emptyMessage="#{msg['glb_no_records_found']}"
+						rendered="#{indicatorsBacking.type eq 0}">
+
+						<p:column filterBy="#{rec.crmBranch.name}"
+							filterMatchMode="contains">
+							<f:facet name="header">
+								<h:outputText value="#{msg['ind_branch']}" />
+							</f:facet>
+							<h:outputLabel value="#{rec.crmBranch.name}" />
+						</p:column>
+
+						<p:column filterBy="#{rec.crmProcedureDetail.name}"
+							filterMatchMode="contains">
+							<f:facet name="header">
+								<h:outputText value="#{msg['ind_procedure']}" />
+							</f:facet>
+							<h:outputLabel value="#{rec.crmProcedureDetail.name}" />
+						</p:column>
+
+						<p:column filterBy="#{rec.date}" filterMatchMode="contains">
+							<f:facet name="header">
+								<h:outputText value="#{msg['ind_date']}" />
+							</f:facet>
+							<h:outputLabel value="#{rec.date}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+						</p:column>
+
+					</p:dataTable>
+
+					<p:dataTable id="selectedTableControlNum" var="rec"
+						value="#{indicatorsBacking.listIndPatientAppointment}"
+						rowKey="#{rec.code}" style="width:100%;" paginator="true"
+						rows="20" resizableColumns="true"
+						emptyMessage="#{msg['glb_no_records_found']}"
+						rendered="#{indicatorsBacking.type eq 1}">
+
+						<p:column filterBy="#{rec.id.branchName}"
+							filterMatchMode="contains">
+							<f:facet name="header">
+								<h:outputText value="#{msg['ind_branch']}" />
+							</f:facet>
+							<h:outputLabel value="#{rec.branchName}" />
+						</p:column>
+
+						<p:column filterBy="#{rec.id.procedureName}"
+							filterMatchMode="contains">
+							<f:facet name="header">
+								<h:outputText value="#{msg['ind_procedure']}" />
+							</f:facet>
+							<h:outputLabel value="#{rec.procedureName}" />
+						</p:column>
+
+						<p:column filterBy="#{rec.id.namePatient}"
+							filterMatchMode="contains">
+							<f:facet name="header">
+								<h:outputText value="#{msg['ind_patient']}" />
+							</f:facet>
+							<h:outputLabel value="#{rec.docPatient} - #{rec.namePatient}" />
+						</p:column>
+
+						<p:column filterBy="#{rec.id.num}" filterMatchMode="contains">
+							<f:facet name="header">
+								<h:outputText value="#{msg['ind_num']}" />
+							</f:facet>
+							<h:outputLabel value="#{rec.num}" />
+						</p:column>
+
+					</p:dataTable>
+
+					<p:dataTable id="selectedTableSale1" var="rec"
+						value="#{indicatorsBacking.listAppointment100}"
+						rowKey="#{rec.code}" style="width:100%" paginator="true" rows="10"
+						emptyMessage="#{msg['glb_no_records_found']}"
+						rendered="#{indicatorsBacking.type eq 2}">
+
+						<f:facet name="header">
+							<h:outputLabel value="#{msg['ind_3_1']}" />
+						</f:facet>
+
+						<p:column headerText="#{msg['app_code']}">
+							<h:outputLabel value="#{rec.code}" />
+						</p:column>
+
+						<p:column filterBy="#{rec.crmBranch.patientNames}"
+							filterMatchMode="contains">
+							<f:facet name="header">
+								<h:outputText value="#{msg['ind_patient']}" />
+							</f:facet>
+							<h:outputLabel value="#{rec.patientNames}" />
+						</p:column>
+
+						<p:column headerText="#{msg['app_date']}">
+							<h:outputLabel value="#{rec.startAppointmentDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+						</p:column>
+
+						<p:column headerText="#{msg['app_branch']}">
+							<h:outputLabel value="#{rec.crmBranch.name}" />
+						</p:column>
+
+						<p:column headerText="#{msg['app_doctor']}">
+							<h:outputLabel value="#{rec.crmDoctor.names}" />
+						</p:column>
+
+						<p:column headerText="#{msg['app_procedure']}">
+							<h:outputLabel value="#{rec.crmProcedureDetail.name}" />
+						</p:column>
+					</p:dataTable>
+
+					<p:dataTable id="selectedTableSale2" var="rec"
+						value="#{indicatorsBacking.listAppointment5099}"
+						rowKey="#{rec.code}" style="width:100%" paginator="true" rows="10"
+						emptyMessage="#{msg['glb_no_records_found']}"
+						rendered="#{indicatorsBacking.type eq 2}">
+
+						<f:facet name="header">
+							<h:outputLabel value="#{msg['ind_3_2']}" />
+						</f:facet>
+
+						<p:column headerText="#{msg['app_code']}">
+							<h:outputLabel value="#{rec.code}" />
+						</p:column>
+
+						<p:column filterBy="#{rec.crmBranch.patientNames}"
+							filterMatchMode="contains">
+							<f:facet name="header">
+								<h:outputText value="#{msg['ind_patient']}" />
+							</f:facet>
+							<h:outputLabel value="#{rec.patientNames}" />
+						</p:column>
+
+						<p:column headerText="#{msg['app_date']}">
+							<h:outputLabel value="#{rec.startAppointmentDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+						</p:column>
+
+						<p:column headerText="#{msg['app_branch']}">
+							<h:outputLabel value="#{rec.crmBranch.name}" />
+						</p:column>
+
+						<p:column filterBy="#{rec.crmBranch.patientNames}"
+							filterMatchMode="contains">
+							<f:facet name="header">
+								<h:outputText value="#{msg['ind_patient']}" />
+							</f:facet>
+							<h:outputLabel value="#{rec.patientNames}" />
+						</p:column>
+
+						<p:column headerText="#{msg['app_doctor']}">
+							<h:outputLabel value="#{rec.crmDoctor.names}" />
+						</p:column>
+
+						<p:column headerText="#{msg['app_procedure']}">
+							<h:outputLabel value="#{rec.crmProcedureDetail.name}" />
+						</p:column>
+					</p:dataTable>
+
+					<p:dataTable id="selectedTableSale3" var="rec"
+						value="#{indicatorsBacking.listAppointment50}"
+						rowKey="#{rec.code}" style="width:100%" paginator="true" rows="10"
+						emptyMessage="#{msg['glb_no_records_found']}"
+						rendered="#{indicatorsBacking.type eq 2}">
+
+						<f:facet name="header">
+							<h:outputLabel value="#{msg['ind_3_3']}" />
+						</f:facet>
+
+						<p:column headerText="#{msg['app_code']}">
+							<h:outputLabel value="#{rec.code}" />
+						</p:column>
+
+						<p:column filterBy="#{rec.crmBranch.patientNames}"
+							filterMatchMode="contains">
+							<f:facet name="header">
+								<h:outputText value="#{msg['ind_patient']}" />
+							</f:facet>
+							<h:outputLabel value="#{rec.patientNames}" />
+						</p:column>
+
+						<p:column headerText="#{msg['app_date']}">
+							<h:outputLabel value="#{rec.startAppointmentDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+						</p:column>
+
+						<p:column headerText="#{msg['app_branch']}">
+							<h:outputLabel value="#{rec.crmBranch.name}" />
+						</p:column>
+
+						<p:column headerText="#{msg['app_doctor']}">
+							<h:outputLabel value="#{rec.crmDoctor.names}" />
+						</p:column>
+
+						<p:column headerText="#{msg['app_procedure']}">
+							<h:outputLabel value="#{rec.crmProcedureDetail.name}" />
+						</p:column>
+					</p:dataTable>
+
+					<p:dataTable id="selectedTableSale4" var="rec"
+						value="#{indicatorsBacking.listAppointment0}" rowKey="#{rec.code}"
+						style="width:100%" paginator="true" rows="10"
+						emptyMessage="#{msg['glb_no_records_found']}"
+						rendered="#{indicatorsBacking.type eq 2}">
+
+						<f:facet name="header">
+							<h:outputLabel value="#{msg['ind_3_4']}" />
+						</f:facet>
+
+						<p:column headerText="#{msg['app_code']}">
+							<h:outputLabel value="#{rec.code}" />
+						</p:column>
+
+						<p:column filterBy="#{rec.crmBranch.patientNames}"
+							filterMatchMode="contains">
+							<f:facet name="header">
+								<h:outputText value="#{msg['ind_patient']}" />
+							</f:facet>
+							<h:outputLabel value="#{rec.patientNames}" />
+						</p:column>
+
+						<p:column headerText="#{msg['app_date']}">
+							<h:outputLabel value="#{rec.startAppointmentDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+						</p:column>
+
+						<p:column headerText="#{msg['app_branch']}">
+							<h:outputLabel value="#{rec.crmBranch.name}" />
+						</p:column>
+
+						<p:column headerText="#{msg['app_doctor']}">
+							<h:outputLabel value="#{rec.crmDoctor.names}" />
+						</p:column>
+
+						<p:column headerText="#{msg['app_procedure']}">
+							<h:outputLabel value="#{rec.crmProcedureDetail.name}" />
+						</p:column>
+					</p:dataTable>
+
+				</h:panelGrid>
+
+				<p:dialog id="branchDialog" widgetVar="branchDlg" modal="true"
+					closable="true" header="#{msg['usr_branch']}">
+
+					<p:toolbar id="toolBar" style="width:100%">
+						<p:toolbarGroup align="left">
+							<p:commandButton id="btnAdd" value="#{msg['btn_add']}"
+								icon="ui-icon-plusthick" update=":form:pnlDetail growl"
+								oncomplete="handleComplete(xhr, status, args)"
+								actionListener="#{indicatorsBacking.addBranchAction(true)}" />
+						</p:toolbarGroup>
+					</p:toolbar>
+
+					<p:spacer />
+
+					<p:dataTable id="selectedTableBranch" var="rec"
+						value="#{indicatorsBacking.listBranchObject}" rowKey="#{rec.id}"
+						style="width:100%"
+						selection="#{indicatorsBacking.selectedsBranchObject}"
+						paginator="true" rows="10"
+						emptyMessage="#{msg['glb_no_records_found']}">
+
+						<p:column selectionMode="multiple" style="width:18px" />
+
+						<p:column headerText="#{msg['bra_sales_off']}"
+							filterBy="#{rec.code}" filterMatchMode="contains">
+							<h:outputLabel value="#{rec.code}" />
+						</p:column>
+
+						<p:column headerText="#{msg['bra_name']}" filterBy="#{rec.name}"
+							filterMatchMode="contains">
+							<h:outputLabel value="#{rec.name}" />
+						</p:column>
+					</p:dataTable>
+
+				</p:dialog>
+
+				<p:dialog id="exportDialog" widgetVar="exportDlg" modal="true"
+					closable="true" header="#{msg['btn_export']}">
+
+					<h:outputLabel value="#{msg['app_src_format']}"
+						style="font-size:medium;" />
+
+					<h:panelGrid width="100%" columns="3">
+
+						<h:commandLink>
+							<p:graphicImage id="imgExcel" value="../../images/excel.png"
+								alt="Excel" />
+							<p:dataExporter type="xls" target="selectedTable"
+								fileName="indicador" />
+							<p:tooltip for="imgExcel" value="#{msg['btn_export_excel']}"
+								showEffect="fade" hideEffect="fade" />
+						</h:commandLink>
+
+						<h:commandLink>
+							<p:graphicImage id="imgCSV" value="../../images/csv.png" />
+							<p:dataExporter type="csv" target="selectedTable"
+								fileName="indicador" />
+							<p:tooltip for="imgCSV" value="#{msg['btn_export_csv']}"
+								showEffect="fade" hideEffect="fade" />
+						</h:commandLink>
+
+						<h:commandLink>
+							<p:graphicImage id="imgXML" value="../../images/xml.png" />
+							<p:dataExporter type="xml" target="selectedTable"
+								fileName="indicador" />
+							<p:tooltip for="imgXML" value="#{msg['btn_export_xml']}"
+								showEffect="fade" hideEffect="fade" />
+						</h:commandLink>
+
+					</h:panelGrid>
+				</p:dialog>
+
+			</h:form>
+
+		</p:panel>
+
+		<script type="text/javascript">
+			function handleComplete(xhr, status, args) {
+				if (args.validate) {
+					branchDlg.hide();
+				} else {
+					branchDlg.show();
+				}
+			}
+		</script>
+
+	</ui:define>
+</ui:composition>
+</html>
