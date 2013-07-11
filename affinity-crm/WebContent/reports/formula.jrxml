@@ -327,7 +327,7 @@ ORDER BY 1]]>
 				<textFieldExpression><![CDATA[$F{desc_cie}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement uuid="c97e21ae-df63-46d9-97f0-3c16107d05e1" isPrintRepeatedValues="false" x="235" y="0" width="133" height="34"/>
+				<reportElement uuid="c97e21ae-df63-46d9-97f0-3c16107d05e1" isPrintRepeatedValues="false" x="235" y="0" width="133" height="34" printWhenGroupChanges="group_cie"/>
 				<textElement>
 					<font fontName="Arial" size="9"/>
 				</textElement>

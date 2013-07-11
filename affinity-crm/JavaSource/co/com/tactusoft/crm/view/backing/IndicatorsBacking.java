@@ -33,6 +33,8 @@ public class IndicatorsBacking extends BaseBacking {
 	private List<CrmAppointment> listAppointment0;
 	private List<CrmAppointment> listAppointmentFree;
 
+	private String target;
+
 	private enum IndicatorType {
 		OPPORTUNITY_AGENDA, CONTROL_NUM, BEHAVIOR_SALE
 	}
@@ -123,6 +125,14 @@ public class IndicatorsBacking extends BaseBacking {
 		this.listAppointmentFree = listAppointmentFree;
 	}
 
+	public String getTarget() {
+		return target;
+	}
+
+	public void setTarget(String target) {
+		this.target = target;
+	}
+
 	public boolean isDisabledExport() {
 		boolean result = true;
 		if (listOpportunityAgenda != null && listOpportunityAgenda.size() > 0
@@ -147,6 +157,8 @@ public class IndicatorsBacking extends BaseBacking {
 
 		startDate = new Date();
 		endDate = FacesUtil.addDaysToDate(startDate, 30);
+		
+		target = "selectedTable";
 	}
 
 	public void searchAction(ActionEvent event) {
@@ -172,6 +184,16 @@ public class IndicatorsBacking extends BaseBacking {
 		} else {
 			String message = FacesUtil.getMessage("app_no_branch");
 			FacesUtil.addWarn(message);
+		}
+	}
+
+	public void handleTypeChange() {
+		if (type == IndicatorType.OPPORTUNITY_AGENDA.ordinal()) {
+			target = "selectedTable";
+		} else if (type == IndicatorType.CONTROL_NUM.ordinal()) {
+			target = "selectedTableControlNum";
+		} else {
+			target = null;
 		}
 	}
 
