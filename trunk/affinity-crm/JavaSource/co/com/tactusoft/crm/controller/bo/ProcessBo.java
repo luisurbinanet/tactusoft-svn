@@ -1645,8 +1645,8 @@ public class ProcessBo implements Serializable {
 				+ "JOIN crm_procedure_detail d ON (a.id_procedure_detail = d.id), (SELECT @row\\:=0) r "
 				+ "WHERE a.state IN (3,4) AND a.id_branch IN (" + branchs
 				+ ") AND Date(a.start_appointment_date) BETWEEN '"
-				+ FacesUtil.formatDate(startDate, "YYYY-MM-dd") + "' AND '"
-				+ FacesUtil.formatDate(endDate, "YYYY-MM-dd")
+				+ FacesUtil.formatDate(startDate, "yyyy-MM-dd") + "' AND '"
+				+ FacesUtil.formatDate(endDate, "yyyy-MM-dd")
 				+ "' GROUP BY id_patient, id_branch " + "ORDER by 1,6,5";
 		List<IndPatientAppointment> result = dao.findNative(sql,
 				IndPatientAppointment.class);
@@ -1666,9 +1666,9 @@ public class ProcessBo implements Serializable {
 				+ "WHERE a.state  = 4 AND a.id_branch IN ("
 				+ branchs
 				+ ") AND Date(a.start_appointment_date) BETWEEN '"
-				+ FacesUtil.formatDate(startDate, "YYYY-MM-dd")
+				+ FacesUtil.formatDate(startDate, "yyyy-MM-dd")
 				+ "' AND '"
-				+ FacesUtil.formatDate(endDate, "YYYY-MM-dd")
+				+ FacesUtil.formatDate(endDate, "yyyy-MM-dd")
 				+ "' AND (SELECT COUNT(1) FROM crm_medication b WHERE b.id_appointment = a.id) = "
 				+ "(SELECT COUNT(1) FROM crm_sap_medication c WHERE c.id_appointment = a.id) "
 				+ "ORDER BY 1,6,4";
@@ -1690,9 +1690,9 @@ public class ProcessBo implements Serializable {
 				+ "WHERE a.state  = 4 AND a.id_branch IN ("
 				+ branchs
 				+ ") AND Date(a.start_appointment_date) BETWEEN '"
-				+ FacesUtil.formatDate(startDate, "YYYY-MM-dd")
+				+ FacesUtil.formatDate(startDate, "yyyy-MM-dd")
 				+ "' AND '"
-				+ FacesUtil.formatDate(endDate, "YYYY-MM-dd")
+				+ FacesUtil.formatDate(endDate, "yyyy-MM-dd")
 				+ "' AND (SELECT COUNT(1) FROM crm_sap_medication  b WHERE b.id_appointment = a.id) >= "
 				+ "((SELECT COUNT(1) FROM crm_medication c WHERE c.id_appointment = a.id)/2) "
 				+ "AND (SELECT COUNT(1) FROM crm_sap_medication c WHERE c.id_appointment = a.id) < "
@@ -1716,9 +1716,9 @@ public class ProcessBo implements Serializable {
 				+ "WHERE a.state  = 4 AND a.id_branch IN ("
 				+ branchs
 				+ ") AND Date(a.start_appointment_date) BETWEEN '"
-				+ FacesUtil.formatDate(startDate, "YYYY-MM-dd")
+				+ FacesUtil.formatDate(startDate, "yyyy-MM-dd")
 				+ "' AND '"
-				+ FacesUtil.formatDate(endDate, "YYYY-MM-dd")
+				+ FacesUtil.formatDate(endDate, "yyyy-MM-dd")
 				+ "' AND (SELECT COUNT(1) FROM crm_sap_medication  b WHERE b.id_appointment = a.id) < "
 				+ "((SELECT COUNT(1) FROM crm_medication c WHERE c.id_appointment = a.id)/2) "
 				+ "ORDER BY 1,6,4";
@@ -1740,9 +1740,9 @@ public class ProcessBo implements Serializable {
 				+ "WHERE a.state  = 4 AND a.id_branch IN ("
 				+ branchs
 				+ ") AND Date(a.start_appointment_date) BETWEEN '"
-				+ FacesUtil.formatDate(startDate, "YYYY-MM-dd")
+				+ FacesUtil.formatDate(startDate, "yyyy-MM-dd")
 				+ "' AND '"
-				+ FacesUtil.formatDate(endDate, "YYYY-MM-dd")
+				+ FacesUtil.formatDate(endDate, "yyyy-MM-dd")
 				+ "' AND (SELECT COUNT(1) FROM crm_sap_medication c WHERE c.id_appointment = a.id) = 0 "
 				+ "ORDER BY 1,6,4";
 

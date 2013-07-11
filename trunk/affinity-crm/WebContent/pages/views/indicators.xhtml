@@ -18,17 +18,17 @@
 
 				<p:growl id="growl" showDetail="true" />
 
-				<p:toolbar style="width:100%">
+				<p:toolbar id="toolbar" style="width:100%">
 					<p:toolbarGroup align="left">
 						<p:commandButton id="btnSearch" value="#{msg['btn_search']}"
-							icon="ui-icon-search"
-							update="selectedTable selectedTableControlNum selectedTableSale1 selectedTableSale2 selectedTableSale3 selectedTableSale4 growl btnExport"
+							icon="ui-icon-search" update="pnlResults growl btnExport"
 							actionListener="#{indicatorsBacking.searchAction}" />
 						<p:commandButton id="btnBranch" oncomplete="branchDlg.show();"
 							value="#{msg['usr_branch']}" icon="ui-icon-bookmark" />
 						<p:commandButton id="btnExport" oncomplete="exportDlg.show();"
 							value="#{msg['btn_export']}" icon="ui-icon-disk"
-							disabled="#{indicatorsBacking.disabledExport}" />
+							disabled="#{indicatorsBacking.disabledExport}"
+							rendered="#{indicatorsBacking.type ne 2}" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -39,7 +39,8 @@
 
 					<h:outputLabel value="#{msg['ind_type']}" style="width:40%" />
 					<p:selectOneMenu value="#{indicatorsBacking.type}">
-						<p:ajax update="pnlResults" />
+						<p:ajax update="pnlResults toolbar"
+							listener="#{indicatorsBacking.handleTypeChange}" />
 						<f:selectItem itemValue="0" itemLabel="#{msg['ind_1']}" />
 						<f:selectItem itemValue="1" itemLabel="#{msg['ind_2']}" />
 						<f:selectItem itemValue="2" itemLabel="#{msg['ind_3']}" />
@@ -175,7 +176,19 @@
 						<p:column headerText="#{msg['app_procedure']}">
 							<h:outputLabel value="#{rec.crmProcedureDetail.name}" />
 						</p:column>
+
+						<f:facet name="footer">
+							<p:commandButton
+								disabled="#{empty indicatorsBacking.listAppointment100}"
+								oncomplete="exportDlg.show();" value="#{msg['btn_export']}"
+								icon="ui-icon-disk">
+								<f:setPropertyActionListener
+									target="#{indicatorsBacking.target}" value="selectedTableSale1" />
+							</p:commandButton>
+						</f:facet>
 					</p:dataTable>
+
+					<p:spacer />
 
 					<p:dataTable id="selectedTableSale2" var="rec"
 						value="#{indicatorsBacking.listAppointment5099}"
@@ -224,6 +237,16 @@
 						<p:column headerText="#{msg['app_procedure']}">
 							<h:outputLabel value="#{rec.crmProcedureDetail.name}" />
 						</p:column>
+
+						<f:facet name="footer">
+							<p:commandButton
+								disabled="#{empty indicatorsBacking.listAppointment5099}"
+								oncomplete="exportDlg.show();" value="#{msg['btn_export']}"
+								icon="ui-icon-disk">
+								<f:setPropertyActionListener
+									target="#{indicatorsBacking.target}" value="selectedTableSale2" />
+							</p:commandButton>
+						</f:facet>
 					</p:dataTable>
 
 					<p:dataTable id="selectedTableSale3" var="rec"
@@ -265,6 +288,16 @@
 						<p:column headerText="#{msg['app_procedure']}">
 							<h:outputLabel value="#{rec.crmProcedureDetail.name}" />
 						</p:column>
+
+						<f:facet name="footer">
+							<p:commandButton
+								disabled="#{empty indicatorsBacking.listAppointment50}"
+								oncomplete="exportDlg.show();" value="#{msg['btn_export']}"
+								icon="ui-icon-disk">
+								<f:setPropertyActionListener
+									target="#{indicatorsBacking.target}" value="selectedTableSale3" />
+							</p:commandButton>
+						</f:facet>
 					</p:dataTable>
 
 					<p:dataTable id="selectedTableSale4" var="rec"
@@ -306,6 +339,16 @@
 						<p:column headerText="#{msg['app_procedure']}">
 							<h:outputLabel value="#{rec.crmProcedureDetail.name}" />
 						</p:column>
+
+						<f:facet name="footer">
+							<p:commandButton
+								disabled="#{empty indicatorsBacking.listAppointment0}"
+								oncomplete="exportDlg.show();" value="#{msg['btn_export']}"
+								icon="ui-icon-disk">
+								<f:setPropertyActionListener
+									target="#{indicatorsBacking.target}" value="selectedTableSale4" />
+							</p:commandButton>
+						</f:facet>
 					</p:dataTable>
 
 				</h:panelGrid>
@@ -357,7 +400,7 @@
 						<h:commandLink>
 							<p:graphicImage id="imgExcel" value="../../images/excel.png"
 								alt="Excel" />
-							<p:dataExporter type="xls" target="selectedTable"
+							<p:dataExporter type="xls" target="#{indicatorsBacking.target}"
 								fileName="indicador" />
 							<p:tooltip for="imgExcel" value="#{msg['btn_export_excel']}"
 								showEffect="fade" hideEffect="fade" />
@@ -365,7 +408,7 @@
 
 						<h:commandLink>
 							<p:graphicImage id="imgCSV" value="../../images/csv.png" />
-							<p:dataExporter type="csv" target="selectedTable"
+							<p:dataExporter type="csv" target="#{indicatorsBacking.target}"
 								fileName="indicador" />
 							<p:tooltip for="imgCSV" value="#{msg['btn_export_csv']}"
 								showEffect="fade" hideEffect="fade" />
@@ -373,7 +416,7 @@
 
 						<h:commandLink>
 							<p:graphicImage id="imgXML" value="../../images/xml.png" />
-							<p:dataExporter type="xml" target="selectedTable"
+							<p:dataExporter type="xml" target="#{indicatorsBacking.target}"
 								fileName="indicador" />
 							<p:tooltip for="imgXML" value="#{msg['btn_export_xml']}"
 								showEffect="fade" hideEffect="fade" />
