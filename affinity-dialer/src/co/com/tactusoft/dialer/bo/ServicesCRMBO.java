@@ -17,10 +17,10 @@ public class ServicesCRMBO implements Serializable {
 	@Autowired
 	private IDaoCRM<?> dao;
 
-	public List<TblCallOutBoundExt> getListCustomer() {
-		return dao.getListCustomers();
+	public List<TblCallOutBoundExt> getListCustomer(String id, String status) {
+		return dao.getListCustomers(id, status);
 	}
-	
+
 	public void updateCustomer(Long idCallOutBoundExt, Integer idCall) {
 		dao.updateCustomer(idCallOutBoundExt, idCall);
 	}

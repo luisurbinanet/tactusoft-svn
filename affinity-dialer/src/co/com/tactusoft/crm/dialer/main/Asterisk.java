@@ -2,6 +2,7 @@ package co.com.tactusoft.crm.dialer.main;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.asteriskjava.live.AsteriskChannel;
@@ -123,20 +124,50 @@ public class Asterisk {
 				extension, new Integer(1), new Long(60000));
 	}
 
+	public List<String> unpausedAgent(String agent, String queue) {
+		List<String> list = asteriskServer
+				.executeCliCommand("queue unpause member Agent/" + agent
+						+ " queue " + queue);
+		return list;
+	}
+
 	public String callActionAplication(String channel, String agent,
 			String account, String queue, String idUser, String phone)
 			throws ManagerCommunicationException, NoSuchChannelException {
 		String result = null;
 		Map<String, String> mapVariables = new HashMap<String, String>();
 		mapVariables.put("account", account);
-		CallerId callerId = new CallerId(idUser, phone);
-		asteriskServer.executeCliCommand("queue unpause member Agent/" + agent
-				+ " queue " + queue);
-		AsteriskChannel request = asteriskServer.originateToApplication(
-				channel, "Queue", queue, new Long(60000), callerId,
-				mapVariables);
-		if (request != null) {
-			result = request.getId();
+		CallerId callerId = new CallerId(idUser + ":" + phone, idUser + ":"
+				+ phone);
+
+		/*
+		 * AsteriskChannel request = asteriskServer.originateToApplication(
+		 * channel, "Queue", queue, new Long(60000), callerId, mapVariables); if
+		 * (request != null) { result = request.getId(); }
+		 */
+		asteriskServer.originateToApplicationAsync(channel, "Queue", queue,
+				new Long(60000), callerId, mapVariables, null);
+		return result;
+	}
+
+	public List<String> exceuteCliCommand(String command) {
+		return asteriskServer.executeCliCommand(command);
+	}
+
+	public boolean getAgent(String queue, String agent) {
+		boolean result = false;
+		List<String> list = asteriskServer.executeCliCommand("queue show "
+				+ queue);
+		for (String row : list) {
+			if (row.indexOf("(Not in use)") >= 0
+					&& row.indexOf("(paused)") == -1) {
+				int idx = row.indexOf("Agent");
+				String agentStr = row.substring(idx, idx + 10);
+				if (agentStr.equalsIgnoreCase("Agent/" + agent)) {
+					result = true;
+					break;
+				}
+			}
 		}
 		return result;
 	}
@@ -147,6 +178,12 @@ public class Asterisk {
 
 		Asterisk asterisk = new Asterisk("192.168.1.251", 5038, "crmaffinity",
 				"4dm1n.aff");
+
+		// asterisk.getAgent("6060");
+		String str = "      Agent/7005 (Unavailable) has taken no calls yet";
+		int idx = str.indexOf("Agent");
+		String x = str.substring(idx, idx + 10);
+		System.out.println(x);
 
 		/* asterisk.callAction("SIP/N2P6737/011573112510963", "7005", "123"); */
 		/*
