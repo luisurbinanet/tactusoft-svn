@@ -26,11 +26,13 @@ public class DaoImplCRM<T extends Serializable> implements IDaoCRM<T> {
 
 	@Override
 	@Transactional
-	public List<TblCallOutBoundExt> getListCustomers() {
+	public List<TblCallOutBoundExt> getListCustomers(String id, String status) {
 		return jdbcTemplate
 				.query("SELECT id_CallOutBoundExt, id_UsuarioWeb, st_Nombre, st_Telefono, st_TelefonoMovil, id_Call, dt_Fecha "
-						+ "FROM tbl_CallOutBoundExt WHERE (id_Call = 1) AND (DATEDIFF(dd, GETDATE(), dt_Fecha) = 0)",
-						new Object[] {}, new CustomerRowMapper());
+						+ "FROM tbl_CallOutBoundExt WHERE id_Call IN ("
+						+ status
+						+ ") AND (DATEDIFF(dd, GETDATE(), dt_Fecha) = 0) AND id_CallOutBoundExt > ? ORDER BY id_CallOutBoundExt",
+						new Object[] { id }, new CustomerRowMapper());
 	}
 
 	@Override
