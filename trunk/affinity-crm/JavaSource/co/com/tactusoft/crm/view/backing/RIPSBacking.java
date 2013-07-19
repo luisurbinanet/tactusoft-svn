@@ -83,15 +83,21 @@ public class RIPSBacking extends BaseBacking implements Serializable {
 					this.RIPSService.getListPatient(idBranch, startDateString,
 							endDateString);
 				} else if (option.equals("RIPS2")) {
-
+					this.RIPSService.getListAppointment(idBranch, startDateString,
+							endDateString);
 				} else if (option.equals("RIPS3")) {
-
+					this.RIPSService.getListProcedure(idBranch, startDateString,
+							endDateString);
 				} else if (option.equals("RIPS4")) {
-
+					this.RIPSService.getListMedication(idBranch, startDateString,
+							endDateString);
 				} else if (option.equals("RIPS5")) {
-
+					this.RIPSService.getListTransaction(idBranch, startDateString,
+							endDateString);
 				}
 			}
+			
+			FacesUtil.addInfo("Archivo generado en la ruta /opt/rips de su servidor");
 		}
 	}
 

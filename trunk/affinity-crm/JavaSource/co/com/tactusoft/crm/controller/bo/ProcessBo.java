@@ -593,9 +593,7 @@ public class ProcessBo implements Serializable {
 								+ idBranch + ")");
 
 				if ((calendar.get(Calendar.DAY_OF_WEEK) != 1)
-						&& (this.validateHoliday(listHoliday, currentDate))
-						&& (this.validateException(listDoctorException,
-								currentDate))) {
+						&& (this.validateHoliday(listHoliday, currentDate))) {
 					for (CrmDoctorSchedule schedule : listDoctorSchedule) {
 						if (calendar.get(Calendar.DAY_OF_WEEK) == schedule
 								.getDay()) {
@@ -611,52 +609,58 @@ public class ProcessBo implements Serializable {
 
 							boolean endIterate = true;
 							while (endIterate) {
-								Calendar calendar2 = Calendar.getInstance();
-								calendar2.setTime(initHour);
-								calendar2.add(Calendar.MINUTE, minutes);
-								Date endHour = calendar2.getTime();
+								if (this.validateException(listDoctorException,
+										initHour)) {
 
-								// Si la hora final candidata es mayor al tiempo
-								// de atencion del doctor salir
-								if (endHour.getTime() > scheduleEndHour
-										.getTime()) {
-									endIterate = false;
-									break;
-								}
+									Calendar calendar2 = Calendar.getInstance();
+									calendar2.setTime(initHour);
+									calendar2.add(Calendar.MINUTE, minutes);
+									Date endHour = calendar2.getTime();
 
-								// Iterar Horas Candidatas
-								List<Date> candidatesHours = getListcandidatesHours(
-										initHour, endHour);
+									// Si la hora final candidata es mayor al
+									// tiempo
+									// de atencion del doctor salir
+									if (endHour.getTime() > scheduleEndHour
+											.getTime()) {
+										endIterate = false;
+										break;
+									}
 
-								// Validar Disponibilidad
-								boolean validate = validateAvailabilitySchedule(
-										candidatesHours, listApp, currentDate,
-										Constant.TIME_TYPE_DOCTOR);
+									// Iterar Horas Candidatas
+									List<Date> candidatesHours = getListcandidatesHours(
+											initHour, endHour);
 
-								if (validate) {
-									validate = validateException(
-											listDoctorException, initHour);
+									// Validar Disponibilidad
+									boolean validate = validateAvailabilitySchedule(
+											candidatesHours, listApp,
+											currentDate,
+											Constant.TIME_TYPE_DOCTOR);
 
-									if (FacesUtil
-											.getDateWithoutTime(new Date())
-											.compareTo(currentDate) == 0) {
-										if (new Date().compareTo(initHour) > 0) {
-											validate = false;
+									if (validate) {
+										validate = validateException(
+												listDoctorException, initHour);
+
+										if (FacesUtil.getDateWithoutTime(
+												new Date()).compareTo(
+												currentDate) == 0) {
+											if (new Date().compareTo(initHour) > 0) {
+												validate = false;
+											}
 										}
 									}
-								}
 
-								if (validate) {
-									result.add(new Candidate(id, doctor,
-											initHour, endHour,
-											branch.getName(), procedureDetail
-													.getName()));
-									id++;
+									if (validate) {
+										result.add(new Candidate(id, doctor,
+												initHour, endHour, branch
+														.getName(),
+												procedureDetail.getName()));
+										id++;
 
-									// Numero Citas completadas
-									if (result.size() == numApp) {
-										iterate = false;
-										break outer;
+										// Numero Citas completadas
+										if (result.size() == numApp) {
+											iterate = false;
+											break outer;
+										}
 									}
 								}
 								initHour = FacesUtil.addMinutesToDate(initHour,
