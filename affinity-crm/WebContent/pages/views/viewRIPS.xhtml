@@ -16,10 +16,12 @@
 
 			<h:form id="form">
 
+				<p:growl id="growl" showDetail="true" />
+
 				<p:toolbar style="width:100%">
 					<p:toolbarGroup align="left">
-						<p:commandButton value="#{msg['btn_search']}"
-							action="#{RIPSBacking.generateAction}" />
+						<p:commandButton value="#{msg['btn_search']}" update="growl"
+							action="#{RIPSBacking.generateAction}" icon="ui-icon-search" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -28,7 +30,8 @@
 				<h:panelGrid columns="2" width="100%">
 					<h:outputLabel value="#{msg['app_branch']}" />
 					<p:selectOneMenu style="width:600px"
-						value="#{RIPSBacking.idBranch}">
+						value="#{RIPSBacking.idBranch}" filterMatchMode="contains"
+						filter="true">
 						<f:selectItems value="#{RIPSBacking.listCrmBranch}" />
 					</p:selectOneMenu>
 

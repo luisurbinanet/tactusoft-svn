@@ -109,6 +109,17 @@ public class TablesBo implements Serializable {
 						+ "' AND o.state = 1 ORDER BY o.state, o.dateCall, orderField",
 						1);
 	}
+	
+	public List<CrmCampaign> getListCampaignActive(String type) {
+		String callDate = FacesUtil.formatDate(new Date(), "yyyy-MM-dd");
+		return dao
+				.find("FROM CrmCampaign o WHERE o.crmUser.id = "
+						+ FacesUtil.getCurrentIdUsuario()
+						+ " AND Date(dateCall) <= '"
+						+ callDate
+						+ "' AND o.state = 1 ORDER BY o.state, o.dateCall, orderField",
+						1);
+	}
 
 	public List<CrmCampaign> getListCampaignByStatus(String branchs,
 			String startDate, String endDate, String status, int maxResults) {
