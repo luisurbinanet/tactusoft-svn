@@ -1,10 +1,13 @@
 package co.com.tactusoft.crm.postsale.main;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -13,6 +16,7 @@ import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmCampaign;
 import co.com.tactusoft.crm.model.entities.CrmCampaignDetail;
+import co.com.tactusoft.crm.model.entities.CrmCampaignMedication;
 import co.com.tactusoft.crm.model.entities.CrmLog;
 import co.com.tactusoft.crm.model.entities.CrmLogDetail;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
@@ -41,6 +45,9 @@ public class Principal {
 		crmLog.setLogType("POSTVENTA");
 		processBO.save(crmLog);
 
+		Map<BigDecimal, CrmCampaign> mapCampaign = new HashMap<BigDecimal, CrmCampaign>();
+		Map<BigDecimal, Date> mapCallDates = new HashMap<BigDecimal, Date>();
+
 		Date currentDate = new Date();
 		String currentDateString = Utils.formatDate(currentDate, "yyyy-MM-dd");
 		int currentDay = Utils.getCurrentDay(currentDate);
@@ -62,6 +69,25 @@ public class Principal {
 			tomorrowDate = Utils.addDaysToDate(currentDate, 3);
 		}
 		String tomorrowString = Utils.formatDate(tomorrowDate, "yyyy-MM-dd");
+
+		// Buscando fecha llamada x sucursal
+		List<CrmBranch> listCrmBranch = processBO.getListBranchActive();
+		for (CrmBranch branch : listCrmBranch) {
+			Date callDate = currentDate;
+			boolean validate = true;
+			do {
+				callDate = Utils.addDaysToDate(callDate, 1);
+				int day = Utils.getCurrentDay(callDate);
+				if (day != 1
+						&& processBO.getListHoliday(callDate, branch.getId())
+								.isEmpty()) {
+					mapCallDates.put(branch.getId(),
+							Utils.getDateWithoutTime(callDate));
+					validate = false;
+					break;
+				}
+			} while (validate);
+		}
 
 		System.out.println("ACTUALIZANDO CITAS...");
 		// ACTUALIZAR TODAS LAS CITAS QUE NO FUERON ATENDIDAS
@@ -88,8 +114,40 @@ public class Principal {
 		List<CrmAppointment> listNoAttendet = processBO
 				.getListAppointmentNoAttendet(yesterdayString);
 		for (CrmAppointment row : listNoAttendet) {
-			listStorage.add(new StorageBean(row.getCrmPatient(), row,
-					"NO_ATTENDET"));
+			CrmBranch crmBranch = row.getCrmBranch();
+			CrmCampaign crmCampaign = mapCampaign.get(row.getCrmPatient()
+					.getId());
+			Date callDate = mapCallDates.get(crmBranch.getId());
+			String callDateString = FacesUtil.formatDate(
+					mapCallDates.get(crmBranch.getId()), "yyyy-MM-dd");
+
+			if (crmCampaign == null) {
+				crmCampaign = new CrmCampaign();
+
+				CrmUser crmUser = processBO.getUser(crmBranch, callDateString);
+				if (crmUser == null) {
+					crmUser = new CrmUser();
+					crmUser.setId(new BigDecimal(2));
+				}
+
+				crmCampaign.setCrmLog(crmLog);
+				crmCampaign.setCrmPatient(row.getCrmPatient());
+				crmCampaign.setCrmBranch(crmBranch);
+				crmCampaign.setCrmUser(crmUser);
+				crmCampaign.setDateCall(callDate);
+				crmCampaign.setState(1);
+				processBO.save(crmCampaign);
+
+				mapCampaign.put(row.getCrmPatient().getId(), crmCampaign);
+			}
+
+			CrmCampaignDetail crmCampaignDetail = new CrmCampaignDetail();
+			crmCampaignDetail.setCrmCampaign(crmCampaign);
+			crmCampaignDetail.setCrmAppointment(row);
+			crmCampaignDetail.setCampaingType("NO_ATTENDET");
+			crmCampaignDetail.setStatus(0);
+			crmCampaignDetail.setCallDate(callDate);
+			processBO.save(crmCampaignDetail);
 		}
 
 		System.out.println("BUSCANDO CITAS CONFIRMADAS...");
@@ -103,8 +161,39 @@ public class Principal {
 		List<CrmAppointment> listConfirmed = processBO
 				.getListAppointmentConfirmed(tomorrowString);
 		for (CrmAppointment row : listConfirmed) {
-			listStorage.add(new StorageBean(row.getCrmPatient(), row,
-					"CONFIRMED"));
+			CrmBranch crmBranch = row.getCrmBranch();
+			CrmCampaign crmCampaign = mapCampaign.get(row.getCrmPatient()
+					.getId());
+			Date callDate = mapCallDates.get(crmBranch.getId());
+			String callDateString = FacesUtil.formatDate(
+					mapCallDates.get(crmBranch.getId()), "yyyy-MM-dd");
+
+			if (crmCampaign == null) {
+				crmCampaign = new CrmCampaign();
+				CrmUser crmUser = processBO.getUser(crmBranch, callDateString);
+				if (crmUser == null) {
+					crmUser = new CrmUser();
+					crmUser.setId(new BigDecimal(2));
+				}
+
+				crmCampaign.setCrmLog(crmLog);
+				crmCampaign.setCrmPatient(row.getCrmPatient());
+				crmCampaign.setCrmBranch(crmBranch);
+				crmCampaign.setCrmUser(crmUser);
+				crmCampaign.setDateCall(callDate);
+				crmCampaign.setState(1);
+				processBO.save(crmCampaign);
+
+				mapCampaign.put(row.getCrmPatient().getId(), crmCampaign);
+			}
+
+			CrmCampaignDetail crmCampaignDetail = new CrmCampaignDetail();
+			crmCampaignDetail.setCrmCampaign(crmCampaign);
+			crmCampaignDetail.setCrmAppointment(row);
+			crmCampaignDetail.setCampaingType("CONFIRMED");
+			crmCampaignDetail.setStatus(0);
+			crmCampaignDetail.setCallDate(callDate);
+			processBO.save(crmCampaignDetail);
 		}
 
 		System.out
@@ -122,12 +211,43 @@ public class Principal {
 		List<CrmAppointment> listControl = processBO
 				.getListAppointmentControl(ago25DateString);
 		for (CrmAppointment row : listControl) {
-			listStorage
-					.add(new StorageBean(row.getCrmPatient(), row, "CONTROL"));
+			CrmBranch crmBranch = row.getCrmBranch();
+			CrmCampaign crmCampaign = mapCampaign.get(row.getCrmPatient()
+					.getId());
+			Date callDate = mapCallDates.get(crmBranch.getId());
+			String callDateString = FacesUtil.formatDate(
+					mapCallDates.get(crmBranch.getId()), "yyyy-MM-dd");
+
+			if (crmCampaign == null) {
+				crmCampaign = new CrmCampaign();
+
+				CrmUser crmUser = processBO.getUser(crmBranch, callDateString);
+				if (crmUser == null) {
+					crmUser = new CrmUser();
+					crmUser.setId(new BigDecimal(2));
+				}
+
+				crmCampaign.setCrmLog(crmLog);
+				crmCampaign.setCrmPatient(row.getCrmPatient());
+				crmCampaign.setCrmBranch(crmBranch);
+				crmCampaign.setCrmUser(crmUser);
+				crmCampaign.setDateCall(callDate);
+				crmCampaign.setState(1);
+				processBO.save(crmCampaign);
+
+				mapCampaign.put(row.getCrmPatient().getId(), crmCampaign);
+			}
+
+			CrmCampaignDetail crmCampaignDetail = new CrmCampaignDetail();
+			crmCampaignDetail.setCrmCampaign(crmCampaign);
+			crmCampaignDetail.setCrmAppointment(row);
+			crmCampaignDetail.setCampaingType("CONTROL");
+			crmCampaignDetail.setStatus(0);
+			crmCampaignDetail.setCallDate(callDate);
+			processBO.save(crmCampaignDetail);
 		}
 
 		System.out.println("BUSCANDO MEDICAMENTOS Y TERAPIAS NO FACTURADAS");
-		// SIN CITAS DE CONTROL EN 25 DÍAS
 		crmLogDetail = new CrmLogDetail();
 		crmLogDetail.setCrmLog(crmLog);
 		crmLogDetail.setLogDate(new Date());
@@ -201,112 +321,58 @@ public class Principal {
 			}
 		});
 
-		System.out.println("ASIGNANDO TAREAS..");
-		crmLogDetail = new CrmLogDetail();
-		crmLogDetail.setCrmLog(crmLog);
-		crmLogDetail.setLogDate(new Date());
-		crmLogDetail.setMessage("ASIGNANDO TAREAS");
-		processBO.save(crmLogDetail);
+		CrmPatient crmPatientOld = new CrmPatient();
+		crmPatientOld.setId(new BigDecimal(0));
+		CrmCampaign crmCampaign = null;
+		for (StorageBean row : listStorage) {
+			if (row.getCrmPatient().getId().longValue() != crmPatientOld
+					.getId().longValue()) {
+				crmCampaign = mapCampaign.get(row.getCrmPatient()
+						.getId());
+				Date callDate = null;
+				if (crmCampaign == null) {
+					CrmBranch crmBranch = processBO.getBranch(row
+							.getCrmPatient());
+					crmCampaign = new CrmCampaign();
 
-		if (listStorage.size() > 0) {
-			CrmPatient crmPatient = listStorage.get(0).getCrmPatient();
-			CrmBranch crmBranch = new CrmBranch();
-			if (listStorage.get(0).getCrmAppointment() != null) {
-				crmBranch = listStorage.get(0).getCrmAppointment()
-						.getCrmBranch();
-			} else {
-				crmBranch = processBO.getBranch(crmPatient);
-			}
+					callDate = mapCallDates.get(crmBranch.getId());
+					String callDateString = FacesUtil.formatDate(
+							mapCallDates.get(crmBranch.getId()), "yyyy-MM-dd");
 
-			Date callDate = Utils.addDaysToDate(currentDate, 1);
-			String callDateString = FacesUtil
-					.formatDate(callDate, "yyyy-MM-dd");
-			CrmUser crmUser = processBO.getUser(crmBranch, callDateString);
-
-			// Primer Registro
-			CrmCampaign crmCampaign = new CrmCampaign();
-			if (crmUser != null) {
-				crmCampaign.setCrmLog(crmLog);
-				crmCampaign.setCrmPatient(crmPatient);
-
-				crmCampaign.setCrmBranch(crmBranch);
-				crmCampaign.setCrmUser(processBO.getUser(crmBranch,
-						callDateString));
-				crmCampaign.setDateCall(callDate);
-				crmCampaign.setState(1);
-				processBO.save(crmCampaign);
-			}
-
-			int orderField = 99;
-			for (StorageBean row : listStorage) {
-				crmBranch = new CrmBranch();
-				if (row.getCrmAppointment() != null) {
-					crmBranch = row.getCrmAppointment().getCrmBranch();
-				} else {
-					crmBranch = processBO.getBranch(crmPatient);
-				}
-				crmUser = processBO.getUser(crmBranch, callDateString);
-
-				if (row.getCrmPatient().getId().intValue() != crmPatient
-						.getId().intValue()) {
-
-					if (crmUser != null) {
-						crmCampaign.setOrderField(orderField);
-						processBO.save(crmCampaign);
-
-						orderField = 99;
-						crmCampaign = new CrmCampaign();
-						crmCampaign.setCrmLog(crmLog);
-						crmCampaign.setCrmPatient(row.getCrmPatient());
-						crmCampaign.setCrmBranch(crmBranch);
-						crmCampaign.setCrmUser(crmUser);
-						crmCampaign.setDateCall(Utils.addDaysToDate(
-								currentDate, 1));
-						crmCampaign.setState(1);
-						processBO.save(crmCampaign);
-					}
-				}
-
-				if (crmUser != null) {
-					int type = 0;
-					if (row.getType().equals("CONFIRMED")) {
-						type = 0;
-					} else if (row.getType().equals("NO_ATTENDET")) {
-						type = 1;
-					} else if (row.getType().equals("CONTROL")) {
-						type = 2;
-					} else {
-						type = 3;
+					CrmUser crmUser = processBO.getUser(crmBranch,
+							callDateString);
+					if (crmUser == null) {
+						crmUser = new CrmUser();
+						crmUser.setId(new BigDecimal(2));
 					}
 
-					if (type < orderField) {
-						orderField = type;
-					}
-
-					CrmCampaignDetail crmCampaignDetail = new CrmCampaignDetail();
-					crmCampaignDetail.setCrmCampaign(crmCampaign);
-					crmCampaignDetail
-							.setCrmAppointment(row.getCrmAppointment());
-					crmCampaignDetail.setCampaingType(row.getType());
-					crmCampaignDetail.setCodMaterial(row.getMedicationCode());
-					crmCampaignDetail.setDescMaterial(row.getMedicationName());
-					crmCampaignDetail.setUnit(row.getUnit());
-					processBO.save(crmCampaignDetail);
+					crmCampaign.setCrmLog(crmLog);
+					crmCampaign.setCrmPatient(row.getCrmPatient());
+					crmCampaign.setCrmBranch(crmBranch);
+					crmCampaign.setCrmUser(crmUser);
+					crmCampaign.setDateCall(callDate);
+					crmCampaign.setState(1);
+					processBO.save(crmCampaign);
 				}
 
-				crmPatient = row.getCrmPatient();
+				callDate = mapCallDates.get(crmCampaign.getCrmBranch().getId());
+				CrmCampaignDetail crmCampaignDetail = new CrmCampaignDetail();
+				crmCampaignDetail.setCrmCampaign(crmCampaign);
+				crmCampaignDetail.setCrmAppointment(null);
+				crmCampaignDetail.setCampaingType("MEDICATION");
+				crmCampaignDetail.setStatus(0);
+				crmCampaignDetail.setCallDate(callDate);
+				processBO.save(crmCampaignDetail);
 			}
 
-			// El ultimo
-			crmCampaign.setOrderField(orderField);
-			processBO.save(crmCampaign);
-		} else {
-			System.out.println("NO EXISTEN TAREAS..");
-			crmLogDetail = new CrmLogDetail();
-			crmLogDetail.setCrmLog(crmLog);
-			crmLogDetail.setLogDate(new Date());
-			crmLogDetail.setMessage("NO EXISTEN TAREAS");
-			processBO.save(crmLogDetail);
+			CrmCampaignMedication crmCampaignMedication = new CrmCampaignMedication();
+			crmCampaignMedication.setCrmCampaign(crmCampaign);
+			crmCampaignMedication.setCodMaterial(row.getMedicationCode());
+			crmCampaignMedication.setDescMaterial(row.getMedicationName());
+			crmCampaignMedication.setUnit(row.getUnit());
+			processBO.save(crmCampaignMedication);
+
+			crmPatientOld = row.getCrmPatient();
 		}
 
 		processBO.updateCrmSapMedication();

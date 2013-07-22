@@ -1,6 +1,7 @@
 package co.com.tactusoft.crm.postsale.util;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -48,6 +49,17 @@ public class Utils {
 				size - valueToPad.length());
 
 		return String.valueOf(array);
+	}
+	
+	public static Date getDateWithoutTime(Date date) {
+		DateFormat df1 = new SimpleDateFormat("dd/MM/yyyy");
+		Date now = new Date();
+		try {
+			now = df1.parse(df1.format(date));
+		} catch (ParseException e) {
+			now = null;
+		}
+		return now;
 	}
 
 }
