@@ -2,6 +2,7 @@ package co.com.tactusoft.crm.postsale.bo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.exception.ConstraintViolationException;
@@ -12,10 +13,12 @@ import org.springframework.stereotype.Service;
 import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
+import co.com.tactusoft.crm.model.entities.CrmHoliday;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmSapMedication;
 import co.com.tactusoft.crm.model.entities.CrmUser;
 import co.com.tactusoft.crm.model.entities.VwAppointmentMedication;
+import co.com.tactusoft.crm.util.FacesUtil;
 
 @Service
 public class ProcessBO implements Serializable {
@@ -160,6 +163,17 @@ public class ProcessBO implements Serializable {
 			}
 		}
 		return result;
+	}
+	
+	public List<CrmHoliday> getListHoliday(Date date, BigDecimal idBranch) {
+		String currenDate = FacesUtil.formatDate(date, "yyyy-MM-dd");
+		return dao
+				.find("select o.crmHoliday from CrmHolidayBranch o where o.crmHoliday.holiday = '"
+						+ currenDate + "' and o.crmBranch.id = " + idBranch);
+	}
+	
+	public List<CrmBranch> getListBranchActive() {
+		return dao.find("from CrmBranch o where o.state = 1");
 	}
 
 }
