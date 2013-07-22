@@ -34,29 +34,30 @@ public class CrmCampaign implements java.io.Serializable {
 	private Date dateCall;
 	private String observation;
 	private Integer days;
-	private Integer state;
+	private int state;
 	private Integer orderField;
 	private Integer poll;
 	private List<CrmCampaignDetail> crmCampaignDetails = new ArrayList<CrmCampaignDetail>();
+	private List<CrmCampaignMedication> crmCampaignMedications = new ArrayList<CrmCampaignMedication>();
 
 	public CrmCampaign() {
 	}
 
 	public CrmCampaign(CrmPatient crmPatient, CrmUser crmUser, CrmLog crmLog,
-			CrmBranch crmBranch, Date dateCall, Integer state, Integer poll) {
+			CrmBranch crmBranch, Date dateCall, int state) {
 		this.crmPatient = crmPatient;
 		this.crmUser = crmUser;
 		this.crmLog = crmLog;
 		this.crmBranch = crmBranch;
 		this.dateCall = dateCall;
 		this.state = state;
-		this.poll = poll;
 	}
 
 	public CrmCampaign(CrmPatient crmPatient, CrmUser crmUser, CrmLog crmLog,
 			CrmBranch crmBranch, Date dateCall, String observation,
-			Integer days, Integer state, Integer poll,
-			List<CrmCampaignDetail> crmCampaignDetails) {
+			Integer days, int state, Integer orderField, Integer poll,
+			List<CrmCampaignDetail> crmCampaignDetails,
+			List<CrmCampaignMedication> crmCampaignMedications) {
 		this.crmPatient = crmPatient;
 		this.crmUser = crmUser;
 		this.crmLog = crmLog;
@@ -65,8 +66,10 @@ public class CrmCampaign implements java.io.Serializable {
 		this.observation = observation;
 		this.days = days;
 		this.state = state;
+		this.orderField = orderField;
 		this.poll = poll;
 		this.crmCampaignDetails = crmCampaignDetails;
+		this.crmCampaignMedications = crmCampaignMedications;
 	}
 
 	@Id
@@ -90,7 +93,7 @@ public class CrmCampaign implements java.io.Serializable {
 		this.crmPatient = crmPatient;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_user", nullable = false)
 	public CrmUser getCrmUser() {
 		return this.crmUser;
@@ -110,7 +113,7 @@ public class CrmCampaign implements java.io.Serializable {
 		this.crmLog = crmLog;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_branch", nullable = false)
 	public CrmBranch getCrmBranch() {
 		return this.crmBranch;
@@ -149,17 +152,17 @@ public class CrmCampaign implements java.io.Serializable {
 	}
 
 	@Column(name = "state", nullable = false)
-	public Integer getState() {
+	public int getState() {
 		return this.state;
 	}
 
-	public void setState(Integer state) {
+	public void setState(int state) {
 		this.state = state;
 	}
 
 	@Column(name = "order_field")
 	public Integer getOrderField() {
-		return orderField;
+		return this.orderField;
 	}
 
 	public void setOrderField(Integer orderField) {
@@ -168,7 +171,7 @@ public class CrmCampaign implements java.io.Serializable {
 
 	@Column(name = "poll")
 	public Integer getPoll() {
-		return poll;
+		return this.poll;
 	}
 
 	public void setPoll(Integer poll) {
@@ -182,6 +185,16 @@ public class CrmCampaign implements java.io.Serializable {
 
 	public void setCrmCampaignDetails(List<CrmCampaignDetail> crmCampaignDetails) {
 		this.crmCampaignDetails = crmCampaignDetails;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmCampaign")
+	public List<CrmCampaignMedication> getCrmCampaignMedications() {
+		return crmCampaignMedications;
+	}
+
+	public void setCrmCampaignMedications(
+			List<CrmCampaignMedication> crmCampaignMedications) {
+		this.crmCampaignMedications = crmCampaignMedications;
 	}
 
 }
