@@ -20,13 +20,13 @@ public class VwRipsMedicationId implements java.io.Serializable {
 	private String clinic;
 	private String docType;
 	private String doc;
-	private char autorization;
+	private String autorization;
 	private String medicationCode;
-	private char medicationType;
+	private String medicationType;
 	private String medicationName;
-	private char medicationForm;
-	private char medicationConcentration;
-	private char medicationSize;
+	private String medicationForm;
+	private String medicationConcentration;
+	private String medicationSize;
 	private Integer unit;
 	private BigDecimal amount;
 	private BigDecimal total;
@@ -35,8 +35,8 @@ public class VwRipsMedicationId implements java.io.Serializable {
 	}
 
 	public VwRipsMedicationId(BigDecimal idBranch, String idBill,
-			char autorization, char medicationType, char medicationForm,
-			char medicationConcentration, char medicationSize) {
+			String autorization, String medicationType, String medicationForm,
+			String medicationConcentration, String medicationSize) {
 		this.idBranch = idBranch;
 		this.idBill = idBill;
 		this.autorization = autorization;
@@ -48,10 +48,10 @@ public class VwRipsMedicationId implements java.io.Serializable {
 
 	public VwRipsMedicationId(BigDecimal idBranch, Date appointmentDate,
 			String idBill, String clinic, String docType, String doc,
-			char autorization, String medicationCode, char medicationType,
-			String medicationName, char medicationForm,
-			char medicationConcentration, char medicationSize, Integer unit,
-			BigDecimal amount, BigDecimal total) {
+			String autorization, String medicationCode, String medicationType,
+			String medicationName, String medicationForm,
+			String medicationConcentration, String medicationSize,
+			Integer unit, BigDecimal amount, BigDecimal total) {
 		this.idBranch = idBranch;
 		this.appointmentDate = appointmentDate;
 		this.idBill = idBill;
@@ -125,11 +125,11 @@ public class VwRipsMedicationId implements java.io.Serializable {
 	}
 
 	@Column(name = "autorization", nullable = false, length = 0)
-	public char getAutorization() {
+	public String getAutorization() {
 		return this.autorization;
 	}
 
-	public void setAutorization(char autorization) {
+	public void setAutorization(String autorization) {
 		this.autorization = autorization;
 	}
 
@@ -143,11 +143,11 @@ public class VwRipsMedicationId implements java.io.Serializable {
 	}
 
 	@Column(name = "medication_type", nullable = false, length = 0)
-	public char getMedicationType() {
+	public String getMedicationType() {
 		return this.medicationType;
 	}
 
-	public void setMedicationType(char medicationType) {
+	public void setMedicationType(String medicationType) {
 		this.medicationType = medicationType;
 	}
 
@@ -161,29 +161,29 @@ public class VwRipsMedicationId implements java.io.Serializable {
 	}
 
 	@Column(name = "medication_form", nullable = false, length = 0)
-	public char getMedicationForm() {
+	public String getMedicationForm() {
 		return this.medicationForm;
 	}
 
-	public void setMedicationForm(char medicationForm) {
+	public void setMedicationForm(String medicationForm) {
 		this.medicationForm = medicationForm;
 	}
 
 	@Column(name = "medication_concentration", nullable = false, length = 0)
-	public char getMedicationConcentration() {
+	public String getMedicationConcentration() {
 		return this.medicationConcentration;
 	}
 
-	public void setMedicationConcentration(char medicationConcentration) {
+	public void setMedicationConcentration(String medicationConcentration) {
 		this.medicationConcentration = medicationConcentration;
 	}
 
 	@Column(name = "medication_size", nullable = false, length = 0)
-	public char getMedicationSize() {
+	public String getMedicationSize() {
 		return this.medicationSize;
 	}
 
-	public void setMedicationSize(char medicationSize) {
+	public void setMedicationSize(String medicationSize) {
 		this.medicationSize = medicationSize;
 	}
 
@@ -213,100 +213,4 @@ public class VwRipsMedicationId implements java.io.Serializable {
 	public void setTotal(BigDecimal total) {
 		this.total = total;
 	}
-
-	public boolean equals(Object other) {
-		if ((this == other))
-			return true;
-		if ((other == null))
-			return false;
-		if (!(other instanceof VwRipsMedicationId))
-			return false;
-		VwRipsMedicationId castOther = (VwRipsMedicationId) other;
-
-		return ((this.getIdBranch() == castOther.getIdBranch()) || (this
-				.getIdBranch() != null && castOther.getIdBranch() != null && this
-				.getIdBranch().equals(castOther.getIdBranch())))
-				&& ((this.getAppointmentDate() == castOther
-						.getAppointmentDate()) || (this.getAppointmentDate() != null
-						&& castOther.getAppointmentDate() != null && this
-						.getAppointmentDate().equals(
-								castOther.getAppointmentDate())))
-				&& ((this.getIdBill() == castOther.getIdBill()) || (this
-						.getIdBill() != null && castOther.getIdBill() != null && this
-						.getIdBill().equals(castOther.getIdBill())))
-				&& ((this.getClinic() == castOther.getClinic()) || (this
-						.getClinic() != null && castOther.getClinic() != null && this
-						.getClinic().equals(castOther.getClinic())))
-				&& ((this.getDocType() == castOther.getDocType()) || (this
-						.getDocType() != null && castOther.getDocType() != null && this
-						.getDocType().equals(castOther.getDocType())))
-				&& ((this.getDoc() == castOther.getDoc()) || (this.getDoc() != null
-						&& castOther.getDoc() != null && this.getDoc().equals(
-						castOther.getDoc())))
-				&& (this.getAutorization() == castOther.getAutorization())
-				&& ((this.getMedicationCode() == castOther.getMedicationCode()) || (this
-						.getMedicationCode() != null
-						&& castOther.getMedicationCode() != null && this
-						.getMedicationCode().equals(
-								castOther.getMedicationCode())))
-				&& (this.getMedicationType() == castOther.getMedicationType())
-				&& ((this.getMedicationName() == castOther.getMedicationName()) || (this
-						.getMedicationName() != null
-						&& castOther.getMedicationName() != null && this
-						.getMedicationName().equals(
-								castOther.getMedicationName())))
-				&& (this.getMedicationForm() == castOther.getMedicationForm())
-				&& (this.getMedicationConcentration() == castOther
-						.getMedicationConcentration())
-				&& (this.getMedicationSize() == castOther.getMedicationSize())
-				&& ((this.getUnit() == castOther.getUnit()) || (this.getUnit() != null
-						&& castOther.getUnit() != null && this.getUnit()
-						.equals(castOther.getUnit())))
-				&& ((this.getAmount() == castOther.getAmount()) || (this
-						.getAmount() != null && castOther.getAmount() != null && this
-						.getAmount().equals(castOther.getAmount())))
-				&& ((this.getTotal() == castOther.getTotal()) || (this
-						.getTotal() != null && castOther.getTotal() != null && this
-						.getTotal().equals(castOther.getTotal())));
-	}
-
-	public int hashCode() {
-		int result = 17;
-
-		result = 37 * result
-				+ (getIdBranch() == null ? 0 : this.getIdBranch().hashCode());
-		result = 37
-				* result
-				+ (getAppointmentDate() == null ? 0 : this.getAppointmentDate()
-						.hashCode());
-		result = 37 * result
-				+ (getIdBill() == null ? 0 : this.getIdBill().hashCode());
-		result = 37 * result
-				+ (getClinic() == null ? 0 : this.getClinic().hashCode());
-		result = 37 * result
-				+ (getDocType() == null ? 0 : this.getDocType().hashCode());
-		result = 37 * result
-				+ (getDoc() == null ? 0 : this.getDoc().hashCode());
-		result = 37 * result + this.getAutorization();
-		result = 37
-				* result
-				+ (getMedicationCode() == null ? 0 : this.getMedicationCode()
-						.hashCode());
-		result = 37 * result + this.getMedicationType();
-		result = 37
-				* result
-				+ (getMedicationName() == null ? 0 : this.getMedicationName()
-						.hashCode());
-		result = 37 * result + this.getMedicationForm();
-		result = 37 * result + this.getMedicationConcentration();
-		result = 37 * result + this.getMedicationSize();
-		result = 37 * result
-				+ (getUnit() == null ? 0 : this.getUnit().hashCode());
-		result = 37 * result
-				+ (getAmount() == null ? 0 : this.getAmount().hashCode());
-		result = 37 * result
-				+ (getTotal() == null ? 0 : this.getTotal().hashCode());
-		return result;
-	}
-
 }

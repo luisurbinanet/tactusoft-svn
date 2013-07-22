@@ -20,25 +20,25 @@ public class VwRipsProcedureId implements java.io.Serializable {
 	private String clinic;
 	private String docType;
 	private String doc;
-	private char autorization;
+	private String autorization;
 	private String procedureType;
 	private String procedureCode;
 	private int procedureScope;
 	private int procedureTarget;
-	private char personal;
-	private char diagnosis1;
-	private char diagnosis2;
-	private char complication;
-	private char surgical;
+	private String personal;
+	private String diagnosis1;
+	private String diagnosis2;
+	private String complication;
+	private String surgical;
 	private BigDecimal amount;
 
 	public VwRipsProcedureId() {
 	}
 
 	public VwRipsProcedureId(BigDecimal idBranch, String idBill,
-			char autorization, int procedureScope, int procedureTarget,
-			char personal, char diagnosis1, char diagnosis2, char complication,
-			char surgical) {
+			String autorization, int procedureScope, int procedureTarget,
+			String personal, String diagnosis1, String diagnosis2, String complication,
+			String surgical) {
 		this.idBranch = idBranch;
 		this.idBill = idBill;
 		this.autorization = autorization;
@@ -53,9 +53,9 @@ public class VwRipsProcedureId implements java.io.Serializable {
 
 	public VwRipsProcedureId(BigDecimal idBranch, Date appointmentDate,
 			String idBill, String clinic, String docType, String doc,
-			char autorization, String procedureType, String procedureCode,
-			int procedureScope, int procedureTarget, char personal,
-			char diagnosis1, char diagnosis2, char complication, char surgical,
+			String autorization, String procedureType, String procedureCode,
+			int procedureScope, int procedureTarget, String personal,
+			String diagnosis1, String diagnosis2, String complication, String surgical,
 			BigDecimal amount) {
 		this.idBranch = idBranch;
 		this.appointmentDate = appointmentDate;
@@ -131,11 +131,11 @@ public class VwRipsProcedureId implements java.io.Serializable {
 	}
 
 	@Column(name = "autorization", nullable = false, length = 0)
-	public char getAutorization() {
+	public String getAutorization() {
 		return this.autorization;
 	}
 
-	public void setAutorization(char autorization) {
+	public void setAutorization(String autorization) {
 		this.autorization = autorization;
 	}
 
@@ -176,47 +176,47 @@ public class VwRipsProcedureId implements java.io.Serializable {
 	}
 
 	@Column(name = "personal", nullable = false, length = 0)
-	public char getPersonal() {
+	public String getPersonal() {
 		return this.personal;
 	}
 
-	public void setPersonal(char personal) {
+	public void setPersonal(String personal) {
 		this.personal = personal;
 	}
 
 	@Column(name = "diagnosis_1", nullable = false, length = 0)
-	public char getDiagnosis1() {
+	public String getDiagnosis1() {
 		return this.diagnosis1;
 	}
 
-	public void setDiagnosis1(char diagnosis1) {
+	public void setDiagnosis1(String diagnosis1) {
 		this.diagnosis1 = diagnosis1;
 	}
 
 	@Column(name = "diagnosis_2", nullable = false, length = 0)
-	public char getDiagnosis2() {
+	public String getDiagnosis2() {
 		return this.diagnosis2;
 	}
 
-	public void setDiagnosis2(char diagnosis2) {
+	public void setDiagnosis2(String diagnosis2) {
 		this.diagnosis2 = diagnosis2;
 	}
 
 	@Column(name = "complication", nullable = false, length = 0)
-	public char getComplication() {
+	public String getComplication() {
 		return this.complication;
 	}
 
-	public void setComplication(char complication) {
+	public void setComplication(String complication) {
 		this.complication = complication;
 	}
 
 	@Column(name = "surgical", nullable = false, length = 0)
-	public char getSurgical() {
+	public String getSurgical() {
 		return this.surgical;
 	}
 
-	public void setSurgical(char surgical) {
+	public void setSurgical(String surgical) {
 		this.surgical = surgical;
 	}
 
@@ -228,95 +228,4 @@ public class VwRipsProcedureId implements java.io.Serializable {
 	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
-
-	public boolean equals(Object other) {
-		if ((this == other))
-			return true;
-		if ((other == null))
-			return false;
-		if (!(other instanceof VwRipsProcedureId))
-			return false;
-		VwRipsProcedureId castOther = (VwRipsProcedureId) other;
-
-		return ((this.getIdBranch() == castOther.getIdBranch()) || (this
-				.getIdBranch() != null && castOther.getIdBranch() != null && this
-				.getIdBranch().equals(castOther.getIdBranch())))
-				&& ((this.getAppointmentDate() == castOther
-						.getAppointmentDate()) || (this.getAppointmentDate() != null
-						&& castOther.getAppointmentDate() != null && this
-						.getAppointmentDate().equals(
-								castOther.getAppointmentDate())))
-				&& ((this.getIdBill() == castOther.getIdBill()) || (this
-						.getIdBill() != null && castOther.getIdBill() != null && this
-						.getIdBill().equals(castOther.getIdBill())))
-				&& ((this.getClinic() == castOther.getClinic()) || (this
-						.getClinic() != null && castOther.getClinic() != null && this
-						.getClinic().equals(castOther.getClinic())))
-				&& ((this.getDocType() == castOther.getDocType()) || (this
-						.getDocType() != null && castOther.getDocType() != null && this
-						.getDocType().equals(castOther.getDocType())))
-				&& ((this.getDoc() == castOther.getDoc()) || (this.getDoc() != null
-						&& castOther.getDoc() != null && this.getDoc().equals(
-						castOther.getDoc())))
-				&& (this.getAutorization() == castOther.getAutorization())
-				&& ((this.getProcedureType() == castOther.getProcedureType()) || (this
-						.getProcedureType() != null
-						&& castOther.getProcedureType() != null && this
-						.getProcedureType()
-						.equals(castOther.getProcedureType())))
-				&& ((this.getProcedureCode() == castOther.getProcedureCode()) || (this
-						.getProcedureCode() != null
-						&& castOther.getProcedureCode() != null && this
-						.getProcedureCode()
-						.equals(castOther.getProcedureCode())))
-				&& (this.getProcedureScope() == castOther.getProcedureScope())
-				&& (this.getProcedureTarget() == castOther.getProcedureTarget())
-				&& (this.getPersonal() == castOther.getPersonal())
-				&& (this.getDiagnosis1() == castOther.getDiagnosis1())
-				&& (this.getDiagnosis2() == castOther.getDiagnosis2())
-				&& (this.getComplication() == castOther.getComplication())
-				&& (this.getSurgical() == castOther.getSurgical())
-				&& ((this.getAmount() == castOther.getAmount()) || (this
-						.getAmount() != null && castOther.getAmount() != null && this
-						.getAmount().equals(castOther.getAmount())));
-	}
-
-	public int hashCode() {
-		int result = 17;
-
-		result = 37 * result
-				+ (getIdBranch() == null ? 0 : this.getIdBranch().hashCode());
-		result = 37
-				* result
-				+ (getAppointmentDate() == null ? 0 : this.getAppointmentDate()
-						.hashCode());
-		result = 37 * result
-				+ (getIdBill() == null ? 0 : this.getIdBill().hashCode());
-		result = 37 * result
-				+ (getClinic() == null ? 0 : this.getClinic().hashCode());
-		result = 37 * result
-				+ (getDocType() == null ? 0 : this.getDocType().hashCode());
-		result = 37 * result
-				+ (getDoc() == null ? 0 : this.getDoc().hashCode());
-		result = 37 * result + this.getAutorization();
-		result = 37
-				* result
-				+ (getProcedureType() == null ? 0 : this.getProcedureType()
-						.hashCode());
-		result = 37
-				* result
-				+ (getProcedureCode() == null ? 0 : this.getProcedureCode()
-						.hashCode());
-		result = 37 * result + this.getProcedureScope();
-		result = 37 * result + this.getProcedureTarget();
-		result = 37 * result + this.getPersonal();
-		result = 37 * result + this.getDiagnosis1();
-		result = 37 * result + this.getDiagnosis2();
-		result = 37 * result + this.getComplication();
-		result = 37 * result + this.getSurgical();
-		result = 37 * result
-				+ (getAmount() == null ? 0 : this.getAmount().hashCode());
-		return result;
-	}
-
 }

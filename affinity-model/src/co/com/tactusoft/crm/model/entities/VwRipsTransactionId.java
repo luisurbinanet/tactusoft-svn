@@ -21,13 +21,13 @@ public class VwRipsTransactionId implements java.io.Serializable {
 	private String doc;
 	private String idBill;
 	private Date dateBill;
-	private char startDate;
-	private char endDate;
-	private char epsCode;
-	private char epsName;
-	private char contract;
-	private char benefitPlan;
-	private char policy;
+	private String startDate;
+	private String endDate;
+	private String epsCode;
+	private String epsName;
+	private String contract;
+	private String benefitPlan;
+	private String policy;
 	private int copayment;
 	private int commission;
 	private int discount;
@@ -37,8 +37,8 @@ public class VwRipsTransactionId implements java.io.Serializable {
 	}
 
 	public VwRipsTransactionId(BigDecimal idBranch, String idBill,
-			char startDate, char endDate, char epsCode, char epsName,
-			char contract, char benefitPlan, char policy, int copayment,
+			String startDate, String endDate, String epsCode, String epsName,
+			String contract, String benefitPlan, String policy, int copayment,
 			int commission, int discount) {
 		this.idBranch = idBranch;
 		this.idBill = idBill;
@@ -56,8 +56,8 @@ public class VwRipsTransactionId implements java.io.Serializable {
 
 	public VwRipsTransactionId(BigDecimal idBranch, Date appointmentDate,
 			String clinic, String docType, String doc, String idBill,
-			Date dateBill, char startDate, char endDate, char epsCode,
-			char epsName, char contract, char benefitPlan, char policy,
+			Date dateBill, String startDate, String endDate, String epsCode,
+			String epsName, String contract, String benefitPlan, String policy,
 			int copayment, int commission, int discount, BigDecimal amount) {
 		this.idBranch = idBranch;
 		this.appointmentDate = appointmentDate;
@@ -143,65 +143,65 @@ public class VwRipsTransactionId implements java.io.Serializable {
 	}
 
 	@Column(name = "start_date", nullable = false, length = 0)
-	public char getStartDate() {
+	public String getStartDate() {
 		return this.startDate;
 	}
 
-	public void setStartDate(char startDate) {
+	public void setStartDate(String startDate) {
 		this.startDate = startDate;
 	}
 
 	@Column(name = "end_date", nullable = false, length = 0)
-	public char getEndDate() {
+	public String getEndDate() {
 		return this.endDate;
 	}
 
-	public void setEndDate(char endDate) {
+	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
 
 	@Column(name = "eps_code", nullable = false, length = 0)
-	public char getEpsCode() {
+	public String getEpsCode() {
 		return this.epsCode;
 	}
 
-	public void setEpsCode(char epsCode) {
+	public void setEpsCode(String epsCode) {
 		this.epsCode = epsCode;
 	}
 
 	@Column(name = "eps_name", nullable = false, length = 0)
-	public char getEpsName() {
+	public String getEpsName() {
 		return this.epsName;
 	}
 
-	public void setEpsName(char epsName) {
+	public void setEpsName(String epsName) {
 		this.epsName = epsName;
 	}
 
 	@Column(name = "contract", nullable = false, length = 0)
-	public char getContract() {
+	public String getContract() {
 		return this.contract;
 	}
 
-	public void setContract(char contract) {
+	public void setContract(String contract) {
 		this.contract = contract;
 	}
 
 	@Column(name = "benefit_plan", nullable = false, length = 0)
-	public char getBenefitPlan() {
+	public String getBenefitPlan() {
 		return this.benefitPlan;
 	}
 
-	public void setBenefitPlan(char benefitPlan) {
+	public void setBenefitPlan(String benefitPlan) {
 		this.benefitPlan = benefitPlan;
 	}
 
 	@Column(name = "policy", nullable = false, length = 0)
-	public char getPolicy() {
+	public String getPolicy() {
 		return this.policy;
 	}
 
-	public void setPolicy(char policy) {
+	public void setPolicy(String policy) {
 		this.policy = policy;
 	}
 
@@ -240,87 +240,4 @@ public class VwRipsTransactionId implements java.io.Serializable {
 	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
-
-	public boolean equals(Object other) {
-		if ((this == other))
-			return true;
-		if ((other == null))
-			return false;
-		if (!(other instanceof VwRipsTransactionId))
-			return false;
-		VwRipsTransactionId castOther = (VwRipsTransactionId) other;
-
-		return ((this.getIdBranch() == castOther.getIdBranch()) || (this
-				.getIdBranch() != null && castOther.getIdBranch() != null && this
-				.getIdBranch().equals(castOther.getIdBranch())))
-				&& ((this.getAppointmentDate() == castOther
-						.getAppointmentDate()) || (this.getAppointmentDate() != null
-						&& castOther.getAppointmentDate() != null && this
-						.getAppointmentDate().equals(
-								castOther.getAppointmentDate())))
-				&& ((this.getClinic() == castOther.getClinic()) || (this
-						.getClinic() != null && castOther.getClinic() != null && this
-						.getClinic().equals(castOther.getClinic())))
-				&& ((this.getDocType() == castOther.getDocType()) || (this
-						.getDocType() != null && castOther.getDocType() != null && this
-						.getDocType().equals(castOther.getDocType())))
-				&& ((this.getDoc() == castOther.getDoc()) || (this.getDoc() != null
-						&& castOther.getDoc() != null && this.getDoc().equals(
-						castOther.getDoc())))
-				&& ((this.getIdBill() == castOther.getIdBill()) || (this
-						.getIdBill() != null && castOther.getIdBill() != null && this
-						.getIdBill().equals(castOther.getIdBill())))
-				&& ((this.getDateBill() == castOther.getDateBill()) || (this
-						.getDateBill() != null
-						&& castOther.getDateBill() != null && this
-						.getDateBill().equals(castOther.getDateBill())))
-				&& (this.getStartDate() == castOther.getStartDate())
-				&& (this.getEndDate() == castOther.getEndDate())
-				&& (this.getEpsCode() == castOther.getEpsCode())
-				&& (this.getEpsName() == castOther.getEpsName())
-				&& (this.getContract() == castOther.getContract())
-				&& (this.getBenefitPlan() == castOther.getBenefitPlan())
-				&& (this.getPolicy() == castOther.getPolicy())
-				&& (this.getCopayment() == castOther.getCopayment())
-				&& (this.getCommission() == castOther.getCommission())
-				&& (this.getDiscount() == castOther.getDiscount())
-				&& ((this.getAmount() == castOther.getAmount()) || (this
-						.getAmount() != null && castOther.getAmount() != null && this
-						.getAmount().equals(castOther.getAmount())));
-	}
-
-	public int hashCode() {
-		int result = 17;
-
-		result = 37 * result
-				+ (getIdBranch() == null ? 0 : this.getIdBranch().hashCode());
-		result = 37
-				* result
-				+ (getAppointmentDate() == null ? 0 : this.getAppointmentDate()
-						.hashCode());
-		result = 37 * result
-				+ (getClinic() == null ? 0 : this.getClinic().hashCode());
-		result = 37 * result
-				+ (getDocType() == null ? 0 : this.getDocType().hashCode());
-		result = 37 * result
-				+ (getDoc() == null ? 0 : this.getDoc().hashCode());
-		result = 37 * result
-				+ (getIdBill() == null ? 0 : this.getIdBill().hashCode());
-		result = 37 * result
-				+ (getDateBill() == null ? 0 : this.getDateBill().hashCode());
-		result = 37 * result + this.getStartDate();
-		result = 37 * result + this.getEndDate();
-		result = 37 * result + this.getEpsCode();
-		result = 37 * result + this.getEpsName();
-		result = 37 * result + this.getContract();
-		result = 37 * result + this.getBenefitPlan();
-		result = 37 * result + this.getPolicy();
-		result = 37 * result + this.getCopayment();
-		result = 37 * result + this.getCommission();
-		result = 37 * result + this.getDiscount();
-		result = 37 * result
-				+ (getAmount() == null ? 0 : this.getAmount().hashCode());
-		return result;
-	}
-
 }
