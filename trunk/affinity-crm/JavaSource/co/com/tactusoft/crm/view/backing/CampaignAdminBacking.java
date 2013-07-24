@@ -15,7 +15,6 @@ import co.com.tactusoft.crm.model.entities.CrmParameter;
 import co.com.tactusoft.crm.model.entities.CrmUser;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.datamodel.CampaignDataModel;
-import co.com.tactusoft.crm.view.datamodel.CampaignDetailDataModel;
 
 @Named
 @Scope("view")
@@ -116,8 +115,8 @@ public class CampaignAdminBacking extends CampaignBacking {
 
 	@Override
 	public void generateDetail() {
-		listDetail = tableService.getListCampaignDetail(selected.getId());
-		modelDetail = new CampaignDetailDataModel(listDetail);
+		//listDetail = tableService.getListCampaignDetail(selected.getId());
+		//modelDetail = new CampaignDetailDataModel(listDetail);
 
 		List<CrmUser> listUser = tableService
 				.getListUserActiveByBranchAndCallCenter(selected.getCrmBranch()

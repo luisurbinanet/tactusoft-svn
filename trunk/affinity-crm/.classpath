@@ -19,5 +19,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/affinity-model"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/fastagi"/>
 	<classpathentry kind="output" path="WebContent/WEB-INF/classes"/>
 </classpath>

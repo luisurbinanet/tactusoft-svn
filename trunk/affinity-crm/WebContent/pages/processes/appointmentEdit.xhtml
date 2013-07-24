@@ -91,53 +91,67 @@
 					columnClasses="width25per,width75per">
 
 					<h:outputLabel
-						value="#{appointmentBacking.selectedPatient.contact?msg['pat_phone_number']:msg['pat_sap_code']}" />
+						value="#{appointmentBacking.selectedPatient.contact?msg['pat_phone_number']:msg['pat_sap_code']}"
+						rendered="#{appointmentBacking.selectedPatient eq null?false:true}" />
 					<p:inputText
 						value="#{appointmentBacking.selectedPatient.contact?appointmentBacking.selectedPatient.phoneNumber:appointmentBacking.selectedPatient.codeSap}"
-						style="width:700px" readonly="true" />
+						style="width:700px;background-color:#FFFF80;font-weight:bold;"
+						readonly="true"
+						rendered="#{appointmentBacking.selectedPatient eq null?false:true}" />
 
-					<h:outputLabel value="#{msg['pat_names']}" />
+					<h:outputLabel value="#{msg['pat_names']}"
+						rendered="#{appointmentBacking.selectedPatient eq null?false:true}" />
 					<p:inputText value="#{appointmentBacking.selectedPatient.names}"
-						style="width:700px" readonly="true" />
+						style="width:700px;background-color:#FFFF80;font-weight:bold;"
+						readonly="true"
+						rendered="#{appointmentBacking.selectedPatient eq null?false:true}" />
 
 					<h:outputLabel value="#{msg['app_branch']}" />
-					<p:selectOneMenu style="width:700px"
-						value="#{appointmentBacking.idBranch}">
+					<p:selectOneMenu style="width:700px" filter="true"
+						filterMatchMode="contains" panelStyle="width:700px"
+						value="#{appointmentBacking.idBranch}"
+						disabled="#{appointmentBacking.selectedPatient eq null}">
 						<f:selectItems value="#{appointmentBacking.listBranch}" />
-						<p:ajax update="pnlDetail pnlDetail2"
+						<p:ajax update="pnlDetail pnlDetail2 pnlDetail4"
 							listener="#{appointmentBacking.handleBranchChange}" />
 					</p:selectOneMenu>
 
 					<h:outputLabel value="#{msg['app_procedure']}" />
-					<p:selectOneMenu style="width:700px"
-						value="#{appointmentBacking.idProcedure}">
-						<f:selectItems value="#{appointmentBacking.listProcedure}" />
-						<p:ajax update="pnlDetail pnlDetail2"
-							listener="#{appointmentBacking.handleProcedureChange}" />
+					<p:selectOneMenu id="selProcedure" style="width:700px"
+						value="#{appointmentBacking.idProcedureDetail}"
+						filterMatchMode="contains" panelStyle="width:700px"
+						disabled="#{appointmentBacking.selectedPatient eq null}">
+						<f:selectItems value="#{appointmentBacking.listProcedureDetail}" />
+						<p:ajax update="pnlDetail pnlDetail2 pnlDetail4 btnSearch"
+							listener="#{appointmentBacking.handleProcedureDetailChange}" />
 					</p:selectOneMenu>
 
-					<h:outputLabel value="#{msg['app_procedure_type']}" />
+					<h:outputLabel value="#{msg['app_procedure_type']}"
+						rendered="#{appointmentBacking.dependProcedureDetail}" />
 					<p:selectOneMenu id="selProcedureDetail" style="width:700px"
-						value="#{appointmentBacking.idProcedureDetail}">
-						<f:selectItems value="#{appointmentBacking.listProcedureDetail}" />
-						<p:ajax update="pnlDetail pnlDetail2"
-							listener="#{appointmentBacking.handleProcedureDetailChange}" />
+						value="#{appointmentBacking.idTherapyMaterials}"
+						filterMatchMode="contains" panelStyle="width:700px"
+						rendered="#{appointmentBacking.dependProcedureDetail}">
+						<f:selectItems value="#{appointmentBacking.listTherapyMaterials}" />
 					</p:selectOneMenu>
 
 					<h:outputLabel value="#{msg['app_seller_group']}" />
 					<p:selectOneMenu style="width:700px"
-						value="#{appointmentBacking.selectedWSGroupSellers}">
+						value="#{appointmentBacking.selectedWSGroupSellers}"
+						disabled="#{appointmentBacking.selectedPatient eq null}">
 						<f:selectItems value="#{appointmentBacking.listWSGroupSellers}" />
 					</p:selectOneMenu>
 
-					<h:outputLabel value="#{msg['app_procedure_search']}" />
+					<h:outputLabel value="#{msg['app_procedure_search']}"
+						rendered="#{appointmentBacking.renderedDoctorWithoutTime}" />
 					<p:selectOneMenu id="selSearch" style="width:700px"
-						value="#{appointmentBacking.idSearch}">
+						value="#{appointmentBacking.idSearch}"
+						rendered="#{appointmentBacking.renderedDoctorWithoutTime}"
+						disabled="#{appointmentBacking.selectedPatient eq null}">
 						<f:selectItems value="#{appointmentBacking.listSearch}" />
 						<p:ajax update="pnlDetail2 btnSearch"
 							listener="#{appointmentBacking.handleSearchChange}" />
 					</p:selectOneMenu>
-
 				</h:panelGrid>
 
 				<h:panelGrid id="pnlDetail2" columns="2" width="100%"
@@ -145,24 +159,21 @@
 
 					<h:outputLabel id="lblCurrentDate" value="#{msg['app_date']}"
 						rendered="#{appointmentBacking.renderedForDate or appointmentBacking.renderedForDoctor}" />
-					<p:calendar value="#{appointmentBacking.currentDate}"
-						id="calCurrentDate" showOn="button" navigator="true"
-						pattern="dd/MM/yyyy" readonlyInput="true"
-						mindate="#{appointmentBacking.currentDate}"
-						rendered="#{appointmentBacking.renderedForDate or appointmentBacking.renderedForDoctor}"
-						locale="es">
-						<p:ajax event="dateSelect"
-							listener="#{appointmentBacking.handleDateSelect}"
-							update="selHours" />
-					</p:calendar>
-
-					<h:outputLabel id="lblCurrentHour" value="#{msg['app_start_hour']}"
-						rendered="#{appointmentBacking.renderedForDate}" />
-					<p:selectOneMenu id="selHours" style="width:700px"
-						rendered="#{appointmentBacking.renderedForDate}"
-						value="#{appointmentBacking.currentTime}">
-						<f:selectItems value="#{appointmentBacking.listTimes}" />
-					</p:selectOneMenu>
+					<h:panelGrid columns="2">
+						<p:calendar value="#{appointmentBacking.currentDate}"
+							id="calCurrentDate" showOn="button" navigator="true"
+							pattern="dd/MM/yyyy" readonlyInput="true"
+							mindate="#{appointmentBacking.today}"
+							rendered="#{appointmentBacking.renderedForDate or appointmentBacking.renderedForDoctor}"
+							locale="es">
+							<p:ajax event="dateSelect"
+								listener="#{appointmentBacking.handleDateSelect}"
+								update="lblMessageDate" />
+						</p:calendar>
+						<h:outputLabel id="lblMessageDate" style="font-weight:bold;"
+							value="#{appointmentBacking.infoMessageDate}"
+							rendered="#{appointmentBacking.renderedForDate}" />
+					</h:panelGrid>
 
 					<h:outputLabel value="#{msg['app_doctor']}"
 						rendered="#{appointmentBacking.renderedForDoctor}" />
@@ -173,9 +184,9 @@
 					</p:selectOneMenu>
 
 					<h:outputLabel value="#{msg['app_num']}"
-						rendered="#{appointmentBacking.renderedForDoctor}" />
+						rendered="#{appointmentBacking.renderedForDate or appointmentBacking.renderedForDoctor}" />
 					<p:selectOneMenu style="width:700px"
-						rendered="#{appointmentBacking.renderedForDoctor}"
+						rendered="#{appointmentBacking.renderedForDate or appointmentBacking.renderedForDoctor}"
 						value="#{appointmentBacking.appointmentsNumber}">
 						<f:selectItem itemLabel="#{msg['app_first_10_app']}"
 							itemValue="10" />
@@ -183,6 +194,8 @@
 							itemValue="20" />
 						<f:selectItem itemLabel="#{msg['app_first_30_app']}"
 							itemValue="30" />
+						<f:selectItem itemLabel="#{msg['app_first_50_app']}"
+							itemValue="50" />
 					</p:selectOneMenu>
 
 				</h:panelGrid>

@@ -9,39 +9,112 @@
 
 	<ui:define name="body">
 
-		<p:panel style="width:100%;height:600px;"
+		<p:panel style="width:100%;height:900px;"
 			header="#{msg['title_campaign']}">
 
 			<p:spacer height="10" />
 
 			<h:form id="form">
 
-				<p:toolbar style="width:100%">
-					<p:toolbarGroup align="left">
+				<h:panelGrid id="pnlCampaign" width="100%">
+
+					<p:spacer height="10" />
+
+					<p:fieldset id="fldPostVenta" legend="Seguimiento Post-Venta SAP">
+						<h:panelGrid columns="2" width="100%">
+							<h:outputLabel value="#{msg['cam_pat']}" />
+							<h:outputLabel
+								value="#{campaignBacking.selectedMediaction.crmPatient.names}" />
+
+							<h:outputLabel value="#{msg['cam_date']}" />
+							<h:outputLabel
+								value="#{campaignBacking.selectedMediaction.dateCall}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+
+							<h:outputLabel value="#{msg['cam_branch']}" />
+							<h:outputLabel
+								value="#{campaignBacking.selectedMediaction.crmBranch.name}" />
+						</h:panelGrid>
 						<p:commandButton value="#{msg['btn_edit']}" icon="ui-icon-pencil"
 							oncomplete="dlg.show()" update=":editForm:pnlDetail"
-							disabled="#{campaignBacking.selected == null}"
-							action="#{campaignBacking.generateDetail}" />
-					</p:toolbarGroup>
-				</p:toolbar>
+							disabled="#{campaignBacking.selectedMediaction == null}"
+							action="#{campaignBacking.generateDetailMedication}" />
+					</p:fieldset>
 
-				<p:spacer height="10" />
+					<p:spacer height="5" />
 
-				<p:fieldset id="fldCampaign" legend="Paciente Pendiente de Llamar">
-					<h:panelGrid columns="2" width="100%">
-						<h:outputLabel value="#{msg['cam_pat']}" />
-						<h:outputLabel
-							value="#{campaignBacking.selected.crmPatient.names}" />
+					<p:fieldset id="fldControls" legend="Agendamiento Controles">
+						<h:panelGrid columns="2" width="100%">
+							<h:outputLabel value="#{msg['cam_pat']}" />
+							<h:outputLabel
+								value="#{campaignBacking.selectedControl.crmPatient.names}" />
 
-						<h:outputLabel value="#{msg['cam_date']}" />
-						<h:outputLabel value="#{campaignBacking.selected.dateCall}">
-							<f:convertDateTime pattern="dd/MM/yyyy" />
-						</h:outputLabel>
+							<h:outputLabel value="#{msg['cam_date']}" />
+							<h:outputLabel
+								value="#{campaignBacking.selectedControl.dateCall}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
 
-						<h:outputLabel value="#{msg['cam_branch']}" />
-						<h:outputLabel value="#{campaignBacking.selected.crmBranch.name}" />
-					</h:panelGrid>
-				</p:fieldset>
+							<h:outputLabel value="#{msg['cam_branch']}" />
+							<h:outputLabel
+								value="#{campaignBacking.selectedControl.crmBranch.name}" />
+						</h:panelGrid>
+						<p:commandButton value="#{msg['btn_edit']}" icon="ui-icon-pencil"
+							oncomplete="dlg.show()" update=":editForm:pnlDetail"
+							disabled="#{campaignBacking.selectedControl == null}"
+							action="#{campaignBacking.generateDetailControl}" />
+					</p:fieldset>
+
+					<p:spacer height="5" />
+
+					<p:fieldset id="fldAppointment" legend="Confirmación Citas">
+						<h:panelGrid columns="2" width="100%">
+							<h:outputLabel value="#{msg['cam_pat']}" />
+							<h:outputLabel
+								value="#{campaignBacking.selectedConfirmed.crmPatient.names}" />
+
+							<h:outputLabel value="#{msg['cam_date']}" />
+							<h:outputLabel
+								value="#{campaignBacking.selectedConfirmed.dateCall}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+
+							<h:outputLabel value="#{msg['cam_branch']}" />
+							<h:outputLabel
+								value="#{campaignBacking.selectedConfirmed.crmBranch.name}" />
+						</h:panelGrid>
+						<p:commandButton value="#{msg['btn_edit']}" icon="ui-icon-pencil"
+							oncomplete="dlg.show()" update=":editForm:pnlDetail"
+							disabled="#{campaignBacking.selectedConfirmed == null}"
+							action="#{campaignBacking.generateDetailConfirmed}" />
+					</p:fieldset>
+
+					<p:spacer height="5" />
+
+					<p:fieldset id="fldNoAppointment" legend="No Asistencia">
+						<h:panelGrid columns="2" width="100%">
+							<h:outputLabel value="#{msg['cam_pat']}" />
+							<h:outputLabel
+								value="#{campaignBacking.selectedNoAttendet.crmPatient.names}" />
+
+							<h:outputLabel value="#{msg['cam_date']}" />
+							<h:outputLabel
+								value="#{campaignBacking.selectedNoAttendet.dateCall}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+
+							<h:outputLabel value="#{msg['cam_branch']}" />
+							<h:outputLabel
+								value="#{campaignBacking.selectedNoAttendet.crmBranch.name}" />
+						</h:panelGrid>
+						<p:commandButton value="#{msg['btn_edit']}" icon="ui-icon-pencil"
+							oncomplete="dlg.show()" update=":editForm:pnlDetail"
+							disabled="#{campaignBacking.selectedNoAttendet == null}"
+							action="#{campaignBacking.generateDetailNoAttendet}" />
+					</p:fieldset>
+
+				</h:panelGrid>
 
 			</h:form>
 
@@ -60,9 +133,9 @@
 						<p:commandButton value="#{msg['btn_save']}" icon="ui-icon-disk"
 							action="#{campaignBacking.saveAction}"
 							oncomplete="handleComplete(xhr, status, args)"
-							update="growl :form:fldCampaign" />
+							update="growl :form:pnlCampaign" />
 						<p:commandButton value="#{msg['btn_close']}"
-							icon="ui-icon-closethick" update="growl :form:fldCampaign"
+							icon="ui-icon-closethick" update="growl :form:pnlCampaign"
 							process="@none" oncomplete="dlg.hide()" />
 					</p:toolbarGroup>
 				</p:toolbar>
@@ -97,87 +170,227 @@
 
 					<p:spacer height="5" />
 
-					<p:dataGrid var="rec" value="#{campaignBacking.modelDetail}"
-						columns="3" rows="3" paginator="true">
+					<p:fieldset legend="Medicamentos NO Adquiridos"
+						rendered="#{campaignBacking.selectedDetailMediaction ne null}">
+						<p:dataTable value="#{campaignBacking.modelDetailMedication}"
+							rows="5" paginator="true" var="item">
 
-						<p:fieldset style="height:100%;"
-							legend="#{campaignBacking.getDescCampaingType(rec.campaingType)}">
+							<p:column headerText="#{msg['cam_medication']}">
+								<h:outputLabel value="#{item.descMaterial}" />
+							</p:column>
 
+							<p:column headerText="#{msg['sal_material_amount']}">
+								<h:outputLabel value="#{item.unit}" />
+							</p:column>
+
+						</p:dataTable>
+
+						<p:spacer />
+
+						<h:panelGrid id="pnlAttributesME" columns="2" width="100%">
+							<h:outputLabel value="#{msg['app_state']}" />
+							<p:selectOneMenu style="width:400px" required="true"
+								label="#{msg['app_state']}"
+								value="#{campaignBacking.selectedDetailMediaction.status}">
+								<p:ajax update="pnlAttributesNA" />
+								<f:selectItem itemValue=""
+									itemLabel="#{msg['glb_default_value']}" />
+								<f:selectItem itemValue="1"
+									itemLabel="#{msg['glb_state_close']}" />
+								<f:selectItem itemValue="3"
+									itemLabel="#{msg['cam_state_new_call']}" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+					</p:fieldset>
+
+					<p:spacer height="5"
+						rendered="#{campaignBacking.selectedDetailMediaction ne null}" />
+
+					<p:fieldset
+						legend="No ha asistido a CONTROLES en los últimos 25 días"
+						rendered="#{campaignBacking.selectedDetailControl ne null}">
+
+						<h:panelGrid columns="2" style="width:100%">
+							<h:outputLabel value="#{msg['cam_date']}"
+								style="font-size:12px;font-weight:bold;" />
 							<h:outputLabel
-								value="#{campaignBacking.getText(rec.campaingType)}"
-								style="font-size:14px;" />
-
-							<h:panelGrid columns="2" style="width:100%"
-								rendered="#{rec.campaingType ne 'CONTROL' and rec.campaingType ne 'MEDICATION'}">
-								<h:outputLabel value="#{msg['cam_date']}"
+								value="#{campaignBacking.selectedDetailControl.crmAppointment.startAppointmentDate}"
+								style="font-size:12px;font-weight:bold;">
+								<f:convertDateTime pattern="dd/MM/yyyy HH:mm"
 									style="font-size:12px;font-weight:bold;" />
-								<h:outputLabel
-									value="#{rec.crmAppointment.startAppointmentDate}"
-									style="font-size:12px;font-weight:bold;">
-									<f:convertDateTime pattern="dd/MM/yyyy HH:mm"
-										style="font-size:12px;font-weight:bold;" />
-								</h:outputLabel>
-								<h:outputLabel value="#{msg['cam_procedure']}"
-									style="font-size:12px;font-weight:bold;" />
-								<h:outputLabel
-									value="#{rec.crmAppointment.crmProcedureDetail.name}"
-									style="font-size:12px;font-weight:bold;" />
-								<h:outputLabel value="#{msg['app_doctor']}"
-									style="font-size:12px;font-weight:bold;" />
-								<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}"
-									style="font-size:12px;font-weight:bold;" />
-							</h:panelGrid>
+							</h:outputLabel>
+							<h:outputLabel value="#{msg['cam_procedure']}"
+								style="font-size:12px;font-weight:bold;" />
+							<h:outputLabel
+								value="#{campaignBacking.selectedDetailControl.crmAppointment.crmProcedureDetail.name}"
+								style="font-size:12px;font-weight:bold;" />
+							<h:outputLabel value="#{msg['app_doctor']}"
+								style="font-size:12px;font-weight:bold;" />
+							<h:outputLabel
+								value="#{campaignBacking.selectedDetailControl.crmAppointment.crmDoctor.names}"
+								style="font-size:12px;font-weight:bold;" />
+							<h:outputLabel value="#{msg['cam_branch']}"
+								style="font-size:12px;font-weight:bold;" />
+							<h:outputLabel style="font-size:12px;font-weight:bold;"
+								value="#{campaignBacking.selectedDetailControl.crmAppointment.crmBranch.name}" />
+						</h:panelGrid>
 
-							<p:dataTable rendered="#{campaignBacking.renderedMedication}"
-								value="#{campaignBacking.modelDetailMedication}" rows="2"
-								paginator="true" var="item">
+						<p:spacer />
 
-								<p:column headerText="#{msg['cam_medication']}">
-									<h:outputLabel value="#{item.descMaterial}" />
-								</p:column>
-
-								<p:column headerText="#{msg['sal_material_amount']}">
-									<h:outputLabel value="#{item.unit}" />
-								</p:column>
-
-							</p:dataTable>
-
+						<h:panelGrid>
 							<p:commandButton value="#{msg['btn_edit_app']}"
 								action="#{campaignBacking.editAppoinmnetAction}"
-								rendered="#{rec.campaingType ne 'CONTROL' and rec.campaingType ne 'MEDICATION'}"
 								immediate="true">
 								<f:setPropertyActionListener
 									target="#{campaignBacking.selectedAppointment}"
-									value="#{rec.crmAppointment}" />
+									value="#{campaignBacking.selectedDetailControl.crmAppointment}" />
 							</p:commandButton>
+						</h:panelGrid>
 
-						</p:fieldset>
+						<p:spacer />
 
-					</p:dataGrid>
+						<h:panelGrid id="pnlAttributesCO" columns="2" width="100%">
+							<h:outputLabel value="#{msg['app_state']}" />
+							<p:selectOneMenu style="width:400px" required="true"
+								label="#{msg['app_state']}"
+								value="#{campaignBacking.selectedDetailControl.status}">
+								<p:ajax update="pnlAttributesNA" />
+								<f:selectItem itemValue=""
+									itemLabel="#{msg['glb_default_value']}" />
+								<f:selectItem itemValue="1"
+									itemLabel="#{msg['glb_state_close']}" />
+								<f:selectItem itemValue="3"
+									itemLabel="#{msg['cam_state_new_call']}" />
+							</p:selectOneMenu>
+						</h:panelGrid>
 
-					<p:spacer height="5" />
+					</p:fieldset>
 
-					<h:panelGrid id="pnlAttributes" columns="2" width="100%">
-						<h:outputLabel value="#{msg['app_state']}" />
-						<p:selectOneMenu value="#{campaignBacking.selected.state}"
-							style="width:400px" required="true">
-							<p:ajax update="pnlAttributes" />
-							<f:selectItem itemValue="2" itemLabel="#{msg['glb_state_close']}" />
-							<f:selectItem itemValue="3"
-								itemLabel="#{msg['cam_state_new_call']}" />
-						</p:selectOneMenu>
-						<h:outputLabel value="#{msg['cam_call_days']}"
-							rendered="#{campaignBacking.selected.state eq 3}" />
-						<p:selectOneMenu value="#{campaignBacking.selected.days}"
-							style="width:400px"
-							rendered="#{campaignBacking.selected.state eq 3}">
-							<f:selectItem itemValue="" itemLabel="#{msg['cam_days_not']}" />
-							<f:selectItem itemValue="5" itemLabel="#{msg['cam_days_5']}" />
-							<f:selectItem itemValue="10" itemLabel="#{msg['cam_days_10']}" />
-							<f:selectItem itemValue="15" itemLabel="#{msg['cam_days_15']}" />
-							<f:selectItem itemValue="25" itemLabel="#{msg['cam_days_25']}" />
-							<f:selectItem itemValue="30" itemLabel="#{msg['cam_days_30']}" />
-						</p:selectOneMenu>
+					<p:spacer height="5"
+						rendered="#{campaignBacking.selectedDetailControl ne null}" />
+
+					<p:fieldset legend="Confirmar la cita"
+						rendered="#{campaignBacking.selectedDetailConfirmed ne null}">
+						<h:panelGrid columns="2" style="width:100%">
+							<h:outputLabel value="#{msg['cam_date']}"
+								style="font-size:12px;font-weight:bold;" />
+							<h:outputLabel
+								value="#{campaignBacking.selectedDetailConfirmed.crmAppointment.startAppointmentDate}"
+								style="font-size:12px;font-weight:bold;">
+								<f:convertDateTime pattern="dd/MM/yyyy HH:mm"
+									style="font-size:12px;font-weight:bold;" />
+							</h:outputLabel>
+							<h:outputLabel value="#{msg['cam_procedure']}"
+								style="font-size:12px;font-weight:bold;" />
+							<h:outputLabel
+								value="#{campaignBacking.selectedDetailConfirmed.crmAppointment.crmProcedureDetail.name}"
+								style="font-size:12px;font-weight:bold;" />
+							<h:outputLabel value="#{msg['app_doctor']}"
+								style="font-size:12px;font-weight:bold;" />
+							<h:outputLabel
+								value="#{campaignBacking.selectedDetailConfirmed.crmAppointment.crmDoctor.names}"
+								style="font-size:12px;font-weight:bold;" />
+							<h:outputLabel value="#{msg['cam_branch']}"
+								style="font-size:12px;font-weight:bold;" />
+							<h:outputLabel style="font-size:12px;font-weight:bold;"
+								value="#{campaignBacking.selectedDetailConfirmed.crmAppointment.crmBranch.name}" />
+						</h:panelGrid>
+
+						<p:spacer />
+
+						<h:panelGrid>
+							<p:commandButton value="#{msg['btn_edit_app']}"
+								action="#{campaignBacking.editAppoinmnetAction}"
+								immediate="true">
+								<f:setPropertyActionListener
+									target="#{campaignBacking.selectedAppointment}"
+									value="#{campaignBacking.selectedDetailConfirmed.crmAppointment}" />
+							</p:commandButton>
+						</h:panelGrid>
+
+						<p:spacer />
+
+						<h:panelGrid id="pnlAttributesCM" columns="2" width="100%">
+							<h:outputLabel value="#{msg['app_state']}" />
+							<p:selectOneMenu style="width:400px" required="true"
+								label="#{msg['app_state']}"
+								value="#{campaignBacking.selectedDetailConfirmed.status}">
+								<p:ajax update="pnlAttributesNA" />
+								<f:selectItem itemValue=""
+									itemLabel="#{msg['glb_default_value']}" />
+								<f:selectItem itemValue="1"
+									itemLabel="#{msg['glb_state_close']}" />
+								<f:selectItem itemValue="3"
+									itemLabel="#{msg['cam_state_new_call']}" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+					</p:fieldset>
+
+					<p:spacer height="5"
+						rendered="#{campaignBacking.selectedDetailConfirmed ne null}" />
+
+					<p:fieldset legend="No asistió a la cita"
+						rendered="#{campaignBacking.selectedDetailNoAttendet ne null}">
+						<h:panelGrid columns="2" style="width:100%">
+							<h:outputLabel value="#{msg['cam_date']}"
+								style="font-size:12px;font-weight:bold;" />
+							<h:outputLabel
+								value="#{campaignBacking.selectedDetailNoAttendet.crmAppointment.startAppointmentDate}"
+								style="font-size:12px;font-weight:bold;">
+								<f:convertDateTime pattern="dd/MM/yyyy HH:mm"
+									style="font-size:12px;font-weight:bold;" />
+							</h:outputLabel>
+							<h:outputLabel value="#{msg['cam_procedure']}"
+								style="font-size:12px;font-weight:bold;" />
+							<h:outputLabel
+								value="#{campaignBacking.selectedDetailNoAttendet.crmAppointment.crmProcedureDetail.name}"
+								style="font-size:12px;font-weight:bold;" />
+							<h:outputLabel value="#{msg['app_doctor']}"
+								style="font-size:12px;font-weight:bold;" />
+							<h:outputLabel
+								value="#{campaignBacking.selectedDetailNoAttendet.crmAppointment.crmDoctor.names}"
+								style="font-size:12px;font-weight:bold;" />
+							<h:outputLabel value="#{msg['cam_branch']}"
+								style="font-size:12px;font-weight:bold;" />
+							<h:outputLabel style="font-size:12px;font-weight:bold;"
+								value="#{campaignBacking.selectedDetailNoAttendet.crmAppointment.crmBranch.name}" />
+						</h:panelGrid>
+
+						<p:spacer />
+
+						<h:panelGrid>
+							<p:commandButton value="#{msg['btn_edit_app']}"
+								action="#{campaignBacking.editAppoinmnetAction}"
+								immediate="true">
+								<f:setPropertyActionListener
+									target="#{campaignBacking.selectedAppointment}"
+									value="#{campaignBacking.selectedDetailNoAttendet.crmAppointment}" />
+							</p:commandButton>
+						</h:panelGrid>
+
+						<p:spacer />
+
+						<h:panelGrid id="pnlAttributesNA" columns="2" width="100%">
+							<h:outputLabel value="#{msg['app_state']}" />
+							<p:selectOneMenu style="width:400px" required="true"
+								label="#{msg['app_state']}"
+								value="#{campaignBacking.selectedDetailNoAttendet.status}">
+								<p:ajax update="pnlAttributesNA" />
+								<f:selectItem itemValue=""
+									itemLabel="#{msg['glb_default_value']}" />
+								<f:selectItem itemValue="2"
+									itemLabel="#{msg['glb_state_close']}" />
+								<f:selectItem itemValue="3"
+									itemLabel="#{msg['cam_state_new_call']}" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+					</p:fieldset>
+
+					<p:spacer height="5"
+						rendered="#{campaignBacking.selectedDetailNoAttendet ne null}" />
+
+					<h:panelGrid id="pnlAttributes" columns="2" width="100%"
+						rendered="#{campaignBacking.selectedDetailMediaction ne null}">
 						<h:outputLabel value="#{msg['cam_call_poll']}" />
 						<p:selectOneMenu value="#{campaignBacking.selected.poll}"
 							style="width:400px">

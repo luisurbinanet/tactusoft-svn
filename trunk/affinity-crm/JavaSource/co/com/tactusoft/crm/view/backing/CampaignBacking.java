@@ -13,16 +13,18 @@ import javax.inject.Named;
 
 import org.springframework.context.annotation.Scope;
 
+import com.tactusoft.webservice.client.beans.WSBean;
+
 import co.com.tactusoft.crm.controller.bo.ParameterBo;
 import co.com.tactusoft.crm.controller.bo.TablesBo;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmCampaign;
 import co.com.tactusoft.crm.model.entities.CrmCampaignDetail;
+import co.com.tactusoft.crm.model.entities.CrmCampaignMedication;
 import co.com.tactusoft.crm.model.entities.CrmParameter;
-import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.datamodel.CampaignDataModel;
-import co.com.tactusoft.crm.view.datamodel.CampaignDetailDataModel;
+import co.com.tactusoft.crm.view.datamodel.CampaignMedicationlDataModel;
 
 @Named
 @Scope("view")
@@ -38,13 +40,20 @@ public class CampaignBacking extends BaseBacking {
 
 	protected List<CrmCampaign> list;
 	protected CampaignDataModel model;
+
 	protected CrmCampaign selected;
+	protected CrmCampaign selectedNoAttendet;
+	protected CrmCampaign selectedConfirmed;
+	protected CrmCampaign selectedControl;
+	protected CrmCampaign selectedMediaction;
 
-	protected List<CrmCampaignDetail> listDetail;
-	protected CampaignDetailDataModel modelDetail;
+	protected CrmCampaignDetail selectedDetailNoAttendet;
+	protected CrmCampaignDetail selectedDetailConfirmed;
+	protected CrmCampaignDetail selectedDetailControl;
+	protected CrmCampaignDetail selectedDetailMediaction;
 
-	protected List<CrmCampaignDetail> listDetailMedication;
-	protected CampaignDetailDataModel modelDetailMedication;
+	protected List<CrmCampaignMedication> listDetailMedication;
+	protected CampaignMedicationlDataModel modelDetailMedication;
 
 	protected Map<String, String> mapText;
 	protected CrmAppointment selectedAppointment;
@@ -80,45 +89,88 @@ public class CampaignBacking extends BaseBacking {
 		this.model = model;
 	}
 
-	public CrmCampaign getSelected() {
-		return selected;
+	public CrmCampaign getSelectedNoAttendet() {
+		return selectedNoAttendet;
 	}
 
-	public void setSelected(CrmCampaign selected) {
-		this.selected = selected;
+	public void setSelectedNoAttendet(CrmCampaign selectedNoAttendet) {
+		this.selectedNoAttendet = selectedNoAttendet;
 	}
 
-	public List<CrmCampaignDetail> getListDetail() {
-		return listDetail;
+	public CrmCampaign getSelectedConfirmed() {
+		return selectedConfirmed;
 	}
 
-	public void setListDetail(List<CrmCampaignDetail> listDetail) {
-		this.listDetail = listDetail;
+	public void setSelectedConfirmed(CrmCampaign selectedConfirmed) {
+		this.selectedConfirmed = selectedConfirmed;
 	}
 
-	public CampaignDetailDataModel getModelDetail() {
-		return modelDetail;
+	public CrmCampaign getSelectedControl() {
+		return selectedControl;
 	}
 
-	public void setModelDetail(CampaignDetailDataModel modelDetail) {
-		this.modelDetail = modelDetail;
+	public void setSelectedControl(CrmCampaign selectedControl) {
+		this.selectedControl = selectedControl;
 	}
 
-	public List<CrmCampaignDetail> getListDetailMedication() {
+	public CrmCampaign getSelectedMediaction() {
+		return selectedMediaction;
+	}
+
+	public void setSelectedMediaction(CrmCampaign selectedMediaction) {
+		this.selectedMediaction = selectedMediaction;
+	}
+
+	public CrmCampaignDetail getSelectedDetailNoAttendet() {
+		return selectedDetailNoAttendet;
+	}
+
+	public void setSelectedDetailNoAttendet(
+			CrmCampaignDetail selectedDetailNoAttendet) {
+		this.selectedDetailNoAttendet = selectedDetailNoAttendet;
+	}
+
+	public CrmCampaignDetail getSelectedDetailConfirmed() {
+		return selectedDetailConfirmed;
+	}
+
+	public void setSelectedDetailConfirmed(
+			CrmCampaignDetail selectedDetailConfirmed) {
+		this.selectedDetailConfirmed = selectedDetailConfirmed;
+	}
+
+	public CrmCampaignDetail getSelectedDetailControl() {
+		return selectedDetailControl;
+	}
+
+	public void setSelectedDetailControl(CrmCampaignDetail selectedDetailControl) {
+		this.selectedDetailControl = selectedDetailControl;
+	}
+
+	public CrmCampaignDetail getSelectedDetailMediaction() {
+		return selectedDetailMediaction;
+	}
+
+	public void setSelectedDetailMediaction(
+			CrmCampaignDetail selectedDetailMediaction) {
+		this.selectedDetailMediaction = selectedDetailMediaction;
+	}
+
+	public List<CrmCampaignMedication> getListDetailMedication() {
 		return listDetailMedication;
 	}
 
 	public void setListDetailMedication(
-			List<CrmCampaignDetail> listDetailMedication) {
+			List<CrmCampaignMedication> listDetailMedication) {
 		this.listDetailMedication = listDetailMedication;
 	}
 
-	public CampaignDetailDataModel getModelDetailMedication() {
+	public CampaignMedicationlDataModel getModelDetailMedication() {
 		return modelDetailMedication;
 	}
 
 	public void setModelDetailMedication(
-			CampaignDetailDataModel modelDetailMedication) {
+			CampaignMedicationlDataModel modelDetailMedication) {
 		this.modelDetailMedication = modelDetailMedication;
 	}
 
@@ -138,62 +190,99 @@ public class CampaignBacking extends BaseBacking {
 		this.selectedAppointment = selectedAppointment;
 	}
 
+	public CrmCampaign getSelected() {
+		return selected;
+	}
+
+	public void setSelected(CrmCampaign selected) {
+		this.selected = selected;
+	}
+
 	protected void refreshList() {
-		List<CrmCampaign> listTemp = tableService.getListCampaignActive();
+		List<CrmCampaign> listTemp = tableService.getListCampaignNoAttendet();
 		if (listTemp.size() > 0) {
-			selected = listTemp.get(0);
+			selectedNoAttendet = listTemp.get(0);
 		} else {
-			selected = null;
+			selectedNoAttendet = null;
+		}
+
+		listTemp = tableService.getListCampaignConfirmed();
+		if (listTemp.size() > 0) {
+			selectedConfirmed = listTemp.get(0);
+		} else {
+			selectedConfirmed = null;
+		}
+
+		listTemp = tableService.getListCampaignControl();
+		if (listTemp.size() > 0) {
+			selectedControl = listTemp.get(0);
+		} else {
+			selectedControl = null;
+		}
+
+		listTemp = tableService.getListCampaignMedication();
+		if (listTemp.size() > 0) {
+			selectedMediaction = listTemp.get(0);
+		} else {
+			selectedMediaction = null;
 		}
 	}
 
 	public void newAction() {
-		selected = new CrmCampaign();
-		selected.setState(Constant.STATE_ACTIVE);
+		selectedConfirmed = null;
+		selectedControl = null;
+		selectedMediaction = null;
+		selectedNoAttendet = null;
 	}
 
-	public void saveAction() {
-		String message = null;
+	public void generateDetailNoAttendet() {
+		selected = selectedNoAttendet;
+		generateDetail();
+	}
 
-		int result = tableService.saveCampaign(selected);
-		if (result == 0) {
-			refreshList();
-			message = FacesUtil.getMessage("msg_record_ok");
-			FacesUtil.addInfo(message);
-		} else if (result == -1) {
-			String paramValue = FacesUtil.getMessage("doc_code");
-			message = FacesUtil.getMessage("msg_record_unique_exception",
-					paramValue);
-			FacesUtil.addError(message);
+	public void generateDetailConfirmed() {
+		selected = selectedConfirmed;
+		generateDetail();
+	}
 
-		}
+	public void generateDetailMedication() {
+		selected = selectedMediaction;
+		generateDetail();
+	}
+
+	public void generateDetailControl() {
+		selected = selectedControl;
+		generateDetail();
 	}
 
 	public void generateDetail() {
-		List<CrmCampaignDetail> listDetailAll = selected
-				.getCrmCampaignDetails();
+		selectedDetailNoAttendet = null;
+		selectedDetailConfirmed = null;
+		selectedDetailControl = null;
+		selectedDetailMediaction = null;
 
-		listDetail = new ArrayList<CrmCampaignDetail>();
-		for (CrmCampaignDetail row : listDetailAll) {
-			if (!row.getCampaingType().equals("MEDICATION")) {
-				listDetail.add(row);
+		List<CrmCampaignDetail> listDetail = selected.getCrmCampaignDetails();
+		for (CrmCampaignDetail row : listDetail) {
+			if (row.getCampaingType().equals("NO_ATTENDET")) {
+				selectedDetailNoAttendet = row;
+			} else if (row.getCampaingType().equals("CONFIRMED")) {
+				selectedDetailConfirmed = row;
+			} else if (row.getCampaingType().equals("CONTROL")) {
+				selectedDetailControl = row;
+			} else if (row.getCampaingType().equals("MEDICATION")) {
+				selectedDetailMediaction = row;
 			}
 		}
 
-		listDetailMedication = new ArrayList<CrmCampaignDetail>();
-		for (CrmCampaignDetail row : listDetailAll) {
-			if (row.getCampaingType().equals("MEDICATION")) {
-				listDetailMedication.add(row);
-			}
+		if (selectedDetailMediaction != null) {
+			listDetailMedication = tablesService
+					.getListCampaignMedication(selected.getId());
+		} else {
+			listDetailMedication = new ArrayList<CrmCampaignMedication>();
 		}
 
-		modelDetail = new CampaignDetailDataModel(listDetail);
-		modelDetailMedication = new CampaignDetailDataModel(
+		modelDetailMedication = new CampaignMedicationlDataModel(
 				listDetailMedication);
-
-		if (listDetailMedication.size() > 0) {
-			listDetail.add(listDetailMedication.get(0));
-		}
 	}
 
 	public boolean isRenderedMedication() {
@@ -209,6 +298,15 @@ public class CampaignBacking extends BaseBacking {
 
 	public String getText(String typeCampaign) {
 		return mapText.get(typeCampaign);
+	}
+
+	public String getDocType(String country, String code) {
+		for (WSBean row : FacesUtil.getCurrentUserData().getListWSDocType()) {
+			if (row.getNames().contains(country) && row.getCode().equals(code)) {
+				return row.getNames();
+			}
+		}
+		return "Tipo de Identificación Desconocida";
 	}
 
 	public String editAppoinmnetAction() {
@@ -243,5 +341,34 @@ public class CampaignBacking extends BaseBacking {
 				.getId());
 
 		return "/pages/processes/appointmentEdit.jsf?faces-redirect=true";
+	}
+
+	public void saveAction() {
+		String message = null;
+		selected.setState(1);
+		int result = tableService.saveCampaign(selected);
+		if (selectedDetailConfirmed != null) {
+			tableService.saveCampaignDetail(selectedDetailConfirmed);
+		}
+		if (selectedDetailControl != null) {
+			tableService.saveCampaignDetail(selectedDetailControl);
+		}
+		if (selectedDetailMediaction != null) {
+			tableService.saveCampaignDetail(selectedDetailMediaction);
+		}
+		if (selectedDetailNoAttendet != null) {
+			tableService.saveCampaignDetail(selectedDetailNoAttendet);
+		}
+		if (result == 0) {
+			refreshList();
+			message = FacesUtil.getMessage("msg_record_ok");
+			FacesUtil.addInfo(message);
+		} else if (result == -1) {
+			String paramValue = FacesUtil.getMessage("doc_code");
+			message = FacesUtil.getMessage("msg_record_unique_exception",
+					paramValue);
+			FacesUtil.addError(message);
+
+		}
 	}
 }
