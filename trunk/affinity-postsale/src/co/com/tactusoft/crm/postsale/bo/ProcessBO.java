@@ -14,6 +14,7 @@ import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmHoliday;
+import co.com.tactusoft.crm.model.entities.CrmLog;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmSapMedication;
 import co.com.tactusoft.crm.model.entities.CrmUser;
@@ -47,12 +48,13 @@ public class ProcessBO implements Serializable {
 						+ dateString + "T23:59:59.999+05:00'");
 	}
 
-	public List<CrmAppointment> getListAppointmentConfirmed(String dateString) {
+	public List<CrmAppointment> getListAppointmentConfirmed(
+			String yesterdayString, String currentDateString) {
 		return dao
-				.find("FROM CrmAppointment o WHERE state = 1 AND startAppointmentDate BETWEEN '"
-						+ dateString
-						+ "T00:00:00.000+05:00' and '"
-						+ dateString + "T23:59:59.999+05:00'");
+				.find("FROM CrmAppointment o WHERE o.state = 1 AND Date(o.startAppointmentDate) = '"
+						+ yesterdayString
+						+ "' AND Date(o.dateCreate) <> '"
+						+ currentDateString + "'");
 	}
 
 	public List<CrmAppointment> getListAppointmentControl(String dateString) {
@@ -164,16 +166,21 @@ public class ProcessBO implements Serializable {
 		}
 		return result;
 	}
-	
+
 	public List<CrmHoliday> getListHoliday(Date date, BigDecimal idBranch) {
 		String currenDate = FacesUtil.formatDate(date, "yyyy-MM-dd");
 		return dao
 				.find("select o.crmHoliday from CrmHolidayBranch o where o.crmHoliday.holiday = '"
 						+ currenDate + "' and o.crmBranch.id = " + idBranch);
 	}
-	
+
 	public List<CrmBranch> getListBranchActive() {
 		return dao.find("from CrmBranch o where o.state = 1");
+	}
+
+	public List<CrmLog> getListLog(String currentDateString) {
+		return dao.find("from CrmLog o where Date(o.logDate) = '"
+				+ currentDateString + "'");
 	}
 
 }
