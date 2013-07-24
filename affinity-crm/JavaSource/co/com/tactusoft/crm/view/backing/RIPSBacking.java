@@ -1,5 +1,6 @@
 package co.com.tactusoft.crm.view.backing;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
@@ -32,10 +33,10 @@ public class RIPSBacking extends BaseBacking implements Serializable {
 	public RIPSBacking() {
 		options = new HashMap<String, String>();
 		options.put("Archivo de Usuarios", "RIPS1");
-		options.put("Archivo de Consulta","RIPS2");
-		options.put("Archivo de Procedimientos","RIPS3");
-		options.put("Archivo de Medicamentos","RIPS4");
-		options.put("Archivo de Transacciones","RIPS5");
+		options.put("Archivo de Consulta", "RIPS2");
+		options.put("Archivo de Procedimientos", "RIPS3");
+		options.put("Archivo de Medicamentos", "RIPS4");
+		options.put("Archivo de Transacciones", "RIPS5");
 	}
 
 	public Date getStartDate() {
@@ -73,32 +74,46 @@ public class RIPSBacking extends BaseBacking implements Serializable {
 	public void generateAction() {
 		if (selectedOptions.size() > 0) {
 
+			String fileName = FacesUtil.formatDate(new Date(),
+					"yyyyMMddHHmmssS");
+			String path = "c:/Temp/";
+
 			String startDateString = FacesUtil.formatDate(this.startDate,
 					"yyyy-MM-dd") + " 00:00:00";
 			String endDateString = FacesUtil.formatDate(this.endDate,
 					"yyyy-MM-dd") + " 23:59:59";
 
+			File[] files = new File[selectedOptions.size()];
+			int index = 0;
+
 			for (String option : selectedOptions) {
 				if (option.equals("RIPS1")) {
-					this.RIPSService.getListPatient(idBranch, startDateString,
-							endDateString);
+					files[index] = this.RIPSService.getListPatient(path,
+							fileName, idBranch, startDateString, endDateString);
+					index++;
 				} else if (option.equals("RIPS2")) {
-					this.RIPSService.getListAppointment(idBranch, startDateString,
-							endDateString);
+					files[index] = this.RIPSService.getListAppointment(path,
+							fileName, idBranch, startDateString, endDateString);
+					index++;
 				} else if (option.equals("RIPS3")) {
-					this.RIPSService.getListProcedure(idBranch, startDateString,
-							endDateString);
+					files[index] = this.RIPSService.getListProcedure(path,
+							fileName, idBranch, startDateString, endDateString);
+					index++;
 				} else if (option.equals("RIPS4")) {
-					this.RIPSService.getListMedication(idBranch, startDateString,
-							endDateString);
+					files[index] = this.RIPSService.getListMedication(path,
+							fileName, idBranch, startDateString, endDateString);
+					index++;
 				} else if (option.equals("RIPS5")) {
-					this.RIPSService.getListTransaction(idBranch, startDateString,
-							endDateString);
+					files[index] = this.RIPSService.getListTransaction(path,
+							fileName, idBranch, startDateString, endDateString);
+					index++;
 				}
 			}
-			
-			FacesUtil.addInfo("Archivo generado en la ruta /opt/rips de su servidor");
+
+			FacesUtil.createZip(files, path, "/rips" + fileName + ".zip");
+
+			FacesUtil.addInfo("Archivo generado " + fileName + ".zip"
+					+ " exitosamente");
 		}
 	}
-
 }

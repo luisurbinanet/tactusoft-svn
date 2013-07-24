@@ -16,12 +16,14 @@
 
 			<h:form id="form">
 
-				<p:growl id="growl" showDetail="true" />
+				<p:growl id="growl" showDetail="true" autoUpdate="true" />
 
 				<p:toolbar style="width:100%">
 					<p:toolbarGroup align="left">
-						<p:commandButton value="#{msg['btn_search']}" update="growl"
-							action="#{RIPSBacking.generateAction}" icon="ui-icon-search" />
+						<h:commandLink action="#{RIPSBacking.generateAction}">
+							<p:commandButton icon="ui-icon-search"
+								value="#{msg['btn_search']}" />
+						</h:commandLink>
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -36,12 +38,12 @@
 					</p:selectOneMenu>
 
 					<h:outputLabel value="#{msg['src_star_date']}" style="width:40%" />
-					<p:calendar value="#{RIPSBacking.startDate}"
+					<p:calendar value="#{RIPSBacking.startDate}" required="true"
 						label="#{msg['src_star_date']}" readonlyInput="true"
 						pattern="dd/MM/yyyy" showOn="button" navigator="true" locale="es" />
 
 					<h:outputLabel value="#{msg['src_end_date']}" style="width:40%" />
-					<p:calendar value="#{RIPSBacking.endDate}"
+					<p:calendar value="#{RIPSBacking.endDate}" required="true"
 						label="#{msg['src_end_date']}" readonlyInput="true"
 						pattern="dd/MM/yyyy" showOn="button" navigator="true" locale="es" />
 				</h:panelGrid>
@@ -49,7 +51,7 @@
 				<p:spacer height="5" />
 
 				<h:panelGrid columns="1" width="100%">
-					<h:outputText value="Vertical: " />
+					<h:outputText value="#{msg['rip_file']}" />
 					<p:selectManyCheckbox value="#{RIPSBacking.selectedOptions}"
 						layout="pageDirection">
 						<f:selectItems value="#{RIPSBacking.options}" />

@@ -1,6 +1,8 @@
 package co.com.tactusoft.crm.util;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,6 +29,8 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
@@ -37,7 +41,9 @@ import javax.faces.event.MethodExpressionActionListener;
 import javax.faces.model.SelectItem;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -558,4 +564,64 @@ public class FacesUtil {
 		int currentDay = calendar.get(Calendar.DAY_OF_WEEK);
 		return currentDay;
 	}
+	
+	/**
+	 * 
+	 * @param listaFiles
+	 * @param outFilename
+	 * @return
+	 */
+	public static boolean createZip(File[] listaFiles, String path, String outFilename) {
+		boolean resultado = false;
+		byte[] buf = new byte[1024];
+		try {
+			// Create the ZIP file
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ZipOutputStream out = new ZipOutputStream(baos);
+			// Compress the files
+			for (int i = 0; i < listaFiles.length; i++) {
+				FileInputStream in = new FileInputStream(listaFiles[i]);
+				String strFile = (listaFiles[i]).getName();
+				// Add ZIP entry to output stream.
+				out.putNextEntry(new ZipEntry(strFile));
+				// Transfer bytes from the file to the ZIP file
+				int len;
+				while ((len = in.read(buf)) > 0) {
+					out.write(buf, 0, len);
+				}
+				// Complete the entry
+				out.closeEntry();
+				in.close();
+			}
+			// Complete the ZIP file
+			out.close();
+
+			FileOutputStream fileOut = new FileOutputStream(path + outFilename);
+			baos.writeTo(fileOut);
+			fileOut.close();
+
+			// Export the File
+			FacesContext facesContext = FacesContext.getCurrentInstance();
+			Object response = facesContext.getExternalContext().getResponse();
+
+			if (response instanceof HttpServletResponse) {
+				HttpServletResponse hsr = (HttpServletResponse) response;
+				hsr.setContentType("application/zip");
+				hsr.setHeader("Content-disposition", "attachment; filename="
+						+ path);
+				hsr.setContentLength(baos.size());
+				ServletOutputStream output = hsr.getOutputStream();
+				baos.writeTo(output);
+				output.flush();
+				facesContext.responseComplete();
+			}
+
+			resultado = true;
+		} catch (IOException e) {
+			e.printStackTrace();
+			resultado = false;
+		}
+		return resultado;
+	}
+
 }
