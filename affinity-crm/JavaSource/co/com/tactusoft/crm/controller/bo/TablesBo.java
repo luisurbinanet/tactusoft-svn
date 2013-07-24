@@ -17,6 +17,7 @@ import co.com.tactusoft.crm.model.entities.AstTrunkDialpatterns;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmCampaign;
 import co.com.tactusoft.crm.model.entities.CrmCampaignDetail;
+import co.com.tactusoft.crm.model.entities.CrmCampaignMedication;
 import co.com.tactusoft.crm.model.entities.CrmCaseStudy;
 import co.com.tactusoft.crm.model.entities.CrmCie;
 import co.com.tactusoft.crm.model.entities.CrmCieMaterial;
@@ -99,26 +100,40 @@ public class TablesBo implements Serializable {
 		return dao.find("from CrmGuideline");
 	}
 
-	public List<CrmCampaign> getListCampaignActive() {
+	public List<CrmCampaign> getListCampaignNoAttendet() {
+		return getListCampaignActive("NO_ATTENDET");
+	}
+
+	public List<CrmCampaign> getListCampaignConfirmed() {
+		return getListCampaignActive("CONFIRMED");
+	}
+
+	public List<CrmCampaign> getListCampaignControl() {
+		return getListCampaignActive("CONTROL");
+	}
+
+	public List<CrmCampaign> getListCampaignMedication() {
+		return getListCampaignActive("MEDICATION");
+	}
+
+	private List<CrmCampaign> getListCampaignActive(String type) {
 		String callDate = FacesUtil.formatDate(new Date(), "yyyy-MM-dd");
 		return dao
-				.find("FROM CrmCampaign o WHERE o.crmUser.id = "
+				.find("SELECT DISTINCT o.crmCampaign FROM CrmCampaignDetail o WHERE o.crmCampaign.crmUser.id = "
 						+ FacesUtil.getCurrentIdUsuario()
-						+ " AND Date(dateCall) <= '"
+						+ " AND Date(o.callDate) <= '"
 						+ callDate
-						+ "' AND o.state = 1 ORDER BY o.state, o.dateCall, orderField",
+						+ "' AND o.campaingType = '"
+						+ type
+						+ "' AND o.status = 0 ORDER BY o.crmCampaign.state, o.crmCampaign.dateCall, o.crmCampaign.orderField",
 						1);
 	}
-	
-	public List<CrmCampaign> getListCampaignActive(String type) {
-		String callDate = FacesUtil.formatDate(new Date(), "yyyy-MM-dd");
+
+	public List<CrmCampaignMedication> getListCampaignMedication(
+			Integer idCampaign) {
 		return dao
-				.find("FROM CrmCampaign o WHERE o.crmUser.id = "
-						+ FacesUtil.getCurrentIdUsuario()
-						+ " AND Date(dateCall) <= '"
-						+ callDate
-						+ "' AND o.state = 1 ORDER BY o.state, o.dateCall, orderField",
-						1);
+				.find("FROM CrmCampaignMedication o WHERE o.crmCampaign.id = "
+						+ idCampaign);
 	}
 
 	public List<CrmCampaign> getListCampaignByStatus(String branchs,
@@ -769,6 +784,10 @@ public class TablesBo implements Serializable {
 	}
 
 	public Integer saveCampaign(CrmCampaign entity) {
+		return this.persist(entity);
+	}
+	
+	public Integer saveCampaignDetail(CrmCampaignDetail entity) {
 		return this.persist(entity);
 	}
 

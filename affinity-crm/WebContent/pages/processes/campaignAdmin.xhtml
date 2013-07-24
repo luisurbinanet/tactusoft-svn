@@ -170,47 +170,6 @@
 
 					<p:spacer height="10" />
 
-					<p:dataGrid var="rec" value="#{campaignAdminBacking.modelDetail}"
-						columns="3" rows="3" paginator="true">
-
-						<p:fieldset style="height:180px;"
-							legend="#{campaignAdminBacking.getDescCampaingType(rec.campaingType)}">
-
-							<h:outputLabel
-								value="#{campaignAdminBacking.getText(rec.campaingType)}"
-								style="font-size:14px;" />
-
-							<h:panelGrid columns="2" style="width:100%"
-								rendered="#{rec.campaingType ne 'CONTROL'}">
-								<h:outputLabel value="#{msg['cam_date']}"
-									style="font-size:12px;font-weight:bold;" />
-								<h:outputLabel
-									value="#{rec.crmAppointment.startAppointmentDate}"
-									style="font-size:12px;font-weight:bold;">
-									<f:convertDateTime pattern="dd/MM/yyyy"
-										style="font-size:12px;font-weight:bold;" />
-								</h:outputLabel>
-								<h:outputLabel value="#{msg['cam_procedure']}"
-									style="font-size:12px;font-weight:bold;" />
-								<h:outputLabel
-									value="#{rec.crmAppointment.crmProcedureDetail.name}"
-									style="font-size:12px;font-weight:bold;" />
-							</h:panelGrid>
-
-							<p:commandButton value="#{msg['btn_edit_app']}"
-								action="#{campaignAdminBacking.editAppoinmnetAction}"
-								rendered="#{rec.campaingType ne 'CONTROL'}" immediate="true">
-								<f:setPropertyActionListener
-									target="#{campaignAdminBacking.selectedAppointment}"
-									value="#{rec.crmAppointment}" />
-							</p:commandButton>
-
-						</p:fieldset>
-
-					</p:dataGrid>
-
-					<p:spacer height="10" />
-
 					<h:panelGrid id="pnlAttributes" columns="2" width="100%">
 						<h:outputLabel value="#{msg['app_state']}" />
 						<p:selectOneMenu value="#{campaignAdminBacking.selected.state}"

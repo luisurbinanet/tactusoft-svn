@@ -86,7 +86,7 @@ public class RIPSBo implements Serializable {
 		}
 		return outFile;
 	}
-	
+
 	public FileWriter getListAppointment(BigDecimal idBranch, String startDate,
 			String endDate) {
 		FileWriter outFile = null;
@@ -98,48 +98,54 @@ public class RIPSBo implements Serializable {
 					+ startDate
 					+ "' AND '"
 					+ endDate
-					+ "' AND o.id.idBranch = "
-					+ idBranch;
+					+ "' AND o.id.idBranch = " + idBranch;
 			List<VwRipsAppointment> list = dao.find(sql);
 
 			for (VwRipsAppointment row : list) {
-				StringBuilder result = new StringBuilder();
-				result.append(row.getId().getIdBill());
-				result.append(SEPARATOR);
-				result.append(row.getId().getClinic());
-				result.append(SEPARATOR);
-				result.append(row.getId().getDocType());
-				result.append(SEPARATOR);
-				result.append(row.getId().getDoc());
-				result.append(SEPARATOR);
-				result.append(FacesUtil.formatDate(row.getId().getAppointmentDate(),"dd/MM/yyyy"));
-				result.append(SEPARATOR);
-				result.append(row.getId().getAppointmentType());
-				result.append(SEPARATOR);
-				result.append(row.getId().getAutorization());
-				result.append(SEPARATOR);
-				result.append(row.getId().getAppointmentCode());
-				result.append(SEPARATOR);
-				result.append(row.getId().getAppointmentTarget());
-				result.append(SEPARATOR);
-				result.append(row.getId().getAppointmentExternal());
-				result.append(SEPARATOR);
-				result.append(row.getId().getDiagnosis1());
-				result.append(SEPARATOR);
-				result.append(row.getId().getDiagnosis2());
-				result.append(SEPARATOR);
-				result.append(row.getId().getDiagnosis3());
-				result.append(SEPARATOR);
-				result.append(row.getId().getDiagnosis4());
-				result.append(SEPARATOR);
-				result.append(row.getId().getDiagnosisType());
-				result.append(SEPARATOR);
-				result.append(row.getId().getAmount());
-				result.append(SEPARATOR);
-				result.append(row.getId().getQuote());
-				result.append(SEPARATOR);
-				result.append(row.getId().getTotal());
-				out.println(result.toString());
+				try {
+					StringBuilder result = new StringBuilder();
+					if (row != null) {
+						result.append(row.getIdBill());
+						result.append(SEPARATOR);
+						result.append(row.getClinic());
+						result.append(SEPARATOR);
+						result.append(row.getDocType());
+						result.append(SEPARATOR);
+						result.append(row.getDoc());
+						result.append(SEPARATOR);
+						result.append(FacesUtil.formatDate(
+								row.getAppointmentDate(), "dd/MM/yyyy"));
+						result.append(SEPARATOR);
+						result.append(row.getAppointmentType());
+						result.append(SEPARATOR);
+						result.append(row.getAutorization());
+						result.append(SEPARATOR);
+						result.append(row.getAppointmentCode());
+						result.append(SEPARATOR);
+						result.append(row.getAppointmentTarget());
+						result.append(SEPARATOR);
+						result.append(row.getAppointmentExternal());
+						result.append(SEPARATOR);
+						result.append(row.getDiagnosis1());
+						result.append(SEPARATOR);
+						result.append(row.getDiagnosis2());
+						result.append(SEPARATOR);
+						result.append(row.getDiagnosis3());
+						result.append(SEPARATOR);
+						result.append(row.getDiagnosis4());
+						result.append(SEPARATOR);
+						result.append(row.getDiagnosisType());
+						result.append(SEPARATOR);
+						result.append(row.getAmount());
+						result.append(SEPARATOR);
+						result.append(row.getQuote());
+						result.append(SEPARATOR);
+						result.append(row.getTotal());
+						out.println(result.toString());
+					}
+				} catch (Exception ex) {
+					System.out.println("");
+				}
 			}
 			out.close();
 		} catch (IOException e) {
@@ -147,7 +153,7 @@ public class RIPSBo implements Serializable {
 		}
 		return outFile;
 	}
-	
+
 	public FileWriter getListProcedure(BigDecimal idBranch, String startDate,
 			String endDate) {
 		FileWriter outFile = null;
@@ -159,8 +165,7 @@ public class RIPSBo implements Serializable {
 					+ startDate
 					+ "' AND '"
 					+ endDate
-					+ "' AND o.id.idBranch = "
-					+ idBranch;
+					+ "' AND o.id.idBranch = " + idBranch;
 			List<VwRipsProcedure> list = dao.find(sql);
 
 			for (VwRipsProcedure row : list) {
@@ -173,7 +178,8 @@ public class RIPSBo implements Serializable {
 				result.append(SEPARATOR);
 				result.append(row.getId().getDoc());
 				result.append(SEPARATOR);
-				result.append(FacesUtil.formatDate(row.getId().getAppointmentDate(),"dd/MM/yyyy"));
+				result.append(FacesUtil.formatDate(row.getId()
+						.getAppointmentDate(), "dd/MM/yyyy"));
 				result.append(SEPARATOR);
 				result.append(row.getId().getAutorization());
 				result.append(SEPARATOR);
@@ -204,7 +210,7 @@ public class RIPSBo implements Serializable {
 		}
 		return outFile;
 	}
-	
+
 	public FileWriter getListMedication(BigDecimal idBranch, String startDate,
 			String endDate) {
 		FileWriter outFile = null;
@@ -216,8 +222,7 @@ public class RIPSBo implements Serializable {
 					+ startDate
 					+ "' AND '"
 					+ endDate
-					+ "' AND o.id.idBranch = "
-					+ idBranch;
+					+ "' AND o.id.idBranch = " + idBranch;
 			List<VwRipsMedication> list = dao.find(sql);
 
 			for (VwRipsMedication row : list) {
@@ -230,7 +235,8 @@ public class RIPSBo implements Serializable {
 				result.append(SEPARATOR);
 				result.append(row.getId().getDoc());
 				result.append(SEPARATOR);
-				result.append(FacesUtil.formatDate(row.getId().getAppointmentDate(),"dd/MM/yyyy"));
+				result.append(FacesUtil.formatDate(row.getId()
+						.getAppointmentDate(), "dd/MM/yyyy"));
 				result.append(SEPARATOR);
 				result.append(row.getId().getAutorization());
 				result.append(SEPARATOR);
@@ -246,7 +252,7 @@ public class RIPSBo implements Serializable {
 				result.append(SEPARATOR);
 				result.append(row.getId().getMedicationSize());
 				result.append(SEPARATOR);
-				result.append(row.getId().getUnit() );
+				result.append(row.getId().getUnit());
 				result.append(SEPARATOR);
 				result.append(row.getId().getAmount());
 				result.append(SEPARATOR);
@@ -259,7 +265,7 @@ public class RIPSBo implements Serializable {
 		}
 		return outFile;
 	}
-	
+
 	public FileWriter getListTransaction(BigDecimal idBranch, String startDate,
 			String endDate) {
 		FileWriter outFile = null;
@@ -271,8 +277,7 @@ public class RIPSBo implements Serializable {
 					+ startDate
 					+ "' AND '"
 					+ endDate
-					+ "' AND o.id.idBranch = "
-					+ idBranch;
+					+ "' AND o.id.idBranch = " + idBranch;
 			List<VwRipsTransaction> list = dao.find(sql);
 
 			for (VwRipsTransaction row : list) {
@@ -285,7 +290,8 @@ public class RIPSBo implements Serializable {
 				result.append(SEPARATOR);
 				result.append(row.getId().getIdBill());
 				result.append(SEPARATOR);
-				result.append(FacesUtil.formatDate(row.getId().getDateBill(),"dd/MM/yyyy"));
+				result.append(FacesUtil.formatDate(row.getId().getDateBill(),
+						"dd/MM/yyyy"));
 				result.append(SEPARATOR);
 				result.append(row.getId().getStartDate());
 				result.append(SEPARATOR);
@@ -316,7 +322,7 @@ public class RIPSBo implements Serializable {
 		}
 		return outFile;
 	}
-	
+
 	/**
 	 * 
 	 * @param listaFiles
@@ -349,9 +355,12 @@ public class RIPSBo implements Serializable {
 			out.close();
 
 			// store pdf file
-			String nameFile = null; 
-			/*reporte = VariablesSesion.getCarpetaAcrhivosReportes() + "Reporte"
-					+ mpcCapa.getNombre() + FacesUtils.formatDate() + ".zip";*/
+			String nameFile = null;
+			/*
+			 * reporte = VariablesSesion.getCarpetaAcrhivosReportes() +
+			 * "Reporte" + mpcCapa.getNombre() + FacesUtils.formatDate() +
+			 * ".zip";
+			 */
 			FileOutputStream fileOut = new FileOutputStream(nameFile);
 			baos.writeTo(fileOut);
 			fileOut.close();
