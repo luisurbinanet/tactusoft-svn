@@ -1,23 +1,15 @@
 package co.com.tactusoft.crm.controller.bo;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
 
 import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.VwRipsAppointment;
@@ -36,11 +28,12 @@ public class RIPSBo implements Serializable {
 	@Inject
 	private CustomHibernateDao dao;
 
-	public FileWriter getListPatient(BigDecimal idBranch, String startDate,
-			String endDate) {
-		FileWriter outFile = null;
+	public File getListPatient(String path, String fileName,
+			BigDecimal idBranch, String startDate, String endDate) {
+		File file = new File(path + "/rips_paciente" + fileName + ".txt");
 		try {
-			outFile = new FileWriter("/opt/rips/rips_paciente.txt");
+			FileWriter outFile = null;
+			outFile = new FileWriter(file);
 			PrintWriter out = new PrintWriter(outFile);
 
 			String sql = "FROM VwRipsPatient o WHERE o.appointmentDate BETWEEN '"
@@ -84,14 +77,14 @@ public class RIPSBo implements Serializable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return outFile;
+		return file;
 	}
 
-	public FileWriter getListAppointment(BigDecimal idBranch, String startDate,
-			String endDate) {
-		FileWriter outFile = null;
+	public File getListAppointment(String path, String fileName,
+			BigDecimal idBranch, String startDate, String endDate) {
+		File file = new File(path + "/rips_consultas" + fileName + ".txt");
 		try {
-			outFile = new FileWriter("/opt/rips/rips_consultas.txt");
+			FileWriter outFile = new FileWriter(file);
 			PrintWriter out = new PrintWriter(outFile);
 
 			String sql = "FROM VwRipsAppointment o WHERE o.id.appointmentDate BETWEEN '"
@@ -151,14 +144,15 @@ public class RIPSBo implements Serializable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return outFile;
+		return file;
 	}
 
-	public FileWriter getListProcedure(BigDecimal idBranch, String startDate,
-			String endDate) {
-		FileWriter outFile = null;
+	public File getListProcedure(String path, String fileName,
+			BigDecimal idBranch, String startDate, String endDate) {
+		File file = new File(path + "/rips_procedimientos" + fileName + ".txt");
 		try {
-			outFile = new FileWriter("/opt/rips/rips_procedimientos.txt");
+			FileWriter outFile = new FileWriter(path + "/rips_procedimientos"
+					+ fileName + ".txt");
 			PrintWriter out = new PrintWriter(outFile);
 
 			String sql = "FROM VwRipsProcedure o WHERE o.id.appointmentDate BETWEEN '"
@@ -208,14 +202,14 @@ public class RIPSBo implements Serializable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return outFile;
+		return file;
 	}
 
-	public FileWriter getListMedication(BigDecimal idBranch, String startDate,
-			String endDate) {
-		FileWriter outFile = null;
+	public File getListMedication(String path, String fileName,
+			BigDecimal idBranch, String startDate, String endDate) {
+		File file = new File(path + "/rips_medicamentos" + fileName + ".txt");
 		try {
-			outFile = new FileWriter("/opt/rips/rips_medicamentos.txt");
+			FileWriter outFile = new FileWriter(file);
 			PrintWriter out = new PrintWriter(outFile);
 
 			String sql = "FROM VwRipsMedication o WHERE o.id.appointmentDate BETWEEN '"
@@ -263,14 +257,14 @@ public class RIPSBo implements Serializable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return outFile;
+		return file;
 	}
 
-	public FileWriter getListTransaction(BigDecimal idBranch, String startDate,
-			String endDate) {
-		FileWriter outFile = null;
+	public File getListTransaction(String path, String fileName,
+			BigDecimal idBranch, String startDate, String endDate) {
+		File file = new File(path + "/rips_transacciones" + fileName + ".txt");
 		try {
-			outFile = new FileWriter("/opt/rips/rips_transacciones.txt");
+			FileWriter outFile = new FileWriter(file);
 			PrintWriter out = new PrintWriter(outFile);
 
 			String sql = "FROM VwRipsTransaction o WHERE o.id.appointmentDate BETWEEN '"
@@ -320,73 +314,7 @@ public class RIPSBo implements Serializable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return outFile;
-	}
-
-	/**
-	 * 
-	 * @param listaFiles
-	 * @param outFilename
-	 * @return
-	 */
-	public boolean crearZip(File[] listaFiles, String outFilename) {
-		boolean resultado = false;
-		byte[] buf = new byte[1024];
-		try {
-			// Create the ZIP file
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ZipOutputStream out = new ZipOutputStream(baos);
-			// Compress the files
-			for (int i = 0; i < listaFiles.length; i++) {
-				FileInputStream in = new FileInputStream(listaFiles[i]);
-				String strFile = (listaFiles[i]).getName();
-				// Add ZIP entry to output stream.
-				out.putNextEntry(new ZipEntry(strFile));
-				// Transfer bytes from the file to the ZIP file
-				int len;
-				while ((len = in.read(buf)) > 0) {
-					out.write(buf, 0, len);
-				}
-				// Complete the entry
-				out.closeEntry();
-				in.close();
-			}
-			// Complete the ZIP file
-			out.close();
-
-			// store pdf file
-			String nameFile = null;
-			/*
-			 * reporte = VariablesSesion.getCarpetaAcrhivosReportes() +
-			 * "Reporte" + mpcCapa.getNombre() + FacesUtils.formatDate() +
-			 * ".zip";
-			 */
-			FileOutputStream fileOut = new FileOutputStream(nameFile);
-			baos.writeTo(fileOut);
-			fileOut.close();
-
-			// Export the File
-			FacesContext facesContext = FacesContext.getCurrentInstance();
-			Object response = facesContext.getExternalContext().getResponse();
-
-			if (response instanceof HttpServletResponse) {
-				HttpServletResponse hsr = (HttpServletResponse) response;
-				hsr.setContentType("application/zip");
-				hsr.setHeader("Content-disposition", "attachment; filename="
-						+ nameFile + ".zip");
-				hsr.setContentLength(baos.size());
-				ServletOutputStream output = hsr.getOutputStream();
-				baos.writeTo(output);
-				output.flush();
-				facesContext.responseComplete();
-			}
-
-			resultado = true;
-		} catch (IOException e) {
-			e.printStackTrace();
-			resultado = false;
-		}
-		return resultado;
+		return file;
 	}
 
 }
