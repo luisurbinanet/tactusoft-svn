@@ -93,7 +93,7 @@ public class CrmCampaign implements java.io.Serializable {
 		this.crmPatient = crmPatient;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_user", nullable = false)
 	public CrmUser getCrmUser() {
 		return this.crmUser;
@@ -113,7 +113,7 @@ public class CrmCampaign implements java.io.Serializable {
 		this.crmLog = crmLog;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_branch", nullable = false)
 	public CrmBranch getCrmBranch() {
 		return this.crmBranch;
