@@ -31,6 +31,7 @@ public class CrmProcedureDetail implements java.io.Serializable {
 	private Short noRepeatDays;
 	private String docType;
 	private String formulaDocType;
+	private String formulaDocTypePs;
 	private boolean availability;
 	private int minMedication;
 	private int maxMedication;
@@ -54,9 +55,9 @@ public class CrmProcedureDetail implements java.io.Serializable {
 	public CrmProcedureDetail(BigDecimal id, CrmProcedure crmProcedure,
 			String name, Integer timeDoctor, Integer timeNurses,
 			Integer timeStretchers, boolean noRepeat, Short noRepeatDays,
-			String docType, String formulaDocType, boolean availability,
-			String codPublicity, boolean dependent, int state,
-			Set<CrmAppointment> crmAppointments) {
+			String docType, String formulaDocType, String formulaDocTypePs,
+			boolean availability, String codPublicity, boolean dependent,
+			int state, Set<CrmAppointment> crmAppointments) {
 		this.id = id;
 		this.crmProcedure = crmProcedure;
 		this.name = name;
@@ -68,6 +69,7 @@ public class CrmProcedureDetail implements java.io.Serializable {
 		this.availability = availability;
 		this.docType = docType;
 		this.formulaDocType = formulaDocType;
+		this.formulaDocTypePs = formulaDocTypePs;
 		this.codPublicity = codPublicity;
 		this.dependent = dependent;
 		this.state = state;
@@ -166,6 +168,15 @@ public class CrmProcedureDetail implements java.io.Serializable {
 		this.formulaDocType = formulaDocType;
 	}
 
+	@Column(name = "formula_doc_type_ps")
+	public String getFormulaDocTypePs() {
+		return formulaDocTypePs;
+	}
+
+	public void setFormulaDocTypePs(String formulaDocTypePs) {
+		this.formulaDocTypePs = formulaDocTypePs;
+	}
+
 	@Column(name = "availability")
 	public boolean isAvailability() {
 		return availability;
@@ -192,7 +203,7 @@ public class CrmProcedureDetail implements java.io.Serializable {
 	public void setMaxMedication(int maxMedication) {
 		this.maxMedication = maxMedication;
 	}
-	
+
 	@Column(name = "cod_publicity", length = 4)
 	public String getCodPublicity() {
 		return this.codPublicity;
@@ -201,7 +212,7 @@ public class CrmProcedureDetail implements java.io.Serializable {
 	public void setCodPublicity(String codPublicity) {
 		this.codPublicity = codPublicity;
 	}
-	
+
 	@Column(name = "dependent")
 	public boolean isDependent() {
 		return dependent;
