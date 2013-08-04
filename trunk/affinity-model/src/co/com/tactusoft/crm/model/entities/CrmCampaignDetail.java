@@ -24,27 +24,27 @@ public class CrmCampaignDetail implements java.io.Serializable {
 	private Integer id;
 	private CrmCampaign crmCampaign;
 	private CrmAppointment crmAppointment;
-	private String campaingType;
+	private int campaignType;
 	private int status;
 	private Date callDate;
 
 	public CrmCampaignDetail() {
 	}
 
-	public CrmCampaignDetail(CrmCampaign crmCampaign, String campaingType,
+	public CrmCampaignDetail(CrmCampaign crmCampaign, int campaignType,
 			int status, Date callDate) {
 		this.crmCampaign = crmCampaign;
-		this.campaingType = campaingType;
+		this.campaignType = campaignType;
 		this.status = status;
 		this.callDate = callDate;
 	}
 
 	public CrmCampaignDetail(CrmCampaign crmCampaign,
-			CrmAppointment crmAppointment, String campaingType, int status,
+			CrmAppointment crmAppointment, int campaignType, int status,
 			Date callDate) {
 		this.crmCampaign = crmCampaign;
 		this.crmAppointment = crmAppointment;
-		this.campaingType = campaingType;
+		this.campaignType = campaignType;
 		this.status = status;
 		this.callDate = callDate;
 	}
@@ -80,13 +80,13 @@ public class CrmCampaignDetail implements java.io.Serializable {
 		this.crmAppointment = crmAppointment;
 	}
 
-	@Column(name = "campaing_type", nullable = false, length = 30)
-	public String getCampaingType() {
-		return this.campaingType;
+	@Column(name = "campaign_type", nullable = false)
+	public int getCampaignType() {
+		return this.campaignType;
 	}
 
-	public void setCampaingType(String campaingType) {
-		this.campaingType = campaingType;
+	public void setCampaignType(int campaignType) {
+		this.campaignType = campaignType;
 	}
 
 	@Column(name = "status", nullable = false)
