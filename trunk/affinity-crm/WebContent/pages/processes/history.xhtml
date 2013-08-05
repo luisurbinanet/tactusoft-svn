@@ -1130,18 +1130,20 @@
 										for="cmbDiagnosisCaseStudyHistory" />
 									<p:selectOneMenu id="cmbDiagnosisCaseStudyHistory"
 										value="#{historyBacking.selectedCaseStudy.reason}"
-										style="width:600px">
+										style="width:600px" label="#{msg['cst_reason']}">
 										<f:selectItem itemValue=""
 											itemLabel="#{msg['glb_default_value']}" />
 										<f:selectItems value="#{historyBacking.listCaseStudyHistory}" />
 									</p:selectOneMenu>
 
 									<h:outputLabel value="#{msg['cst_perc']}" />
-									<p:selectOneMenu style="width:600px"
+									<p:selectOneMenu style="width:600px" required="true"
+										label="#{msg['cst_perc']}"
 										value="#{historyBacking.selectedCaseStudy.percent}">
-										<f:selectItem itemValue="0" itemLabel="0%" />
+										<f:selectItem itemValue=""
+											itemLabel="#{msg['glb_default_value']}" />
 										<f:selectItem itemValue="10" itemLabel="10%" />
-										<f:selectItem itemValue="20" itemLabel="50%" />
+										<f:selectItem itemValue="20" itemLabel="20%" />
 										<f:selectItem itemValue="30" itemLabel="30%" />
 										<f:selectItem itemValue="40" itemLabel="40%" />
 										<f:selectItem itemValue="50" itemLabel="50%" />

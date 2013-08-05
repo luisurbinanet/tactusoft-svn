@@ -80,4 +80,9 @@ public class Constant {
 	public static String HISTORY_HOMEOPATHIC = "HOMEOPATHIC";
 	public static String HISTORY_PHYSIQUE = "PHYSIQUE";
 	public static String HISTORY_ORGANOMETRY = "ORGANOMETRY";
+	
+	public static final int NO_ATTENDET = 1;
+	public static final int CONFIRMED = 2;
+	public static final int CONTROL = 3;
+	public static final int MEDICATION = 4;
 }

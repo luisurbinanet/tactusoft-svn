@@ -11,10 +11,11 @@ import javax.inject.Named;
 
 import org.springframework.context.annotation.Scope;
 
+import co.com.tactusoft.crm.model.entities.CrmCampaignDetail;
 import co.com.tactusoft.crm.model.entities.CrmParameter;
 import co.com.tactusoft.crm.model.entities.CrmUser;
 import co.com.tactusoft.crm.util.FacesUtil;
-import co.com.tactusoft.crm.view.datamodel.CampaignDataModel;
+import co.com.tactusoft.crm.view.datamodel.CampaignDetailDataModel;
 
 @Named
 @Scope("view")
@@ -30,6 +31,9 @@ public class CampaignAdminBacking extends CampaignBacking {
 	private Date endDate;
 	private List<String> listStatus = new LinkedList<String>();
 	private String statusString;
+	private List<CrmCampaignDetail> listDetail;
+	private CampaignDetailDataModel modelDetail;
+	private CrmCampaignDetail selectedDetail;
 
 	public CampaignAdminBacking() {
 		startDate = new Date();
@@ -91,6 +95,30 @@ public class CampaignAdminBacking extends CampaignBacking {
 		this.endDate = endDate;
 	}
 
+	public List<CrmCampaignDetail> getListDetail() {
+		return listDetail;
+	}
+
+	public void setListDetail(List<CrmCampaignDetail> listDetail) {
+		this.listDetail = listDetail;
+	}
+
+	public CampaignDetailDataModel getModelDetail() {
+		return modelDetail;
+	}
+
+	public void setModelDetail(CampaignDetailDataModel modelDetail) {
+		this.modelDetail = modelDetail;
+	}
+
+	public CrmCampaignDetail getSelectedDetail() {
+		return selectedDetail;
+	}
+
+	public void setSelectedDetail(CrmCampaignDetail selectedDetail) {
+		this.selectedDetail = selectedDetail;
+	}
+
 	@PostConstruct
 	public void init() {
 		List<CrmParameter> listParameter = parameterService
@@ -102,7 +130,7 @@ public class CampaignAdminBacking extends CampaignBacking {
 	}
 
 	public boolean isDisabled() {
-		return list != null && list.size() > 0 ? false : true;
+		return listDetail != null && listDetail.size() > 0 ? false : true;
 	}
 
 	public List<String> getListCrmBranchSelected() {
@@ -115,15 +143,12 @@ public class CampaignAdminBacking extends CampaignBacking {
 
 	@Override
 	public void generateDetail() {
-		//listDetail = tableService.getListCampaignDetail(selected.getId());
-		//modelDetail = new CampaignDetailDataModel(listDetail);
-
+		selected = selectedDetail.getCrmCampaign();
 		List<CrmUser> listUser = tableService
 				.getListUserActiveByBranchAndCallCenter(selected.getCrmBranch()
 						.getId());
 		listUserItem = FacesUtil.entityToSelectItem(listUser, "getId",
 				"getUsername");
-
 		crmUser = new CrmUser();
 	}
 
@@ -139,12 +164,14 @@ public class CampaignAdminBacking extends CampaignBacking {
 				statusString = getStringSelecteds(listStatus);
 			}
 
-			list = tableService.getListCampaignByStatus(branchs,
+			listDetail = tableService.getListCampaignByStatus(branchs,
 					startDateString, endDateString, statusString, maxResults);
-			model = new CampaignDataModel(list);
-			if (list.size() > 0) {
-				selected = list.get(0);
+			modelDetail = new CampaignDetailDataModel(listDetail);
+			if (listDetail.size() > 0) {
+				selectedDetail = listDetail.get(0);
+				selected = selectedDetail.getCrmCampaign();
 			} else {
+				selectedDetail = null;
 				selected = null;
 			}
 

@@ -30,6 +30,10 @@ public class RIPSBacking extends BaseBacking implements Serializable {
 	private Map<String, String> options;
 	private List<String> selectedOptions;
 
+	private File[] files;
+	private String fileName;
+	private String path;
+
 	public RIPSBacking() {
 		options = new HashMap<String, String>();
 		options.put("Archivo de Usuarios", "RIPS1");
@@ -71,19 +75,22 @@ public class RIPSBacking extends BaseBacking implements Serializable {
 		this.selectedOptions = selectedOptions;
 	}
 
+	public boolean isDisabledExport() {
+		return (files == null || files.length == 0) ? true : false;
+	}
+
 	public void generateAction() {
 		if (selectedOptions.size() > 0) {
 
-			String fileName = FacesUtil.formatDate(new Date(),
-					"yyyyMMddHHmmssS");
-			String path = "c:/Temp/";
+			fileName = FacesUtil.formatDate(new Date(), "yyyyMMddHHmmssS");
+			path = "/opt/rips/";
 
 			String startDateString = FacesUtil.formatDate(this.startDate,
 					"yyyy-MM-dd") + " 00:00:00";
 			String endDateString = FacesUtil.formatDate(this.endDate,
 					"yyyy-MM-dd") + " 23:59:59";
 
-			File[] files = new File[selectedOptions.size()];
+			files = new File[selectedOptions.size()];
 			int index = 0;
 
 			for (String option : selectedOptions) {
@@ -110,10 +117,13 @@ public class RIPSBacking extends BaseBacking implements Serializable {
 				}
 			}
 
-			FacesUtil.createZip(files, path, "/rips" + fileName + ".zip");
+			FacesUtil.addInfo("Archivo generados exitosamente");
+		}
+	}
 
-			FacesUtil.addInfo("Archivo generado " + fileName + ".zip"
-					+ " exitosamente");
+	public void exportAction() {
+		if (files != null && files.length > 0) {
+			FacesUtil.createZip(files, path, "/rips" + fileName + ".zip");
 		}
 	}
 }

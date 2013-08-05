@@ -608,7 +608,7 @@ public class FacesUtil {
 				HttpServletResponse hsr = (HttpServletResponse) response;
 				hsr.setContentType("application/zip");
 				hsr.setHeader("Content-disposition", "attachment; filename="
-						+ path);
+						+ outFilename);
 				hsr.setContentLength(baos.size());
 				ServletOutputStream output = hsr.getOutputStream();
 				baos.writeTo(output);
