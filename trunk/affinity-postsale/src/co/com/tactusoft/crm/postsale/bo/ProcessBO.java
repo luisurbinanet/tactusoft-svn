@@ -13,12 +13,14 @@ import org.springframework.stereotype.Service;
 import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
+import co.com.tactusoft.crm.model.entities.CrmCampaignDetail;
 import co.com.tactusoft.crm.model.entities.CrmHoliday;
 import co.com.tactusoft.crm.model.entities.CrmLog;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmSapMedication;
 import co.com.tactusoft.crm.model.entities.CrmUser;
 import co.com.tactusoft.crm.model.entities.VwAppointmentMedication;
+import co.com.tactusoft.crm.model.entities.VwMedication;
 import co.com.tactusoft.crm.util.FacesUtil;
 
 @Service
@@ -38,6 +40,18 @@ public class ProcessBO implements Serializable {
 				+ " WHERE state = 1 AND startAppointmentDate <= '"
 				+ dateString
 				+ " 23:59:59'");
+	}
+
+	public void updateCampaign(String dateString) {
+		dao.executeHQL("UPDATE CrmCampaign SET state = 999 WHERE state = 1 AND Date(dateCall) <= '"
+				+ dateString
+				+ "' AND id IN (SELECT o.crmCampaign.id FROM CrmCampaignDetail o WHERE o.campaignType=2 "
+				+ " AND Date(o.callDate) <= '"
+				+ dateString
+				+ "' AND o.status = 0)");
+
+		dao.executeHQL("UPDATE CrmCampaignDetail SET status = 999 WHERE status = 0 AND Date(callDate) <= '"
+				+ dateString + "' AND campaignType=2");
 	}
 
 	public List<CrmAppointment> getListAppointmentNoAttendet(String dateString) {
@@ -71,7 +85,7 @@ public class ProcessBO implements Serializable {
 				+ "and d.start_appointment_date<'"
 				+ dateString
 				+ "' and c.id = a.id) "
-				+ "and b.id not in (select e.id_appointment from crm_campaign_detail e where e.campaing_type='CONTROL')";
+				+ "and b.id not in (select e.id_appointment from crm_campaign_detail e where e.campaign_type=3)";
 
 		return dao.findNative(sql, CrmAppointment.class);
 	}
@@ -120,9 +134,9 @@ public class ProcessBO implements Serializable {
 			CrmPatient patient, String typeBill, String initDate, String endDate) {
 		return dao.find("FROM CrmSapMedication o WHERE (o.idPatient = '"
 				+ patient.getCodeSap() + "' OR docPatient = '"
-				+ patient.getDoc() + "') AND o.typeBill = '" + typeBill
-				+ "' AND o.dateBill >= '" + initDate + "' AND o.dateBill <= '"
-				+ endDate + "' AND o.status IS NULL ORDER BY o.id");
+				+ patient.getDoc() + "') AND o.typeBill IN (" + typeBill
+				+ ") AND Date(o.dateBill) BETWEEN '" + initDate + "' AND '"
+				+ endDate + "' ORDER BY o.id");
 	}
 
 	public List<CrmSapMedication> getListSapAppointmentByLoadState(
@@ -151,6 +165,18 @@ public class ProcessBO implements Serializable {
 				+ "'");
 	}
 
+	public List<CrmCampaignDetail> getListCampaignDetailMedication(CrmLog log) {
+		return dao
+				.find("FROM CrmCampaignDetail o WHERE o.campaignType = 4 AND o.crmCampaign.crmLog.id = "
+						+ log.getId());
+	}
+
+	public List<VwMedication> getListVwMedicationByAppointment(
+			BigDecimal idAppointment, String formulaDocType) {
+		return dao.find("FROM VwMedication o WHERE idAppointment = "
+				+ idAppointment + " AND formulaDocType IN (" + formulaDocType + ")");
+	}
+
 	public int save(Object entity) {
 		int result = 0;
 		try {
@@ -175,7 +201,7 @@ public class ProcessBO implements Serializable {
 	}
 
 	public List<CrmBranch> getListBranchActive() {
-		return dao.find("from CrmBranch o where o.state = 1");
+		return dao.find("from CrmBranch o");
 	}
 
 	public List<CrmLog> getListLog(String currentDateString) {
