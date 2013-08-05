@@ -199,21 +199,21 @@
 								<h:outputLabel for="opt1" value="#{msg['sal_key_press_doc']}" />
 								<p:inputText value="#{searchByPatientBacking.docPatient}"
 									style="width:100%">
-									<pe:keyFilter regEx="/[\d]/" />
+									<pe:keyFilter regEx="/[\d]/" preventPaste="false" />
 								</p:inputText>
 
 								<p:radioButton id="opt2" for="customRadio" itemIndex="1" />
 								<h:outputLabel for="opt2" value="#{msg['sal_key_press_nom']}" />
 								<p:inputText value="#{searchByPatientBacking.namePatient}"
 									style="width:100%">
-									<pe:keyFilter regEx="/[a-zA-Z\s]/i" />
+									<pe:keyFilter regEx="/[a-zA-Z\s]/i" preventPaste="false" />
 								</p:inputText>
 
 								<p:radioButton id="opt3" for="customRadio" itemIndex="2" />
 								<h:outputLabel for="opt3" value="#{msg['sal_key_press_tel']}" />
 								<p:inputText value="#{searchByPatientBacking.telPatient}"
 									style="width:100%">
-									<pe:keyFilter regEx="/[\d]/" />
+									<pe:keyFilter regEx="/[\d]/" preventPaste="false" />
 								</p:inputText>
 							</h:panelGrid>
 						</p:outputPanel>

@@ -101,31 +101,31 @@ public class TablesBo implements Serializable {
 	}
 
 	public List<CrmCampaign> getListCampaignNoAttendet() {
-		return getListCampaignActive("NO_ATTENDET");
+		return getListCampaignActive(Constant.NO_ATTENDET);
 	}
 
 	public List<CrmCampaign> getListCampaignConfirmed() {
-		return getListCampaignActive("CONFIRMED");
+		return getListCampaignActive(Constant.CONFIRMED);
 	}
 
 	public List<CrmCampaign> getListCampaignControl() {
-		return getListCampaignActive("CONTROL");
+		return getListCampaignActive(Constant.CONTROL);
 	}
 
 	public List<CrmCampaign> getListCampaignMedication() {
-		return getListCampaignActive("MEDICATION");
+		return getListCampaignActive(Constant.MEDICATION);
 	}
 
-	private List<CrmCampaign> getListCampaignActive(String type) {
+	private List<CrmCampaign> getListCampaignActive(int type) {
 		String callDate = FacesUtil.formatDate(new Date(), "yyyy-MM-dd");
 		return dao
 				.find("SELECT DISTINCT o.crmCampaign FROM CrmCampaignDetail o WHERE o.crmCampaign.crmUser.id = "
 						+ FacesUtil.getCurrentIdUsuario()
 						+ " AND Date(o.callDate) <= '"
 						+ callDate
-						+ "' AND o.campaingType = '"
+						+ "' AND o.campaignType = "
 						+ type
-						+ "' AND o.status = 0 ORDER BY o.crmCampaign.state, o.crmCampaign.dateCall, o.crmCampaign.orderField",
+						+ " AND o.status = 0 ORDER BY o.crmCampaign.state, o.crmCampaign.dateCall, o.crmCampaign.orderField",
 						1);
 	}
 
@@ -136,23 +136,25 @@ public class TablesBo implements Serializable {
 						+ idCampaign);
 	}
 
-	public List<CrmCampaign> getListCampaignByStatus(String branchs,
+	public List<CrmCampaignDetail> getListCampaignByStatus(String branchs,
 			String startDate, String endDate, String status, int maxResults) {
-		return dao.find("FROM CrmCampaign o WHERE o.crmBranch.id IN ("
-				+ branchs + ") AND Date(o.dateCall) BETWEEN '" + startDate
-				+ "' AND '" + endDate + "' AND o.state IN (" + status
-				+ ") ORDER BY o.state, o.dateCall", maxResults);
+		return dao.find(
+				"FROM CrmCampaignDetail o WHERE o.crmCampaign.crmBranch.id IN ("
+						+ branchs + ") AND Date(o.callDate) BETWEEN '"
+						+ startDate + "' AND '" + endDate
+						+ "' AND o.crmCampaign.state IN (" + status
+						+ ") ORDER BY o.status, o.callDate", maxResults);
 	}
 
 	public List<CrmCampaignDetail> getListCampaignDetail(Integer idCampaign) {
 		return dao.find("from CrmCampaignDetail where  crmCampaign.id = "
-				+ idCampaign + "and campaingType <> 'MEDICATION'");
+				+ idCampaign + "and campaignType <> 4");
 	}
 
 	public List<CrmCampaignDetail> getListCampaignDetailMedication(
 			Integer idCampaign) {
 		return dao.find("from CrmCampaignDetail where crmCampaign.id = "
-				+ idCampaign + "and campaingType = 'MEDICATION'");
+				+ idCampaign + "and campaignType = 4");
 	}
 
 	public List<CrmNurse> getListNurseActive() {
@@ -786,7 +788,7 @@ public class TablesBo implements Serializable {
 	public Integer saveCampaign(CrmCampaign entity) {
 		return this.persist(entity);
 	}
-	
+
 	public Integer saveCampaignDetail(CrmCampaignDetail entity) {
 		return this.persist(entity);
 	}

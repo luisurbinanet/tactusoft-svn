@@ -22,6 +22,7 @@ import co.com.tactusoft.crm.model.entities.CrmCampaign;
 import co.com.tactusoft.crm.model.entities.CrmCampaignDetail;
 import co.com.tactusoft.crm.model.entities.CrmCampaignMedication;
 import co.com.tactusoft.crm.model.entities.CrmParameter;
+import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.datamodel.CampaignDataModel;
 import co.com.tactusoft.crm.view.datamodel.CampaignMedicationlDataModel;
@@ -263,13 +264,13 @@ public class CampaignBacking extends BaseBacking {
 
 		List<CrmCampaignDetail> listDetail = selected.getCrmCampaignDetails();
 		for (CrmCampaignDetail row : listDetail) {
-			if (row.getCampaingType().equals("NO_ATTENDET")) {
+			if (row.getCampaignType() == Constant.NO_ATTENDET) {
 				selectedDetailNoAttendet = row;
-			} else if (row.getCampaingType().equals("CONFIRMED")) {
+			} else if (row.getCampaignType() == Constant.CONFIRMED) {
 				selectedDetailConfirmed = row;
-			} else if (row.getCampaingType().equals("CONTROL")) {
+			} else if (row.getCampaignType() == Constant.CONTROL) {
 				selectedDetailControl = row;
-			} else if (row.getCampaingType().equals("MEDICATION")) {
+			} else if (row.getCampaignType() == Constant.MEDICATION) {
 				selectedDetailMediaction = row;
 			}
 		}
@@ -289,10 +290,10 @@ public class CampaignBacking extends BaseBacking {
 		return listDetailMedication != null && listDetailMedication.size() > 0;
 	}
 
-	public String getDescCampaingType(String typeCampaign) {
-		return typeCampaign.equals("NO_ATTENDET") ? "No asistió a la cita"
-				: typeCampaign.equals("CONFIRMED") ? "Confirmar la cita"
-						: typeCampaign.equals("CONTROL") ? "No ha asistido a control"
+	public String getDescCampaignType(int typeCampaign) {
+		return typeCampaign == Constant.NO_ATTENDET ? "No asistió a la cita"
+				: typeCampaign == Constant.CONFIRMED ? "Confirmar la cita"
+						: typeCampaign == Constant.CONTROL ? "No ha asistido a control"
 								: "Medicamentos NO adquiridos";
 	}
 

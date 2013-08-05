@@ -176,11 +176,21 @@
 							rows="5" paginator="true" var="item">
 
 							<p:column headerText="#{msg['cam_medication']}">
-								<h:outputLabel value="#{item.descMaterial}" />
+								<h:outputLabel id="colMaterial" value="#{item.descMaterial}" />
+								<p:tooltip for="colMaterial"
+									value="#{item.posology}"/>
+							</p:column>
+
+							<p:column headerText="Vendido">
+								<h:outputLabel value="#{item.sold eq 1?'SI':'NO'}" />
 							</p:column>
 
 							<p:column headerText="#{msg['sal_material_amount']}">
 								<h:outputLabel value="#{item.unit}" />
+							</p:column>
+
+							<p:column headerText="Cantidad Vendida">
+								<h:outputLabel value="#{item.unitSale}" />
 							</p:column>
 
 						</p:dataTable>
@@ -389,14 +399,7 @@
 					<p:spacer height="5"
 						rendered="#{campaignBacking.selectedDetailNoAttendet ne null}" />
 
-					<h:panelGrid id="pnlAttributes" columns="2" width="100%"
-						rendered="#{campaignBacking.selectedDetailMediaction ne null}">
-						<h:outputLabel value="#{msg['cam_call_poll']}" />
-						<p:selectOneMenu value="#{campaignBacking.selected.poll}"
-							style="width:400px">
-							<f:selectItem itemValue="0" itemLabel="No" />
-							<f:selectItem itemValue="1" itemLabel="Si" />
-						</p:selectOneMenu>
+					<h:panelGrid id="pnlAttributes" columns="2" width="100%">
 						<h:outputLabel value="#{msg['pat_type_obs']}" />
 						<p:inputTextarea value="#{campaignBacking.selected.observation}"
 							style="width:400px" rows="3" required="true"

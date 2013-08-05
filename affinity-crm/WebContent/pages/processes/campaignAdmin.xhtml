@@ -85,8 +85,8 @@
 				<p:spacer height="5" />
 
 				<p:dataTable id="recordTable" var="rec"
-					value="#{campaignAdminBacking.model}" rowKey="#{rec.id}"
-					selection="#{campaignAdminBacking.selected}" paginator="true"
+					value="#{campaignAdminBacking.modelDetail}" rowKey="#{rec.id}"
+					selection="#{campaignAdminBacking.selectedDetail}" paginator="true"
 					rows="10" style="width:100%"
 					emptyMessage="#{msg['glb_no_records_found']}">
 
@@ -94,29 +94,34 @@
 
 					<p:column headerText="#{msg['cam_pat']}" filterMatchMode="contains"
 						filterBy="#{rec.crmPatient.names}">
-						<h:outputLabel value="#{rec.crmPatient.names}" />
+						<h:outputLabel value="#{rec.crmCampaign.crmPatient.names}" />
 					</p:column>
 
 					<p:column headerText="#{msg['cam_date']}">
-						<h:outputLabel value="#{rec.dateCall}">
+						<h:outputLabel value="#{rec.callDate}">
 							<f:convertDateTime pattern="dd/MM/yyyy" />
 						</h:outputLabel>
 					</p:column>
 
 					<p:column headerText="#{msg['cam_branch']}"
 						filterMatchMode="contains" filterBy="#{rec.crmBranch.name}">
-						<h:outputLabel value="#{rec.crmBranch.name}" />
+						<h:outputLabel value="#{rec.crmCampaign.crmBranch.name}" />
 					</p:column>
 
 					<p:column headerText="#{msg['cam_user']}"
 						filterMatchMode="contains" filterBy="#{rec.crmUser.username}">
-						<h:outputLabel value="#{rec.crmUser.username}" />
+						<h:outputLabel value="#{rec.crmCampaign.crmUser.username}" />
 					</p:column>
 
 					<p:column headerText="#{msg['glb_state']}"
 						filterMatchMode="contains">
 						<h:outputLabel
-							value="#{campaignAdminBacking.getStatus(rec.state)}" />
+							value="#{campaignAdminBacking.getStatus(rec.crmCampaign.state)}" />
+					</p:column>
+
+					<p:column headerText="Tipo" filterMatchMode="contains">
+						<h:outputLabel
+							value="#{campaignAdminBacking.getDescCampaignType(rec.campaignType)}" />
 					</p:column>
 
 				</p:dataTable>

@@ -236,7 +236,7 @@
 								<h:outputLabel for="opt1" value="#{msg['sal_key_press_doc']}" />
 								<p:inputText value="#{appointmentBacking.docPatient}"
 									style="width:100%">
-									<pe:keyFilter regEx="/[\d]/" />
+									<pe:keyFilter regEx="/[\d]/" preventPaste="false"/>
 								</p:inputText>
 
 								<p:radioButton id="opt2" for="customRadio" itemIndex="1" />
@@ -250,7 +250,7 @@
 								<h:outputLabel for="opt3" value="#{msg['sal_key_press_tel']}" />
 								<p:inputText value="#{appointmentBacking.telPatient}"
 									style="width:100%">
-									<pe:keyFilter regEx="/[\d]/" />
+									<pe:keyFilter regEx="/[\d]/" preventPaste="false"/>
 								</p:inputText>
 							</h:panelGrid>
 						</p:outputPanel>

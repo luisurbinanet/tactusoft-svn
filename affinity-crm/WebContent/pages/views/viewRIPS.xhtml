@@ -18,12 +18,14 @@
 
 				<p:growl id="growl" showDetail="true" autoUpdate="true" />
 
-				<p:toolbar style="width:100%">
+				<p:toolbar id="toolBar" style="width:100%">
 					<p:toolbarGroup align="left">
-						<h:commandLink action="#{RIPSBacking.generateAction}">
-							<p:commandButton icon="ui-icon-search"
-								value="#{msg['btn_search']}" />
-						</h:commandLink>
+						<p:commandButton icon="ui-icon-search"
+							value="#{msg['btn_search']}"
+							action="#{RIPSBacking.generateAction}" update="toolBar" />
+						<p:commandButton icon="ui-icon-disk" ajax="false"
+							value="#{msg['btn_export']}" action="#{RIPSBacking.exportAction}"
+							disabled="#{RIPSBacking.disabledExport}" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
