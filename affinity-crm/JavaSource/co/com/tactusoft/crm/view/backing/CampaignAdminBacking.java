@@ -144,7 +144,7 @@ public class CampaignAdminBacking extends CampaignBacking {
 	@Override
 	public void generateDetail() {
 		selected = selectedDetail.getCrmCampaign();
-		List<CrmUser> listUser = tableService
+		List<CrmUser> listUser = tablesService
 				.getListUserActiveByBranchAndCallCenter(selected.getCrmBranch()
 						.getId());
 		listUserItem = FacesUtil.entityToSelectItem(listUser, "getId",
@@ -164,7 +164,7 @@ public class CampaignAdminBacking extends CampaignBacking {
 				statusString = getStringSelecteds(listStatus);
 			}
 
-			listDetail = tableService.getListCampaignByStatus(branchs,
+			listDetail = tablesService.getListCampaignByStatus(branchs,
 					startDateString, endDateString, statusString, maxResults);
 			modelDetail = new CampaignDetailDataModel(listDetail);
 			if (listDetail.size() > 0) {
@@ -188,7 +188,7 @@ public class CampaignAdminBacking extends CampaignBacking {
 		if (selected.getState() == 4) {
 			selected.setState(1);
 		}
-		int result = tableService.saveCampaign(selected);
+		int result = tablesService.saveCampaign(selected);
 		if (result == 0) {
 			searchAction();
 			message = FacesUtil.getMessage("msg_record_ok");

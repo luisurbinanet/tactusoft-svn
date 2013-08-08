@@ -2,6 +2,7 @@ package co.com.tactusoft.crm.controller.bo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -40,6 +41,7 @@ import co.com.tactusoft.crm.model.entities.CrmProcedure;
 import co.com.tactusoft.crm.model.entities.CrmProcedureBranch;
 import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
+import co.com.tactusoft.crm.model.entities.CrmRecall;
 import co.com.tactusoft.crm.model.entities.CrmRegion;
 import co.com.tactusoft.crm.model.entities.CrmRole;
 import co.com.tactusoft.crm.model.entities.CrmSpeciality;
@@ -155,6 +157,47 @@ public class TablesBo implements Serializable {
 			Integer idCampaign) {
 		return dao.find("from CrmCampaignDetail where crmCampaign.id = "
 				+ idCampaign + "and campaignType = 4");
+	}
+
+	public List<CrmRecall> getListRecall(Integer idTaskType) {
+		return dao.find("from CrmRecall o where o.idTaskType = " + idTaskType
+				+ " order by o.crmRecall.id,o.id");
+	}
+
+	public int getLevels(Integer idTaskType) {
+		List<CrmRecall> list = dao
+				.find("SELECT o FROM CrmRecall o LEFT JOIN o.crmRecall b WHERE o.idTaskType = "
+						+ idTaskType + " ORDER BY o.crmRecall.id DESC");
+		List<CrmRecall> current = new ArrayList<CrmRecall>();
+		List<CrmRecall> max = new ArrayList<CrmRecall>();
+
+		Integer parentId = null;
+		for (CrmRecall row : list) {
+			if (row.getCrmRecall() != null
+					&& (parentId != row.getCrmRecall().getId())) {
+				CrmRecall parent = row.getCrmRecall();
+				parentId = parent.getId();
+				current.add(row);
+				while (true) {
+					if (parent.getCrmRecall() != null) {
+						current.add(parent);
+						parent = parent.getCrmRecall();
+						parentId = parent.getId();
+					} else {
+						current.add(parent);
+						break;
+					}
+				}
+
+				if (current.size() > max.size()) {
+					max = new ArrayList<CrmRecall>();
+					max.addAll(current);
+				}
+				current = new ArrayList<CrmRecall>();
+			}
+		}
+
+		return max.size();
 	}
 
 	public List<CrmNurse> getListNurseActive() {
