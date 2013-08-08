@@ -38,6 +38,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.MethodExpressionActionListener;
+import javax.faces.event.MethodExpressionValueChangeListener;
 import javax.faces.model.SelectItem;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
@@ -276,7 +277,22 @@ public class FacesUtil {
 		}
 		return actionListener;
 	}
+	
+	public static MethodExpressionValueChangeListener createMethodExpressionValueChangeListener(
+			String valueExpression, Class<?> valueType,
+			Class<?>[] expectedParamTypes) {
 
+		MethodExpressionValueChangeListener actionListener = null;
+		try {
+			actionListener = new MethodExpressionValueChangeListener(
+					createMethodExpression(valueExpression, valueType,
+							expectedParamTypes));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return actionListener;
+	}
+	
 	public static String lpad(String valueToPad, char filler, int size) {
 		char[] array = new char[size];
 

@@ -177,8 +177,7 @@
 
 							<p:column headerText="#{msg['cam_medication']}">
 								<h:outputLabel id="colMaterial" value="#{item.descMaterial}" />
-								<p:tooltip for="colMaterial"
-									value="#{item.posology}"/>
+								<p:tooltip for="colMaterial" value="#{item.posology}" />
 							</p:column>
 
 							<p:column headerText="Vendido">
@@ -365,6 +364,18 @@
 							<h:outputLabel style="font-size:12px;font-weight:bold;"
 								value="#{campaignBacking.selectedDetailNoAttendet.crmAppointment.crmBranch.name}" />
 						</h:panelGrid>
+
+						<p:spacer />
+
+						<p:panelGrid id="pnlNoAttendet" style="width:100%" columns="2">
+							<ui:repeat var="item" size="#{campaignBacking.levelsNoAttendet}">
+								<h:outputLabel value="Nivel #{item}" />
+								<p:selectOneMenu id="somLevel1#{item}"
+									valueChangeListener="#{campaignBacking.levelValueChangeEvent}">
+									<f:selectItems value="#{campaignBacking.getItemsLevel(1,null)}" />
+								</p:selectOneMenu>
+							</ui:repeat>
+						</p:panelGrid>
 
 						<p:spacer />
 
