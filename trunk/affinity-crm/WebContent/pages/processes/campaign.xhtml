@@ -367,15 +367,19 @@
 
 						<p:spacer />
 
-						<p:panelGrid id="pnlNoAttendet" style="width:100%" columns="2">
-							<ui:repeat var="item" size="#{campaignBacking.levelsNoAttendet}">
-								<h:outputLabel value="Nivel #{item}" />
-								<p:selectOneMenu id="somLevel1#{item}"
-									valueChangeListener="#{campaignBacking.levelValueChangeEvent}">
-									<f:selectItems value="#{campaignBacking.getItemsLevel(1,null)}" />
+						<h:outputLabel value="Respuesta" />
+						<ui:repeat var="item" value="#{campaignBacking.levelsNoAttendet}"
+							varStatus="sta">
+							<p:panelGrid id="pnlNoAttendet" style="width:100%" columns="2">
+								<h:outputLabel value="Nivel #{sta.index+1}" />
+								<p:selectOneMenu style="width:350px;"
+									value="#{campaignBacking.levelValues[sta.index]}">
+									<p:ajax listener="#{campaignBacking.levelValueChangeEvent(1)}" />
+									<f:selectItems
+										value="#{campaignBacking.getItemsLevel(1,sta.index,null)}" />
 								</p:selectOneMenu>
-							</ui:repeat>
-						</p:panelGrid>
+							</p:panelGrid>
+						</ui:repeat>
 
 						<p:spacer />
 

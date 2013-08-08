@@ -164,7 +164,7 @@ public class TablesBo implements Serializable {
 				+ " order by o.crmRecall.id,o.id");
 	}
 
-	public int getLevels(Integer idTaskType) {
+	public List<CrmRecall> getLevels(Integer idTaskType) {
 		List<CrmRecall> list = dao
 				.find("SELECT o FROM CrmRecall o LEFT JOIN o.crmRecall b WHERE o.idTaskType = "
 						+ idTaskType + " ORDER BY o.crmRecall.id DESC");
@@ -197,7 +197,7 @@ public class TablesBo implements Serializable {
 			}
 		}
 
-		return max.size();
+		return max;
 	}
 
 	public List<CrmNurse> getListNurseActive() {
