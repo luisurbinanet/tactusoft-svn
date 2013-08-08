@@ -69,7 +69,7 @@ public class CampaignBacking extends BaseBacking {
 
 	private Integer[] levelValues;
 
-	private Integer levelsNoAttendet;
+	private List<CrmRecall> levelsNoAttendet;
 
 	private List<CrmRecall> listNoAttendet;
 	private List<CrmRecall> listConfirmedControl;
@@ -224,32 +224,37 @@ public class CampaignBacking extends BaseBacking {
 		this.levelValues = levelValues;
 	}
 
-	public Integer getLevelsNoAttendet() {
+	public List<CrmRecall> getLevelsNoAttendet() {
 		if (levelsNoAttendet == null) {
 			levelsNoAttendet = tablesService.getLevels(Constant.NO_ATTENDET);
 		}
 		return levelsNoAttendet;
 	}
 
-	public void setLevelsNoAttendet(Integer levelsNoAttendet) {
+	public void setLevelsNoAttendet(List<CrmRecall> levelsNoAttendet) {
 		this.levelsNoAttendet = levelsNoAttendet;
 	}
 
-	public List<SelectItem> getItemsLevel(int type, CrmRecall parent) {
+	public List<SelectItem> getItemsLevel(Long type, Long level, CrmRecall parent) {
 		List<SelectItem> itemsLevel = new ArrayList<SelectItem>();
+		String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
+		itemsLevel.add(new SelectItem(Constant.DEFAULT_VALUE.intValue(), label));
+		levelValues[level.intValue()] = Constant.DEFAULT_VALUE.intValue();
+		
 		if (type == Constant.NO_ATTENDET) {
 			List<CrmRecall> listAllLevel = this.getListNoAttendet();
 			for (CrmRecall recall : listAllLevel) {
-				if (parent == null) {
+				if (parent == null && level == 0) {
 					if (recall.getCrmRecall() == null) {
 						itemsLevel.add(new SelectItem(recall.getId(), recall
 								.getDescription()));
 					}
-				}else {
-					if (recall.getCrmRecall().getId() == parent
-							.getCrmRecall().getId()) {
-						itemsLevel.add(new SelectItem(recall.getId(),
-								recall.getDescription()));
+				} else {
+					if (parent != null
+							&& recall.getCrmRecall().getId() == parent
+									.getCrmRecall().getId()) {
+						itemsLevel.add(new SelectItem(recall.getId(), recall
+								.getDescription()));
 					}
 				}
 			}
@@ -258,6 +263,9 @@ public class CampaignBacking extends BaseBacking {
 	}
 
 	public List<CrmRecall> getListNoAttendet() {
+		if (listNoAttendet == null) {
+			listNoAttendet = tablesService.getListRecall(Constant.NO_ATTENDET);
+		}
 		return listNoAttendet;
 	}
 
@@ -327,6 +335,7 @@ public class CampaignBacking extends BaseBacking {
 	}
 
 	public void generateDetailNoAttendet() {
+		levelValues = new Integer[levelsNoAttendet.size()];
 		selected = selectedNoAttendet;
 		generateDetail();
 	}
@@ -518,8 +527,7 @@ public class CampaignBacking extends BaseBacking {
 		panel.getChildren().add(selectOneMenu);
 	}
 
-	public void levelValueChangeEvent(ValueChangeEvent event) {
-		String level = event.getComponent().getId().substring(6, 1);
-		System.out.println("tactu: " + event.getNewValue());
+	public void levelValueChangeEvent(Long type) {
+		System.out.println(type);
 	}
 }
