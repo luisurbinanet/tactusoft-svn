@@ -23,7 +23,7 @@ public class VwMedication implements java.io.Serializable {
 	private String posology;
 	private int sold;
 	private int unit;
-	private long saleUnit;
+	private int saleUnit;
 	private BigDecimal price;
 	private BigDecimal salePrice;
 
@@ -32,7 +32,7 @@ public class VwMedication implements java.io.Serializable {
 
 	public VwMedication(BigDecimal id, BigDecimal idAppointment,
 			long codMaterial, String descMaterial, int sold, int unit,
-			long saleUnit, BigDecimal price, BigDecimal salePrice) {
+			int saleUnit, BigDecimal price, BigDecimal salePrice) {
 		this.id = id;
 		this.idAppointment = idAppointment;
 		this.codMaterial = codMaterial;
@@ -46,7 +46,7 @@ public class VwMedication implements java.io.Serializable {
 
 	public VwMedication(BigDecimal id, BigDecimal idAppointment,
 			String formulaDocType, long codMaterial, String descMaterial,
-			String posology, int sold, int unit, long saleUnit,
+			String posology, int sold, int unit, int saleUnit,
 			BigDecimal price, BigDecimal salePrice) {
 		this.id = id;
 		this.idAppointment = idAppointment;
@@ -135,11 +135,11 @@ public class VwMedication implements java.io.Serializable {
 	}
 
 	@Column(name = "sale_unit", nullable = false)
-	public long getSaleUnit() {
+	public int getSaleUnit() {
 		return this.saleUnit;
 	}
 
-	public void setSaleUnit(long saleUnit) {
+	public void setSaleUnit(int saleUnit) {
 		this.saleUnit = saleUnit;
 	}
 
