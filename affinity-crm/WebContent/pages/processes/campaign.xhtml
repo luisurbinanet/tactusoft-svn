@@ -3,7 +3,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:pe="http://primefaces.org/ui/extensions">
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 
 <ui:composition template="../templates/common.xhtml">
 
@@ -338,7 +339,7 @@
 					<p:spacer height="5"
 						rendered="#{campaignBacking.selectedDetailConfirmed ne null}" />
 
-					<p:fieldset legend="No asistió a la cita"
+					<p:fieldset id="fldNoAttendet" legend="No asistió a la cita"
 						rendered="#{campaignBacking.selectedDetailNoAttendet ne null}">
 						<h:panelGrid columns="2" style="width:100%">
 							<h:outputLabel value="#{msg['cam_date']}"
@@ -367,19 +368,7 @@
 
 						<p:spacer />
 
-						<h:outputLabel value="Respuesta" />
-						<ui:repeat var="item" value="#{campaignBacking.levelsNoAttendet}"
-							varStatus="sta">
-							<p:panelGrid id="pnlNoAttendet" style="width:100%" columns="2">
-								<h:outputLabel value="Nivel #{sta.index+1}" />
-								<p:selectOneMenu style="width:350px;"
-									value="#{campaignBacking.levelValues[sta.index]}">
-									<p:ajax listener="#{campaignBacking.levelValueChangeEvent(1)}" />
-									<f:selectItems
-										value="#{campaignBacking.getItemsLevel(1,sta.index,null)}" />
-								</p:selectOneMenu>
-							</p:panelGrid>
-						</ui:repeat>
+						<h:panelGroup binding="#{campaignBacking.panelGroupNoAttendet}" />
 
 						<p:spacer />
 
@@ -391,23 +380,6 @@
 									target="#{campaignBacking.selectedAppointment}"
 									value="#{campaignBacking.selectedDetailNoAttendet.crmAppointment}" />
 							</p:commandButton>
-						</h:panelGrid>
-
-						<p:spacer />
-
-						<h:panelGrid id="pnlAttributesNA" columns="2" width="100%">
-							<h:outputLabel value="#{msg['app_state']}" />
-							<p:selectOneMenu style="width:400px" required="true"
-								label="#{msg['app_state']}"
-								value="#{campaignBacking.selectedDetailNoAttendet.status}">
-								<p:ajax update="pnlAttributesNA" />
-								<f:selectItem itemValue=""
-									itemLabel="#{msg['glb_default_value']}" />
-								<f:selectItem itemValue="2"
-									itemLabel="#{msg['glb_state_close']}" />
-								<f:selectItem itemValue="3"
-									itemLabel="#{msg['cam_state_new_call']}" />
-							</p:selectOneMenu>
 						</h:panelGrid>
 					</p:fieldset>
 
