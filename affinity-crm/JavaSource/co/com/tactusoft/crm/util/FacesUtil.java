@@ -34,6 +34,7 @@ import java.util.zip.ZipOutputStream;
 
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
+import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -277,7 +278,7 @@ public class FacesUtil {
 		}
 		return actionListener;
 	}
-	
+
 	public static MethodExpressionValueChangeListener createMethodExpressionValueChangeListener(
 			String valueExpression, Class<?> valueType,
 			Class<?>[] expectedParamTypes) {
@@ -292,7 +293,7 @@ public class FacesUtil {
 		}
 		return actionListener;
 	}
-	
+
 	public static String lpad(String valueToPad, char filler, int size) {
 		char[] array = new char[size];
 
@@ -580,14 +581,15 @@ public class FacesUtil {
 		int currentDay = calendar.get(Calendar.DAY_OF_WEEK);
 		return currentDay;
 	}
-	
+
 	/**
 	 * 
 	 * @param listaFiles
 	 * @param outFilename
 	 * @return
 	 */
-	public static boolean createZip(File[] listaFiles, String path, String outFilename) {
+	public static boolean createZip(File[] listaFiles, String path,
+			String outFilename) {
 		boolean resultado = false;
 		byte[] buf = new byte[1024];
 		try {
@@ -638,6 +640,10 @@ public class FacesUtil {
 			resultado = false;
 		}
 		return resultado;
+	}
+
+	public static Application getApplication() {
+		return FacesContext.getCurrentInstance().getApplication();
 	}
 
 }

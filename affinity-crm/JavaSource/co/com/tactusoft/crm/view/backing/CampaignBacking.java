@@ -71,6 +71,8 @@ public class CampaignBacking extends BaseBacking {
 
 	private Integer[] levelValuesNoAttendet;
 
+	private List<CrmRecall> listAllLevelNoAttendet;
+
 	private List<CrmRecall> levelsNoAttendet;
 
 	private List<CrmRecall> listNoAttendet;
@@ -92,6 +94,10 @@ public class CampaignBacking extends BaseBacking {
 		for (CrmParameter row : listParameter) {
 			mapText.put(row.getCode(), row.getTextValue());
 		}
+
+		listAllLevelNoAttendet = tablesService
+				.getListRecall(Constant.NO_ATTENDET);
+
 		refreshList();
 	}
 
@@ -491,17 +497,15 @@ public class CampaignBacking extends BaseBacking {
 	}
 
 	public HtmlPanelGroup createPanelGroup(int type) {
-		Application application = FacesContext.getCurrentInstance()
-				.getApplication();
+		Application application = FacesUtil.getApplication();
 		ELContext eLContext = FacesContext.getCurrentInstance().getELContext();
 		ExpressionFactory expressionFactory = application
 				.getExpressionFactory();
 		HtmlPanelGroup result = (HtmlPanelGroup) application
 				.createComponent(HtmlPanelGroup.COMPONENT_TYPE);
 
-		List<CrmRecall> listAllLevel = tablesService.getListRecall(type);
 		List<CrmRecall> listLevel = new ArrayList<CrmRecall>();
-		for (CrmRecall row : listAllLevel) {
+		for (CrmRecall row : listAllLevelNoAttendet) {
 			if (row.getCrmRecall() == null) {
 				listLevel.add(row);
 			}
@@ -509,6 +513,7 @@ public class CampaignBacking extends BaseBacking {
 
 		PanelGrid panelGrid = (PanelGrid) application
 				.createComponent(PanelGrid.COMPONENT_TYPE);
+		panelGrid.setId("pnl_" + type);
 		HtmlOutputText title = (HtmlOutputText) application
 				.createComponent(HtmlOutputText.COMPONENT_TYPE);
 		title.setValue("Respuestas");
@@ -529,7 +534,6 @@ public class CampaignBacking extends BaseBacking {
 			selectOneMenu.setId("somLevel_" + type + "_" + index);
 			selectOneMenu.setStyle("width: 350px;");
 			selectOneMenu.setSubmittedValue(Constant.DEFAULT_VALUE.intValue());
-			selectOneMenu.setValue(null);
 
 			List<SelectItem> listItem = new ArrayList<SelectItem>();
 			listItem.add(new SelectItem(Constant.DEFAULT_VALUE.intValue(),
@@ -551,16 +555,18 @@ public class CampaignBacking extends BaseBacking {
 			menuChildren.add(items);
 			selectOneMenu.getChildren().addAll(menuChildren);
 
-			MethodExpression methodExpression = FacesUtil
-					.createMethodExpression(
-							"#{campaignBacking.levelValueChangeEvent(" + type
-									+ "," + index + ")}", null, new Class[] {
-									Long.class, Long.class });
-			AjaxBehaviorCustom pajax = new AjaxBehaviorCustom();
-			// pajax.setUpdate("@all");
-			// pajax.setProcess("@all");
-			pajax.setListener(methodExpression);
-			selectOneMenu.addClientBehavior("change", pajax);
+			if (index < levelValuesNoAttendet.length - 1) {
+				MethodExpression methodExpression = FacesUtil
+						.createMethodExpression(
+								"#{campaignBacking.levelValueChangeEvent("
+										+ type + "," + index + ")}", null,
+								new Class[] { Long.class, Long.class });
+				AjaxBehaviorCustom pajax = new AjaxBehaviorCustom();
+				pajax.setUpdate(":editForm:" + panelGrid.getId());
+				// pajax.setProcess("@all");
+				pajax.setListener(methodExpression);
+				selectOneMenu.addClientBehavior("change", pajax);
+			}
 
 			ValueExpression valueExpression = expressionFactory
 					.createValueExpression(eLContext,
@@ -575,8 +581,59 @@ public class CampaignBacking extends BaseBacking {
 	}
 
 	public void levelValueChangeEvent(Long type, Long level) {
-		System.out.println(level);
-		System.out.println(type);
-		System.out.println(levelValuesNoAttendet[level.intValue()]);
+		List<SelectItem> listItem = new ArrayList<SelectItem>();
+		listItem.add(new SelectItem(Constant.DEFAULT_VALUE.intValue(),
+				FacesUtil.getMessage(Constant.DEFAULT_LABEL)));
+
+		SelectOneMenu selectOneMenu = (SelectOneMenu) FacesContext
+				.getCurrentInstance()
+				.getViewRoot()
+				.findComponent(":editForm:somLevel_" + type + "_" + (level + 1));
+
+		
+		Integer value = -1;
+		
+		if (selectOneMenu != null) {
+			if (type.intValue() == Constant.NO_ATTENDET) {
+				value = levelValuesNoAttendet[level.intValue()];
+				if (value != Constant.DEFAULT_VALUE.intValue()) {
+					for (CrmRecall row : listAllLevelNoAttendet) {
+						if (row.getCrmRecall() != null
+								&& row.getCrmRecall().getId() == value) {
+							SelectItem selectItem = new SelectItem(row.getId(),
+									row.getDescription());
+							listItem.add(selectItem);
+						}
+					}
+				}
+
+				if (listItem.size() > 1) {
+					selectOneMenu.setDisabled(false);
+				} else {
+					selectOneMenu.setDisabled(true);
+				}
+
+				selectOneMenu.getChildren().clear();
+				selectOneMenu.getChildren().addAll(getUIComponent(listItem));
+				/*selectOneMenu.setSubmittedValue(Constant.DEFAULT_VALUE
+						.intValue());*/
+			}
+		}
+		
+		SelectOneMenu parentSelectOneMenu = (SelectOneMenu) FacesContext
+				.getCurrentInstance()
+				.getViewRoot()
+				.findComponent(":editForm:somLevel_" + type + "_" + level);
+		parentSelectOneMenu.setValue(value);
+	}
+
+	private List<UIComponent> getUIComponent(List<SelectItem> listItem) {
+		Application application = FacesUtil.getApplication();
+		List<UIComponent> menuChildren = new ArrayList<UIComponent>();
+		UISelectItems items = (UISelectItems) application
+				.createComponent(UISelectItems.COMPONENT_TYPE);
+		items.setValue(listItem);
+		menuChildren.add(items);
+		return menuChildren;
 	}
 }
