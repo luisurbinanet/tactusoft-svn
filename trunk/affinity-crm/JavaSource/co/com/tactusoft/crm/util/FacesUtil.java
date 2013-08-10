@@ -245,7 +245,7 @@ public class FacesUtil {
 				new Class[0]);
 	}
 
-	private static MethodExpression createMethodExpression(
+	public static MethodExpression createMethodExpression(
 			String valueExpression, Class<?> valueType,
 			Class<?>[] expectedParamTypes) {
 
