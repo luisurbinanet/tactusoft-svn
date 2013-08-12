@@ -2,6 +2,7 @@ package co.com.tactusoft.crm.view.backing;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,7 @@ import javax.inject.Named;
 
 import org.primefaces.component.panelgrid.PanelGrid;
 import org.primefaces.component.selectonemenu.SelectOneMenu;
+import org.primefaces.context.RequestContext;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
@@ -96,6 +98,7 @@ public class CampaignBacking extends BaseBacking {
 
 	private String[] task = new String[4];
 	private CrmRecall[] selectedCrmRecall = new CrmRecall[4];
+	private Date[] selectedDates = new Date[4];
 
 	public CampaignBacking() {
 		newAction();
@@ -454,6 +457,14 @@ public class CampaignBacking extends BaseBacking {
 		this.selectedCrmRecall = selectedCrmRecall;
 	}
 
+	public Date[] getSelectedDates() {
+		return selectedDates;
+	}
+
+	public void setSelectedDates(Date[] selectedDates) {
+		this.selectedDates = selectedDates;
+	}
+
 	protected void refreshList() {
 		List<CrmCampaign> listTemp = tablesService.getListCampaignNoAttendet();
 		if (listTemp.size() > 0) {
@@ -512,6 +523,38 @@ public class CampaignBacking extends BaseBacking {
 	}
 
 	public void generateDetail() {
+		if (levelValuesNoAttendet != null) {
+			for (int index = 0; index < levelValuesNoAttendet.length; index++) {
+				levelValuesNoAttendet[index] = Constant.DEFAULT_VALUE
+						.intValue();
+			}
+			levelValueChangeEvent((long) Constant.RECALL_NO_ATTENDET, 0L);
+		}
+		
+		if (levelValuesConfirmed != null) {
+			for (int index = 0; index < levelValuesConfirmed.length; index++) {
+				levelValuesConfirmed[index] = Constant.DEFAULT_VALUE
+						.intValue();
+			}
+			levelValueChangeEvent((long) Constant.RECALL_CONFIRMED, 0L);
+		}
+		
+		if (levelValuesControl != null) {
+			for (int index = 0; index < levelValuesControl.length; index++) {
+				levelValuesControl[index] = Constant.DEFAULT_VALUE
+						.intValue();
+			}
+			levelValueChangeEvent((long) Constant.RECALL_CONTROL, 0L);
+		}
+		
+		if (levelValuesMedication != null) {
+			for (int index = 0; index < levelValuesMedication.length; index++) {
+				levelValuesMedication[index] = Constant.DEFAULT_VALUE
+						.intValue();
+			}
+			levelValueChangeEvent((long) Constant.RECALL_MEDICATION, 0L);
+		}
+
 		selectedDetailNoAttendet = null;
 		selectedDetailConfirmed = null;
 		selectedDetailControl = null;
@@ -597,34 +640,6 @@ public class CampaignBacking extends BaseBacking {
 				.getId());
 
 		return "/pages/processes/appointmentEdit.jsf?faces-redirect=true";
-	}
-
-	public void saveAction() {
-		String message = null;
-		selected.setState(1);
-		int result = tablesService.saveCampaign(selected);
-		if (selectedDetailConfirmed != null) {
-			tablesService.saveCampaignDetail(selectedDetailConfirmed);
-		}
-		if (selectedDetailControl != null) {
-			tablesService.saveCampaignDetail(selectedDetailControl);
-		}
-		if (selectedDetailMediaction != null) {
-			tablesService.saveCampaignDetail(selectedDetailMediaction);
-		}
-		if (selectedDetailNoAttendet != null) {
-			tablesService.saveCampaignDetail(selectedDetailNoAttendet);
-		}
-		if (result == 0) {
-			refreshList();
-			message = FacesUtil.getMessage("msg_record_ok");
-			FacesUtil.addInfo(message);
-		} else if (result == -1) {
-			String paramValue = FacesUtil.getMessage("doc_code");
-			message = FacesUtil.getMessage("msg_record_unique_exception",
-					paramValue);
-			FacesUtil.addError(message);
-		}
 	}
 
 	public HtmlPanelGroup createPanelGroup(int type,
@@ -766,8 +781,12 @@ public class CampaignBacking extends BaseBacking {
 			value = levelValuesNoAttendet[level.intValue()];
 			refreshLevels(type.intValue(), level.intValue(), value,
 					listAllLevelNoAttendet);
-			levelValuesNoAttendet[level.intValue() + 1] = Constant.DEFAULT_VALUE
-					.intValue();
+			try {
+				levelValuesNoAttendet[level.intValue() + 1] = Constant.DEFAULT_VALUE
+						.intValue();
+			} catch (Exception ex) {
+
+			}
 			if (value != Constant.DEFAULT_VALUE.intValue()) {
 				selectedCrmRecall[0] = mapNoAttendet.get(value);
 				task[0] = selectedCrmRecall[0].getTask();
@@ -780,8 +799,12 @@ public class CampaignBacking extends BaseBacking {
 			value = levelValuesConfirmed[level.intValue()];
 			refreshLevels(type.intValue(), level.intValue(), value,
 					listAllLevelConfirmed);
-			levelValuesConfirmed[level.intValue() + 1] = Constant.DEFAULT_VALUE
-					.intValue();
+			try {
+				levelValuesConfirmed[level.intValue() + 1] = Constant.DEFAULT_VALUE
+						.intValue();
+			} catch (Exception ex) {
+
+			}
 			if (value != Constant.DEFAULT_VALUE.intValue()) {
 				selectedCrmRecall[1] = mapConfirmed.get(value);
 				task[1] = selectedCrmRecall[1].getTask();
@@ -794,8 +817,12 @@ public class CampaignBacking extends BaseBacking {
 			value = levelValuesControl[level.intValue()];
 			refreshLevels(type.intValue(), level.intValue(), value,
 					listAllLevelControl);
-			levelValuesControl[level.intValue() + 1] = Constant.DEFAULT_VALUE
-					.intValue();
+			try {
+				levelValuesControl[level.intValue() + 1] = Constant.DEFAULT_VALUE
+						.intValue();
+			} catch (Exception ex) {
+
+			}
 			if (value != Constant.DEFAULT_VALUE.intValue()) {
 				selectedCrmRecall[2] = mapControl.get(value);
 				task[2] = selectedCrmRecall[2].getTask();
@@ -808,8 +835,12 @@ public class CampaignBacking extends BaseBacking {
 			value = levelValuesMedication[level.intValue()];
 			refreshLevels(type.intValue(), level.intValue(), value,
 					listAllLevelMedication);
-			levelValuesMedication[level.intValue() + 1] = Constant.DEFAULT_VALUE
-					.intValue();
+			try {
+				levelValuesMedication[level.intValue() + 1] = Constant.DEFAULT_VALUE
+						.intValue();
+			} catch (Exception ex) {
+
+			}
 			if (value != Constant.DEFAULT_VALUE.intValue()) {
 				selectedCrmRecall[3] = mapMedication.get(value);
 				task[3] = selectedCrmRecall[3].getTask();
@@ -853,5 +884,111 @@ public class CampaignBacking extends BaseBacking {
 		items.setValue(listItem);
 		menuChildren.add(items);
 		return menuChildren;
+	}
+
+	private int getLevels(List<CrmRecall> listAllLevel) {
+		Integer value = levelValuesNoAttendet[0];
+		CrmRecall currentRecall = mapNoAttendet.get(value);
+		int count = 0;
+		for (CrmRecall row : listAllLevel) {
+			if (row.getCrmRecall() != null
+					&& row.getCrmRecall().getId() == currentRecall.getId()) {
+				currentRecall = row;
+				count++;
+			}
+		}
+		return count;
+	}
+
+	public void saveAction() {
+		String message = null;
+		String paramValue = null;
+		int level = 0;
+		int valueNoAttendet = -1;
+		int valueConfirmed = -1;
+		int valueControl = -1;
+		int valueMedication = -1;
+		boolean validate = true;
+		RequestContext context = RequestContext.getCurrentInstance();
+
+		try {
+			level = getLevels(listAllLevelNoAttendet);
+			valueNoAttendet = levelValuesNoAttendet[level];
+			if (valueNoAttendet == Constant.DEFAULT_VALUE.intValue()) {
+				paramValue = FacesUtil.getMessage("cam_type_no_attendet");
+				message = FacesUtil.getMessage("cam_msg_required", paramValue);
+				FacesUtil.addError(message);
+				validate = false;
+			} else {
+
+			}
+		} catch (Exception ex) {
+
+		}
+
+		try {
+			level = getLevels(listAllLevelConfirmed);
+			valueConfirmed = levelValuesConfirmed[level];
+			if (valueConfirmed == Constant.DEFAULT_VALUE.intValue()) {
+				paramValue = FacesUtil.getMessage("cam_type_confirmed");
+				message = FacesUtil.getMessage("cam_msg_required", paramValue);
+				FacesUtil.addError(message);
+				validate = false;
+			} else {
+
+			}
+		} catch (Exception ex) {
+
+		}
+
+		try {
+			level = getLevels(listAllLevelNoAttendet);
+			valueControl = levelValuesControl[level];
+			if (valueControl == Constant.DEFAULT_VALUE.intValue()) {
+				paramValue = FacesUtil.getMessage("cam_type_control");
+				message = FacesUtil.getMessage("cam_msg_required", paramValue);
+				FacesUtil.addError(message);
+				validate = false;
+			} else {
+
+			}
+		} catch (Exception ex) {
+
+		}
+
+		try {
+			level = getLevels(listAllLevelMedication);
+			valueMedication = levelValuesMedication[level];
+			if (valueMedication == Constant.DEFAULT_VALUE.intValue()) {
+				paramValue = FacesUtil.getMessage("cam_type_medication");
+				message = FacesUtil.getMessage("cam_msg_required", paramValue);
+				FacesUtil.addError(message);
+				validate = false;
+			} else {
+
+			}
+		} catch (Exception ex) {
+
+		}
+
+		context.addCallbackParam("validate", validate);
+
+		/*
+		 * selected.setState(1); int result =
+		 * tablesService.saveCampaign(selected); if (selectedDetailNoAttendet !=
+		 * null) { tablesService.saveCampaignDetail(selectedDetailNoAttendet); }
+		 * if (selectedDetailConfirmed != null) {
+		 * tablesService.saveCampaignDetail(selectedDetailConfirmed); } if
+		 * (selectedDetailControl != null) {
+		 * tablesService.saveCampaignDetail(selectedDetailControl); } if
+		 * (selectedDetailMediaction != null) {
+		 * tablesService.saveCampaignDetail(selectedDetailMediaction); } if
+		 * (result == 0) { refreshList(); message =
+		 * FacesUtil.getMessage("msg_record_ok"); FacesUtil.addInfo(message); }
+		 * else if (result == -1) { paramValue =
+		 * FacesUtil.getMessage("doc_code"); message =
+		 * FacesUtil.getMessage("msg_record_unique_exception", paramValue);
+		 * FacesUtil.addError(message); }
+		 */
 	}
 }
