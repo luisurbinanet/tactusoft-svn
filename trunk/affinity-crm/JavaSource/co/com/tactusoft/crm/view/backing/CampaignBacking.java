@@ -530,23 +530,21 @@ public class CampaignBacking extends BaseBacking {
 			}
 			levelValueChangeEvent((long) Constant.RECALL_NO_ATTENDET, 0L);
 		}
-		
+
 		if (levelValuesConfirmed != null) {
 			for (int index = 0; index < levelValuesConfirmed.length; index++) {
-				levelValuesConfirmed[index] = Constant.DEFAULT_VALUE
-						.intValue();
+				levelValuesConfirmed[index] = Constant.DEFAULT_VALUE.intValue();
 			}
 			levelValueChangeEvent((long) Constant.RECALL_CONFIRMED, 0L);
 		}
-		
+
 		if (levelValuesControl != null) {
 			for (int index = 0; index < levelValuesControl.length; index++) {
-				levelValuesControl[index] = Constant.DEFAULT_VALUE
-						.intValue();
+				levelValuesControl[index] = Constant.DEFAULT_VALUE.intValue();
 			}
 			levelValueChangeEvent((long) Constant.RECALL_CONTROL, 0L);
 		}
-		
+
 		if (levelValuesMedication != null) {
 			for (int index = 0; index < levelValuesMedication.length; index++) {
 				levelValuesMedication[index] = Constant.DEFAULT_VALUE
@@ -886,15 +884,31 @@ public class CampaignBacking extends BaseBacking {
 		return menuChildren;
 	}
 
-	private int getLevels(List<CrmRecall> listAllLevel) {
-		Integer value = levelValuesNoAttendet[0];
-		CrmRecall currentRecall = mapNoAttendet.get(value);
+	private int getLevels(int type, List<CrmRecall> listAllLevel) {
+		Integer value = Constant.RECALL_NO_ATTENDET;
+		CrmRecall currentRecall = null;
+		if (type == Constant.RECALL_NO_ATTENDET) {
+			value = levelValuesNoAttendet[0];
+			currentRecall = mapNoAttendet.get(value);
+		} else if (type == Constant.RECALL_CONFIRMED) {
+			value = levelValuesConfirmed[0];
+			currentRecall = mapConfirmed.get(value);
+		} else if (type == Constant.RECALL_CONTROL) {
+			value = levelValuesControl[0];
+			currentRecall = mapControl.get(value);
+		} else {
+			value = levelValuesMedication[0];
+			currentRecall = mapMedication.get(value);
+		}
+
 		int count = 0;
-		for (CrmRecall row : listAllLevel) {
-			if (row.getCrmRecall() != null
-					&& row.getCrmRecall().getId() == currentRecall.getId()) {
-				currentRecall = row;
-				count++;
+		if (currentRecall != null) {
+			for (CrmRecall row : listAllLevel) {
+				if (row.getCrmRecall() != null
+						&& row.getCrmRecall().getId() == currentRecall.getId()) {
+					currentRecall = row;
+					count++;
+				}
 			}
 		}
 		return count;
@@ -911,84 +925,109 @@ public class CampaignBacking extends BaseBacking {
 		boolean validate = true;
 		RequestContext context = RequestContext.getCurrentInstance();
 
-		try {
-			level = getLevels(listAllLevelNoAttendet);
-			valueNoAttendet = levelValuesNoAttendet[level];
-			if (valueNoAttendet == Constant.DEFAULT_VALUE.intValue()) {
+		// selected.setState(1);
+		// int result = tablesService.saveCampaign(selected);
+		if (selectedDetailNoAttendet != null) {
+			try {
 				paramValue = FacesUtil.getMessage("cam_type_no_attendet");
 				message = FacesUtil.getMessage("cam_msg_required", paramValue);
-				FacesUtil.addError(message);
-				validate = false;
-			} else {
+				level = getLevels(Constant.RECALL_NO_ATTENDET,
+						listAllLevelNoAttendet);
+				if (level > 0) {
+					valueNoAttendet = levelValuesNoAttendet[level];
+					if (valueNoAttendet == Constant.DEFAULT_VALUE.intValue()) {
+						FacesUtil.addError(message);
+						validate = false;
+					} else {
+
+					}
+				} else {
+					FacesUtil.addError(message);
+					validate = false;
+				}
+			} catch (Exception ex) {
 
 			}
-		} catch (Exception ex) {
-
+			// tablesService.saveCampaignDetail(selectedDetailNoAttendet);
 		}
-
-		try {
-			level = getLevels(listAllLevelConfirmed);
-			valueConfirmed = levelValuesConfirmed[level];
-			if (valueConfirmed == Constant.DEFAULT_VALUE.intValue()) {
+		if (selectedDetailConfirmed != null) {
+			try {
 				paramValue = FacesUtil.getMessage("cam_type_confirmed");
 				message = FacesUtil.getMessage("cam_msg_required", paramValue);
-				FacesUtil.addError(message);
-				validate = false;
-			} else {
+				level = getLevels(Constant.RECALL_CONFIRMED,
+						listAllLevelConfirmed);
+				if (level > 0) {
+					valueConfirmed = levelValuesConfirmed[level];
+					if (valueConfirmed == Constant.DEFAULT_VALUE.intValue()) {
+						FacesUtil.addError(message);
+						validate = false;
+					} else {
+
+					}
+				} else {
+					FacesUtil.addError(message);
+					validate = false;
+				}
+			} catch (Exception ex) {
 
 			}
-		} catch (Exception ex) {
-
+			// tablesService.saveCampaignDetail(selectedDetailConfirmed);
 		}
-
-		try {
-			level = getLevels(listAllLevelNoAttendet);
-			valueControl = levelValuesControl[level];
-			if (valueControl == Constant.DEFAULT_VALUE.intValue()) {
+		if (selectedDetailControl != null) {
+			try {
 				paramValue = FacesUtil.getMessage("cam_type_control");
 				message = FacesUtil.getMessage("cam_msg_required", paramValue);
-				FacesUtil.addError(message);
-				validate = false;
-			} else {
+				level = getLevels(Constant.RECALL_CONTROL, listAllLevelControl);
+				if (level > 0) {
+					valueControl = levelValuesControl[level];
+					if (valueControl == Constant.DEFAULT_VALUE.intValue()) {
+						FacesUtil.addError(message);
+						validate = false;
+					} else {
+
+					}
+				} else {
+					FacesUtil.addError(message);
+					validate = false;
+				}
+			} catch (Exception ex) {
 
 			}
-		} catch (Exception ex) {
-
+			// tablesService.saveCampaignDetail(selectedDetailControl);
 		}
-
-		try {
-			level = getLevels(listAllLevelMedication);
-			valueMedication = levelValuesMedication[level];
-			if (valueMedication == Constant.DEFAULT_VALUE.intValue()) {
+		if (selectedDetailMediaction != null) {
+			try {
 				paramValue = FacesUtil.getMessage("cam_type_medication");
 				message = FacesUtil.getMessage("cam_msg_required", paramValue);
-				FacesUtil.addError(message);
-				validate = false;
-			} else {
+				level = getLevels(Constant.RECALL_MEDICATION,
+						listAllLevelMedication);
+				if (level > 0) {
+					valueMedication = levelValuesMedication[level];
+					if (valueMedication == Constant.DEFAULT_VALUE.intValue()) {
+						FacesUtil.addError(message);
+						validate = false;
+					} else {
+
+					}
+				} else {
+					FacesUtil.addError(message);
+					validate = false;
+				}
+			} catch (Exception ex) {
 
 			}
-		} catch (Exception ex) {
-
+			// tablesService.saveCampaignDetail(selectedDetailMediaction);
 		}
 
-		context.addCallbackParam("validate", validate);
-
 		/*
-		 * selected.setState(1); int result =
-		 * tablesService.saveCampaign(selected); if (selectedDetailNoAttendet !=
-		 * null) { tablesService.saveCampaignDetail(selectedDetailNoAttendet); }
-		 * if (selectedDetailConfirmed != null) {
-		 * tablesService.saveCampaignDetail(selectedDetailConfirmed); } if
-		 * (selectedDetailControl != null) {
-		 * tablesService.saveCampaignDetail(selectedDetailControl); } if
-		 * (selectedDetailMediaction != null) {
-		 * tablesService.saveCampaignDetail(selectedDetailMediaction); } if
-		 * (result == 0) { refreshList(); message =
+		 * if (result == 0) { refreshList(); message =
 		 * FacesUtil.getMessage("msg_record_ok"); FacesUtil.addInfo(message); }
 		 * else if (result == -1) { paramValue =
 		 * FacesUtil.getMessage("doc_code"); message =
 		 * FacesUtil.getMessage("msg_record_unique_exception", paramValue);
 		 * FacesUtil.addError(message); }
 		 */
+
+		context.addCallbackParam("validate", validate);
 	}
 }
