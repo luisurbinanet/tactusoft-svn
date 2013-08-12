@@ -103,19 +103,19 @@ public class TablesBo implements Serializable {
 	}
 
 	public List<CrmCampaign> getListCampaignNoAttendet() {
-		return getListCampaignActive(Constant.NO_ATTENDET);
+		return getListCampaignActive(Constant.RECALL_NO_ATTENDET);
 	}
 
 	public List<CrmCampaign> getListCampaignConfirmed() {
-		return getListCampaignActive(Constant.CONFIRMED);
+		return getListCampaignActive(Constant.RECALL_CONFIRMED);
 	}
 
 	public List<CrmCampaign> getListCampaignControl() {
-		return getListCampaignActive(Constant.CONTROL);
+		return getListCampaignActive(Constant.RECALL_CONTROL);
 	}
 
 	public List<CrmCampaign> getListCampaignMedication() {
-		return getListCampaignActive(Constant.MEDICATION);
+		return getListCampaignActive(Constant.RECALL_MEDICATION);
 	}
 
 	private List<CrmCampaign> getListCampaignActive(int type) {

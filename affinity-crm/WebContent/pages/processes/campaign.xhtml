@@ -247,31 +247,19 @@
 
 						<p:spacer />
 
-						<h:panelGrid>
+						<h:panelGroup binding="#{campaignBacking.panelGroupControl}" />
+
+						<p:spacer />
+
+						<h:panelGrid id="pnlTask_3">
 							<p:commandButton value="#{msg['btn_edit_app']}"
 								action="#{campaignBacking.editAppoinmnetAction}"
-								immediate="true">
+								immediate="true"
+								rendered="#{campaignBacking.task[2] eq 'APPOINTMENT'}">
 								<f:setPropertyActionListener
 									target="#{campaignBacking.selectedAppointment}"
 									value="#{campaignBacking.selectedDetailControl.crmAppointment}" />
 							</p:commandButton>
-						</h:panelGrid>
-
-						<p:spacer />
-
-						<h:panelGrid id="pnlAttributesCO" columns="2" width="100%">
-							<h:outputLabel value="#{msg['app_state']}" />
-							<p:selectOneMenu style="width:400px" required="true"
-								label="#{msg['app_state']}"
-								value="#{campaignBacking.selectedDetailControl.status}">
-								<p:ajax update="pnlAttributesNA" />
-								<f:selectItem itemValue=""
-									itemLabel="#{msg['glb_default_value']}" />
-								<f:selectItem itemValue="1"
-									itemLabel="#{msg['glb_state_close']}" />
-								<f:selectItem itemValue="3"
-									itemLabel="#{msg['cam_state_new_call']}" />
-							</p:selectOneMenu>
 						</h:panelGrid>
 
 					</p:fieldset>
@@ -308,31 +296,19 @@
 
 						<p:spacer />
 
-						<h:panelGrid>
+						<h:panelGroup binding="#{campaignBacking.panelGroupConfirmed}" />
+
+						<p:spacer />
+
+						<h:panelGrid id="pnlTask_2">
 							<p:commandButton value="#{msg['btn_edit_app']}"
 								action="#{campaignBacking.editAppoinmnetAction}"
-								immediate="true">
+								immediate="true"
+								rendered="#{campaignBacking.task[1] eq 'APPOINTMENT'}">
 								<f:setPropertyActionListener
 									target="#{campaignBacking.selectedAppointment}"
 									value="#{campaignBacking.selectedDetailConfirmed.crmAppointment}" />
 							</p:commandButton>
-						</h:panelGrid>
-
-						<p:spacer />
-
-						<h:panelGrid id="pnlAttributesCM" columns="2" width="100%">
-							<h:outputLabel value="#{msg['app_state']}" />
-							<p:selectOneMenu style="width:400px" required="true"
-								label="#{msg['app_state']}"
-								value="#{campaignBacking.selectedDetailConfirmed.status}">
-								<p:ajax update="pnlAttributesNA" />
-								<f:selectItem itemValue=""
-									itemLabel="#{msg['glb_default_value']}" />
-								<f:selectItem itemValue="1"
-									itemLabel="#{msg['glb_state_close']}" />
-								<f:selectItem itemValue="3"
-									itemLabel="#{msg['cam_state_new_call']}" />
-							</p:selectOneMenu>
 						</h:panelGrid>
 					</p:fieldset>
 
@@ -372,10 +348,11 @@
 
 						<p:spacer />
 
-						<h:panelGrid>
+						<h:panelGrid id="pnlTask_1">
 							<p:commandButton value="#{msg['btn_edit_app']}"
 								action="#{campaignBacking.editAppoinmnetAction}"
-								immediate="true">
+								immediate="true"
+								rendered="#{campaignBacking.task[0] eq 'APPOINTMENT'}">
 								<f:setPropertyActionListener
 									target="#{campaignBacking.selectedAppointment}"
 									value="#{campaignBacking.selectedDetailNoAttendet.crmAppointment}" />
