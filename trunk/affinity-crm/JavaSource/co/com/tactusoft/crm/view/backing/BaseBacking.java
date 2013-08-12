@@ -18,6 +18,7 @@ import javax.inject.Inject;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 
+import co.com.tactusoft.crm.controller.bo.ParameterBo;
 import co.com.tactusoft.crm.controller.bo.ProcessBo;
 import co.com.tactusoft.crm.controller.bo.SecurityBo;
 import co.com.tactusoft.crm.controller.bo.TablesBo;
@@ -51,6 +52,9 @@ public class BaseBacking implements Serializable {
 
 	@Inject
 	protected SecurityBo securityService;
+	
+	@Inject
+	protected ParameterBo parameterService;
 
 	private static final long serialVersionUID = 1L;
 

@@ -18,14 +18,12 @@ import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGroup;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.primefaces.component.panelgrid.PanelGrid;
 import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.springframework.context.annotation.Scope;
 
-import co.com.tactusoft.crm.controller.bo.ParameterBo;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmCampaign;
 import co.com.tactusoft.crm.model.entities.CrmCampaignDetail;
@@ -45,9 +43,6 @@ import com.tactusoft.webservice.client.beans.WSBean;
 public class CampaignBacking extends BaseBacking {
 
 	private static final long serialVersionUID = 1L;
-
-	@Inject
-	protected ParameterBo parameterService;
 
 	protected List<CrmCampaign> list;
 	protected CampaignDataModel model;
@@ -70,17 +65,37 @@ public class CampaignBacking extends BaseBacking {
 	protected CrmAppointment selectedAppointment;
 
 	private Integer[] levelValuesNoAttendet;
+	private Integer[] levelValuesConfirmed;
+	private Integer[] levelValuesControl;
+	private Integer[] levelValuesMedication;
 
 	private List<CrmRecall> listAllLevelNoAttendet;
+	private List<CrmRecall> listAllLevelConfirmed;
+	private List<CrmRecall> listAllLevelControl;
+	private List<CrmRecall> listAllLevelMedication;
 
 	private List<CrmRecall> levelsNoAttendet;
+	private List<CrmRecall> levelsConfirmed;
+	private List<CrmRecall> levelsControl;
+	private List<CrmRecall> levelsMedication;
 
 	private List<CrmRecall> listNoAttendet;
-	private List<CrmRecall> listConfirmedControl;
+	private List<CrmRecall> listConfirmed;
 	private List<CrmRecall> listControl;
 	private List<CrmRecall> listMedication;
 
 	private HtmlPanelGroup panelGroupNoAttendet;
+	private HtmlPanelGroup panelGroupConfirmed;
+	private HtmlPanelGroup panelGroupControl;
+	private HtmlPanelGroup panelGroupMedication;
+
+	private Map<Integer, CrmRecall> mapNoAttendet;
+	private Map<Integer, CrmRecall> mapConfirmed;
+	private Map<Integer, CrmRecall> mapControl;
+	private Map<Integer, CrmRecall> mapMedication;
+
+	private String[] task = new String[4];
+	private CrmRecall[] selectedCrmRecall = new CrmRecall[4];
 
 	public CampaignBacking() {
 		newAction();
@@ -96,7 +111,32 @@ public class CampaignBacking extends BaseBacking {
 		}
 
 		listAllLevelNoAttendet = tablesService
-				.getListRecall(Constant.NO_ATTENDET);
+				.getListRecall(Constant.RECALL_NO_ATTENDET);
+		mapNoAttendet = new HashMap<Integer, CrmRecall>();
+		for (CrmRecall row : listAllLevelNoAttendet) {
+			mapNoAttendet.put(row.getId(), row);
+		}
+
+		listAllLevelConfirmed = tablesService
+				.getListRecall(Constant.RECALL_CONFIRMED);
+		mapConfirmed = new HashMap<Integer, CrmRecall>();
+		for (CrmRecall row : listAllLevelConfirmed) {
+			mapConfirmed.put(row.getId(), row);
+		}
+
+		listAllLevelControl = tablesService
+				.getListRecall(Constant.RECALL_CONTROL);
+		mapControl = new HashMap<Integer, CrmRecall>();
+		for (CrmRecall row : listAllLevelControl) {
+			mapControl.put(row.getId(), row);
+		}
+
+		listAllLevelMedication = tablesService
+				.getListRecall(Constant.RECALL_MEDICATION);
+		mapMedication = new HashMap<Integer, CrmRecall>();
+		for (CrmRecall row : listAllLevelMedication) {
+			mapMedication.put(row.getId(), row);
+		}
 
 		refreshList();
 	}
@@ -234,9 +274,34 @@ public class CampaignBacking extends BaseBacking {
 		this.levelValuesNoAttendet = levelValuesNoAttendet;
 	}
 
+	public Integer[] getLevelValuesConfirmed() {
+		return levelValuesConfirmed;
+	}
+
+	public void setLevelValuesConfirmed(Integer[] levelValuesConfirmed) {
+		this.levelValuesConfirmed = levelValuesConfirmed;
+	}
+
+	public Integer[] getLevelValuesControl() {
+		return levelValuesControl;
+	}
+
+	public void setLevelValuesControl(Integer[] levelValuesControl) {
+		this.levelValuesControl = levelValuesControl;
+	}
+
+	public Integer[] getLevelValuesMedication() {
+		return levelValuesMedication;
+	}
+
+	public void setLevelValuesMedication(Integer[] levelValuesMedication) {
+		this.levelValuesMedication = levelValuesMedication;
+	}
+
 	public List<CrmRecall> getLevelsNoAttendet() {
 		if (levelsNoAttendet == null) {
-			levelsNoAttendet = tablesService.getLevels(Constant.NO_ATTENDET);
+			levelsNoAttendet = tablesService
+					.getLevels(Constant.RECALL_NO_ATTENDET);
 		}
 		return levelsNoAttendet;
 	}
@@ -245,39 +310,45 @@ public class CampaignBacking extends BaseBacking {
 		this.levelsNoAttendet = levelsNoAttendet;
 	}
 
-	public List<SelectItem> getItemsLevel(Long type, Long level,
-			CrmRecall parent) {
-		List<SelectItem> itemsLevel = new ArrayList<SelectItem>();
-		String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
-		itemsLevel
-				.add(new SelectItem(Constant.DEFAULT_VALUE.intValue(), label));
-		levelValuesNoAttendet[level.intValue()] = Constant.DEFAULT_VALUE
-				.intValue();
-
-		if (type == Constant.NO_ATTENDET) {
-			List<CrmRecall> listAllLevel = this.getListNoAttendet();
-			for (CrmRecall recall : listAllLevel) {
-				if (parent == null && level == 0) {
-					if (recall.getCrmRecall() == null) {
-						itemsLevel.add(new SelectItem(recall.getId(), recall
-								.getDescription()));
-					}
-				} else {
-					if (parent != null
-							&& recall.getCrmRecall().getId() == parent
-									.getCrmRecall().getId()) {
-						itemsLevel.add(new SelectItem(recall.getId(), recall
-								.getDescription()));
-					}
-				}
-			}
+	public List<CrmRecall> getLevelsConfirmed() {
+		if (levelsConfirmed == null) {
+			levelsConfirmed = tablesService
+					.getLevels(Constant.RECALL_CONFIRMED);
 		}
-		return itemsLevel;
+		return levelsConfirmed;
+	}
+
+	public void setLevelsConfirmed(List<CrmRecall> levelsConfirmed) {
+		this.levelsConfirmed = levelsConfirmed;
+	}
+
+	public List<CrmRecall> getLevelsControl() {
+		if (levelsControl == null) {
+			levelsControl = tablesService.getLevels(Constant.RECALL_CONTROL);
+		}
+		return levelsControl;
+	}
+
+	public void setLevelsControl(List<CrmRecall> levelsControl) {
+		this.levelsControl = levelsControl;
+	}
+
+	public List<CrmRecall> getLevelsMedication() {
+		if (levelsMedication == null) {
+			levelsMedication = tablesService
+					.getLevels(Constant.RECALL_MEDICATION);
+		}
+		return levelsMedication;
+	}
+
+	public void setLevelsMedication(List<CrmRecall> levelsMedication) {
+		this.levelsMedication = levelsMedication;
 	}
 
 	public List<CrmRecall> getListNoAttendet() {
 		if (listNoAttendet == null) {
-			listNoAttendet = tablesService.getListRecall(Constant.NO_ATTENDET);
+			listNoAttendet = tablesService
+					.getListRecall(Constant.RECALL_NO_ATTENDET);
 		}
 		return listNoAttendet;
 	}
@@ -286,12 +357,12 @@ public class CampaignBacking extends BaseBacking {
 		this.listNoAttendet = listNoAttendet;
 	}
 
-	public List<CrmRecall> getListConfirmedControl() {
-		return listConfirmedControl;
+	public List<CrmRecall> getListConfirmed() {
+		return listConfirmed;
 	}
 
-	public void setListConfirmedControl(List<CrmRecall> listConfirmedControl) {
-		this.listConfirmedControl = listConfirmedControl;
+	public void setListConfirmed(List<CrmRecall> listConfirmed) {
+		this.listConfirmed = listConfirmed;
 	}
 
 	public List<CrmRecall> getListControl() {
@@ -314,13 +385,73 @@ public class CampaignBacking extends BaseBacking {
 		if (panelGroupNoAttendet == null) {
 			getLevelsNoAttendet();
 			levelValuesNoAttendet = new Integer[levelsNoAttendet.size()];
-			panelGroupNoAttendet = createPanelGroup(Constant.NO_ATTENDET);
+			panelGroupNoAttendet = createPanelGroup(
+					Constant.RECALL_NO_ATTENDET, listAllLevelNoAttendet,
+					levelValuesNoAttendet);
 		}
 		return panelGroupNoAttendet;
 	}
 
 	public void setPanelGroupNoAttendet(HtmlPanelGroup panelGroupNoAttendet) {
 		this.panelGroupNoAttendet = panelGroupNoAttendet;
+	}
+
+	public HtmlPanelGroup getPanelGroupConfirmed() {
+		if (panelGroupConfirmed == null) {
+			getLevelsConfirmed();
+			levelValuesConfirmed = new Integer[levelsConfirmed.size()];
+			panelGroupConfirmed = createPanelGroup(Constant.RECALL_CONFIRMED,
+					listAllLevelConfirmed, levelValuesConfirmed);
+		}
+		return panelGroupConfirmed;
+	}
+
+	public void setPanelGroupConfirmed(HtmlPanelGroup panelGroupConfirmed) {
+		this.panelGroupConfirmed = panelGroupConfirmed;
+	}
+
+	public HtmlPanelGroup getPanelGroupControl() {
+		if (panelGroupControl == null) {
+			getLevelsControl();
+			levelValuesControl = new Integer[levelsControl.size()];
+			panelGroupControl = createPanelGroup(Constant.RECALL_CONTROL,
+					listAllLevelControl, levelValuesControl);
+		}
+		return panelGroupControl;
+	}
+
+	public void setPanelGroupControl(HtmlPanelGroup panelGroupControl) {
+		this.panelGroupControl = panelGroupControl;
+	}
+
+	public HtmlPanelGroup getPanelGroupMedication() {
+		if (panelGroupMedication == null) {
+			getLevelsMedication();
+			levelValuesMedication = new Integer[levelsMedication.size()];
+			panelGroupMedication = createPanelGroup(Constant.RECALL_MEDICATION,
+					listAllLevelMedication, levelValuesMedication);
+		}
+		return panelGroupMedication;
+	}
+
+	public void setPanelGroupMedication(HtmlPanelGroup panelGroupMedication) {
+		this.panelGroupMedication = panelGroupMedication;
+	}
+
+	public String[] getTask() {
+		return task;
+	}
+
+	public void setTask(String[] task) {
+		this.task = task;
+	}
+
+	public CrmRecall[] getSelectedCrmRecall() {
+		return selectedCrmRecall;
+	}
+
+	public void setSelectedCrmRecall(CrmRecall[] selectedCrmRecall) {
+		this.selectedCrmRecall = selectedCrmRecall;
 	}
 
 	protected void refreshList() {
@@ -388,13 +519,13 @@ public class CampaignBacking extends BaseBacking {
 
 		List<CrmCampaignDetail> listDetail = selected.getCrmCampaignDetails();
 		for (CrmCampaignDetail row : listDetail) {
-			if (row.getCampaignType() == Constant.NO_ATTENDET) {
+			if (row.getCampaignType() == Constant.RECALL_NO_ATTENDET) {
 				selectedDetailNoAttendet = row;
-			} else if (row.getCampaignType() == Constant.CONFIRMED) {
+			} else if (row.getCampaignType() == Constant.RECALL_CONFIRMED) {
 				selectedDetailConfirmed = row;
-			} else if (row.getCampaignType() == Constant.CONTROL) {
+			} else if (row.getCampaignType() == Constant.RECALL_CONTROL) {
 				selectedDetailControl = row;
-			} else if (row.getCampaignType() == Constant.MEDICATION) {
+			} else if (row.getCampaignType() == Constant.RECALL_MEDICATION) {
 				selectedDetailMediaction = row;
 			}
 		}
@@ -415,9 +546,9 @@ public class CampaignBacking extends BaseBacking {
 	}
 
 	public String getDescCampaignType(int typeCampaign) {
-		return typeCampaign == Constant.NO_ATTENDET ? "No asistió a la cita"
-				: typeCampaign == Constant.CONFIRMED ? "Confirmar la cita"
-						: typeCampaign == Constant.CONTROL ? "No ha asistido a control"
+		return typeCampaign == Constant.RECALL_NO_ATTENDET ? "No asistió a la cita"
+				: typeCampaign == Constant.RECALL_CONFIRMED ? "Confirmar la cita"
+						: typeCampaign == Constant.RECALL_CONTROL ? "No ha asistido a control"
 								: "Medicamentos NO adquiridos";
 	}
 
@@ -496,7 +627,8 @@ public class CampaignBacking extends BaseBacking {
 		}
 	}
 
-	public HtmlPanelGroup createPanelGroup(int type) {
+	public HtmlPanelGroup createPanelGroup(int type,
+			List<CrmRecall> listAllLevel, Integer[] levelValues) {
 		Application application = FacesUtil.getApplication();
 		ELContext eLContext = FacesContext.getCurrentInstance().getELContext();
 		ExpressionFactory expressionFactory = application
@@ -505,7 +637,7 @@ public class CampaignBacking extends BaseBacking {
 				.createComponent(HtmlPanelGroup.COMPONENT_TYPE);
 
 		List<CrmRecall> listLevel = new ArrayList<CrmRecall>();
-		for (CrmRecall row : listAllLevelNoAttendet) {
+		for (CrmRecall row : listAllLevel) {
 			if (row.getCrmRecall() == null) {
 				listLevel.add(row);
 			}
@@ -522,7 +654,7 @@ public class CampaignBacking extends BaseBacking {
 		panelGrid.setColumns(2);
 		result.getChildren().add(panelGrid);
 
-		for (int index = 0; index < levelValuesNoAttendet.length; index++) {
+		for (int index = 0; index < levelValues.length; index++) {
 			HtmlOutputText text = (HtmlOutputText) application
 					.createComponent(HtmlOutputText.COMPONENT_TYPE);
 			text.setId("outLevel_" + type + "_" + index);
@@ -533,7 +665,7 @@ public class CampaignBacking extends BaseBacking {
 					.createComponent(SelectOneMenu.COMPONENT_TYPE);
 			selectOneMenu.setId("somLevel_" + type + "_" + index);
 			selectOneMenu.setStyle("width: 350px;");
-			selectOneMenu.setSubmittedValue(Constant.DEFAULT_VALUE.intValue());
+			selectOneMenu.setValue(Constant.DEFAULT_VALUE.intValue());
 
 			List<SelectItem> listItem = new ArrayList<SelectItem>();
 			listItem.add(new SelectItem(Constant.DEFAULT_VALUE.intValue(),
@@ -555,23 +687,35 @@ public class CampaignBacking extends BaseBacking {
 			menuChildren.add(items);
 			selectOneMenu.getChildren().addAll(menuChildren);
 
-			if (index < levelValuesNoAttendet.length - 1) {
-				MethodExpression methodExpression = FacesUtil
-						.createMethodExpression(
-								"#{campaignBacking.levelValueChangeEvent("
-										+ type + "," + index + ")}", null,
-								new Class[] { Long.class, Long.class });
-				AjaxBehaviorCustom pajax = new AjaxBehaviorCustom();
-				pajax.setUpdate(":editForm:" + panelGrid.getId());
-				// pajax.setProcess("@all");
-				pajax.setListener(methodExpression);
-				selectOneMenu.addClientBehavior("change", pajax);
+			MethodExpression methodExpression = FacesUtil
+					.createMethodExpression(
+							"#{campaignBacking.levelValueChangeEvent(" + type
+									+ "," + index + ")}", null, new Class[] {
+									Long.class, Long.class });
+			AjaxBehaviorCustom pajax = new AjaxBehaviorCustom();
+			pajax.setUpdate(":editForm:pnlTask_" + type + " :editForm:"
+					+ panelGrid.getId());
+			// pajax.setProcess("@all");
+			pajax.setListener(methodExpression);
+			selectOneMenu.addClientBehavior("change", pajax);
+
+			String expression = null;
+			if (type == Constant.RECALL_NO_ATTENDET) {
+				expression = "#{campaignBacking.levelValuesNoAttendet[" + index
+						+ "]}";
+			} else if (type == Constant.RECALL_CONFIRMED) {
+				expression = "#{campaignBacking.levelValuesConfirmed[" + index
+						+ "]}";
+			} else if (type == Constant.RECALL_CONTROL) {
+				expression = "#{campaignBacking.levelValuesControl[" + index
+						+ "]}";
+			} else {
+				expression = "#{campaignBacking.levelValuesMedication[" + index
+						+ "]}";
 			}
 
 			ValueExpression valueExpression = expressionFactory
-					.createValueExpression(eLContext,
-							"#{campaignBacking.levelValuesNoAttendet[" + index
-									+ "]}", Integer.class);
+					.createValueExpression(eLContext, expression, Integer.class);
 			selectOneMenu.setValueExpression("value", valueExpression);
 
 			panelGrid.getChildren().add(selectOneMenu);
@@ -580,51 +724,125 @@ public class CampaignBacking extends BaseBacking {
 		return result;
 	}
 
-	public void levelValueChangeEvent(Long type, Long level) {
+	private void refreshLevels(int type, int level, int value,
+			List<CrmRecall> listAllLevel) {
 		List<SelectItem> listItem = new ArrayList<SelectItem>();
 		listItem.add(new SelectItem(Constant.DEFAULT_VALUE.intValue(),
 				FacesUtil.getMessage(Constant.DEFAULT_LABEL)));
 
-		SelectOneMenu selectOneMenu = (SelectOneMenu) FacesContext
-				.getCurrentInstance()
-				.getViewRoot()
-				.findComponent(":editForm:somLevel_" + type + "_" + (level + 1));
+		String idComponent = ":editForm:somLevel_" + type + "_" + (level + 1);
 
-		
-		Integer value = -1;
-		
+		SelectOneMenu selectOneMenu = (SelectOneMenu) FacesContext
+				.getCurrentInstance().getViewRoot().findComponent(idComponent);
 		if (selectOneMenu != null) {
-			if (type.intValue() == Constant.NO_ATTENDET) {
-				value = levelValuesNoAttendet[level.intValue()];
-				if (value != Constant.DEFAULT_VALUE.intValue()) {
-					for (CrmRecall row : listAllLevelNoAttendet) {
-						if (row.getCrmRecall() != null
-								&& row.getCrmRecall().getId() == value) {
-							SelectItem selectItem = new SelectItem(row.getId(),
-									row.getDescription());
-							listItem.add(selectItem);
-						}
+			if (value != Constant.DEFAULT_VALUE.intValue()) {
+				for (CrmRecall row : listAllLevel) {
+					if (row.getCrmRecall() != null
+							&& row.getCrmRecall().getId() == value) {
+						SelectItem selectItem = new SelectItem(row.getId(),
+								row.getDescription());
+						listItem.add(selectItem);
 					}
 				}
+			}
 
-				if (listItem.size() > 1) {
-					selectOneMenu.setDisabled(false);
-				} else {
-					selectOneMenu.setDisabled(true);
-				}
+			if (listItem.size() > 1) {
+				selectOneMenu.setDisabled(false);
+			} else {
+				selectOneMenu.setDisabled(true);
+			}
 
-				selectOneMenu.getChildren().clear();
-				selectOneMenu.getChildren().addAll(getUIComponent(listItem));
-				/*selectOneMenu.setSubmittedValue(Constant.DEFAULT_VALUE
-						.intValue());*/
+			selectOneMenu.getChildren().clear();
+			selectOneMenu.getChildren().addAll(getUIComponent(listItem));
+		}
+	}
+
+	public void levelValueChangeEvent(Long type, Long level) {
+		Integer value = -1;
+		Integer[] levelValues;
+
+		if (type.intValue() == Constant.RECALL_NO_ATTENDET) {
+			levelValues = new Integer[levelValuesNoAttendet.length];
+			value = levelValuesNoAttendet[level.intValue()];
+			refreshLevels(type.intValue(), level.intValue(), value,
+					listAllLevelNoAttendet);
+			levelValuesNoAttendet[level.intValue() + 1] = Constant.DEFAULT_VALUE
+					.intValue();
+			if (value != Constant.DEFAULT_VALUE.intValue()) {
+				selectedCrmRecall[0] = mapNoAttendet.get(value);
+				task[0] = selectedCrmRecall[0].getTask();
+			} else {
+				selectedCrmRecall[0] = null;
+				task[0] = null;
+			}
+		} else if (type == Constant.RECALL_CONFIRMED) {
+			levelValues = new Integer[levelValuesConfirmed.length];
+			value = levelValuesConfirmed[level.intValue()];
+			refreshLevels(type.intValue(), level.intValue(), value,
+					listAllLevelConfirmed);
+			levelValuesConfirmed[level.intValue() + 1] = Constant.DEFAULT_VALUE
+					.intValue();
+			if (value != Constant.DEFAULT_VALUE.intValue()) {
+				selectedCrmRecall[1] = mapConfirmed.get(value);
+				task[1] = selectedCrmRecall[1].getTask();
+			} else {
+				selectedCrmRecall[1] = null;
+				task[1] = null;
+			}
+		} else if (type == Constant.RECALL_CONTROL) {
+			levelValues = new Integer[levelValuesControl.length];
+			value = levelValuesControl[level.intValue()];
+			refreshLevels(type.intValue(), level.intValue(), value,
+					listAllLevelControl);
+			levelValuesControl[level.intValue() + 1] = Constant.DEFAULT_VALUE
+					.intValue();
+			if (value != Constant.DEFAULT_VALUE.intValue()) {
+				selectedCrmRecall[2] = mapControl.get(value);
+				task[2] = selectedCrmRecall[2].getTask();
+			} else {
+				selectedCrmRecall[2] = null;
+				task[2] = null;
+			}
+		} else {
+			levelValues = new Integer[levelValuesMedication.length];
+			value = levelValuesMedication[level.intValue()];
+			refreshLevels(type.intValue(), level.intValue(), value,
+					listAllLevelMedication);
+			levelValuesMedication[level.intValue() + 1] = Constant.DEFAULT_VALUE
+					.intValue();
+			if (value != Constant.DEFAULT_VALUE.intValue()) {
+				selectedCrmRecall[3] = mapMedication.get(value);
+				task[3] = selectedCrmRecall[3].getTask();
+			} else {
+				selectedCrmRecall[3] = null;
+				task[3] = null;
 			}
 		}
-		
-		SelectOneMenu parentSelectOneMenu = (SelectOneMenu) FacesContext
-				.getCurrentInstance()
-				.getViewRoot()
-				.findComponent(":editForm:somLevel_" + type + "_" + level);
-		parentSelectOneMenu.setValue(value);
+
+		List<SelectItem> listItem = new ArrayList<SelectItem>();
+		listItem.add(new SelectItem(Constant.DEFAULT_VALUE.intValue(),
+				FacesUtil.getMessage(Constant.DEFAULT_LABEL)));
+
+		for (int index = level.intValue() + 2; index < levelValues.length; index++) {
+			if (type.intValue() == Constant.RECALL_NO_ATTENDET) {
+				levelValuesNoAttendet[index] = Constant.DEFAULT_VALUE
+						.intValue();
+			} else if (type == Constant.RECALL_CONFIRMED) {
+				levelValuesConfirmed[index] = Constant.DEFAULT_VALUE.intValue();
+			} else if (type == Constant.RECALL_CONTROL) {
+				levelValuesControl[index] = Constant.DEFAULT_VALUE.intValue();
+			} else {
+				levelValuesMedication[index] = Constant.DEFAULT_VALUE
+						.intValue();
+			}
+			String idComponent = ":editForm:somLevel_" + type + "_" + index;
+			SelectOneMenu selectOneMenu = (SelectOneMenu) FacesContext
+					.getCurrentInstance().getViewRoot()
+					.findComponent(idComponent);
+			selectOneMenu.getChildren().clear();
+			selectOneMenu.getChildren().addAll(getUIComponent(listItem));
+			selectOneMenu.setDisabled(true);
+		}
 	}
 
 	private List<UIComponent> getUIComponent(List<SelectItem> listItem) {
