@@ -19,6 +19,7 @@ import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmCampaign;
 import co.com.tactusoft.crm.model.entities.CrmCampaignDetail;
 import co.com.tactusoft.crm.model.entities.CrmCampaignMedication;
+import co.com.tactusoft.crm.model.entities.CrmCampaignTask;
 import co.com.tactusoft.crm.model.entities.CrmCaseStudy;
 import co.com.tactusoft.crm.model.entities.CrmCie;
 import co.com.tactusoft.crm.model.entities.CrmCieMaterial;
@@ -854,6 +855,10 @@ public class TablesBo implements Serializable {
 	}
 
 	public Integer saveCampaignDetail(CrmCampaignDetail entity) {
+		return this.persist(entity);
+	}
+	
+	public Integer saveCampaignTask(CrmCampaignTask entity) {
 		return this.persist(entity);
 	}
 

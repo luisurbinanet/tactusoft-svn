@@ -211,7 +211,7 @@
 									value="#{campaignBacking.selectedDetailMedication.crmAppointment}" />
 							</p:commandButton>
 							<h:panelGrid width="100%" columns="2"
-								rendered="#{campaignBacking.task[3] eq 'DATE'}">
+								rendered="#{campaignBacking.task[3] eq 'DATE' or campaignBacking.task[3] eq 'TASK_DATE'}">
 								<h:outputLabel value="Fecha" />
 								<p:calendar label="Fecha"
 									value="#{campaignBacking.selectedDates[3]}" showOn="button"
@@ -268,7 +268,7 @@
 									value="#{campaignBacking.selectedDetailControl.crmAppointment}" />
 							</p:commandButton>
 							<h:panelGrid width="100%" columns="2"
-								rendered="#{campaignBacking.task[2] eq 'DATE'}">
+								rendered="#{campaignBacking.task[2] eq 'DATE' or campaignBacking.task[2] eq 'TASK_DATE'}">
 								<h:outputLabel value="Fecha" />
 								<p:calendar label="Fecha"
 									value="#{campaignBacking.selectedDates[2]}" showOn="button"
@@ -325,7 +325,7 @@
 									value="#{campaignBacking.selectedDetailConfirmed.crmAppointment}" />
 							</p:commandButton>
 							<h:panelGrid width="100%" columns="2"
-								rendered="#{campaignBacking.task[1] eq 'DATE'}">
+								rendered="#{campaignBacking.task[1] eq 'DATE' or campaignBacking.task[1] eq 'TASK_DATE'}">
 								<h:outputLabel value="Fecha" />
 								<p:calendar label="Fecha"
 									value="#{campaignBacking.selectedDates[1]}" showOn="button"
@@ -382,7 +382,7 @@
 									value="#{campaignBacking.selectedDetailNoAttendet.crmAppointment}" />
 							</p:commandButton>
 							<h:panelGrid width="100%" columns="2"
-								rendered="#{campaignBacking.task[0] eq 'DATE'}">
+								rendered="#{campaignBacking.task[0] eq 'DATE' or campaignBacking.task[0] eq 'TASK_DATE'}">
 								<h:outputLabel value="Fecha" />
 								<p:calendar label="Fecha"
 									value="#{campaignBacking.selectedDates[0]}" showOn="button"
@@ -398,8 +398,7 @@
 					<h:panelGrid id="pnlAttributes" columns="2" width="100%">
 						<h:outputLabel value="#{msg['pat_type_obs']}" />
 						<p:inputTextarea value="#{campaignBacking.selected.observation}"
-							style="width:400px" rows="3" required="true"
-							label="#{msg['pat_type_obs']}" />
+							style="width:500px" rows="3" label="#{msg['pat_type_obs']}" />
 					</h:panelGrid>
 
 				</h:panelGrid>
