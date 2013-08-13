@@ -79,15 +79,19 @@ public class TablesBo implements Serializable {
 		return dao.find("from CrmDoctor o");
 	}
 
-	public List<CrmCaseStudy> getListCaseStudy() {
-		return dao.findNative("SELECT a.* FROM crm_db.crm_case_study a  "
-				+ "JOIN crm_appointment b ON a.id_appointment = b.id "
-				+ "JOIN crm_patient c ON b.id_patient = c.id "
-				+ "WHERE a.id_appointment = ( "
-				+ "SELECT MAX(d.id_appointment) FROM crm_case_study d "
-				+ "JOIN crm_appointment e ON d.id_appointment = e.id "
-				+ "JOIN crm_patient f ON e.id_patient = f.id "
-				+ "WHERE e.id_patient = b.id_patient)", CrmCaseStudy.class);
+	public List<CrmCaseStudy> getListCaseStudy(String startDate, String endDate) {
+		return dao
+				.findNative(
+						"SELECT a.* FROM crm_db.crm_case_study a  "
+								+ "JOIN crm_appointment b ON a.id_appointment = b.id "
+								+ "JOIN crm_patient c ON b.id_patient = c.id "
+								+ "WHERE a.id_appointment = ( "
+								+ "SELECT MAX(d.id_appointment) FROM crm_case_study d "
+								+ "JOIN crm_appointment e ON d.id_appointment = e.id "
+								+ "JOIN crm_patient f ON e.id_patient = f.id "
+								+ "WHERE e.id_patient = b.id_patient) AND Date(b.start_appointment_date) BETWEEN '"
+								+ startDate + "' AND '" + endDate + "'",
+						CrmCaseStudy.class);
 	}
 
 	public List<CrmDoctor> getListDoctorActive() {
@@ -198,6 +202,23 @@ public class TablesBo implements Serializable {
 		}
 
 		return max;
+	}
+
+	public List<CrmCampaignDetail> getListCampaignByAppointment(
+			BigDecimal idAppointment, int type) {
+		return dao.find("FROM CrmCampaignDetail o WHERE o.crmAppointment.id = "
+				+ idAppointment + "AND campaignType = " + type);
+	}
+
+	public CrmCampaign getListCampaignByPatient(
+			BigDecimal idPatient, String date) {
+		List<CrmCampaign> list = dao.find("FROM CrmCampaign o WHERE o.crmPatient.id = "
+				+ idPatient + "AND Date(o.dateCall) = '" + date + "'");
+		if(list.size() > 0){
+			return list.get(0);
+		} else {
+			return null;
+		}
 	}
 
 	public List<CrmNurse> getListNurseActive() {

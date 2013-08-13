@@ -884,34 +884,104 @@ public class CampaignBacking extends BaseBacking {
 		return menuChildren;
 	}
 
-	private int getLevels(int type, List<CrmRecall> listAllLevel) {
-		Integer value = Constant.RECALL_NO_ATTENDET;
-		CrmRecall currentRecall = null;
+	private int getLevels(int type, Integer[] levelValues) {
+		int count = 0;
+
+		for (int index = 0; index < levelValues.length; index++) {
+			String idComponent = ":editForm:somLevel_" + type + "_" + index;
+			SelectOneMenu selectOneMenu = (SelectOneMenu) FacesContext
+					.getCurrentInstance().getViewRoot()
+					.findComponent(idComponent);
+			int size = selectOneMenu.getChildren().size();
+			UISelectItems uiSelectItems = (UISelectItems) selectOneMenu
+					.getChildren().get(size - 1);
+			@SuppressWarnings("unchecked")
+			List<SelectItem> items = (List<SelectItem>) uiSelectItems
+					.getValue();
+			if (items.size() > 1) {
+				count++;
+			}
+		}
+		return count - 1;
+	}
+
+	private void generateNewCampaign(CrmCampaignDetail crmCampaignDetail,
+			Integer value, int type) {
+		CrmRecall crmRecall = null;
+
 		if (type == Constant.RECALL_NO_ATTENDET) {
-			value = levelValuesNoAttendet[0];
-			currentRecall = mapNoAttendet.get(value);
+			crmRecall = mapNoAttendet.get(value);
 		} else if (type == Constant.RECALL_CONFIRMED) {
-			value = levelValuesConfirmed[0];
-			currentRecall = mapConfirmed.get(value);
+			crmRecall = mapConfirmed.get(value);
 		} else if (type == Constant.RECALL_CONTROL) {
-			value = levelValuesControl[0];
-			currentRecall = mapControl.get(value);
+			crmRecall = mapControl.get(value);
 		} else {
-			value = levelValuesMedication[0];
-			currentRecall = mapMedication.get(value);
+			crmRecall = mapMedication.get(value);
 		}
 
-		int count = 0;
-		if (currentRecall != null) {
-			for (CrmRecall row : listAllLevel) {
-				if (row.getCrmRecall() != null
-						&& row.getCrmRecall().getId() == currentRecall.getId()) {
-					currentRecall = row;
-					count++;
+		Date currentDate = new Date();
+		boolean newRecord = false;
+		if (crmRecall.getOccurrences() > 0) {
+			List<CrmCampaignDetail> list = tablesService
+					.getListCampaignByAppointment(crmCampaignDetail
+							.getCrmAppointment().getId(),
+							Constant.RECALL_NO_ATTENDET);
+			if (list.size() <= crmRecall.getOccurrences()) {
+				currentDate = FacesUtil.getDateWithoutTime(currentDate);
+				if (crmRecall.getNumDays() > 0) {
+					newRecord = true;
+					if (crmRecall.getNumDays() == 1) {
+						int hour = FacesUtil.getHour(currentDate);
+						if (hour <= 12) {
+							currentDate = FacesUtil.addHoursToDate(currentDate,
+									4);
+						} else {
+							currentDate = FacesUtil.addDaysToDate(currentDate,
+									1);
+						}
+					} else {
+						currentDate = FacesUtil.addDaysToDate(currentDate, 1);
+					}
+				} else if (crmRecall.getNumDaysAux() > 0) {
+					currentDate = FacesUtil.addDaysToDate(currentDate,
+							crmRecall.getNumDaysAux());
+					newRecord = true;
 				}
 			}
 		}
-		return count;
+		
+		if (crmRecall.getTask() != null && crmRecall.getTask().equals("DATE")) {
+			currentDate = selectedDates[type - 1];
+			newRecord = true;
+		}
+		
+		selected.setState(2);
+		tablesService.saveCampaign(selected);
+
+		crmCampaignDetail.setStatus(value);
+		tablesService.saveCampaignDetail(crmCampaignDetail);
+
+		if (newRecord) {
+			String currentDateString = FacesUtil.formatDate(currentDate,
+					"yyyy-MM-dd");
+			CrmCampaign newCrmCampaign = tablesService
+					.getListCampaignByPatient(crmCampaignDetail
+							.getCrmCampaign().getCrmPatient().getId(),
+							currentDateString);
+			if (newCrmCampaign == null) {
+				newCrmCampaign = crmCampaignDetail.getCrmCampaign();
+				newCrmCampaign.setId(null);
+				newCrmCampaign.setDateCall(currentDate);
+				tablesService.saveCampaign(newCrmCampaign);
+			}
+
+			CrmCampaignDetail newCrmCampaignDetail = crmCampaignDetail;
+			newCrmCampaignDetail.setCrmCampaign(newCrmCampaign);
+			newCrmCampaignDetail.setId(null);
+			newCrmCampaignDetail.setCallDate(currentDate);
+			newCrmCampaignDetail.setStatus(0);
+			tablesService.saveCampaignDetail(newCrmCampaignDetail);
+		}
 	}
 
 	public void saveAction() {
@@ -925,21 +995,20 @@ public class CampaignBacking extends BaseBacking {
 		boolean validate = true;
 		RequestContext context = RequestContext.getCurrentInstance();
 
-		// selected.setState(1);
-		// int result = tablesService.saveCampaign(selected);
 		if (selectedDetailNoAttendet != null) {
 			try {
 				paramValue = FacesUtil.getMessage("cam_type_no_attendet");
 				message = FacesUtil.getMessage("cam_msg_required", paramValue);
 				level = getLevels(Constant.RECALL_NO_ATTENDET,
-						listAllLevelNoAttendet);
+						levelValuesNoAttendet);
 				if (level > 0) {
 					valueNoAttendet = levelValuesNoAttendet[level];
 					if (valueNoAttendet == Constant.DEFAULT_VALUE.intValue()) {
 						FacesUtil.addError(message);
 						validate = false;
 					} else {
-
+						generateNewCampaign(selectedDetailNoAttendet,
+								valueNoAttendet, Constant.RECALL_NO_ATTENDET);
 					}
 				} else {
 					FacesUtil.addError(message);
@@ -948,21 +1017,21 @@ public class CampaignBacking extends BaseBacking {
 			} catch (Exception ex) {
 
 			}
-			// tablesService.saveCampaignDetail(selectedDetailNoAttendet);
 		}
 		if (selectedDetailConfirmed != null) {
 			try {
 				paramValue = FacesUtil.getMessage("cam_type_confirmed");
 				message = FacesUtil.getMessage("cam_msg_required", paramValue);
 				level = getLevels(Constant.RECALL_CONFIRMED,
-						listAllLevelConfirmed);
+						levelValuesConfirmed);
 				if (level > 0) {
 					valueConfirmed = levelValuesConfirmed[level];
 					if (valueConfirmed == Constant.DEFAULT_VALUE.intValue()) {
 						FacesUtil.addError(message);
 						validate = false;
 					} else {
-
+						generateNewCampaign(selectedDetailConfirmed,
+								valueConfirmed, Constant.RECALL_CONFIRMED);
 					}
 				} else {
 					FacesUtil.addError(message);
@@ -971,20 +1040,20 @@ public class CampaignBacking extends BaseBacking {
 			} catch (Exception ex) {
 
 			}
-			// tablesService.saveCampaignDetail(selectedDetailConfirmed);
 		}
 		if (selectedDetailControl != null) {
 			try {
 				paramValue = FacesUtil.getMessage("cam_type_control");
 				message = FacesUtil.getMessage("cam_msg_required", paramValue);
-				level = getLevels(Constant.RECALL_CONTROL, listAllLevelControl);
+				level = getLevels(Constant.RECALL_CONTROL, levelValuesControl);
 				if (level > 0) {
 					valueControl = levelValuesControl[level];
 					if (valueControl == Constant.DEFAULT_VALUE.intValue()) {
 						FacesUtil.addError(message);
 						validate = false;
 					} else {
-
+						generateNewCampaign(selectedDetailControl,
+								valueControl, Constant.RECALL_CONTROL);
 					}
 				} else {
 					FacesUtil.addError(message);
@@ -993,21 +1062,21 @@ public class CampaignBacking extends BaseBacking {
 			} catch (Exception ex) {
 
 			}
-			// tablesService.saveCampaignDetail(selectedDetailControl);
 		}
 		if (selectedDetailMediaction != null) {
 			try {
 				paramValue = FacesUtil.getMessage("cam_type_medication");
 				message = FacesUtil.getMessage("cam_msg_required", paramValue);
 				level = getLevels(Constant.RECALL_MEDICATION,
-						listAllLevelMedication);
+						levelValuesMedication);
 				if (level > 0) {
 					valueMedication = levelValuesMedication[level];
 					if (valueMedication == Constant.DEFAULT_VALUE.intValue()) {
 						FacesUtil.addError(message);
 						validate = false;
 					} else {
-
+						generateNewCampaign(selectedDetailMediaction,
+								valueMedication, Constant.RECALL_MEDICATION);
 					}
 				} else {
 					FacesUtil.addError(message);
@@ -1016,17 +1085,13 @@ public class CampaignBacking extends BaseBacking {
 			} catch (Exception ex) {
 
 			}
-			// tablesService.saveCampaignDetail(selectedDetailMediaction);
 		}
 
-		/*
-		 * if (result == 0) { refreshList(); message =
-		 * FacesUtil.getMessage("msg_record_ok"); FacesUtil.addInfo(message); }
-		 * else if (result == -1) { paramValue =
-		 * FacesUtil.getMessage("doc_code"); message =
-		 * FacesUtil.getMessage("msg_record_unique_exception", paramValue);
-		 * FacesUtil.addError(message); }
-		 */
+		if (validate) {
+			refreshList();
+			message = FacesUtil.getMessage("msg_record_ok");
+			FacesUtil.addInfo(message);
+		}
 
 		context.addCallbackParam("validate", validate);
 	}

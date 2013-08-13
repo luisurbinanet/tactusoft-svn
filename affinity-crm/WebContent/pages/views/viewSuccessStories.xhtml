@@ -18,20 +18,33 @@
 
 				<p:growl id="growl" showDetail="true" />
 
-				<p:toolbar style="width:100%">
+				<p:toolbar id="toolbar" style="width:100%">
 					<p:toolbarGroup align="left">
 						<p:commandButton id="btnSearch" value="#{msg['btn_search']}"
-							icon="ui-icon-search" update="recordTable growl"
+							icon="ui-icon-search" update="recordTable toolbar growl"
 							actionListener="#{caseStudyBacking.searchAction}" />
 						<p:commandButton id="btnBranch" oncomplete="branchDlg.show();"
 							value="#{msg['usr_branch']}" icon="ui-icon-bookmark" />
+						<p:commandButton id="btnExport" oncomplete="exportDlg.show();"
+							value="#{msg['btn_export']}" icon="ui-icon-disk"
+							disabled="#{empty caseStudyBacking.model}" />
 					</p:toolbarGroup>
 				</p:toolbar>
-				
+
 				<p:spacer height="5" />
 
 				<h:panelGrid id="pnlDetail" columns="2" cellpadding="4"
 					style="margin:0 auto;" width="100%">
+
+					<h:outputLabel value="#{msg['src_star_date']}" style="width:40%" />
+					<p:calendar value="#{caseStudyBacking.startDate}" required="true"
+						label="#{msg['src_star_date']}" readonlyInput="true"
+						pattern="dd/MM/yyyy" showOn="button" navigator="true" locale="es" />
+
+					<h:outputLabel value="#{msg['src_end_date']}" style="width:40%" />
+					<p:calendar value="#{caseStudyBacking.endDate}" required="true"
+						label="#{msg['src_end_date']}" readonlyInput="true"
+						pattern="dd/MM/yyyy" showOn="button" navigator="true" locale="es" />
 
 					<h:outputLabel value="#{msg['app_doctor']}" />
 					<p:selectOneMenu id="selDoctor" style="width:400px"
@@ -39,7 +52,7 @@
 						<f:selectItems value="#{caseStudyBacking.listDoctor}" />
 					</p:selectOneMenu>
 				</h:panelGrid>
-				
+
 				<p:spacer height="5" />
 
 				<p:dataTable id="recordTable" var="rec"
@@ -50,40 +63,60 @@
 
 					<p:column selectionMode="single" style="width:18px" />
 
-					<p:column headerText="#{msg['app_doctor']}">
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['app_doctor']}" />
+						</f:facet>
 						<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
 					</p:column>
 
-					<p:column headerText="#{msg['cam_pat']}">
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['cam_pat']}" />
+						</f:facet>
 						<h:outputLabel value="#{rec.crmAppointment.crmPatient.names}" />
 					</p:column>
 
-					<p:column headerText="#{msg['cst_start_date']}">
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['cst_start_date']}" />
+						</f:facet>
 						<h:outputLabel value="#{rec.startDate}">
 							<f:convertDateTime pattern="dd/MM/yyyy" />
 						</h:outputLabel>
 					</p:column>
 
-					<p:column headerText="#{msg['cst_end_date']}">
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['cst_end_date']}" />
+						</f:facet>
 						<h:outputLabel value="#{rec.crmAppointment.startAppointmentDate}">
 							<f:convertDateTime pattern="dd/MM/yyyy" />
 						</h:outputLabel>
 					</p:column>
 
-					<p:column headerText="#{msg['cst_perc']}">
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['cst_perc']}" />
+						</f:facet>
 						<h:outputLabel value="#{rec.percent}" />
 					</p:column>
 
-					<p:column headerText="#{msg['cst_patology']}">
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['cst_patology']}" />
+						</f:facet>
 						<h:outputLabel value="#{rec.crmCie.description}" />
 					</p:column>
 
-					<p:column headerText="#{msg['cst_reason']}">
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['cst_reason']}" />
+						</f:facet>
 						<h:outputLabel value="#{rec.reason}" />
 					</p:column>
 
 				</p:dataTable>
-
 
 				<p:dialog id="branchDialog" widgetVar="branchDlg" modal="true"
 					closable="true" header="#{msg['usr_branch']}">
@@ -198,6 +231,39 @@
 						</p:dataTable>
 					</p:scrollPanel>
 
+				</p:dialog>
+
+				<p:dialog id="exportDialog" widgetVar="exportDlg" modal="true"
+					closable="true" header="#{msg['btn_export']}">
+
+					<h:outputLabel value="#{msg['app_src_format']}"
+						style="font-size:medium;" />
+
+					<h:panelGrid width="100%" columns="3">
+
+						<h:commandLink>
+							<p:graphicImage id="imgExcel" value="../../images/excel.png"
+								alt="Excel" />
+							<p:dataExporter type="xls" target="recordTable" fileName="export" />
+							<p:tooltip for="imgExcel" value="#{msg['btn_export_excel']}"
+								showEffect="fade" hideEffect="fade" />
+						</h:commandLink>
+
+						<h:commandLink>
+							<p:graphicImage id="imgCSV" value="../../images/csv.png" />
+							<p:dataExporter type="csv" target="recordTable" fileName="export" />
+							<p:tooltip for="imgCSV" value="#{msg['btn_export_csv']}"
+								showEffect="fade" hideEffect="fade" />
+						</h:commandLink>
+
+						<h:commandLink>
+							<p:graphicImage id="imgXML" value="../../images/xml.png" />
+							<p:dataExporter type="xml" target="recordTable" fileName="export" />
+							<p:tooltip for="imgXML" value="#{msg['btn_export_xml']}"
+								showEffect="fade" hideEffect="fade" />
+						</h:commandLink>
+
+					</h:panelGrid>
 				</p:dialog>
 			</h:form>
 		</p:panel>
