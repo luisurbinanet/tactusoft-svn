@@ -1,6 +1,8 @@
 package co.com.tactusoft.crm.model.entities;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,6 +11,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -27,6 +30,8 @@ public class CrmCampaignDetail implements java.io.Serializable {
 	private int campaignType;
 	private int status;
 	private Date callDate;
+	private Set<CrmCampaignTask> crmCampaignTasks = new HashSet<CrmCampaignTask>(
+			0);
 
 	public CrmCampaignDetail() {
 	}
@@ -41,12 +46,13 @@ public class CrmCampaignDetail implements java.io.Serializable {
 
 	public CrmCampaignDetail(CrmCampaign crmCampaign,
 			CrmAppointment crmAppointment, int campaignType, int status,
-			Date callDate) {
+			Date callDate, Set<CrmCampaignTask> crmCampaignTasks) {
 		this.crmCampaign = crmCampaign;
 		this.crmAppointment = crmAppointment;
 		this.campaignType = campaignType;
 		this.status = status;
 		this.callDate = callDate;
+		this.crmCampaignTasks = crmCampaignTasks;
 	}
 
 	@Id
@@ -106,6 +112,15 @@ public class CrmCampaignDetail implements java.io.Serializable {
 
 	public void setCallDate(Date callDate) {
 		this.callDate = callDate;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmCampaignDetail")
+	public Set<CrmCampaignTask> getCrmCampaignTasks() {
+		return this.crmCampaignTasks;
+	}
+
+	public void setCrmCampaignTasks(Set<CrmCampaignTask> crmCampaignTasks) {
+		this.crmCampaignTasks = crmCampaignTasks;
 	}
 
 }
