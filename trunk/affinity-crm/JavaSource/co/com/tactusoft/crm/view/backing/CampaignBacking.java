@@ -30,6 +30,7 @@ import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmCampaign;
 import co.com.tactusoft.crm.model.entities.CrmCampaignDetail;
 import co.com.tactusoft.crm.model.entities.CrmCampaignMedication;
+import co.com.tactusoft.crm.model.entities.CrmCampaignTask;
 import co.com.tactusoft.crm.model.entities.CrmParameter;
 import co.com.tactusoft.crm.model.entities.CrmRecall;
 import co.com.tactusoft.crm.util.AjaxBehaviorCustom;
@@ -949,12 +950,18 @@ public class CampaignBacking extends BaseBacking {
 				}
 			}
 		}
-		
+
 		if (crmRecall.getTask() != null && crmRecall.getTask().equals("DATE")) {
 			currentDate = selectedDates[type - 1];
 			newRecord = true;
+		} else if (crmRecall.getTask() != null
+				&& crmRecall.getTask().equals("TASK_DATE")) {
+			CrmCampaignTask crmCampaignTask = new CrmCampaignTask();
+			crmCampaignTask.setCrmCampaignDetail(crmCampaignDetail);
+			crmCampaignTask.setTaskDate(currentDate);
+			tablesService.saveCampaignTask(crmCampaignTask);
 		}
-		
+
 		selected.setState(2);
 		tablesService.saveCampaign(selected);
 
