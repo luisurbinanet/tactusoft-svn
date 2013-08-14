@@ -9,9 +9,8 @@ import javax.inject.Named;
 
 import org.springframework.context.annotation.Scope;
 
-import co.com.tactusoft.crm.model.entities.CrmCaseStudy;
+import co.com.tactusoft.crm.model.entities.VwPatientTicket;
 import co.com.tactusoft.crm.util.FacesUtil;
-import co.com.tactusoft.crm.view.datamodel.CaseStudyDataModel;
 import co.com.tactusoft.crm.view.datamodel.VwPatientTicketDataModel;
 
 @Named
@@ -20,9 +19,8 @@ public class TicketBacking extends BaseBacking {
 
 	private static final long serialVersionUID = 1L;
 
-	private List<CrmCaseStudy> list;
+	private List<VwPatientTicket> list;
 	private VwPatientTicketDataModel model;
-	private CrmCaseStudy selected;
 
 	private Date startDate;
 	private Date endDate;
@@ -33,14 +31,14 @@ public class TicketBacking extends BaseBacking {
 
 	@PostConstruct
 	public void init() {
-		
+
 	}
 
-	public List<CrmCaseStudy> getList() {
+	public List<VwPatientTicket> getList() {
 		return list;
 	}
 
-	public void setList(List<CrmCaseStudy> list) {
+	public void setList(List<VwPatientTicket> list) {
 		this.list = list;
 	}
 
@@ -50,14 +48,6 @@ public class TicketBacking extends BaseBacking {
 
 	public void setModel(VwPatientTicketDataModel model) {
 		this.model = model;
-	}
-
-	public CrmCaseStudy getSelected() {
-		return selected;
-	}
-
-	public void setSelected(CrmCaseStudy selected) {
-		this.selected = selected;
 	}
 
 	public Date getStartDate() {
@@ -77,7 +67,6 @@ public class TicketBacking extends BaseBacking {
 	}
 
 	public void newAction() {
-		selected = new CrmCaseStudy();
 		selectedsBranchObject = null;
 		startDate = new Date();
 		endDate = new Date();
@@ -89,13 +78,9 @@ public class TicketBacking extends BaseBacking {
 					"yyyy-MM-dd");
 			String endDateString = FacesUtil.formatDate(endDate, "yyyy-MM-dd");
 
-			list = tablesService.getListCaseStudy(startDateString,
-					endDateString);
-			//model = new VwPatientTicketDataModel(list);
-
-			if (list.size() > 0) {
-				selected = list.get(0);
-			}
+			list = tablesService.getListVwPatientTicket(selectedsBranchObject,
+					startDateString, endDateString);
+			model = new VwPatientTicketDataModel(list);
 		} else {
 			String message = FacesUtil.getMessage("app_no_branch");
 			FacesUtil.addInfo(message);
