@@ -22,10 +22,12 @@
 					<p:toolbarGroup align="left">
 						<p:commandButton id="btnSearch" value="#{msg['btn_search']}"
 							icon="ui-icon-search" update="recordTable toolbar growl"
-							actionListener="#{caseStudyBacking.searchAction}" />
+							actionListener="#{ticketBacking.searchAction}" />
+						<p:commandButton id="btnBranch" oncomplete="branchDlg.show();"
+							value="#{msg['usr_branch']}" icon="ui-icon-bookmark" />
 						<p:commandButton id="btnExport" oncomplete="exportDlg.show();"
 							value="#{msg['btn_export']}" icon="ui-icon-disk"
-							disabled="#{empty caseStudyBacking.model}" />
+							disabled="#{empty ticketBacking.model}" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -34,94 +36,133 @@
 				<h:panelGrid id="pnlDetail" columns="2" cellpadding="4"
 					style="margin:0 auto;" width="100%">
 
-					<h:outputLabel value="#{msg['app_branch']}" />
-					<p:selectOneMenu style="width:600px"
-						value="#{RIPSBacking.idBranch}" filterMatchMode="contains"
-						filter="true">
-						<f:selectItems value="#{RIPSBacking.listCrmBranch}" />
-					</p:selectOneMenu>
-
 					<h:outputLabel value="#{msg['src_star_date']}" style="width:40%" />
-					<p:calendar value="#{caseStudyBacking.startDate}" required="true"
+					<p:calendar value="#{ticketBacking.startDate}" required="true"
 						label="#{msg['src_star_date']}" readonlyInput="true"
 						pattern="dd/MM/yyyy" showOn="button" navigator="true" locale="es" />
 
 					<h:outputLabel value="#{msg['src_end_date']}" style="width:40%" />
-					<p:calendar value="#{caseStudyBacking.endDate}" required="true"
+					<p:calendar value="#{ticketBacking.endDate}" required="true"
 						label="#{msg['src_end_date']}" readonlyInput="true"
 						pattern="dd/MM/yyyy" showOn="button" navigator="true" locale="es" />
-
-					<h:outputLabel value="#{msg['app_doctor']}" />
-					<p:selectOneMenu id="selDoctor" style="width:400px"
-						value="#{caseStudyBacking.idDoctor}">
-						<f:selectItems value="#{caseStudyBacking.listDoctor}" />
-					</p:selectOneMenu>
 				</h:panelGrid>
 
 				<p:spacer height="5" />
 
 				<p:dataTable id="recordTable" var="rec"
-					value="#{caseStudyBacking.model}" rowKey="#{rec.id}"
-					resizableColumns="true" selection="#{caseStudyBacking.selected}"
-					paginator="true" rows="10" style="width:100%"
-					emptyMessage="#{msg['glb_no_records_found']}">
-
-					<p:column selectionMode="single" style="width:18px" />
+					value="#{ticketBacking.model}" rowKey="#{rec.id}"
+					resizableColumns="true" paginator="true" rows="10"
+					style="width:100%" emptyMessage="#{msg['glb_no_records_found']}">
 
 					<p:column>
 						<f:facet name="header">
-							<h:outputText value="#{msg['app_doctor']}" />
+							<h:outputText value="#{msg['pat_code']}" />
 						</f:facet>
-						<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+						<h:outputLabel value="#{rec.pacientDoc}" />
 					</p:column>
 
 					<p:column>
 						<f:facet name="header">
-							<h:outputText value="#{msg['cam_pat']}" />
+							<h:outputText value="#{msg['pat_names']}" />
 						</f:facet>
-						<h:outputLabel value="#{rec.crmAppointment.crmPatient.names}" />
+						<h:outputLabel value="#{rec.patientNames}" />
 					</p:column>
 
 					<p:column>
 						<f:facet name="header">
-							<h:outputText value="#{msg['cst_start_date']}" />
+							<h:outputText value="#{msg['pat_surnames']}" />
 						</f:facet>
-						<h:outputLabel value="#{rec.startDate}">
+						<h:outputLabel value="#{rec.patientSurnames}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['vw_created_date']}" />
+						</f:facet>
+						<h:outputLabel value="#{rec.createDate}">
 							<f:convertDateTime pattern="dd/MM/yyyy" />
 						</h:outputLabel>
 					</p:column>
 
 					<p:column>
 						<f:facet name="header">
-							<h:outputText value="#{msg['cst_end_date']}" />
+							<h:outputText value="#{msg['app_username_created']}" />
 						</f:facet>
-						<h:outputLabel value="#{rec.crmAppointment.startAppointmentDate}">
-							<f:convertDateTime pattern="dd/MM/yyyy" />
-						</h:outputLabel>
+						<h:outputLabel value="#{rec.username}" />
 					</p:column>
 
 					<p:column>
 						<f:facet name="header">
-							<h:outputText value="#{msg['cst_perc']}" />
+							<h:outputText value="#{msg['vw_user_names']}" />
 						</f:facet>
-						<h:outputLabel value="#{rec.percent}" />
+						<h:outputLabel value="#{rec.userNames}" />
 					</p:column>
 
 					<p:column>
 						<f:facet name="header">
-							<h:outputText value="#{msg['cst_patology']}" />
+							<h:outputText value="#{msg['vw_user_surnames']}" />
 						</f:facet>
-						<h:outputLabel value="#{rec.crmCie.description}" />
+						<h:outputLabel value="#{rec.userSurnames}" />
 					</p:column>
 
 					<p:column>
 						<f:facet name="header">
-							<h:outputText value="#{msg['cst_reason']}" />
+							<h:outputText value="#{msg['pat_ticket']}" />
 						</f:facet>
-						<h:outputLabel value="#{rec.reason}" />
+						<h:outputLabel value="#{rec.ticket}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['vw_branch_code']}" />
+						</f:facet>
+						<h:outputLabel value="#{rec.branchCode}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['vw_branch_name']}" />
+						</f:facet>
+						<h:outputLabel value="#{rec.brancheName}" />
 					</p:column>
 
 				</p:dataTable>
+
+				<p:dialog id="branchDialog" widgetVar="branchDlg" modal="true"
+					closable="true" header="#{msg['usr_branch']}">
+
+					<p:toolbar id="toolBar" style="width:100%">
+						<p:toolbarGroup align="left">
+							<p:commandButton id="btnAdd" value="#{msg['btn_add']}"
+								icon="ui-icon-plusthick" update="pnlDetail growl"
+								oncomplete="handleComplete(xhr, status, args)"
+								actionListener="#{ticketBacking.addBranchAction(true)}" />
+						</p:toolbarGroup>
+					</p:toolbar>
+
+					<p:spacer />
+
+					<p:dataTable id="selectedTableBranch" var="rec"
+						value="#{ticketBacking.listBranchObject}" rowKey="#{rec.id}"
+						style="width:100%"
+						selection="#{ticketBacking.selectedsBranchObject}"
+						paginator="true" rows="10"
+						emptyMessage="#{msg['glb_no_records_found']}">
+
+						<p:column selectionMode="multiple" style="width:18px" />
+
+						<p:column headerText="#{msg['bra_sales_off']}"
+							filterBy="#{rec.code}" filterMatchMode="contains">
+							<h:outputLabel value="#{rec.code}" />
+						</p:column>
+
+						<p:column headerText="#{msg['bra_name']}" filterBy="#{rec.name}"
+							filterMatchMode="contains">
+							<h:outputLabel value="#{rec.name}" />
+						</p:column>
+					</p:dataTable>
+
+				</p:dialog>
 
 				<p:dialog id="exportDialog" widgetVar="exportDlg" modal="true"
 					closable="true" header="#{msg['btn_export']}">
@@ -159,20 +200,6 @@
 		</p:panel>
 
 		<script type="text/javascript">
-			function handleComplete(xhr, status, args) {
-				if (args.validate) {
-					dlgPatient.hide();
-				} else {
-					dialogPatient.show();
-				}
-			}
-
-			function handleComplete2(xhr, status, args) {
-				if (args.validate) {
-					dlg.hide();
-				}
-			}
-
 			function handleComplete(xhr, status, args) {
 				if (args.validate) {
 					branchDlg.hide();

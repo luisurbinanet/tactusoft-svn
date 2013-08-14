@@ -22,10 +22,10 @@
 					<p:toolbarGroup align="left">
 						<p:commandButton icon="ui-icon-search"
 							value="#{msg['btn_search']}"
-							action="#{ticketBacking.generateAction}" update="toolBar" />
+							action="#{RIPSBacking.generateAction}" update="toolBar" />
 						<p:commandButton icon="ui-icon-disk" ajax="false"
-							value="#{msg['btn_export']}" action="#{ticketBacking.exportAction}"
-							disabled="#{ticketBacking.disabledExport}" />
+							value="#{msg['btn_export']}" action="#{RIPSBacking.exportAction}"
+							disabled="#{RIPSBacking.disabledExport}" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -34,18 +34,18 @@
 				<h:panelGrid columns="2" width="100%">
 					<h:outputLabel value="#{msg['app_branch']}" />
 					<p:selectOneMenu style="width:600px"
-						value="#{ticketBacking.idBranch}" filterMatchMode="contains"
+						value="#{RIPSBacking.idBranch}" filterMatchMode="contains"
 						filter="true">
-						<f:selectItems value="#{ticketBacking.listCrmBranch}" />
+						<f:selectItems value="#{RIPSBacking.listCrmBranch}" />
 					</p:selectOneMenu>
 
 					<h:outputLabel value="#{msg['src_star_date']}" style="width:40%" />
-					<p:calendar value="#{ticketBacking.startDate}" required="true"
+					<p:calendar value="#{RIPSBacking.startDate}" required="true"
 						label="#{msg['src_star_date']}" readonlyInput="true"
 						pattern="dd/MM/yyyy" showOn="button" navigator="true" locale="es" />
 
 					<h:outputLabel value="#{msg['src_end_date']}" style="width:40%" />
-					<p:calendar value="#{ticketBacking.endDate}" required="true"
+					<p:calendar value="#{RIPSBacking.endDate}" required="true"
 						label="#{msg['src_end_date']}" readonlyInput="true"
 						pattern="dd/MM/yyyy" showOn="button" navigator="true" locale="es" />
 				</h:panelGrid>
@@ -54,9 +54,9 @@
 
 				<h:panelGrid columns="1" width="100%">
 					<h:outputText value="#{msg['rip_file']}" />
-					<p:selectManyCheckbox value="#{ticketBacking.selectedOptions}"
+					<p:selectManyCheckbox value="#{RIPSBacking.selectedOptions}"
 						layout="pageDirection">
-						<f:selectItems value="#{ticketBacking.options}" />
+						<f:selectItems value="#{RIPSBacking.options}" />
 					</p:selectManyCheckbox>
 				</h:panelGrid>
 

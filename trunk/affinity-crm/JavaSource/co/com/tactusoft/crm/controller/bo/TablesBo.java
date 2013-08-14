@@ -54,6 +54,7 @@ import co.com.tactusoft.crm.model.entities.CrmUserProfile;
 import co.com.tactusoft.crm.model.entities.CrmUserRole;
 import co.com.tactusoft.crm.model.entities.DatesBean;
 import co.com.tactusoft.crm.model.entities.VwCallRange;
+import co.com.tactusoft.crm.model.entities.VwPatientTicket;
 import co.com.tactusoft.crm.model.entities.VwProcedure;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
@@ -93,6 +94,20 @@ public class TablesBo implements Serializable {
 								+ "WHERE e.id_patient = b.id_patient) AND Date(b.start_appointment_date) BETWEEN '"
 								+ startDate + "' AND '" + endDate + "'",
 						CrmCaseStudy.class);
+	}
+
+	public List<VwPatientTicket> getListVwPatientTicket(CrmBranch[] listBranch,
+			String startDate, String endDate) {
+
+		String branchs = "";
+		for (CrmBranch crmBranch : listBranch) {
+			branchs = branchs + crmBranch.getId() + ",";
+		}
+		branchs = branchs.substring(0, branchs.length() - 1);
+
+		return dao.find("FROM VwPatientTicket WHERE branchId IN (" + branchs
+				+ ") AND Date(createDate) BETWEEN '" + startDate + "' AND '"
+				+ endDate + "'");
 	}
 
 	public List<CrmDoctor> getListDoctorActive() {
@@ -211,11 +226,12 @@ public class TablesBo implements Serializable {
 				+ idAppointment + "AND campaignType = " + type);
 	}
 
-	public CrmCampaign getListCampaignByPatient(
-			BigDecimal idPatient, String date) {
-		List<CrmCampaign> list = dao.find("FROM CrmCampaign o WHERE o.crmPatient.id = "
-				+ idPatient + "AND Date(o.dateCall) = '" + date + "'");
-		if(list.size() > 0){
+	public CrmCampaign getListCampaignByPatient(BigDecimal idPatient,
+			String date) {
+		List<CrmCampaign> list = dao
+				.find("FROM CrmCampaign o WHERE o.crmPatient.id = " + idPatient
+						+ "AND Date(o.dateCall) = '" + date + "'");
+		if (list.size() > 0) {
 			return list.get(0);
 		} else {
 			return null;
@@ -857,7 +873,7 @@ public class TablesBo implements Serializable {
 	public Integer saveCampaignDetail(CrmCampaignDetail entity) {
 		return this.persist(entity);
 	}
-	
+
 	public Integer saveCampaignTask(CrmCampaignTask entity) {
 		return this.persist(entity);
 	}
