@@ -69,7 +69,7 @@ public class Principal {
 		CrmCampaignDetail crmCampaignDetail = new CrmCampaignDetail();
 		crmCampaignDetail.setCrmCampaign(crmCampaign);
 		crmCampaignDetail.setCrmAppointment(crmAppointment);
-		crmCampaignDetail.setCampaignType(type);
+		crmCampaignDetail.setIdCampaignType(type);
 		crmCampaignDetail.setStatus(0);
 		crmCampaignDetail.setCallDate(callDate);
 		processBO.save(crmCampaignDetail);
