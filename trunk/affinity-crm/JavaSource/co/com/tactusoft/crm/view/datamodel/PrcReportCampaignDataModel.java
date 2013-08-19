@@ -7,29 +7,29 @@ import javax.faces.model.ListDataModel;
 
 import org.primefaces.model.SelectableDataModel;
 
-import co.com.tactusoft.crm.model.entities.VwAppointment;
+import co.com.tactusoft.crm.model.entities.PrcReportCampaign;
 
-public class VwAppointmentDataModel extends ListDataModel<VwAppointment> implements
-		SelectableDataModel<VwAppointment>, Serializable {
+public class PrcReportCampaignDataModel extends ListDataModel<PrcReportCampaign> implements
+		SelectableDataModel<PrcReportCampaign>, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public VwAppointmentDataModel() {
+	public PrcReportCampaignDataModel() {
 	}
 
-	public VwAppointmentDataModel(List<VwAppointment> data) {
+	public PrcReportCampaignDataModel(List<PrcReportCampaign> data) {
 		super(data);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public VwAppointment getRowData(String rowKey) {
+	public PrcReportCampaign getRowData(String rowKey) {
 		// In a real app, a more efficient way like a query by rowKey should be
 		// implemented to deal with huge data
 
-		List<VwAppointment> list = (List<VwAppointment>) getWrappedData();
+		List<PrcReportCampaign> list = (List<PrcReportCampaign>) getWrappedData();
 
-		for (VwAppointment row : list) {
+		for (PrcReportCampaign row : list) {
 			if (row.getId().equals(rowKey))
 				return row;
 		}
@@ -38,7 +38,7 @@ public class VwAppointmentDataModel extends ListDataModel<VwAppointment> impleme
 	}
 
 	@Override
-	public Object getRowKey(VwAppointment car) {
+	public Object getRowKey(PrcReportCampaign car) {
 		return car.getId();
 	}
 }
