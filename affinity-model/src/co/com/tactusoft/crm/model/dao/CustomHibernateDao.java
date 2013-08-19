@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
+import co.com.tactusoft.crm.util.Parameter;
+
 public interface CustomHibernateDao {
 
 	public Integer persist(Object entity);
@@ -23,5 +25,7 @@ public interface CustomHibernateDao {
 	public <T> BigDecimal getId(Class<T> clasz);
 	
 	public int executeHQL(final String hql);
+	
+	public <T> List<T> executeProcedure(String name, List<Parameter> parameters);
 
 }

@@ -14,6 +14,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import co.com.tactusoft.crm.util.Parameter;
+
 @Repository
 public class CustomHibernateDaoImpl implements CustomHibernateDao, Serializable {
 
@@ -124,7 +126,16 @@ public class CustomHibernateDaoImpl implements CustomHibernateDao, Serializable 
 			ex.printStackTrace();
 		}
 		return id;
+	}
 
+	@SuppressWarnings("unchecked")
+	@Transactional(readOnly = false)
+	public <T> List<T> executeProcedure(String name, List<Parameter> parameters) {
+		Query query = getCurrentSession().getNamedQuery(name);
+		for (Parameter row : parameters) {
+			query.setParameter(row.getName(), row.getValue());
+		}
+		return query.list();
 	}
 
 }
