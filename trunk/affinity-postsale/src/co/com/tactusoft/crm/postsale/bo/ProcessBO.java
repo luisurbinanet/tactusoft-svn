@@ -45,13 +45,13 @@ public class ProcessBO implements Serializable {
 	public void updateCampaign(String dateString) {
 		dao.executeHQL("UPDATE CrmCampaign SET state = 999 WHERE state = 1 AND Date(dateCall) <= '"
 				+ dateString
-				+ "' AND id IN (SELECT o.crmCampaign.id FROM CrmCampaignDetail o WHERE o.campaignType=2 "
+				+ "' AND id IN (SELECT o.crmCampaign.id FROM CrmCampaignDetail o WHERE o.idCampaignType=2 "
 				+ " AND Date(o.callDate) <= '"
 				+ dateString
 				+ "' AND o.status = 0)");
 
 		dao.executeHQL("UPDATE CrmCampaignDetail SET status = 999 WHERE status = 0 AND Date(callDate) <= '"
-				+ dateString + "' AND campaignType=2");
+				+ dateString + "' AND idCampaignType=2");
 	}
 
 	public List<CrmAppointment> getListAppointmentNoAttendet(String dateString) {
@@ -85,17 +85,17 @@ public class ProcessBO implements Serializable {
 				+ "and d.start_appointment_date<'"
 				+ dateString
 				+ "' and c.id = a.id) "
-				+ "and b.id not in (select e.id_appointment from crm_campaign_detail e where e.campaign_type=3)";
+				+ "and b.id not in (select e.id_appointment from crm_campaign_detail e where e.id_campaign_type=3)";
 
 		return dao.findNative(sql, CrmAppointment.class);
 	}
 
 	public List<CrmAppointment> getListAppointmentClosed(String dateString) {
 		return dao
-				.find("FROM CrmAppointment o WHERE state = 4 AND closeAppointment = 1 AND startAppointmentDate BETWEEN  '"
+				.find("FROM CrmAppointment o WHERE o.crmProcedureDetail.formulaDocTypePs IS NOT NULL AND "
+						+ "state = 4 AND closeAppointment = 1 AND Date(startAppointmentDate) =  '"
 						+ dateString
-						+ "T00:00:00.001+05:00' AND '"
-						+ dateString + "T23:59:59.999+05:00'");
+						+ "' AND o.id IN (SELECT m.crmAppointment.id from CrmMedication m)");
 	}
 
 	public CrmUser getUser(CrmBranch crmBranch, String date) {
@@ -167,14 +167,15 @@ public class ProcessBO implements Serializable {
 
 	public List<CrmCampaignDetail> getListCampaignDetailMedication(CrmLog log) {
 		return dao
-				.find("FROM CrmCampaignDetail o WHERE o.campaignType = 4 AND o.crmCampaign.crmLog.id = "
+				.find("FROM CrmCampaignDetail o WHERE o.idCampaignType = 4 AND o.crmCampaign.crmLog.id = "
 						+ log.getId());
 	}
 
 	public List<VwMedication> getListVwMedicationByAppointment(
 			BigDecimal idAppointment, String formulaDocType) {
 		return dao.find("FROM VwMedication o WHERE idAppointment = "
-				+ idAppointment + " AND formulaDocType IN (" + formulaDocType + ")");
+				+ idAppointment + " AND formulaDocType IN (" + formulaDocType
+				+ ")");
 	}
 
 	public int save(Object entity) {

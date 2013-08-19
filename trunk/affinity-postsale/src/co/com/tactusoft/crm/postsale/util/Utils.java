@@ -61,5 +61,16 @@ public class Utils {
 		}
 		return now;
 	}
+	
+	public static Date stringTOSDate(String strDate, String format) {
+		SimpleDateFormat formatoDelTexto = new SimpleDateFormat(format);
+		Date date = null;
+		try {
+			date = formatoDelTexto.parse(strDate);
+		} catch (ParseException ex) {
+			date = null;
+		}
+		return date;
+	}
 
 }
