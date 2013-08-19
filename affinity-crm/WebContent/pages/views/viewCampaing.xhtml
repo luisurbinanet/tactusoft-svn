@@ -9,7 +9,7 @@
 
 	<ui:define name="body">
 
-		<p:panel style="width:1150px;height:600px;"
+		<p:panel style="width:1150px;height:100%;"
 			header="#{msg['title_view_ticket']}">
 
 			<p:spacer height="5" />
@@ -21,10 +21,15 @@
 				<p:toolbar id="toolbar" style="width:100%">
 					<p:toolbarGroup align="left">
 						<p:commandButton id="btnSearch" value="#{msg['btn_search']}"
-							icon="ui-icon-search" update="recordTable toolbar growl"
+							icon="ui-icon-search"
+							update="recordTable recordTableDetail toolbar growl"
 							actionListener="#{campaignReportBacking.searchAction}" />
 						<p:commandButton id="btnBranch" oncomplete="branchDlg.show();"
 							value="#{msg['usr_branch']}" icon="ui-icon-bookmark" />
+						<p:commandButton id="btnDetail" update="recordTableDetail"
+							value="#{msg['btn_detail']}" icon="ui-icon-pencil"
+							disabled="#{empty campaignReportBacking.model}"
+							actionListener="#{campaignReportBacking.generateDetailAction}" />
 						<p:commandButton id="btnExport" oncomplete="exportDlg.show();"
 							value="#{msg['btn_export']}" icon="ui-icon-disk"
 							disabled="#{empty campaignReportBacking.model}" />
@@ -105,37 +110,30 @@
 
 					<p:column>
 						<f:facet name="header">
-							<h:outputText value="#{msg['cam_branch']}" />
+							<h:outputText value="#{msg['cam_pat']}" />
 						</f:facet>
-						<h:outputLabel value="#{rec.branchName}" />
+						<h:outputLabel value="#{rec.crmCampaign.crmPatient.names}" />
 					</p:column>
 
 					<p:column>
 						<f:facet name="header">
-							<h:outputText value="#{msg['cam_task_type']}" />
+							<h:outputText value="#{msg['cam_app']}" />
 						</f:facet>
-						<h:outputLabel value="#{rec.campaignTypeName}" />
+						<h:outputLabel value="#{rec.crmAppointment.code}" />
 					</p:column>
 
 					<p:column>
 						<f:facet name="header">
-							<h:outputText value="#{msg['cam_total_attendet']}" />
+							<h:outputText value="#{msg['app_state']}" />
 						</f:facet>
-						<h:outputLabel value="#{rec.totalAttendet}" />
+						<h:outputLabel value="#{rec.status eq 0?'Pendiente':'Atendida'}" />
 					</p:column>
 
 					<p:column>
 						<f:facet name="header">
-							<h:outputText value="#{msg['cam_total']}" />
+							<h:outputText value="#{msg['doc_user']}" />
 						</f:facet>
-						<h:outputLabel value="#{rec.total}" />
-					</p:column>
-
-					<p:column>
-						<f:facet name="header">
-							<h:outputText value="#{msg['cam_percent']}" />
-						</f:facet>
-						<h:outputLabel value="#{rec.percent}" />
+						<h:outputLabel value="#{rec.crmCampaign.crmUser.username}" />
 					</p:column>
 
 				</p:dataTable>

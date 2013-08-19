@@ -561,13 +561,13 @@ public class CampaignBacking extends BaseBacking {
 
 		List<CrmCampaignDetail> listDetail = selected.getCrmCampaignDetails();
 		for (CrmCampaignDetail row : listDetail) {
-			if (row.getCampaignType() == Constant.RECALL_NO_ATTENDET) {
+			if (row.getIdCampaignType() == Constant.RECALL_NO_ATTENDET) {
 				selectedDetailNoAttendet = row;
-			} else if (row.getCampaignType() == Constant.RECALL_CONFIRMED) {
+			} else if (row.getIdCampaignType() == Constant.RECALL_CONFIRMED) {
 				selectedDetailConfirmed = row;
-			} else if (row.getCampaignType() == Constant.RECALL_CONTROL) {
+			} else if (row.getIdCampaignType() == Constant.RECALL_CONTROL) {
 				selectedDetailControl = row;
-			} else if (row.getCampaignType() == Constant.RECALL_MEDICATION) {
+			} else if (row.getIdCampaignType() == Constant.RECALL_MEDICATION) {
 				selectedDetailMediaction = row;
 			}
 		}
