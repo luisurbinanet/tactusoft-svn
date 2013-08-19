@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Scope;
 import co.com.tactusoft.crm.model.entities.CrmCampaignDetail;
 import co.com.tactusoft.crm.model.entities.PrcReportCampaign;
 import co.com.tactusoft.crm.util.FacesUtil;
+import co.com.tactusoft.crm.view.datamodel.CampaignDetailDataModel;
 import co.com.tactusoft.crm.view.datamodel.PrcReportCampaignDataModel;
 
 @Named
@@ -23,7 +24,7 @@ public class CampaignReportBacking extends BaseBacking {
 	private List<PrcReportCampaign> list;
 	private PrcReportCampaignDataModel model;
 	private PrcReportCampaign selected;
-	private CrmCampaignDetail modelDetail;
+	private CampaignDetailDataModel modelDetail;
 
 	private Date startDate;
 	private Date endDate;
@@ -53,11 +54,11 @@ public class CampaignReportBacking extends BaseBacking {
 		this.model = model;
 	}
 
-	public CrmCampaignDetail getModelDetail() {
+	public CampaignDetailDataModel getModelDetail() {
 		return modelDetail;
 	}
 
-	public void setModelDetail(CrmCampaignDetail modelDetail) {
+	public void setModelDetail(CampaignDetailDataModel modelDetail) {
 		this.modelDetail = modelDetail;
 	}
 
@@ -102,11 +103,27 @@ public class CampaignReportBacking extends BaseBacking {
 			model = new PrcReportCampaignDataModel(list);
 			if (list.size() > 0) {
 				selected = list.get(0);
+				List<CrmCampaignDetail> listDetail = tablesService
+						.getListCampaignByBranchCampaignType(
+								selected.getBranchId(),
+								selected.getCampaignTypeId(), startDateString,
+								endDateString);
+				modelDetail = new CampaignDetailDataModel(listDetail);
 			}
 		} else {
 			String message = FacesUtil.getMessage("app_no_branch");
 			FacesUtil.addInfo(message);
 		}
+	}
+
+	public void generateDetailAction(ActionEvent event) {
+		String startDateString = FacesUtil.formatDate(startDate, "yyyy-MM-dd");
+		String endDateString = FacesUtil.formatDate(endDate, "yyyy-MM-dd");
+		List<CrmCampaignDetail> listDetail = tablesService
+				.getListCampaignByBranchCampaignType(selected.getBranchId(),
+						selected.getCampaignTypeId(), startDateString,
+						endDateString);
+		modelDetail = new CampaignDetailDataModel(listDetail);
 	}
 
 }
