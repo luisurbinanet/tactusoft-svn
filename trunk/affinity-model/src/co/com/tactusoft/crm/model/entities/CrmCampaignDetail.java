@@ -27,7 +27,7 @@ public class CrmCampaignDetail implements java.io.Serializable {
 	private Integer id;
 	private CrmCampaign crmCampaign;
 	private CrmAppointment crmAppointment;
-	private int campaignType;
+	private int idCampaignType;
 	private int status;
 	private Date callDate;
 	private Set<CrmCampaignTask> crmCampaignTasks = new HashSet<CrmCampaignTask>(
@@ -36,20 +36,20 @@ public class CrmCampaignDetail implements java.io.Serializable {
 	public CrmCampaignDetail() {
 	}
 
-	public CrmCampaignDetail(CrmCampaign crmCampaign, int campaignType,
+	public CrmCampaignDetail(CrmCampaign crmCampaign, int idCampaignType,
 			int status, Date callDate) {
 		this.crmCampaign = crmCampaign;
-		this.campaignType = campaignType;
+		this.idCampaignType = idCampaignType;
 		this.status = status;
 		this.callDate = callDate;
 	}
 
 	public CrmCampaignDetail(CrmCampaign crmCampaign,
-			CrmAppointment crmAppointment, int campaignType, int status,
+			CrmAppointment crmAppointment, int idCampaignType, int status,
 			Date callDate, Set<CrmCampaignTask> crmCampaignTasks) {
 		this.crmCampaign = crmCampaign;
 		this.crmAppointment = crmAppointment;
-		this.campaignType = campaignType;
+		this.idCampaignType = idCampaignType;
 		this.status = status;
 		this.callDate = callDate;
 		this.crmCampaignTasks = crmCampaignTasks;
@@ -86,13 +86,13 @@ public class CrmCampaignDetail implements java.io.Serializable {
 		this.crmAppointment = crmAppointment;
 	}
 
-	@Column(name = "campaign_type", nullable = false)
-	public int getCampaignType() {
-		return this.campaignType;
+	@Column(name = "id_campaign_type", nullable = false)
+	public int getIdCampaignType() {
+		return this.idCampaignType;
 	}
 
-	public void setCampaignType(int campaignType) {
-		this.campaignType = campaignType;
+	public void setIdCampaignType(int idCampaignType) {
+		this.idCampaignType = idCampaignType;
 	}
 
 	@Column(name = "status", nullable = false)
