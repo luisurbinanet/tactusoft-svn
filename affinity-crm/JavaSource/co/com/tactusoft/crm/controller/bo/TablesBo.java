@@ -53,11 +53,13 @@ import co.com.tactusoft.crm.model.entities.CrmUserBranchPostsale;
 import co.com.tactusoft.crm.model.entities.CrmUserProfile;
 import co.com.tactusoft.crm.model.entities.CrmUserRole;
 import co.com.tactusoft.crm.model.entities.DatesBean;
+import co.com.tactusoft.crm.model.entities.PrcReportCampaign;
 import co.com.tactusoft.crm.model.entities.VwCallRange;
 import co.com.tactusoft.crm.model.entities.VwPatientTicket;
 import co.com.tactusoft.crm.model.entities.VwProcedure;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
+import co.com.tactusoft.crm.util.Parameter;
 
 import com.tactusoft.webservice.client.beans.WSBean;
 
@@ -236,6 +238,22 @@ public class TablesBo implements Serializable {
 		} else {
 			return null;
 		}
+	}
+
+	public List<PrcReportCampaign> getListPrcReportCampaign(
+			CrmBranch[] listBranch, String startDate, String endDate) {
+
+		String branchs = "";
+		for (CrmBranch crmBranch : listBranch) {
+			branchs = branchs + crmBranch.getId() + ",";
+		}
+		branchs = branchs.substring(0, branchs.length() - 1);
+		
+		List<Parameter> parameters = new ArrayList<Parameter>();
+		parameters.add(new Parameter("start_date", startDate));
+		parameters.add(new Parameter("end_date", endDate));
+		parameters.add(new Parameter("branchs", branchs));
+		return dao.executeProcedure("callPrcReportCampaign", parameters);
 	}
 
 	public List<CrmNurse> getListNurseActive() {

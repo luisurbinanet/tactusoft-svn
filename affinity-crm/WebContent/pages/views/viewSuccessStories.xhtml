@@ -60,8 +60,13 @@
 					resizableColumns="true" selection="#{caseStudyBacking.selected}"
 					paginator="true" rows="10" style="width:100%"
 					emptyMessage="#{msg['glb_no_records_found']}">
-
-					<p:column selectionMode="single" style="width:18px" />
+					
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['app_branch']}" />
+						</f:facet>
+						<h:outputLabel value="#{rec.crmAppointment.crmBranch.name}" />
+					</p:column>
 
 					<p:column>
 						<f:facet name="header">

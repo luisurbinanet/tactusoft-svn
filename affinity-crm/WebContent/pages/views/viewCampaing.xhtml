@@ -1,0 +1,226 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="../templates/common.xhtml">
+
+	<ui:define name="body">
+
+		<p:panel style="width:1150px;height:600px;"
+			header="#{msg['title_view_ticket']}">
+
+			<p:spacer height="5" />
+
+			<h:form id="form">
+
+				<p:growl id="growl" showDetail="true" />
+
+				<p:toolbar id="toolbar" style="width:100%">
+					<p:toolbarGroup align="left">
+						<p:commandButton id="btnSearch" value="#{msg['btn_search']}"
+							icon="ui-icon-search" update="recordTable toolbar growl"
+							actionListener="#{campaignReportBacking.searchAction}" />
+						<p:commandButton id="btnBranch" oncomplete="branchDlg.show();"
+							value="#{msg['usr_branch']}" icon="ui-icon-bookmark" />
+						<p:commandButton id="btnExport" oncomplete="exportDlg.show();"
+							value="#{msg['btn_export']}" icon="ui-icon-disk"
+							disabled="#{empty campaignReportBacking.model}" />
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="5" />
+
+				<h:panelGrid id="pnlDetail" columns="2" cellpadding="4"
+					style="margin:0 auto;" width="100%">
+
+					<h:outputLabel value="#{msg['src_star_date']}" style="width:40%" />
+					<p:calendar value="#{campaignReportBacking.startDate}"
+						required="true" label="#{msg['src_star_date']}"
+						readonlyInput="true" pattern="dd/MM/yyyy" showOn="button"
+						navigator="true" locale="es" />
+
+					<h:outputLabel value="#{msg['src_end_date']}" style="width:40%" />
+					<p:calendar value="#{campaignReportBacking.endDate}"
+						required="true" label="#{msg['src_end_date']}"
+						readonlyInput="true" pattern="dd/MM/yyyy" showOn="button"
+						navigator="true" locale="es" />
+				</h:panelGrid>
+
+				<p:spacer height="5" />
+
+				<p:dataTable id="recordTable" var="rec"
+					value="#{campaignReportBacking.model}" rowKey="#{rec.id}"
+					resizableColumns="true" paginator="true" rows="10"
+					style="width:100%" emptyMessage="#{msg['glb_no_records_found']}"
+					selection="#{campaignReportBacking.selected}">
+
+					<p:column selectionMode="single" style="width:18px" />
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['cam_branch']}" />
+						</f:facet>
+						<h:outputLabel value="#{rec.branchName}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['cam_task_type']}" />
+						</f:facet>
+						<h:outputLabel value="#{rec.campaignTypeName}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['cam_total_attendet']}" />
+						</f:facet>
+						<h:outputLabel value="#{rec.totalAttendet}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['cam_total']}" />
+						</f:facet>
+						<h:outputLabel value="#{rec.total}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['cam_percent']}" />
+						</f:facet>
+						<h:outputLabel value="#{rec.percent}" />
+					</p:column>
+
+				</p:dataTable>
+
+				<p:spacer height="5" />
+
+				<p:dataTable id="recordTableDetail" var="rec"
+					value="#{campaignReportBacking.modelDetail}" rowKey="#{rec.id}"
+					resizableColumns="true" paginator="true" rows="10"
+					style="width:100%" emptyMessage="#{msg['glb_no_records_found']}">
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['cam_branch']}" />
+						</f:facet>
+						<h:outputLabel value="#{rec.branchName}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['cam_task_type']}" />
+						</f:facet>
+						<h:outputLabel value="#{rec.campaignTypeName}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['cam_total_attendet']}" />
+						</f:facet>
+						<h:outputLabel value="#{rec.totalAttendet}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['cam_total']}" />
+						</f:facet>
+						<h:outputLabel value="#{rec.total}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['cam_percent']}" />
+						</f:facet>
+						<h:outputLabel value="#{rec.percent}" />
+					</p:column>
+
+				</p:dataTable>
+
+				<p:dialog id="branchDialog" widgetVar="branchDlg" modal="true"
+					closable="true" header="#{msg['usr_branch']}">
+
+					<p:toolbar id="toolBar" style="width:100%">
+						<p:toolbarGroup align="left">
+							<p:commandButton id="btnAdd" value="#{msg['btn_add']}"
+								icon="ui-icon-plusthick" update="pnlDetail growl"
+								oncomplete="handleComplete(xhr, status, args)"
+								actionListener="#{campaignReportBacking.addBranchAction(true)}" />
+						</p:toolbarGroup>
+					</p:toolbar>
+
+					<p:spacer />
+
+					<p:dataTable id="selectedTableBranch" var="rec"
+						value="#{campaignReportBacking.listBranchObject}"
+						rowKey="#{rec.id}" style="width:100%"
+						selection="#{campaignReportBacking.selectedsBranchObject}"
+						paginator="true" rows="10"
+						emptyMessage="#{msg['glb_no_records_found']}">
+
+						<p:column selectionMode="multiple" style="width:18px" />
+
+						<p:column headerText="#{msg['bra_sales_off']}"
+							filterBy="#{rec.code}" filterMatchMode="contains">
+							<h:outputLabel value="#{rec.code}" />
+						</p:column>
+
+						<p:column headerText="#{msg['bra_name']}" filterBy="#{rec.name}"
+							filterMatchMode="contains">
+							<h:outputLabel value="#{rec.name}" />
+						</p:column>
+					</p:dataTable>
+
+				</p:dialog>
+
+				<p:dialog id="exportDialog" widgetVar="exportDlg" modal="true"
+					closable="true" header="#{msg['btn_export']}">
+
+					<h:outputLabel value="#{msg['app_src_format']}"
+						style="font-size:medium;" />
+
+					<h:panelGrid width="100%" columns="3">
+
+						<h:commandLink>
+							<p:graphicImage id="imgExcel" value="../../images/excel.png"
+								alt="Excel" />
+							<p:dataExporter type="xls" target="recordTable" fileName="export" />
+							<p:tooltip for="imgExcel" value="#{msg['btn_export_excel']}"
+								showEffect="fade" hideEffect="fade" />
+						</h:commandLink>
+
+						<h:commandLink>
+							<p:graphicImage id="imgCSV" value="../../images/csv.png" />
+							<p:dataExporter type="csv" target="recordTable" fileName="export" />
+							<p:tooltip for="imgCSV" value="#{msg['btn_export_csv']}"
+								showEffect="fade" hideEffect="fade" />
+						</h:commandLink>
+
+						<h:commandLink>
+							<p:graphicImage id="imgXML" value="../../images/xml.png" />
+							<p:dataExporter type="xml" target="recordTable" fileName="export" />
+							<p:tooltip for="imgXML" value="#{msg['btn_export_xml']}"
+								showEffect="fade" hideEffect="fade" />
+						</h:commandLink>
+
+					</h:panelGrid>
+				</p:dialog>
+			</h:form>
+		</p:panel>
+
+		<script type="text/javascript">
+			function handleComplete(xhr, status, args) {
+				if (args.validate) {
+					branchDlg.hide();
+				} else {
+					branchDlg.show();
+				}
+			}
+		</script>
+
+	</ui:define>
+</ui:composition>
+</html>
