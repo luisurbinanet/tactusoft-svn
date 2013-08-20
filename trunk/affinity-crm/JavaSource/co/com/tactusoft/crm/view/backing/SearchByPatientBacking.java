@@ -17,6 +17,7 @@ import javax.inject.Named;
 import net.sf.jasperreports.engine.JRException;
 
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.TabChangeEvent;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.controller.bo.GenerateFormulaPDF;
@@ -55,6 +56,14 @@ public class SearchByPatientBacking extends BaseBacking {
 
 	private List<CrmMedication> listMedication;
 	private MedicationDataModel medicationModel;
+
+	private List<CrmMedication> listTherapy;
+	private MedicationDataModel therapyModel;
+
+	private List<CrmMedication> listExam;
+	private MedicationDataModel examModel;
+
+	private String selectedTab;
 
 	public SearchByPatientBacking() {
 		newAction(null);
@@ -164,6 +173,38 @@ public class SearchByPatientBacking extends BaseBacking {
 		this.medicationModel = medicationModel;
 	}
 
+	public List<CrmMedication> getListTherapy() {
+		return listTherapy;
+	}
+
+	public void setListTherapy(List<CrmMedication> listTherapy) {
+		this.listTherapy = listTherapy;
+	}
+
+	public MedicationDataModel getTherapyModel() {
+		return therapyModel;
+	}
+
+	public void setTherapyModel(MedicationDataModel therapyModel) {
+		this.therapyModel = therapyModel;
+	}
+
+	public List<CrmMedication> getListExam() {
+		return listExam;
+	}
+
+	public void setListExam(List<CrmMedication> listExam) {
+		this.listExam = listExam;
+	}
+
+	public MedicationDataModel getExamModel() {
+		return examModel;
+	}
+
+	public void setExamModel(MedicationDataModel examModel) {
+		this.examModel = examModel;
+	}
+
 	public boolean isRenderedFields() {
 		boolean result = false;
 		if (selectedAppointment != null
@@ -213,6 +254,8 @@ public class SearchByPatientBacking extends BaseBacking {
 		listStates.add(new SelectItem(Constant.APP_STATE_NOATTENDED, message));
 
 		selectedsBranchObject = null;
+
+		selectedTab = Constant.MATERIAL_TYPE_MEDICINE;
 	}
 
 	public void generateListDoctor(ActionEvent event) {
@@ -250,13 +293,6 @@ public class SearchByPatientBacking extends BaseBacking {
 
 	public boolean isDisabledAppointment() {
 		if (this.listAppointment.size() == 0) {
-			return true;
-		}
-		return false;
-	}
-
-	public boolean isDisabledPrintFormula() {
-		if (this.listAppointment == null || this.listAppointment.size() == 0) {
 			return true;
 		}
 		return false;
@@ -393,12 +429,49 @@ public class SearchByPatientBacking extends BaseBacking {
 		listMedication = processService.getListMedicationByAppointment(
 				selectedAppointment.getId(), Constant.MATERIAL_TYPE_MEDICINE);
 		medicationModel = new MedicationDataModel(listMedication);
+
+		listTherapy = processService.getListMedicationByAppointment(
+				selectedAppointment.getId(), Constant.MATERIAL_TYPE_THERAPY);
+		therapyModel = new MedicationDataModel(listTherapy);
+
+		listExam = processService.getListMedicationByAppointment(
+				selectedAppointment.getId(), Constant.MATERIAL_TYPE_EXAMS);
+		examModel = new MedicationDataModel(listExam);
+	}
+
+	public void onTabChange(TabChangeEvent event) {
+		String id = event.getTab().getId();
+		if (id.equalsIgnoreCase("tabMedication")) {
+			selectedTab = Constant.MATERIAL_TYPE_MEDICINE;
+		} else if (id.equalsIgnoreCase("tabTherapy")) {
+			selectedTab = Constant.MATERIAL_TYPE_THERAPY;
+		} else {
+			selectedTab = Constant.MATERIAL_TYPE_EXAMS;
+		}
+	}
+
+	public boolean isDisabledPrintFormula() {
+		boolean result = false;
+		if (selectedTab.equals(Constant.MATERIAL_TYPE_MEDICINE)) {
+			if (this.listAppointment == null
+					|| this.listAppointment.size() == 0) {
+				result = true;
+			}
+		} else if (selectedTab.equals(Constant.MATERIAL_TYPE_THERAPY)) {
+			if (this.listTherapy == null || this.listTherapy.size() == 0) {
+				result = true;
+			}
+		} else {
+			if (this.listExam == null || this.listExam.size() == 0) {
+				result = true;
+			}
+		}
+		return result;
 	}
 
 	public void printFormulaAction() {
 		try {
-			GenerateFormulaPDF.PDF(selectedAppointment.getId(),
-					Constant.MATERIAL_TYPE_MEDICINE);
+			GenerateFormulaPDF.PDF(selectedAppointment.getId(), selectedTab);
 		} catch (JRException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
