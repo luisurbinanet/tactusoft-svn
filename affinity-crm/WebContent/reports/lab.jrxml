@@ -122,7 +122,7 @@ join crm_appointment d on c.id_appointment = d.id
 join crm_patient e on d.id_patient = e.id
 join crm_doctor f on d.id_doctor = f.id
 join crm_branch g on d.id_branch = g.id
-where c.id_appointment = $P{P_APPOINTMENT} and c.material_type = 'TERAPIA'
+where c.id_appointment = $P{P_APPOINTMENT} and c.material_type = 'EXAMENES_COMPLEMENTARIOS'
 order by c.id]]>
 	</queryString>
 	<field name="id_appointment" class="java.math.BigDecimal">
@@ -175,7 +175,7 @@ order by c.id]]>
 				<textElement textAlignment="Center">
 					<font fontName="Arial" size="14" isBold="true" isItalic="false"/>
 				</textElement>
-				<text><![CDATA[Terapias]]></text>
+				<text><![CDATA[Exámenes de Laboratorio]]></text>
 			</staticText>
 			<textField>
 				<reportElement uuid="fb85831b-54e6-420d-bfcd-274dc2ff4fc3" x="199" y="27" width="157" height="15"/>
@@ -232,14 +232,14 @@ order by c.id]]>
 				<textElement textAlignment="Center">
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Diagnóstico / Frecuencia]]></text>
+				<text><![CDATA[Diagnóstico]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="535a5a5f-6fb6-4495-8f88-4ab2f31902bf" x="187" y="27" width="181" height="15"/>
 				<textElement textAlignment="Center">
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Terapias]]></text>
+				<text><![CDATA[Exámen]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="79a8848e-910c-4361-999f-df34709a3d55" x="0" y="4" width="49" height="20"/>

@@ -141,7 +141,7 @@
 							<f:setPropertyActionListener value="#{rec}"
 								target="#{searchByPatientBacking.selectedAppointment}" />
 						</p:commandButton>
-						<p:commandButton update=":editForm:formulaDisplay"
+						<p:commandButton update=":editForm:tabFormula"
 							oncomplete="formulaDlg.show()" icon="ui-icon-print"
 							title="#{msg['btn_print']}"
 							action="#{searchByPatientBacking.searchMedicationAction}"
@@ -381,7 +381,7 @@
 					widgetVar="formulaDlg" resizable="false" id="formulaDialog"
 					showEffect="fade" hideEffect="explode" modal="true" dynamic="true">
 
-					<p:toolbar style="width:100%">
+					<p:toolbar id="toolBarPrint" style="width:100%">
 						<p:toolbarGroup align="left">
 							<p:commandButton value="#{msg['btn_print']}" icon="ui-icon-print"
 								disabled="#{searchByPatientBacking.disabledPrintFormula}"
@@ -392,11 +392,15 @@
 
 					<p:spacer />
 
+					<p:tabView id="tabFormula">
 
-					<p:tabMenu id="tabFormula">
-						<p:tab title="#{msg['btn_print_medication']}">
-							<h:panelGrid id="formulaDisplay" columns="1" cellpadding="4"
-								style="margin:0 auto;" width="100%">
+						<p:ajax event="tabChange"
+							listener="#{searchByPatientBacking.onTabChange}"
+							update=":editForm:toolBarPrint" />
+
+						<p:tab id="tabMedication" title="#{msg['btn_print_medication']}">
+							<h:panelGrid columns="1" cellpadding="4" style="margin:0 auto;"
+								width="100%">
 
 								<p:dataTable id="dtbMedication" var="rec"
 									value="#{searchByPatientBacking.medicationModel}"
@@ -422,15 +426,64 @@
 								</p:dataTable>
 
 							</h:panelGrid>
-
-							<p:tab title="#{msg['btn_print_medication']}">
-							</p:tab>
-
-							<p:tab title="#{msg['btn_print_lab']}">
-							</p:tab>
 						</p:tab>
 
-					</p:tabMenu>
+						<p:tab id="tabTherapy" title="#{msg['btn_print_therapy']}">
+							<h:panelGrid columns="1" cellpadding="4" style="margin:0 auto;"
+								width="100%">
+
+								<p:dataTable var="rec"
+									value="#{searchByPatientBacking.therapyModel}"
+									rowKey="#{rec.id}" paginator="true" rows="15"
+									style="width:100%"
+									emptyMessage="#{msg['glb_no_records_found']}">
+
+									<p:column headerText="#{msg['sal_material_code']}">
+										<h:outputLabel value="#{rec.codMaterial}" />
+									</p:column>
+
+									<p:column headerText="#{msg['his_history_note_therapy']}">
+										<h:outputLabel value="#{rec.descMaterial}" />
+									</p:column>
+
+									<p:column headerText="#{msg['sal_material_amount']}">
+										<h:outputLabel value="#{rec.unit}" />
+									</p:column>
+								</p:dataTable>
+
+							</h:panelGrid>
+						</p:tab>
+
+						<p:tab id="tabLab" title="#{msg['btn_print_lab']}">
+							<h:panelGrid columns="1" cellpadding="4" style="margin:0 auto;"
+								width="100%">
+
+								<p:dataTable var="rec"
+									value="#{searchByPatientBacking.examModel}" rowKey="#{rec.id}"
+									paginator="true" rows="15" style="width:100%"
+									emptyMessage="#{msg['glb_no_records_found']}">
+
+									<p:column headerText="#{msg['cie_grp_diagnosis']}">
+										<h:outputLabel value="#{rec.crmCie.description}" />
+									</p:column>
+
+									<p:column headerText="#{msg['sal_material_code']}">
+										<h:outputLabel value="#{rec.codMaterial}" />
+									</p:column>
+
+									<p:column headerText="#{msg['cie_grp_medication']}">
+										<h:outputLabel value="#{rec.descMaterial}" />
+									</p:column>
+
+									<p:column headerText="#{msg['sal_material_amount']}">
+										<h:outputLabel value="#{rec.unit}" />
+									</p:column>
+								</p:dataTable>
+
+							</h:panelGrid>
+						</p:tab>
+
+					</p:tabView>
 
 				</p:dialog>
 
