@@ -84,6 +84,7 @@ public class DaoAuthenticationProviderCustom extends
 			user.setRoles(listGrantedAuthority);
 			user.setOpenAppointment(false);
 			user.setPrintFormula(false);
+			user.setPrintHistorial(false);
 
 			String idRoles = "";
 			for (CrmRole row : listRole) {
@@ -93,6 +94,10 @@ public class DaoAuthenticationProviderCustom extends
 				}
 				if (row.getPrintFormula()) {
 					user.setPrintFormula(true);
+				}
+
+				if (row.getPrintHistorial()) {
+					user.setPrintHistorial(true);
 				}
 			}
 

@@ -1,7 +1,9 @@
 package co.com.tactusoft.crm.view.backing;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -15,9 +17,12 @@ import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 
+import net.sf.jasperreports.engine.JRException;
+
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 
+import co.com.tactusoft.crm.controller.bo.GenerateFormulaPDF;
 import co.com.tactusoft.crm.controller.bo.ParameterBo;
 import co.com.tactusoft.crm.controller.bo.ProcessBo;
 import co.com.tactusoft.crm.controller.bo.SecurityBo;
@@ -52,7 +57,7 @@ public class BaseBacking implements Serializable {
 
 	@Inject
 	protected SecurityBo securityService;
-	
+
 	@Inject
 	protected ParameterBo parameterService;
 
@@ -838,6 +843,10 @@ public class BaseBacking implements Serializable {
 		return FacesUtil.getCurrentUserData().isPrintFormula();
 	}
 
+	public boolean isPrintHistorial() {
+		return FacesUtil.getCurrentUserData().isPrintHistorial();
+	}
+
 	public List<SelectItem> getListOccupation() {
 		if (listOccupation == null) {
 			listOccupation = new LinkedList<SelectItem>();
@@ -1076,6 +1085,18 @@ public class BaseBacking implements Serializable {
 			}
 		}
 		context.addCallbackParam("validate", validate);
+	}
+
+	public void printHistoryAction() {
+		try {
+			GenerateFormulaPDF.historyPDF(selectedPatient.getId());
+		} catch (JRException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

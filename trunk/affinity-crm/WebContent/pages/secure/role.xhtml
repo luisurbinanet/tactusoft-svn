@@ -91,6 +91,10 @@
 					<p:selectBooleanCheckbox
 						value="#{roleBacking.selected.printFormula}" />
 
+					<h:outputLabel value="#{msg['rol_print_historial']}" />
+					<p:selectBooleanCheckbox
+						value="#{roleBacking.selected.printHistorial}" />
+
 					<h:outputLabel value="#{msg['glb_state']}"
 						rendered="#{roleBacking.selected.id!=null?true:false}" />
 					<p:selectOneMenu value="#{roleBacking.selected.state}"
