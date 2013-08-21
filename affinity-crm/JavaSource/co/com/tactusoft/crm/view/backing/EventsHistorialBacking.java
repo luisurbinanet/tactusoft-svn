@@ -22,7 +22,7 @@ public class EventsHistorialBacking extends BaseBacking {
 	private List<CrmMedication> listMedication;
 	private List<CrmMedication> listTherapy;
 	private List<CrmMedication> listLabExam;
-	private List<CrmCampaignDetail> listCapaign;
+	private List<CrmCampaignDetail> listCampaign;
 
 	public EventsHistorialBacking() {
 		newAction();
@@ -60,12 +60,12 @@ public class EventsHistorialBacking extends BaseBacking {
 		this.listLabExam = listLabExam;
 	}
 
-	public List<CrmCampaignDetail> getListCapaign() {
-		return listCapaign;
+	public List<CrmCampaignDetail> getListCampaign() {
+		return listCampaign;
 	}
 
-	public void setListCapaign(List<CrmCampaignDetail> listCapaign) {
-		this.listCapaign = listCapaign;
+	public void setListCampaign(List<CrmCampaignDetail> listCampaign) {
+		this.listCampaign = listCampaign;
 	}
 
 	public void newAction() {
@@ -98,6 +98,9 @@ public class EventsHistorialBacking extends BaseBacking {
 				listLabExam.add(row);
 			}
 		}
+
+		listCampaign = tablesService
+				.getListCampaignDetailByPatient(selectedPatient.getId());
 	}
 
 }
