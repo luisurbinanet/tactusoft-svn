@@ -186,6 +186,47 @@
 						</p:column>
 					</p:dataTable>
 
+					<p:spacer />
+
+					<p:dataTable var="rec"
+						value="#{eventsHistorialBacking.listCampaign}" rowKey="#{rec.id}"
+						paginator="true" rows="10" style="width:100%"
+						emptyMessage="#{msg['glb_no_records_found']}">
+
+						<f:facet name="header">
+							<h:outputLabel value="#{msg['cam_call']}" />
+						</f:facet>
+
+						<p:column headerText="#{msg['cam_date']}">
+							<h:outputLabel value="#{rec.callDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+						</p:column>
+
+						<p:column headerText="#{msg['cam_branch']}"
+							filterMatchMode="contains" filterBy="#{rec.crmBranch.name}">
+							<h:outputLabel value="#{rec.crmCampaign.crmBranch.name}" />
+						</p:column>
+
+						<p:column headerText="#{msg['cam_user']}"
+							filterMatchMode="contains" filterBy="#{rec.crmUser.username}">
+							<h:outputLabel value="#{rec.crmCampaign.crmUser.username}" />
+						</p:column>
+
+						<p:column headerText="#{msg['glb_state']}"
+							filterMatchMode="contains">
+							<h:outputLabel
+								value="#{campaignAdminBacking.getStatus(rec.crmCampaign.state)}" />
+						</p:column>
+
+						<p:column headerText="#{msg['cam_type']}"
+							filterMatchMode="contains">
+							<h:outputLabel
+								value="#{campaignAdminBacking.getDescCampaignType(rec.idCampaignType)}" />
+						</p:column>
+
+					</p:dataTable>
+
 				</h:panelGrid>
 
 			</h:form>

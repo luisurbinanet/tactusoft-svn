@@ -240,6 +240,13 @@ public class TablesBo implements Serializable {
 		}
 	}
 
+	public List<CrmCampaignDetail> getListCampaignDetailByPatient(
+			BigDecimal idPatient) {
+		return dao
+				.find("FROM CrmCampaignDetail o WHERE o.crmCampaign.crmPatient.id = "
+						+ idPatient + " AND o.status <> 0");
+	}
+
 	public List<PrcReportCampaign> getListPrcReportCampaign(
 			CrmBranch[] listBranch, String startDate, String endDate) {
 
