@@ -41,6 +41,7 @@ public class UserData implements UserDetails {
 	private int numCalls;
 	private boolean openAppointment;
 	private boolean printFormula;
+	private boolean printHistorial;
 
 	private boolean accountNonExpired = true;
 	private boolean credentialsNonExpired = true;
@@ -205,6 +206,14 @@ public class UserData implements UserDetails {
 
 	public void setPrintFormula(boolean printFormula) {
 		this.printFormula = printFormula;
+	}
+
+	public boolean isPrintHistorial() {
+		return printHistorial;
+	}
+
+	public void setPrintHistorial(boolean printHistorial) {
+		this.printHistorial = printHistorial;
 	}
 
 	@Override

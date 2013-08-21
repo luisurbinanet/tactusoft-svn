@@ -1,0 +1,300 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="../templates/common.xhtml">
+
+	<ui:define name="body">
+
+		<p:panel style="width:100%;height:100%;"
+			header="#{msg['title_event_historial']}">
+
+			<p:spacer height="5" />
+
+			<h:form id="form">
+
+				<p:growl id="growl" showDetail="true" />
+
+				<p:toolbar style="width:100%">
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{msg['btn_add_patient']}"
+							icon="ui-icon-circle-check" oncomplete="dlg2.show()"
+							update=":editForm:dialog2" />
+						<p:commandButton id="btnSearch" value="#{msg['btn_search']}"
+							icon="ui-icon-search" update="pnlTable"
+							disabled="#{eventsHistorialBacking.disabledSelectedPatient}"
+							action="#{eventsHistorialBacking.searchAction}" />
+						<p:commandButton id="btnPrint" value="#{msg['btn_print']}"
+							icon="ui-icon-print"
+							disabled="#{eventsHistorialBacking.disabledSelectedPatient or not eventsHistorialBacking.printHistorial}"
+							action="#{eventsHistorialBacking.printHistoryAction}"
+							ajax="false" />
+
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer />
+
+				<h:panelGrid id="pnlDetail" columns="4" cellpadding="4"
+					style="margin:0 auto;" width="100%">
+
+					<h:outputLabel
+						value="#{eventsHistorialBacking.selectedPatient.contact?msg['pat_phone_number']:msg['pat_sap_code']}" />
+					<p:inputText
+						value="#{eventsHistorialBacking.selectedPatient.contact?eventsHistorialBacking.selectedPatient.phoneNumber:eventsHistorialBacking.selectedPatient.codeSap}"
+						style="width:350px;background-color:#FFFF80;font-weight:bold;"
+						readonly="true" />
+
+					<h:outputLabel value="#{msg['pat_names']}" />
+					<p:inputText
+						value="#{eventsHistorialBacking.selectedPatient.names}"
+						style="width:350px;background-color:#FFFF80;font-weight:bold;"
+						readonly="true" />
+
+				</h:panelGrid>
+
+				<p:spacer />
+
+				<h:panelGrid id="pnlTable" width="100%" columns="1">
+
+					<p:dataTable id="tblHistoryAppointment" var="rec"
+						value="#{eventsHistorialBacking.listAppointment}"
+						rowKey="#{rec.code}" style="width:100%" paginator="true" rows="10"
+						emptyMessage="#{msg['glb_no_records_found']}">
+
+						<f:facet name="header">
+							<h:outputLabel value="#{msg['his_history']}" />
+						</f:facet>
+
+						<p:column headerText="#{msg['app_date']}">
+							<h:outputLabel value="#{rec.startAppointmentDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+						</p:column>
+
+						<p:column headerText="#{msg['app_branch']}">
+							<h:outputLabel value="#{rec.branchName}" />
+						</p:column>
+
+						<p:column headerText="#{msg['app_doctor']}">
+							<h:outputLabel value="#{rec.doctorNames}" />
+						</p:column>
+
+						<p:column headerText="#{msg['app_procedure']}">
+							<h:outputLabel value="#{rec.prcDetName}" />
+						</p:column>
+
+					</p:dataTable>
+
+					<p:spacer />
+
+					<p:dataTable var="rec"
+						value="#{eventsHistorialBacking.listMedication}" paginator="true"
+						rows="15" style="width:100%"
+						emptyMessage="#{msg['glb_no_records_found']}">
+
+						<f:facet name="header">
+							<h:outputLabel value="#{msg['his_history_medicaction']}" />
+						</f:facet>
+
+						<p:column headerText="#{msg['app_date']}">
+							<h:outputLabel value="#{rec.crmAppointment.startAppointmentDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+						</p:column>
+
+						<p:column headerText="#{msg['app_doctor']}">
+							<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+						</p:column>
+
+						<p:column headerText="#{msg['sal_material_descr']}">
+							<h:outputLabel value="#{rec.descMaterial}" />
+						</p:column>
+
+						<p:column headerText="#{msg['sal_material_amount']}"
+							style="width:100px">
+							<h:outputLabel value="#{rec.unit}" />
+						</p:column>
+
+						<p:column headerText="#{msg['cie_grp_diagnosis']}">
+							<h:outputLabel value="#{rec.crmCie.description}" />
+						</p:column>
+					</p:dataTable>
+
+					<p:spacer />
+
+					<p:dataTable var="rec"
+						value="#{eventsHistorialBacking.listTherapy}" paginator="true"
+						rows="15" style="width:100%"
+						emptyMessage="#{msg['glb_no_records_found']}">
+
+						<f:facet name="header">
+							<h:outputLabel value="#{msg['his_history_therapy']}" />
+						</f:facet>
+
+						<p:column headerText="#{msg['app_date']}">
+							<h:outputLabel value="#{rec.crmAppointment.startAppointmentDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+						</p:column>
+
+						<p:column headerText="#{msg['app_doctor']}">
+							<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+						</p:column>
+
+						<p:column headerText="#{msg['sal_material_descr']}">
+							<h:outputLabel value="#{rec.descMaterial}" />
+						</p:column>
+
+						<p:column headerText="#{msg['sal_material_amount']}"
+							style="width:100px">
+							<h:outputLabel value="#{rec.unit}" />
+						</p:column>
+					</p:dataTable>
+
+					<p:spacer />
+
+					<p:dataTable var="rec"
+						value="#{eventsHistorialBacking.listLabExam}" paginator="true"
+						rows="15" style="width:100%"
+						emptyMessage="#{msg['glb_no_records_found']}">
+
+						<f:facet name="header">
+							<h:outputLabel value="#{msg['his_history_examinations']}" />
+						</f:facet>
+
+						<p:column headerText="#{msg['app_date']}">
+							<h:outputLabel value="#{rec.crmAppointment.startAppointmentDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+						</p:column>
+
+						<p:column headerText="#{msg['app_doctor']}">
+							<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+						</p:column>
+
+						<p:column headerText="#{msg['sal_material_descr']}">
+							<h:outputLabel value="#{rec.descMaterial}" />
+						</p:column>
+
+						<p:column headerText="#{msg['sal_material_amount']}"
+							style="width:100px">
+							<h:outputLabel value="#{rec.unit}" />
+						</p:column>
+					</p:dataTable>
+
+				</h:panelGrid>
+
+			</h:form>
+
+			<h:form id="editForm">
+
+				<p:dialog header="#{msg['sal_patient']}" widgetVar="dlg2"
+					resizable="false" id="dialog2" showEffect="fade"
+					hideEffect="explode" modal="true" width="600">
+
+					<h:panelGrid columns="2" width="100%">
+						<p:outputPanel id="customPanel">
+							<p:selectOneRadio id="customRadio"
+								value="#{eventsHistorialBacking.optionSearchPatient}"
+								layout="custom">
+								<f:selectItem itemLabel="#{msg['sal_key_press_doc']}"
+									itemValue="1" />
+								<f:selectItem itemLabel="#{msg['sal_key_press_nom']}"
+									itemValue="2" />
+								<f:selectItem itemLabel="#{msg['sal_key_press_tel']}"
+									itemValue="3" />
+							</p:selectOneRadio>
+
+							<h:panelGrid columns="3" width="100%">
+								<p:radioButton id="opt1" for="customRadio" itemIndex="0" />
+								<h:outputLabel for="opt1" value="#{msg['sal_key_press_doc']}" />
+								<p:inputText value="#{eventsHistorialBacking.docPatient}"
+									style="width:100%">
+									<pe:keyFilter regEx="/[\d]/" preventPaste="false" />
+								</p:inputText>
+
+								<p:radioButton id="opt2" for="customRadio" itemIndex="1" />
+								<h:outputLabel for="opt2" value="#{msg['sal_key_press_nom']}" />
+								<p:inputText value="#{eventsHistorialBacking.namePatient}"
+									style="width:100%">
+									<pe:keyFilter regEx="/[a-zA-Z\s]/i" preventPaste="false" />
+								</p:inputText>
+
+								<p:radioButton id="opt3" for="customRadio" itemIndex="2" />
+								<h:outputLabel for="opt3" value="#{msg['sal_key_press_tel']}" />
+								<p:inputText value="#{eventsHistorialBacking.telPatient}"
+									style="width:100%">
+									<pe:keyFilter regEx="/[\d]/" preventPaste="false" />
+								</p:inputText>
+							</h:panelGrid>
+						</p:outputPanel>
+
+						<f:facet name="footer">
+							<p:spacer height="10" />
+
+							<p:commandButton value="#{msg['btn_search']}"
+								icon="ui-icon-search"
+								update="pnlTable2 recordTable2 btnAddPatient"
+								action="#{eventsHistorialBacking.searchPatientAction}" />
+							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
+								icon="ui-icon-plusthick"
+								update=":form:pnlDetail :form:btnSearch :form:btnPrint"
+								oncomplete="dlg2.hide()"
+								disabled="#{eventsHistorialBacking.disabledAddPatient}" />
+						</f:facet>
+					</h:panelGrid>
+
+					<p:spacer height="10" />
+					<p:scrollPanel id="pnlTable2" style="width:580px;height:300px">
+						<p:dataTable id="recordTable2" var="rec"
+							value="#{eventsHistorialBacking.patientModel}" rowKey="#{rec.id}"
+							selection="#{eventsHistorialBacking.selectedPatient}"
+							paginator="true" rows="15" style="width:570px"
+							emptyMessage="#{msg['glb_no_records_found']}">
+
+							<p:column selectionMode="single" style="width:18px" />
+
+							<p:column headerText="#{msg['pat_code_1']}">
+								<h:outputLabel value="#{rec.doc}" />
+							</p:column>
+
+							<p:column headerText="#{msg['pat_sap_code']}">
+								<h:outputLabel value="#{rec.codeSap}" />
+							</p:column>
+
+							<p:column headerText="#{msg['pat_names']}">
+								<h:outputLabel value="#{rec.names}" />
+							</p:column>
+
+							<p:column headerText="#{msg['pat_send_phone']}">
+								<h:outputLabel value="#{rec.phoneNumber} #{rec.cellNumber}" />
+							</p:column>
+
+						</p:dataTable>
+					</p:scrollPanel>
+
+				</p:dialog>
+
+				<script type="text/javascript">
+					function handleSaveRequest(xhr, status, args) {
+						if (args.validationFailed || !args.saved) {
+							jQuery('#checkedDialog').effect("shake", {
+								times : 3
+							}, 100);
+						} else {
+							checkedDlg.hide();
+						}
+					}
+				</script>
+
+			</h:form>
+
+		</p:panel>
+
+	</ui:define>
+</ui:composition>
+</html>
