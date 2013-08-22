@@ -598,10 +598,13 @@ public class CampaignBacking extends BaseBacking {
 		return mapText.get(typeCampaign);
 	}
 
-	public String getDocType(String country, String code) {
-		for (WSBean row : FacesUtil.getCurrentUserData().getListWSDocType()) {
-			if (row.getNames().contains(country) && row.getCode().equals(code)) {
-				return row.getNames();
+	public String getDocType() {
+		if (this.selected != null) {
+			for (WSBean row : FacesUtil.getCurrentUserData().getListWSDocType()) {
+				if (row.getCode().equals(
+						this.selected.getCrmPatient().getDocType())) {
+					return row.getNames();
+				}
 			}
 		}
 		return "Tipo de Identificación Desconocida";

@@ -339,6 +339,13 @@ public class PatientBacking extends BaseBacking {
 									sap.getPassword(), profile.getSociety(),
 									selectedPatient.getDoc(), 0);
 						}
+					} else {
+						if (!FacesUtil.isEmptyOrBlank(selectedPatient
+								.getCodeSap())
+								&& !selectedPatient.getDoc().equalsIgnoreCase(
+										selectedPatient.getCodeSap())) {
+							existsSAP = true;
+						}
 					}
 
 					if (existsSAP || automatic || customer.size() == 0) {
