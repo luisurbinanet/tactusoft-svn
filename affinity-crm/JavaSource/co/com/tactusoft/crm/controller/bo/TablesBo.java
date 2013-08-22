@@ -244,7 +244,7 @@ public class TablesBo implements Serializable {
 			BigDecimal idPatient) {
 		return dao
 				.find("FROM CrmCampaignDetail o WHERE o.crmCampaign.crmPatient.id = "
-						+ idPatient + " AND o.status <> 0");
+						+ idPatient);
 	}
 
 	public List<PrcReportCampaign> getListPrcReportCampaign(

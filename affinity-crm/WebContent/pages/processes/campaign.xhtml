@@ -148,12 +148,21 @@
 
 					<p:fieldset legend="#{msg['cam_pat']}">
 						<h:panelGrid columns="4" width="100%">
+							<h:outputLabel value="#{msg['pat_type_code']}" />
+							<p:inputText value="#{campaignBacking.docType}"
+								style="width:190px;background-color:#FFFF80;font-weight:bold;"
+								readonly="true" />
 							<h:outputLabel value="#{msg['pat_code_1']}" />
 							<p:inputText value="#{campaignBacking.selected.crmPatient.doc}"
 								style="width:190px;background-color:#FFFF80;font-weight:bold;"
 								readonly="true" />
 							<h:outputLabel value="#{msg['pat_names']}" />
 							<p:inputText value="#{campaignBacking.selected.crmPatient.names}"
+								style="width:190px;background-color:#FFFF80;font-weight:bold;"
+								readonly="true" />
+							<h:outputLabel value="#{msg['glb_gender']}" />
+							<p:inputText
+								value="#{campaignBacking.selected.crmPatient.gender eq 'W'?msg['glb_gender_woman']:msg['glb_gender_man']}"
 								style="width:190px;background-color:#FFFF80;font-weight:bold;"
 								readonly="true" />
 							<h:outputLabel value="#{msg['pat_phone_number']}" />
