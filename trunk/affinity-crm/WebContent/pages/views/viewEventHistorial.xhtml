@@ -27,7 +27,7 @@
 							icon="ui-icon-search" update="pnlTable"
 							disabled="#{eventsHistorialBacking.disabledSelectedPatient}"
 							action="#{eventsHistorialBacking.searchAction}" />
-						<p:commandButton id="btnPrint" value="#{msg['btn_print']}"
+						<p:commandButton id="btnPrint" value="#{msg['btn_print_history']}"
 							icon="ui-icon-print"
 							disabled="#{eventsHistorialBacking.disabledSelectedPatient or not eventsHistorialBacking.printHistorial}"
 							action="#{eventsHistorialBacking.printHistoryAction}"
@@ -87,6 +87,14 @@
 							<h:outputLabel value="#{rec.prcDetName}" />
 						</p:column>
 
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="#{msg['app_state']}" />
+							</f:facet>
+							<h:outputLabel
+								value="#{rec.state eq 1?'Agendada':rec.state eq 2?'Cancelada':rec.state eq 3?'Chequeada':rec.state eq 4?'Asistió a Consulta':'No Asistió a Consulta'}" />
+						</p:column>
+
 					</p:dataTable>
 
 					<p:spacer />
@@ -101,13 +109,13 @@
 						</f:facet>
 
 						<p:column headerText="#{msg['app_date']}">
-							<h:outputLabel value="#{rec.crmAppointment.startAppointmentDate}">
+							<h:outputLabel value="#{rec.appointmentDate}">
 								<f:convertDateTime pattern="dd/MM/yyyy" />
 							</h:outputLabel>
 						</p:column>
 
 						<p:column headerText="#{msg['app_doctor']}">
-							<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+							<h:outputLabel value="#{rec.doctorName}" />
 						</p:column>
 
 						<p:column headerText="#{msg['sal_material_descr']}">
@@ -120,7 +128,11 @@
 						</p:column>
 
 						<p:column headerText="#{msg['cie_grp_diagnosis']}">
-							<h:outputLabel value="#{rec.crmCie.description}" />
+							<h:outputLabel value="#{rec.descCie}" />
+						</p:column>
+
+						<p:column headerText="#{msg['cie_grp_sold']}">
+							<h:outputLabel value="#{rec.sold eq 1?'SI':'NO'}" />
 						</p:column>
 					</p:dataTable>
 
@@ -136,13 +148,13 @@
 						</f:facet>
 
 						<p:column headerText="#{msg['app_date']}">
-							<h:outputLabel value="#{rec.crmAppointment.startAppointmentDate}">
+							<h:outputLabel value="#{rec.appointmentDate}">
 								<f:convertDateTime pattern="dd/MM/yyyy" />
 							</h:outputLabel>
 						</p:column>
 
 						<p:column headerText="#{msg['app_doctor']}">
-							<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+							<h:outputLabel value="#{rec.doctorName}" />
 						</p:column>
 
 						<p:column headerText="#{msg['sal_material_descr']}">
@@ -167,13 +179,13 @@
 						</f:facet>
 
 						<p:column headerText="#{msg['app_date']}">
-							<h:outputLabel value="#{rec.crmAppointment.startAppointmentDate}">
+							<h:outputLabel value="#{rec.appointmentDate}">
 								<f:convertDateTime pattern="dd/MM/yyyy" />
 							</h:outputLabel>
 						</p:column>
 
 						<p:column headerText="#{msg['app_doctor']}">
-							<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+							<h:outputLabel value="#{rec.doctorName}" />
 						</p:column>
 
 						<p:column headerText="#{msg['sal_material_descr']}">
@@ -216,7 +228,7 @@
 						<p:column headerText="#{msg['glb_state']}"
 							filterMatchMode="contains">
 							<h:outputLabel
-								value="#{campaignAdminBacking.getStatus(rec.crmCampaign.state)}" />
+								value="#{eventsHistorialBacking.getDescRecall(rec.crmCampaign.state)}" />
 						</p:column>
 
 						<p:column headerText="#{msg['cam_type']}"

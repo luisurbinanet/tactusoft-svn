@@ -185,6 +185,10 @@ public class TablesBo implements Serializable {
 		return dao.find("from CrmRecall o where o.idTaskType = " + idTaskType
 				+ " order by o.crmRecall.id,o.id");
 	}
+	
+	public List<CrmRecall> getAllListRecall() {
+		return dao.find("FROM CrmRecall o");
+	}
 
 	public List<CrmRecall> getLevels(Integer idTaskType) {
 		List<CrmRecall> list = dao

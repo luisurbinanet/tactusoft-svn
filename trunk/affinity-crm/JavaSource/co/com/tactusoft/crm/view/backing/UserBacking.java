@@ -348,7 +348,7 @@ public class UserBacking extends BaseBacking {
 
 			listTargetRole = securityService.getListCrmRoleByUser(selected
 					.getId());
-			for (CrmRole row : FacesUtil.getCurrentUserData().getListRoleAll()) {
+			for (CrmRole row : tablesService.getListRoleActive()) {
 				boolean exits = false;
 				for (CrmRole avb : listTargetRole) {
 					if (avb.getId().intValue() == row.getId().intValue()) {

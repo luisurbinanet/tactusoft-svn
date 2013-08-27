@@ -38,6 +38,7 @@ import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
 import co.com.tactusoft.crm.model.entities.IndPatientAppointment;
 import co.com.tactusoft.crm.model.entities.VwAppointment;
+import co.com.tactusoft.crm.model.entities.VwMedicationSold;
 import co.com.tactusoft.crm.model.entities.VwTherapyMaterials;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
@@ -182,6 +183,12 @@ public class ProcessBo implements Serializable {
 				.find("from VwAppointment o where o.patId = "
 						+ idPatient
 						+ " and o.state in (3,4,5) order by o.startAppointmentDate DESC");
+	}
+
+	public List<VwAppointment> getListByAppointmentAllByPatient(
+			BigDecimal idPatient) {
+		return dao.find("FROM VwAppointment o WHERE o.patId = " + idPatient
+				+ " ORDER BY o.startAppointmentDate DESC");
 	}
 
 	public List<CrmCie> getListCieByCode(String code) {
@@ -1329,6 +1336,14 @@ public class ProcessBo implements Serializable {
 				.find("from CrmMedication o where o.crmAppointment.crmPatient.id = "
 						+ idPatient
 						+ " order by o.crmAppointment.startAppointmentDate desc");
+		return list;
+	}
+
+	public List<VwMedicationSold> getListMedicationSoldByPatient(
+			BigDecimal idPatient) {
+		List<VwMedicationSold> list = dao
+				.find("from VwMedicationSold o where o.idPatient = "
+						+ idPatient + " order by o.appointmentDate desc");
 		return list;
 	}
 
