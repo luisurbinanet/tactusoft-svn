@@ -31,6 +31,7 @@ public class VwAppointment implements java.io.Serializable {
 	private BigDecimal prcDetId;
 	private String prcDetName;
 	private String prcDocType;
+	private int prcAvailability;
 	private String prcFormulaDocType;
 	private BigDecimal branchId;
 	private String branchCode;
@@ -70,10 +71,11 @@ public class VwAppointment implements java.io.Serializable {
 	public VwAppointment(BigDecimal id, String code, Date startAppointmentDate,
 			Date endAppointmentDate, int state, BigDecimal patId,
 			String patCode, String patCodeSap, BigDecimal prcDetId,
-			String prcDetName, String prcDocType, String prcFormulaDocType,
-			BigDecimal branchId, BigDecimal doctorId, String doctorCode,
-			String doctorNames, BigDecimal userCreateId, String userCreateCode,
-			String userCreateNames, String userCreateSurnames) {
+			String prcDetName, String prcDocType, int prcAvailability,
+			String prcFormulaDocType, BigDecimal branchId, BigDecimal doctorId,
+			String doctorCode, String doctorNames, BigDecimal userCreateId,
+			String userCreateCode, String userCreateNames,
+			String userCreateSurnames) {
 		this.id = id;
 		this.code = code;
 		this.startAppointmentDate = startAppointmentDate;
@@ -85,6 +87,7 @@ public class VwAppointment implements java.io.Serializable {
 		this.prcDetId = prcDetId;
 		this.prcDetName = prcDetName;
 		this.prcDocType = prcDocType;
+		this.prcAvailability = prcAvailability;
 		this.prcFormulaDocType = prcFormulaDocType;
 		this.branchId = branchId;
 		this.doctorId = doctorId;
@@ -101,11 +104,11 @@ public class VwAppointment implements java.io.Serializable {
 			String patCode, String patCodeSap, String patSurnames,
 			String patFirstnames, String patPhoneNumber, String patCellNumber,
 			BigDecimal prcDetId, String prcDetName, String prcDocType,
-			String prcFormulaDocType, BigDecimal branchId, String branchCode,
-			String branchName, String branchSociety, BigDecimal doctorId,
-			String doctorCode, String doctorNames, BigDecimal userCreateId,
-			String userCreateCode, String userCreateNames,
-			String userCreateSurnames, Date dateCreate,
+			int prcAvailability, String prcFormulaDocType, BigDecimal branchId,
+			String branchCode, String branchName, String branchSociety,
+			BigDecimal doctorId, String doctorCode, String doctorNames,
+			BigDecimal userCreateId, String userCreateCode,
+			String userCreateNames, String userCreateSurnames, Date dateCreate,
 			BigDecimal userModifiedId, String userModifiedCode,
 			String userModifiedNames, String userModifiedSurnames,
 			Date dateModified, BigDecimal userCheckedId,
@@ -129,6 +132,7 @@ public class VwAppointment implements java.io.Serializable {
 		this.prcDetId = prcDetId;
 		this.prcDetName = prcDetName;
 		this.prcDocType = prcDocType;
+		this.prcAvailability = prcAvailability;
 		this.prcFormulaDocType = prcFormulaDocType;
 		this.branchId = branchId;
 		this.branchCode = branchCode;
@@ -294,6 +298,15 @@ public class VwAppointment implements java.io.Serializable {
 
 	public void setPrcDocType(String prcDocType) {
 		this.prcDocType = prcDocType;
+	}
+
+	@Column(name = "prc_availability", nullable = false)
+	public int getPrcAvailability() {
+		return prcAvailability;
+	}
+
+	public void setPrcAvailability(int prcAvailability) {
+		this.prcAvailability = prcAvailability;
 	}
 
 	@Column(name = "prc_formula_doc_type", nullable = false)
