@@ -28,7 +28,7 @@
 							actionListener="#{callOutcomingBacking.searchAction}"
 							process="@this, txtPhone, txtInd"
 							disabled="#{callOutcomingBacking.searched or callOutcomingBacking.saved}" />
-						<p:commandButton value="#{msg['btn_call']}" icon="ui-icon-disk"
+						<p:commandButton value="#{msg['btn_call']}" icon="ui-icon-comment"
 							actionListener="#{callOutcomingBacking.callAction}"
 							update="growl toolBar pnlInfo pnlCallType"
 							process="@this, txtPhone, txtInd"

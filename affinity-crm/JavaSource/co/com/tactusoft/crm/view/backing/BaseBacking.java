@@ -22,6 +22,7 @@ import net.sf.jasperreports.engine.JRException;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 
+import co.com.tactusoft.crm.controller.bo.CapaignBo;
 import co.com.tactusoft.crm.controller.bo.GenerateFormulaPDF;
 import co.com.tactusoft.crm.controller.bo.ParameterBo;
 import co.com.tactusoft.crm.controller.bo.ProcessBo;
@@ -60,6 +61,9 @@ public class BaseBacking implements Serializable {
 
 	@Inject
 	protected ParameterBo parameterService;
+	
+	@Inject
+	protected CapaignBo capaignService;
 
 	private static final long serialVersionUID = 1L;
 

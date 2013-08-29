@@ -129,12 +129,20 @@
 				resizable="false" id="dialog" showEffect="fade" hideEffect="explode"
 				modal="true" width="900" height="600">
 
-				<p:toolbar style="width:100%">
+				<p:toolbar id="toolBar" style="width:100%">
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_save']}" icon="ui-icon-disk"
 							action="#{campaignBacking.saveAction}"
 							oncomplete="handleComplete(xhr, status, args)"
 							update="growl :form:pnlCampaign" />
+						<p:commandButton value="#{msg['btn_call']}" icon="ui-icon-comment"
+							actionListener="#{campaignBacking.callAction}"
+							update="growl toolBar pnlCall pnlCallType"
+							process="@this,pnlCall" />
+						<p:commandButton value="#{msg['btn_save']}  #{msg['cam_call']}"
+							icon="ui-icon-disk" action="#{campaignBacking.saveCallAction}"
+							update="growl toolBar pnlCallType"
+							disabled="#{not campaignBacking.called or campaignBacking.saved}" />
 						<p:commandButton value="#{msg['btn_close']}"
 							icon="ui-icon-closethick" update="growl :form:pnlCampaign"
 							process="@none" oncomplete="dlg.hide()" />
@@ -175,6 +183,44 @@
 								value="#{campaignBacking.selected.crmPatient.cellNumber}"
 								style="width:190px;background-color:#FFFF80;font-weight:bold;"
 								readonly="true" />
+						</h:panelGrid>
+					</p:fieldset>
+
+					<p:spacer height="5" />
+
+					<p:fieldset legend="#{msg['cam_call']}">
+						<h:panelGrid id="pnlCall" columns="2" width="100%">
+							<p:selectOneRadio id="customRadio"
+								value="#{campaignBacking.phoneType}">
+								<f:selectItem itemLabel="#{msg['pat_phone_number']}"
+									itemValue="1" />
+								<f:selectItem itemLabel="#{msg['pat_cell_number']}"
+									itemValue="2" />
+							</p:selectOneRadio>
+							<p:inputText id="txtInd" maxlength="3"
+								value="#{campaignBacking.indicative}" />
+							<p:watermark for="txtInd" value="#{msg['cam_ind']}" />
+						</h:panelGrid>
+
+						<h:panelGrid id="pnlCallType" columns="2" style="width:100%">
+							<h:outputText value="#{msg['cam_call_level1']}"
+								style="width:100%" />
+							<p:selectOneMenu id="selCallType"
+								value="#{campaignBacking.idCallType}" style="width:500px"
+								required="true" label="#{msg['cam_call_level1']}"
+								disabled="#{not campaignBacking.called or campaignBacking.saved}">
+								<f:selectItems value="#{campaignBacking.listCallType}" />
+								<p:ajax listener="#{campaignBacking.handleCallTypeChange}"
+									update="selCallTypeDetail" />
+							</p:selectOneMenu>
+							<h:outputText value="#{msg['cam_call_level2']}"
+								style="width:100%" />
+							<p:selectOneMenu id="selCallTypeDetail"
+								value="#{campaignBacking.idCallTypeDetail}" style="width:500px"
+								required="true" label="#{msg['cam_call_level2']}"
+								disabled="#{not campaignBacking.called or campaignBacking.saved}">
+								<f:selectItems value="#{campaignBacking.listCallTypeDetail}" />
+							</p:selectOneMenu>
 						</h:panelGrid>
 					</p:fieldset>
 
@@ -408,6 +454,14 @@
 						<h:outputLabel value="#{msg['pat_type_obs']}" />
 						<p:inputTextarea value="#{campaignBacking.selected.observation}"
 							style="width:500px" rows="3" label="#{msg['pat_type_obs']}" />
+						<h:outputLabel value="#{msg['cam_call_poll']}"
+							rendered="#{campaignBacking.selectedDetailMediaction ne null}" />
+						<p:selectOneMenu value="#{campaignBacking.selected.poll}"
+							style="width:400px"
+							rendered="#{campaignBacking.selectedDetailMediaction ne null}">
+							<f:selectItem itemValue="0" itemLabel="No" />
+							<f:selectItem itemValue="1" itemLabel="Si" />
+						</p:selectOneMenu>
 					</h:panelGrid>
 
 				</h:panelGrid>

@@ -37,9 +37,6 @@ public class CallOutcomingBacking extends ContactBacking {
 	private static final long serialVersionUID = 1L;
 
 	@Inject
-	private CapaignBo capaignService;
-
-	@Inject
 	private ParameterBo parameterService;
 
 	private String names;
