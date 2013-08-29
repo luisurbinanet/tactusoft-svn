@@ -73,7 +73,7 @@ public class ProcessBo implements Serializable {
 				+ "' and o.endAppointmentDate <= '" + endDateString
 				+ "') and closeAppointment = 0 or (o.startAppointmentDate < '"
 				+ startDateString
-				+ "' and closeAppointment = 0)) and o.state in (3,4) "
+				+ "' and closeAppointment = 0)) and o.state in (3,4) and o.prcAvailability = 1"
 				+ "order by o.startAppointmentDate");
 	}
 
