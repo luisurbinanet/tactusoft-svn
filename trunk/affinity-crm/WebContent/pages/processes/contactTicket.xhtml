@@ -123,14 +123,14 @@
 					<p:inputText value="#{contactBacking.selectedPatient.firstnames}"
 						maxlength="35" style="width:240px" label="#{msg['pat_names']}"
 						required="true">
-						<pe:keyFilter regEx="/[a-zA-Z\s]/i" />
+						<pe:keyFilter regEx="/[a-zA-ZñÑ\s]/i" />
 					</p:inputText>
 
 					<h:outputLabel value="#{msg['pat_surnames']}" />
 					<p:inputText value="#{contactBacking.selectedPatient.surnames}"
 						maxlength="35" style="width:240px" label="#{msg['pat_surnames']}"
 						required="true">
-						<pe:keyFilter regEx="/[a-zA-Z\s]/i" />
+						<pe:keyFilter regEx="/[a-zA-ZñÑ\s]/i" />
 					</p:inputText>
 
 					<h:outputText value="#{msg['glb_gender']}" />

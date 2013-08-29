@@ -844,7 +844,7 @@ public class AppointmentBacking extends BaseBacking {
 
 				if (procedureDetail.isDependent()) {
 					VwTherapyMaterials vwTherapyMaterials = mapTherapyMaterials
-							.get(idTherapyMaterials);
+							.get(idTherapyMaterials.longValue());
 					selected.setSapMaterialCode(vwTherapyMaterials.getId());
 					selected.setSapMaterialDesc(vwTherapyMaterials
 							.getDescMaterial());

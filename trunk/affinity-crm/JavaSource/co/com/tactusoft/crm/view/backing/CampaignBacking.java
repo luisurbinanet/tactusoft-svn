@@ -18,22 +18,31 @@ import javax.faces.component.UISelectItems;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGroup;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.inject.Named;
 
+import org.asteriskjava.live.ManagerCommunicationException;
+import org.asteriskjava.live.NoSuchChannelException;
 import org.primefaces.component.panelgrid.PanelGrid;
 import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.primefaces.context.RequestContext;
 import org.springframework.context.annotation.Scope;
 
+import co.com.tactusoft.crm.model.entities.AstTrunkDialpatterns;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
+import co.com.tactusoft.crm.model.entities.CrmCall;
+import co.com.tactusoft.crm.model.entities.CrmCallType;
+import co.com.tactusoft.crm.model.entities.CrmCallTypeDetail;
 import co.com.tactusoft.crm.model.entities.CrmCampaign;
 import co.com.tactusoft.crm.model.entities.CrmCampaignDetail;
 import co.com.tactusoft.crm.model.entities.CrmCampaignMedication;
 import co.com.tactusoft.crm.model.entities.CrmCampaignTask;
 import co.com.tactusoft.crm.model.entities.CrmParameter;
 import co.com.tactusoft.crm.model.entities.CrmRecall;
+import co.com.tactusoft.crm.model.entities.VwCallRange;
 import co.com.tactusoft.crm.util.AjaxBehaviorCustom;
+import co.com.tactusoft.crm.util.Asterisk;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.datamodel.CampaignDataModel;
@@ -101,6 +110,32 @@ public class CampaignBacking extends BaseBacking {
 	private CrmRecall[] selectedCrmRecall = new CrmRecall[4];
 	private Date[] selectedDates = new Date[4];
 
+	private Integer phoneType;
+	private String indicative;
+
+	private List<VwCallRange> listCallRange;
+	private List<AstTrunkDialpatterns> listDialpatterns;
+	private String remoteChannel;
+	private String idCall;
+	private String agentNumber;
+
+	private String asteriskHost;
+	private int asteriskPort;
+	private String asteriskUser;
+	private String asteriskPassword;
+	private CrmCall call;
+	private boolean called;
+	private boolean saved;
+	private Date callDate;
+	private String asteriskId;
+
+	private List<SelectItem> listCallType;
+	private List<SelectItem> listCallTypeDetail;
+	private Integer idCallType;
+	private Integer idCallTypeDetail;
+	private Map<Integer, CrmCallTypeDetail> mapCallTypeDetail;
+	private String phone;
+
 	public CampaignBacking() {
 		newAction();
 	}
@@ -142,7 +177,25 @@ public class CampaignBacking extends BaseBacking {
 			mapMedication.put(row.getId(), row);
 		}
 
+		listCallRange = tablesService.getVwCallRange();
+		listDialpatterns = tablesService.getListDialpatterns();
+		List<CrmParameter> listParameterAterisk = parameterService
+				.getListParameterByGroup("ASTERISK");
+		for (CrmParameter crmParameter : listParameterAterisk) {
+			if (crmParameter.getCode().equals("ASTERISK_HOST")) {
+				asteriskHost = crmParameter.getTextValue();
+			} else if (crmParameter.getCode().equals("ASTERISK_PORT")) {
+				asteriskPort = Integer.parseInt(crmParameter.getTextValue());
+			} else if (crmParameter.getCode().equals("ASTERISK_USER")) {
+				asteriskUser = crmParameter.getTextValue();
+			} else if (crmParameter.getCode().equals("ASTERISK_PASSWORD")) {
+				asteriskPassword = crmParameter.getTextValue();
+			}
+		}
+		agentNumber = FacesUtil.getCurrentUser().getExtensionAgent();
+
 		refreshList();
+		generateCallType();
 	}
 
 	public List<CrmCampaign> getList() {
@@ -466,6 +519,79 @@ public class CampaignBacking extends BaseBacking {
 		this.selectedDates = selectedDates;
 	}
 
+	public Integer getPhoneType() {
+		return phoneType;
+	}
+
+	public void setPhoneType(Integer phoneType) {
+		this.phoneType = phoneType;
+	}
+
+	public String getIndicative() {
+		return indicative;
+	}
+
+	public void setIndicative(String indicative) {
+		this.indicative = indicative;
+	}
+
+	public boolean isCalled() {
+		return called;
+	}
+
+	public void setCalled(boolean called) {
+		this.called = called;
+	}
+
+	public boolean isSaved() {
+		return saved;
+	}
+
+	public void setSaved(boolean saved) {
+		this.saved = saved;
+	}
+
+	public List<SelectItem> getListCallType() {
+		return listCallType;
+	}
+
+	public void setListCallType(List<SelectItem> listCallType) {
+		this.listCallType = listCallType;
+	}
+
+	public List<SelectItem> getListCallTypeDetail() {
+		return listCallTypeDetail;
+	}
+
+	public void setListCallTypeDetail(List<SelectItem> listCallTypeDetail) {
+		this.listCallTypeDetail = listCallTypeDetail;
+	}
+
+	public Integer getIdCallType() {
+		return idCallType;
+	}
+
+	public void setIdCallType(Integer idCallType) {
+		this.idCallType = idCallType;
+	}
+
+	public Integer getIdCallTypeDetail() {
+		return idCallTypeDetail;
+	}
+
+	public void setIdCallTypeDetail(Integer idCallTypeDetail) {
+		this.idCallTypeDetail = idCallTypeDetail;
+	}
+
+	public Map<Integer, CrmCallTypeDetail> getMapCallTypeDetail() {
+		return mapCallTypeDetail;
+	}
+
+	public void setMapCallTypeDetail(
+			Map<Integer, CrmCallTypeDetail> mapCallTypeDetail) {
+		this.mapCallTypeDetail = mapCallTypeDetail;
+	}
+
 	protected void refreshList() {
 		List<CrmCampaign> listTemp = tablesService.getListCampaignNoAttendet();
 		if (listTemp.size() > 0) {
@@ -581,6 +707,18 @@ public class CampaignBacking extends BaseBacking {
 
 		modelDetailMedication = new CampaignMedicationlDataModel(
 				listDetailMedication);
+
+		phoneType = 1;
+		if (FacesUtil.isEmptyOrBlank(selected.getCrmPatient().getPhoneNumber())) {
+			phoneType = 2;
+		}
+
+		phone = null;
+		indicative = null;
+		called = false;
+		saved = false;
+		idCallType = null;
+		idCallTypeDetail = null;
 	}
 
 	public boolean isRenderedMedication() {
@@ -1105,4 +1243,134 @@ public class CampaignBacking extends BaseBacking {
 
 		context.addCallbackParam("validate", validate);
 	}
+
+	private void generateCallType() {
+		listCallType = new ArrayList<SelectItem>();
+		String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
+		listCallType.add(new SelectItem(null, label));
+
+		for (CrmCallType row : capaignService.getListCallTypeOutcoming()) {
+			listCallType.add(new SelectItem(row.getId(), row.getDescription()));
+		}
+
+		listCallTypeDetail = new ArrayList<SelectItem>();
+		mapCallTypeDetail = new HashMap<Integer, CrmCallTypeDetail>();
+		listCallTypeDetail.add(new SelectItem(null, label));
+	}
+
+	public void saveCallAction() {
+		if (idCallTypeDetail != -1) {
+			call.setIdCall(idCall);
+			call.setAgentNumber("Agent/" + agentNumber);
+			call.setCallType(Constant.CALLED_TYPE_OUT);
+			call.setCrmCallTypeDetail(mapCallTypeDetail.get(idCallTypeDetail));
+			call.setPhone(phone);
+			call.setRemoteChannel(remoteChannel);
+			call.setCallDate(callDate);
+			call.setAsteriskId(asteriskId);
+			call.setCrmPatient(this.selected.getCrmPatient());
+			capaignService.saveCall(call);
+			String message = FacesUtil.getMessage("cam_msg_update_ok", selected
+					.getCrmPatient().getNames());
+			FacesUtil.addInfo(message);
+			saved = true;
+		} else {
+			String paramValue = FacesUtil.getMessage("cam_call_level2");
+			String message = FacesUtil.getMessage("cam_msg_required",
+					paramValue);
+			FacesUtil.addWarn(message);
+		}
+	}
+
+	public void callAction(ActionEvent event) {
+		remoteChannel = null;
+		call = null;
+		asteriskId = null;
+		called = false;
+
+		phone = selected.getCrmPatient().getPhoneNumber();
+		if (phoneType == 2) {
+			phone = selected.getCrmPatient().getCellNumber();
+		}
+		String phoneWithIndicative = phone;
+
+		if (!FacesUtil.isEmptyOrBlank(indicative)) {
+			phoneWithIndicative = indicative + phoneWithIndicative;
+		}
+		for (VwCallRange row : listCallRange) {
+			if (FacesUtil.getRegularExpression(row.getExpressionRegular(),
+					phoneWithIndicative)) {
+				for (AstTrunkDialpatterns dial : listDialpatterns) {
+					String pattern = dial.getMatchPatternPass().replace("X",
+							"\\d");
+					if (FacesUtil.getRegularExpression(pattern, phone)) {
+						phoneWithIndicative = phone;
+						if (!FacesUtil.isEmptyOrBlank(dial.getPrependDigits())) {
+							phoneWithIndicative = dial.getPrependDigits()
+									+ phone;
+						}
+
+						if (row.getPrefix() == 0
+								&& !FacesUtil.isEmptyOrBlank(indicative)) {
+							phoneWithIndicative = phone;
+						}
+
+						remoteChannel = row.getCallNumber().replace(
+								"numero_a_marcar", phoneWithIndicative);
+						break;
+					}
+				}
+				break;
+			}
+		}
+
+		if (remoteChannel != null) {
+			String sessionId = FacesUtil.getSessionID().substring(0, 16);
+			int numCalls = FacesUtil.getCurrentUserData().getNumCalls();
+			numCalls = numCalls + 1;
+			FacesUtil.getCurrentUserData().setNumCalls(numCalls);
+			idCall = sessionId + numCalls;
+
+			Asterisk asterisk = new Asterisk(asteriskHost, asteriskPort,
+					asteriskUser, asteriskPassword);
+
+			try {
+				asteriskId = asterisk.callActionAplication(remoteChannel,
+						agentNumber, idCall);
+				called = true;
+				call = new CrmCall();
+				callDate = new Date();
+			} catch (ManagerCommunicationException e) {
+				called = false;
+			} catch (NoSuchChannelException e) {
+				called = false;
+			}
+		} else {
+			called = false;
+			String message = FacesUtil.getMessage("cam_msg_call_error");
+			FacesUtil.addError(message);
+		}
+	}
+
+	public void handleCallTypeChange() {
+		listCallTypeDetail = new ArrayList<SelectItem>();
+		mapCallTypeDetail = new HashMap<Integer, CrmCallTypeDetail>();
+		String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
+		listCallTypeDetail.add(new SelectItem(-1, label));
+		if (idCallType != null && idCallType != 0) {
+			for (CrmCallTypeDetail row : capaignService
+					.getListCallTypeDetail(idCallType)) {
+				listCallTypeDetail.add(new SelectItem(row.getId(), row
+						.getCode() + " - " + row.getDescription()));
+				mapCallTypeDetail.put(row.getId(), row);
+			}
+		}
+	}
+
+	public void handleCallTypeDetailChange() {
+		/*
+		 * if (call != null) { this.saveCallAction(); }
+		 */
+	}
+
 }
