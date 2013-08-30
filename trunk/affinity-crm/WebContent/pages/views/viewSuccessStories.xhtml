@@ -9,7 +9,7 @@
 
 	<ui:define name="body">
 
-		<p:panel style="width:1150px;height:600px;"
+		<p:panel style="width:1150px;height:100%;"
 			header="#{msg['title_case_study']}">
 
 			<p:spacer height="5" />
@@ -60,7 +60,7 @@
 					resizableColumns="true" selection="#{caseStudyBacking.selected}"
 					paginator="true" rows="10" style="width:100%"
 					emptyMessage="#{msg['glb_no_records_found']}">
-					
+
 					<p:column>
 						<f:facet name="header">
 							<h:outputText value="#{msg['app_branch']}" />
@@ -73,6 +73,13 @@
 							<h:outputText value="#{msg['app_doctor']}" />
 						</f:facet>
 						<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['pat_code']}" />
+						</f:facet>
+						<h:outputLabel value="#{rec.crmAppointment.crmPatient.doc}" />
 					</p:column>
 
 					<p:column>

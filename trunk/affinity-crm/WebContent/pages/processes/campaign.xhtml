@@ -137,12 +137,7 @@
 							update="growl :form:pnlCampaign" />
 						<p:commandButton value="#{msg['btn_call']}" icon="ui-icon-comment"
 							actionListener="#{campaignBacking.callAction}"
-							update="growl toolBar pnlCall pnlCallType"
-							process="@this,pnlCall" />
-						<p:commandButton value="#{msg['btn_save']}  #{msg['cam_call']}"
-							icon="ui-icon-disk" action="#{campaignBacking.saveCallAction}"
-							update="growl toolBar pnlCallType"
-							disabled="#{not campaignBacking.called or campaignBacking.saved}" />
+							update="growl toolBar pnlCall" process="@this,pnlCall" />
 						<p:commandButton value="#{msg['btn_close']}"
 							icon="ui-icon-closethick" update="growl :form:pnlCampaign"
 							process="@none" oncomplete="dlg.hide()" />
@@ -201,27 +196,6 @@
 								value="#{campaignBacking.indicative}" />
 							<p:watermark for="txtInd" value="#{msg['cam_ind']}" />
 						</h:panelGrid>
-
-						<h:panelGrid id="pnlCallType" columns="2" style="width:100%">
-							<h:outputText value="#{msg['cam_call_level1']}"
-								style="width:100%" />
-							<p:selectOneMenu id="selCallType"
-								value="#{campaignBacking.idCallType}" style="width:500px"
-								required="true" label="#{msg['cam_call_level1']}"
-								disabled="#{not campaignBacking.called or campaignBacking.saved}">
-								<f:selectItems value="#{campaignBacking.listCallType}" />
-								<p:ajax listener="#{campaignBacking.handleCallTypeChange}"
-									update="selCallTypeDetail" />
-							</p:selectOneMenu>
-							<h:outputText value="#{msg['cam_call_level2']}"
-								style="width:100%" />
-							<p:selectOneMenu id="selCallTypeDetail"
-								value="#{campaignBacking.idCallTypeDetail}" style="width:500px"
-								required="true" label="#{msg['cam_call_level2']}"
-								disabled="#{not campaignBacking.called or campaignBacking.saved}">
-								<f:selectItems value="#{campaignBacking.listCallTypeDetail}" />
-							</p:selectOneMenu>
-						</h:panelGrid>
 					</p:fieldset>
 
 					<p:spacer height="5" />
@@ -236,7 +210,7 @@
 								<p:tooltip for="colMaterial" value="#{item.posology}" />
 							</p:column>
 
-							<p:column headerText="Vendido">
+							<p:column headerText="#{msg['cam_sold']}">
 								<h:outputLabel value="#{item.sold eq 1?'SI':'NO'}" />
 							</p:column>
 
@@ -244,7 +218,7 @@
 								<h:outputLabel value="#{item.unit}" />
 							</p:column>
 
-							<p:column headerText="Cantidad Vendida">
+							<p:column headerText="#{msg['cam_sold_vendida']}">
 								<h:outputLabel value="#{item.unitSale}" />
 							</p:column>
 

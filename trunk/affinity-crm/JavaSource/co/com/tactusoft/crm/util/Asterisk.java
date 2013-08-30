@@ -1,9 +1,12 @@
 package co.com.tactusoft.crm.util;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.asteriskjava.live.AsteriskChannel;
 import org.asteriskjava.live.AsteriskServer;
+import org.asteriskjava.live.CallerId;
 import org.asteriskjava.live.DefaultAsteriskServer;
 import org.asteriskjava.live.ManagerCommunicationException;
 import org.asteriskjava.live.NoSuchChannelException;
@@ -84,7 +87,7 @@ public class Asterisk {
 		try {
 			for (AsteriskChannel asteriskChannel : asteriskServer.getChannels()) {
 				System.out.println(asteriskChannel);
-				
+
 			}
 
 			try {
@@ -121,13 +124,15 @@ public class Asterisk {
 	}
 
 	public String callActionAplication(String channel, String agent,
-			String account) throws ManagerCommunicationException,
-			NoSuchChannelException {
+			String account, CallerId callerId)
+			throws ManagerCommunicationException, NoSuchChannelException {
 		String result = null;
 		asteriskServer.executeCliCommand("queue unpause member Agent/" + agent
 				+ " queue 8" + agent);
+		Map<String, String> mapVariables = new HashMap<String, String>();
 		AsteriskChannel request = asteriskServer.originateToApplication(
-				channel, "queue", "8" + agent, new Long(60000));
+				channel, "queue", "8" + agent, new Long(60000), callerId,
+				mapVariables);
 		if (request != null) {
 			result = request.getId();
 		}
@@ -141,10 +146,12 @@ public class Asterisk {
 		Asterisk asterisk = new Asterisk("192.168.1.251", 5038, "crmaffinity",
 				"4dm1n.aff");
 
-		/* asterisk.callAction("SIP/N2P6737/011573112510963", "7005", "123");
-		asterisk.callActionAplication("SIP/Lyric-MovTigo/3003044115", "7005",
-				"cSIkGm0dy1cr9atH7");*/
-		
+		/*
+		 * asterisk.callAction("SIP/N2P6737/011573112510963", "7005", "123");
+		 * asterisk.callActionAplication("SIP/Lyric-MovTigo/3003044115", "7005",
+		 * "cSIkGm0dy1cr9atH7");
+		 */
+
 		asterisk.run();
 
 		System.out.println(asterisk.getNumCalls());

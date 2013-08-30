@@ -12,6 +12,7 @@ import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.asteriskjava.live.CallerId;
 import org.asteriskjava.live.ManagerCommunicationException;
 import org.asteriskjava.live.NoSuchChannelException;
 import org.springframework.context.annotation.Scope;
@@ -385,8 +386,10 @@ public class CallOutcomingBacking extends ContactBacking {
 					asteriskUser, asteriskPassword);
 
 			try {
+				CallerId callerId = new CallerId(Constant.CALLED_TYPE_OUT + ":"
+						+ phone, Constant.CALLED_TYPE_OUT + ":" + phone);
 				asteriskId = asterisk.callActionAplication(remoteChannel,
-						agentNumber, idCall);
+						agentNumber, idCall, callerId);
 				called = true;
 				call = new CrmCall();
 				idCallType = null;
