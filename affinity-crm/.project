@@ -4,7 +4,6 @@
 	<comment></comment>
 	<projects>
 		<project>affinity-model</project>
-		<project>fastagi</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
