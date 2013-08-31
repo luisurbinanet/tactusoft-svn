@@ -33,6 +33,7 @@ public class CrmSapMedication implements java.io.Serializable {
 	private String idInterlocutor;
 	private String userSap;
 	private BigDecimal idAppointment;
+	private Integer idLog;
 	private String status;
 
 	public CrmSapMedication() {
@@ -191,6 +192,15 @@ public class CrmSapMedication implements java.io.Serializable {
 
 	public void setIdAppointment(BigDecimal idAppointment) {
 		this.idAppointment = idAppointment;
+	}
+
+	@Column(name = "id_log", scale = 0)
+	public Integer getIdLog() {
+		return idLog;
+	}
+
+	public void setIdLog(Integer idLog) {
+		this.idLog = idLog;
 	}
 
 	@Column(name = "status", length = 30)
