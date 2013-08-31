@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -207,7 +208,7 @@ public class CallBacking extends ContactBacking {
 			call.setPhone(phone);
 			call.setCompanyPhone(companyPhone);
 			call.setRemoteChannel(remoteChannel);
-
+			call.setCallDate(new Date());
 			try {
 				int result = capaignService.saveCall(call);
 				if (result == -1) {
@@ -218,7 +219,7 @@ public class CallBacking extends ContactBacking {
 					call.setPhone(phone);
 					call.setCompanyPhone(companyPhone);
 					call.setRemoteChannel(remoteChannel);
-					call.setCallType(Constant.CALLED_TYPE_IN);
+					call.setCallType(callType);
 					capaignService.saveCall(call);
 				}
 			} catch (Exception ex) {
@@ -408,7 +409,7 @@ public class CallBacking extends ContactBacking {
 	public void handleCallTypeDetailChange() {
 		if (idCallTypeDetail != null && idCallTypeDetail != 0) {
 			call.setCrmCallTypeDetail(mapCallTypeDetail.get(idCallTypeDetail));
-			call.setCallType(Constant.CALLED_TYPE_IN);
+			call.setCallType(callType);
 			capaignService.saveCall(call);
 		}
 	}
