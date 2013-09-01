@@ -51,7 +51,7 @@ public class Principal {
 			CrmUser crmUser = processBO.getUser(crmBranch, callDateString);
 			if (crmUser == null) {
 				crmUser = new CrmUser();
-				crmUser.setId(new BigDecimal(2));
+				crmUser.setId(new BigDecimal(50));
 			}
 
 			crmCampaign.setCrmLog(crmLog);
@@ -249,7 +249,7 @@ public class Principal {
 				if (listSapAppointment.size() > 0) {
 					processBO.updateSapMedicationByLoadState(
 							row.getCrmPatient(), rowInitDateString,
-							currentDateString, row.getId());
+							currentDateString, row.getId(), crmLog.getId());
 				}
 			}
 
