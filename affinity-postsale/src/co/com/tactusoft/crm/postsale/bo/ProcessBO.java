@@ -149,13 +149,15 @@ public class ProcessBO implements Serializable {
 	}
 
 	public int updateSapMedicationByLoadState(CrmPatient patient,
-			String initDate, String endDate, BigDecimal idAppointment) {
+			String initDate, String endDate, BigDecimal idAppointment,
+			Integer idLog) {
 		return dao
 				.executeHQL("UPDATE CrmSapMedication o SET o.idAppointment = "
-						+ idAppointment + " WHERE (o.idPatient = '"
-						+ patient.getCodeSap() + "' OR docPatient = '"
-						+ patient.getDoc() + "') AND o.dateBill >= '"
-						+ initDate + "' AND o.dateBill <= '" + endDate
+						+ idAppointment + ",idLog = " + idLog
+						+ " WHERE (o.idPatient = '" + patient.getCodeSap()
+						+ "' OR docPatient = '" + patient.getDoc()
+						+ "') AND o.dateBill >= '" + initDate
+						+ "' AND o.dateBill <= '" + endDate
 						+ "' AND o.status IS NULL ORDER BY o.id");
 	}
 
