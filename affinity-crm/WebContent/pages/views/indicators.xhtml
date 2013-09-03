@@ -249,6 +249,8 @@
 						</f:facet>
 					</p:dataTable>
 
+					<p:spacer />
+
 					<p:dataTable id="selectedTableSale3" var="rec"
 						value="#{indicatorsBacking.listAppointment50}"
 						rowKey="#{rec.code}" style="width:100%" paginator="true" rows="10"
@@ -300,6 +302,8 @@
 						</f:facet>
 					</p:dataTable>
 
+					<p:spacer />
+
 					<p:dataTable id="selectedTableSale4" var="rec"
 						value="#{indicatorsBacking.listAppointment0}" rowKey="#{rec.code}"
 						style="width:100%" paginator="true" rows="10"
@@ -349,6 +353,57 @@
 									target="#{indicatorsBacking.target}" value="selectedTableSale4" />
 							</p:commandButton>
 						</f:facet>
+					</p:dataTable>
+
+					<p:spacer />
+
+					<p:dataTable id="selectedTableSale5" var="rec"
+						value="#{indicatorsBacking.listAppointmentTotal}"
+						style="width:100%" emptyMessage="#{msg['glb_no_records_found']}"
+						rendered="#{indicatorsBacking.type eq 2}">
+
+						<f:facet name="header">
+							<h:outputLabel value="#{msg['ind_consolidate']}" />
+						</f:facet>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputLabel value="#{msg['ind_3']}" />
+							</f:facet>
+							<h:outputLabel value="#{rec.type}" />
+						</p:column>
+
+						<p:column style="text-align:right">
+							<f:facet name="header">
+								<h:outputLabel value="#{msg['ind_total']}" />
+							</f:facet>
+							<h:outputLabel value="#{rec.value}" />
+						</p:column>
+
+						<p:column style="text-align:right">
+							<f:facet name="header">
+								<h:outputLabel value="#{msg['ind_percent']}" />
+							</f:facet>
+							<h:outputLabel value="#{rec.percent}">
+								<f:convertNumber maxFractionDigits="2" />
+							</h:outputLabel>
+						</p:column>
+
+						<f:facet name="footer">
+							<p:row>
+								<p:column footerText="Totales:" style="text-align:right" />
+								<p:column footerText="#{indicatorsBacking.totals}" />
+								<p:column footerText="#{indicatorsBacking.totalPercetn}" />
+							</p:row>
+							<p:commandButton
+								disabled="#{empty indicatorsBacking.listAppointmentTotal}"
+								oncomplete="exportDlg.show();" value="#{msg['btn_export']}"
+								icon="ui-icon-disk">
+								<f:setPropertyActionListener
+									target="#{indicatorsBacking.target}" value="selectedTableSale5" />
+							</p:commandButton>
+						</f:facet>
+
 					</p:dataTable>
 
 				</h:panelGrid>
