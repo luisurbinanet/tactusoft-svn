@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Scope;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.IndPatientAppointment;
 import co.com.tactusoft.crm.util.FacesUtil;
+import co.com.tactusoft.crm.view.beans.IndicatorBean;
 import co.com.tactusoft.crm.view.beans.OpportunityAgenda;
 
 @Named
@@ -32,6 +33,10 @@ public class IndicatorsBacking extends BaseBacking {
 	private List<CrmAppointment> listAppointment50;
 	private List<CrmAppointment> listAppointment0;
 	private List<CrmAppointment> listAppointmentFree;
+	private List<IndicatorBean> listAppointmentTotal;
+	
+	private double totals;
+	private double totalPercent;
 
 	private String target;
 
@@ -125,6 +130,14 @@ public class IndicatorsBacking extends BaseBacking {
 		this.listAppointmentFree = listAppointmentFree;
 	}
 
+	public List<IndicatorBean> getListAppointmentTotal() {
+		return listAppointmentTotal;
+	}
+
+	public void setListAppointmentTotal(List<IndicatorBean> listAppointmentTotal) {
+		this.listAppointmentTotal = listAppointmentTotal;
+	}
+
 	public String getTarget() {
 		return target;
 	}
@@ -149,6 +162,22 @@ public class IndicatorsBacking extends BaseBacking {
 		return result;
 	}
 
+	public double getTotals() {
+		return totals;
+	}
+
+	public void setTotals(double totals) {
+		this.totals = totals;
+	}
+
+	public double getTotalPercent() {
+		return totalPercent;
+	}
+
+	public void setTotalPercent(double totalPercent) {
+		this.totalPercent = totalPercent;
+	}
+
 	public void newAction(ActionEvent event) {
 		type = IndicatorType.OPPORTUNITY_AGENDA.ordinal();
 
@@ -157,7 +186,7 @@ public class IndicatorsBacking extends BaseBacking {
 
 		startDate = new Date();
 		endDate = FacesUtil.addDaysToDate(startDate, 30);
-		
+
 		target = "selectedTable";
 	}
 
@@ -180,6 +209,41 @@ public class IndicatorsBacking extends BaseBacking {
 						selectedsBranchObject, startDate, endDate);
 				listAppointment0 = processService.getListAppointment0(
 						selectedsBranchObject, startDate, endDate);
+
+				int valueAppointment100 = listAppointment100 != null ? listAppointment100
+						.size() : 0;
+				int valueAppointment5099 = listAppointment5099 != null ? listAppointment5099
+						.size() : 0;
+				int valueAppointment50 = listAppointment50 != null ? listAppointment50
+						.size() : 0;
+				int valueAppointment0 = listAppointment0 != null ? listAppointment0
+						.size() : 0;
+
+				 totals = valueAppointment100 + valueAppointment5099
+						+ valueAppointment50 + valueAppointment0;
+
+				listAppointmentTotal = new ArrayList<IndicatorBean>();
+
+				String label = FacesUtil.getMessage("ind_3_1");
+				double percent = (valueAppointment100 / totals) * 100;
+				totalPercent = percent;
+				listAppointmentTotal.add(new IndicatorBean(label,
+						valueAppointment100, percent));
+				label = FacesUtil.getMessage("ind_3_2");
+				percent = (valueAppointment5099 / totals) * 100;
+				totalPercent = totalPercent + percent;
+				listAppointmentTotal.add(new IndicatorBean(label,
+						valueAppointment5099, percent));
+				label = FacesUtil.getMessage("ind_3_3");
+				percent = (valueAppointment50 / totals) * 100;
+				totalPercent = totalPercent + percent;
+				listAppointmentTotal.add(new IndicatorBean(label,
+						valueAppointment50, percent));
+				label = FacesUtil.getMessage("ind_3_4");
+				percent = (valueAppointment0 / totals) * 100;
+				totalPercent = totalPercent + percent;
+				listAppointmentTotal.add(new IndicatorBean(label,
+						valueAppointment0, percent));
 			}
 		} else {
 			String message = FacesUtil.getMessage("app_no_branch");

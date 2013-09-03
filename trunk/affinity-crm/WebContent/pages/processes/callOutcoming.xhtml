@@ -30,12 +30,9 @@
 							disabled="#{callOutcomingBacking.searched or callOutcomingBacking.saved}" />
 						<p:commandButton value="#{msg['btn_call']}" icon="ui-icon-comment"
 							actionListener="#{callOutcomingBacking.callAction}"
-							update="growl toolBar pnlInfo pnlCallType"
+							update="growl toolBar pnlInfo"
 							process="@this, txtPhone, txtInd"
 							disabled="#{not callOutcomingBacking.searched}" />
-						<p:commandButton value="#{msg['btn_save']}" icon="ui-icon-disk"
-							action="#{callOutcomingBacking.saveAction}" update="form"
-							disabled="#{not callOutcomingBacking.called or callOutcomingBacking.saved}" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -60,32 +57,6 @@
 				<p:spacer />
 
 				<p:watermark for="txtInd" value="#{msg['cam_ind']}" />
-
-				<p:fieldset legend="#{msg['cam_final']}">
-					<h:panelGrid id="pnlCallType" columns="2" width="100%">
-						<h:outputText value="#{msg['cam_call_level1']}" style="width:100%" />
-						<p:selectOneMenu id="selCallType"
-							value="#{callOutcomingBacking.idCallType}" style="width:500px"
-							required="true" label="#{msg['cam_call_level1']}"
-							disabled="#{not callOutcomingBacking.called}">
-							<f:selectItems value="#{callOutcomingBacking.listCallType}" />
-							<p:ajax listener="#{callOutcomingBacking.handleCallTypeChange}"
-								update="selCallTypeDetail" />
-						</p:selectOneMenu>
-						<h:outputText value="#{msg['cam_call_level2']}" style="width:100%" />
-						<p:selectOneMenu id="selCallTypeDetail"
-							value="#{callOutcomingBacking.idCallTypeDetail}"
-							style="width:500px" required="true"
-							label="#{msg['cam_call_level2']}"
-							disabled="#{not callOutcomingBacking.called}">
-							<f:selectItems value="#{callOutcomingBacking.listCallTypeDetail}" />
-							<p:ajax update="growl"
-								listener="#{callOutcomingBacking.handleCallTypeDetailChange}" />
-						</p:selectOneMenu>
-					</h:panelGrid>
-				</p:fieldset>
-
-				<p:spacer />
 
 				<h:panelGrid id="pnlContactList" columns="1" width="100%">
 
