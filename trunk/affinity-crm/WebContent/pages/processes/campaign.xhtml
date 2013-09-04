@@ -21,7 +21,8 @@
 
 					<p:spacer height="10" />
 
-					<p:fieldset id="fldPostVenta" legend="Seguimiento Post-Venta SAP">
+					<p:fieldset id="fldPostVenta"
+						legend="#{msg['cam_type_medication']}">
 						<h:panelGrid columns="2" width="100%">
 							<h:outputLabel value="#{msg['cam_pat']}" />
 							<h:outputLabel
@@ -45,7 +46,7 @@
 
 					<p:spacer height="5" />
 
-					<p:fieldset id="fldControls" legend="Agendamiento Controles">
+					<p:fieldset id="fldControls" legend="#{msg['cam_type_control']}">
 						<h:panelGrid columns="2" width="100%">
 							<h:outputLabel value="#{msg['cam_pat']}" />
 							<h:outputLabel
@@ -69,7 +70,8 @@
 
 					<p:spacer height="5" />
 
-					<p:fieldset id="fldAppointment" legend="Confirmación Citas">
+					<p:fieldset id="fldAppointment"
+						legend="#{msg['cam_type_confirmed']}">
 						<h:panelGrid columns="2" width="100%">
 							<h:outputLabel value="#{msg['cam_pat']}" />
 							<h:outputLabel
@@ -93,7 +95,8 @@
 
 					<p:spacer height="5" />
 
-					<p:fieldset id="fldNoAppointment" legend="No Asistencia">
+					<p:fieldset id="fldNoAppointment"
+						legend="#{msg['cam_type_no_attendet']}">
 						<h:panelGrid columns="2" width="100%">
 							<h:outputLabel value="#{msg['cam_pat']}" />
 							<h:outputLabel
@@ -176,6 +179,10 @@
 							<h:outputLabel value="#{msg['pat_cell_number']}" />
 							<p:inputText
 								value="#{campaignBacking.selected.crmPatient.cellNumber}"
+								style="width:190px;background-color:#FFFF80;font-weight:bold;"
+								readonly="true" />
+							<h:outputLabel value="#{msg['cam_branch']}" />
+							<p:inputText value="#{campaignBacking.selected.crmBranch.name}"
 								style="width:190px;background-color:#FFFF80;font-weight:bold;"
 								readonly="true" />
 						</h:panelGrid>

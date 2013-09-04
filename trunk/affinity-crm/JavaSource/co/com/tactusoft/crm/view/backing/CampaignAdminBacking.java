@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.model.SelectItem;
@@ -12,6 +13,7 @@ import javax.inject.Named;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.model.entities.CrmCampaignDetail;
+import co.com.tactusoft.crm.model.entities.CrmCampaignType;
 import co.com.tactusoft.crm.model.entities.CrmParameter;
 import co.com.tactusoft.crm.model.entities.CrmUser;
 import co.com.tactusoft.crm.util.FacesUtil;
@@ -34,6 +36,9 @@ public class CampaignAdminBacking extends CampaignBacking {
 	private List<CrmCampaignDetail> listDetail;
 	private CampaignDetailDataModel modelDetail;
 	private CrmCampaignDetail selectedDetail;
+	private List<SelectItem> listCampaignType;
+	private List<String> listCampaignTypeSelected;
+	private Map<Integer, CrmCampaignType> mapCampaingType;
 
 	public CampaignAdminBacking() {
 		startDate = new Date();
@@ -45,6 +50,28 @@ public class CampaignAdminBacking extends CampaignBacking {
 		listStatus.add("3");
 
 		statusString = getStringSelecteds(listStatus);
+	}
+
+	@PostConstruct
+	public void init() {
+		List<CrmParameter> listParameter = parameterService
+				.getListParameterByGroup("CAMPAIGN");
+		mapText = new HashMap<String, String>();
+		for (CrmParameter row : listParameter) {
+			mapText.put(row.getCode(), row.getTextValue());
+		}
+
+		List<CrmCampaignType> listCampaignTypeTemp = parameterService
+				.getListCampaignType();
+		listCampaignType = FacesUtil.entityToSelectItem(listCampaignTypeTemp,
+				"getId", "getDescription");
+		try {
+			mapCampaingType = FacesUtil.entityToMapInteger(
+					listCampaignTypeTemp, "getId");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public List<SelectItem> getListUserItem() {
@@ -119,16 +146,6 @@ public class CampaignAdminBacking extends CampaignBacking {
 		this.selectedDetail = selectedDetail;
 	}
 
-	@PostConstruct
-	public void init() {
-		List<CrmParameter> listParameter = parameterService
-				.getListParameterByGroup("CAMPAIGN");
-		mapText = new HashMap<String, String>();
-		for (CrmParameter row : listParameter) {
-			mapText.put(row.getCode(), row.getTextValue());
-		}
-	}
-
 	public boolean isDisabled() {
 		return listDetail != null && listDetail.size() > 0 ? false : true;
 	}
@@ -139,6 +156,23 @@ public class CampaignAdminBacking extends CampaignBacking {
 
 	public void setListCrmBranchSelected(List<String> listCrmBranchSelected) {
 		this.listCrmBranchSelected = listCrmBranchSelected;
+	}
+
+	public List<SelectItem> getListCampaignType() {
+		return listCampaignType;
+	}
+
+	public void setListCampaignType(List<SelectItem> listCampaignType) {
+		this.listCampaignType = listCampaignType;
+	}
+
+	public List<String> getListCampaignTypeSelected() {
+		return listCampaignTypeSelected;
+	}
+
+	public void setListCampaignTypeSelected(
+			List<String> listCampaignTypeSelected) {
+		this.listCampaignTypeSelected = listCampaignTypeSelected;
 	}
 
 	@Override
@@ -158,6 +192,7 @@ public class CampaignAdminBacking extends CampaignBacking {
 					"yyyy-MM-dd");
 			String endDateString = FacesUtil.formatDate(endDate, "yyyy-MM-dd");
 			String branchs = getStringSelecteds(this.listCrmBranchSelected);
+			String campaignTypes = getStringSelecteds(this.listCampaignTypeSelected);
 
 			statusString = status.toString();
 			if (status == 0) {
@@ -165,7 +200,8 @@ public class CampaignAdminBacking extends CampaignBacking {
 			}
 
 			listDetail = tablesService.getListCampaignByStatus(branchs,
-					startDateString, endDateString, statusString, maxResults);
+					startDateString, endDateString, statusString,
+					campaignTypes, maxResults);
 			modelDetail = new CampaignDetailDataModel(listDetail);
 			if (listDetail.size() > 0) {
 				selectedDetail = listDetail.get(0);
@@ -213,6 +249,10 @@ public class CampaignAdminBacking extends CampaignBacking {
 		if (startDate.compareTo(endDate) > 0) {
 			endDate = startDate;
 		}
+	}
+
+	public String getDescCampaignType(int typeCampaign) {
+		return mapCampaingType.get(typeCampaign).getDescription();
 	}
 
 }

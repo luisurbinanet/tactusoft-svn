@@ -237,6 +237,10 @@
 								value="#{campaignAdminBacking.getDescCampaignType(rec.idCampaignType)}" />
 						</p:column>
 
+						<p:column headerText="#{msg['pat_type_obs']}" width="50px">
+							<h:outputLabel value="#{rec.crmCampaign.observation}" />
+						</p:column>
+
 					</p:dataTable>
 
 				</h:panelGrid>

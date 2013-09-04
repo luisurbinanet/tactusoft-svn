@@ -371,6 +371,9 @@
 								<h:outputLabel value="#{msg['ind_3']}" />
 							</f:facet>
 							<h:outputLabel value="#{rec.type}" />
+							<f:facet name="footer">
+								<h:outputLabel value="#{msg['ind_total']}" />
+							</f:facet>
 						</p:column>
 
 						<p:column style="text-align:right">
@@ -378,6 +381,9 @@
 								<h:outputLabel value="#{msg['ind_total']}" />
 							</f:facet>
 							<h:outputLabel value="#{rec.value}" />
+							<f:facet name="footer">
+								<h:outputLabel value="#{indicatorsBacking.totals}" />
+							</f:facet>
 						</p:column>
 
 						<p:column style="text-align:right">
@@ -387,14 +393,12 @@
 							<h:outputLabel value="#{rec.percent}">
 								<f:convertNumber maxFractionDigits="2" />
 							</h:outputLabel>
+							<f:facet name="footer">
+								<h:outputLabel value="#{indicatorsBacking.totalPercent}" />
+							</f:facet>
 						</p:column>
 
 						<f:facet name="footer">
-							<p:row>
-								<p:column footerText="Totales:" style="text-align:right" />
-								<p:column footerText="#{indicatorsBacking.totals}" />
-								<p:column footerText="#{indicatorsBacking.totalPercetn}" />
-							</p:row>
 							<p:commandButton
 								disabled="#{empty indicatorsBacking.listAppointmentTotal}"
 								oncomplete="exportDlg.show();" value="#{msg['btn_export']}"

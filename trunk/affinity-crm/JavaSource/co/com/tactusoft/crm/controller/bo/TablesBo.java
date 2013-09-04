@@ -161,12 +161,14 @@ public class TablesBo implements Serializable {
 	}
 
 	public List<CrmCampaignDetail> getListCampaignByStatus(String branchs,
-			String startDate, String endDate, String status, int maxResults) {
+			String startDate, String endDate, String status,
+			String campaingType, int maxResults) {
 		return dao.find(
 				"FROM CrmCampaignDetail o WHERE o.crmCampaign.crmBranch.id IN ("
 						+ branchs + ") AND Date(o.callDate) BETWEEN '"
 						+ startDate + "' AND '" + endDate
 						+ "' AND o.crmCampaign.state IN (" + status
+						+ ") AND o.idCampaignType IN (" + campaingType
 						+ ") ORDER BY o.status, o.callDate", maxResults);
 	}
 
@@ -185,7 +187,7 @@ public class TablesBo implements Serializable {
 		return dao.find("from CrmRecall o where o.idTaskType = " + idTaskType
 				+ " order by o.crmRecall.id,o.id");
 	}
-	
+
 	public List<CrmRecall> getAllListRecall() {
 		return dao.find("FROM CrmRecall o");
 	}
