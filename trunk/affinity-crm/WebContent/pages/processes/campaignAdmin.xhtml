@@ -45,11 +45,11 @@
 					<h:outputLabel value="#{msg['app_state']}" />
 					<p:selectOneMenu value="#{campaignAdminBacking.status}"
 						style="width:400px">
-						<f:selectItem itemValue="" itemLabel="#{msg['glb_all_value']}" />
+						<f:selectItem itemValue="-1" itemLabel="#{msg['glb_all_value']}" />
 						<f:selectItem itemValue="1" itemLabel="#{msg['crm_state_open']}" />
-						<f:selectItem itemValue="2" itemLabel="#{msg['glb_state_close']}" />
+						<f:selectItem itemValue="2" itemLabel="#{msg['crm_state_close']}" />
 						<f:selectItem itemValue="3"
-							itemLabel="#{msg['cam_state_new_call']}" />
+							itemLabel="#{msg['cam_state_no_attendet']}" />
 					</p:selectOneMenu>
 
 					<h:outputLabel value="#{msg['cam_type']}" />
@@ -123,7 +123,7 @@
 					<p:column headerText="#{msg['glb_state']}"
 						filterMatchMode="contains">
 						<h:outputLabel
-							value="#{campaignAdminBacking.getStatus(rec.crmCampaign.state)}" />
+							value="#{campaignAdminBacking.getDescRecall(rec.status)}" />
 					</p:column>
 
 					<p:column headerText="#{msg['cam_type']}"
