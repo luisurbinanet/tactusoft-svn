@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Scope;
 import co.com.tactusoft.crm.model.entities.CrmCampaignDetail;
 import co.com.tactusoft.crm.model.entities.CrmCampaignType;
 import co.com.tactusoft.crm.model.entities.CrmParameter;
+import co.com.tactusoft.crm.model.entities.CrmRecall;
 import co.com.tactusoft.crm.model.entities.CrmUser;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.datamodel.CampaignDetailDataModel;
@@ -39,6 +40,7 @@ public class CampaignAdminBacking extends CampaignBacking {
 	private List<SelectItem> listCampaignType;
 	private List<String> listCampaignTypeSelected;
 	private Map<Integer, CrmCampaignType> mapCampaingType;
+	private Map<Integer, CrmRecall> mapRecall;
 
 	public CampaignAdminBacking() {
 		startDate = new Date();
@@ -69,7 +71,13 @@ public class CampaignAdminBacking extends CampaignBacking {
 			mapCampaingType = FacesUtil.entityToMapInteger(
 					listCampaignTypeTemp, "getId");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		List<CrmRecall> listRecall = tablesService.getAllListRecall();
+		try {
+			mapRecall = FacesUtil.entityToMapInteger(listRecall, "getId");
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -195,8 +203,19 @@ public class CampaignAdminBacking extends CampaignBacking {
 			String campaignTypes = getStringSelecteds(this.listCampaignTypeSelected);
 
 			statusString = status.toString();
-			if (status == 0) {
-				statusString = getStringSelecteds(listStatus);
+			switch (status) {
+			case -1:
+				statusString = " = o.status ";
+				break;
+			case 1:
+				statusString = " = 0 ";
+				break;
+			case 2:
+				statusString = " != 0 and o.status != 999 ";
+				break;
+			case 3:
+				statusString = " = 999 ";
+				break;
 			}
 
 			listDetail = tablesService.getListCampaignByStatus(branchs,
@@ -237,14 +256,6 @@ public class CampaignAdminBacking extends CampaignBacking {
 		}
 	}
 
-	public String getStatus(int status) {
-		return status == 1 ? FacesUtil.getMessage("crm_state_open")
-				: status == 2 ? FacesUtil.getMessage("crm_state_close")
-						: status == 3 ? FacesUtil
-								.getMessage("cam_state_new_call") : FacesUtil
-								.getMessage("cam_state_reallocate");
-	}
-
 	public void handleDateSelect() {
 		if (startDate.compareTo(endDate) > 0) {
 			endDate = startDate;
@@ -253,6 +264,18 @@ public class CampaignAdminBacking extends CampaignBacking {
 
 	public String getDescCampaignType(int typeCampaign) {
 		return mapCampaingType.get(typeCampaign).getDescription();
+	}
+
+	public String getDescRecall(Integer idRecall) {
+		String result = null;
+		if (idRecall == 0) {
+			result = FacesUtil.getMessage("crm_state_open");
+		} else if (idRecall == 999) {
+			result = FacesUtil.getMessage("cam_state_no_attendet");
+		} else {
+			result = mapRecall.get(idRecall).getDescription();
+		}
+		return result;
 	}
 
 }

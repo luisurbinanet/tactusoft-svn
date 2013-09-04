@@ -166,9 +166,8 @@ public class TablesBo implements Serializable {
 		return dao.find(
 				"FROM CrmCampaignDetail o WHERE o.crmCampaign.crmBranch.id IN ("
 						+ branchs + ") AND Date(o.callDate) BETWEEN '"
-						+ startDate + "' AND '" + endDate
-						+ "' AND o.crmCampaign.state IN (" + status
-						+ ") AND o.idCampaignType IN (" + campaingType
+						+ startDate + "' AND '" + endDate + "' AND o.status "
+						+ status + " AND o.idCampaignType IN (" + campaingType
 						+ ") ORDER BY o.status, o.callDate", maxResults);
 	}
 
