@@ -535,9 +535,10 @@ public class FacesUtil {
 		return items;
 	}
 
-	public static Map<Integer, Object> entityToMapInteger(List<?> list,
+	@SuppressWarnings("unchecked")
+	public static <T> Map<Integer, T> entityToMapInteger(List<?> list,
 			String getIdMethod) throws Exception {
-		Map<Integer, Object> items = new HashMap<Integer, Object>();
+		Map<Integer, T> items = new HashMap<Integer, T>();
 
 		Method idMethod = null;
 
@@ -550,7 +551,7 @@ public class FacesUtil {
 			}
 			// invoke Methods
 			Integer id = (Integer) idMethod.invoke(item, new Object[] {});
-			items.put(id, item);
+			items.put(id, (T) item);
 		}
 
 		return items;

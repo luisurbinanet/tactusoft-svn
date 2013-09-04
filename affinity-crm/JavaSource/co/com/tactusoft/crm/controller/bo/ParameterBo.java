@@ -11,6 +11,7 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
+import co.com.tactusoft.crm.model.entities.CrmCampaignType;
 import co.com.tactusoft.crm.model.entities.CrmParameter;
 
 @Named
@@ -41,6 +42,10 @@ public class ParameterBo implements Serializable {
 	public List<CrmParameter> getListParameterByGroup(String byGroup) {
 		return dao
 				.find("from CrmParameter o where byGroup = '" + byGroup + "'");
+	}
+
+	public List<CrmCampaignType> getListCampaignType() {
+		return dao.find("from CrmCampaignType o where o.status = 1");
 	}
 
 	public Integer saveParameter(CrmParameter entity) {

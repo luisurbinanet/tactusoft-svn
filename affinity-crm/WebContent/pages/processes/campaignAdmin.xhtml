@@ -35,7 +35,7 @@
 				<h:panelGrid width="100%" columns="2">
 
 					<h:outputLabel value="#{msg['doc_branch']}" />
-					<p:selectCheckboxMenu
+					<p:selectCheckboxMenu required="true"
 						value="#{campaignAdminBacking.listCrmBranchSelected}"
 						label="#{msg['doc_branch']}" filter="true" style="width:400px"
 						filterMatchMode="contains" panelStyle="width:400px">
@@ -51,6 +51,13 @@
 						<f:selectItem itemValue="3"
 							itemLabel="#{msg['cam_state_new_call']}" />
 					</p:selectOneMenu>
+
+					<h:outputLabel value="#{msg['cam_type']}" />
+					<p:selectCheckboxMenu label="#{msg['cam_type']}"
+						value="#{campaignAdminBacking.listCampaignTypeSelected}"
+						style="width:400px" panelStyle="width:400px" required="true">
+						<f:selectItems value="#{campaignAdminBacking.listCampaignType}" />
+					</p:selectCheckboxMenu>
 
 					<h:outputLabel value="#{msg['app_num_records']}" />
 					<p:selectOneMenu value="#{campaignAdminBacking.maxResults}"
@@ -119,7 +126,8 @@
 							value="#{campaignAdminBacking.getStatus(rec.crmCampaign.state)}" />
 					</p:column>
 
-					<p:column headerText="Tipo" filterMatchMode="contains">
+					<p:column headerText="#{msg['cam_type']}"
+						filterMatchMode="contains">
 						<h:outputLabel
 							value="#{campaignAdminBacking.getDescCampaignType(rec.idCampaignType)}" />
 					</p:column>
