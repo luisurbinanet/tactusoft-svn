@@ -155,6 +155,11 @@
 						<pe:keyFilter regEx="/[\d]/" />
 					</p:inputText>
 
+					<h:outputText value="#{msg['pat_email']}" />
+					<p:inputText value="#{contactBacking.selectedPatient.email}"
+						style="width:240px" label="#{msg['pat_email']}"
+						validator="emailValidator" />
+
 					<h:outputLabel value="#{msg['pat_sales_off']}" style="width:40%" />
 					<p:selectOneMenu id="selsalesOff"
 						value="#{contactBacking.salesOff}" style="width:248px">

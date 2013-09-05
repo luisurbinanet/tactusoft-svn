@@ -22,22 +22,23 @@ public class EmailValidator implements Validator {
 	@Override
 	public void validate(FacesContext facesContext, UIComponent uiComponent,
 			Object object) throws ValidatorException {
-
 		String enteredEmail = (String) object;
-		// Set the email pattern string
-		Pattern p = Pattern.compile(EMAIL_PATTERN);
+		if (!FacesUtil.isEmptyOrBlank(enteredEmail)) {
+			// Set the email pattern string
+			Pattern p = Pattern.compile(EMAIL_PATTERN);
 
-		// Match the given string with the pattern
-		Matcher m = p.matcher(enteredEmail);
+			// Match the given string with the pattern
+			Matcher m = p.matcher(enteredEmail);
 
-		// Check whether match is found
-		boolean matchFound = m.matches();
+			// Check whether match is found
+			boolean matchFound = m.matches();
 
-		if (!matchFound) {
-			String title = FacesUtil.getMessage("msg_error");
-			String message = FacesUtil.getMessage("msg_validator_email");
-			throw new ValidatorException(new FacesMessage(
-					FacesMessage.SEVERITY_ERROR, title, message));
+			if (!matchFound) {
+				String title = FacesUtil.getMessage("msg_error");
+				String message = FacesUtil.getMessage("msg_validator_email");
+				throw new ValidatorException(new FacesMessage(
+						FacesMessage.SEVERITY_ERROR, title, message));
+			}
 		}
 	}
 
