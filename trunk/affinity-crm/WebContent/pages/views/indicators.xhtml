@@ -151,7 +151,15 @@
 							<h:outputLabel value="#{rec.code}" />
 						</p:column>
 
-						<p:column filterBy="#{rec.crmBranch.patientNames}"
+						<p:column filterBy="#{rec.crmPatient.doc}"
+							filterMatchMode="contains">
+							<f:facet name="header">
+								<h:outputText value="#{msg['doc_code']}" />
+							</f:facet>
+							<h:outputLabel value="#{rec.crmPatient.doc}" />
+						</p:column>
+
+						<p:column filterBy="#{rec.patientNames}"
 							filterMatchMode="contains">
 							<f:facet name="header">
 								<h:outputText value="#{msg['ind_patient']}" />
@@ -204,7 +212,15 @@
 							<h:outputLabel value="#{rec.code}" />
 						</p:column>
 
-						<p:column filterBy="#{rec.crmBranch.patientNames}"
+						<p:column filterBy="#{rec.crmPatient.doc}"
+							filterMatchMode="contains">
+							<f:facet name="header">
+								<h:outputText value="#{msg['doc_code']}" />
+							</f:facet>
+							<h:outputLabel value="#{rec.crmPatient.doc}" />
+						</p:column>
+
+						<p:column filterBy="#{rec.patientNames}"
 							filterMatchMode="contains">
 							<f:facet name="header">
 								<h:outputText value="#{msg['ind_patient']}" />
@@ -220,14 +236,6 @@
 
 						<p:column headerText="#{msg['app_branch']}">
 							<h:outputLabel value="#{rec.crmBranch.name}" />
-						</p:column>
-
-						<p:column filterBy="#{rec.crmBranch.patientNames}"
-							filterMatchMode="contains">
-							<f:facet name="header">
-								<h:outputText value="#{msg['ind_patient']}" />
-							</f:facet>
-							<h:outputLabel value="#{rec.patientNames}" />
 						</p:column>
 
 						<p:column headerText="#{msg['app_doctor']}">
@@ -265,7 +273,15 @@
 							<h:outputLabel value="#{rec.code}" />
 						</p:column>
 
-						<p:column filterBy="#{rec.crmBranch.patientNames}"
+						<p:column filterBy="#{rec.crmPatient.doc}"
+							filterMatchMode="contains">
+							<f:facet name="header">
+								<h:outputText value="#{msg['doc_code']}" />
+							</f:facet>
+							<h:outputLabel value="#{rec.crmPatient.doc}" />
+						</p:column>
+
+						<p:column filterBy="#{rec.patientNames}"
 							filterMatchMode="contains">
 							<f:facet name="header">
 								<h:outputText value="#{msg['ind_patient']}" />
@@ -318,7 +334,15 @@
 							<h:outputLabel value="#{rec.code}" />
 						</p:column>
 
-						<p:column filterBy="#{rec.crmBranch.patientNames}"
+						<p:column filterBy="#{rec.crmPatient.doc}"
+							filterMatchMode="contains">
+							<f:facet name="header">
+								<h:outputText value="#{msg['doc_code']}" />
+							</f:facet>
+							<h:outputLabel value="#{rec.crmPatient.doc}" />
+						</p:column>
+
+						<p:column filterBy="#{rec.patientNames}"
 							filterMatchMode="contains">
 							<f:facet name="header">
 								<h:outputText value="#{msg['ind_patient']}" />
