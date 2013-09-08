@@ -18,6 +18,7 @@ import co.com.tactusoft.crm.model.entities.CrmHoliday;
 import co.com.tactusoft.crm.model.entities.CrmLog;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmSapMedication;
+import co.com.tactusoft.crm.model.entities.CrmSapMedicationDistinct;
 import co.com.tactusoft.crm.model.entities.CrmUser;
 import co.com.tactusoft.crm.model.entities.VwAppointmentMedication;
 import co.com.tactusoft.crm.model.entities.VwMedication;
@@ -74,13 +75,13 @@ public class ProcessBO implements Serializable {
 	public List<CrmAppointment> getListAppointmentControl(String dateString) {
 		String sql = "select distinct b.* "
 				+ "from crm_db.crm_appointment b inner join crm_db.crm_patient a on b.id_patient=a.id  "
-				+ "where (b.id_procedure_detail in (2 , 6 , 8))  "
+				+ "where (b.id_procedure_detail in (1, 2 , 7 , 8))  "
 				+ "and (b.state in (1 , 3 , 4))  "
 				+ "and b.start_appointment_date<'"
 				+ dateString
 				+ "' and b.id  = (select max(d.id) "
 				+ "from crm_db.crm_appointment d inner join crm_db.crm_patient c on d.id_patient=c.id  "
-				+ "where (d.id_procedure_detail in (2 , 6 , 8))  "
+				+ "where (d.id_procedure_detail in (1, 2 , 7 , 8))  "
 				+ "and (d.state in (1 , 3 , 4))  "
 				+ "and d.start_appointment_date<'"
 				+ dateString
@@ -126,39 +127,53 @@ public class ProcessBO implements Serializable {
 		return result;
 	}
 
-	public void updateCrmSapMedication() {
-		dao.executeHQL("UPDATE CrmSapMedication SET status = 'PROCESADO'");
+	public void updateCrmSapMedication(String currentDate) {
+		dao.executeHQL("UPDATE CrmSapMedication SET status = 'PROCESADO' WHERE Date(dateBill) = '"
+				+ currentDate + "'");
 	}
 
-	public List<CrmSapMedication> getListSapMedicationByLoadState(
-			CrmPatient patient, String typeBill, String initDate, String endDate) {
-		return dao.find("FROM CrmSapMedication o WHERE (o.idPatient = '"
-				+ patient.getCodeSap() + "' OR docPatient = '"
-				+ patient.getDoc() + "') AND o.typeBill IN (" + typeBill
-				+ ") AND Date(o.dateBill) BETWEEN '" + initDate + "' AND '"
-				+ endDate + "' ORDER BY o.id");
+	public List<CrmSapMedicationDistinct> getListSapMedicationByLoadStateDistinct(
+			String currentDate) {
+		return dao
+				.findNative(
+						"SELECT DISTINCT id_bill,id_patient,date_bill,type_bill "
+								+ "FROM crm_sap_medication a JOIN crm_patient b ON (a.id_patient = b.code_sap) "
+								+ "WHERE id_appointment IS NULL AND Date(date_bill) = '"
+								+ currentDate
+								+ "' AND type_bill IS NOT NULL ORDER BY id_bill",
+						CrmSapMedicationDistinct.class);
 	}
 
-	public List<CrmSapMedication> getListSapAppointmentByLoadState(
-			CrmPatient patient, String initDate, String endDate) {
-		return dao.find("FROM CrmSapMedication o WHERE (o.idPatient = '"
-				+ patient.getCodeSap() + "' OR docPatient = '"
-				+ patient.getDoc() + "') AND o.dateBill >= '" + initDate
-				+ "' AND o.dateBill <= '" + endDate
-				+ "' AND o.status IS NULL ORDER BY o.id");
+	public CrmAppointment getAppointment(String codeSap, String initDate,
+			String endDate, String typeBill) {
+		List<CrmAppointment> list = dao.find(
+				"FROM CrmAppointment o WHERE o.crmPatient.codeSap = '"
+						+ codeSap
+						+ "' AND o.crmProcedureDetail.formulaDocTypePs LIKE '%"
+						+ typeBill
+						+ "%' AND Date(o.startAppointmentDate) BETWEEN '"
+						+ initDate + "' AND '" + endDate
+						+ "' ORDER BY o.startAppointmentDate DESC", 1);
+		CrmAppointment result = null;
+		if (list.size() > 0) {
+			result = list.get(0);
+		}
+		return result;
 	}
 
-	public int updateSapMedicationByLoadState(CrmPatient patient,
-			String initDate, String endDate, BigDecimal idAppointment,
-			Integer idLog) {
+	public List<CrmSapMedication> getListSapMedicationByAppointment(
+			BigDecimal idAppointment) {
+		return dao.find("FROM CrmSapMedication o WHERE o.idAppointment = "
+				+ idAppointment + " ORDER BY o.id");
+	}
+
+	public int updateSapMedicationById(String idBill, String typeBill,
+			BigDecimal idAppointment, Integer idLog) {
 		return dao
 				.executeHQL("UPDATE CrmSapMedication o SET o.idAppointment = "
 						+ idAppointment + ",idLog = " + idLog
-						+ " WHERE (o.idPatient = '" + patient.getCodeSap()
-						+ "' OR docPatient = '" + patient.getDoc()
-						+ "') AND o.dateBill >= '" + initDate
-						+ "' AND o.dateBill <= '" + endDate
-						+ "' AND o.status IS NULL ORDER BY o.id");
+						+ " WHERE o.id.idBill = '" + idBill
+						+ "' AND typeBill = '" + typeBill + "'");
 	}
 
 	public List<VwAppointmentMedication> getListAppointmentMedicationByCode(

@@ -17,6 +17,7 @@ import co.com.tactusoft.crm.model.entities.CrmCampaignMedication;
 import co.com.tactusoft.crm.model.entities.CrmLog;
 import co.com.tactusoft.crm.model.entities.CrmLogDetail;
 import co.com.tactusoft.crm.model.entities.CrmSapMedication;
+import co.com.tactusoft.crm.model.entities.CrmSapMedicationDistinct;
 import co.com.tactusoft.crm.model.entities.CrmUser;
 import co.com.tactusoft.crm.model.entities.VwAppointmentMedication;
 import co.com.tactusoft.crm.model.entities.VwMedication;
@@ -77,7 +78,8 @@ public class Principal {
 
 	public void execute() {
 		System.out.println("INCIANDO PROCESO...");
-		Date currentDate = new Date();
+		//Date currentDate = new Date();
+		Date currentDate = Utils.stringTOSDate("08/09/2013", "dd/MM/yyyy");
 		String currentDateString = Utils.formatDate(currentDate, "yyyy-MM-dd");
 
 		System.out.println("CARGANDO BASE DE DATOS...");
@@ -204,6 +206,39 @@ public class Principal {
 				insertDetail(crmCampaign, row, Principal.CONTROL);
 			}
 
+			System.out.println("ACTUALIZANDO FACTURAS CON SUS CITAS");
+			crmLogDetail = new CrmLogDetail();
+			crmLogDetail.setCrmLog(crmLog);
+			crmLogDetail.setLogDate(new Date());
+			crmLogDetail.setMessage("ACTUALIZANDO FACTURAS CON SUS CITAS");
+			processBO.save(crmLogDetail);
+
+			List<CrmSapMedicationDistinct> listDistinct = processBO
+					.getListSapMedicationByLoadStateDistinct(currentDateString);
+			int count = 0;
+			for (CrmSapMedicationDistinct row : listDistinct) {
+				String rowInitDateString = Utils.formatDate(
+						Utils.addDaysToDate(row.getDateBill(), -3),
+						"yyyy-MM-dd");
+				CrmAppointment crmAppointment = processBO.getAppointment(
+						row.getIdPatient(), rowInitDateString,
+						Utils.formatDate(row.getDateBill(), "yyyy-MM-dd"),
+						row.getTypeBill());
+				if (crmAppointment != null) {
+					processBO.updateSapMedicationById(row.getIdBill(),
+							row.getTypeBill(), crmAppointment.getId(), -1);
+					count++;
+					System.out.println("Actualizado: " + row.getIdBill());
+				}
+			}
+
+			System.out.println("FACTURAS ACTUALIZADAS: " + count);
+			crmLogDetail = new CrmLogDetail();
+			crmLogDetail.setCrmLog(crmLog);
+			crmLogDetail.setLogDate(new Date());
+			crmLogDetail.setMessage("FACTURAS ACTUALIZADAS: " + count);
+			processBO.save(crmLogDetail);
+
 			System.out
 					.println("BUSCANDO MEDICAMENTOS Y TERAPIAS NO FACTURADAS");
 			crmLogDetail = new CrmLogDetail();
@@ -213,16 +248,11 @@ public class Principal {
 					.setMessage("BUSCANDO MEDICAMENTOS Y TERAPIAS NO FACTURADAS");
 			processBO.save(crmLogDetail);
 
-			String rowInitDateString = Utils.formatDate(
-					Utils.addDaysToDate(currentDate, -3), "yyyy-MM-dd");
 			List<CrmAppointment> listClosed = processBO
-					.getListAppointmentClosed(rowInitDateString);
+					.getListAppointmentClosed(currentDateString);
 			for (CrmAppointment row : listClosed) {
 				List<CrmSapMedication> listSapMedication = processBO
-						.getListSapMedicationByLoadState(row.getCrmPatient(),
-								row.getCrmProcedureDetail()
-										.getFormulaDocTypePs(),
-								rowInitDateString, currentDateString);
+						.getListSapMedicationByAppointment(row.getId());
 
 				boolean validate = false;
 				if (listSapMedication.size() > 0) {
@@ -241,19 +271,9 @@ public class Principal {
 							.getCrmPatient().getId());
 					insertDetail(crmCampaign, row, Principal.MEDICATION);
 				}
-
-				List<CrmSapMedication> listSapAppointment = processBO
-						.getListSapAppointmentByLoadState(row.getCrmPatient(),
-								rowInitDateString, currentDateString);
-
-				if (listSapAppointment.size() > 0) {
-					processBO.updateSapMedicationByLoadState(
-							row.getCrmPatient(), rowInitDateString,
-							currentDateString, row.getId(), crmLog.getId());
-				}
 			}
 
-			processBO.updateCrmSapMedication();
+			processBO.updateCrmSapMedication(currentDateString);
 
 			for (CrmCampaignDetail row : processBO
 					.getListCampaignDetailMedication(crmLog)) {
