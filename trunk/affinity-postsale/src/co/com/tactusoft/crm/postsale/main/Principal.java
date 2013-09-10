@@ -78,8 +78,8 @@ public class Principal {
 
 	public void execute() {
 		System.out.println("INCIANDO PROCESO...");
-		//Date currentDate = new Date();
-		Date currentDate = Utils.stringTOSDate("08/09/2013", "dd/MM/yyyy");
+		Date currentDate = new Date();
+		//Date currentDate = Utils.stringTOSDate("08/09/2013", "dd/MM/yyyy");
 		String currentDateString = Utils.formatDate(currentDate, "yyyy-MM-dd");
 
 		System.out.println("CARGANDO BASE DE DATOS...");
