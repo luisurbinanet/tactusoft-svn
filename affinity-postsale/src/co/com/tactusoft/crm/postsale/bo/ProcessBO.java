@@ -146,14 +146,17 @@ public class ProcessBO implements Serializable {
 
 	public CrmAppointment getAppointment(String codeSap, String initDate,
 			String endDate, String typeBill) {
-		List<CrmAppointment> list = dao.find(
-				"FROM CrmAppointment o WHERE o.crmPatient.codeSap = '"
+		List<CrmAppointment> list = dao
+				.find("FROM CrmAppointment o WHERE o.crmPatient.codeSap = '"
 						+ codeSap
 						+ "' AND o.crmProcedureDetail.formulaDocTypePs LIKE '%"
 						+ typeBill
 						+ "%' AND Date(o.startAppointmentDate) BETWEEN '"
-						+ initDate + "' AND '" + endDate
-						+ "' ORDER BY o.startAppointmentDate DESC", 1);
+						+ initDate
+						+ "' AND '"
+						+ endDate
+						+ "' o.state = 4 AND ORDER BY o.startAppointmentDate DESC",
+						1);
 		CrmAppointment result = null;
 		if (list.size() > 0) {
 			result = list.get(0);
