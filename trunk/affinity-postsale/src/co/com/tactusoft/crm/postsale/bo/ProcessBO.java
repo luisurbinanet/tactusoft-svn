@@ -46,13 +46,13 @@ public class ProcessBO implements Serializable {
 	public void updateCampaign(String dateString) {
 		dao.executeHQL("UPDATE CrmCampaign SET state = 999 WHERE state = 1 AND Date(dateCall) <= '"
 				+ dateString
-				+ "' AND id IN (SELECT o.crmCampaign.id FROM CrmCampaignDetail o WHERE o.idCampaignType=2 "
+				+ "' AND id IN (SELECT o.crmCampaign.id FROM CrmCampaignDetail o WHERE o.idCampaignType != 4 "
 				+ " AND Date(o.callDate) <= '"
 				+ dateString
 				+ "' AND o.status = 0)");
 
 		dao.executeHQL("UPDATE CrmCampaignDetail SET status = 999 WHERE status = 0 AND Date(callDate) <= '"
-				+ dateString + "' AND idCampaignType=2");
+				+ dateString + "' AND idCampaignType != 4");
 	}
 
 	public List<CrmAppointment> getListAppointmentNoAttendet(String dateString) {
@@ -99,14 +99,18 @@ public class ProcessBO implements Serializable {
 						+ "' AND o.id IN (SELECT m.crmAppointment.id from CrmMedication m)");
 	}
 
-	public CrmUser getUser(CrmBranch crmBranch, String date) {
+	public CrmUser getUser(CrmBranch crmBranch, String date,
+			Integer idCampaignType) {
 		CrmUser result = null;
 		List<CrmUser> list = dao.findNative("SELECT b.* "
 				+ "FROM crm_db.crm_campaign a  "
-				+ "right outer JOIN crm_db.crm_user b  "
+				+ "right OUTER JOIN crm_db.crm_user b  "
 				+ "ON (a.id_user=b.id and date(a.date_call)='" + date + "') "
-				+ "left outer JOIN crm_db.crm_user_branch_postsale c  "
-				+ "ON b.id=c.id_user WHERE b.state=1 and c.id_branch="
+				+ "LEFT OUTER JOIN crm_db.crm_user_branch_postsale c  "
+				+ "ON b.id=c.id_user "
+				+ "LEFT OUTER JOIN crm_db.crm_campaign_detail d "
+				+ "ON (d.id_campaign = a.id AND d.id_campaign_type = "
+				+ idCampaignType + ") WHERE b.state=1 and c.id_branch="
 				+ crmBranch.getId() + " GROUP BY b.id ORDER BY count(a.id)",
 				CrmUser.class);
 		if (list.size() > 0) {
@@ -155,7 +159,7 @@ public class ProcessBO implements Serializable {
 						+ initDate
 						+ "' AND '"
 						+ endDate
-						+ "' o.state = 4 AND ORDER BY o.startAppointmentDate DESC",
+						+ "' AND o.state = 4 ORDER BY o.startAppointmentDate DESC",
 						1);
 		CrmAppointment result = null;
 		if (list.size() > 0) {
