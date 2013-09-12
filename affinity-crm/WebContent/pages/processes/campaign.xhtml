@@ -212,9 +212,14 @@
 						<p:dataTable value="#{campaignBacking.modelDetailMedication}"
 							rows="5" paginator="true" var="item">
 
-							<p:column headerText="#{msg['cam_medication']}">
-								<h:outputLabel id="colMaterial" value="#{item.descMaterial}" />
+							<p:column headerText="#{msg['cam_code_medication']}">
+								<h:outputLabel id="colMaterial" value="#{item.codMaterial}" />
 								<p:tooltip for="colMaterial" value="#{item.posology}" />
+							</p:column>
+
+							<p:column headerText="#{msg['cam_medication']}">
+								<h:outputLabel id="descMaterial" value="#{item.descMaterial}" />
+								<p:tooltip for="descMaterial" value="#{item.posology}" />
 							</p:column>
 
 							<p:column headerText="#{msg['cam_sold']}">
