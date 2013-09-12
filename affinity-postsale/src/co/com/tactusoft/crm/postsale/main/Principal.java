@@ -49,7 +49,7 @@ public class Principal {
 		if (crmCampaign == null) {
 			crmCampaign = new CrmCampaign();
 
-			CrmUser crmUser = processBO.getUser(crmBranch, callDateString);
+			CrmUser crmUser = processBO.getUser(crmBranch, callDateString, type);
 			if (crmUser == null) {
 				crmUser = new CrmUser();
 				crmUser.setId(new BigDecimal(50));
