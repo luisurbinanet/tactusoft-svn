@@ -281,7 +281,14 @@ public class CallBacking extends ContactBacking {
 		String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
 		listCallType.add(new SelectItem(null, label));
 
-		for (CrmCallType row : capaignService.getListCallTypeIncoming()) {
+		List<CrmCallType> listCallTypeTemp = null;
+		if (callType == Constant.CALLED_TYPE_OUT) {
+			listCallTypeTemp = capaignService.getListCallTypeOutcoming();
+		} else {
+			listCallTypeTemp = capaignService.getListCallTypeIncoming();
+		}
+
+		for (CrmCallType row : listCallTypeTemp) {
 			listCallType.add(new SelectItem(row.getId(), row.getDescription()));
 		}
 
