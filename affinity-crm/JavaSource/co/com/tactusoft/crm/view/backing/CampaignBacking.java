@@ -717,6 +717,20 @@ public class CampaignBacking extends BaseBacking {
 		return "/pages/processes/appointmentEdit.jsf?faces-redirect=true";
 	}
 
+	public String cancelAppointmentAction() {
+		SearchByPatientBacking searchByPatientBacking = FacesUtil
+				.findBean("searchByPatientBacking");
+		searchByPatientBacking.setSelectedPatient(selectedAppointment
+				.getCrmPatient());
+		Date date = FacesUtil.getDateWithoutTime(selectedAppointment
+				.getStartAppointmentDate());
+		searchByPatientBacking.setStartDate(date);
+		searchByPatientBacking.setEndDate(date);
+		searchByPatientBacking.setState(Constant.DEFAULT_VALUE.intValue());
+		searchByPatientBacking.searchAppoinmentAction();
+		return "/pages/processes/searchByPatient.jsf?faces-redirect=true";
+	}
+
 	public HtmlPanelGroup createPanelGroup(int type,
 			List<CrmRecall> listAllLevel, Integer[] levelValues) {
 		Application application = FacesUtil.getApplication();

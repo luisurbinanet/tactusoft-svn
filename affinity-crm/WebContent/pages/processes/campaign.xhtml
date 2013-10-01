@@ -139,7 +139,7 @@
 							oncomplete="handleComplete(xhr, status, args)"
 							update="growl :form:pnlCampaign" />
 						<p:commandButton value="#{msg['btn_call']}" icon="ui-icon-comment"
-							actionListener="#{campaignBacking.callAction}"
+							actionListener="#{campaignBacking.callAction}" rendered="false"
 							update="growl toolBar pnlCall" process="@this,pnlCall" />
 						<p:commandButton value="#{msg['btn_close']}"
 							icon="ui-icon-closethick" update="growl :form:pnlCampaign"
@@ -181,6 +181,11 @@
 								value="#{campaignBacking.selected.crmPatient.cellNumber}"
 								style="width:190px;background-color:#FFFF80;font-weight:bold;"
 								readonly="true" />
+							<h:outputLabel value="#{msg['pat_address']}" />
+							<p:inputText
+								value="#{campaignBacking.selected.crmPatient.address}"
+								style="width:190px;background-color:#FFFF80;font-weight:bold;"
+								readonly="true" />
 							<h:outputLabel value="#{msg['cam_branch']}" />
 							<p:inputText value="#{campaignBacking.selected.crmBranch.name}"
 								style="width:190px;background-color:#FFFF80;font-weight:bold;"
@@ -188,9 +193,9 @@
 						</h:panelGrid>
 					</p:fieldset>
 
-					<p:spacer height="5" />
+					<p:spacer height="5" rendered="false" />
 
-					<p:fieldset legend="#{msg['cam_call']}">
+					<p:fieldset legend="#{msg['cam_call']}" rendered="false">
 						<h:panelGrid id="pnlCall" columns="2" width="100%">
 							<p:selectOneRadio id="customRadio"
 								value="#{campaignBacking.phoneType}">
@@ -209,6 +214,15 @@
 
 					<p:fieldset legend="#{msg['cam_type_medication']}"
 						rendered="#{campaignBacking.selectedDetailMediaction ne null}">
+
+						<h:panelGrid columns="4" width="100%">
+							<h:outputLabel value="#{msg['cam_procedure']}" />
+							<p:inputText
+								value="#{campaignBacking.selectedDetailMediaction.crmAppointment.crmProcedureDetail.name}"
+								style="width:190px;background-color:#FFFF80;font-weight:bold;"
+								readonly="true" />
+						</h:panelGrid>
+
 						<p:dataTable value="#{campaignBacking.modelDetailMedication}"
 							rows="5" paginator="true" var="item">
 
@@ -357,14 +371,24 @@
 						<p:spacer />
 
 						<h:panelGrid id="pnlTask_2" width="100%">
-							<p:commandButton value="#{msg['btn_edit_app']}"
-								action="#{campaignBacking.editAppoinmnetAction}"
-								immediate="true"
-								rendered="#{campaignBacking.task[1] eq 'APPOINTMENT'}">
-								<f:setPropertyActionListener
-									target="#{campaignBacking.selectedAppointment}"
-									value="#{campaignBacking.selectedDetailConfirmed.crmAppointment}" />
-							</p:commandButton>
+							<h:panelGrid columns="2">
+								<p:commandButton value="#{msg['btn_edit_app']}"
+									action="#{campaignBacking.editAppoinmnetAction}"
+									immediate="true"
+									rendered="#{campaignBacking.task[1] eq 'APPOINTMENT' or campaignBacking.task[1] eq 'APPOINTMENT-CANCEL'}">
+									<f:setPropertyActionListener
+										target="#{campaignBacking.selectedAppointment}"
+										value="#{campaignBacking.selectedDetailConfirmed.crmAppointment}" />
+								</p:commandButton>
+								<p:commandButton value="#{msg['btn_cancel_app']}"
+									action="#{campaignBacking.cancelAppointmentAction}"
+									immediate="true"
+									rendered="#{campaignBacking.task[1] eq 'CANCEL' or campaignBacking.task[1] eq 'APPOINTMENT-CANCEL'}">
+									<f:setPropertyActionListener
+										target="#{campaignBacking.selectedAppointment}"
+										value="#{campaignBacking.selectedDetailConfirmed.crmAppointment}" />
+								</p:commandButton>
+							</h:panelGrid>
 							<h:panelGrid width="100%" columns="2"
 								rendered="#{campaignBacking.task[1] eq 'DATE' or campaignBacking.task[1] eq 'TASK_DATE'}">
 								<h:outputLabel value="Fecha" />
@@ -441,10 +465,10 @@
 						<p:inputTextarea value="#{campaignBacking.selected.observation}"
 							style="width:500px" rows="3" label="#{msg['pat_type_obs']}" />
 						<h:outputLabel value="#{msg['cam_call_poll']}"
-							rendered="#{campaignBacking.selectedDetailMediaction ne null}" />
+							rendered="#{campaignBacking.selectedDetailMediaction ne null and campaignBacking.selectedDetailMediaction.crmAppointment.crmProcedureDetail.noRepeat}" />
 						<p:selectOneMenu value="#{campaignBacking.selected.poll}"
 							style="width:400px"
-							rendered="#{campaignBacking.selectedDetailMediaction ne null}">
+							rendered="#{campaignBacking.selectedDetailMediaction ne null and campaignBacking.selectedDetailMediaction.crmAppointment.crmProcedureDetail.noRepeat}">
 							<f:selectItem itemValue="0" itemLabel="No" />
 							<f:selectItem itemValue="1" itemLabel="Si" />
 						</p:selectOneMenu>

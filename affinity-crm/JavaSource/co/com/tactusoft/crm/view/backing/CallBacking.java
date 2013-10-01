@@ -97,11 +97,11 @@ public class CallBacking extends ContactBacking {
 			}
 			String[] phones = parameter.split(":");
 			companyPhone = phones[0];
+			if (companyPhone.equalsIgnoreCase(Constant.CALLED_TYPE_OUT)) {
+				callType = Constant.CALLED_TYPE_OUT;
+				companyPhone = null;
+			}
 			if (phones.length > 1) {
-				if (companyPhone.equalsIgnoreCase(Constant.CALLED_TYPE_OUT)) {
-					callType = Constant.CALLED_TYPE_OUT;
-					companyPhone = null;
-				}
 				phone = phones[1];
 			} else {
 				phone = null;
