@@ -128,6 +128,14 @@
 						<p:selectBooleanCheckbox
 							value="#{procedureBacking.selected.availability}" />
 
+						<h:outputText value="#{msg['prc_min_medicamento']}" />
+						<pe:inputNumber value="#{procedureBacking.selected.minMedication}"
+							symbolPosition="s" decimalPlaces="0" style="width:70px" />
+
+						<h:outputText value="#{msg['prc_max_medicamento']}" />
+						<pe:inputNumber value="#{procedureBacking.selected.maxMedication}"
+							symbolPosition="s" decimalPlaces="0" style="width:70px" />
+
 						<h:outputText value="#{msg['prc_study_case']}" />
 						<p:selectBooleanCheckbox
 							value="#{procedureBacking.selected.caseStudy}" />

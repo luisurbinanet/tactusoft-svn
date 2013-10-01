@@ -68,13 +68,17 @@ public class ProcessBo implements Serializable {
 				+ " 00:00:00";
 		String endDateString = FacesUtil.formatDate(new Date(), "yyyy-MM-dd")
 				+ " 23:59:59";
-		return dao.find("from VwAppointment o where o.doctorId = " + idDoctor
-				+ " and ((o.startAppointmentDate >= '" + startDateString
-				+ "' and o.endAppointmentDate <= '" + endDateString
-				+ "') and closeAppointment = 0 or (o.startAppointmentDate < '"
-				+ startDateString
-				+ "' and closeAppointment = 0)) and o.state in (3,4) and o.prcAvailability = 1"
-				+ "order by o.startAppointmentDate");
+		return dao
+				.find("from VwAppointment o where o.doctorId = "
+						+ idDoctor
+						+ " and ((o.startAppointmentDate >= '"
+						+ startDateString
+						+ "' and o.endAppointmentDate <= '"
+						+ endDateString
+						+ "') and closeAppointment = 0 or (o.startAppointmentDate < '"
+						+ startDateString
+						+ "' and closeAppointment = 0)) and o.state in (3,4) and o.prcAvailability = 1"
+						+ "order by o.startAppointmentDate");
 	}
 
 	public List<VwAppointment> getListVwAppointmentByBranch(BigDecimal branchId) {
@@ -1007,11 +1011,11 @@ public class ProcessBo implements Serializable {
 		}
 
 		List<CrmAppointment> list = dao
-				.find("from CrmAppointment o where (o.startAppointmentDate between '"
+				.find("from CrmAppointment o where (Date(o.startAppointmentDate) between '"
 						+ startDateString
-						+ "T00:00:00.000+05:00' and '"
+						+ "' and '"
 						+ endDateString
-						+ "T23:59:59.999+05:00') and o.crmPatient.id = "
+						+ "') and o.crmPatient.id = "
 						+ idPatient
 						+ " and o.state = "
 						+ stateString
