@@ -1048,8 +1048,8 @@ public class BaseBacking implements Serializable {
 				.add(new SelectItem(Constant.DEFAULT_VALUE, DEFAULT_LABEL_ALL));
 
 		listProcedure = new LinkedList<SelectItem>();
-		listProcedure.add(new SelectItem(Constant.DEFAULT_VALUE,
-				DEFAULT_LABEL_ALL));
+		/*listProcedure.add(new SelectItem(Constant.DEFAULT_VALUE,
+				DEFAULT_LABEL_ALL));*/
 
 		idDoctor = Constant.DEFAULT_VALUE;
 		idProcedure = Constant.DEFAULT_VALUE;

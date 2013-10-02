@@ -46,10 +46,13 @@
 
 					<h:outputLabel value="#{msg['app_procedure_type']}"
 						style="width:40%" />
-					<p:selectOneMenu id="selProcedure" style="width:400px"
-						value="#{appointmentSearchBacking.idProcedure}">
+					<p:selectCheckboxMenu id="selProcedure"
+						value="#{appointmentSearchBacking.listProcedureSelected}"
+						label="#{msg['app_procedure_type']}" filter="true"
+						style="width:400px" filterMatchMode="contains"
+						panelStyle="width:400px" required="true">
 						<f:selectItems value="#{appointmentSearchBacking.listProcedure}" />
-					</p:selectOneMenu>
+					</p:selectCheckboxMenu>
 
 					<h:outputLabel value="#{msg['src_state']}" />
 					<p:selectOneMenu value="#{appointmentSearchBacking.state}"
@@ -193,11 +196,17 @@
 						<h:outputLabel value="#{rec.prcDetName}" />
 					</p:column>
 
-					<p:column headerText="#{msg['app_untimely_1']}">
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['app_untimely_1']}" />
+						</f:facet>
 						<h:outputLabel value="#{rec.untimely eq 1?'SI':'NO'}" />
 					</p:column>
 
-					<p:column headerText="#{msg['app_seller_group']}">
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['app_seller_group']}" />
+						</f:facet>
 						<h:outputLabel value="#{rec.publicityName}" />
 					</p:column>
 
@@ -251,6 +260,7 @@
 							<p:commandButton id="btnAdd" value="#{msg['btn_add']}"
 								icon="ui-icon-plusthick" update=":form:pnlDetail growl"
 								oncomplete="handleComplete(xhr, status, args)"
+								process="@this,branchDialog"
 								actionListener="#{appointmentSearchBacking.addBranchAction(true)}" />
 						</p:toolbarGroup>
 					</p:toolbar>
