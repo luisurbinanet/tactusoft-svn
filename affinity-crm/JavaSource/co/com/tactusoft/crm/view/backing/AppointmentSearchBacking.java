@@ -36,6 +36,7 @@ public class AppointmentSearchBacking extends BaseBacking {
 	private List<VwAppointment> listAppointment;
 	private VwAppointmentDataModel appointmentModel;
 	private CrmAppointment selectedAppointment;
+	private List<String> listProcedureSelected;
 
 	public AppointmentSearchBacking() {
 		newAction(null);
@@ -121,6 +122,14 @@ public class AppointmentSearchBacking extends BaseBacking {
 		this.selectedAppointment = selectedAppointment;
 	}
 
+	public List<String> getListProcedureSelected() {
+		return listProcedureSelected;
+	}
+
+	public void setListProcedureSelected(List<String> listProcedureSelected) {
+		this.listProcedureSelected = listProcedureSelected;
+	}
+
 	public void newAction(ActionEvent event) {
 		listAppointment = new LinkedList<VwAppointment>();
 		appointmentModel = new VwAppointmentDataModel(listAppointment);
@@ -148,8 +157,6 @@ public class AppointmentSearchBacking extends BaseBacking {
 		message = FacesUtil.getMessage(Constant.APP_STATE_NOATTENDED_LABEL);
 		listStates.add(new SelectItem(Constant.APP_STATE_NOATTENDED, message));
 	}
-
-	
 
 	public void searchAppoinmentAction(ActionEvent event) {
 		if (selectedsBranchObject != null && selectedsBranchObject.length > 0) {
@@ -199,21 +206,9 @@ public class AppointmentSearchBacking extends BaseBacking {
 					where = where + " and o.doctorId = " + idDoctor.intValue();
 				}
 
-				if (idProcedure.intValue() == -1) {
-					String procedures = " and o.prcDetId in (";
-					for (SelectItem item : listProcedure) {
-						if (((BigDecimal) item.getValue()).intValue() != -1) {
-							procedures = procedures + item.getValue() + ",";
-						}
-					}
-					procedures = procedures.substring(0,
-							procedures.length() - 1) + ")";
-					where = where + procedures;
-
-				} else {
-					where = where + " and o.prcDetId = "
-							+ idProcedure.intValue();
-				}
+				String procedures = " and o.prcDetId in ("
+						+ getStringSelecteds(listProcedureSelected) + ")";
+				where = where + procedures;
 			}
 
 			if (state != -1) {

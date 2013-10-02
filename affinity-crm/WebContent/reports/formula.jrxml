@@ -199,37 +199,37 @@ ORDER BY 1]]>
 		</groupFooter>
 	</group>
 	<title>
-		<band height="82" splitType="Stretch">
+		<band height="84" splitType="Stretch">
 			<textField>
-				<reportElement uuid="fb85831b-54e6-420d-bfcd-274dc2ff4fc3" x="235" y="0" width="133" height="15"/>
+				<reportElement uuid="fb85831b-54e6-420d-bfcd-274dc2ff4fc3" x="235" y="20" width="133" height="15"/>
 				<textElement>
 					<font fontName="Arial" size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name_doctor}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="8f0bc0ea-63f2-4dec-a63a-dccc937aaefa" x="52" y="0" width="92" height="15"/>
+				<reportElement uuid="8f0bc0ea-63f2-4dec-a63a-dccc937aaefa" x="47" y="20" width="128" height="15"/>
 				<textElement>
 					<font fontName="Arial" size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name_branch}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement uuid="61702f48-9bba-4e85-b708-edbce66e3d79" x="235" y="54" width="133" height="20"/>
+				<reportElement uuid="61702f48-9bba-4e85-b708-edbce66e3d79" x="235" y="63" width="133" height="20"/>
 				<textElement>
 					<font fontName="Arial" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{appointment_date}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="4837340c-f939-4456-a360-ac9d8c2d7b62" x="52" y="24" width="316" height="20"/>
+				<reportElement uuid="4837340c-f939-4456-a360-ac9d8c2d7b62" x="47" y="39" width="321" height="20"/>
 				<textElement>
 					<font fontName="Arial" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name_patient}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="6491ee03-fae5-4f3e-8d79-8c4529348a26" x="52" y="54" width="92" height="20"/>
+				<reportElement uuid="6491ee03-fae5-4f3e-8d79-8c4529348a26" x="47" y="63" width="128" height="20"/>
 				<textElement>
 					<font fontName="Arial" isBold="true"/>
 				</textElement>
@@ -300,33 +300,4 @@ ORDER BY 1]]>
 			</textField>
 		</band>
 	</detail>
-	<lastPageFooter>
-		<band height="80">
-			<staticText>
-				<reportElement uuid="2642f2bd-2ae6-4290-a2f1-dacdc96f65c6" x="0" y="0" width="87" height="16"/>
-				<textElement>
-					<font fontName="Arial" size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Recomendaciones:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="3f0d2517-6e43-4779-8e9a-a67c2300dcc0" x="0" y="11" width="368" height="58"/>
-				<textElement>
-					<font fontName="Arial" size="8"/>
-				</textElement>
-				<text><![CDATA[- No tomar bebidas negras, evitar el consumo de fritos.
-- No dejar los medicamentos cerca de equipos eléctricos o electrónicos (celulares, TV, computadores, etc.)
-- Antes de consumir los medicamentos agitarlos, dándole golpes secos con la palma de la mano.
-- No suspender los medicamentos alopáticos recetados por su médico de la EPS.
-- Caminar diariamente 1 hora.]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="96e9d700-5ddb-48e5-8c30-56a3c2613dca" x="0" y="67" width="368" height="13"/>
-				<textElement textAlignment="Center">
-					<font fontName="Arial" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Línea de Servicio Al Cliente 018000939393]]></text>
-			</staticText>
-		</band>
-	</lastPageFooter>
 </jasperReport>
