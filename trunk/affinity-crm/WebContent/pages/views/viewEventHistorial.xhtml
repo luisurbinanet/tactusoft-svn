@@ -200,14 +200,22 @@
 
 					<p:spacer />
 
-					<p:dataTable var="rec"
+					<p:dataTable id="selectedTable" var="rec"
+						selection="#{eventsHistorialBacking.crmCampaignDetail}"
 						value="#{eventsHistorialBacking.listCampaign}" rowKey="#{rec.id}"
 						paginator="true" rows="10" style="width:100%"
 						emptyMessage="#{msg['glb_no_records_found']}">
 
+						<p:ajax event="rowSelectRadio" update="selectedTable">
+							<f:setPropertyActionListener value="#{rec}"
+								target="#{eventsHistorialBacking.crmCampaignDetail}" />
+						</p:ajax>
+
 						<f:facet name="header">
 							<h:outputLabel value="#{msg['cam_call']}" />
 						</f:facet>
+
+						<p:column selectionMode="single" style="width:2%" />
 
 						<p:column headerText="#{msg['cam_date']}">
 							<h:outputLabel value="#{rec.callDate}">
@@ -228,7 +236,7 @@
 						<p:column headerText="#{msg['glb_state']}"
 							filterMatchMode="contains">
 							<h:outputLabel
-								value="#{eventsHistorialBacking.getDescRecall(rec.crmCampaign.state)}" />
+								value="#{eventsHistorialBacking.getDescRecall(rec.status)}" />
 						</p:column>
 
 						<p:column headerText="#{msg['cam_type']}"
@@ -240,6 +248,14 @@
 						<p:column headerText="#{msg['pat_type_obs']}" width="50px">
 							<h:outputLabel value="#{rec.crmCampaign.observation}" />
 						</p:column>
+
+						<f:facet name="footer">
+							<p:commandButton id="btnUpdateCall"
+								value="#{msg['btn_update_call']}" icon="ui-icon-clipboard"
+								action="#{eventsHistorialBacking.updateCall}"
+								update="selectedTable growl"
+								disabled="#{eventsHistorialBacking.crmCampaignDetail.status eq 0?false:true}" />
+						</f:facet>
 
 					</p:dataTable>
 
@@ -292,7 +308,6 @@
 
 						<f:facet name="footer">
 							<p:spacer height="10" />
-
 							<p:commandButton value="#{msg['btn_search']}"
 								icon="ui-icon-search"
 								update="pnlTable2 recordTable2 btnAddPatient"

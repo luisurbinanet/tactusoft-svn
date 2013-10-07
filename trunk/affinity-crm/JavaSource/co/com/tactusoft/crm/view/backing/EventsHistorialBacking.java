@@ -15,6 +15,7 @@ import co.com.tactusoft.crm.model.entities.CrmRecall;
 import co.com.tactusoft.crm.model.entities.VwAppointment;
 import co.com.tactusoft.crm.model.entities.VwMedicationSold;
 import co.com.tactusoft.crm.util.Constant;
+import co.com.tactusoft.crm.util.FacesUtil;
 
 @Named
 @Scope("view")
@@ -27,6 +28,7 @@ public class EventsHistorialBacking extends BaseBacking {
 	private List<VwMedicationSold> listTherapy;
 	private List<VwMedicationSold> listLabExam;
 	private List<CrmCampaignDetail> listCampaign;
+	private CrmCampaignDetail crmCampaignDetail;
 
 	private Map<Integer, CrmRecall> mapRecall;
 
@@ -83,6 +85,14 @@ public class EventsHistorialBacking extends BaseBacking {
 		this.listCampaign = listCampaign;
 	}
 
+	public CrmCampaignDetail getCrmCampaignDetail() {
+		return crmCampaignDetail;
+	}
+
+	public void setCrmCampaignDetail(CrmCampaignDetail crmCampaignDetail) {
+		this.crmCampaignDetail = crmCampaignDetail;
+	}
+
 	public void newAction() {
 		optionSearchPatient = 1;
 		docPatient = "";
@@ -114,8 +124,12 @@ public class EventsHistorialBacking extends BaseBacking {
 			}
 		}
 
+		crmCampaignDetail = new CrmCampaignDetail();
 		listCampaign = tablesService
 				.getListCampaignDetailByPatient(selectedPatient.getId());
+		if (listCampaign.size() > 0) {
+			crmCampaignDetail = listCampaign.get(0);
+		}
 	}
 
 	public String getDescRecall(Integer idRecall) {
@@ -128,6 +142,13 @@ public class EventsHistorialBacking extends BaseBacking {
 			result = mapRecall.get(idRecall).getDescription();
 		}
 		return result;
+	}
+
+	public void updateCall() {
+		crmCampaignDetail.setStatus(53);
+		tablesService.persist(crmCampaignDetail);
+		String message = FacesUtil.getMessage("cam_msg_update_ok");
+		FacesUtil.addInfo(message);
 	}
 
 }
