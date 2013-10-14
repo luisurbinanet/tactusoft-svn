@@ -881,4 +881,8 @@ public class AppointmentBacking extends BaseBacking {
 		return "/pages/processes/patient?faces-redirect=true";
 	}
 
+	public void closeDialog() {
+		RequestContext.getCurrentInstance().closeDialog(null);
+	}
+
 }

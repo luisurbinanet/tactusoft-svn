@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -298,7 +299,7 @@ public class SearchByPatientBacking extends BaseBacking {
 		return false;
 	}
 
-	public String editAppoinmnetAction() {
+	public void editAppoinmnetAction() {
 		AppointmentBacking appointmentEditBacking = FacesUtil
 				.findBean("appointmentBacking");
 
@@ -335,7 +336,15 @@ public class SearchByPatientBacking extends BaseBacking {
 
 		appointmentEditBacking.handleBranchChange();
 
-		return "/pages/processes/appointmentEdit.jsf?faces-redirect=true";
+		Map<String, Object> options = new HashMap<String, Object>();
+		options.put("modal", true);
+		options.put("draggable", false);
+		options.put("resizable", false);
+		options.put("contentWidth", 1200);
+		options.put("contentHeight", 800);
+
+		RequestContext.getCurrentInstance().openDialog("appointmentEditDialog",
+				options, null);
 	}
 
 	public void cancelAppointmentAction(ActionEvent actionEvent) {
