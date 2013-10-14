@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<f:view contentType="text/html">
+	<h:head>
+		<title>#{msg['title_app']}</title>
+		<link rel="stylesheet" href="../../css/style.css" type="text/css"
+			media="screen" />
+
+		<script type="text/javascript">
+			PrimeFaces.locales['es'] = {
+				closeText : 'Cerrar',
+				prevText : 'Anterior',
+				nextText : 'Próximo',
+				currentText : 'Inicio',
+				monthNames : [ 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo',
+						'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre',
+						'Noviembre', 'Diciembre' ],
+				monthNamesShort : [ 'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+						'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic' ],
+				dayNames : [ 'Domingo', 'Lunes', 'Martes', 'Miercoles',
+						'Jueves', 'Viernes', 'Sábado' ],
+				dayNamesShort : [ 'Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie',
+						'Sáb' ],
+				dayNamesMin : [ 'D', 'L', 'M', 'M', 'J', 'V', 'S' ],
+				weekHeader : 'Semana',
+				firstDay : 1,
+				isRTL : false,
+				showMonthAfterYear : false,
+				yearSuffix : '',
+				timeOnlyTitle : 'Apenas unas horas',
+				timeText : 'Tempo',
+				hourText : 'Hora',
+				minuteText : 'Minuto',
+				secondText : 'Segundo',
+				ampm : false,
+				month : 'Mes',
+				week : 'Semana',
+				day : 'Día',
+				allDayText : 'Todos Los Días'
+			};
+		</script>
+	</h:head>
+
+	<h:body>
+
+		<p:ajaxStatus onstart="statusDialog.show();"
+			onsuccess="statusDialog.hide();" />
+
+		<p:dialog modal="true" widgetVar="statusDialog"
+			header="#{msg['msg_wait']}" draggable="false" closable="false"
+			resizable="false">
+			<p:graphicImage value="../../images/ajaxloadingbar.gif" />
+		</p:dialog>
+
+		<p:idleMonitor onactive="sessionTimeOutDialog.show();"
+			timeout="#{session.maxInactiveInterval * 1000}" />
+		<p:dialog header="#{msg['error.sessionTimeOut.header']}"
+			widgetVar="sessionTimeOutDialog" modal="true" closable="false"
+			width="400" visible="false" resizable="false">
+			<h:panelGrid width="100%" style="text-align:center;">
+				<h:outputText value="#{msg['error.sessionTimeOut.text']}" />
+				<p:button value="#{msg['btn_return_app']}"
+					onclick="window.location='#{facesContext.externalContext.requestContextPath}/login.jsf';" />
+			</h:panelGrid>
+		</p:dialog>
+
+		<div id="content">
+
+			<div id="mainContent">
+				<ui:insert name="body">Page Body</ui:insert>
+			</div>
+		</div>
+	</h:body>
+
+</f:view>
+</html>

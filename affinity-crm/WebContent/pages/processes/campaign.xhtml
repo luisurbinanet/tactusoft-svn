@@ -381,8 +381,8 @@
 										value="#{campaignBacking.selectedDetailConfirmed.crmAppointment}" />
 								</p:commandButton>
 								<p:commandButton value="#{msg['btn_cancel_app']}"
-									action="#{campaignBacking.cancelAppointmentAction}"
-									immediate="true"
+									icon="ui-icon-closethick" oncomplete="cancelDlg.show()"
+									update=":editForm:pnlCancelObs"
 									rendered="#{campaignBacking.task[1] eq 'CANCEL' or campaignBacking.task[1] eq 'APPOINTMENT-CANCEL'}">
 									<f:setPropertyActionListener
 										target="#{campaignBacking.selectedAppointment}"
@@ -477,6 +477,25 @@
 				</h:panelGrid>
 
 			</p:dialog>
+
+			<p:confirmDialog id="cancelDialog" message="#{msg['glb_question']}"
+				header="#{msg['title_app']}" severity="alert" widgetVar="cancelDlg">
+
+				<h:panelGrid id="pnlCancelObs" columns="1">
+					<h:outputLabel value="#{msg['app_obs']}" />
+					<h:inputTextarea rows="3" style="width:400px"
+						value="#{campaignBacking.selectedAppointment.obs}" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<p:commandButton id="btnCancelYes" value="#{msg['glb_state_yes']}"
+						oncomplete="cancelDlg.hide()" update="growl"
+						actionListener="#{campaignBacking.cancelAppointmentAction}" />
+					<p:commandButton id="btnCancelNo" value="#{msg['glb_state_no']}"
+						onclick="cancelDlg.hide()" type="button" />
+				</h:panelGrid>
+
+			</p:confirmDialog>
 		</h:form>
 
 		<script type="text/javascript">

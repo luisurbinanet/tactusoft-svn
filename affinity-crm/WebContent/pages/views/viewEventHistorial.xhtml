@@ -253,7 +253,7 @@
 							<p:commandButton id="btnUpdateCall"
 								value="#{msg['btn_update_call']}" icon="ui-icon-clipboard"
 								action="#{eventsHistorialBacking.updateCall}"
-								update="selectedTable growl"
+								update="selectedTable :form:growl"
 								disabled="#{eventsHistorialBacking.crmCampaignDetail.status eq 0?false:true}" />
 						</f:facet>
 

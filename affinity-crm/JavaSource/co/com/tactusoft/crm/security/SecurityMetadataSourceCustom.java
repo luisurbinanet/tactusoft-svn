@@ -27,7 +27,7 @@ public class SecurityMetadataSourceCustom implements
 					|| url.contains(".css") || url.contains(".png")
 					|| url.contains(".jpg") || url.contains(".gif")
 					|| url.contains(".swf") || url.contains("script.js")
-					|| url.contains("index.jsp")) {
+					|| url.contains("index.jsp") || url.contains("Include")) {
 				return null;
 			}
 

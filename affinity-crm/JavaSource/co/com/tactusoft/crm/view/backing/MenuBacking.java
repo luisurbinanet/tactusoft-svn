@@ -2,16 +2,18 @@ package co.com.tactusoft.crm.view.backing;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 
-import org.primefaces.component.menuitem.MenuItem;
-import org.primefaces.component.submenu.Submenu;
-import org.primefaces.model.DefaultMenuModel;
-import org.primefaces.model.MenuModel;
+import org.primefaces.model.menu.DefaultMenuItem;
+import org.primefaces.model.menu.DefaultMenuModel;
+import org.primefaces.model.menu.DefaultSubMenu;
+import org.primefaces.model.menu.MenuModel;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.model.entities.CrmPage;
@@ -31,27 +33,26 @@ public class MenuBacking implements Serializable {
 
 		for (CrmPage crmPage : listPage) {
 			if (crmPage.getParent() == null) {
-				Submenu submenu = new Submenu();
+				DefaultSubMenu submenu = new DefaultSubMenu();
 				submenu.setLabel(crmPage.getName());
 				submenu.setIcon(crmPage.getIcon());
 				for (CrmPage children : listPage) {
 					if ((children.getParent() != null)
 							&& (children.getParent().intValue() == crmPage
 									.getId().intValue())) {
-						MenuItem menuItem = new MenuItem();
+						DefaultMenuItem menuItem = new DefaultMenuItem();
 						menuItem.setValue(children.getName());
 						menuItem.setIcon(children.getIcon());
-						menuItem.getAttributes()
-								.put("page", children.getPage());
+						List<String> params = new ArrayList<String>();
+						params.add(children.getPage());
+						menuItem.setParams(new HashMap<String, List<String>>());
+						menuItem.getParams().put("page", params);
 						menuItem.setAjax(true);
-						menuItem.addActionListener(FacesUtil
-								.createMethodActionListener(
-										"#{menuBacking.actionPage}", Void.TYPE,
-										new Class[] { ActionEvent.class }));
-						submenu.getChildren().add(menuItem);
+						menuItem.setCommand("#{menuBacking.actionPage}");
+						submenu.addElement(menuItem);
 					}
 				}
-				model.addSubmenu(submenu);
+				model.addElement(submenu);
 			}
 		}
 	}
@@ -81,13 +82,17 @@ public class MenuBacking implements Serializable {
 		SearchByPatientBacking searchByPatientBacking = FacesUtil
 				.findBean("searchByPatientBacking");
 		searchByPatientBacking.newAction(null);
+
+		/*CampaignBacking campaignBacking = FacesUtil.findBean("campaignBacking");
+		campaignBacking.newAction();
+		campaignBacking.init();*/
 	}
 
 	public void actionPage(ActionEvent event) {
 		refreshBackings();
 
-		MenuItem menuItem = (MenuItem) event.getSource();
-		String page = (String) menuItem.getAttributes().get("page");
+		DefaultMenuItem menuItem = (DefaultMenuItem) event.getSource();
+		String page = (String) menuItem.getParams().get("page").get(0);
 		if (page != null) {
 			try {
 				FacesContext.getCurrentInstance().getExternalContext()

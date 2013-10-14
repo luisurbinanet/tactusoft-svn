@@ -156,7 +156,9 @@
 						<p:commandButton id="btnEdit" value="#{msg['btn_edit']}"
 							icon="ui-icon-clipboard"
 							disabled="#{searchByPatientBacking.selectedAppointment.state eq 1?false:true}"
-							action="#{searchByPatientBacking.editAppoinmnetAction}" />
+							action="#{searchByPatientBacking.editAppoinmnetAction}">
+							<p:ajax event="dialogReturn" update="selectedTable" />
+						</p:commandButton>
 						<p:commandButton value="#{msg['btn_cancel_appointment']}"
 							icon="ui-icon-closethick" onclick="cancelDlg.show()"
 							disabled="#{searchByPatientBacking.selectedAppointment.state eq 1?false:true}" />

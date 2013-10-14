@@ -588,6 +588,8 @@ public class CampaignBacking extends BaseBacking {
 	}
 
 	public void generateDetail() {
+		selectedAppointment =  new CrmAppointment();
+		
 		if (levelValuesNoAttendet != null) {
 			for (int index = 0; index < levelValuesNoAttendet.length; index++) {
 				levelValuesNoAttendet[index] = Constant.DEFAULT_VALUE
@@ -681,54 +683,6 @@ public class CampaignBacking extends BaseBacking {
 			}
 		}
 		return "Tipo de Identificación Desconocida";
-	}
-
-	public String editAppoinmnetAction() {
-		AppointmentBacking appointmentEditBacking = FacesUtil
-				.findBean("appointmentBacking");
-
-		appointmentEditBacking.newAction(null);
-		appointmentEditBacking.setSelected(selectedAppointment);
-		appointmentEditBacking.setSelectedPatient(selectedAppointment
-				.getCrmPatient());
-		appointmentEditBacking.setCurrentDate(selectedAppointment
-				.getStartAppointmentDate());
-		appointmentEditBacking.setIdBranch(selectedAppointment.getCrmBranch()
-				.getId());
-		appointmentEditBacking.handleBranchChange();
-		appointmentEditBacking.setIdProcedureDetail(selectedAppointment
-				.getCrmProcedureDetail().getId());
-		appointmentEditBacking.handleProcedureDetailChange();
-		appointmentEditBacking.setSelectedWSGroupSellers(selectedAppointment
-				.getCodPublicity());
-		appointmentEditBacking.setEdit(true);
-		appointmentEditBacking.setSaved(false);
-		appointmentEditBacking.setFromPage("CAMPAIGN");
-		for (SelectItem item : appointmentEditBacking.getListBranch()) {
-			long value = ((BigDecimal) item.getValue()).longValue();
-			if (value == selectedAppointment.getCrmBranch().getId().longValue()) {
-				appointmentEditBacking.setSaved(false);
-				break;
-			}
-		}
-		appointmentEditBacking.setIdBranch(selectedAppointment.getCrmBranch()
-				.getId());
-
-		return "/pages/processes/appointmentEdit.jsf?faces-redirect=true";
-	}
-
-	public String cancelAppointmentAction() {
-		SearchByPatientBacking searchByPatientBacking = FacesUtil
-				.findBean("searchByPatientBacking");
-		searchByPatientBacking.setSelectedPatient(selectedAppointment
-				.getCrmPatient());
-		Date date = FacesUtil.getDateWithoutTime(selectedAppointment
-				.getStartAppointmentDate());
-		searchByPatientBacking.setStartDate(date);
-		searchByPatientBacking.setEndDate(date);
-		searchByPatientBacking.setState(Constant.DEFAULT_VALUE.intValue());
-		searchByPatientBacking.searchAppoinmentAction();
-		return "/pages/processes/searchByPatient.jsf?faces-redirect=true";
 	}
 
 	public HtmlPanelGroup createPanelGroup(int type,
@@ -1258,6 +1212,62 @@ public class CampaignBacking extends BaseBacking {
 			String message = FacesUtil.getMessage("cam_msg_call_error");
 			FacesUtil.addError(message);
 		}
+	}
+	
+	public void editAppoinmnetAction() {
+		AppointmentBacking appointmentEditBacking = FacesUtil
+				.findBean("appointmentBacking");
+
+		appointmentEditBacking.newAction(null);
+		appointmentEditBacking.setSelected(selectedAppointment);
+		appointmentEditBacking.setSelectedPatient(selectedAppointment
+				.getCrmPatient());
+		appointmentEditBacking.setCurrentDate(selectedAppointment
+				.getStartAppointmentDate());
+		appointmentEditBacking.setIdBranch(selectedAppointment.getCrmBranch()
+				.getId());
+		appointmentEditBacking.handleBranchChange();
+		appointmentEditBacking.setIdProcedureDetail(selectedAppointment
+				.getCrmProcedureDetail().getId());
+		appointmentEditBacking.handleProcedureDetailChange();
+		appointmentEditBacking.setSelectedWSGroupSellers(selectedAppointment
+				.getCodPublicity());
+		appointmentEditBacking.setEdit(true);
+		appointmentEditBacking.setSaved(false);
+		appointmentEditBacking.setFromPage("CAMPAIGN");
+		for (SelectItem item : appointmentEditBacking.getListBranch()) {
+			long value = ((BigDecimal) item.getValue()).longValue();
+			if (value == selectedAppointment.getCrmBranch().getId().longValue()) {
+				appointmentEditBacking.setSaved(false);
+				break;
+			}
+		}
+		appointmentEditBacking.setIdBranch(selectedAppointment.getCrmBranch()
+				.getId());
+
+		Map<String, Object> options = new HashMap<String, Object>();
+		options.put("modal", true);
+		options.put("draggable", false);
+		options.put("resizable", false);
+		options.put("contentWidth", 1200);
+		options.put("contentHeight", 800);
+		RequestContext.getCurrentInstance().openDialog("appointmentEditDialog",
+				options, null);
+	}
+
+	public void closeDialog() {
+		RequestContext.getCurrentInstance().closeDialog(null);
+	}
+	
+	public void cancelAppointmentAction(ActionEvent actionEvent) {
+		selectedAppointment.setCrmUserByIdUserCanceled(FacesUtil
+				.getCurrentUser());
+		selectedAppointment.setDateCanceled(new Date());
+		selectedAppointment.setState(Constant.APP_STATE_CANCELED);
+		processService.saveAppointment(selectedAppointment);
+		String code = selectedAppointment.getCode();
+		String message = FacesUtil.getMessage("app_msg_cancel", code);
+		FacesUtil.addInfo(message);
 	}
 
 }
