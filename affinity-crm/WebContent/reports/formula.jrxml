@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="formula" pageWidth="396" pageHeight="612" whenNoDataType="BlankPage" columnWidth="368" leftMargin="14" rightMargin="14" topMargin="0" bottomMargin="14" uuid="c92dc5a0-c2d1-42d0-bc28-ff2011c41d76">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="formula" pageWidth="396" pageHeight="612" whenNoDataType="BlankPage" columnWidth="358" leftMargin="19" rightMargin="19" topMargin="51" bottomMargin="14" uuid="c92dc5a0-c2d1-42d0-bc28-ff2011c41d76">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -109,8 +109,8 @@ order by a.id]]>
 		a.id_cie,
 		c.unit,
 		c.cod_material,
-		c.desc_material,
-		a.posology,
+		ucase(c.desc_material) desc_material,
+		ucase(a.posology) posology,
 		e.doc,
 		cast(d.start_appointment_date as Date) appointment_date,
 		concat(e.firstnames,' ', e.surnames) as name_patient,
@@ -131,8 +131,8 @@ select  c.id,c.id_appointment,
 		0 id_cie,
 		c.unit,
 		c.cod_material,
-		c.desc_material,
-		posology,
+		ucase(c.desc_material),
+		ucase(posology),
 		e.doc,
 		cast(d.start_appointment_date as Date) appointment_date,
 		concat(e.firstnames,' ', e.surnames) as name_patient,
@@ -154,7 +154,9 @@ ORDER BY 1]]>
 	<field name="id_appointment" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="desc_cie" class="java.lang.String"/>
+	<field name="desc_cie" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="id_cie" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -190,18 +192,18 @@ ORDER BY 1]]>
 		<groupHeader>
 			<band height="20">
 				<textField isStretchWithOverflow="true">
-					<reportElement uuid="6734ef12-a28c-4963-8b42-50c6bfe9fd5a" isPrintRepeatedValues="false" x="0" y="0" width="368" height="20"/>
+					<reportElement uuid="6734ef12-a28c-4963-8b42-50c6bfe9fd5a" isPrintRepeatedValues="false" x="0" y="0" width="358" height="20"/>
 					<textElement>
-						<font fontName="Arial" size="9"/>
+						<font fontName="Arial" size="10" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{desc_cie}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
 		<groupFooter>
-			<band height="6">
+			<band height="12">
 				<line>
-					<reportElement uuid="5b7eb3e9-923b-4386-b701-f469eeef6d65" x="0" y="3" width="368" height="1" forecolor="#009999"/>
+					<reportElement uuid="5b7eb3e9-923b-4386-b701-f469eeef6d65" x="0" y="3" width="358" height="1" forecolor="#009999"/>
 					<graphicElement>
 						<pen lineWidth="2.0" lineStyle="Double"/>
 					</graphicElement>
@@ -210,9 +212,9 @@ ORDER BY 1]]>
 		</groupFooter>
 	</group>
 	<title>
-		<band height="64" splitType="Stretch">
+		<band height="54" splitType="Stretch">
 			<textField>
-				<reportElement uuid="fb85831b-54e6-420d-bfcd-274dc2ff4fc3" x="235" y="1" width="133" height="15"/>
+				<reportElement uuid="fb85831b-54e6-420d-bfcd-274dc2ff4fc3" x="235" y="1" width="123" height="15"/>
 				<textElement>
 					<font fontName="Arial" size="9"/>
 				</textElement>
@@ -226,21 +228,21 @@ ORDER BY 1]]>
 				<textFieldExpression><![CDATA[$F{name_branch}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement uuid="61702f48-9bba-4e85-b708-edbce66e3d79" x="235" y="44" width="133" height="20"/>
+				<reportElement uuid="61702f48-9bba-4e85-b708-edbce66e3d79" x="235" y="39" width="123" height="15"/>
 				<textElement>
 					<font fontName="Arial" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{appointment_date}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="4837340c-f939-4456-a360-ac9d8c2d7b62" x="47" y="20" width="321" height="20"/>
+				<reportElement uuid="4837340c-f939-4456-a360-ac9d8c2d7b62" x="47" y="20" width="311" height="15"/>
 				<textElement>
 					<font fontName="Arial" size="9" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name_patient}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="6491ee03-fae5-4f3e-8d79-8c4529348a26" x="47" y="44" width="128" height="20"/>
+				<reportElement uuid="6491ee03-fae5-4f3e-8d79-8c4529348a26" x="47" y="39" width="128" height="15"/>
 				<textElement>
 					<font fontName="Arial" isBold="false"/>
 				</textElement>
@@ -251,28 +253,21 @@ ORDER BY 1]]>
 	<pageHeader>
 		<band height="31" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="4fecec29-edfb-43b7-a3b5-68630a905c95" x="0" y="0" width="368" height="15"/>
-				<textElement textAlignment="Center">
-					<font fontName="Arial" size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Diagnósticos]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="535a5a5f-6fb6-4495-8f88-4ab2f31902bf" x="0" y="12" width="120" height="15"/>
+				<reportElement uuid="535a5a5f-6fb6-4495-8f88-4ab2f31902bf" x="0" y="12" width="126" height="15"/>
 				<textElement textAlignment="Center">
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Medicamentos]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="5cc47441-d4fb-4934-883a-6b5a18f2758d" x="120" y="12" width="248" height="15"/>
+				<reportElement uuid="5cc47441-d4fb-4934-883a-6b5a18f2758d" x="142" y="12" width="216" height="15"/>
 				<textElement textAlignment="Center">
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Posología]]></text>
 			</staticText>
 			<line>
-				<reportElement uuid="5b7eb3e9-923b-4386-b701-f469eeef6d65" x="0" y="28" width="368" height="1" forecolor="#009999"/>
+				<reportElement uuid="5b7eb3e9-923b-4386-b701-f469eeef6d65" x="0" y="28" width="358" height="1" forecolor="#009999"/>
 				<graphicElement>
 					<pen lineWidth="2.0" lineStyle="Double"/>
 				</graphicElement>
@@ -296,7 +291,7 @@ ORDER BY 1]]>
 				<textFieldExpression><![CDATA[$F{unit}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement uuid="c97e21ae-df63-46d9-97f0-3c16107d05e1" isPrintRepeatedValues="false" x="126" y="0" width="242" height="23" printWhenGroupChanges="group_cie"/>
+				<reportElement uuid="c97e21ae-df63-46d9-97f0-3c16107d05e1" isPrintRepeatedValues="false" x="142" y="0" width="216" height="23" printWhenGroupChanges="group_cie"/>
 				<textElement>
 					<font fontName="Arial" size="9"/>
 				</textElement>
