@@ -61,7 +61,7 @@ public class BaseBacking implements Serializable {
 
 	@Inject
 	protected ParameterBo parameterService;
-	
+
 	@Inject
 	protected CapaignBo capaignService;
 
@@ -1048,8 +1048,10 @@ public class BaseBacking implements Serializable {
 				.add(new SelectItem(Constant.DEFAULT_VALUE, DEFAULT_LABEL_ALL));
 
 		listProcedure = new LinkedList<SelectItem>();
-		/*listProcedure.add(new SelectItem(Constant.DEFAULT_VALUE,
-				DEFAULT_LABEL_ALL));*/
+		/*
+		 * listProcedure.add(new SelectItem(Constant.DEFAULT_VALUE,
+		 * DEFAULT_LABEL_ALL));
+		 */
 
 		idDoctor = Constant.DEFAULT_VALUE;
 		idProcedure = Constant.DEFAULT_VALUE;
@@ -1101,6 +1103,12 @@ public class BaseBacking implements Serializable {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void cleanPatientFields() {
+		this.docPatient = null;
+		this.namePatient = null;
+		this.telPatient = null;
 	}
 
 }

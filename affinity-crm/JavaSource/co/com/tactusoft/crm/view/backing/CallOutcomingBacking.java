@@ -324,7 +324,7 @@ public class CallOutcomingBacking extends ContactBacking {
 		searched = false;
 		called = false;
 		saved = false;
-		tmpSelectedPatient = null;
+		selectedPatientTemp = null;
 		idCallType = null;
 		idCallTypeDetail = null;
 	}

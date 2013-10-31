@@ -150,5 +150,11 @@ public class EventsHistorialBacking extends BaseBacking {
 		String message = FacesUtil.getMessage("cam_msg_update_ok");
 		FacesUtil.addInfo(message);
 	}
+	
+	@Override
+	public void searchPatientAction(){
+		super.searchPatientAction();
+		searchAction();
+	}
 
 }

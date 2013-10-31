@@ -426,9 +426,7 @@ public class AppointmentBacking extends BaseBacking {
 		disabledSearch = true;
 
 		optionSearchPatient = 1;
-		docPatient = "";
-		namePatient = "";
-		telPatient = "";
+		cleanPatientFields();
 		selectedWSGroupSellers = "-1";
 
 		listAppointment = new LinkedList<Candidate>();

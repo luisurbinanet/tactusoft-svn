@@ -729,22 +729,22 @@
 								<h:outputLabel value="#{msg['his_physique_heart_rate']}" />
 								<pe:inputNumber symbol="   puls" symbolPosition="s"
 									decimalPlaces="0" style="width:300px" maxValue="200"
-									value="#{historyBacking.selectedHistoryPhysique.heartRate}" />
+									value="#{historyBacking.heartRate}" />
 
 								<h:outputLabel value="#{msg['his_physique_respiratory_rate']}" />
 								<pe:inputNumber symbol="   resp/min" symbolPosition="s"
 									decimalPlaces="0" style="width:300px" maxValue="70"
-									value="#{historyBacking.selectedHistoryPhysique.respiratoryRate}" />
+									value="#{historyBacking.respiratoryRate}" />
 
 								<h:outputLabel value="#{msg['his_physique_height']}" />
 								<pe:inputNumber symbol="   cm" symbolPosition="s"
 									decimalPlaces="0" style="width:300px" maxValue="250"
-									value="#{historyBacking.selectedHistoryPhysique.height}" />
+									value="#{historyBacking.height}" />
 
 								<h:outputLabel value="#{msg['his_physique_weight']}" />
 								<pe:inputNumber symbol="   kg" symbolPosition="s"
 									decimalPlaces="2" style="width:300px" maxValue="999"
-									value="#{historyBacking.selectedHistoryPhysique.weight}" />
+									value="#{historyBacking.weight}" />
 
 								<h:outputLabel value="#{msg['his_physique_blood_pressure']}" />
 								<p:inputText maxlength="7" style="width:300px"
@@ -1388,32 +1388,40 @@
 						<p:outputPanel id="customPanel">
 							<p:selectOneRadio id="customRadio"
 								value="#{historyBacking.optionSearchPatient}" layout="custom">
+								<p:ajax update="customPanel"
+									listener="#{historyBacking.cleanPatientFields}" />
 								<f:selectItem itemLabel="#{msg['sal_key_press_doc']}"
 									itemValue="1" />
 								<f:selectItem itemLabel="#{msg['sal_key_press_nom']}"
 									itemValue="2" />
+								<f:selectItem itemLabel="#{msg['sal_key_press_tel']}"
+									itemValue="3" />
 							</p:selectOneRadio>
-
-							<h:panelGrid columns="2" width="100%" cellspacing="10">
-								<h:outputText value="#{msg['usr_profile']}" />
-								<p:selectOneMenu value="#{historyBacking.idProfile}"
-									style="width:500px" required="true"
-									label="#{msg['usr_profile']}">
-									<f:selectItems value="#{historyBacking.listProfile}" />
-								</p:selectOneMenu>
-							</h:panelGrid>
 
 							<h:panelGrid columns="3" width="100%">
 								<p:radioButton id="opt1" for="customRadio" itemIndex="0" />
 								<h:outputLabel for="opt1" value="#{msg['sal_key_press_doc']}" />
 								<p:inputText value="#{historyBacking.docPatient}"
-									style="width:100%" />
+									style="width:100%"
+									disabled="#{historyBacking.optionSearchPatient ne 1}">
+									<pe:keyFilter regEx="/[\d]/" preventPaste="false" />
+								</p:inputText>
 
 								<p:radioButton id="opt2" for="customRadio" itemIndex="1" />
 								<h:outputLabel for="opt2" value="#{msg['sal_key_press_nom']}" />
 								<p:inputText value="#{historyBacking.namePatient}"
-									style="width:100%" />
+									style="width:100%"
+									disabled="#{historyBacking.optionSearchPatient ne 2}">
+									<pe:keyFilter regEx="/[a-zA-Z\s]/i" />
+								</p:inputText>
 
+								<p:radioButton id="opt3" for="customRadio" itemIndex="2" />
+								<h:outputLabel for="opt3" value="#{msg['sal_key_press_tel']}" />
+								<p:inputText value="#{historyBacking.telPatient}"
+									style="width:100%"
+									disabled="#{historyBacking.optionSearchPatient ne 3}">
+									<pe:keyFilter regEx="/[\d]/" preventPaste="false" />
+								</p:inputText>
 							</h:panelGrid>
 						</p:outputPanel>
 

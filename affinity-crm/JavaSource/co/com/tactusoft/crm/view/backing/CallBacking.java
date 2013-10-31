@@ -252,7 +252,7 @@ public class CallBacking extends ContactBacking {
 					patientGridType = 1;
 					this.setListPatient(listCrmPatient);
 					this.setPatientModel(new PatientDataModel(listCrmPatient));
-					this.setTmpSelectedPatient(listCrmPatient.get(0));
+					this.setSelectedPatientTemp(listCrmPatient.get(0));
 					this.setIdCountry(crmGuideline.getIdCountry());
 				}
 			} else {
@@ -271,7 +271,7 @@ public class CallBacking extends ContactBacking {
 
 	@Override
 	public void addContactAction(ActionEvent event) {
-		this.setSelectedPatient(this.getTmpSelectedPatient());
+		this.setSelectedPatient(this.getSelectedPatientTemp());
 		patientGridType = 0;
 		generateRegion(this.getSelectedPatient().getIdCountry());
 	}

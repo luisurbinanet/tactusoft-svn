@@ -171,42 +171,49 @@
 					hideEffect="explode" modal="true" width="600">
 
 					<h:panelGrid columns="2" width="100%">
-
 						<p:outputPanel id="customPanel">
 							<p:selectOneRadio id="customRadio"
-								value="#{caseStudyBacking.optionSearchPatient}" layout="custom">
+								value="#{caseStudyBacking.optionSearchPatient}"
+								layout="custom">
+								<p:ajax update="customPanel"
+									listener="#{caseStudyBacking.cleanPatientFields}" />
 								<f:selectItem itemLabel="#{msg['sal_key_press_doc']}"
 									itemValue="1" />
 								<f:selectItem itemLabel="#{msg['sal_key_press_nom']}"
 									itemValue="2" />
+								<f:selectItem itemLabel="#{msg['sal_key_press_tel']}"
+									itemValue="3" />
 							</p:selectOneRadio>
 
-							<h:panelGrid columns="2" width="100%" cellspacing="10">
-								<h:outputText value="#{msg['usr_profile']}" />
-								<p:selectOneMenu value="#{caseStudyBacking.idProfile}"
-									style="width:500px" required="true"
-									label="#{msg['usr_profile']}">
-									<f:selectItems value="#{caseStudyBacking.listProfile}" />
-								</p:selectOneMenu>
-							</h:panelGrid>
-
-							<h:panelGrid id="pnlTxt" columns="3" width="100%">
+							<h:panelGrid columns="3" width="100%">
 								<p:radioButton id="opt1" for="customRadio" itemIndex="0" />
 								<h:outputLabel for="opt1" value="#{msg['sal_key_press_doc']}" />
-								<p:inputText id="txtDoc" value="#{caseStudyBacking.docPatient}"
-									style="width:100%" />
+								<p:inputText value="#{caseStudyBacking.docPatient}"
+									style="width:100%"
+									disabled="#{caseStudyBacking.optionSearchPatient ne 1}">
+									<pe:keyFilter regEx="/[\d]/" preventPaste="false" />
+								</p:inputText>
 
 								<p:radioButton id="opt2" for="customRadio" itemIndex="1" />
 								<h:outputLabel for="opt2" value="#{msg['sal_key_press_nom']}" />
-								<p:inputText id="txtName"
-									value="#{caseStudyBacking.namePatient}" style="width:100%" />
+								<p:inputText value="#{caseStudyBacking.namePatient}"
+									style="width:100%"
+									disabled="#{caseStudyBacking.optionSearchPatient ne 2}">
+									<pe:keyFilter regEx="/[a-zA-Z\s]/i" />
+								</p:inputText>
 
+								<p:radioButton id="opt3" for="customRadio" itemIndex="2" />
+								<h:outputLabel for="opt3" value="#{msg['sal_key_press_tel']}" />
+								<p:inputText value="#{caseStudyBacking.telPatient}"
+									style="width:100%"
+									disabled="#{caseStudyBacking.optionSearchPatient ne 3}">
+									<pe:keyFilter regEx="/[\d]/" preventPaste="false" />
+								</p:inputText>
 							</h:panelGrid>
 						</p:outputPanel>
 
 						<f:facet name="footer">
 							<p:spacer height="10" />
-
 							<p:commandButton value="#{msg['btn_search']}"
 								icon="ui-icon-search"
 								update="pnlTable2 recordTable2 btnAddPatient"
@@ -222,15 +229,18 @@
 					</h:panelGrid>
 
 					<p:spacer height="10" />
-
 					<p:scrollPanel id="pnlTable2" style="width:580px;height:300px">
 						<p:dataTable id="recordTable2" var="rec"
 							value="#{caseStudyBacking.patientModel}" rowKey="#{rec.id}"
-							selection="#{caseStudyBacking.selectedPatientTemp}"
-							paginator="true" rows="15" style="width:570px"
+							selection="#{caseStudyBacking.selectedPatient}" paginator="true"
+							rows="15" style="width:570px"
 							emptyMessage="#{msg['glb_no_records_found']}">
 
 							<p:column selectionMode="single" style="width:18px" />
+
+							<p:column headerText="#{msg['pat_code_1']}">
+								<h:outputLabel value="#{rec.doc}" />
+							</p:column>
 
 							<p:column headerText="#{msg['pat_sap_code']}">
 								<h:outputLabel value="#{rec.codeSap}" />
@@ -238,6 +248,10 @@
 
 							<p:column headerText="#{msg['pat_names']}">
 								<h:outputLabel value="#{rec.names}" />
+							</p:column>
+
+							<p:column headerText="#{msg['pat_send_phone']}">
+								<h:outputLabel value="#{rec.phoneNumber} #{rec.cellNumber}" />
 							</p:column>
 
 						</p:dataTable>

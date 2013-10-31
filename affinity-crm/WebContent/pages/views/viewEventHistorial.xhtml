@@ -23,10 +23,6 @@
 						<p:commandButton value="#{msg['btn_add_patient']}"
 							icon="ui-icon-circle-check" oncomplete="dlg2.show()"
 							update=":editForm:dialog2" />
-						<p:commandButton id="btnSearch" value="#{msg['btn_search']}"
-							icon="ui-icon-search" update="pnlTable"
-							disabled="#{eventsHistorialBacking.disabledSelectedPatient}"
-							action="#{eventsHistorialBacking.searchAction}" />
 						<p:commandButton id="btnPrint" value="#{msg['btn_print_history']}"
 							icon="ui-icon-print"
 							disabled="#{eventsHistorialBacking.disabledSelectedPatient or not eventsHistorialBacking.printHistorial}"
@@ -212,7 +208,7 @@
 						</p:ajax>
 
 						<f:facet name="header">
-							<h:outputLabel value="#{msg['cam_call']}" />
+							<h:outputLabel value="#{msg['cam_call_2']}" />
 						</f:facet>
 
 						<p:column selectionMode="single" style="width:2%" />
@@ -274,6 +270,8 @@
 							<p:selectOneRadio id="customRadio"
 								value="#{eventsHistorialBacking.optionSearchPatient}"
 								layout="custom">
+								<p:ajax update="customPanel"
+									listener="#{eventsHistorialBacking.cleanPatientFields}" />
 								<f:selectItem itemLabel="#{msg['sal_key_press_doc']}"
 									itemValue="1" />
 								<f:selectItem itemLabel="#{msg['sal_key_press_nom']}"
@@ -286,21 +284,24 @@
 								<p:radioButton id="opt1" for="customRadio" itemIndex="0" />
 								<h:outputLabel for="opt1" value="#{msg['sal_key_press_doc']}" />
 								<p:inputText value="#{eventsHistorialBacking.docPatient}"
-									style="width:100%">
+									style="width:100%"
+									disabled="#{eventsHistorialBacking.optionSearchPatient ne 1}">
 									<pe:keyFilter regEx="/[\d]/" preventPaste="false" />
 								</p:inputText>
 
 								<p:radioButton id="opt2" for="customRadio" itemIndex="1" />
 								<h:outputLabel for="opt2" value="#{msg['sal_key_press_nom']}" />
 								<p:inputText value="#{eventsHistorialBacking.namePatient}"
-									style="width:100%">
-									<pe:keyFilter regEx="/[a-zA-Z\s]/i" preventPaste="false" />
+									style="width:100%"
+									disabled="#{eventsHistorialBacking.optionSearchPatient ne 2}">
+									<pe:keyFilter regEx="/[a-zA-Z\s]/i" />
 								</p:inputText>
 
 								<p:radioButton id="opt3" for="customRadio" itemIndex="2" />
 								<h:outputLabel for="opt3" value="#{msg['sal_key_press_tel']}" />
 								<p:inputText value="#{eventsHistorialBacking.telPatient}"
-									style="width:100%">
+									style="width:100%"
+									disabled="#{eventsHistorialBacking.optionSearchPatient ne 3}">
 									<pe:keyFilter regEx="/[\d]/" preventPaste="false" />
 								</p:inputText>
 							</h:panelGrid>
@@ -314,7 +315,7 @@
 								action="#{eventsHistorialBacking.searchPatientAction}" />
 							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
 								icon="ui-icon-plusthick"
-								update=":form:pnlDetail :form:btnSearch :form:btnPrint"
+								update=":form:pnlDetail :form:pnlTable :form:btnPrint"
 								oncomplete="dlg2.hide()"
 								disabled="#{eventsHistorialBacking.disabledAddPatient}" />
 						</f:facet>
