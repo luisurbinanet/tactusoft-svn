@@ -223,6 +223,8 @@
 							<p:selectOneRadio id="customRadio"
 								value="#{appointmentBacking.optionSearchPatient}"
 								layout="custom">
+								<p:ajax update="customPanel"
+									listener="#{appointmentBacking.cleanPatientFields}" />
 								<f:selectItem itemLabel="#{msg['sal_key_press_doc']}"
 									itemValue="1" />
 								<f:selectItem itemLabel="#{msg['sal_key_press_nom']}"
@@ -235,22 +237,25 @@
 								<p:radioButton id="opt1" for="customRadio" itemIndex="0" />
 								<h:outputLabel for="opt1" value="#{msg['sal_key_press_doc']}" />
 								<p:inputText value="#{appointmentBacking.docPatient}"
-									style="width:100%">
-									<pe:keyFilter regEx="/[\d]/" preventPaste="false"/>
+									style="width:100%"
+									disabled="#{appointmentBacking.optionSearchPatient ne 1}">
+									<pe:keyFilter regEx="/[\d]/" preventPaste="false" />
 								</p:inputText>
 
 								<p:radioButton id="opt2" for="customRadio" itemIndex="1" />
 								<h:outputLabel for="opt2" value="#{msg['sal_key_press_nom']}" />
 								<p:inputText value="#{appointmentBacking.namePatient}"
-									style="width:100%">
+									style="width:100%"
+									disabled="#{appointmentBacking.optionSearchPatient ne 2}">
 									<pe:keyFilter regEx="/[a-zA-Z\s]/i" />
 								</p:inputText>
 
 								<p:radioButton id="opt3" for="customRadio" itemIndex="2" />
 								<h:outputLabel for="opt3" value="#{msg['sal_key_press_tel']}" />
 								<p:inputText value="#{appointmentBacking.telPatient}"
-									style="width:100%">
-									<pe:keyFilter regEx="/[\d]/" preventPaste="false"/>
+									style="width:100%"
+									disabled="#{appointmentBacking.optionSearchPatient ne 3}">
+									<pe:keyFilter regEx="/[\d]/" preventPaste="false" />
 								</p:inputText>
 							</h:panelGrid>
 						</p:outputPanel>
@@ -322,7 +327,7 @@
 							</h:outputLabel>
 						</p:column>
 
-						<p:column headerText="#{msg['app_doctor']}">
+						<p:column headerText="#{msg['app_doctor']}" rendered="false">
 							<h:outputLabel value="#{rec.doctor.names}" />
 						</p:column>
 

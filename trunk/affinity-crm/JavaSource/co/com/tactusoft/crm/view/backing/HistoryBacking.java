@@ -107,6 +107,10 @@ public class HistoryBacking extends BaseBacking {
 	private BigDecimal idMembershipType;
 	private double imc;
 	private String descImc;
+	private int heartRate;
+	private int respiratoryRate;
+	private Double height;
+	private Double weight;
 
 	private int optionSearchCie;
 	private List<CrmCie> listCie;
@@ -456,6 +460,38 @@ public class HistoryBacking extends BaseBacking {
 
 	public String getDescImc() {
 		return descImc;
+	}
+
+	public int getHeartRate() {
+		return heartRate;
+	}
+
+	public void setHeartRate(int heartRate) {
+		this.heartRate = heartRate;
+	}
+
+	public int getRespiratoryRate() {
+		return respiratoryRate;
+	}
+
+	public void setRespiratoryRate(int respiratoryRate) {
+		this.respiratoryRate = respiratoryRate;
+	}
+
+	public Double getHeight() {
+		return height;
+	}
+
+	public void setHeight(Double height) {
+		this.height = height;
+	}
+
+	public Double getWeight() {
+		return weight;
+	}
+
+	public void setWeight(Double weight) {
+		this.weight = weight;
 	}
 
 	public void setDescImc(String descImc) {
@@ -1024,8 +1060,8 @@ public class HistoryBacking extends BaseBacking {
 	}
 
 	public void calculateIMCAction(ActionEvent event) {
-		double weight = selectedHistoryPhysique.getWeight().doubleValue();
-		double height = selectedHistoryPhysique.getHeight().doubleValue() / 100;
+		double weight = this.getWeight();
+		double height = this.getHeight() / 100;
 
 		if (height > 0) {
 			imc = weight / (height * height);
@@ -1171,6 +1207,34 @@ public class HistoryBacking extends BaseBacking {
 				.getHistoryPhysique(selectedAppointment.getId());
 		selectedHistoryPhysique.setCrmPatient(selectedPatient);
 		selectedHistoryPhysique.setCrmAppointment(currentAppointment);
+
+		try {
+			this.heartRate = Integer.parseInt(selectedHistoryPhysique
+					.getHeartRate());
+		} catch (Exception ex) {
+			this.heartRate = 0;
+		}
+
+		try {
+			this.respiratoryRate = Integer.parseInt(selectedHistoryPhysique
+					.getRespiratoryRate());
+		} catch (Exception ex) {
+			this.respiratoryRate = 0;
+		}
+
+		try {
+			this.weight = Double.parseDouble(selectedHistoryPhysique
+					.getWeight());
+		} catch (Exception ex) {
+			this.weight = 0d;
+		}
+
+		try {
+			this.height = Double.parseDouble(selectedHistoryPhysique
+					.getHeight());
+		} catch (Exception ex) {
+			this.height = 0d;
+		}
 
 		selectedHistoryOrganometry = processService
 				.getHistoryOrganometry(selectedAppointment.getId());
@@ -1797,36 +1861,46 @@ public class HistoryBacking extends BaseBacking {
 			}
 		}
 
-		if (selectedHistoryPhysique.getHeartRate() == 0) {
+		if (this.getHeartRate() == 0) {
 			field = FacesUtil.getMessage("his_physique_heart_rate");
 			message = FacesUtil.getMessage("his_history_physique", field);
 			message = message + " - "
 					+ FacesUtil.getMessage("glb_required", field);
 			FacesUtil.addWarn(message);
+		} else {
+			selectedHistoryPhysique
+					.setHeartRate(String.valueOf(this.heartRate));
 		}
 
-		if (selectedHistoryPhysique.getRespiratoryRate() == 0) {
+		if (this.getRespiratoryRate() == 0) {
 			field = FacesUtil.getMessage("his_physique_respiratory_rate");
 			message = FacesUtil.getMessage("his_history_physique", field);
 			message = message + " - "
 					+ FacesUtil.getMessage("glb_required", field);
 			FacesUtil.addWarn(message);
+		} else {
+			selectedHistoryPhysique.setRespiratoryRate(String
+					.valueOf(this.respiratoryRate));
 		}
 
-		if (selectedHistoryPhysique.getHeight().intValue() == 0) {
+		if (this.getHeight().intValue() == 0) {
 			field = FacesUtil.getMessage("his_physique_height");
 			message = FacesUtil.getMessage("his_history_physique", field);
 			message = message + " - "
 					+ FacesUtil.getMessage("glb_required", field);
 			FacesUtil.addWarn(message);
+		} else {
+			selectedHistoryPhysique.setHeight(String.valueOf(this.height));
 		}
 
-		if (selectedHistoryPhysique.getWeight().intValue() == 0) {
+		if (this.getWeight().intValue() == 0) {
 			field = FacesUtil.getMessage("his_physique_weight");
 			message = FacesUtil.getMessage("his_history_physique", field);
 			message = message + " - "
 					+ FacesUtil.getMessage("glb_required", field);
 			FacesUtil.addWarn(message);
+		} else {
+			selectedHistoryPhysique.setWeight(String.valueOf(this.weight));
 		}
 
 		if (FacesUtil

@@ -26,7 +26,7 @@
 						<p:commandButton value="#{msg['btn_search']}" process="@this"
 							icon="ui-icon-search" oncomplete="searchDlg.show()"
 							actionListener="#{contactBacking.refreshSearchAction}"
-							update="searchDialog" />
+							update=":editForm:searchDialog" />
 						<p:commandButton id="btnSavePatient" value="#{msg['btn_save']}"
 							icon="ui-icon-disk" action="#{contactBacking.saveAction}"
 							update="growl toolBar pnlDetail pnlDetail2 pnlDetail3"
@@ -162,7 +162,8 @@
 
 					<h:outputLabel value="#{msg['pat_sales_off']}" style="width:40%" />
 					<p:selectOneMenu id="selsalesOff"
-						value="#{contactBacking.salesOff}" style="width:248px">
+						value="#{contactBacking.salesOff}" style="width:248px"
+						filterMatchMode="contains" filter="true">
 						<f:selectItems value="#{contactBacking.listBranch}" />
 					</p:selectOneMenu>
 
@@ -175,80 +176,6 @@
 						style="width:240px" label="#{msg['pat_ticket']}" required="true"
 						disabled="#{contactBacking.disabledTicket}" />
 				</h:panelGrid>
-
-				<p:dialog header="#{msg['btn_search']}" widgetVar="searchDlg"
-					resizable="false" id="searchDialog" showEffect="fade"
-					hideEffect="explode" modal="true">
-
-					<h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;"
-						width="100%">
-
-						<p:selectOneRadio id="radioSearch"
-							value="#{contactBacking.optionSearchPatient}" layout="custom">
-							<f:selectItem itemLabel="#{msg['sal_key_press_doc']}"
-								itemValue="1" />
-							<f:selectItem itemLabel="#{msg['sal_key_press_nom']}"
-								itemValue="2" />
-						</p:selectOneRadio>
-
-						<h:panelGrid columns="3" width="100%">
-							<p:radioButton id="optDocSearch" for="radioSearch" itemIndex="0" />
-							<h:outputLabel for="txtDocSearch"
-								value="#{msg['sal_key_press_doc']}" />
-							<p:inputText id="txtDocSearch"
-								value="#{contactBacking.docPatient}" style="width:100%" />
-
-							<p:radioButton id="optNameSearch" for="radioSearch" itemIndex="1" />
-							<h:outputLabel for="txtNameSearch"
-								value="#{msg['sal_key_press_nom']}" />
-							<p:inputText id="txtNameSearch"
-								value="#{contactBacking.namePatient}" style="width:100%" />
-
-						</h:panelGrid>
-
-						<f:facet name="footer">
-							<p:commandButton value="#{msg['btn_search']}"
-								icon="ui-icon-search"
-								actionListener="#{contactBacking.searchAction}"
-								update="btnAddPatient scpSearchPatient dtbSearchPatient"
-								process="@this, txtDocSearch, txtNameSearch, radioSearch, optDocSearch, txtNameSearch" />
-							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
-								icon="ui-icon-plusthick"
-								update="pnlDetail pnlDetail2 pnlDetail3 toolBar"
-								actionListener="#{contactBacking.addContactAction}"
-								process="@this, scpSearchPatient" oncomplete="searchDlg.hide();"
-								disabled="#{contactBacking.disabledAddPatient}" />
-						</f:facet>
-
-					</h:panelGrid>
-
-					<p:spacer height="10" />
-					<p:scrollPanel id="scpSearchPatient"
-						style="width:460px;height:400px">
-						<p:dataTable id="dtbSearchPatient" var="rec"
-							value="#{contactBacking.patientModel}" rowKey="#{rec.id}"
-							selection="#{contactBacking.tmpSelectedPatient}" paginator="true"
-							rows="15" style="width:450px"
-							emptyMessage="#{msg['glb_no_records_found']}">
-
-							<p:column selectionMode="single" style="width:18px" />
-
-							<p:column headerText="#{msg['pat_code_1']}">
-								<h:outputLabel value="#{rec.doc}" />
-							</p:column>
-
-							<p:column headerText="#{msg['pat_names']}">
-								<h:outputLabel value="#{rec.names}" />
-							</p:column>
-
-							<p:column headerText="#{msg['pat_phone_number']}">
-								<h:outputLabel value="#{rec.phoneNumber}" />
-							</p:column>
-
-						</p:dataTable>
-					</p:scrollPanel>
-
-				</p:dialog>
 
 				<p:dialog header="#{msg['btn_update']}" widgetVar="updateDlg"
 					resizable="false" id="updateDialog" showEffect="fade"
@@ -430,6 +357,102 @@
 				</p:dialog>
 
 			</h:form>
+			
+			<h:form id="editForm">
+				<p:dialog header="#{msg['btn_search']}" widgetVar="searchDlg"
+					resizable="false" id="searchDialog" showEffect="fade"
+					hideEffect="explode" modal="true">
+
+					<p:toolbar id="toolBar" style="width:100%">
+						<p:toolbarGroup align="left">
+							<p:commandButton value="#{msg['btn_search']}"
+								icon="ui-icon-search"
+								actionListener="#{contactBacking.searchAction}"
+								update="pnlTable2 recordTable2 btnAddPatient :form:growl"
+								process="@this,pnlParameter" />
+							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
+								icon="ui-icon-plusthick"
+								update=":form:pnlDetail :form:pnlDetail2 :form:pnlDetail3 toolBar :form:growl"
+								actionListener="#{contactBacking.addContactAction}"
+								process="@this,searchDialog" oncomplete="searchDlg.hide();"
+								disabled="#{contactBacking.disabledAddPatient}" />
+						</p:toolbarGroup>
+					</p:toolbar>
+
+					<h:panelGrid id="pnlParameter" columns="2" width="100%">
+
+						<p:outputPanel id="customPanel">
+							<p:selectOneRadio id="customRadio"
+								value="#{contactBacking.optionSearchPatient}" layout="custom">
+								<p:ajax update="customPanel"
+									listener="#{contactBacking.cleanPatientFields}" />
+								<f:selectItem itemLabel="#{msg['sal_key_press_doc']}"
+									itemValue="1" />
+								<f:selectItem itemLabel="#{msg['sal_key_press_nom']}"
+									itemValue="2" />
+								<f:selectItem itemLabel="#{msg['sal_key_press_tel']}"
+									itemValue="3" />
+							</p:selectOneRadio>
+
+							<h:panelGrid columns="3" width="100%">
+								<p:radioButton id="opt1" for="customRadio" itemIndex="0" />
+								<h:outputLabel for="opt1" value="#{msg['sal_key_press_doc']}" />
+								<p:inputText value="#{contactBacking.docPatient}"
+									style="width:100%"
+									disabled="#{contactBacking.optionSearchPatient ne 1}">
+									<pe:keyFilter regEx="/[\d]/" preventPaste="false" />
+								</p:inputText>
+
+								<p:radioButton id="opt2" for="customRadio" itemIndex="1" />
+								<h:outputLabel for="opt2" value="#{msg['sal_key_press_nom']}" />
+								<p:inputText value="#{contactBacking.namePatient}"
+									style="width:100%"
+									disabled="#{contactBacking.optionSearchPatient ne 2}">
+									<pe:keyFilter regEx="/[a-zA-Z\s]/i" />
+								</p:inputText>
+
+								<p:radioButton id="opt3" for="customRadio" itemIndex="2" />
+								<h:outputLabel for="opt3" value="#{msg['sal_key_press_tel']}" />
+								<p:inputText value="#{contactBacking.telPatient}"
+									style="width:100%"
+									disabled="#{contactBacking.optionSearchPatient ne 3}">
+									<pe:keyFilter regEx="/[\d]/" preventPaste="false" />
+								</p:inputText>
+							</h:panelGrid>
+						</p:outputPanel>
+					</h:panelGrid>
+
+					<p:scrollPanel id="pnlTable2" style="width:580px;height:300px">
+						<p:dataTable id="recordTable2" var="rec"
+							value="#{contactBacking.patientModel}" rowKey="#{rec.id}"
+							selection="#{contactBacking.selectedPatientTemp}"
+							paginator="true" rows="15" style="width:570px"
+							emptyMessage="#{msg['glb_no_records_found']}">
+
+							<p:column selectionMode="single" style="width:18px" />
+
+							<p:column headerText="#{msg['pat_code_1']}">
+								<h:outputLabel value="#{rec.doc}" />
+							</p:column>
+
+							<p:column headerText="#{msg['pat_sap_code']}">
+								<h:outputLabel value="#{rec.codeSap}" />
+							</p:column>
+
+							<p:column headerText="#{msg['pat_names']}">
+								<h:outputLabel value="#{rec.names}" />
+							</p:column>
+
+							<p:column headerText="#{msg['pat_send_phone']}">
+								<h:outputLabel value="#{rec.phoneNumber} #{rec.cellNumber}" />
+							</p:column>
+
+						</p:dataTable>
+					</p:scrollPanel>
+
+				</p:dialog>
+			</h:form>
+			
 
 			<script type="text/javascript">
 				function handleLoginRequest(xhr, status, args) {

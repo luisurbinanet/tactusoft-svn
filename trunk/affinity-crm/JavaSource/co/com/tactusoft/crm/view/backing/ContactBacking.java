@@ -38,8 +38,6 @@ public class ContactBacking extends BaseBacking {
 	private boolean automatic;
 
 	private List<SelectItem> listDocType;
-	protected CrmPatient tmpSelectedPatient;
-
 	private List<String> selectedSendOptions;
 
 	private boolean saved;
@@ -80,14 +78,6 @@ public class ContactBacking extends BaseBacking {
 		this.listDocType = listDocType;
 	}
 
-	public CrmPatient getTmpSelectedPatient() {
-		return tmpSelectedPatient;
-	}
-
-	public void setTmpSelectedPatient(CrmPatient tmpSelectedPatient) {
-		this.tmpSelectedPatient = tmpSelectedPatient;
-	}
-
 	public List<String> getSelectedSendOptions() {
 		return selectedSendOptions;
 	}
@@ -120,9 +110,9 @@ public class ContactBacking extends BaseBacking {
 
 		// Busquedas
 		optionSearchPatient = 1;
-		docPatient = null;
-		namePatient = null;
+		cleanPatientFields();
 		patientModel = new PatientDataModel();
+		selectedPatientTemp = null;
 
 		mapOccupation = new HashMap<BigDecimal, CrmOccupation>();
 	}
@@ -232,30 +222,37 @@ public class ContactBacking extends BaseBacking {
 	public void refreshSearchAction(ActionEvent event) {
 		listPatient = new LinkedList<CrmPatient>();
 		patientModel = new PatientDataModel(listPatient);
-		tmpSelectedPatient = new CrmPatient();
+		selectedPatientTemp = new CrmPatient();
 		optionSearchPatient = 1;
-		docPatient = null;
-		namePatient = null;
+		cleanPatientFields();
 		disabledAddPatient = true;
 	}
 
 	public void searchAction(ActionEvent event) {
 		listPatient = new LinkedList<CrmPatient>();
 		patientModel = new PatientDataModel(listPatient);
-		tmpSelectedPatient = new CrmPatient();
+		selectedPatientTemp = new CrmPatient();
 		if (optionSearchPatient == 1) {
-			tmpSelectedPatient = processService.getContactByDoc(docPatient);
-			if (tmpSelectedPatient.getId() != null) {
-				listPatient.add(tmpSelectedPatient);
+			selectedPatientTemp = processService.getContactByDoc(docPatient);
+			if (selectedPatientTemp.getId() != null) {
+				listPatient.add(selectedPatientTemp);
 				patientModel = new PatientDataModel(listPatient);
 				disabledAddPatient = false;
 			}
-		} else {
-			listPatient = processService.getContactByName(namePatient
-					.toUpperCase());
+		} else if (optionSearchPatient == 2) {
+			listPatient = processService.getListPatientByField("NAMES",
+					namePatient.toUpperCase());
 			patientModel = new PatientDataModel(listPatient);
 			if (listPatient.size() > 0) {
-				tmpSelectedPatient = listPatient.get(0);
+				selectedPatientTemp = listPatient.get(0);
+				disabledAddPatient = false;
+			}
+		} else if (optionSearchPatient == 3) {
+			listPatient = processService.getListPatientByField("PHONE",
+					this.telPatient);
+			patientModel = new PatientDataModel(listPatient);
+			if (listPatient.size() > 0) {
+				selectedPatientTemp = listPatient.get(0);
 				disabledAddPatient = false;
 			}
 		}
@@ -423,7 +420,7 @@ public class ContactBacking extends BaseBacking {
 	}
 
 	public void addContactAction(ActionEvent event) {
-		selectedPatient = tmpSelectedPatient;
+		selectedPatient = selectedPatientTemp;
 		newRecord = false;
 		idCountry = selectedPatient.getIdCountry();
 		handleCountryChange();
