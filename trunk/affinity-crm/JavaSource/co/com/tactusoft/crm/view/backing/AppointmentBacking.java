@@ -778,8 +778,11 @@ public class AppointmentBacking extends BaseBacking {
 			CrmBranch branch = mapBranch.get(idBranch);
 
 			int validateApp = 0;
-			validateApp = processService.validateAppointmentForDate(
-					selectedCandidate.getStartDate(), selectedPatient.getId());
+			if (!this.edit) {
+				validateApp = processService.validateAppointmentForDate(
+						selectedCandidate.getStartDate(),
+						selectedPatient.getId());
+			}
 
 			if (validateApp == 0) {
 				if (appType.equals("ORDINARY")) {

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
@@ -26,6 +27,7 @@ import co.com.tactusoft.crm.util.SAPEnvironment;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 
 import com.tactusoft.webservice.client.beans.WSBean;
+import com.tactusoft.webservice.client.beans.WSBeanPatient;
 import com.tactusoft.webservice.client.execute.CustomerExecute;
 
 @Named
@@ -36,6 +38,7 @@ public class ContactBacking extends BaseBacking {
 	private boolean disabledSaveButton;
 	private boolean newRecord;
 	private boolean automatic;
+	private boolean existsSAP;
 
 	private List<SelectItem> listDocType;
 	private List<String> selectedSendOptions;
@@ -107,6 +110,7 @@ public class ContactBacking extends BaseBacking {
 		disabledSaveButton = false;
 		newRecord = true;
 		saved = false;
+		existsSAP = false;
 
 		// Busquedas
 		optionSearchPatient = 1;
@@ -232,12 +236,61 @@ public class ContactBacking extends BaseBacking {
 		listPatient = new LinkedList<CrmPatient>();
 		patientModel = new PatientDataModel(listPatient);
 		selectedPatientTemp = new CrmPatient();
+		existsSAP = false;
 		if (optionSearchPatient == 1) {
 			selectedPatientTemp = processService.getContactByDoc(docPatient);
 			if (selectedPatientTemp.getId() != null) {
 				listPatient.add(selectedPatientTemp);
 				patientModel = new PatientDataModel(listPatient);
 				disabledAddPatient = false;
+			} else {
+				SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
+				CrmProfile profile = mapProfile.get(this.idProfile);
+				selectedPatientTemp.setCrmProfile(profile);
+
+				List<WSBean> listPatientSAP = CustomerExecute.findByDoc(
+						sap.getUrlCustomer2(), sap.getUsername(),
+						sap.getPassword(), profile.getSociety(),
+						this.docPatient);
+
+				if (listPatientSAP.size() > 0) {
+					String codeSap = listPatientSAP.get(0).getCode();
+
+					WSBeanPatient customer = CustomerExecute.getDetailcomplete(
+							sap.getUrlCustomer2(), sap.getUsername(),
+							sap.getPassword(), codeSap, profile.getSalesOrg(),
+							profile.getDistrChan(), profile.getDivision());
+
+					if (customer != null) {
+						existsSAP = true;
+						selectedPatientTemp.setDoc(this.docPatient);
+						selectedPatientTemp.setCodeSap(customer.getCodeSap());
+						selectedPatientTemp.setFirstnames(customer
+								.getFirstname());
+						selectedPatientTemp.setSurnames(customer.getLastname());
+						selectedPatientTemp.setAddress(customer.getAddress());
+						selectedPatientTemp.setPhoneNumber(customer
+								.getPhoneNumber());
+						selectedPatientTemp.setEmail(customer.getEmail());
+						selectedPatientTemp.setZipCode(customer.getZipCode());
+						selectedPatientTemp.setCycle(false);
+
+						for (Map.Entry<BigDecimal, CrmCountry> entry : mapCountry
+								.entrySet()) {
+							if (customer.getCountry().equalsIgnoreCase(
+									entry.getValue().getCode())) {
+								idCountry = entry.getValue().getId();
+								selectedPatientTemp.setIdCountry(idCountry);
+								break;
+							}
+						}
+
+						newRecord = false;
+
+						listPatient.add(selectedPatientTemp);
+						patientModel = new PatientDataModel(listPatient);
+					}
+				}
 			}
 		} else if (optionSearchPatient == 2) {
 			listPatient = processService.getListPatientByField("NAMES",
@@ -361,6 +414,23 @@ public class ContactBacking extends BaseBacking {
 				}
 				FacesUtil.addError(message);
 			}
+		}
+	}
+	
+	public void addPatientAction(ActionEvent event) {
+		selectedPatient = selectedPatientTemp;
+		newRecord = false;
+		idCountry = selectedPatient.getIdCountry();
+		handleCountryChange();
+
+		if (existsSAP) {
+			String message = FacesUtil.getMessage("pat_msg_exists_sap");
+			FacesUtil.addWarn(message);
+			handleRegionChange();
+		} else {
+			idRegion = selectedPatient.getIdRegion();
+			handleRegionChange();
+			idCity = selectedPatient.getIdCity();
 		}
 	}
 
