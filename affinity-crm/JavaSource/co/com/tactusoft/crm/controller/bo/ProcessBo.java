@@ -862,6 +862,19 @@ public class ProcessBo implements Serializable {
 		return listApp.size();
 	}
 
+	public int validateAppointmentForDate(Date currentDate,
+			BigDecimal idPatient) {
+		int result = 0;
+		String dateString = FacesUtil.formatDate(currentDate, "yyyy-MM-dd");
+		List<CrmAppointment> list = dao
+				.find("from CrmAppointment o where Date(o.startAppointmentDate) = '"
+						+ dateString + "' AND o.crmPatient.id = " + idPatient);
+		if (list.size() > 0) {
+			result = -5;
+		}
+		return result;
+	}
+
 	public int validateAppointmentForDate(BigDecimal idBranch, Date starDate,
 			Date endDate, CrmProcedureDetail procedureDetail,
 			BigDecimal idDoctor, BigDecimal idPatient, String timeType,

@@ -446,4 +446,12 @@ public class ContactBacking extends BaseBacking {
 		return "/pages/processes/searchByPatient.jsf?faces-redirect=true";
 	}
 
+	public String goChecking() {
+		AppointmentPatientBacking appointmentPatientBacking = FacesUtil
+				.findBean("appointmentPatientBacking");
+		appointmentPatientBacking.setSelectedPatient(selectedPatient);
+		appointmentPatientBacking.searchAppoinmnetConfirmedAction();
+		return "/pages/processes/appointmentCheck.jsf?faces-redirect=true";
+	}
+
 }

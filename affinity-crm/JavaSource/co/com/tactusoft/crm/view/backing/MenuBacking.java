@@ -82,6 +82,10 @@ public class MenuBacking implements Serializable {
 		SearchByPatientBacking searchByPatientBacking = FacesUtil
 				.findBean("searchByPatientBacking");
 		searchByPatientBacking.newAction(null);
+		
+		AppointmentPatientBacking appointmentPatientBacking = FacesUtil
+				.findBean("appointmentPatientBacking");
+		appointmentPatientBacking.newAction(null);
 
 		/*CampaignBacking campaignBacking = FacesUtil.findBean("campaignBacking");
 		campaignBacking.newAction();
@@ -104,6 +108,8 @@ public class MenuBacking implements Serializable {
 	}
 
 	public String actionPage() {
+		refreshBackings();
+		
 		String page = FacesUtil.getParam("page");
 		if (page != null) {
 			page = page + "?faces-redirect=true";

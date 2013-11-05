@@ -1036,27 +1036,31 @@ public class HistoryBacking extends BaseBacking {
 	}
 
 	public boolean isDisabledDiagnosis() {
-		return listDiagnosis.size() == 0 ? true : false;
+		return listDiagnosis != null && listDiagnosis.size() == 0 ? true
+				: false;
 	}
 
 	public boolean isDisabledMedication() {
-		return listMedication.size() == 0 ? true : false;
+		return listMedication != null && listMedication.size() == 0 ? true
+				: false;
 	}
 
 	public boolean isDisabledTherapy() {
-		return listTherapy.size() == 0 ? true : false;
+		return listTherapy != null && listTherapy.size() == 0 ? true : false;
 	}
 
 	public boolean isDisabledExam() {
-		return listExam.size() == 0 ? true : false;
+		return listExam != null && listExam.size() == 0 ? true : false;
 	}
 
 	public boolean isDisabledOtherMedication() {
-		return listOtherMedication.size() == 0 ? true : false;
+		return listOtherMedication != null && listOtherMedication.size() == 0 ? true
+				: false;
 	}
 
 	public boolean isDisabledNote() {
-		return listNoteTherapyItem.size() == 0 ? true : false;
+		return listNoteTherapyItem != null && listNoteTherapyItem.size() == 0 ? true
+				: false;
 	}
 
 	public void calculateIMCAction(ActionEvent event) {

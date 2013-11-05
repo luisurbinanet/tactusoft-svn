@@ -223,7 +223,7 @@
 						<h:outputLabel value="#{msg['app_obs']}" />
 						<h:inputTextarea rows="3" style="width:400px"
 							rendered="#{appointmentPatientBacking.selectedAppointment eq null?false:true}"
-							value="#{appointmentPatientBacking.selectedAppointment.obs}" />
+							value="#{appointmentPatientBacking.selectedAppointment.obsCancel}" />
 
 						<f:facet name="footer">
 							<p:commandButton id="confirm" value="#{msg['glb_state_yes']}"

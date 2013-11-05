@@ -778,22 +778,27 @@ public class AppointmentBacking extends BaseBacking {
 			CrmBranch branch = mapBranch.get(idBranch);
 
 			int validateApp = 0;
-			if (appType.equals("ORDINARY")) {
-				validateApp = processService.validateAppointmentForDate(
-						branch.getId(), selectedCandidate.getStartDate(),
-						selectedCandidate.getEndDate(), procedureDetail,
-						selectedCandidate.getDoctor().getId(),
-						selectedPatient.getId(), timeType, edit);
-			} else {
-				CrmDoctor doctor = mapDoctor.get(selected.getCrmDoctor()
-						.getId());
-				selectedCandidate = new Candidate();
-				selectedCandidate.setBranch(branch.getName());
-				selectedCandidate.setProcedure(procedureDetail.getName());
-				selectedCandidate.setStartDate(currentDate);
-				selectedCandidate.setEndDate(FacesUtil.addMinutesToDate(
-						currentDate, procedureDetail.getTimeDoctor()));
-				selectedCandidate.setDoctor(doctor);
+			validateApp = processService.validateAppointmentForDate(
+					selectedCandidate.getStartDate(), selectedPatient.getId());
+
+			if (validateApp == 0) {
+				if (appType.equals("ORDINARY")) {
+					validateApp = processService.validateAppointmentForDate(
+							branch.getId(), selectedCandidate.getStartDate(),
+							selectedCandidate.getEndDate(), procedureDetail,
+							selectedCandidate.getDoctor().getId(),
+							selectedPatient.getId(), timeType, edit);
+				} else {
+					CrmDoctor doctor = mapDoctor.get(selected.getCrmDoctor()
+							.getId());
+					selectedCandidate = new Candidate();
+					selectedCandidate.setBranch(branch.getName());
+					selectedCandidate.setProcedure(procedureDetail.getName());
+					selectedCandidate.setStartDate(currentDate);
+					selectedCandidate.setEndDate(FacesUtil.addMinutesToDate(
+							currentDate, procedureDetail.getTimeDoctor()));
+					selectedCandidate.setDoctor(doctor);
+				}
 			}
 
 			if (validateApp != 0) {
@@ -809,6 +814,9 @@ public class AppointmentBacking extends BaseBacking {
 					break;
 				case -4:
 					infoMessage = FacesUtil.getMessage("app_msg_error_4");
+					break;
+				case -5:
+					infoMessage = FacesUtil.getMessage("app_msg_error_5");
 					break;
 				}
 
