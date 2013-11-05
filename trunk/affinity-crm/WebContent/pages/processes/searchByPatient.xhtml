@@ -129,18 +129,16 @@
 						<h:outputLabel value="#{rec.closeAppointment?'SI':'NO'}" />
 					</p:column>
 
+					<p:column headerText="#{msg['pat_type_obs']}" style="width:100px">
+						<h:inputTextarea rows="3" style="width:200px" value="#{rec.obs}" readonly="true"/>
+					</p:column>
+
 					<p:column headerText="#{msg['app_state']}">
 						<h:outputLabel
 							value="#{rec.state eq 1?'Agendada':rec.state eq 2?'Cancelada':rec.state eq 3?'Chequeada':rec.state eq 4?'Asistió a Consulta':'No Asistió a Consulta'}" />
 					</p:column>
 
-					<p:column style="width:8%">
-						<p:commandButton update=":editForm:display"
-							oncomplete="obsDialog.show()" icon="ui-icon-search"
-							title="#{msg['btn_view']}">
-							<f:setPropertyActionListener value="#{rec}"
-								target="#{searchByPatientBacking.selectedAppointment}" />
-						</p:commandButton>
+					<p:column style="width:4%">
 						<p:commandButton update=":editForm:tabFormula"
 							oncomplete="formulaDlg.show()" icon="ui-icon-print"
 							title="#{msg['btn_print']}"
@@ -166,7 +164,7 @@
 							actionListener="#{searchByPatientBacking.generateListDoctor}"
 							icon="ui-icon-check" onclick="checkedDlg.show()"
 							update=":editForm:checkedPanel"
-							disabled="#{(searchByPatientBacking.selectedAppointment.state eq 1?false:true) or searchByPatientBacking.selectedPatient.contact}" />
+							disabled="#{(searchByPatientBacking.selectedAppointment.state eq 1?false:true) or searchByPatientBacking.selectedPatient.contact or searchByPatientBacking.compareDates()}" />
 						<p:commandButton value="#{msg['btn_open_appointment']}"
 							icon="ui-icon-folder-open" onclick="openAppDlg.show()"
 							rendered="#{searchByPatientBacking.openAppointment}"
@@ -279,7 +277,7 @@
 						<h:outputLabel value="#{msg['app_obs']}" />
 						<h:inputTextarea rows="3" style="width:400px"
 							rendered="#{searchByPatientBacking.selectedAppointment eq null?false:true}"
-							value="#{searchByPatientBacking.selectedAppointment.obs}" />
+							value="#{searchByPatientBacking.selectedAppointment.obsCancel}" />
 
 						<f:facet name="footer">
 							<p:commandButton id="confirm" value="#{msg['glb_state_yes']}"

@@ -23,7 +23,7 @@ import co.com.tactusoft.crm.view.datamodel.AppointmentDataModel;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 
 @Named
-@Scope("view")
+@Scope("session")
 public class AppointmentPatientBacking extends BaseBacking {
 
 	private static final long serialVersionUID = 1L;
@@ -119,7 +119,7 @@ public class AppointmentPatientBacking extends BaseBacking {
 		disabledSaveButton = false;
 
 		optionSearchPatient = 1;
-		namePatient = "";
+		cleanPatientFields();
 	}
 
 	public void searchAppoinmnetConfirmedAction() {
@@ -253,5 +253,15 @@ public class AppointmentPatientBacking extends BaseBacking {
 		contactBacking.setSelectedPatient(selectedPatient);
 		contactBacking.setNewRecord(false);
 		return "/pages/processes/contact?faces-redirect=true";
+	}
+
+	public boolean compareDates() {
+		Date currentDate = FacesUtil
+				.getDateWithoutTime(this.selectedAppointment
+						.getStartAppointmentDate());
+		Date today = FacesUtil.getDateWithoutTime(new Date());
+		int result = today.compareTo(currentDate);
+		return result == 0 ? false : true;
+
 	}
 }

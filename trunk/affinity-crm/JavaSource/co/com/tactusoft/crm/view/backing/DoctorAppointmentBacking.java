@@ -343,7 +343,8 @@ public class DoctorAppointmentBacking extends BaseBacking {
 			for (VwAppointment row : listAppointment) {
 				String title = "Nro. Cita:" + row.getCode() + ". Paciente: "
 						+ row.getPatFirstnames() + " " + row.getPatSurnames()
-						+ ". Doctor: " + row.getDoctorNames();
+						+ ". Doctor: " + row.getDoctorNames()
+						+ ". Procedimiento: " + row.getPrcDetName();
 				branchEventModel
 						.addEvent(new DefaultScheduleEvent(title, row
 								.getStartAppointmentDate(), row

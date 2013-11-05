@@ -230,9 +230,7 @@ public class SearchByPatientBacking extends BaseBacking {
 		disabledSaveButton = false;
 
 		optionSearchPatient = 1;
-		docPatient = "";
-		namePatient = "";
-		telPatient = "";
+		cleanPatientFields();
 		startDate = new Date();
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(startDate);
@@ -334,7 +332,7 @@ public class SearchByPatientBacking extends BaseBacking {
 		appointmentEditBacking.setSaved(false);
 		appointmentEditBacking.setFromPage("SEARCH");
 
-		appointmentEditBacking.handleBranchChange();
+		//appointmentEditBacking.handleBranchChange();
 
 		Map<String, Object> options = new HashMap<String, Object>();
 		options.put("modal", true);
@@ -488,6 +486,16 @@ public class SearchByPatientBacking extends BaseBacking {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public boolean compareDates() {
+		Date currentDate = FacesUtil
+				.getDateWithoutTime(this.selectedAppointment
+						.getStartAppointmentDate());
+		Date today = FacesUtil.getDateWithoutTime(new Date());
+		int result = today.compareTo(currentDate);
+		return result == 0 ? false : true;
+
 	}
 
 }

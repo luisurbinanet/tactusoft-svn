@@ -68,6 +68,11 @@
 					paginator="true" rows="10"
 					emptyMessage="#{msg['glb_no_records_found']}">
 
+					<p:ajax event="rowSelectRadio" update="selectedTable">
+						<f:setPropertyActionListener value="#{rec}"
+							target="#{appointmentPatientBacking.selectedAppointment}" />
+					</p:ajax>
+
 					<p:column selectionMode="single" style="width:18px" />
 
 					<p:column headerText="#{msg['app_code']}">
@@ -117,7 +122,7 @@
 						<p:commandButton value="#{msg['btn_check_appointment']}"
 							icon="ui-icon-check" onclick="confirmDlg.show()"
 							actionListener="#{appointmentPatientBacking.generateListDoctor}"
-							disabled="#{appointmentPatientBacking.disabledAppointment}"
+							disabled="#{appointmentPatientBacking.disabledAppointment or appointmentPatientBacking.compareDates()}"
 							update=":editForm:confirmPanel" />
 					</f:facet>
 

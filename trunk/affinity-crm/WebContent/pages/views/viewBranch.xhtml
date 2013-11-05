@@ -28,7 +28,8 @@
 
 				<h:panelGrid columns="4" width="100%">
 					<h:outputLabel value="#{msg['app_branch']}" />
-					<p:selectOneMenu style="width:400px"
+					<p:selectOneMenu style="width:400px" filter="true"
+						filterMatchMode="contains"
 						value="#{doctorAppointmentBacking.idBranch}">
 						<f:selectItems value="#{doctorAppointmentBacking.listBranch}" />
 						<p:ajax update="selDoctor"
@@ -36,7 +37,8 @@
 					</p:selectOneMenu>
 
 					<h:outputLabel value="#{msg['app_doctor']}" />
-					<p:selectOneMenu id="selDoctor" style="width:400px"
+					<p:selectOneMenu id="selDoctor" style="width:400px" filter="true"
+						filterMatchMode="contains"
 						value="#{doctorAppointmentBacking.doctor.id}">
 						<f:selectItems value="#{doctorAppointmentBacking.listDoctor}" />
 					</p:selectOneMenu>

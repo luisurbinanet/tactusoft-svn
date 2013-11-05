@@ -206,6 +206,8 @@
 									action="#{contactBacking.goSearchByPatient}" immediate="true" />
 								<p:menuitem value="#{msg['title_sales_order']}" rendered="false"
 									action="#{contactBacking.goAppointment}" immediate="true" />
+								<p:menuitem value="#{msg['title_appointment_check']}"
+									action="#{contactBacking.goChecking}" immediate="true" />
 							</p:splitButton>
 
 						</p:toolbarGroup>
@@ -357,7 +359,7 @@
 				</p:dialog>
 
 			</h:form>
-			
+
 			<h:form id="editForm">
 				<p:dialog header="#{msg['btn_search']}" widgetVar="searchDlg"
 					resizable="false" id="searchDialog" showEffect="fade"
@@ -452,7 +454,7 @@
 
 				</p:dialog>
 			</h:form>
-			
+
 
 			<script type="text/javascript">
 				function handleLoginRequest(xhr, status, args) {
