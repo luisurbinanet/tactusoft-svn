@@ -251,10 +251,18 @@ public class AppointmentPatientBacking extends BaseBacking {
 	}
 
 	public String addGoContactAction() {
-		ContactBacking contactBacking = FacesUtil.findBean("contactBacking");
-		contactBacking.setSelectedPatient(selectedPatient);
-		contactBacking.setNewRecord(false);
-		return "/pages/processes/contact?faces-redirect=true";
+		PatientBacking patientBacking = FacesUtil.findBean("patientBacking");
+		patientBacking.setSelectedPatient(selectedPatient);
+		patientBacking.getSelectedPatient().setCodeSap(null);
+		patientBacking.setNewRecord(true);
+		patientBacking.getListProfile();
+		patientBacking.getListCountry();
+		patientBacking.setIdCountry(selectedPatient.getIdCountry());
+		patientBacking.handleCountryChange();
+		patientBacking.setIdRegion(selectedPatient.getIdRegion());
+		patientBacking.handleRegionChange();
+		patientBacking.setIdCity(selectedPatient.getIdCity());
+		return "/pages/processes/patient?faces-redirect=true";
 	}
 
 	public boolean compareDates() {
@@ -266,7 +274,7 @@ public class AppointmentPatientBacking extends BaseBacking {
 		return result == 0 ? false : true;
 
 	}
-	
+
 	public void editAppoinmnetAction() {
 		AppointmentBacking appointmentEditBacking = FacesUtil
 				.findBean("appointmentBacking");
@@ -302,7 +310,7 @@ public class AppointmentPatientBacking extends BaseBacking {
 		appointmentEditBacking.setSaved(false);
 		appointmentEditBacking.setFromPage("SEARCH");
 
-		//appointmentEditBacking.handleBranchChange();
+		// appointmentEditBacking.handleBranchChange();
 
 		Map<String, Object> options = new HashMap<String, Object>();
 		options.put("modal", true);
