@@ -310,7 +310,15 @@ public class PatientBacking extends BaseBacking {
 								String.valueOf(this.numCell));
 
 				FacesUtil.addError(message);
-			} else {
+			}
+
+			if (selectedPatient.isCycle()
+					&& selectedPatientSendOptions.isEmpty()) {
+				message = FacesUtil.getMessage("pat_msg_send");
+				FacesUtil.addError(message);
+			}
+
+			if (message == null) {
 				try {
 					SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
 					CrmProfile profile = mapProfile.get(selectedPatient
