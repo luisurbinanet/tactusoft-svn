@@ -2,6 +2,7 @@ package co.com.tactusoft.crm.view.backing;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,6 +16,7 @@ import org.primefaces.context.RequestContext;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
+import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.util.Constant;
@@ -263,5 +265,53 @@ public class AppointmentPatientBacking extends BaseBacking {
 		int result = today.compareTo(currentDate);
 		return result == 0 ? false : true;
 
+	}
+	
+	public void editAppoinmnetAction() {
+		AppointmentBacking appointmentEditBacking = FacesUtil
+				.findBean("appointmentBacking");
+
+		appointmentEditBacking.newAction(null);
+		appointmentEditBacking.setSelected(selectedAppointment);
+		appointmentEditBacking.setSelectedPatient(selectedAppointment
+				.getCrmPatient());
+		appointmentEditBacking.setCurrentDate(new Date());
+
+		appointmentEditBacking.setListBranch(new LinkedList<SelectItem>());
+		appointmentEditBacking
+				.setMapBranch(new LinkedHashMap<BigDecimal, CrmBranch>());
+		for (CrmBranch row : FacesUtil.getCurrentUserData().getListBranch()) {
+			appointmentEditBacking.getMapBranch().put(row.getId(), row);
+			appointmentEditBacking.getListBranch().add(
+					new SelectItem(row.getId(), row.getName()));
+			if (row.getId().longValue() == selectedAppointment.getCrmBranch()
+					.getId().longValue()) {
+				appointmentEditBacking.setSaved(false);
+				break;
+			}
+		}
+		appointmentEditBacking.setIdBranch(selectedAppointment.getCrmBranch()
+				.getId());
+		appointmentEditBacking.handleBranchChange();
+		appointmentEditBacking.setIdProcedureDetail(selectedAppointment
+				.getCrmProcedureDetail().getId());
+		appointmentEditBacking.handleProcedureDetailChange();
+		appointmentEditBacking.setSelectedWSGroupSellers(selectedAppointment
+				.getCodPublicity());
+		appointmentEditBacking.setEdit(true);
+		appointmentEditBacking.setSaved(false);
+		appointmentEditBacking.setFromPage("SEARCH");
+
+		//appointmentEditBacking.handleBranchChange();
+
+		Map<String, Object> options = new HashMap<String, Object>();
+		options.put("modal", true);
+		options.put("draggable", false);
+		options.put("resizable", false);
+		options.put("contentWidth", 1200);
+		options.put("contentHeight", 800);
+
+		RequestContext.getCurrentInstance().openDialog("appointmentEditDialog",
+				options, null);
 	}
 }

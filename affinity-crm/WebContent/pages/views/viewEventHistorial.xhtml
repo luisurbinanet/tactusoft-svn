@@ -50,211 +50,218 @@
 						style="width:350px;background-color:#FFFF80;font-weight:bold;"
 						readonly="true" />
 
+					<h:outputLabel value="#{msg['pat_address']}" />
+					<p:inputText
+						value="#{eventsHistorialBacking.selectedPatient.address}"
+						style="width:350px;background-color:#FFFF80;font-weight:bold;"
+						readonly="true" />
+
+					<h:outputLabel value="#{msg['pat_city']}" />
+					<p:inputText
+						value="#{eventsHistorialBacking.selectedPatient.crmCity.name}"
+						style="width:350px;background-color:#FFFF80;font-weight:bold;"
+						readonly="true" />
+
+					<h:outputLabel value="#{msg['pat_phone_number']}" />
+					<p:inputText
+						value="#{eventsHistorialBacking.selectedPatient.phoneNumber}"
+						style="width:350px;background-color:#FFFF80;font-weight:bold;"
+						readonly="true" />
+
+					<h:outputLabel value="#{msg['pat_cell_number']}" />
+					<p:inputText
+						value="#{eventsHistorialBacking.selectedPatient.cellNumber}"
+						style="width:350px;background-color:#FFFF80;font-weight:bold;"
+						readonly="true" />
+
 				</h:panelGrid>
 
 				<p:spacer />
 
 				<h:panelGrid id="pnlTable" width="100%" columns="1">
 
-					<p:dataTable id="tblHistoryAppointment" var="rec"
-						value="#{eventsHistorialBacking.listAppointment}"
-						rowKey="#{rec.code}" style="width:100%" paginator="true" rows="10"
-						emptyMessage="#{msg['glb_no_records_found']}">
+					<p:accordionPanel>
+						<p:tab title="#{msg['his_history']}">
+							<p:dataTable id="tblHistoryAppointment" var="rec"
+								value="#{eventsHistorialBacking.listAppointment}"
+								rowKey="#{rec.code}" style="width:100%" paginator="true"
+								rows="10" emptyMessage="#{msg['glb_no_records_found']}">
 
-						<f:facet name="header">
-							<h:outputLabel value="#{msg['his_history']}" />
-						</f:facet>
+								<p:column headerText="#{msg['app_date']}">
+									<h:outputLabel value="#{rec.startAppointmentDate}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputLabel>
+								</p:column>
 
-						<p:column headerText="#{msg['app_date']}">
-							<h:outputLabel value="#{rec.startAppointmentDate}">
-								<f:convertDateTime pattern="dd/MM/yyyy" />
-							</h:outputLabel>
-						</p:column>
+								<p:column headerText="#{msg['app_branch']}">
+									<h:outputLabel value="#{rec.branchName}" />
+								</p:column>
 
-						<p:column headerText="#{msg['app_branch']}">
-							<h:outputLabel value="#{rec.branchName}" />
-						</p:column>
+								<p:column headerText="#{msg['app_doctor']}">
+									<h:outputLabel value="#{rec.doctorNames}" />
+								</p:column>
 
-						<p:column headerText="#{msg['app_doctor']}">
-							<h:outputLabel value="#{rec.doctorNames}" />
-						</p:column>
+								<p:column headerText="#{msg['app_procedure']}">
+									<h:outputLabel value="#{rec.prcDetName}" />
+								</p:column>
 
-						<p:column headerText="#{msg['app_procedure']}">
-							<h:outputLabel value="#{rec.prcDetName}" />
-						</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="#{msg['app_state']}" />
+									</f:facet>
+									<h:outputLabel
+										value="#{rec.state eq 1?'Agendada':rec.state eq 2?'Cancelada':rec.state eq 3?'Chequeada':rec.state eq 4?'Asistió a Consulta':'No Asistió a Consulta'}" />
+								</p:column>
 
-						<p:column>
-							<f:facet name="header">
-								<h:outputText value="#{msg['app_state']}" />
-							</f:facet>
-							<h:outputLabel
-								value="#{rec.state eq 1?'Agendada':rec.state eq 2?'Cancelada':rec.state eq 3?'Chequeada':rec.state eq 4?'Asistió a Consulta':'No Asistió a Consulta'}" />
-						</p:column>
+							</p:dataTable>
+						</p:tab>
 
-					</p:dataTable>
+						<p:tab title="#{msg['his_history_medicaction']}">
+							<p:dataTable var="rec"
+								value="#{eventsHistorialBacking.listMedication}"
+								paginator="true" rows="15" style="width:100%"
+								emptyMessage="#{msg['glb_no_records_found']}">
 
-					<p:spacer />
+								<p:column headerText="#{msg['app_date']}">
+									<h:outputLabel value="#{rec.appointmentDate}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputLabel>
+								</p:column>
 
-					<p:dataTable var="rec"
-						value="#{eventsHistorialBacking.listMedication}" paginator="true"
-						rows="15" style="width:100%"
-						emptyMessage="#{msg['glb_no_records_found']}">
+								<p:column headerText="#{msg['app_doctor']}">
+									<h:outputLabel value="#{rec.doctorName}" />
+								</p:column>
 
-						<f:facet name="header">
-							<h:outputLabel value="#{msg['his_history_medicaction']}" />
-						</f:facet>
+								<p:column headerText="#{msg['sal_material_descr']}">
+									<h:outputLabel value="#{rec.descMaterial}" />
+								</p:column>
 
-						<p:column headerText="#{msg['app_date']}">
-							<h:outputLabel value="#{rec.appointmentDate}">
-								<f:convertDateTime pattern="dd/MM/yyyy" />
-							</h:outputLabel>
-						</p:column>
+								<p:column headerText="#{msg['sal_material_amount']}"
+									style="width:100px">
+									<h:outputLabel value="#{rec.unit}" />
+								</p:column>
 
-						<p:column headerText="#{msg['app_doctor']}">
-							<h:outputLabel value="#{rec.doctorName}" />
-						</p:column>
+								<p:column headerText="#{msg['cie_grp_diagnosis']}">
+									<h:outputLabel value="#{rec.descCie}" />
+								</p:column>
 
-						<p:column headerText="#{msg['sal_material_descr']}">
-							<h:outputLabel value="#{rec.descMaterial}" />
-						</p:column>
+								<p:column headerText="#{msg['cie_grp_sold']}">
+									<h:outputLabel value="#{rec.sold eq 1?'SI':'NO'}" />
+								</p:column>
+							</p:dataTable>
+						</p:tab>
 
-						<p:column headerText="#{msg['sal_material_amount']}"
-							style="width:100px">
-							<h:outputLabel value="#{rec.unit}" />
-						</p:column>
+						<p:tab title="#{msg['his_history_therapy']}">
+							<p:dataTable var="rec"
+								value="#{eventsHistorialBacking.listTherapy}" paginator="true"
+								rows="15" style="width:100%"
+								emptyMessage="#{msg['glb_no_records_found']}">
 
-						<p:column headerText="#{msg['cie_grp_diagnosis']}">
-							<h:outputLabel value="#{rec.descCie}" />
-						</p:column>
+								<p:column headerText="#{msg['app_date']}">
+									<h:outputLabel value="#{rec.appointmentDate}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputLabel>
+								</p:column>
 
-						<p:column headerText="#{msg['cie_grp_sold']}">
-							<h:outputLabel value="#{rec.sold eq 1?'SI':'NO'}" />
-						</p:column>
-					</p:dataTable>
+								<p:column headerText="#{msg['app_doctor']}">
+									<h:outputLabel value="#{rec.doctorName}" />
+								</p:column>
 
-					<p:spacer />
+								<p:column headerText="#{msg['sal_material_descr']}">
+									<h:outputLabel value="#{rec.descMaterial}" />
+								</p:column>
 
-					<p:dataTable var="rec"
-						value="#{eventsHistorialBacking.listTherapy}" paginator="true"
-						rows="15" style="width:100%"
-						emptyMessage="#{msg['glb_no_records_found']}">
+								<p:column headerText="#{msg['sal_material_amount']}"
+									style="width:100px">
+									<h:outputLabel value="#{rec.unit}" />
+								</p:column>
+							</p:dataTable>
+						</p:tab>
 
-						<f:facet name="header">
-							<h:outputLabel value="#{msg['his_history_therapy']}" />
-						</f:facet>
+						<p:tab title="#{msg['his_history_examinations']}">
+							<p:dataTable var="rec"
+								value="#{eventsHistorialBacking.listLabExam}" paginator="true"
+								rows="15" style="width:100%"
+								emptyMessage="#{msg['glb_no_records_found']}">
 
-						<p:column headerText="#{msg['app_date']}">
-							<h:outputLabel value="#{rec.appointmentDate}">
-								<f:convertDateTime pattern="dd/MM/yyyy" />
-							</h:outputLabel>
-						</p:column>
+								<p:column headerText="#{msg['app_date']}">
+									<h:outputLabel value="#{rec.appointmentDate}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputLabel>
+								</p:column>
 
-						<p:column headerText="#{msg['app_doctor']}">
-							<h:outputLabel value="#{rec.doctorName}" />
-						</p:column>
+								<p:column headerText="#{msg['app_doctor']}">
+									<h:outputLabel value="#{rec.doctorName}" />
+								</p:column>
 
-						<p:column headerText="#{msg['sal_material_descr']}">
-							<h:outputLabel value="#{rec.descMaterial}" />
-						</p:column>
+								<p:column headerText="#{msg['sal_material_descr']}">
+									<h:outputLabel value="#{rec.descMaterial}" />
+								</p:column>
 
-						<p:column headerText="#{msg['sal_material_amount']}"
-							style="width:100px">
-							<h:outputLabel value="#{rec.unit}" />
-						</p:column>
-					</p:dataTable>
+								<p:column headerText="#{msg['sal_material_amount']}"
+									style="width:100px">
+									<h:outputLabel value="#{rec.unit}" />
+								</p:column>
+							</p:dataTable>
+						</p:tab>
 
-					<p:spacer />
+						<p:tab title="#{msg['cam_call_2']}">
+							<p:dataTable id="selectedTable" var="rec"
+								selection="#{eventsHistorialBacking.crmCampaignDetail}"
+								value="#{eventsHistorialBacking.listCampaign}"
+								rowKey="#{rec.id}" paginator="true" rows="10" style="width:100%"
+								emptyMessage="#{msg['glb_no_records_found']}">
 
-					<p:dataTable var="rec"
-						value="#{eventsHistorialBacking.listLabExam}" paginator="true"
-						rows="15" style="width:100%"
-						emptyMessage="#{msg['glb_no_records_found']}">
+								<p:ajax event="rowSelectRadio" update="selectedTable">
+									<f:setPropertyActionListener value="#{rec}"
+										target="#{eventsHistorialBacking.crmCampaignDetail}" />
+								</p:ajax>
 
-						<f:facet name="header">
-							<h:outputLabel value="#{msg['his_history_examinations']}" />
-						</f:facet>
+								<p:column selectionMode="single" style="width:2%" />
 
-						<p:column headerText="#{msg['app_date']}">
-							<h:outputLabel value="#{rec.appointmentDate}">
-								<f:convertDateTime pattern="dd/MM/yyyy" />
-							</h:outputLabel>
-						</p:column>
+								<p:column headerText="#{msg['cam_date']}">
+									<h:outputLabel value="#{rec.callDate}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
+									</h:outputLabel>
+								</p:column>
 
-						<p:column headerText="#{msg['app_doctor']}">
-							<h:outputLabel value="#{rec.doctorName}" />
-						</p:column>
+								<p:column headerText="#{msg['cam_branch']}"
+									filterMatchMode="contains" filterBy="#{rec.crmBranch.name}">
+									<h:outputLabel value="#{rec.crmCampaign.crmBranch.name}" />
+								</p:column>
 
-						<p:column headerText="#{msg['sal_material_descr']}">
-							<h:outputLabel value="#{rec.descMaterial}" />
-						</p:column>
+								<p:column headerText="#{msg['cam_user']}"
+									filterMatchMode="contains" filterBy="#{rec.crmUser.username}">
+									<h:outputLabel value="#{rec.crmCampaign.crmUser.username}" />
+								</p:column>
 
-						<p:column headerText="#{msg['sal_material_amount']}"
-							style="width:100px">
-							<h:outputLabel value="#{rec.unit}" />
-						</p:column>
-					</p:dataTable>
+								<p:column headerText="#{msg['glb_state']}"
+									filterMatchMode="contains">
+									<h:outputLabel
+										value="#{eventsHistorialBacking.getDescRecall(rec.status)}" />
+								</p:column>
 
-					<p:spacer />
+								<p:column headerText="#{msg['cam_type']}"
+									filterMatchMode="contains">
+									<h:outputLabel
+										value="#{campaignAdminBacking.getDescCampaignType(rec.idCampaignType)}" />
+								</p:column>
 
-					<p:dataTable id="selectedTable" var="rec"
-						selection="#{eventsHistorialBacking.crmCampaignDetail}"
-						value="#{eventsHistorialBacking.listCampaign}" rowKey="#{rec.id}"
-						paginator="true" rows="10" style="width:100%"
-						emptyMessage="#{msg['glb_no_records_found']}">
+								<p:column headerText="#{msg['pat_type_obs']}" width="50px">
+									<h:outputLabel value="#{rec.crmCampaign.observation}" />
+								</p:column>
 
-						<p:ajax event="rowSelectRadio" update="selectedTable">
-							<f:setPropertyActionListener value="#{rec}"
-								target="#{eventsHistorialBacking.crmCampaignDetail}" />
-						</p:ajax>
+								<f:facet name="footer">
+									<p:commandButton id="btnUpdateCall"
+										value="#{msg['btn_update_call']}" icon="ui-icon-clipboard"
+										action="#{eventsHistorialBacking.updateCall}"
+										update="selectedTable :form:growl"
+										disabled="#{eventsHistorialBacking.crmCampaignDetail.status eq 0?false:true}" />
+								</f:facet>
 
-						<f:facet name="header">
-							<h:outputLabel value="#{msg['cam_call_2']}" />
-						</f:facet>
-
-						<p:column selectionMode="single" style="width:2%" />
-
-						<p:column headerText="#{msg['cam_date']}">
-							<h:outputLabel value="#{rec.callDate}">
-								<f:convertDateTime pattern="dd/MM/yyyy" />
-							</h:outputLabel>
-						</p:column>
-
-						<p:column headerText="#{msg['cam_branch']}"
-							filterMatchMode="contains" filterBy="#{rec.crmBranch.name}">
-							<h:outputLabel value="#{rec.crmCampaign.crmBranch.name}" />
-						</p:column>
-
-						<p:column headerText="#{msg['cam_user']}"
-							filterMatchMode="contains" filterBy="#{rec.crmUser.username}">
-							<h:outputLabel value="#{rec.crmCampaign.crmUser.username}" />
-						</p:column>
-
-						<p:column headerText="#{msg['glb_state']}"
-							filterMatchMode="contains">
-							<h:outputLabel
-								value="#{eventsHistorialBacking.getDescRecall(rec.status)}" />
-						</p:column>
-
-						<p:column headerText="#{msg['cam_type']}"
-							filterMatchMode="contains">
-							<h:outputLabel
-								value="#{campaignAdminBacking.getDescCampaignType(rec.idCampaignType)}" />
-						</p:column>
-
-						<p:column headerText="#{msg['pat_type_obs']}" width="50px">
-							<h:outputLabel value="#{rec.crmCampaign.observation}" />
-						</p:column>
-
-						<f:facet name="footer">
-							<p:commandButton id="btnUpdateCall"
-								value="#{msg['btn_update_call']}" icon="ui-icon-clipboard"
-								action="#{eventsHistorialBacking.updateCall}"
-								update="selectedTable :form:growl"
-								disabled="#{eventsHistorialBacking.crmCampaignDetail.status eq 0?false:true}" />
-						</f:facet>
-
-					</p:dataTable>
-
+							</p:dataTable>
+						</p:tab>
+					</p:accordionPanel>
 				</h:panelGrid>
 
 			</h:form>
