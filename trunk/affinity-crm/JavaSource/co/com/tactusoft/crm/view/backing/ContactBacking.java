@@ -250,7 +250,7 @@ public class ContactBacking extends BaseBacking {
 
 				List<WSBean> listPatientSAP = CustomerExecute.findByDoc(
 						sap.getUrlCustomer2(), sap.getUsername(),
-						sap.getPassword(), profile.getSociety(),
+						sap.getPassword(), null,
 						this.docPatient);
 
 				if (listPatientSAP.size() > 0) {
