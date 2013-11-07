@@ -30,11 +30,12 @@
 						<p:commandButton id="btnSavePatient" value="#{msg['btn_save']}"
 							icon="ui-icon-disk" action="#{contactBacking.saveAction}"
 							update="growl toolBar pnlDetail pnlDetail2 pnlDetail3"
-							process="toolBar pnlDetail pnlDetail2 pnlDetail3" />
+							process="toolBar pnlDetail pnlDetail2 pnlDetail3"
+							disabled="#{contactBacking.existsSAP}" />
 						<p:commandButton value="#{msg['btn_update']}"
 							process="@this,selsalesOff" icon="ui-icon-refresh"
 							oncomplete="updateDlg.show()" update="updateDialog"
-							disabled="#{contactBacking.newRecord}" />
+							disabled="#{contactBacking.newRecord or not contactBacking.existsSAP}" />
 						<p:splitButton icon="ui-icon-arrowrefresh-1-w"
 							value="#{msg['btn_actions']}"
 							disabled="#{contactBacking.selectedPatient.id == null?true:false}">
@@ -223,7 +224,7 @@
 							value="#{contactBacking.selectedPatient.doc}"
 							style="width:240px;" label="#{msg['pat_code']}" maxlength="16"
 							rendered="#{!contactBacking.automatic or !contactBacking.newRecord}"
-							required="true" />
+							disabled="#{contactBacking.existsSAP}" required="true" />
 
 						<h:outputText style="width:240px"
 							rendered="#{!contactBacking.automatic or !contactBacking.newRecord}" />
@@ -364,7 +365,7 @@
 								process="@this,pnlParameter" />
 							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
 								icon="ui-icon-plusthick"
-								update=":form:pnlDetail :form:pnlDetail2 :form:pnlDetail3 toolBar :form:growl"
+								update=":form:pnlDetail :form:pnlDetail2 :form:pnlDetail3 toolBar :form:growl :form:toolBar"
 								actionListener="#{contactBacking.addContactAction}"
 								process="@this,searchDialog" oncomplete="searchDlg.hide();"
 								disabled="#{contactBacking.disabledAddPatient}" />

@@ -22,7 +22,7 @@
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_add_patient']}"
 							icon="ui-icon-circle-check" oncomplete="dlg2.show()"
-							update=":editForm:dialog2" />
+							update=":patientForm:dialog2" />
 						<p:commandButton id="btnPrint" value="#{msg['btn_print_history']}"
 							icon="ui-icon-print"
 							disabled="#{eventsHistorialBacking.disabledSelectedPatient or not eventsHistorialBacking.printHistorial}"
@@ -255,7 +255,8 @@
 									<p:commandButton id="btnUpdateCall"
 										value="#{msg['btn_update_call']}" icon="ui-icon-clipboard"
 										action="#{eventsHistorialBacking.updateCall}"
-										update="selectedTable :form:growl"
+										update="selectedTable :form:growl :editForm:dialogRecall"
+										oncomplete="dlgRecall.show();"
 										disabled="#{eventsHistorialBacking.crmCampaignDetail.status eq 0?false:true}" />
 								</f:facet>
 
@@ -266,7 +267,7 @@
 
 			</h:form>
 
-			<h:form id="editForm">
+			<h:form id="patientForm">
 
 				<p:dialog header="#{msg['sal_patient']}" widgetVar="dlg2"
 					resizable="false" id="dialog2" showEffect="fade"
@@ -371,6 +372,189 @@
 					}
 				</script>
 
+			</h:form>
+
+			<h:form id="editForm">
+				<p:dialog header="#{msg['msg_detail']}" widgetVar="dlgRecall"
+					resizable="false" id="dialogRecall" showEffect="fade"
+					hideEffect="explode" modal="true" width="900" height="600">
+
+					<p:toolbar id="toolBar" style="width:100%">
+						<p:toolbarGroup align="left">
+							<p:commandButton value="#{msg['btn_save']}" icon="ui-icon-disk"
+								action="#{eventsHistorialBacking.saveCampaingAction}"
+								oncomplete="handleComplete(xhr, status, args)"
+								update=":form:growl :form:pnlTable" />
+							<p:commandButton value="#{msg['btn_close']}"
+								icon="ui-icon-closethick" update=":form:growl :form:pnlTable"
+								process="@none" oncomplete="dlgRecall.hide()" />
+						</p:toolbarGroup>
+					</p:toolbar>
+
+					<p:spacer height="5" />
+
+					<h:panelGrid id="pnlDetail" columns="1" cellpadding="4"
+						style="margin:0 auto;" width="100%">
+
+						<p:fieldset legend="#{msg['cam_type_medication']}"
+							rendered="#{campaignBacking.selectedDetailMediaction ne null}">
+
+
+							<h:panelGrid columns="4" width="100%">
+								<h:outputLabel value="#{msg['cam_procedure']}" />
+								<p:inputText
+									value="#{campaignBacking.selectedDetailMediaction.crmAppointment.crmProcedureDetail.name}"
+									style="width:190px;background-color:#FFFF80;font-weight:bold;"
+									readonly="true" />
+							</h:panelGrid>
+
+							<p:dataTable value="#{campaignBacking.modelDetailMedication}"
+								rows="5" paginator="true" var="item">
+
+								<p:column headerText="#{msg['cam_code_medication']}">
+									<h:outputLabel id="colMaterial" value="#{item.codMaterial}" />
+									<p:tooltip for="colMaterial" value="#{item.posology}" />
+								</p:column>
+
+								<p:column headerText="#{msg['cam_medication']}">
+									<h:outputLabel id="descMaterial" value="#{item.descMaterial}" />
+									<p:tooltip for="descMaterial" value="#{item.posology}" />
+								</p:column>
+
+								<p:column headerText="#{msg['cam_sold']}">
+									<h:outputLabel value="#{item.sold eq 1?'SI':'NO'}" />
+								</p:column>
+
+								<p:column headerText="#{msg['sal_material_amount']}">
+									<h:outputLabel value="#{item.unit}" />
+								</p:column>
+
+								<p:column headerText="#{msg['cam_sold_vendida']}">
+									<h:outputLabel value="#{item.unitSale}" />
+								</p:column>
+
+							</p:dataTable>
+
+							<p:spacer />
+
+							<h:panelGroup binding="#{campaignBacking.panelGroupMedication}" />
+							<h:panelGrid id="pnlTask_4" width="100%" />
+						</p:fieldset>
+
+						<p:spacer height="5"
+							rendered="#{campaignBacking.selectedDetailMediaction ne null}" />
+
+						<p:fieldset legend="#{msg['cam_type_control']}"
+							rendered="#{campaignBacking.selectedDetailControl ne null}">
+
+							<h:panelGrid columns="2" style="width:100%">
+								<h:outputLabel value="#{msg['cam_date']}"
+									style="font-size:12px;font-weight:bold;" />
+								<h:outputLabel
+									value="#{campaignBacking.selectedDetailControl.crmAppointment.startAppointmentDate}"
+									style="font-size:12px;font-weight:bold;">
+									<f:convertDateTime pattern="dd/MM/yyyy HH:mm"
+										style="font-size:12px;font-weight:bold;" />
+								</h:outputLabel>
+								<h:outputLabel value="#{msg['cam_procedure']}"
+									style="font-size:12px;font-weight:bold;" />
+								<h:outputLabel
+									value="#{campaignBacking.selectedDetailControl.crmAppointment.crmProcedureDetail.name}"
+									style="font-size:12px;font-weight:bold;" />
+								<h:outputLabel value="#{msg['app_doctor']}"
+									style="font-size:12px;font-weight:bold;" />
+								<h:outputLabel
+									value="#{campaignBacking.selectedDetailControl.crmAppointment.crmDoctor.names}"
+									style="font-size:12px;font-weight:bold;" />
+								<h:outputLabel value="#{msg['cam_branch']}"
+									style="font-size:12px;font-weight:bold;" />
+								<h:outputLabel style="font-size:12px;font-weight:bold;"
+									value="#{campaignBacking.selectedDetailControl.crmAppointment.crmBranch.name}" />
+							</h:panelGrid>
+
+							<p:spacer />
+
+							<h:panelGroup binding="#{campaignBacking.panelGroupControl}" />
+							<h:panelGrid id="pnlTask_3" width="100%" />
+						</p:fieldset>
+
+						<p:spacer height="5"
+							rendered="#{campaignBacking.selectedDetailControl ne null}" />
+
+						<p:fieldset legend="#{msg['cam_type_confirmed']}"
+							rendered="#{campaignBacking.selectedDetailConfirmed ne null}">
+
+							<h:panelGrid columns="2" style="width:100%">
+								<h:outputLabel value="#{msg['cam_date']}"
+									style="font-size:12px;font-weight:bold;" />
+								<h:outputLabel
+									value="#{campaignBacking.selectedDetailConfirmed.crmAppointment.startAppointmentDate}"
+									style="font-size:12px;font-weight:bold;">
+									<f:convertDateTime pattern="dd/MM/yyyy HH:mm"
+										style="font-size:12px;font-weight:bold;" />
+								</h:outputLabel>
+								<h:outputLabel value="#{msg['cam_procedure']}"
+									style="font-size:12px;font-weight:bold;" />
+								<h:outputLabel
+									value="#{campaignBacking.selectedDetailConfirmed.crmAppointment.crmProcedureDetail.name}"
+									style="font-size:12px;font-weight:bold;" />
+								<h:outputLabel value="#{msg['app_doctor']}"
+									style="font-size:12px;font-weight:bold;" />
+								<h:outputLabel
+									value="#{campaignBacking.selectedDetailConfirmed.crmAppointment.crmDoctor.names}"
+									style="font-size:12px;font-weight:bold;" />
+								<h:outputLabel value="#{msg['cam_branch']}"
+									style="font-size:12px;font-weight:bold;" />
+								<h:outputLabel style="font-size:12px;font-weight:bold;"
+									value="#{campaignBacking.selectedDetailConfirmed.crmAppointment.crmBranch.name}" />
+							</h:panelGrid>
+
+							<p:spacer />
+
+							<h:panelGroup binding="#{campaignBacking.panelGroupConfirmed}" />
+							<h:panelGrid id="pnlTask_2" width="100%" />
+						</p:fieldset>
+
+						<p:spacer height="5"
+							rendered="#{campaignBacking.selectedDetailConfirmed ne null}" />
+
+						<p:fieldset id="fldNoAttendet"
+							legend="#{msg['cam_type_no_attendet']}"
+							rendered="#{campaignBacking.selectedDetailNoAttendet ne null}">
+							<h:panelGroup binding="#{campaignBacking.panelGroupNoAttendet}" />
+							<h:panelGrid id="pnlTask_1" width="100%" />
+						</p:fieldset>
+						<p:spacer height="5"
+							rendered="#{campaignBacking.selectedDetailNoAttendet ne null}" />
+
+						<h:panelGrid id="pnlAttributes" columns="2" width="100%">
+							<h:outputLabel value="#{msg['pat_type_obs']}" />
+							<p:inputTextarea value="#{campaignBacking.selected.observation}"
+								style="width:500px" rows="3" label="#{msg['pat_type_obs']}" />
+							<h:outputLabel value="#{msg['cam_call_poll']}"
+								rendered="#{campaignBacking.selectedDetailMediaction ne null and campaignBacking.selectedDetailMediaction.crmAppointment.crmProcedureDetail.noRepeat}" />
+							<p:selectOneMenu value="#{campaignBacking.selected.poll}"
+								style="width:400px"
+								rendered="#{campaignBacking.selectedDetailMediaction ne null and campaignBacking.selectedDetailMediaction.crmAppointment.crmProcedureDetail.noRepeat}">
+								<f:selectItem itemValue="0" itemLabel="No" />
+								<f:selectItem itemValue="1" itemLabel="Si" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+
+					</h:panelGrid>
+				</p:dialog>
+
+				<script type="text/javascript">
+					function handleComplete(xhr, status, args) {
+						if (args.validationFailed  || !args.validate) {
+							jQuery('dialogRecall').effect("shake", {
+								times : 3
+							}, 100);
+						} else {
+							dlgRecall.hide();
+						}
+					}
+				</script>
 			</h:form>
 
 		</p:panel>

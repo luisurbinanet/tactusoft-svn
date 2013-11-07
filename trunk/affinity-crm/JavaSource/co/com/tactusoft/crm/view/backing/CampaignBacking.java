@@ -49,7 +49,7 @@ import co.com.tactusoft.crm.view.datamodel.CampaignMedicationlDataModel;
 import com.tactusoft.webservice.client.beans.WSBean;
 
 @Named
-@Scope("view")
+@Scope("session")
 public class CampaignBacking extends BaseBacking {
 
 	private static final long serialVersionUID = 1L;
@@ -167,19 +167,19 @@ public class CampaignBacking extends BaseBacking {
 
 		listCallRange = tablesService.getVwCallRange();
 		listDialpatterns = tablesService.getListDialpatterns();
-		List<CrmParameter> listParameterAterisk = parameterService
-				.getListParameterByGroup("ASTERISK");
-		for (CrmParameter crmParameter : listParameterAterisk) {
-			if (crmParameter.getCode().equals("ASTERISK_HOST")) {
-				asteriskHost = crmParameter.getTextValue();
-			} else if (crmParameter.getCode().equals("ASTERISK_PORT")) {
-				asteriskPort = Integer.parseInt(crmParameter.getTextValue());
-			} else if (crmParameter.getCode().equals("ASTERISK_USER")) {
-				asteriskUser = crmParameter.getTextValue();
-			} else if (crmParameter.getCode().equals("ASTERISK_PASSWORD")) {
-				asteriskPassword = crmParameter.getTextValue();
-			}
-		}
+		/*
+		 * List<CrmParameter> listParameterAterisk = parameterService
+		 * .getListParameterByGroup("ASTERISK"); for (CrmParameter crmParameter
+		 * : listParameterAterisk) { if
+		 * (crmParameter.getCode().equals("ASTERISK_HOST")) { asteriskHost =
+		 * crmParameter.getTextValue(); } else if
+		 * (crmParameter.getCode().equals("ASTERISK_PORT")) { asteriskPort =
+		 * Integer.parseInt(crmParameter.getTextValue()); } else if
+		 * (crmParameter.getCode().equals("ASTERISK_USER")) { asteriskUser =
+		 * crmParameter.getTextValue(); } else if
+		 * (crmParameter.getCode().equals("ASTERISK_PASSWORD")) {
+		 * asteriskPassword = crmParameter.getTextValue(); } }
+		 */
 		agentNumber = FacesUtil.getCurrentUser().getExtensionAgent();
 
 		refreshList();
@@ -588,8 +588,8 @@ public class CampaignBacking extends BaseBacking {
 	}
 
 	public void generateDetail() {
-		selectedAppointment =  new CrmAppointment();
-		
+		selectedAppointment = new CrmAppointment();
+
 		if (levelValuesNoAttendet != null) {
 			for (int index = 0; index < levelValuesNoAttendet.length; index++) {
 				levelValuesNoAttendet[index] = Constant.DEFAULT_VALUE
@@ -706,6 +706,7 @@ public class CampaignBacking extends BaseBacking {
 		panelGrid.setId("pnl_" + type);
 		HtmlOutputText title = (HtmlOutputText) application
 				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		title.setId("lbl_" + type);
 		title.setValue("Respuestas");
 		panelGrid.getFacets().put("header", title);
 		panelGrid.setStyle("width:100%");
@@ -741,6 +742,7 @@ public class CampaignBacking extends BaseBacking {
 			List<UIComponent> menuChildren = selectOneMenu.getChildren();
 			UISelectItems items = (UISelectItems) application
 					.createComponent(UISelectItems.COMPONENT_TYPE);
+			items.setId("sliLevel_" + type + "_" + index);
 			items.setValue(listItem);
 			menuChildren.add(items);
 			selectOneMenu.getChildren().addAll(menuChildren);
@@ -1213,7 +1215,7 @@ public class CampaignBacking extends BaseBacking {
 			FacesUtil.addError(message);
 		}
 	}
-	
+
 	public void editAppoinmnetAction() {
 		AppointmentBacking appointmentEditBacking = FacesUtil
 				.findBean("appointmentBacking");
@@ -1258,7 +1260,7 @@ public class CampaignBacking extends BaseBacking {
 	public void closeDialog() {
 		RequestContext.getCurrentInstance().closeDialog(null);
 	}
-	
+
 	public void cancelAppointmentAction(ActionEvent actionEvent) {
 		selectedAppointment.setCrmUserByIdUserCanceled(FacesUtil
 				.getCurrentUser());
