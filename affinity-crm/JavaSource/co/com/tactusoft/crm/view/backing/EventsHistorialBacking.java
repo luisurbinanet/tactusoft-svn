@@ -31,6 +31,7 @@ public class EventsHistorialBacking extends BaseBacking {
 	private CrmCampaignDetail crmCampaignDetail;
 
 	private Map<Integer, CrmRecall> mapRecall;
+	private CampaignBacking campaignBacking;
 
 	public EventsHistorialBacking() {
 		newAction();
@@ -124,6 +125,10 @@ public class EventsHistorialBacking extends BaseBacking {
 			}
 		}
 
+		searchCamapignDetail();
+	}
+
+	public void searchCamapignDetail() {
 		crmCampaignDetail = new CrmCampaignDetail();
 		listCampaign = tablesService
 				.getListCampaignDetailByPatient(selectedPatient.getId());
@@ -145,16 +150,20 @@ public class EventsHistorialBacking extends BaseBacking {
 	}
 
 	public void updateCall() {
-		crmCampaignDetail.setStatus(53);
-		tablesService.persist(crmCampaignDetail);
-		String message = FacesUtil.getMessage("cam_msg_update_ok");
-		FacesUtil.addInfo(message);
+		campaignBacking = FacesUtil.findBean("campaignBacking");
+		campaignBacking.setSelected(this.crmCampaignDetail.getCrmCampaign());
+		campaignBacking.generateDetail();
 	}
-	
+
 	@Override
-	public void searchPatientAction(){
+	public void searchPatientAction() {
 		super.searchPatientAction();
 		searchAction();
+	}
+
+	public void saveCampaingAction() {
+		campaignBacking.saveAction();
+		searchCamapignDetail();
 	}
 
 }

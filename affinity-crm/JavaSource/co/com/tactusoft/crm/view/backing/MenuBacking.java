@@ -87,9 +87,9 @@ public class MenuBacking implements Serializable {
 				.findBean("appointmentPatientBacking");
 		appointmentPatientBacking.newAction(null);
 
-		/*CampaignBacking campaignBacking = FacesUtil.findBean("campaignBacking");
+		CampaignBacking campaignBacking = FacesUtil.findBean("campaignBacking");
 		campaignBacking.newAction();
-		campaignBacking.init();*/
+		campaignBacking.refreshList();
 	}
 
 	public void actionPage(ActionEvent event) {

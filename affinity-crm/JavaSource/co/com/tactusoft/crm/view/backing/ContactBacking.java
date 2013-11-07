@@ -97,6 +97,14 @@ public class ContactBacking extends BaseBacking {
 		this.saved = saved;
 	}
 
+	public boolean isExistsSAP() {
+		return existsSAP;
+	}
+
+	public void setExistsSAP(boolean existsSAP) {
+		this.existsSAP = existsSAP;
+	}
+
 	public boolean isDisabledTicket() {
 		return this.selectedPatient != null
 				&& !FacesUtil.isEmptyOrBlank(this.selectedPatient.getTicket());
@@ -153,11 +161,23 @@ public class ContactBacking extends BaseBacking {
 								String.valueOf(this.numCell));
 
 				FacesUtil.addError(message);
-			} else if (!validateTicket) {
+			}
+
+			CrmProfile profile = mapProfile.get(selectedPatient.getCrmProfile()
+					.getId());
+
+			if (profile == null) {
+				message = FacesUtil.getMessage("pat_msg_profile");
+				FacesUtil.addError(message);
+			}
+
+			if (!validateTicket) {
 				this.selectedPatient.setTicket(null);
 				message = FacesUtil.getMessage("con_msg_ticket_fail");
 				FacesUtil.addError(message);
-			} else {
+			}
+
+			if (message == null) {
 
 				CrmCountry crmCountry = mapCountry.get(idCountry);
 				selectedPatient.setIdCountry(idCountry);
@@ -170,8 +190,6 @@ public class ContactBacking extends BaseBacking {
 				selectedPatient.setSalesOrg(salesOff);
 
 				if (newRecord) {
-					CrmProfile profile = mapProfile.get(selectedPatient
-							.getCrmProfile().getId());
 					selectedPatient.setCrmProfile(profile);
 					if (FacesUtil.getCurrentUser() != null) {
 						selectedPatient.setCrmUserByIdUserCreate(FacesUtil
@@ -250,8 +268,7 @@ public class ContactBacking extends BaseBacking {
 
 				List<WSBean> listPatientSAP = CustomerExecute.findByDoc(
 						sap.getUrlCustomer2(), sap.getUsername(),
-						sap.getPassword(), null,
-						this.docPatient);
+						sap.getPassword(), null, this.docPatient);
 
 				if (listPatientSAP.size() > 0) {
 					String codeSap = listPatientSAP.get(0).getCode();
@@ -311,8 +328,32 @@ public class ContactBacking extends BaseBacking {
 		}
 	}
 
+	public void addContactAction(ActionEvent event) {
+		selectedPatient = selectedPatientTemp;
+		newRecord = false;
+		idCountry = selectedPatient.getIdCountry();
+		handleCountryChange();
+
+		if (existsSAP) {
+			String message = FacesUtil.getMessage("pat_msg_exists_sap_4");
+			FacesUtil.addWarn(message);
+			handleRegionChange();
+			selectedPatient
+					.setCrmUserByIdUserCreate(FacesUtil.getCurrentUser());
+			selectedPatient.setDateCreate(new Date());
+		} else {
+			idRegion = selectedPatient.getIdRegion();
+			handleRegionChange();
+			idCity = selectedPatient.getIdCity();
+		}
+	}
+
 	public void updateAction(ActionEvent event) {
 		String message = null;
+
+		selectedPatient.setIdCountry(idCountry);
+		selectedPatient.setIdRegion(idRegion);
+		selectedPatient.setIdCity(idCity);
 
 		CrmProfile profile = selectedPatient.getCrmProfile();
 		CrmCountry crmCountry = mapCountry.get(selectedPatient.getIdCountry());
@@ -347,11 +388,6 @@ public class ContactBacking extends BaseBacking {
 			String codeSap = null;
 			SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
 
-			List<WSBean> listCustomer = CustomerExecute.findByDoc(
-					sap.getUrlCustomer2(), sap.getUsername(),
-					sap.getPassword(), profile.getSociety(),
-					selectedPatient.getDoc(), 0);
-
 			String docType = selectedPatient.getDocType();
 			if (automatic) {
 				docType = crmCountry.getDefaultDocType();
@@ -371,28 +407,36 @@ public class ContactBacking extends BaseBacking {
 				selectedPatient.setZipCode("00000");
 			}
 
-			if (listCustomer.size() == 0) {
-				codeSap = CustomerExecute.excecute(
-						sap.getUrlCustomerMaintainAll(), sap.getUsername(),
-						sap.getPassword(), sap.getEnvironment(), docType,
-						selectedPatient.getDoc(), tratamiento,
-						selectedPatient.getSurnames(),
-						selectedPatient.getFirstnames(), address,
-						selectedPatient.getZipCode(),
-						selectedPatient.getPhoneNumber(),
-						selectedPatient.getCellNumber(),
-						selectedPatient.getEmail(), crmCountry.getCode(),
-						crmCity.getName(), crmRegion.getCode(), "D001",
-						profile.getSalesOrg(), profile.getDistrChan(),
-						profile.getDivision(), profile.getSociety(),
-						this.salesOff, "01", profile.getPaymentTerm(),
-						profile.getAccount(), "01", "1", "1",
-						crmCountry.getCurrencyIso());
+			if (!existsSAP) {
+				List<WSBean> listCustomer = CustomerExecute.findByDoc(
+						sap.getUrlCustomer2(), sap.getUsername(),
+						sap.getPassword(), null, selectedPatient.getDoc(), 0);
+
+				if (listCustomer.size() == 0) {
+					codeSap = CustomerExecute.excecute(
+							sap.getUrlCustomerMaintainAll(), sap.getUsername(),
+							sap.getPassword(), sap.getEnvironment(), docType,
+							selectedPatient.getDoc(), tratamiento,
+							selectedPatient.getSurnames(),
+							selectedPatient.getFirstnames(), address,
+							selectedPatient.getZipCode(),
+							selectedPatient.getPhoneNumber(),
+							selectedPatient.getCellNumber(),
+							selectedPatient.getEmail(), crmCountry.getCode(),
+							crmCity.getName(), crmRegion.getCode(), "D001",
+							profile.getSalesOrg(), profile.getDistrChan(),
+							profile.getDivision(), profile.getSociety(),
+							this.salesOff, "01", profile.getPaymentTerm(),
+							profile.getAccount(), "01", "1", "1",
+							crmCountry.getCurrencyIso());
+				} else {
+					codeSap = listCustomer.get(0).getCode();
+				}
+				selectedPatient.setCodeSap(codeSap);
 			} else {
-				codeSap = listCustomer.get(0).getCode();
+				codeSap = selectedPatient.getCodeSap();
 			}
 
-			selectedPatient.setCodeSap(codeSap);
 			selectedPatient.setDocType(docType);
 			selectedPatient.setCrmUserByIdUserModified(FacesUtil
 					.getCurrentUser());
@@ -414,23 +458,6 @@ public class ContactBacking extends BaseBacking {
 				}
 				FacesUtil.addError(message);
 			}
-		}
-	}
-	
-	public void addPatientAction(ActionEvent event) {
-		selectedPatient = selectedPatientTemp;
-		newRecord = false;
-		idCountry = selectedPatient.getIdCountry();
-		handleCountryChange();
-
-		if (existsSAP) {
-			String message = FacesUtil.getMessage("pat_msg_exists_sap");
-			FacesUtil.addWarn(message);
-			handleRegionChange();
-		} else {
-			idRegion = selectedPatient.getIdRegion();
-			handleRegionChange();
-			idCity = selectedPatient.getIdCity();
 		}
 	}
 
@@ -487,16 +514,6 @@ public class ContactBacking extends BaseBacking {
 			listRegion = new LinkedList<SelectItem>();
 			listCity = new LinkedList<SelectItem>();
 		}
-	}
-
-	public void addContactAction(ActionEvent event) {
-		selectedPatient = selectedPatientTemp;
-		newRecord = false;
-		idCountry = selectedPatient.getIdCountry();
-		handleCountryChange();
-		idRegion = selectedPatient.getIdRegion();
-		handleRegionChange();
-		idCity = selectedPatient.getIdCity();
 	}
 
 	public String goAppointment() {

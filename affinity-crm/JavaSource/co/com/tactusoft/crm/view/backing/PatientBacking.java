@@ -336,7 +336,7 @@ public class PatientBacking extends BaseBacking {
 						if (!existsSAP || !automatic) {
 							customer = CustomerExecute.findByDoc(
 									sap.getUrlCustomer2(), sap.getUsername(),
-									sap.getPassword(), profile.getSociety(),
+									sap.getPassword(), null,
 									selectedPatient.getDoc(), 0);
 						}
 					} else {
