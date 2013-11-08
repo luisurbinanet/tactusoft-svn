@@ -21,7 +21,9 @@ import co.com.tactusoft.crm.model.entities.CrmSapMedicationDistinct;
 import co.com.tactusoft.crm.model.entities.CrmUser;
 import co.com.tactusoft.crm.model.entities.VwAppointmentMedication;
 import co.com.tactusoft.crm.model.entities.VwMedication;
+import co.com.tactusoft.crm.model.entities.sap.SapMedication;
 import co.com.tactusoft.crm.postsale.bo.ProcessBO;
+import co.com.tactusoft.crm.postsale.bo.SapBO;
 import co.com.tactusoft.crm.postsale.util.Utils;
 import co.com.tactusoft.crm.util.FacesUtil;
 
@@ -34,6 +36,7 @@ public class Principal2 {
 
 	private BeanFactory beanFactory;
 	private ProcessBO processBO;
+	private SapBO sapBO;
 
 	private Map<BigDecimal, CrmCampaign> mapCampaign;
 	private Map<BigDecimal, Date> mapCallDates;
@@ -47,15 +50,19 @@ public class Principal2 {
 		System.out.println("CARGANDO BASE DE DATOS...");
 		beanFactory = new ClassPathXmlApplicationContext("spring-config.xml");
 		processBO = beanFactory.getBean(ProcessBO.class);
-
+		sapBO = beanFactory.getBean(SapBO.class);
 		
+		List<SapMedication> listSapMedication = sapBO
+				.getListSAPMedication(currentDateString);
+
 		List<CrmSapMedicationDistinct> listDistinct = processBO
 				.getListSapMedicationByLoadStateDistinct(currentDateString);
 		for (CrmSapMedicationDistinct row : listDistinct) {
 			String rowInitDateString = Utils.formatDate(
 					Utils.addDaysToDate(row.getDateBill(), -3), "yyyy-MM-dd");
 			CrmAppointment crmAppointment = processBO.getAppointment(
-					row.getIdPatient(), rowInitDateString, Utils.formatDate(row.getDateBill(), "yyyy-MM-dd"),
+					row.getIdPatient(), rowInitDateString,
+					Utils.formatDate(row.getDateBill(), "yyyy-MM-dd"),
 					row.getTypeBill());
 			if (crmAppointment != null) {
 				processBO.updateSapMedicationById(row.getIdBill(),
@@ -63,6 +70,8 @@ public class Principal2 {
 				System.out.println("Actualizado: " + row.getIdBill());
 			}
 		}
+		
+		
 	}
 
 	public static void main(String[] args) {

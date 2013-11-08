@@ -5,5 +5,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/spring_hibernate_libs"/>
 	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.24-bin.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/affinity-model"/>
+	<classpathentry kind="lib" path="lib/ojdbc6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
