@@ -655,6 +655,18 @@ public class TablesBo implements Serializable {
 		return result;
 	}
 
+	public Integer saveUser(CrmUser entity) {
+		int result = 0;
+
+		if (entity.getId() == null) {
+			entity.setId(getId(CrmUser.class));
+		}
+
+		result = this.persist(entity);
+
+		return result;
+	}
+
 	public Integer saveRole(CrmRole entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmRole.class));

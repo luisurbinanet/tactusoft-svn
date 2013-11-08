@@ -48,7 +48,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import co.com.tactusoft.crm.model.entities.CrmParameter;
@@ -191,7 +191,7 @@ public class FacesUtil {
 		try {
 			userData = (UserData) SecurityContextHolder.getContext()
 					.getAuthentication().getPrincipal();
-			for (SimpleGrantedAuthority role : userData.getRoles()) {
+			for (GrantedAuthority role : userData.getRoles()) {
 				list.add(role.getAuthority());
 			}
 		} catch (Exception ex) {
