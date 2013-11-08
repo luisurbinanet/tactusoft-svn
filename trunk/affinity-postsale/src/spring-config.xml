@@ -8,31 +8,33 @@
 	<context:annotation-config />
 	<context:component-scan base-package="co.com.tactusoft.crm" />
 
-	<tx:annotation-driven transaction-manager="transactionManager" />
+	<tx:annotation-driven order="1" transaction-manager="transactionManager" />
+	<tx:annotation-driven order="2" transaction-manager="transactionManagerSAP" />
 
 	<!-- Datasource -->
-	<bean id="dataSourceDefault1" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+
+	<bean id="dataSourceDefault" class="com.mchange.v2.c3p0.ComboPooledDataSource"
 		destroy-method="close">
 		<property name="driverClass" value="com.mysql.jdbc.Driver" />
 		<property name="jdbcUrl" value="jdbc:mysql://192.168.1.29/crm_db" />
 		<property name="user" value="root" />
 		<property name="password" value="lukro9753" />
 		<property name="minPoolSize" value="5" />
-		<property name="maxPoolSize" value="20" />
+		<property name="maxPoolSize" value="5" />
 		<property name="acquireIncrement" value="1" />
 		<property name="idleConnectionTestPeriod" value="100" />
 		<property name="maxStatements" value="0" />
 		<property name="checkoutTimeout" value="60000" />
 	</bean>
 
-	<bean id="dataSourceDefault" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+	<bean id="dataSourceDefaultSAP" class="com.mchange.v2.c3p0.ComboPooledDataSource"
 		destroy-method="close">
-		<property name="driverClass" value="com.mysql.jdbc.Driver" />
-		<property name="jdbcUrl" value="jdbc:mysql://192.168.1.42/crm_db" />
-		<property name="user" value="root" />
+		<property name="driverClass" value="oracle.jdbc.OracleDriver" />
+		<property name="jdbcUrl" value="jdbc:oracle:thin:@192.168.1.210:1527:PRA" />
+		<property name="user" value="CRM" />
 		<property name="password" value="lukro9753" />
 		<property name="minPoolSize" value="5" />
-		<property name="maxPoolSize" value="5" />
+		<property name="maxPoolSize" value="20" />
 		<property name="acquireIncrement" value="1" />
 		<property name="idleConnectionTestPeriod" value="100" />
 		<property name="maxStatements" value="0" />
@@ -46,7 +48,21 @@
 		<property name="hibernateProperties">
 			<props>
 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
-				<prop key="hibernate.show_sql">false</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.hibernate.format_sql">true</prop>
+				<!-- <prop key="hibernate.hbm2ddl.auto">create-drop</prop> -->
+			</props>
+		</property>
+		<property name="packagesToScan" value="co.com.tactusoft.crm.model.entities" />
+	</bean>
+
+	<bean id="sessionFactorySAP"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSourceDefaultSAP" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.hibernate.format_sql">true</prop>
 				<!-- <prop key="hibernate.hbm2ddl.auto">create-drop</prop> -->
 			</props>
@@ -57,5 +73,10 @@
 	<bean id="transactionManager"
 		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="transactionManagerSAP"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactorySAP" />
 	</bean>
 </beans>
