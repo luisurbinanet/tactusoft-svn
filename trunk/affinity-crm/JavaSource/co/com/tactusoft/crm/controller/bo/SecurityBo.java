@@ -37,6 +37,12 @@ public class SecurityBo implements Serializable {
 				.find("select o.crmRole from CrmUserRole o where o.crmUser.id = "
 						+ idUser);
 	}
+	
+	public List<CrmRole> getListCrmRoleByUser(String username) {
+		return dao
+				.find("select o.crmRole from CrmUserRole o where o.crmUser.username = '"
+						+ username + "'");
+	}
 
 	public List<CrmPage> getListCrmPageByRole(String idRoles) {
 		return dao
