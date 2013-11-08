@@ -51,6 +51,7 @@ public class CrmPatient implements java.io.Serializable {
 	private String typeHousing;
 	private BigDecimal idCountry;
 	private BigDecimal idRegion;
+	private CrmCity crmCity;
 	private BigDecimal idCity;
 	private BigDecimal idGuardianType;
 	private String guardian;
@@ -353,6 +354,16 @@ public class CrmPatient implements java.io.Serializable {
 		this.idRegion = idRegion;
 	}
 
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "id_city", updatable = false, insertable = false)
+	public CrmCity getCrmCity() {
+		return crmCity;
+	}
+
+	public void setCrmCity(CrmCity crmCity) {
+		this.crmCity = crmCity;
+	}
+
 	@Column(name = "id_city", scale = 0)
 	public BigDecimal getIdCity() {
 		return idCity;
@@ -417,11 +428,11 @@ public class CrmPatient implements java.io.Serializable {
 	}
 
 	@Column(name = "cycle")
-	public Boolean getCycle() {
+	public boolean isCycle() {
 		return this.cycle;
 	}
 
-	public void setCycle(Boolean cycle) {
+	public void setCycle(boolean cycle) {
 		this.cycle = cycle;
 	}
 

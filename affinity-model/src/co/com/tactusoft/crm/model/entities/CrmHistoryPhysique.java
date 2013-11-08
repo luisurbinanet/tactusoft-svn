@@ -22,10 +22,10 @@ public class CrmHistoryPhysique implements java.io.Serializable {
 	private BigDecimal id;
 	private CrmPatient crmPatient;
 	private CrmAppointment crmAppointment;
-	private Integer heartRate;
-	private Integer respiratoryRate;
-	private BigDecimal height;
-	private BigDecimal weight;
+	private String heartRate;
+	private String respiratoryRate;
+	private String height;
+	private String weight;
 	private String bloodPressure;
 	private Boolean generalStateCheck;
 	private String generalState;
@@ -60,8 +60,8 @@ public class CrmHistoryPhysique implements java.io.Serializable {
 	}
 
 	public CrmHistoryPhysique(BigDecimal id, CrmPatient crmPatient,
-			CrmAppointment crmAppointment, Integer heartRate,
-			Integer respiratoryRate, BigDecimal height, BigDecimal weight,
+			CrmAppointment crmAppointment, String heartRate,
+			String respiratoryRate, String height, String weight,
 			String bloodPressure, Boolean generalStateCheck,
 			String generalState, Boolean headNeckCheck, String headNeck,
 			Boolean chestCheck, String chest, Boolean lungsCheck, String lungs,
@@ -134,38 +134,38 @@ public class CrmHistoryPhysique implements java.io.Serializable {
 	}
 
 	@Column(name = "heart_rate")
-	public Integer getHeartRate() {
+	public String getHeartRate() {
 		return this.heartRate;
 	}
 
-	public void setHeartRate(Integer heartRate) {
+	public void setHeartRate(String heartRate) {
 		this.heartRate = heartRate;
 	}
 
 	@Column(name = "respiratory_rate")
-	public Integer getRespiratoryRate() {
+	public String getRespiratoryRate() {
 		return this.respiratoryRate;
 	}
 
-	public void setRespiratoryRate(Integer respiratoryRate) {
+	public void setRespiratoryRate(String respiratoryRate) {
 		this.respiratoryRate = respiratoryRate;
 	}
 
-	@Column(name = "height", precision = 5)
-	public BigDecimal getHeight() {
+	@Column(name = "height")
+	public String getHeight() {
 		return this.height;
 	}
 
-	public void setHeight(BigDecimal height) {
+	public void setHeight(String height) {
 		this.height = height;
 	}
 
-	@Column(name = "weight", precision = 5)
-	public BigDecimal getWeight() {
+	@Column(name = "weight")
+	public String getWeight() {
 		return this.weight;
 	}
 
-	public void setWeight(BigDecimal weight) {
+	public void setWeight(String weight) {
 		this.weight = weight;
 	}
 
