@@ -520,7 +520,7 @@ public class CrmHistoryRecord implements java.io.Serializable {
 		this.abortions = abortions;
 	}
 
-	@Column(name = "family_history", length = 45)
+	@Column(name = "family_history", length = 65535)
 	public String getFamilyHistory() {
 		return this.familyHistory;
 	}

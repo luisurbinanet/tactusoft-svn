@@ -53,6 +53,7 @@ public class CrmAppointment implements java.io.Serializable {
 	private String obsOpened;
 	private Long sapMaterialCode;
 	private String sapMaterialDesc;
+	private String obsCancel;
 	private Set<CrmDiagnosis> crmDiagnosises = new HashSet<CrmDiagnosis>(0);
 	private Set<CrmMedication> crmMedications = new HashSet<CrmMedication>(0);
 
@@ -393,6 +394,15 @@ public class CrmAppointment implements java.io.Serializable {
 
 	public void setSapMaterialDesc(String sapMaterialDesc) {
 		this.sapMaterialDesc = sapMaterialDesc;
+	}
+
+	@Column(name = "obs_cancel", length = 65535)
+	public String getObsCancel() {
+		return obsCancel;
+	}
+
+	public void setObsCancel(String obsCancel) {
+		this.obsCancel = obsCancel;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmAppointment")
