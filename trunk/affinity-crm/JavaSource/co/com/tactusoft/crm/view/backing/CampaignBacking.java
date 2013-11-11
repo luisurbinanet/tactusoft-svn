@@ -62,11 +62,13 @@ public class CampaignBacking extends BaseBacking {
 	protected CrmCampaign selectedConfirmed;
 	protected CrmCampaign selectedControl;
 	protected CrmCampaign selectedMediaction;
+	protected CrmCampaign selectedReminder;
 
 	protected CrmCampaignDetail selectedDetailNoAttendet;
 	protected CrmCampaignDetail selectedDetailConfirmed;
 	protected CrmCampaignDetail selectedDetailControl;
 	protected CrmCampaignDetail selectedDetailMediaction;
+	protected CrmCampaignDetail selectedDetailReminder;
 
 	protected List<CrmCampaignMedication> listDetailMedication;
 	protected CampaignMedicationlDataModel modelDetailMedication;
@@ -78,35 +80,41 @@ public class CampaignBacking extends BaseBacking {
 	private Integer[] levelValuesConfirmed;
 	private Integer[] levelValuesControl;
 	private Integer[] levelValuesMedication;
+	private Integer[] levelValuesReminder;
 
 	private List<CrmRecall> listAllLevelNoAttendet;
 	private List<CrmRecall> listAllLevelConfirmed;
 	private List<CrmRecall> listAllLevelControl;
 	private List<CrmRecall> listAllLevelMedication;
+	private List<CrmRecall> listAllLevelReminder;
 
 	private List<CrmRecall> levelsNoAttendet;
 	private List<CrmRecall> levelsConfirmed;
 	private List<CrmRecall> levelsControl;
 	private List<CrmRecall> levelsMedication;
+	private List<CrmRecall> levelsReminder;
 
 	private List<CrmRecall> listNoAttendet;
 	private List<CrmRecall> listConfirmed;
 	private List<CrmRecall> listControl;
 	private List<CrmRecall> listMedication;
+	private List<CrmRecall> listReminder;
 
 	private HtmlPanelGroup panelGroupNoAttendet;
 	private HtmlPanelGroup panelGroupConfirmed;
 	private HtmlPanelGroup panelGroupControl;
 	private HtmlPanelGroup panelGroupMedication;
+	private HtmlPanelGroup panelGroupReminder;
 
 	private Map<Integer, CrmRecall> mapNoAttendet;
 	private Map<Integer, CrmRecall> mapConfirmed;
 	private Map<Integer, CrmRecall> mapControl;
 	private Map<Integer, CrmRecall> mapMedication;
+	private Map<Integer, CrmRecall> mapReminder;
 
-	private String[] task = new String[4];
-	private CrmRecall[] selectedCrmRecall = new CrmRecall[4];
-	private Date[] selectedDates = new Date[4];
+	private String[] task = new String[5];
+	private CrmRecall[] selectedCrmRecall = new CrmRecall[5];
+	private Date[] selectedDates = new Date[5];
 
 	private Integer phoneType;
 	private String indicative;
@@ -165,10 +173,17 @@ public class CampaignBacking extends BaseBacking {
 			mapMedication.put(row.getId(), row);
 		}
 
-		listCallRange = tablesService.getVwCallRange();
-		listDialpatterns = tablesService.getListDialpatterns();
+		listAllLevelReminder = tablesService
+				.getListRecall(Constant.RECALL_REMINDER);
+		mapReminder = new HashMap<Integer, CrmRecall>();
+		for (CrmRecall row : listAllLevelReminder) {
+			mapReminder.put(row.getId(), row);
+		}
+
 		/*
-		 * List<CrmParameter> listParameterAterisk = parameterService
+		 * listCallRange = tablesService.getVwCallRange(); listDialpatterns =
+		 * tablesService.getListDialpatterns(); /* List<CrmParameter>
+		 * listParameterAterisk = parameterService
 		 * .getListParameterByGroup("ASTERISK"); for (CrmParameter crmParameter
 		 * : listParameterAterisk) { if
 		 * (crmParameter.getCode().equals("ASTERISK_HOST")) { asteriskHost =
@@ -178,9 +193,9 @@ public class CampaignBacking extends BaseBacking {
 		 * (crmParameter.getCode().equals("ASTERISK_USER")) { asteriskUser =
 		 * crmParameter.getTextValue(); } else if
 		 * (crmParameter.getCode().equals("ASTERISK_PASSWORD")) {
-		 * asteriskPassword = crmParameter.getTextValue(); } }
+		 * asteriskPassword = crmParameter.getTextValue(); } } agentNumber =
+		 * FacesUtil.getCurrentUser().getExtensionAgent();
 		 */
-		agentNumber = FacesUtil.getCurrentUser().getExtensionAgent();
 
 		refreshList();
 	}
@@ -233,6 +248,14 @@ public class CampaignBacking extends BaseBacking {
 		this.selectedMediaction = selectedMediaction;
 	}
 
+	public CrmCampaign getSelectedReminder() {
+		return selectedReminder;
+	}
+
+	public void setSelectedReminder(CrmCampaign selectedReminder) {
+		this.selectedReminder = selectedReminder;
+	}
+
 	public CrmCampaignDetail getSelectedDetailNoAttendet() {
 		return selectedDetailNoAttendet;
 	}
@@ -266,6 +289,15 @@ public class CampaignBacking extends BaseBacking {
 	public void setSelectedDetailMediaction(
 			CrmCampaignDetail selectedDetailMediaction) {
 		this.selectedDetailMediaction = selectedDetailMediaction;
+	}
+
+	public CrmCampaignDetail getSelectedDetailReminder() {
+		return selectedDetailReminder;
+	}
+
+	public void setSelectedDetailReminder(
+			CrmCampaignDetail selectedDetailReminder) {
+		this.selectedDetailReminder = selectedDetailReminder;
 	}
 
 	public List<CrmCampaignMedication> getListDetailMedication() {
@@ -342,6 +374,14 @@ public class CampaignBacking extends BaseBacking {
 		this.levelValuesMedication = levelValuesMedication;
 	}
 
+	public Integer[] getLevelValuesReminder() {
+		return levelValuesReminder;
+	}
+
+	public void setLevelValuesReminder(Integer[] levelValuesReminder) {
+		this.levelValuesReminder = levelValuesReminder;
+	}
+
 	public List<CrmRecall> getLevelsNoAttendet() {
 		if (levelsNoAttendet == null) {
 			levelsNoAttendet = tablesService
@@ -389,6 +429,17 @@ public class CampaignBacking extends BaseBacking {
 		this.levelsMedication = levelsMedication;
 	}
 
+	public List<CrmRecall> getLevelsReminder() {
+		if (levelsReminder == null) {
+			levelsReminder = tablesService.getLevels(Constant.RECALL_REMINDER);
+		}
+		return levelsReminder;
+	}
+
+	public void setLevelsReminder(List<CrmRecall> levelsReminder) {
+		this.levelsReminder = levelsReminder;
+	}
+
 	public List<CrmRecall> getListNoAttendet() {
 		if (listNoAttendet == null) {
 			listNoAttendet = tablesService
@@ -423,6 +474,14 @@ public class CampaignBacking extends BaseBacking {
 
 	public void setListMedication(List<CrmRecall> listMedication) {
 		this.listMedication = listMedication;
+	}
+
+	public List<CrmRecall> getListReminder() {
+		return listReminder;
+	}
+
+	public void setListReminder(List<CrmRecall> listReminder) {
+		this.listReminder = listReminder;
 	}
 
 	public HtmlPanelGroup getPanelGroupNoAttendet() {
@@ -480,6 +539,20 @@ public class CampaignBacking extends BaseBacking {
 
 	public void setPanelGroupMedication(HtmlPanelGroup panelGroupMedication) {
 		this.panelGroupMedication = panelGroupMedication;
+	}
+
+	public HtmlPanelGroup getPanelGroupReminder() {
+		if (panelGroupReminder == null) {
+			getLevelsReminder();
+			levelValuesReminder = new Integer[levelsReminder.size()];
+			panelGroupReminder = createPanelGroup(Constant.RECALL_REMINDER,
+					listAllLevelReminder, levelValuesReminder);
+		}
+		return panelGroupReminder;
+	}
+
+	public void setPanelGroupReminder(HtmlPanelGroup panelGroupReminder) {
+		this.panelGroupReminder = panelGroupReminder;
 	}
 
 	public String[] getTask() {
@@ -558,6 +631,13 @@ public class CampaignBacking extends BaseBacking {
 		} else {
 			selectedMediaction = null;
 		}
+
+		listTemp = tablesService.getListCampaignReminder();
+		if (listTemp.size() > 0) {
+			selectedReminder = listTemp.get(0);
+		} else {
+			selectedReminder = null;
+		}
 	}
 
 	public void newAction() {
@@ -565,6 +645,7 @@ public class CampaignBacking extends BaseBacking {
 		selectedControl = null;
 		selectedMediaction = null;
 		selectedNoAttendet = null;
+		selectedReminder = null;
 	}
 
 	public void generateDetailNoAttendet() {
@@ -584,6 +665,11 @@ public class CampaignBacking extends BaseBacking {
 
 	public void generateDetailControl() {
 		selected = selectedControl;
+		generateDetail();
+	}
+
+	public void generateDetailReminder() {
+		selected = selectedReminder;
 		generateDetail();
 	}
 
@@ -620,10 +706,18 @@ public class CampaignBacking extends BaseBacking {
 			levelValueChangeEvent((long) Constant.RECALL_MEDICATION, 0L);
 		}
 
+		if (levelValuesReminder != null) {
+			for (int index = 0; index < levelValuesReminder.length; index++) {
+				levelValuesReminder[index] = Constant.DEFAULT_VALUE.intValue();
+			}
+			levelValueChangeEvent((long) Constant.RECALL_REMINDER, 0L);
+		}
+
 		selectedDetailNoAttendet = null;
 		selectedDetailConfirmed = null;
 		selectedDetailControl = null;
 		selectedDetailMediaction = null;
+		selectedDetailReminder = null;
 
 		List<CrmCampaignDetail> listDetail = selected.getCrmCampaignDetails();
 		for (CrmCampaignDetail row : listDetail) {
@@ -635,6 +729,8 @@ public class CampaignBacking extends BaseBacking {
 				selectedDetailControl = row;
 			} else if (row.getIdCampaignType() == Constant.RECALL_MEDICATION) {
 				selectedDetailMediaction = row;
+			} else if (row.getIdCampaignType() == Constant.RECALL_REMINDER) {
+				selectedDetailReminder = row;
 			}
 		}
 
@@ -769,8 +865,11 @@ public class CampaignBacking extends BaseBacking {
 			} else if (type == Constant.RECALL_CONTROL) {
 				expression = "#{campaignBacking.levelValuesControl[" + index
 						+ "]}";
-			} else {
+			} else if (type == Constant.RECALL_MEDICATION) {
 				expression = "#{campaignBacking.levelValuesMedication[" + index
+						+ "]}";
+			} else {
+				expression = "#{campaignBacking.levelValuesReminder[" + index
 						+ "]}";
 			}
 
@@ -875,7 +974,7 @@ public class CampaignBacking extends BaseBacking {
 				selectedCrmRecall[2] = null;
 				task[2] = null;
 			}
-		} else {
+		} else if (type == Constant.RECALL_MEDICATION) {
 			levelValues = new Integer[levelValuesMedication.length];
 			value = levelValuesMedication[level.intValue()];
 			refreshLevels(type.intValue(), level.intValue(), value,
@@ -893,6 +992,24 @@ public class CampaignBacking extends BaseBacking {
 				selectedCrmRecall[3] = null;
 				task[3] = null;
 			}
+		} else {
+			levelValues = new Integer[levelValuesReminder.length];
+			value = levelValuesReminder[level.intValue()];
+			refreshLevels(type.intValue(), level.intValue(), value,
+					listAllLevelReminder);
+			try {
+				levelValuesReminder[level.intValue() + 1] = Constant.DEFAULT_VALUE
+						.intValue();
+			} catch (Exception ex) {
+
+			}
+			if (value != Constant.DEFAULT_VALUE.intValue()) {
+				selectedCrmRecall[4] = mapReminder.get(value);
+				task[4] = selectedCrmRecall[4].getTask();
+			} else {
+				selectedCrmRecall[4] = null;
+				task[4] = null;
+			}
 		}
 
 		List<SelectItem> listItem = new ArrayList<SelectItem>();
@@ -907,9 +1024,11 @@ public class CampaignBacking extends BaseBacking {
 				levelValuesConfirmed[index] = Constant.DEFAULT_VALUE.intValue();
 			} else if (type == Constant.RECALL_CONTROL) {
 				levelValuesControl[index] = Constant.DEFAULT_VALUE.intValue();
-			} else {
+			} else if (type == Constant.RECALL_MEDICATION) {
 				levelValuesMedication[index] = Constant.DEFAULT_VALUE
 						.intValue();
+			} else {
+				levelValuesReminder[index] = Constant.DEFAULT_VALUE.intValue();
 			}
 			String idComponent = ":editForm:somLevel_" + type + "_" + index;
 			SelectOneMenu selectOneMenu = (SelectOneMenu) FacesContext
@@ -962,8 +1081,10 @@ public class CampaignBacking extends BaseBacking {
 			crmRecall = mapConfirmed.get(value);
 		} else if (type == Constant.RECALL_CONTROL) {
 			crmRecall = mapControl.get(value);
-		} else {
+		} else if (type == Constant.RECALL_MEDICATION) {
 			crmRecall = mapMedication.get(value);
+		} else {
+			crmRecall = mapReminder.get(value);
 		}
 
 		Date currentDate = new Date();
@@ -1045,6 +1166,7 @@ public class CampaignBacking extends BaseBacking {
 		int valueConfirmed = -1;
 		int valueControl = -1;
 		int valueMedication = -1;
+		int valueReminder = -1;
 		boolean validate = true;
 		RequestContext context = RequestContext.getCurrentInstance();
 
@@ -1054,7 +1176,7 @@ public class CampaignBacking extends BaseBacking {
 				message = FacesUtil.getMessage("cam_msg_required", paramValue);
 				level = getLevels(Constant.RECALL_NO_ATTENDET,
 						levelValuesNoAttendet);
-				if (level > 0) {
+				if (level >= 0) {
 					valueNoAttendet = levelValuesNoAttendet[level];
 					if (valueNoAttendet == Constant.DEFAULT_VALUE.intValue()) {
 						FacesUtil.addError(message);
@@ -1071,13 +1193,14 @@ public class CampaignBacking extends BaseBacking {
 
 			}
 		}
+
 		if (selectedDetailConfirmed != null) {
 			try {
 				paramValue = FacesUtil.getMessage("cam_type_confirmed");
 				message = FacesUtil.getMessage("cam_msg_required", paramValue);
 				level = getLevels(Constant.RECALL_CONFIRMED,
 						levelValuesConfirmed);
-				if (level > 0) {
+				if (level >= 0) {
 					valueConfirmed = levelValuesConfirmed[level];
 					if (valueConfirmed == Constant.DEFAULT_VALUE.intValue()) {
 						FacesUtil.addError(message);
@@ -1094,12 +1217,13 @@ public class CampaignBacking extends BaseBacking {
 
 			}
 		}
+
 		if (selectedDetailControl != null) {
 			try {
 				paramValue = FacesUtil.getMessage("cam_type_control");
 				message = FacesUtil.getMessage("cam_msg_required", paramValue);
 				level = getLevels(Constant.RECALL_CONTROL, levelValuesControl);
-				if (level > 0) {
+				if (level >= 0) {
 					valueControl = levelValuesControl[level];
 					if (valueControl == Constant.DEFAULT_VALUE.intValue()) {
 						FacesUtil.addError(message);
@@ -1116,13 +1240,14 @@ public class CampaignBacking extends BaseBacking {
 
 			}
 		}
+
 		if (selectedDetailMediaction != null) {
 			try {
 				paramValue = FacesUtil.getMessage("cam_type_medication");
 				message = FacesUtil.getMessage("cam_msg_required", paramValue);
 				level = getLevels(Constant.RECALL_MEDICATION,
 						levelValuesMedication);
-				if (level > 0) {
+				if (level >= 0) {
 					valueMedication = levelValuesMedication[level];
 					if (valueMedication == Constant.DEFAULT_VALUE.intValue()) {
 						FacesUtil.addError(message);
@@ -1130,6 +1255,29 @@ public class CampaignBacking extends BaseBacking {
 					} else {
 						generateNewCampaign(selectedDetailMediaction,
 								valueMedication, Constant.RECALL_MEDICATION);
+					}
+				} else {
+					FacesUtil.addError(message);
+					validate = false;
+				}
+			} catch (Exception ex) {
+
+			}
+		}
+
+		if (selectedDetailReminder != null) {
+			try {
+				paramValue = FacesUtil.getMessage("cam_type_reminder");
+				message = FacesUtil.getMessage("cam_msg_required", paramValue);
+				level = getLevels(Constant.RECALL_REMINDER, levelValuesReminder);
+				if (level >= 0) {
+					valueReminder = levelValuesReminder[level];
+					if (valueReminder == Constant.DEFAULT_VALUE.intValue()) {
+						FacesUtil.addError(message);
+						validate = false;
+					} else {
+						generateNewCampaign(selectedDetailReminder,
+								valueReminder, Constant.RECALL_REMINDER);
 					}
 				} else {
 					FacesUtil.addError(message);

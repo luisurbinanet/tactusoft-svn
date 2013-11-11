@@ -118,6 +118,30 @@
 							action="#{campaignBacking.generateDetailNoAttendet}" />
 					</p:fieldset>
 
+					<p:spacer height="5" />
+
+					<p:fieldset id="fldReminder" legend="#{msg['cam_type_reminder']}">
+						<h:panelGrid columns="2" width="100%">
+							<h:outputLabel value="#{msg['cam_pat']}" />
+							<h:outputLabel
+								value="#{campaignBacking.selectedReminder.crmPatient.names}" />
+
+							<h:outputLabel value="#{msg['cam_date']}" />
+							<h:outputLabel
+								value="#{campaignBacking.selectedReminder.dateCall}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+
+							<h:outputLabel value="#{msg['cam_branch']}" />
+							<h:outputLabel
+								value="#{campaignBacking.selectedReminder.crmBranch.name}" />
+						</h:panelGrid>
+						<p:commandButton value="#{msg['btn_edit']}" icon="ui-icon-pencil"
+							oncomplete="dlg.show()" update=":editForm:pnlDetail"
+							disabled="#{campaignBacking.selectedReminder == null}"
+							action="#{campaignBacking.generateDetailReminder}" />
+					</p:fieldset>
+
 				</h:panelGrid>
 
 			</h:form>
@@ -211,6 +235,29 @@
 					</p:fieldset>
 
 					<p:spacer height="5" />
+
+					<p:fieldset legend="#{msg['cam_type_reminder']}"
+						rendered="#{campaignBacking.selectedDetailReminder ne null}">
+
+						<h:panelGrid columns="2" width="100%">
+							<h:outputLabel value="#{msg['cam_obs']}" />
+							<p:inputTextarea rows="3" disabled="true"
+								value="#{campaignBacking.selectedDetailReminder.obs}"
+								style="width:700px;background-color:#FFFF80;font-weight:bold;"
+								readonly="true" />
+						</h:panelGrid>
+
+						<p:spacer />
+
+						<h:panelGroup binding="#{campaignBacking.panelGroupReminder}" />
+
+						<p:spacer />
+
+						<h:panelGrid id="pnlTask_5" width="100%" />
+					</p:fieldset>
+
+					<p:spacer height="5"
+						rendered="#{campaignBacking.selectedDetailReminder ne null}" />
 
 					<p:fieldset legend="#{msg['cam_type_medication']}"
 						rendered="#{campaignBacking.selectedDetailMediaction ne null}">

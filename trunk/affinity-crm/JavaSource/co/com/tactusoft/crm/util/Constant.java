@@ -85,4 +85,5 @@ public class Constant {
 	public static final int RECALL_CONFIRMED = 2;
 	public static final int RECALL_CONTROL = 3;
 	public static final int RECALL_MEDICATION = 4;
+	public static final int RECALL_REMINDER = 5;
 }
