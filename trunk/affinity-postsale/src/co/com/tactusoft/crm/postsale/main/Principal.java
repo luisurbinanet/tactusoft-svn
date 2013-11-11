@@ -3,6 +3,7 @@ package co.com.tactusoft.crm.postsale.main;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,10 +19,13 @@ import co.com.tactusoft.crm.model.entities.CrmLog;
 import co.com.tactusoft.crm.model.entities.CrmLogDetail;
 import co.com.tactusoft.crm.model.entities.CrmSapMedication;
 import co.com.tactusoft.crm.model.entities.CrmSapMedicationDistinct;
+import co.com.tactusoft.crm.model.entities.CrmSapMedicationId;
 import co.com.tactusoft.crm.model.entities.CrmUser;
 import co.com.tactusoft.crm.model.entities.VwAppointmentMedication;
 import co.com.tactusoft.crm.model.entities.VwMedication;
+import co.com.tactusoft.crm.model.entities.sap.SapMedication;
 import co.com.tactusoft.crm.postsale.bo.ProcessBO;
+import co.com.tactusoft.crm.postsale.bo.SapBO;
 import co.com.tactusoft.crm.postsale.util.Utils;
 import co.com.tactusoft.crm.util.FacesUtil;
 
@@ -34,6 +38,7 @@ public class Principal {
 
 	private BeanFactory beanFactory;
 	private ProcessBO processBO;
+	private SapBO sapBO;
 
 	private Map<BigDecimal, CrmCampaign> mapCampaign;
 	private Map<BigDecimal, Date> mapCallDates;
@@ -49,7 +54,8 @@ public class Principal {
 		if (crmCampaign == null) {
 			crmCampaign = new CrmCampaign();
 
-			CrmUser crmUser = processBO.getUser(crmBranch, callDateString, type);
+			CrmUser crmUser = processBO
+					.getUser(crmBranch, callDateString, type);
 			if (crmUser == null) {
 				crmUser = new CrmUser();
 				crmUser.setId(new BigDecimal(50));
@@ -79,21 +85,56 @@ public class Principal {
 	public void execute() {
 		System.out.println("INCIANDO PROCESO...");
 		Date currentDate = new Date();
-		//Date currentDate = Utils.stringTOSDate("08/09/2013", "dd/MM/yyyy");
+		// Date currentDate = Utils.stringTOSDate("08/09/2013", "dd/MM/yyyy");
 		String currentDateString = Utils.formatDate(currentDate, "yyyy-MM-dd");
 
 		System.out.println("CARGANDO BASE DE DATOS...");
 		beanFactory = new ClassPathXmlApplicationContext("spring-config.xml");
 		processBO = beanFactory.getBean(ProcessBO.class);
+		sapBO = beanFactory.getBean(SapBO.class);
+		
+		int numDays = processBO.getLogLastDay();
 
-		if (processBO.getListLog(currentDateString).isEmpty()) {
-
-			processBO.updateCampaign(currentDateString);
-
+		if (numDays > 0) {
 			crmLog = new CrmLog();
 			crmLog.setLogDate(new Date());
 			crmLog.setLogType("POSTVENTA");
 			processBO.save(crmLog);
+
+			System.out.println("EXTRACCIÓN DE SAP...");
+			CrmLogDetail crmLogDetail = new CrmLogDetail();
+			crmLogDetail.setCrmLog(crmLog);
+			crmLogDetail.setLogDate(new Date());
+			crmLogDetail.setMessage("EXTRACCIÓN DE SAP");
+			processBO.save(crmLogDetail);
+
+			List<CrmSapMedication> listAddMedication = new LinkedList<CrmSapMedication>();
+			List<SapMedication> listMedication = sapBO
+					.getListSAPMedication(numDays);
+			for (SapMedication row : listMedication) {
+				CrmSapMedication crmSapMedication = new CrmSapMedication(
+						new CrmSapMedicationId(row.getId().getIdBill(), row
+								.getId().getPosBill()), row.getDateBill(),
+						row.getTypeBill(), row.getIdPatient(),
+						row.getDocPatient(), row.getIdMaterial(),
+						row.getGrpMaterial(), row.getPositionType(),
+						row.getNameMaterial(), row.getUnit(), row.getAmount(),
+						row.getIdCanal(), row.getIdSalesOff(),
+						row.getIdInterlocutor(), row.getUserSap(), null, null);
+				listAddMedication.add(crmSapMedication);
+			}
+
+			for (CrmSapMedication row : listAddMedication) {
+				processBO.save(row);
+			}
+
+			System.out.println("ACTUALIZACIÓN DE CAMAPAÑAS NO ATENDIDAS...");
+			crmLogDetail = new CrmLogDetail();
+			crmLogDetail.setCrmLog(crmLog);
+			crmLogDetail.setLogDate(new Date());
+			crmLogDetail.setMessage("ACTUALIZACIÓN DE CAMAPAÑAS NO ATENDIDAS");
+			processBO.save(crmLogDetail);
+			processBO.updateCampaign(currentDateString);
 
 			mapCampaign = new HashMap<BigDecimal, CrmCampaign>();
 			mapCallDates = new HashMap<BigDecimal, Date>();
@@ -141,7 +182,7 @@ public class Principal {
 
 			System.out.println("ACTUALIZANDO CITAS...");
 			// ACTUALIZAR TODAS LAS CITAS QUE NO FUERON ATENDIDAS
-			CrmLogDetail crmLogDetail = new CrmLogDetail();
+			crmLogDetail = new CrmLogDetail();
 			crmLogDetail.setCrmLog(crmLog);
 			crmLogDetail.setLogDate(new Date());
 			crmLogDetail.setMessage("ACTUALIZANDO CITAS");

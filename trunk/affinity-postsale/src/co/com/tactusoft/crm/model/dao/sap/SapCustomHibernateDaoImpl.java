@@ -99,8 +99,12 @@ public class SapCustomHibernateDaoImpl implements SapCustomHibernateDao,
 
 	@SuppressWarnings("unchecked")
 	@Transactional(value = "transactionManagerSAP", readOnly = true)
-	public <T> List<T> findNamedQuery(String sql) {
-		final List<T> entities = getCurrentSession().getNamedQuery(sql).list();
+	public <T> List<T> findNamedQuery(String sql, List<Parameter> listParameter) {
+		Query query = getCurrentSession().getNamedQuery(sql);
+		for (Parameter row : listParameter) {
+			query.setParameter(row.getName(), row.getValue());
+		}
+		final List<T> entities = query.list();
 		return entities;
 	}
 

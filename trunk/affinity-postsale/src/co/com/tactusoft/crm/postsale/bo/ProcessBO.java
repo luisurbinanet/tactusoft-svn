@@ -22,6 +22,7 @@ import co.com.tactusoft.crm.model.entities.CrmSapMedicationDistinct;
 import co.com.tactusoft.crm.model.entities.CrmUser;
 import co.com.tactusoft.crm.model.entities.VwAppointmentMedication;
 import co.com.tactusoft.crm.model.entities.VwMedication;
+import co.com.tactusoft.crm.postsale.util.Utils;
 import co.com.tactusoft.crm.util.FacesUtil;
 
 @Service
@@ -232,6 +233,16 @@ public class ProcessBO implements Serializable {
 	public List<CrmLog> getListLog(String currentDateString) {
 		return dao.find("from CrmLog o where Date(o.logDate) = '"
 				+ currentDateString + "'");
+	}
+
+	public int getLogLastDay() {
+		CrmLog lastLog = (CrmLog) dao.find(
+				"FROM CrmLog o WHERE id = (SELECT MAX(id) FROM CrmLog)").get(0);
+		Date today = Utils.getDateWithoutTime(new Date());
+		Date lastDate = Utils.getDateWithoutTime(lastLog.getLogDate());
+		long diff = Math.abs(today.getTime() - lastDate.getTime());
+		Long diffDays = diff / (24 * 60 * 60 * 1000);
+		return diffDays.intValue();
 	}
 
 }

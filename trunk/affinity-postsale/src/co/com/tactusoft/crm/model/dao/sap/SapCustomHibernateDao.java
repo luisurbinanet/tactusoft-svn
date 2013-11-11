@@ -22,7 +22,7 @@ public interface SapCustomHibernateDao {
 	
 	public <T> List<T> findNative(String sql, Class<T> clasz);
 	
-	public <T> List<T> findNamedQuery(String sql);
+	public <T> List<T> findNamedQuery(String sql, List<Parameter> listParameter);
 	
 	public <T> BigDecimal getId(Class<T> clasz);
 	

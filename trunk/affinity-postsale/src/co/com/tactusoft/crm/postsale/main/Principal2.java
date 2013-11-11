@@ -3,6 +3,7 @@ package co.com.tactusoft.crm.postsale.main;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,7 @@ import co.com.tactusoft.crm.model.entities.CrmLog;
 import co.com.tactusoft.crm.model.entities.CrmLogDetail;
 import co.com.tactusoft.crm.model.entities.CrmSapMedication;
 import co.com.tactusoft.crm.model.entities.CrmSapMedicationDistinct;
+import co.com.tactusoft.crm.model.entities.CrmSapMedicationId;
 import co.com.tactusoft.crm.model.entities.CrmUser;
 import co.com.tactusoft.crm.model.entities.VwAppointmentMedication;
 import co.com.tactusoft.crm.model.entities.VwMedication;
@@ -29,18 +31,9 @@ import co.com.tactusoft.crm.util.FacesUtil;
 
 public class Principal2 {
 
-	private static int NO_ATTENDET = 1;
-	private static int CONFIRMED = 2;
-	private static int CONTROL = 3;
-	private static int MEDICATION = 4;
-
 	private BeanFactory beanFactory;
 	private ProcessBO processBO;
 	private SapBO sapBO;
-
-	private Map<BigDecimal, CrmCampaign> mapCampaign;
-	private Map<BigDecimal, Date> mapCallDates;
-	private CrmLog crmLog;
 
 	public void execute() {
 		System.out.println("INCIANDO PROCESO...");
@@ -51,27 +44,43 @@ public class Principal2 {
 		beanFactory = new ClassPathXmlApplicationContext("spring-config.xml");
 		processBO = beanFactory.getBean(ProcessBO.class);
 		sapBO = beanFactory.getBean(SapBO.class);
-		
-		List<SapMedication> listSapMedication = sapBO
-				.getListSAPMedication(currentDateString);
 
-		List<CrmSapMedicationDistinct> listDistinct = processBO
-				.getListSapMedicationByLoadStateDistinct(currentDateString);
-		for (CrmSapMedicationDistinct row : listDistinct) {
-			String rowInitDateString = Utils.formatDate(
-					Utils.addDaysToDate(row.getDateBill(), -3), "yyyy-MM-dd");
-			CrmAppointment crmAppointment = processBO.getAppointment(
-					row.getIdPatient(), rowInitDateString,
-					Utils.formatDate(row.getDateBill(), "yyyy-MM-dd"),
-					row.getTypeBill());
-			if (crmAppointment != null) {
-				processBO.updateSapMedicationById(row.getIdBill(),
-						row.getTypeBill(), crmAppointment.getId(), -1);
-				System.out.println("Actualizado: " + row.getIdBill());
-			}
+		List<CrmSapMedication> listCrmSapMedication = new LinkedList<CrmSapMedication>();
+
+		List<SapMedication> listSapMedication = sapBO
+				.getListSAPMedication(0);
+		for (SapMedication row : listSapMedication) {
+			CrmSapMedication crmSapMedication = new CrmSapMedication(
+					new CrmSapMedicationId(row.getId().getIdBill(), row.getId()
+							.getPosBill()), row.getDateBill(),
+					row.getTypeBill(), row.getIdPatient(), row.getDocPatient(),
+					row.getIdMaterial(), row.getGrpMaterial(),
+					row.getPositionType(), row.getNameMaterial(),
+					row.getUnit(), row.getAmount(), row.getIdCanal(),
+					row.getIdSalesOff(), row.getIdInterlocutor(),
+					row.getUserSap(), null, null);
+			listCrmSapMedication.add(crmSapMedication);
 		}
-		
-		
+
+		for (CrmSapMedication row : listCrmSapMedication) {
+			processBO.save(row);
+		}
+
+		/*
+		 * List<CrmSapMedicationDistinct> listDistinct = processBO
+		 * .getListSapMedicationByLoadStateDistinct(currentDateString); for
+		 * (CrmSapMedicationDistinct row : listDistinct) { String
+		 * rowInitDateString = Utils.formatDate(
+		 * Utils.addDaysToDate(row.getDateBill(), -3), "yyyy-MM-dd");
+		 * CrmAppointment crmAppointment = processBO.getAppointment(
+		 * row.getIdPatient(), rowInitDateString,
+		 * Utils.formatDate(row.getDateBill(), "yyyy-MM-dd"),
+		 * row.getTypeBill()); if (crmAppointment != null) {
+		 * processBO.updateSapMedicationById(row.getIdBill(), row.getTypeBill(),
+		 * crmAppointment.getId(), -1); System.out.println("Actualizado: " +
+		 * row.getIdBill()); } }
+		 */
+
 	}
 
 	public static void main(String[] args) {
