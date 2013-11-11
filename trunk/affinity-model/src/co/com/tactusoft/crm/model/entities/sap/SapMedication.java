@@ -42,7 +42,7 @@ import javax.persistence.TemporalType;
 		+ "left join sapsr3.kna1 Cli on FacEnc.KUNRG=Cli.kunnr and Cli.mandt=FacEnc.mandt\n"
 		+ "left join (select * from sapsr3.vbpa where parvw  ='Z2'  ) Intr on ( Intr.vbeln=Ped.vbeln and Intr.mandt=FacEnc.mandt)    \n"
 		+ "left join sapsr3.makt Mat on FacDet.mandt = Mat.mandt and FacDet.matnr = Mat.matnr and MAt.SPRAS = 'S'\n"
-		+ "where FacEnc.FKDAT  >= to_char(sysdate-0 ,'YYYYMMDD') \n"
+		+ "where FacEnc.FKDAT  >= to_char(sysdate-:pdays,'YYYYMMDD') \n"
 		+ "and  FacEnc.VKORG in ('1000','4000')  order by 1,2", resultSetMapping = "implicit")
 public class SapMedication implements java.io.Serializable {
 
