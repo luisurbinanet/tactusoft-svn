@@ -28,8 +28,9 @@ public class CrmCampaignDetail implements java.io.Serializable {
 	private CrmCampaign crmCampaign;
 	private CrmAppointment crmAppointment;
 	private int idCampaignType;
-	private int status;
 	private Date callDate;
+	private String obs;
+	private int status;
 	private Set<CrmCampaignTask> crmCampaignTasks = new HashSet<CrmCampaignTask>(
 			0);
 
@@ -37,21 +38,22 @@ public class CrmCampaignDetail implements java.io.Serializable {
 	}
 
 	public CrmCampaignDetail(CrmCampaign crmCampaign, int idCampaignType,
-			int status, Date callDate) {
+			Date callDate, int status) {
 		this.crmCampaign = crmCampaign;
 		this.idCampaignType = idCampaignType;
-		this.status = status;
 		this.callDate = callDate;
+		this.status = status;
 	}
 
 	public CrmCampaignDetail(CrmCampaign crmCampaign,
-			CrmAppointment crmAppointment, int idCampaignType, int status,
-			Date callDate, Set<CrmCampaignTask> crmCampaignTasks) {
+			CrmAppointment crmAppointment, int idCampaignType, Date callDate,
+			String obs, int status, Set<CrmCampaignTask> crmCampaignTasks) {
 		this.crmCampaign = crmCampaign;
 		this.crmAppointment = crmAppointment;
 		this.idCampaignType = idCampaignType;
-		this.status = status;
 		this.callDate = callDate;
+		this.obs = obs;
+		this.status = status;
 		this.crmCampaignTasks = crmCampaignTasks;
 	}
 
@@ -95,15 +97,6 @@ public class CrmCampaignDetail implements java.io.Serializable {
 		this.idCampaignType = idCampaignType;
 	}
 
-	@Column(name = "status", nullable = false)
-	public int getStatus() {
-		return this.status;
-	}
-
-	public void setStatus(int status) {
-		this.status = status;
-	}
-
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "call_date", nullable = false, length = 19)
 	public Date getCallDate() {
@@ -112,6 +105,24 @@ public class CrmCampaignDetail implements java.io.Serializable {
 
 	public void setCallDate(Date callDate) {
 		this.callDate = callDate;
+	}
+
+	@Column(name = "obs", length = 65535)
+	public String getObs() {
+		return obs;
+	}
+
+	public void setObs(String obs) {
+		this.obs = obs;
+	}
+
+	@Column(name = "status", nullable = false)
+	public int getStatus() {
+		return this.status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmCampaignDetail")
