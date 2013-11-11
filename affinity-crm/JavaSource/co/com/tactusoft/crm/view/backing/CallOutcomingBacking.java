@@ -17,7 +17,6 @@ import org.asteriskjava.live.ManagerCommunicationException;
 import org.asteriskjava.live.NoSuchChannelException;
 import org.springframework.context.annotation.Scope;
 
-import co.com.tactusoft.crm.controller.bo.CapaignBo;
 import co.com.tactusoft.crm.controller.bo.ParameterBo;
 import co.com.tactusoft.crm.model.entities.AstTrunkDialpatterns;
 import co.com.tactusoft.crm.model.entities.CrmCall;
@@ -183,14 +182,6 @@ public class CallOutcomingBacking extends ContactBacking {
 		this.mapCallTypeDetail = mapCallTypeDetail;
 	}
 
-	public CapaignBo getCapaignService() {
-		return capaignService;
-	}
-
-	public void setCapaignService(CapaignBo capaignService) {
-		this.capaignService = capaignService;
-	}
-
 	public ParameterBo getParameterService() {
 		return parameterService;
 	}
@@ -307,7 +298,7 @@ public class CallOutcomingBacking extends ContactBacking {
 		String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
 		listCallType.add(new SelectItem(null, label));
 
-		for (CrmCallType row : capaignService.getListCallTypeOutcoming()) {
+		for (CrmCallType row : campaignService.getListCallTypeOutcoming()) {
 			listCallType.add(new SelectItem(row.getId(), row.getDescription()));
 		}
 
@@ -330,7 +321,7 @@ public class CallOutcomingBacking extends ContactBacking {
 	}
 
 	public void searchAction(ActionEvent event) {
-		List<CrmPatient> listCrmPatient = capaignService.getListPatient(phone);
+		List<CrmPatient> listCrmPatient = campaignService.getListPatient(phone);
 		patientModel = new PatientDataModel(listCrmPatient);
 		if (listCrmPatient.size() > 0) {
 			selectedPatient = listCrmPatient.get(0);
@@ -424,7 +415,7 @@ public class CallOutcomingBacking extends ContactBacking {
 				&& this.selectedPatient.getId() != null) {
 			call.setCrmPatient(this.selectedPatient);
 		}
-		capaignService.saveCall(call);
+		campaignService.saveCall(call);
 		String message = FacesUtil.getMessage("cam_msg_update_ok",
 				selectedPatient.getNames());
 		FacesUtil.addInfo(message);
@@ -445,7 +436,7 @@ public class CallOutcomingBacking extends ContactBacking {
 		String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
 		listCallTypeDetail.add(new SelectItem(-1, label));
 		if (idCallType != null && idCallType != 0) {
-			for (CrmCallTypeDetail row : capaignService
+			for (CrmCallTypeDetail row : campaignService
 					.getListCallTypeDetail(idCallType)) {
 				listCallTypeDetail.add(new SelectItem(row.getId(), row
 						.getCode() + " - " + row.getDescription()));

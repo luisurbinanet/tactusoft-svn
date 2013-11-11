@@ -44,11 +44,24 @@
 						style="width:350px;background-color:#FFFF80;font-weight:bold;"
 						readonly="true" />
 
+					<h:outputLabel value="#{msg['pat_code']}" />
+					<p:inputText value="#{eventsHistorialBacking.selectedPatient.doc}"
+						style="width:350px;background-color:#FFFF80;font-weight:bold;"
+						readonly="true" />
+
 					<h:outputLabel value="#{msg['pat_names']}" />
 					<p:inputText
 						value="#{eventsHistorialBacking.selectedPatient.names}"
 						style="width:350px;background-color:#FFFF80;font-weight:bold;"
 						readonly="true" />
+
+					<h:outputLabel value="#{msg['pat_born_date']}" />
+					<p:inputText
+						value="#{eventsHistorialBacking.selectedPatient.bornDate}"
+						style="width:350px;background-color:#FFFF80;font-weight:bold;"
+						readonly="true">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</p:inputText>
 
 					<h:outputLabel value="#{msg['pat_address']}" />
 					<p:inputText
@@ -252,12 +265,19 @@
 								</p:column>
 
 								<f:facet name="footer">
-									<p:commandButton id="btnUpdateCall"
+									<p:commandButton id="btnUpdateCampaign"
 										value="#{msg['btn_update_call']}" icon="ui-icon-clipboard"
 										action="#{eventsHistorialBacking.updateCall}"
 										update="selectedTable :form:growl :editForm:dialogRecall"
 										oncomplete="dlgRecall.show();"
 										disabled="#{eventsHistorialBacking.crmCampaignDetail.status eq 0?false:true}" />
+
+									<p:commandButton id="btnCreateCampaign"
+										value="#{msg['btn_create_task']}" icon="ui-icon-document"
+										action="#{eventsHistorialBacking.newCampaingAction}"
+										update="selectedTable :form:growl :patientForm:dialogCampaign"
+										oncomplete="dlgCampaign.show();"
+										disabled="#{empty eventsHistorialBacking.listCampaign}" />
 								</f:facet>
 
 							</p:dataTable>
@@ -318,13 +338,13 @@
 						<f:facet name="footer">
 							<p:spacer height="10" />
 							<p:commandButton value="#{msg['btn_search']}"
-								icon="ui-icon-search"
+								icon="ui-icon-search" process="dialog2"
 								update="pnlTable2 recordTable2 btnAddPatient"
 								action="#{eventsHistorialBacking.searchPatientAction}" />
 							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
 								icon="ui-icon-plusthick"
 								update=":form:pnlDetail :form:pnlTable :form:btnPrint"
-								oncomplete="dlg2.hide()"
+								oncomplete="dlg2.hide()" process="dialog2"
 								disabled="#{eventsHistorialBacking.disabledAddPatient}" />
 						</f:facet>
 					</h:panelGrid>
@@ -360,6 +380,53 @@
 
 				</p:dialog>
 
+				<p:dialog header="#{msg['msg_detail']}" widgetVar="dlgCampaign"
+					resizable="false" id="dialogCampaign" showEffect="fade"
+					hideEffect="explode" modal="true" width="600" height="180">
+
+					<p:toolbar style="width:100%">
+						<p:toolbarGroup align="left">
+							<p:commandButton value="#{msg['btn_save']}" icon="ui-icon-disk"
+								action="#{eventsHistorialBacking.createCampaingAction}"
+								oncomplete="handleCompleteCampaign(xhr, status, args)"
+								update=":form:growl :form:pnlTable" process="dialogCampaign" />
+							<p:commandButton value="#{msg['btn_close']}"
+								icon="ui-icon-closethick" update=":form:growl :form:pnlTable"
+								process="@none" oncomplete="dlgCampaign.hide()" />
+						</p:toolbarGroup>
+					</p:toolbar>
+
+					<p:spacer height="5" />
+
+					<h:panelGrid width="100%" columns="2">
+
+						<h:outputLabel value="#{msg['app_branch']}" />
+						<p:selectOneMenu style="width:400px" filter="true"
+							filterMatchMode="contains" panelStyle="width:400px"
+							value="#{eventsHistorialBacking.campaignIdBranch}"
+							required="true" label="#{msg['app_branch']}">
+							<f:selectItem itemLabel="#{msg['glb_default_value']}"
+								noSelectionOption="true" />
+							<f:selectItems value="#{eventsHistorialBacking.listCrmBranch}" />
+						</p:selectOneMenu>
+
+						<h:outputLabel value="#{msg['cam_date']}"
+							style="font-size:12px;font-weight:bold;" />
+						<p:calendar value="#{eventsHistorialBacking.campaignDate}"
+							id="calCurrentDate" showOn="button" navigator="true"
+							pattern="dd/MM/yyyy" readonlyInput="true"
+							mindate="#{eventsHistorialBacking.today}" locale="es"
+							label="createCampaingAction" required="true" />
+
+						<h:outputLabel value="#{msg['cam_obs']}"
+							style="font-size:12px;font-weight:bold;" />
+						<p:inputTextarea rows="3" style="width:400px"
+							value="#{eventsHistorialBacking.campaignObs}"
+							label="#{msg['cam_obs']}" required="true" />
+					</h:panelGrid>
+
+				</p:dialog>
+
 				<script type="text/javascript">
 					function handleSaveRequest(xhr, status, args) {
 						if (args.validationFailed || !args.saved) {
@@ -368,6 +435,16 @@
 							}, 100);
 						} else {
 							checkedDlg.hide();
+						}
+					}
+
+					function handleCompleteCampaign(xhr, status, args) {
+						if (args.validationFailed) {
+							jQuery('#dialogCampaign').effect("shake", {
+								times : 3
+							}, 100);
+						} else {
+							dlgCampaign.hide();
 						}
 					}
 				</script>
@@ -396,9 +473,31 @@
 					<h:panelGrid id="pnlDetail" columns="1" cellpadding="4"
 						style="margin:0 auto;" width="100%">
 
+						<p:fieldset legend="#{msg['cam_type_reminder']}"
+							rendered="#{campaignBacking.selectedDetailReminder ne null}">
+
+							<h:panelGrid columns="2" width="100%">
+								<h:outputLabel value="#{msg['cam_obs']}" />
+								<p:inputTextarea rows="3" disabled="true"
+									value="#{campaignBacking.selectedDetailReminder.obs}"
+									style="width:700px;background-color:#FFFF80;font-weight:bold;"
+									readonly="true" />
+							</h:panelGrid>
+
+							<p:spacer />
+
+							<h:panelGroup binding="#{campaignBacking.panelGroupReminder}" />
+
+							<p:spacer />
+
+							<h:panelGrid id="pnlTask_5" width="100%" />
+						</p:fieldset>
+
+						<p:spacer height="5"
+							rendered="#{campaignBacking.selectedDetailReminder ne null}" />
+
 						<p:fieldset legend="#{msg['cam_type_medication']}"
 							rendered="#{campaignBacking.selectedDetailMediaction ne null}">
-
 
 							<h:panelGrid columns="4" width="100%">
 								<h:outputLabel value="#{msg['cam_procedure']}" />

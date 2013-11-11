@@ -63,7 +63,7 @@ public class BaseBacking implements Serializable {
 	protected ParameterBo parameterService;
 
 	@Inject
-	protected CapaignBo capaignService;
+	protected CapaignBo campaignService;
 
 	private static final long serialVersionUID = 1L;
 
@@ -154,6 +154,10 @@ public class BaseBacking implements Serializable {
 
 	protected String DEFAULT_LABEL_ALL = FacesUtil
 			.getMessage(Constant.DEFAULT_LABEL_ALL);
+
+	public BaseBacking() {
+		today = new Date();
+	}
 
 	public List<CrmPatient> getListPatient() {
 		return listPatient;

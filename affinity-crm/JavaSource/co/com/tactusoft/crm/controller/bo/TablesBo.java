@@ -140,6 +140,10 @@ public class TablesBo implements Serializable {
 		return getListCampaignActive(Constant.RECALL_MEDICATION);
 	}
 
+	public List<CrmCampaign> getListCampaignReminder() {
+		return getListCampaignActive(Constant.RECALL_REMINDER);
+	}
+
 	private List<CrmCampaign> getListCampaignActive(int type) {
 		String callDate = FacesUtil.formatDate(new Date(), "yyyy-MM-dd");
 		return dao
@@ -221,6 +225,13 @@ public class TablesBo implements Serializable {
 					max.addAll(current);
 				}
 				current = new ArrayList<CrmRecall>();
+			}
+		}
+
+		if (max.isEmpty() && !list.isEmpty()) {
+			for (CrmRecall row : list) {
+				max.add(row);
+				break;
 			}
 		}
 
