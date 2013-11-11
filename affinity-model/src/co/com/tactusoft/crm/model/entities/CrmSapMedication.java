@@ -25,6 +25,8 @@ public class CrmSapMedication implements java.io.Serializable {
 	private String idPatient;
 	private String docPatient;
 	private String idMaterial;
+	private String grpMaterial;
+	private String positionType;
 	private String nameMaterial;
 	private Integer unit;
 	private BigDecimal amount;
@@ -45,15 +47,18 @@ public class CrmSapMedication implements java.io.Serializable {
 
 	public CrmSapMedication(CrmSapMedicationId id, Date dateBill,
 			String typeBill, String idPatient, String docPatient,
-			String idMaterial, String nameMaterial, Integer unit,
-			BigDecimal amount, String idCanal, BigDecimal idSalesOff,
-			String idInterlocutor, String userSap, String status) {
+			String idMaterial, String grpMaterial, String positionType,
+			String nameMaterial, Integer unit, BigDecimal amount,
+			String idCanal, BigDecimal idSalesOff, String idInterlocutor,
+			String userSap, Integer idLog, String status) {
 		this.id = id;
 		this.dateBill = dateBill;
 		this.typeBill = typeBill;
 		this.idPatient = idPatient;
 		this.docPatient = docPatient;
 		this.idMaterial = idMaterial;
+		this.grpMaterial = grpMaterial;
+		this.positionType = positionType;
 		this.nameMaterial = nameMaterial;
 		this.unit = unit;
 		this.amount = amount;
@@ -61,6 +66,7 @@ public class CrmSapMedication implements java.io.Serializable {
 		this.idSalesOff = idSalesOff;
 		this.idInterlocutor = idInterlocutor;
 		this.userSap = userSap;
+		this.idLog = idLog;
 		this.status = status;
 	}
 
@@ -120,6 +126,24 @@ public class CrmSapMedication implements java.io.Serializable {
 
 	public void setIdMaterial(String idMaterial) {
 		this.idMaterial = idMaterial;
+	}
+
+	@Column(name = "grp_material")
+	public String getGrpMaterial() {
+		return grpMaterial;
+	}
+
+	public void setGrpMaterial(String grpMaterial) {
+		this.grpMaterial = grpMaterial;
+	}
+
+	@Column(name = "position_type")
+	public String getPositionType() {
+		return positionType;
+	}
+
+	public void setPositionType(String positionType) {
+		this.positionType = positionType;
 	}
 
 	@Column(name = "name_material")
