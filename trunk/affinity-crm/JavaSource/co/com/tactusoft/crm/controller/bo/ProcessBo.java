@@ -862,8 +862,7 @@ public class ProcessBo implements Serializable {
 		return listApp.size();
 	}
 
-	public int validateAppointmentForDate(Date currentDate,
-			BigDecimal idPatient) {
+	public int validateAppointmentForDate(Date currentDate, BigDecimal idPatient) {
 		int result = 0;
 		String dateString = FacesUtil.formatDate(currentDate, "yyyy-MM-dd");
 		List<CrmAppointment> list = dao
@@ -1706,7 +1705,7 @@ public class ProcessBo implements Serializable {
 				+ "' AND '"
 				+ FacesUtil.formatDate(endDate, "yyyy-MM-dd")
 				+ "' AND (SELECT COUNT(1) FROM crm_medication b WHERE b.id_appointment = a.id) = "
-				+ "(SELECT COUNT(1) FROM crm_sap_medication c WHERE c.id_appointment = a.id) "
+				+ "(SELECT COUNT(1) FROM crm_sap_medication c WHERE c.id_appointment = a.id AND position_type <> 'ZGRT') "
 				+ "ORDER BY 1,6,4";
 
 		List<CrmAppointment> result = dao.findNative(sql, CrmAppointment.class);
@@ -1731,7 +1730,7 @@ public class ProcessBo implements Serializable {
 				+ FacesUtil.formatDate(endDate, "yyyy-MM-dd")
 				+ "' AND (SELECT COUNT(1) FROM crm_sap_medication  b WHERE b.id_appointment = a.id) >= "
 				+ "((SELECT COUNT(1) FROM crm_medication c WHERE c.id_appointment = a.id)/2) "
-				+ "AND (SELECT COUNT(1) FROM crm_sap_medication c WHERE c.id_appointment = a.id) < "
+				+ "AND (SELECT COUNT(1) FROM crm_sap_medication c WHERE c.id_appointment = a.id AND position_type <> 'ZGRT') < "
 				+ "(SELECT COUNT(1) FROM crm_medication b WHERE b.id_appointment = a.id) "
 				+ "ORDER BY 1,6,4";
 
@@ -1755,7 +1754,7 @@ public class ProcessBo implements Serializable {
 				+ FacesUtil.formatDate(startDate, "yyyy-MM-dd")
 				+ "' AND '"
 				+ FacesUtil.formatDate(endDate, "yyyy-MM-dd")
-				+ "' AND (SELECT COUNT(1) FROM crm_sap_medication  b WHERE b.id_appointment = a.id) < "
+				+ "' AND (SELECT COUNT(1) FROM crm_sap_medication  b WHERE b.id_appointment = a.id AND position_type <> 'ZGRT') < "
 				+ "((SELECT COUNT(1) FROM crm_medication c WHERE c.id_appointment = a.id)/2) "
 				+ "ORDER BY 1,6,4";
 
@@ -1779,7 +1778,30 @@ public class ProcessBo implements Serializable {
 				+ FacesUtil.formatDate(startDate, "yyyy-MM-dd")
 				+ "' AND '"
 				+ FacesUtil.formatDate(endDate, "yyyy-MM-dd")
-				+ "' AND (SELECT COUNT(1) FROM crm_sap_medication c WHERE c.id_appointment = a.id) = 0 "
+				+ "' AND (SELECT COUNT(1) FROM crm_sap_medication c WHERE c.id_appointment = a.id AND position_type <> 'ZGRT') = 0 "
+				+ "ORDER BY 1,6,4";
+
+		List<CrmAppointment> result = dao.findNative(sql, CrmAppointment.class);
+		return result;
+	}
+
+	public List<CrmAppointment> getListAppointmentFree(CrmBranch[] listBranch,
+			Date startDate, Date endDate) {
+		String branchs = "";
+		for (CrmBranch crmBranch : listBranch) {
+			branchs = branchs + crmBranch.getId() + ",";
+		}
+		branchs = branchs.substring(0, branchs.length() - 1);
+
+		String sql = "SELECT * "
+				+ "FROM crm_appointment a "
+				+ "WHERE a.state = 4 AND a.id_procedure_detail IN (1,7) AND a.id_branch IN ("
+				+ branchs
+				+ ") AND Date(a.start_appointment_date) BETWEEN '"
+				+ FacesUtil.formatDate(startDate, "yyyy-MM-dd")
+				+ "' AND '"
+				+ FacesUtil.formatDate(endDate, "yyyy-MM-dd")
+				+ "' AND (SELECT COUNT(1) FROM crm_sap_medication c WHERE c.id_appointment = a.id AND position_type = 'ZGRT') > 0 "
 				+ "ORDER BY 1,6,4";
 
 		List<CrmAppointment> result = dao.findNative(sql, CrmAppointment.class);

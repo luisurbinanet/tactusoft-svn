@@ -34,7 +34,7 @@ public class IndicatorsBacking extends BaseBacking {
 	private List<CrmAppointment> listAppointment0;
 	private List<CrmAppointment> listAppointmentFree;
 	private List<IndicatorBean> listAppointmentTotal;
-	
+
 	private double totals;
 	private double totalPercent;
 
@@ -209,6 +209,8 @@ public class IndicatorsBacking extends BaseBacking {
 						selectedsBranchObject, startDate, endDate);
 				listAppointment0 = processService.getListAppointment0(
 						selectedsBranchObject, startDate, endDate);
+				listAppointmentFree = processService.getListAppointment0(
+						selectedsBranchObject, startDate, endDate);
 
 				int valueAppointment100 = listAppointment100 != null ? listAppointment100
 						.size() : 0;
@@ -219,7 +221,7 @@ public class IndicatorsBacking extends BaseBacking {
 				int valueAppointment0 = listAppointment0 != null ? listAppointment0
 						.size() : 0;
 
-				 totals = valueAppointment100 + valueAppointment5099
+				totals = valueAppointment100 + valueAppointment5099
 						+ valueAppointment50 + valueAppointment0;
 
 				listAppointmentTotal = new ArrayList<IndicatorBean>();

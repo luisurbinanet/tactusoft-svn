@@ -382,6 +382,67 @@
 					<p:spacer />
 
 					<p:dataTable id="selectedTableSale5" var="rec"
+						value="#{indicatorsBacking.listAppointmentFree}"
+						rowKey="#{rec.code}" style="width:100%" paginator="true" rows="10"
+						emptyMessage="#{msg['glb_no_records_found']}"
+						rendered="#{indicatorsBacking.type eq 2}">
+
+						<f:facet name="header">
+							<h:outputLabel value="#{msg['ind_3_5']}" />
+						</f:facet>
+
+						<p:column headerText="#{msg['app_code']}">
+							<h:outputLabel value="#{rec.code}" />
+						</p:column>
+
+						<p:column filterBy="#{rec.crmPatient.doc}"
+							filterMatchMode="contains">
+							<f:facet name="header">
+								<h:outputText value="#{msg['doc_code']}" />
+							</f:facet>
+							<h:outputLabel value="#{rec.crmPatient.doc}" />
+						</p:column>
+
+						<p:column filterBy="#{rec.patientNames}"
+							filterMatchMode="contains">
+							<f:facet name="header">
+								<h:outputText value="#{msg['ind_patient']}" />
+							</f:facet>
+							<h:outputLabel value="#{rec.patientNames}" />
+						</p:column>
+
+						<p:column headerText="#{msg['app_date']}">
+							<h:outputLabel value="#{rec.startAppointmentDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+						</p:column>
+
+						<p:column headerText="#{msg['app_branch']}">
+							<h:outputLabel value="#{rec.crmBranch.name}" />
+						</p:column>
+
+						<p:column headerText="#{msg['app_doctor']}">
+							<h:outputLabel value="#{rec.crmDoctor.names}" />
+						</p:column>
+
+						<p:column headerText="#{msg['app_procedure']}">
+							<h:outputLabel value="#{rec.crmProcedureDetail.name}" />
+						</p:column>
+
+						<f:facet name="footer">
+							<p:commandButton
+								disabled="#{empty indicatorsBacking.listAppointment0}"
+								oncomplete="exportDlg.show();" value="#{msg['btn_export']}"
+								icon="ui-icon-disk">
+								<f:setPropertyActionListener
+									target="#{indicatorsBacking.target}" value="selectedTableSale4" />
+							</p:commandButton>
+						</f:facet>
+					</p:dataTable>
+
+					<p:spacer />
+
+					<p:dataTable id="selectedTableSale6" var="rec"
 						value="#{indicatorsBacking.listAppointmentTotal}"
 						style="width:100%" emptyMessage="#{msg['glb_no_records_found']}"
 						rendered="#{indicatorsBacking.type eq 2}">

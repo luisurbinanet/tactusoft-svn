@@ -20,6 +20,7 @@ import co.com.tactusoft.crm.model.entities.CrmNurse;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
 import co.com.tactusoft.crm.model.entities.CrmRole;
 import co.com.tactusoft.crm.model.entities.CrmUser;
+import co.com.tactusoft.crm.security.ldap.LDAPDao;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.datamodel.UserDataModel;
@@ -47,6 +48,8 @@ public class UserBacking extends BaseBacking {
 	private CrmNurse crmNurse;
 	private String rolePrincipal;
 
+	private List<String> listUsersLDAP;
+
 	public UserBacking() {
 		newAction();
 	}
@@ -61,6 +64,7 @@ public class UserBacking extends BaseBacking {
 
 	public UserDataModel getModel() {
 		if (model == null) {
+
 			list = tablesService.getListUser();
 			model = new UserDataModel(list);
 
@@ -167,6 +171,9 @@ public class UserBacking extends BaseBacking {
 
 		crmDoctor = null;
 		crmNurse = null;
+
+		LDAPDao lDAPDao = FacesUtil.findBean("LDAPDao");
+		listUsersLDAP = lDAPDao.getListUsers();
 	}
 
 	public void saveAction() {
