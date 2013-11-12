@@ -121,12 +121,13 @@
 
 	<!-- *************ldap**************** -->
 
+	<!-- <beans:bean id="contextSource" class="org.springframework.security.ldap.DefaultSpringSecurityContextSource"> 
+		<beans:constructor-arg value="ldap://192.168.1.8:389/dc=naturizza,dc=net" 
+		/> <beans:property name="userDn" value="tactusoft@naturizza.net" /> <beans:property 
+		name="password" value="apache2012" /> </beans:bean> -->
+
 	<beans:bean id="contextSource"
-		class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">
-		<beans:constructor-arg value="ldap://192.168.1.8:389/dc=naturizza,dc=net" />
-		<beans:property name="userDn" value="tactusoft@naturizza.net" />
-		<beans:property name="password" value="apache2012" />
-	</beans:bean>
+		class="co.com.tactusoft.crm.security.ldap.LdapContextSourceCustom" />
 
 	<beans:bean id="ldapAuthProvider"
 		class="org.springframework.security.ldap.authentication.LdapAuthenticationProvider">
@@ -143,9 +144,10 @@
 
 	<beans:bean id="ldapUserSearch"
 		class="org.springframework.security.ldap.search.FilterBasedLdapUserSearch">
-		<beans:constructor-arg value="cn=Users" />
-		<beans:constructor-arg value="(sAMAccountName={0})" />
-		<beans:constructor-arg ref="contextSource" />
+		<beans:constructor-arg index="0" value="" />
+		<beans:constructor-arg index="1"
+			value="sAMAccountName={0}" />
+		<beans:constructor-arg index="2" ref="contextSource" />
 	</beans:bean>
 
 	<beans:bean id="authoritiesPopulator"
