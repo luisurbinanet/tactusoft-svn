@@ -47,8 +47,7 @@ public class UserBacking extends BaseBacking {
 	private CrmDoctor crmDoctor;
 	private CrmNurse crmNurse;
 	private String rolePrincipal;
-
-	private List<String> listUsersLDAP;
+	private List<SelectItem> listUsersItems;
 
 	public UserBacking() {
 		newAction();
@@ -155,6 +154,31 @@ public class UserBacking extends BaseBacking {
 		this.rolePrincipal = rolePrincipal;
 	}
 
+	public List<SelectItem> getListUsersItems() {
+		if (listUsersItems == null) {
+			listUsersItems = new LinkedList<SelectItem>();
+			LDAPDao lDAPDao = FacesUtil.findBean("LDAPDao");
+			List<String> listUsersLDAP = lDAPDao.getListUsers();
+			for (String rowLDAP : listUsersLDAP) {
+				boolean isExists = false;
+				for (CrmUser row : list) {
+					if (row.getUsername().equalsIgnoreCase(rowLDAP)) {
+						isExists = true;
+						break;
+					}
+				}
+				if (!isExists) {
+					listUsersItems.add(new SelectItem(rowLDAP, rowLDAP));
+				}
+			}
+		}
+		return listUsersItems;
+	}
+
+	public void setListUsersItems(List<SelectItem> listUsersItems) {
+		this.listUsersItems = listUsersItems;
+	}
+
 	public void newAction() {
 		selected = new CrmUser();
 		selected.setState(Constant.STATE_ACTIVE);
@@ -172,8 +196,10 @@ public class UserBacking extends BaseBacking {
 		crmDoctor = null;
 		crmNurse = null;
 
-		LDAPDao lDAPDao = FacesUtil.findBean("LDAPDao");
-		listUsersLDAP = lDAPDao.getListUsers();
+		listUsersItems = null;
+		if (list != null) {
+			this.getListUsersItems();
+		}
 	}
 
 	public void saveAction() {
@@ -304,6 +330,11 @@ public class UserBacking extends BaseBacking {
 		List<CrmBranch> listSourceBranchPostsale = new LinkedList<CrmBranch>();
 
 		if (selected != null && selected.getId() != null) {
+			listUsersItems = new LinkedList<SelectItem>();
+			for (CrmUser row : list) {
+				listUsersItems.add(new SelectItem(row.getUsername(), row
+						.getUsername()));
+			}
 
 			List<CrmDoctor> listDoctor = tablesService.getDoctorByUser(selected
 					.getId());
@@ -433,6 +464,8 @@ public class UserBacking extends BaseBacking {
 
 	public void copyUserAction(ActionEvent event) {
 		generateListAction(null);
+		listUsersItems = null;
+		this.getListUsersItems();
 		this.selected.setId(null);
 		this.selected.setUsername(null);
 		this.selected.setDoc(null);

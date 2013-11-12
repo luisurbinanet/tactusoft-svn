@@ -92,10 +92,14 @@
 						width="100%">
 
 						<h:outputLabel value="#{msg['usr_username']}" />
-						<p:inputText value="#{userBacking.selected.username}"
+						<p:selectOneMenu value="#{userBacking.selected.username}"
 							style="width:250px" label="#{msg['usr_username']}"
-							required="true"
-							readonly="#{userBacking.selected.id ne null?true:false}" />
+							required="true" filter="true" filterMatchMode="contains"
+							disabled="#{userBacking.selected.id ne null?true:false}">
+							<f:selectItem itemLabel="#{msg['glb_default_value']}"
+								noSelectionOption="true" />
+							<f:selectItems value="#{userBacking.listUsersItems}" />
+						</p:selectOneMenu>
 
 						<h:outputLabel value="#{msg['usr_doc']}" />
 						<p:inputText value="#{userBacking.selected.doc}"
