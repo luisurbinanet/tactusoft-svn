@@ -268,6 +268,13 @@
 								value="#{campaignBacking.selectedDetailMediaction.crmAppointment.crmProcedureDetail.name}"
 								style="width:190px;background-color:#FFFF80;font-weight:bold;"
 								readonly="true" />
+							<h:outputLabel value="#{msg['app_date']}" />
+							<p:inputText
+								value="#{campaignBacking.selectedDetailMediaction.crmAppointment.startAppointmentDate}"
+								style="width:190px;background-color:#FFFF80;font-weight:bold;"
+								readonly="true">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</p:inputText>
 						</h:panelGrid>
 
 						<p:dataTable value="#{campaignBacking.modelDetailMedication}"

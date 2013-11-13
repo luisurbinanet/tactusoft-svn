@@ -99,6 +99,11 @@
 
 					<p:column selectionMode="single" style="width:18px" />
 
+					<p:column headerText="#{msg['pat_code_1']}"
+						filterMatchMode="contains" filterBy="#{rec.crmPatient.doc}">
+						<h:outputLabel value="#{rec.crmCampaign.crmPatient.doc}" />
+					</p:column>
+
 					<p:column headerText="#{msg['cam_pat']}" filterMatchMode="contains"
 						filterBy="#{rec.crmPatient.names}">
 						<h:outputLabel value="#{rec.crmCampaign.crmPatient.names}" />
@@ -188,10 +193,9 @@
 						<p:selectOneMenu value="#{campaignAdminBacking.selected.state}"
 							style="width:400px" required="true">
 							<p:ajax update="pnlAttributes" />
-							<f:selectItem itemValue="2" itemLabel="#{msg['glb_state_close']}" />
-							<f:selectItem itemValue="3"
-								itemLabel="#{msg['cam_state_new_call']}" />
-							<f:selectItem itemValue="4"
+							<f:selectItem itemValue="999"
+								itemLabel="#{msg['glb_state_close']}" />
+							<f:selectItem itemValue="0"
 								itemLabel="#{msg['cam_state_reallocate']}" />
 						</p:selectOneMenu>
 						<h:outputLabel value="#{msg['cam_call_days']}"
@@ -210,7 +214,8 @@
 							rendered="#{campaignAdminBacking.selected.state eq 4}" />
 						<p:selectOneMenu value="#{campaignAdminBacking.crmUser.id}"
 							style="width:400px" required="true" label="#{msg['cam_user']}"
-							rendered="#{campaignAdminBacking.selected.state eq 4}">
+							rendered="#{campaignAdminBacking.selected.state eq 4}"
+							filter="true" filterMatchMode="contains">
 							<f:selectItem itemValue=""
 								itemLabel="#{msg['glb_default_value']}" />
 							<f:selectItems value="#{campaignAdminBacking.listUserItem}" />
