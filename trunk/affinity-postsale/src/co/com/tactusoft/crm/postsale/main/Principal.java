@@ -92,7 +92,8 @@ public class Principal {
 		beanFactory = new ClassPathXmlApplicationContext("spring-config.xml");
 		processBO = beanFactory.getBean(ProcessBO.class);
 		sapBO = beanFactory.getBean(SapBO.class);
-		
+		int count = 0;
+
 		int numDays = processBO.getLogLastDay();
 
 		if (numDays > 0) {
@@ -102,11 +103,6 @@ public class Principal {
 			processBO.save(crmLog);
 
 			System.out.println("EXTRACCIÓN DE SAP...");
-			CrmLogDetail crmLogDetail = new CrmLogDetail();
-			crmLogDetail.setCrmLog(crmLog);
-			crmLogDetail.setLogDate(new Date());
-			crmLogDetail.setMessage("EXTRACCIÓN DE SAP");
-			processBO.save(crmLogDetail);
 
 			List<CrmSapMedication> listAddMedication = new LinkedList<CrmSapMedication>();
 			List<SapMedication> listMedication = sapBO
@@ -126,7 +122,14 @@ public class Principal {
 
 			for (CrmSapMedication row : listAddMedication) {
 				processBO.save(row);
+				count++;
 			}
+
+			CrmLogDetail crmLogDetail = new CrmLogDetail();
+			crmLogDetail.setCrmLog(crmLog);
+			crmLogDetail.setLogDate(new Date());
+			crmLogDetail.setMessage("EXTRACCIÓN DE SAP: " + count);
+			processBO.save(crmLogDetail);
 
 			System.out.println("ACTUALIZACIÓN DE CAMAPAÑAS NO ATENDIDAS...");
 			crmLogDetail = new CrmLogDetail();
@@ -196,67 +199,72 @@ public class Principal {
 
 			System.out.println("BUSCANDO CITAS INASISTIDAS...");
 			// INASISTENCIA DIA ANTERIOR
-			crmLogDetail = new CrmLogDetail();
-			crmLogDetail.setCrmLog(crmLog);
-			crmLogDetail.setLogDate(new Date());
-			crmLogDetail.setMessage("BUSCANDO CITAS INASISTIDAS");
-			processBO.save(crmLogDetail);
 
 			List<CrmAppointment> listNoAttendet = processBO
 					.getListAppointmentNoAttendet(yesterdayString);
+			count = 0;
 			for (CrmAppointment row : listNoAttendet) {
 				CrmCampaign crmCampaign = mapCampaign.get(row.getCrmPatient()
 						.getId());
 				insertDetail(crmCampaign, row, Principal.NO_ATTENDET);
+				count++;
 			}
 
-			System.out.println("BUSCANDO CITAS CONFIRMADAS...");
-			// CONFIRMADAS DIA SIGUIENTE
 			crmLogDetail = new CrmLogDetail();
 			crmLogDetail.setCrmLog(crmLog);
 			crmLogDetail.setLogDate(new Date());
-			crmLogDetail.setMessage("BUSCANDO CITAS CONFIRMADAS");
+			crmLogDetail.setMessage("BUSCANDO CITAS INASISTIDAS: " + count);
 			processBO.save(crmLogDetail);
+
+			System.out.println("BUSCANDO CITAS CONFIRMADAS...");
 
 			List<CrmAppointment> listConfirmed = processBO
 					.getListAppointmentConfirmed(tomorrowString,
 							currentDateString);
+			count = 0;
 			for (CrmAppointment row : listConfirmed) {
 				CrmCampaign crmCampaign = mapCampaign.get(row.getCrmPatient()
 						.getId());
 				insertDetail(crmCampaign, row, Principal.CONFIRMED);
+				count++;
 			}
 
-			System.out
-					.println("BUSCANDO PACIENTES CON MAS DE 25 DIAS SIN CITA CONTROL");
-			// SIN CITAS DE CONTROL EN 25 DÍAS
+			// CONFIRMADAS DIA SIGUIENTE
 			crmLogDetail = new CrmLogDetail();
 			crmLogDetail.setCrmLog(crmLog);
 			crmLogDetail.setLogDate(new Date());
-			crmLogDetail
-					.setMessage("BUSCANDO PACIENTES CON MAS DE 25 DIAS SIN CITA CONTROL");
+			crmLogDetail.setMessage("BUSCANDO CITAS CONFIRMADAS: " + count);
 			processBO.save(crmLogDetail);
+
+			System.out
+					.println("BUSCANDO PACIENTES CON MAS DE 25 DIAS SIN CITA CONTROL");
 
 			Date ago25Date = Utils.addDaysToDate(currentDate, -25);
 			String ago25DateString = Utils.formatDate(ago25Date, "yyyy-MM-dd");
 			List<CrmAppointment> listControl = processBO
 					.getListAppointmentControl(ago25DateString);
+			count = 0;
 			for (CrmAppointment row : listControl) {
 				CrmCampaign crmCampaign = mapCampaign.get(row.getCrmPatient()
 						.getId());
 				insertDetail(crmCampaign, row, Principal.CONTROL);
+				count++;
 			}
 
-			System.out.println("ACTUALIZANDO FACTURAS CON SUS CITAS");
+			// SIN CITAS DE CONTROL EN 25 DÍAS
 			crmLogDetail = new CrmLogDetail();
 			crmLogDetail.setCrmLog(crmLog);
 			crmLogDetail.setLogDate(new Date());
-			crmLogDetail.setMessage("ACTUALIZANDO FACTURAS CON SUS CITAS");
+			crmLogDetail
+					.setMessage("BUSCANDO PACIENTES CON MAS DE 25 DIAS SIN CITA CONTROL: "
+							+ count);
 			processBO.save(crmLogDetail);
 
+			System.out.println("ACTUALIZANDO FACTURAS CON SUS CITAS");
+			
 			List<CrmSapMedicationDistinct> listDistinct = processBO
 					.getListSapMedicationByLoadStateDistinct(currentDateString);
-			int count = 0;
+			count = 0;
 			for (CrmSapMedicationDistinct row : listDistinct) {
 				String rowInitDateString = Utils.formatDate(
 						Utils.addDaysToDate(row.getDateBill(), -3),
@@ -282,12 +290,6 @@ public class Principal {
 
 			System.out
 					.println("BUSCANDO MEDICAMENTOS Y TERAPIAS NO FACTURADAS");
-			crmLogDetail = new CrmLogDetail();
-			crmLogDetail.setCrmLog(crmLog);
-			crmLogDetail.setLogDate(new Date());
-			crmLogDetail
-					.setMessage("BUSCANDO MEDICAMENTOS Y TERAPIAS NO FACTURADAS");
-			processBO.save(crmLogDetail);
 
 			List<CrmAppointment> listClosed = processBO
 					.getListAppointmentClosed(currentDateString);
@@ -316,6 +318,7 @@ public class Principal {
 
 			processBO.updateCrmSapMedication(currentDateString);
 
+			count = 0;
 			for (CrmCampaignDetail row : processBO
 					.getListCampaignDetailMedication(crmLog)) {
 				for (VwMedication row2 : processBO
@@ -329,8 +332,16 @@ public class Principal {
 							row2.getSold(), row2.getUnit(), row2.getSaleUnit(),
 							row2.getPosology());
 					processBO.save(crmCampaignMedication);
+					count++;
 				}
 			}
+
+			crmLogDetail = new CrmLogDetail();
+			crmLogDetail.setCrmLog(crmLog);
+			crmLogDetail.setLogDate(new Date());
+			crmLogDetail
+					.setMessage("BUSCANDO MEDICAMENTOS Y TERAPIAS NO FACTURADAS: " + count);
+			processBO.save(crmLogDetail);
 
 			System.out.println("PROCESO TERMINADO");
 			crmLogDetail = new CrmLogDetail();
