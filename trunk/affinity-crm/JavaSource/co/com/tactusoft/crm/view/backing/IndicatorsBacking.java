@@ -209,7 +209,7 @@ public class IndicatorsBacking extends BaseBacking {
 						selectedsBranchObject, startDate, endDate);
 				listAppointment0 = processService.getListAppointment0(
 						selectedsBranchObject, startDate, endDate);
-				listAppointmentFree = processService.getListAppointment0(
+				listAppointmentFree = processService.getListAppointmentFree(
 						selectedsBranchObject, startDate, endDate);
 
 				int valueAppointment100 = listAppointment100 != null ? listAppointment100
@@ -220,9 +220,12 @@ public class IndicatorsBacking extends BaseBacking {
 						.size() : 0;
 				int valueAppointment0 = listAppointment0 != null ? listAppointment0
 						.size() : 0;
+				int valueAppointmentFree = listAppointmentFree != null ? listAppointmentFree
+						.size() : 0;
 
 				totals = valueAppointment100 + valueAppointment5099
-						+ valueAppointment50 + valueAppointment0;
+						+ valueAppointment50 + valueAppointment0
+						+ valueAppointmentFree;
 
 				listAppointmentTotal = new ArrayList<IndicatorBean>();
 
@@ -246,6 +249,11 @@ public class IndicatorsBacking extends BaseBacking {
 				totalPercent = totalPercent + percent;
 				listAppointmentTotal.add(new IndicatorBean(label,
 						valueAppointment0, percent));
+				label = FacesUtil.getMessage("ind_3_5");
+				percent = (valueAppointmentFree / totals) * 100;
+				totalPercent = totalPercent + percent;
+				listAppointmentTotal.add(new IndicatorBean(label,
+						valueAppointmentFree, percent));
 			}
 		} else {
 			String message = FacesUtil.getMessage("app_no_branch");
