@@ -10,7 +10,7 @@
 
 	<ui:define name="body">
 
-		<p:panel style="width:100%;height:900px;"
+		<p:panel style="width:100%;height:100%;"
 			header="#{msg['title_campaign']}">
 
 			<p:spacer height="10" />
@@ -314,10 +314,13 @@
 							<p:commandButton value="#{msg['btn_edit_app']}"
 								action="#{campaignBacking.editAppoinmnetAction}"
 								immediate="true"
-								rendered="#{campaignBacking.task[3] eq 'APPOINTMENT'}">
+								rendered="#{campaignBacking.task[3] eq 'APPOINTMENT' or campaignBacking.task[3] eq 'NEW_APPOINTMENT'}">
 								<f:setPropertyActionListener
 									target="#{campaignBacking.selectedAppointment}"
 									value="#{campaignBacking.selectedDetailMedication.crmAppointment}" />
+								<f:setPropertyActionListener
+									target="#{campaignBacking.selectedTask}"
+									value="#{campaignBacking.task[3]}" />
 							</p:commandButton>
 							<h:panelGrid width="100%" columns="2"
 								rendered="#{campaignBacking.task[3] eq 'DATE' or campaignBacking.task[3] eq 'TASK_DATE'}">
@@ -371,7 +374,10 @@
 							<p:commandButton value="#{msg['btn_edit_app']}"
 								action="#{campaignBacking.editAppoinmnetAction}"
 								immediate="true"
-								rendered="#{campaignBacking.task[2] eq 'APPOINTMENT'}">
+								rendered="#{campaignBacking.task[2] eq 'APPOINTMENT' or campaignBacking.task[2] eq 'NEW_APPOINTMENT'}">
+								<f:setPropertyActionListener
+									target="#{campaignBacking.selectedTask}"
+									value="#{campaignBacking.task[2]}" />
 								<f:setPropertyActionListener
 									target="#{campaignBacking.selectedAppointment}"
 									value="#{campaignBacking.selectedDetailControl.crmAppointment}" />
@@ -429,7 +435,10 @@
 								<p:commandButton value="#{msg['btn_edit_app']}"
 									action="#{campaignBacking.editAppoinmnetAction}"
 									immediate="true"
-									rendered="#{campaignBacking.task[1] eq 'APPOINTMENT' or campaignBacking.task[1] eq 'APPOINTMENT-CANCEL'}">
+									rendered="#{campaignBacking.task[1] eq 'APPOINTMENT' or campaignBacking.task[1] eq 'APPOINTMENT-CANCEL' or campaignBacking.task[1] eq 'NEW_APPOINTMENT'}">
+									<f:setPropertyActionListener
+										target="#{campaignBacking.selectedTask}"
+										value="#{campaignBacking.task[1]}" />
 									<f:setPropertyActionListener
 										target="#{campaignBacking.selectedAppointment}"
 										value="#{campaignBacking.selectedDetailConfirmed.crmAppointment}" />
@@ -495,7 +504,10 @@
 							<p:commandButton value="#{msg['btn_edit_app']}"
 								action="#{campaignBacking.editAppoinmnetAction}"
 								immediate="true"
-								rendered="#{campaignBacking.task[0] eq 'APPOINTMENT'}">
+								rendered="#{campaignBacking.task[0] eq 'APPOINTMENT' or campaignBacking.task[1] eq 'NEW_APPOINTMENT'}">
+								<f:setPropertyActionListener
+									target="#{campaignBacking.selectedTask}"
+									value="#{campaignBacking.task[0]}" />
 								<f:setPropertyActionListener
 									target="#{campaignBacking.selectedAppointment}"
 									value="#{campaignBacking.selectedDetailNoAttendet.crmAppointment}" />

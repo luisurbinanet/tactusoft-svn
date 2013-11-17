@@ -12,7 +12,6 @@ import javax.inject.Named;
 
 import org.springframework.context.annotation.Scope;
 
-import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmCampaign;
 import co.com.tactusoft.crm.model.entities.CrmCampaignDetail;
@@ -22,6 +21,7 @@ import co.com.tactusoft.crm.model.entities.VwAppointment;
 import co.com.tactusoft.crm.model.entities.VwMedicationSold;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
+import co.com.tactusoft.crm.view.beans.AppointmentMedicationBean;
 
 @Named
 @Scope("view")
@@ -30,9 +30,7 @@ public class EventsHistorialBacking extends BaseBacking {
 	private static final long serialVersionUID = 1L;
 
 	private List<VwAppointment> listAppointment;
-	private List<VwMedicationSold> listMedication;
-	private List<VwMedicationSold> listTherapy;
-	private List<VwMedicationSold> listLabExam;
+	private List<AppointmentMedicationBean> listAppointmentMedicationBean;
 	private List<CrmCampaignDetail> listCampaign;
 	private CrmCampaignDetail crmCampaignDetail;
 
@@ -64,28 +62,13 @@ public class EventsHistorialBacking extends BaseBacking {
 		this.listAppointment = listAppointment;
 	}
 
-	public List<VwMedicationSold> getListMedication() {
-		return listMedication;
+	public List<AppointmentMedicationBean> getListAppointmentMedicationBean() {
+		return listAppointmentMedicationBean;
 	}
 
-	public void setListMedication(List<VwMedicationSold> listMedication) {
-		this.listMedication = listMedication;
-	}
-
-	public List<VwMedicationSold> getListTherapy() {
-		return listTherapy;
-	}
-
-	public void setListTherapy(List<VwMedicationSold> listTherapy) {
-		this.listTherapy = listTherapy;
-	}
-
-	public List<VwMedicationSold> getListLabExam() {
-		return listLabExam;
-	}
-
-	public void setListLabExam(List<VwMedicationSold> listLabExam) {
-		this.listLabExam = listLabExam;
+	public void setListAppointmentMedicationBean(
+			List<AppointmentMedicationBean> listAppointmentMedicationBean) {
+		this.listAppointmentMedicationBean = listAppointmentMedicationBean;
 	}
 
 	public List<CrmCampaignDetail> getListCampaign() {
@@ -138,25 +121,54 @@ public class EventsHistorialBacking extends BaseBacking {
 		listAppointment = processService
 				.getListByAppointmentAllByPatient(selectedPatient.getId());
 
-		listMedication = new ArrayList<VwMedicationSold>();
-		listTherapy = new ArrayList<VwMedicationSold>();
-		listLabExam = new ArrayList<VwMedicationSold>();
-
 		List<VwMedicationSold> listAllMedication = processService
 				.getListMedicationSoldByPatient(selectedPatient.getId());
 
+		AppointmentMedicationBean appointmentMedicationBean = null;
+		AppointmentMedicationBean previousAppointment = new AppointmentMedicationBean();
+		previousAppointment.setIdAppointment(new BigDecimal(0));
+		listAppointmentMedicationBean = new ArrayList<AppointmentMedicationBean>();
 		for (VwMedicationSold row : listAllMedication) {
+			if (row.getIdAppointment().intValue() == previousAppointment
+					.getIdAppointment().intValue()) {
+				appointmentMedicationBean = previousAppointment;
+			} else {
+				if (previousAppointment.getIdAppointment().intValue() != 0) {
+					listAppointmentMedicationBean
+							.add(appointmentMedicationBean);
+				}
+				appointmentMedicationBean = new AppointmentMedicationBean();
+				appointmentMedicationBean.setIdAppointment(row
+						.getIdAppointment());
+				appointmentMedicationBean.setAppointmentDesc("Cita del "
+						+ FacesUtil.formatDate(row.getAppointmentDate(),
+								"dd 'de' MMMMM 'del' yyyy") + " con el Doctor "
+						+ row.getDoctorName());
+				appointmentMedicationBean
+						.setListMedication(new ArrayList<VwMedicationSold>());
+				appointmentMedicationBean
+						.setListTherapy(new ArrayList<VwMedicationSold>());
+				appointmentMedicationBean
+						.setListLabExam(new ArrayList<VwMedicationSold>());
+			}
+
 			if (row.getMaterialType().equals(Constant.MATERIAL_TYPE_MEDICINE)
 					|| row.getMaterialType().equals(
 							Constant.MATERIAL_TYPE_OTHER_MEDICINE)) {
-				listMedication.add(row);
+				appointmentMedicationBean.getListMedication().add(row);
 			} else if (row.getMaterialType().equals(
 					Constant.MATERIAL_TYPE_THERAPY)) {
-				listTherapy.add(row);
+				appointmentMedicationBean.getListTherapy().add(row);
 			} else if (row.getMaterialType().equals(
 					Constant.MATERIAL_TYPE_EXAMS)) {
-				listLabExam.add(row);
+				appointmentMedicationBean.getListLabExam().add(row);
 			}
+
+			previousAppointment = appointmentMedicationBean;
+		}
+
+		if (!listAllMedication.isEmpty()) {
+			listAppointmentMedicationBean.add(appointmentMedicationBean);
 		}
 
 		searchCamapignDetail();
@@ -189,9 +201,7 @@ public class EventsHistorialBacking extends BaseBacking {
 		campaignBacking.generateDetail();
 	}
 
-	@Override
-	public void searchPatientAction() {
-		super.searchPatientAction();
+	public void addPatientAction() {
 		searchAction();
 	}
 
@@ -222,9 +232,7 @@ public class EventsHistorialBacking extends BaseBacking {
 
 		CrmCampaignDetail crmCampaignDetail = new CrmCampaignDetail();
 		crmCampaignDetail.setCrmCampaign(crmCampaign);
-		CrmAppointment generic = new CrmAppointment();
-		generic.setId(new BigDecimal(0));
-		crmCampaignDetail.setCrmAppointment(generic);
+		crmCampaignDetail.setCrmAppointment(null);
 		crmCampaignDetail.setCallDate(this.campaignDate);
 		crmCampaignDetail.setObs(this.campaignObs);
 		crmCampaignDetail.setIdCampaignType(Constant.RECALL_REMINDER);

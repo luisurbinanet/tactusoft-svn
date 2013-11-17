@@ -1359,7 +1359,7 @@ public class ProcessBo implements Serializable {
 			BigDecimal idPatient) {
 		List<VwMedicationSold> list = dao
 				.find("from VwMedicationSold o where o.idPatient = "
-						+ idPatient + " order by o.appointmentDate desc");
+						+ idPatient + " order by o.idAppointment desc");
 		return list;
 	}
 

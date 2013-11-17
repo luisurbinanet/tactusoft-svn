@@ -427,6 +427,7 @@ public class CallOutcomingBacking extends ContactBacking {
 		AppointmentBacking appointmentBacking = FacesUtil
 				.findBean("appointmentBacking");
 		appointmentBacking.setSelectedPatient(this.getSelectedPatient());
+		appointmentBacking.setGenerateNew(true);
 		return "/pages/processes/appointment.jsf?faces-redirect=true";
 	}
 

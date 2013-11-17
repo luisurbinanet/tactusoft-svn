@@ -487,6 +487,7 @@ public class PatientBacking extends BaseBacking {
 		appointmentBacking.setSelectedPatient(selectedPatient);
 		appointmentBacking.getListBranch();
 		appointmentBacking.handleBranchChange();
+		appointmentBacking.setGenerateNew(true);
 		return "/pages/processes/appointment.jsf?faces-redirect=true";
 	}
 

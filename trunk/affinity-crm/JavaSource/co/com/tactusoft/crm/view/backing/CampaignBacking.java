@@ -115,6 +115,7 @@ public class CampaignBacking extends BaseBacking {
 	private String[] task = new String[5];
 	private CrmRecall[] selectedCrmRecall = new CrmRecall[5];
 	private Date[] selectedDates = new Date[5];
+	private String selectedTask;
 
 	private Integer phoneType;
 	private String indicative;
@@ -577,6 +578,14 @@ public class CampaignBacking extends BaseBacking {
 
 	public void setSelectedDates(Date[] selectedDates) {
 		this.selectedDates = selectedDates;
+	}
+
+	public String getSelectedTask() {
+		return selectedTask;
+	}
+
+	public void setSelectedTask(String selectedTask) {
+		this.selectedTask = selectedTask;
 	}
 
 	public Integer getPhoneType() {
@@ -1384,6 +1393,11 @@ public class CampaignBacking extends BaseBacking {
 				.getCodPublicity());
 		appointmentEditBacking.setEdit(true);
 		appointmentEditBacking.setSaved(false);
+		if (selectedTask.equalsIgnoreCase("NEW_APPOINTMENT")) {
+			appointmentEditBacking.setGenerateNew(true);
+		} else {
+			appointmentEditBacking.setGenerateNew(false);
+		}
 		appointmentEditBacking.setFromPage("CAMPAIGN");
 		for (SelectItem item : appointmentEditBacking.getListBranch()) {
 			long value = ((BigDecimal) item.getValue()).longValue();
