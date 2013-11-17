@@ -403,8 +403,8 @@ public class TablesBo implements Serializable {
 	public List<CrmUser> getListUserActiveByBranchAndCallCenter(
 			BigDecimal idBranch) {
 		return dao
-				.find("select o.crmUser from CrmUserBranch o join o.crmUser.crmUserRoles rol where o.crmUser.state = 1 and o.crmBranch.id = "
-						+ idBranch + " and rol.crmRole.id = 2");
+				.find("select o.crmUser from CrmUserBranchPostsale o where o.crmUser.state = 1 and o.crmBranch.id = "
+						+ idBranch);
 	}
 
 	public List<CrmDoctor> getDoctorByUser(BigDecimal idUser) {
