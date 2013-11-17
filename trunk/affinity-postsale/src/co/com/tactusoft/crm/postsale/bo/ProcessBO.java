@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import co.com.tactusoft.crm.model.dao.CustomHibernateDao;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
 import co.com.tactusoft.crm.model.entities.CrmBranch;
+import co.com.tactusoft.crm.model.entities.CrmCampaign;
 import co.com.tactusoft.crm.model.entities.CrmCampaignDetail;
 import co.com.tactusoft.crm.model.entities.CrmHoliday;
 import co.com.tactusoft.crm.model.entities.CrmLog;
@@ -58,10 +59,10 @@ public class ProcessBO implements Serializable {
 
 	public List<CrmAppointment> getListAppointmentNoAttendet(String dateString) {
 		return dao
-				.find("FROM CrmAppointment o WHERE state = 5 AND startAppointmentDate BETWEEN '"
+				.find("FROM CrmAppointment o WHERE state = 5 AND Date(startAppointmentDate) >= '"
 						+ dateString
-						+ "T00:00:00.000+05:00' and '"
-						+ dateString + "T23:59:59.999+05:00'");
+						+ "' AND id NOT IN (SELECT b.crmAppointment.id FROM CrmCampaignDetail b WHERE b.idCampaignType = 1"
+						+ " AND b.crmAppointment.id IS NOT NULL)");
 	}
 
 	public List<CrmAppointment> getListAppointmentConfirmed(
@@ -95,7 +96,7 @@ public class ProcessBO implements Serializable {
 	public List<CrmAppointment> getListAppointmentClosed(String dateString) {
 		return dao
 				.find("FROM CrmAppointment o WHERE o.crmProcedureDetail.formulaDocTypePs IS NOT NULL AND "
-						+ "state = 4 AND closeAppointment = 1 AND Date(startAppointmentDate) =  '"
+						+ "state = 4 AND closeAppointment = 1 AND Date(startAppointmentDate) >=  '"
 						+ dateString
 						+ "' AND o.id IN (SELECT m.crmAppointment.id from CrmMedication m)");
 	}
@@ -133,7 +134,7 @@ public class ProcessBO implements Serializable {
 	}
 
 	public void updateCrmSapMedication(String currentDate) {
-		dao.executeHQL("UPDATE CrmSapMedication SET status = 'PROCESADO' WHERE Date(dateBill) = '"
+		dao.executeHQL("UPDATE CrmSapMedication SET status = 'PROCESADO' WHERE Date(dateBill) >= '"
 				+ currentDate + "'");
 	}
 
@@ -143,7 +144,7 @@ public class ProcessBO implements Serializable {
 				.findNative(
 						"SELECT DISTINCT id_bill,id_patient,date_bill,type_bill "
 								+ "FROM crm_sap_medication a JOIN crm_patient b ON (a.id_patient = b.code_sap) "
-								+ "WHERE id_appointment IS NULL AND Date(date_bill) = '"
+								+ "WHERE id_appointment IS NULL AND Date(date_bill) >= '"
 								+ currentDate
 								+ "' AND type_bill IS NOT NULL ORDER BY id_bill",
 						CrmSapMedicationDistinct.class);
@@ -243,6 +244,10 @@ public class ProcessBO implements Serializable {
 		long diff = Math.abs(today.getTime() - lastDate.getTime());
 		Long diffDays = diff / (24 * 60 * 60 * 1000);
 		return diffDays.intValue();
+	}
+
+	public List<CrmCampaign> getListCrmAppointment(Integer idLog) {
+		return dao.find("FROM CrmCampaign o WHERE o.crmLog.id = " + idLog);
 	}
 
 }

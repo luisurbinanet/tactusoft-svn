@@ -37,49 +37,53 @@ public class Principal2 {
 
 	public void execute() {
 		System.out.println("INCIANDO PROCESO...");
-		Date currentDate = Utils.stringTOSDate("08/08/2013", "dd/MM/yyyy");
-		String currentDateString = Utils.formatDate(currentDate, "yyyy-MM-dd");
+		Date currentDate = Utils.stringTOSDate("13/11/2013", "dd/MM/yyyy");
+		//String currentDateString = Utils.formatDate(currentDate, "yyyy-MM-dd");
 
 		System.out.println("CARGANDO BASE DE DATOS...");
 		beanFactory = new ClassPathXmlApplicationContext("spring-config.xml");
 		processBO = beanFactory.getBean(ProcessBO.class);
 		sapBO = beanFactory.getBean(SapBO.class);
+		
+		int numDays = processBO.getLogLastDay();
+		
+		Date processDate = Utils.addDaysToDate(currentDate, numDays * -1);
+		String processDateString = Utils.formatDate(processDate,
+				"yyyy-MM-dd");
 
-		List<CrmSapMedication> listCrmSapMedication = new LinkedList<CrmSapMedication>();
+		System.out.println("ACTUALIZANDO FACTURAS CON SUS CITAS");
 
-		List<SapMedication> listSapMedication = sapBO
-				.getListSAPMedication(0);
-		for (SapMedication row : listSapMedication) {
-			CrmSapMedication crmSapMedication = new CrmSapMedication(
-					new CrmSapMedicationId(row.getId().getIdBill(), row.getId()
-							.getPosBill()), row.getDateBill(),
-					row.getTypeBill(), row.getIdPatient(), row.getDocPatient(),
-					row.getIdMaterial(), row.getGrpMaterial(),
-					row.getPositionType(), row.getNameMaterial(),
-					row.getUnit(), row.getAmount(), row.getIdCanal(),
-					row.getIdSalesOff(), row.getIdInterlocutor(),
-					row.getUserSap(), null, null);
-			listCrmSapMedication.add(crmSapMedication);
+		List<CrmSapMedicationDistinct> listDistinct = processBO
+				.getListSapMedicationByLoadStateDistinct(processDateString);
+		int count = 0;
+		for (CrmSapMedicationDistinct row : listDistinct) {
+			String rowInitDateString = Utils.formatDate(
+					Utils.addDaysToDate(row.getDateBill(), -3),
+					"yyyy-MM-dd");
+			CrmAppointment crmAppointment = processBO.getAppointment(
+					row.getIdPatient(), rowInitDateString,
+					Utils.formatDate(row.getDateBill(), "yyyy-MM-dd"),
+					row.getTypeBill());
+			if (crmAppointment != null) {
+				processBO.updateSapMedicationById(row.getIdBill(),
+						row.getTypeBill(), crmAppointment.getId(), -1);
+				count++;
+				System.out.println("Actualizado: " + row.getIdBill());
+			}
 		}
 
-		for (CrmSapMedication row : listCrmSapMedication) {
-			processBO.save(row);
-		}
-
-		/*
-		 * List<CrmSapMedicationDistinct> listDistinct = processBO
-		 * .getListSapMedicationByLoadStateDistinct(currentDateString); for
-		 * (CrmSapMedicationDistinct row : listDistinct) { String
-		 * rowInitDateString = Utils.formatDate(
-		 * Utils.addDaysToDate(row.getDateBill(), -3), "yyyy-MM-dd");
-		 * CrmAppointment crmAppointment = processBO.getAppointment(
-		 * row.getIdPatient(), rowInitDateString,
-		 * Utils.formatDate(row.getDateBill(), "yyyy-MM-dd"),
-		 * row.getTypeBill()); if (crmAppointment != null) {
-		 * processBO.updateSapMedicationById(row.getIdBill(), row.getTypeBill(),
-		 * crmAppointment.getId(), -1); System.out.println("Actualizado: " +
-		 * row.getIdBill()); } }
-		 */
+		System.out.println("FACTURAS ACTUALIZADAS: " + count);
+		CrmLogDetail crmLogDetail = new CrmLogDetail();
+		CrmLog crmLog = new CrmLog();
+		crmLog.setId(427);
+		crmLogDetail.setCrmLog(crmLog);
+		crmLogDetail.setId(2839);
+		crmLogDetail.setLogDate(new Date());
+		crmLogDetail.setMessage("FACTURAS ACTUALIZADAS: " + count);
+		processBO.save(crmLogDetail);
+		
+		
+		
 
 	}
 

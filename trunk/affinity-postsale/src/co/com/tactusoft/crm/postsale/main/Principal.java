@@ -84,8 +84,8 @@ public class Principal {
 
 	public void execute() {
 		System.out.println("INCIANDO PROCESO...");
-		Date currentDate = new Date();
-		// Date currentDate = Utils.stringTOSDate("08/09/2013", "dd/MM/yyyy");
+		//Date currentDate = new Date();
+		Date currentDate = Utils.stringTOSDate("16/11/2013 21", "dd/MM/yyyy HH");
 		String currentDateString = Utils.formatDate(currentDate, "yyyy-MM-dd");
 
 		System.out.println("CARGANDO BASE DE DATOS...");
@@ -97,6 +97,11 @@ public class Principal {
 		int numDays = processBO.getLogLastDay();
 
 		if (numDays > 0) {
+			numDays--;
+			Date processDate = Utils.addDaysToDate(currentDate, numDays * -1);
+			String processDateString = Utils.formatDate(processDate,
+					"yyyy-MM-dd");
+
 			crmLog = new CrmLog();
 			crmLog.setLogDate(new Date());
 			crmLog.setLogType("POSTVENTA");
@@ -141,6 +146,13 @@ public class Principal {
 
 			mapCampaign = new HashMap<BigDecimal, CrmCampaign>();
 			mapCallDates = new HashMap<BigDecimal, Date>();
+
+			/*
+			 * List<CrmCampaign> listCampaing =
+			 * processBO.getListCrmAppointment(crmLog.getId()); for(CrmCampaign
+			 * row:listCampaing){ mapCampaign.put(row.getCrmPatient().getId(),
+			 * row); }
+			 */
 
 			int currentDay = Utils.getCurrentDay(currentDate);
 
@@ -201,7 +213,7 @@ public class Principal {
 			// INASISTENCIA DIA ANTERIOR
 
 			List<CrmAppointment> listNoAttendet = processBO
-					.getListAppointmentNoAttendet(yesterdayString);
+					.getListAppointmentNoAttendet(processDateString);
 			count = 0;
 			for (CrmAppointment row : listNoAttendet) {
 				CrmCampaign crmCampaign = mapCampaign.get(row.getCrmPatient()
@@ -261,9 +273,9 @@ public class Principal {
 			processBO.save(crmLogDetail);
 
 			System.out.println("ACTUALIZANDO FACTURAS CON SUS CITAS");
-			
+
 			List<CrmSapMedicationDistinct> listDistinct = processBO
-					.getListSapMedicationByLoadStateDistinct(currentDateString);
+					.getListSapMedicationByLoadStateDistinct(processDateString);
 			count = 0;
 			for (CrmSapMedicationDistinct row : listDistinct) {
 				String rowInitDateString = Utils.formatDate(
@@ -292,7 +304,7 @@ public class Principal {
 					.println("BUSCANDO MEDICAMENTOS Y TERAPIAS NO FACTURADAS");
 
 			List<CrmAppointment> listClosed = processBO
-					.getListAppointmentClosed(currentDateString);
+					.getListAppointmentClosed(processDateString);
 			for (CrmAppointment row : listClosed) {
 				List<CrmSapMedication> listSapMedication = processBO
 						.getListSapMedicationByAppointment(row.getId());
@@ -316,7 +328,7 @@ public class Principal {
 				}
 			}
 
-			processBO.updateCrmSapMedication(currentDateString);
+			processBO.updateCrmSapMedication(processDateString);
 
 			count = 0;
 			for (CrmCampaignDetail row : processBO
@@ -340,7 +352,8 @@ public class Principal {
 			crmLogDetail.setCrmLog(crmLog);
 			crmLogDetail.setLogDate(new Date());
 			crmLogDetail
-					.setMessage("BUSCANDO MEDICAMENTOS Y TERAPIAS NO FACTURADAS: " + count);
+					.setMessage("BUSCANDO MEDICAMENTOS Y TERAPIAS NO FACTURADAS: "
+							+ count);
 			processBO.save(crmLogDetail);
 
 			System.out.println("PROCESO TERMINADO");
