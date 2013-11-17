@@ -86,6 +86,7 @@ public class AppointmentBacking extends BaseBacking {
 	private boolean saved;
 	private boolean edit;
 	private boolean validate;
+	private boolean generateNew;
 
 	private int minutes = 0;
 	private String timeType = null;
@@ -385,6 +386,14 @@ public class AppointmentBacking extends BaseBacking {
 		this.validate = validate;
 	}
 
+	public boolean isGenerateNew() {
+		return generateNew;
+	}
+
+	public void setGenerateNew(boolean generateNew) {
+		this.generateNew = generateNew;
+	}
+
 	public String getInfoMessageDate() {
 		return infoMessageDate;
 	}
@@ -437,6 +446,7 @@ public class AppointmentBacking extends BaseBacking {
 		infoMessage = null;
 		saved = false;
 		edit = false;
+		generateNew = true;
 		fromPage = null;
 
 		String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
@@ -782,6 +792,10 @@ public class AppointmentBacking extends BaseBacking {
 				validateApp = processService.validateAppointmentForDate(
 						selectedCandidate.getStartDate(),
 						selectedPatient.getId());
+			}
+
+			if (this.generateNew) {
+				this.selected.setId(null);
 			}
 
 			if (validateApp == 0) {

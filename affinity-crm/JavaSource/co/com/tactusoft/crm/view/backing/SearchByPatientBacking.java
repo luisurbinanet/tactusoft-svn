@@ -306,6 +306,7 @@ public class SearchByPatientBacking extends BaseBacking {
 		appointmentEditBacking.setSelectedPatient(selectedAppointment
 				.getCrmPatient());
 		appointmentEditBacking.setCurrentDate(new Date());
+		appointmentEditBacking.setGenerateNew(false);
 
 		appointmentEditBacking.setListBranch(new LinkedList<SelectItem>());
 		appointmentEditBacking
