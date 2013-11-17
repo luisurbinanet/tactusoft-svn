@@ -211,10 +211,10 @@
 							<f:selectItem itemValue="30" itemLabel="#{msg['cam_days_30']}" />
 						</p:selectOneMenu>
 						<h:outputLabel value="#{msg['cam_user']}"
-							rendered="#{campaignAdminBacking.selected.state eq 4}" />
+							rendered="#{campaignAdminBacking.selected.state eq 0}" />
 						<p:selectOneMenu value="#{campaignAdminBacking.crmUser.id}"
 							style="width:400px" required="true" label="#{msg['cam_user']}"
-							rendered="#{campaignAdminBacking.selected.state eq 4}"
+							rendered="#{campaignAdminBacking.selected.state eq 0}"
 							filter="true" filterMatchMode="contains">
 							<f:selectItem itemValue=""
 								itemLabel="#{msg['glb_default_value']}" />
