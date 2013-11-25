@@ -45,7 +45,7 @@ public class Principal2 {
 		processBO = beanFactory.getBean(ProcessBO.class);
 		sapBO = beanFactory.getBean(SapBO.class);
 		
-		int numDays = processBO.getLogLastDay();
+		int numDays = processBO.getLogLastDay(currentDate);
 		
 		Date processDate = Utils.addDaysToDate(currentDate, numDays * -1);
 		String processDateString = Utils.formatDate(processDate,

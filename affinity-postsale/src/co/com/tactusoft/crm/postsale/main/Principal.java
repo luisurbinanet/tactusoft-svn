@@ -84,8 +84,8 @@ public class Principal {
 
 	public void execute() {
 		System.out.println("INCIANDO PROCESO...");
-		//Date currentDate = new Date();
-		Date currentDate = Utils.stringTOSDate("16/11/2013 21", "dd/MM/yyyy HH");
+		Date currentDate = new Date();
+		//Date currentDate = Utils.stringTOSDate("24/11/2013 21", "dd/MM/yyyy HH");
 		String currentDateString = Utils.formatDate(currentDate, "yyyy-MM-dd");
 
 		System.out.println("CARGANDO BASE DE DATOS...");
@@ -94,7 +94,7 @@ public class Principal {
 		sapBO = beanFactory.getBean(SapBO.class);
 		int count = 0;
 
-		int numDays = processBO.getLogLastDay();
+		int numDays = processBO.getLogLastDay(currentDate);
 
 		if (numDays > 0) {
 			numDays--;
