@@ -236,10 +236,10 @@ public class ProcessBO implements Serializable {
 				+ currentDateString + "'");
 	}
 
-	public int getLogLastDay() {
+	public int getLogLastDay(Date currentDate) {
 		CrmLog lastLog = (CrmLog) dao.find(
 				"FROM CrmLog o WHERE id = (SELECT MAX(id) FROM CrmLog)").get(0);
-		Date today = Utils.getDateWithoutTime(new Date());
+		Date today = Utils.getDateWithoutTime(currentDate);
 		Date lastDate = Utils.getDateWithoutTime(lastLog.getLogDate());
 		long diff = Math.abs(today.getTime() - lastDate.getTime());
 		Long diffDays = diff / (24 * 60 * 60 * 1000);
