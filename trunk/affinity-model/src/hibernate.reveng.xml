@@ -2,7 +2,29 @@
 <!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
 
 <hibernate-reverse-engineering>
-	<table-filter match-name="crm_campaign_type"
+<type-mapping>
+	<sql-type jdbc-type="BOOLEAN" hibernate-type="boolean"></sql-type>
+</type-mapping>
+<table-filter match-name="crm_odontology_familary_record"
+		match-catalog="crm_db">
+	</table-filter>
+	<table-filter match-name="crm_odontology_periodontal"
+		match-catalog="crm_db">
+	</table-filter>
+	<table-filter match-name="crm_odontology_personal_record"
+		match-catalog="crm_db">
+	</table-filter>
+	<table-filter match-name="crm_odontology_soft_tissue"
+		match-catalog="crm_db">
+	</table-filter>
+	<table-filter match-name="crm_odontology_stomatolog"
+		match-catalog="crm_db">
+	</table-filter>
+	<table-filter match-name="crm_odontology_temp_joint"
+		match-catalog="crm_db">
+	</table-filter>
+	<table-filter match-name="crm_appointment" match-catalog="crm_db"></table-filter>
+	<table-filter match-name="crm_history_physique"
 		match-catalog="crm_db">
 	</table-filter>
 </hibernate-reverse-engineering>
