@@ -38,6 +38,7 @@ public class CrmProcedureDetail implements java.io.Serializable {
 	private boolean caseStudy;
 	private String codPublicity;
 	private boolean dependent;
+	private String typeHistory;
 	private int state;
 	private Set<CrmAppointment> crmAppointments = new HashSet<CrmAppointment>(0);
 
@@ -57,7 +58,7 @@ public class CrmProcedureDetail implements java.io.Serializable {
 			Integer timeStretchers, boolean noRepeat, Short noRepeatDays,
 			String docType, String formulaDocType, String formulaDocTypePs,
 			boolean availability, String codPublicity, boolean dependent,
-			int state, Set<CrmAppointment> crmAppointments) {
+			String typeHistory, int state, Set<CrmAppointment> crmAppointments) {
 		this.id = id;
 		this.crmProcedure = crmProcedure;
 		this.name = name;
@@ -72,6 +73,7 @@ public class CrmProcedureDetail implements java.io.Serializable {
 		this.formulaDocTypePs = formulaDocTypePs;
 		this.codPublicity = codPublicity;
 		this.dependent = dependent;
+		this.typeHistory = typeHistory;
 		this.state = state;
 		this.crmAppointments = crmAppointments;
 	}
@@ -229,6 +231,15 @@ public class CrmProcedureDetail implements java.io.Serializable {
 
 	public void setCaseStudy(boolean caseStudy) {
 		this.caseStudy = caseStudy;
+	}
+
+	@Column(name = "type_history", length = 45)
+	public String getTypeHistory() {
+		return typeHistory;
+	}
+
+	public void setTypeHistory(String typeHistory) {
+		this.typeHistory = typeHistory;
 	}
 
 	@Column(name = "state", nullable = false)

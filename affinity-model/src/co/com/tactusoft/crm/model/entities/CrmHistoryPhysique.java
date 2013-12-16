@@ -49,6 +49,9 @@ public class CrmHistoryPhysique implements java.io.Serializable {
 	private String highlights;
 	private Boolean skinCheck;
 	private String skin;
+	private Integer brushFrecuency;
+	private Boolean floss;
+	private Boolean oralHygieneHabit;
 	private String obs;
 
 	public CrmHistoryPhysique() {
@@ -69,7 +72,8 @@ public class CrmHistoryPhysique implements java.io.Serializable {
 			String abdomen, Boolean genitalsCheck, String genitals,
 			Boolean osteoCheck, String osteo, Boolean tipsCheck, String tips,
 			Boolean highlightsCheck, String highlights, Boolean skinCheck,
-			String skin, String obs) {
+			String skin, Integer brushFrecuency, Boolean floss,
+			Boolean oralHygieneHabit,String obs) {
 		this.id = id;
 		this.crmPatient = crmPatient;
 		this.crmAppointment = crmAppointment;
@@ -100,6 +104,9 @@ public class CrmHistoryPhysique implements java.io.Serializable {
 		this.highlights = highlights;
 		this.skinCheck = skinCheck;
 		this.skin = skin;
+		this.brushFrecuency = brushFrecuency;
+		this.floss = floss;
+		this.oralHygieneHabit = oralHygieneHabit;
 		this.obs = obs;
 	}
 
@@ -374,6 +381,33 @@ public class CrmHistoryPhysique implements java.io.Serializable {
 
 	public void setSkin(String skin) {
 		this.skin = skin;
+	}
+	
+	@Column(name = "brush_frecuency")
+	public Integer getBrushFrecuency() {
+		return this.brushFrecuency;
+	}
+
+	public void setBrushFrecuency(Integer brushFrecuency) {
+		this.brushFrecuency = brushFrecuency;
+	}
+
+	@Column(name = "floss")
+	public Boolean getFloss() {
+		return this.floss;
+	}
+
+	public void setFloss(Boolean floss) {
+		this.floss = floss;
+	}
+
+	@Column(name = "oral_hygiene_habit")
+	public Boolean getOralHygieneHabit() {
+		return this.oralHygieneHabit;
+	}
+
+	public void setOralHygieneHabit(Boolean oralHygieneHabit) {
+		this.oralHygieneHabit = oralHygieneHabit;
 	}
 
 	@Column(name = "obs", length = 65535)
