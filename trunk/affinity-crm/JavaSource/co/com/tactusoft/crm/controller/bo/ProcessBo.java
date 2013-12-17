@@ -34,6 +34,9 @@ import co.com.tactusoft.crm.model.entities.CrmMaterialGroup;
 import co.com.tactusoft.crm.model.entities.CrmMedication;
 import co.com.tactusoft.crm.model.entities.CrmNote;
 import co.com.tactusoft.crm.model.entities.CrmNurse;
+import co.com.tactusoft.crm.model.entities.CrmOdontologyFamilaryRecord;
+import co.com.tactusoft.crm.model.entities.CrmOdontologyPersonalRecord;
+import co.com.tactusoft.crm.model.entities.CrmOdontologyStomatolog;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
 import co.com.tactusoft.crm.model.entities.IndPatientAppointment;
@@ -64,10 +67,13 @@ public class ProcessBo implements Serializable {
 	}
 
 	public List<VwAppointment> getListVwAppointmentByHistory(BigDecimal idDoctor) {
-		String startDateString = FacesUtil.formatDate(new Date(), "yyyy-MM-dd")
-				+ " 00:00:00";
-		String endDateString = FacesUtil.formatDate(new Date(), "yyyy-MM-dd")
-				+ " 23:59:59";
+		/*
+		 * String startDateString = FacesUtil.formatDate(new Date(),
+		 * "yyyy-MM-dd") + " 00:00:00"; String endDateString =
+		 * FacesUtil.formatDate(new Date(), "yyyy-MM-dd") + " 23:59:59";
+		 */
+		String startDateString = "2013-12-16 00:00:00";
+		String endDateString = "2013-12-16 23:59:59";
 		return dao
 				.find("from VwAppointment o where o.doctorId = "
 						+ idDoctor
@@ -1239,6 +1245,45 @@ public class ProcessBo implements Serializable {
 			BigDecimal idPatient) {
 		return dao.find("from CrmHistoryOrganometry o where o.crmPatient.id = "
 				+ idPatient);
+	}
+
+	public CrmOdontologyPersonalRecord getOdontologyPersonalRecord(
+			BigDecimal idAppointment) {
+		List<CrmOdontologyPersonalRecord> list = null;
+		list = dao
+				.find("from CrmOdontologyPersonalRecord o where o.crmAppointment.id = "
+						+ idAppointment);
+		if (list.size() > 0) {
+			return list.get(0);
+		} else {
+			return new CrmOdontologyPersonalRecord();
+		}
+	}
+
+	public CrmOdontologyFamilaryRecord getOdontologyFamilaryRecord(
+			BigDecimal idAppointment) {
+		List<CrmOdontologyFamilaryRecord> list = null;
+		list = dao
+				.find("from CrmOdontologyFamilaryRecord o where o.crmAppointment.id = "
+						+ idAppointment);
+		if (list.size() > 0) {
+			return list.get(0);
+		} else {
+			return new CrmOdontologyFamilaryRecord();
+		}
+	}
+
+	public CrmOdontologyStomatolog getOdontologyStomatolog(
+			BigDecimal idAppointment) {
+		List<CrmOdontologyStomatolog> list = null;
+		list = dao
+				.find("from CrmOdontologyStomatolog o where o.crmAppointment.id = "
+						+ idAppointment);
+		if (list.size() > 0) {
+			return list.get(0);
+		} else {
+			return new CrmOdontologyStomatolog();
+		}
 	}
 
 	public Long getDocAutomatic(String country) {

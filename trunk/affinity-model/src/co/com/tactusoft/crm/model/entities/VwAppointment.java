@@ -33,6 +33,7 @@ public class VwAppointment implements java.io.Serializable {
 	private String prcDocType;
 	private int prcAvailability;
 	private String prcFormulaDocType;
+	private String prcTypeHistory;
 	private BigDecimal branchId;
 	private String branchCode;
 	private String branchName;
@@ -104,11 +105,12 @@ public class VwAppointment implements java.io.Serializable {
 			String patCode, String patCodeSap, String patSurnames,
 			String patFirstnames, String patPhoneNumber, String patCellNumber,
 			BigDecimal prcDetId, String prcDetName, String prcDocType,
-			int prcAvailability, String prcFormulaDocType, BigDecimal branchId,
-			String branchCode, String branchName, String branchSociety,
-			BigDecimal doctorId, String doctorCode, String doctorNames,
-			BigDecimal userCreateId, String userCreateCode,
-			String userCreateNames, String userCreateSurnames, Date dateCreate,
+			int prcAvailability, String prcFormulaDocType,
+			String prcTypeHistory, BigDecimal branchId, String branchCode,
+			String branchName, String branchSociety, BigDecimal doctorId,
+			String doctorCode, String doctorNames, BigDecimal userCreateId,
+			String userCreateCode, String userCreateNames,
+			String userCreateSurnames, Date dateCreate,
 			BigDecimal userModifiedId, String userModifiedCode,
 			String userModifiedNames, String userModifiedSurnames,
 			Date dateModified, BigDecimal userCheckedId,
@@ -134,6 +136,7 @@ public class VwAppointment implements java.io.Serializable {
 		this.prcDocType = prcDocType;
 		this.prcAvailability = prcAvailability;
 		this.prcFormulaDocType = prcFormulaDocType;
+		this.prcTypeHistory = prcTypeHistory;
 		this.branchId = branchId;
 		this.branchCode = branchCode;
 		this.branchName = branchName;
@@ -316,6 +319,15 @@ public class VwAppointment implements java.io.Serializable {
 
 	public void setPrcFormulaDocType(String prcFormulaDocType) {
 		this.prcFormulaDocType = prcFormulaDocType;
+	}
+
+	@Column(name = "prc_type_history", nullable = false)
+	public String getPrcTypeHistory() {
+		return prcTypeHistory;
+	}
+
+	public void setPrcTypeHistory(String prcTypeHistory) {
+		this.prcTypeHistory = prcTypeHistory;
 	}
 
 	@Column(name = "branch_id", nullable = false, scale = 0)
