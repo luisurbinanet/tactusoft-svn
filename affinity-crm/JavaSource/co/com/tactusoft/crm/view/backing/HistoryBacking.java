@@ -72,117 +72,117 @@ public class HistoryBacking extends BaseBacking {
 
 	private static final long serialVersionUID = 1L;
 
-	private CrmDoctor currentDoctor;
-	private CrmNurse currentNurse;
-	private CrmAppointment currentAppointment;
-	private CrmNote currentNote;
+	protected CrmDoctor currentDoctor;
+	protected CrmNurse currentNurse;
+	protected CrmAppointment currentAppointment;
+	protected CrmNote currentNote;
 
-	private List<VwAppointment> listAppointment;
-	private VwAppointmentDataModel appointmentModel;
-	private VwAppointment selectedAppointment;
-	private VwAppointment selectedAppointmentPrint;
+	protected List<VwAppointment> listAppointment;
+	protected VwAppointmentDataModel appointmentModel;
+	protected VwAppointment selectedAppointment;
+	protected VwAppointment selectedAppointmentPrint;
 
-	private boolean modeEdit;
-	private boolean modeHistorial;
-	private String part;
+	protected boolean modeEdit;
+	protected boolean modeHistorial;
+	protected String part;
 
-	private VwAppointmentDataModel historyAppointmentModel;
-	private HistoryHistoryDataModel historyHistoryModel;
-	private HistoryRecordDataModel historyRecordModel;
-	private HistoryHomeopathicDataModel historyHomeopathicModel;
-	private HistoryPhysiqueDataModel historyPhysiqueModel;
-	private HistoryOrganometryDataModel historyOrganometryModel;
+	protected VwAppointmentDataModel historyAppointmentModel;
+	protected HistoryHistoryDataModel historyHistoryModel;
+	protected HistoryRecordDataModel historyRecordModel;
+	protected HistoryHomeopathicDataModel historyHomeopathicModel;
+	protected HistoryPhysiqueDataModel historyPhysiqueModel;
+	protected HistoryOrganometryDataModel historyOrganometryModel;
 
-	private CrmHistoryHistory selectedHistoryHistory;
-	private CrmHistoryRecord selectedHistoryRecord;
-	private CrmHistoryHomeopathic selectedHistoryHomeopathic;
-	private CrmHistoryPhysique selectedHistoryPhysique;
-	private CrmHistoryOrganometry selectedHistoryOrganometry;
+	protected CrmHistoryHistory selectedHistoryHistory;
+	protected CrmHistoryRecord selectedHistoryRecord;
+	protected CrmHistoryHomeopathic selectedHistoryHomeopathic;
+	protected CrmHistoryPhysique selectedHistoryPhysique;
+	protected CrmHistoryOrganometry selectedHistoryOrganometry;
 
-	private int activeIndex = -1;
-	private BigDecimal idOccupation;
-	private String neighborhood;
-	private String typeHousing;
-	private int age;
-	private BigDecimal idMembershipType;
-	private double imc;
-	private String descImc;
-	private int heartRate;
-	private int respiratoryRate;
-	private Double height;
-	private Double weight;
+	protected int activeIndex = -1;
+	protected BigDecimal idOccupation;
+	protected String neighborhood;
+	protected String typeHousing;
+	protected int age;
+	protected BigDecimal idMembershipType;
+	protected double imc;
+	protected String descImc;
+	protected int heartRate;
+	protected int respiratoryRate;
+	protected Double height;
+	protected Double weight;
 
-	private int optionSearchCie;
-	private List<CrmCie> listCie;
-	private CieDataModel cieModel;
-	private CrmCie selectedCie;
-	private String codeCIE;
-	private String descCIE;
-	private boolean disabledAddCie;
+	protected int optionSearchCie;
+	protected List<CrmCie> listCie;
+	protected CieDataModel cieModel;
+	protected CrmCie selectedCie;
+	protected String codeCIE;
+	protected String descCIE;
+	protected boolean disabledAddCie;
 
-	private List<CrmDiagnosis> listDiagnosis;
-	private DiagnosisDataModel diagnosisModel;
-	private CrmDiagnosis[] selectedsDiagnosis;
-	private CrmDiagnosis selectedDiagnosis;
+	protected List<CrmDiagnosis> listDiagnosis;
+	protected DiagnosisDataModel diagnosisModel;
+	protected CrmDiagnosis[] selectedsDiagnosis;
+	protected CrmDiagnosis selectedDiagnosis;
 
-	private List<WSBean> listAllBackupMaterial;
-	private List<WSBean> listAllMaterial;
-	private int optionSearchMaterial;
-	private List<WSBean> listMaterial;
-	private WSBeanDataModel materialModel;
-	private WSBean selectedMaterial;
-	private String codeMaterial;
-	private String descMaterial;
-	private boolean disabledAddMaterial;
+	protected List<WSBean> listAllBackupMaterial;
+	protected List<WSBean> listAllMaterial;
+	protected int optionSearchMaterial;
+	protected List<WSBean> listMaterial;
+	protected WSBeanDataModel materialModel;
+	protected WSBean selectedMaterial;
+	protected String codeMaterial;
+	protected String descMaterial;
+	protected boolean disabledAddMaterial;
 
-	private List<CrmMedication> listMedication;
-	private MedicationDataModel medicationModel;
-	private CrmMedication[] selectedMedication;
+	protected List<CrmMedication> listMedication;
+	protected MedicationDataModel medicationModel;
+	protected CrmMedication[] selectedMedication;
 
-	private List<CrmMedication> listOtherMedication;
-	private MedicationDataModel otherMedicationModel;
-	private CrmMedication[] selectedOtherMedication;
+	protected List<CrmMedication> listOtherMedication;
+	protected MedicationDataModel otherMedicationModel;
+	protected CrmMedication[] selectedOtherMedication;
 
-	private List<CrmMedication> listExam;
-	private MedicationDataModel examModel;
-	private CrmMedication[] selectedExam;
+	protected List<CrmMedication> listExam;
+	protected MedicationDataModel examModel;
+	protected CrmMedication[] selectedExam;
 
-	private List<CrmMedication> listTherapy;
-	private MedicationDataModel therapyModel;
-	private CrmMedication[] selectedTherapy;
+	protected List<CrmMedication> listTherapy;
+	protected MedicationDataModel therapyModel;
+	protected CrmMedication[] selectedTherapy;
 
-	private String typeMedication;
-	private String titleMedication;
-	private int amount;
-	private String noteType;
-	private String noteDoctor;
-	private boolean viewMode;
-	private List<CrmMaterialGroup> listMaterialGroup;
+	protected String typeMedication;
+	protected String titleMedication;
+	protected int amount;
+	protected String noteType;
+	protected String noteDoctor;
+	protected boolean viewMode;
+	protected List<CrmMaterialGroup> listMaterialGroup;
 
-	private List<CrmDiagnosis> listDiagnosisView;
-	private List<CrmMedication> listMedicationView;
-	private List<CrmMedication> listTherapyView;
-	private List<CrmMedication> listExamView;
-	private List<CrmNote> listNoteView;
-	private List<CrmConsent> listConsentView;
-	private List<CrmCaseStudy> listSuccessStoryView;
+	protected List<CrmDiagnosis> listDiagnosisView;
+	protected List<CrmMedication> listMedicationView;
+	protected List<CrmMedication> listTherapyView;
+	protected List<CrmMedication> listExamView;
+	protected List<CrmNote> listNoteView;
+	protected List<CrmConsent> listConsentView;
+	protected List<CrmCaseStudy> listSuccessStoryView;
 
-	private List<SelectItem> listNoteTherapyItem;
-	private Map<Integer, Object> mapNoteTherapy;
-	private Integer idNoteTherapy;
-	private boolean autoNote;
+	protected List<SelectItem> listNoteTherapyItem;
+	protected Map<Integer, Object> mapNoteTherapy;
+	protected Integer idNoteTherapy;
+	protected boolean autoNote;
 
-	private CrmCaseStudy selectedCaseStudy;
-	private List<CrmCie> listCaseStudyCieTemp;
-	private List<SelectItem> listCaseStudyCie;
-	private List<String> listCaseStudyHistoryTemp;
-	private List<SelectItem> listCaseStudyHistory;
-	private BigDecimal idCaseStudyCie;
+	protected CrmCaseStudy selectedCaseStudy;
+	protected List<CrmCie> listCaseStudyCieTemp;
+	protected List<SelectItem> listCaseStudyCie;
+	protected List<String> listCaseStudyHistoryTemp;
+	protected List<SelectItem> listCaseStudyHistory;
+	protected BigDecimal idCaseStudyCie;
 
-	private byte[] consentFile;
-	private Date consentDate;
+	protected byte[] consentFile;
+	protected Date consentDate;
 
-	private HtmlPanelGrid containerComponent;
+	protected HtmlPanelGrid containerComponent;
 
 	public HistoryBacking() {
 		newAction(null);
@@ -1135,7 +1135,7 @@ public class HistoryBacking extends BaseBacking {
 		idCaseStudyCie = null;
 	}
 
-	public void editAppointmentAction() {
+	public String editAppointmentAction() {
 		modeEdit = true;
 		modeHistorial = false;
 		part = Constant.HISTORY_HISTORY;
@@ -1260,6 +1260,15 @@ public class HistoryBacking extends BaseBacking {
 			refreshCaseStudyCie();
 			refreshCaseStudyHistory();
 		}
+
+		if (!selectedAppointment.getPrcTypeHistory().equals("ODONTOLOGY")) {
+			return null;
+		} else {
+			HistoryOdontologyBacking historyOdontologyBacking = FacesUtil
+					.findBean("historyOdontologyBacking");
+			historyOdontologyBacking.loadValues(this.selectedAppointment);
+			return "historyOdontology?faces-redirect=true";
+		}
 	}
 
 	public void showHistorialAction() {
@@ -1335,7 +1344,7 @@ public class HistoryBacking extends BaseBacking {
 		optionSearchCie = 1;
 	}
 
-	private void refreshListCie() {
+	protected void refreshListCie() {
 		List<CrmCie> listCieFilter = new ArrayList<CrmCie>();
 		for (CrmCie row : listCie) {
 			boolean filter = true;
@@ -1446,7 +1455,7 @@ public class HistoryBacking extends BaseBacking {
 		optionSearchCie = 1;
 	}
 
-	private void refreshListMedication() {
+	protected void refreshListMedication() {
 		List<WSBean> listFilter = new ArrayList<WSBean>();
 		for (WSBean row : listMaterial) {
 			boolean filter = true;
@@ -1642,7 +1651,7 @@ public class HistoryBacking extends BaseBacking {
 		refreshMaterialFields();
 	}
 
-	private void refreshLists() {
+	protected void refreshLists() {
 
 		List<VwAppointment> listTempApp = processService
 				.getListByAppointmentByPatient(selectedPatient.getId());
