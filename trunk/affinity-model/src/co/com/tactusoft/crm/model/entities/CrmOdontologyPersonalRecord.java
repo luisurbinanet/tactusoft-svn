@@ -20,41 +20,41 @@ public class CrmOdontologyPersonalRecord implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private CrmAppointment crmAppointment;
-	private Boolean medicalTreatment;
-	private Boolean medicine;
-	private Boolean surgery;
-	private Boolean bloodTransfusion;
-	private Boolean bloodPressureHigh;
-	private Boolean bloodPressureLow;
-	private Boolean penicillinAllergy;
-	private Boolean anesthesiaAllergy;
-	private Boolean aspirinAllergy;
+	private Integer medicalTreatment;
+	private Integer medicine;
+	private Integer surgery;
+	private Integer bloodTransfusion;
+	private Integer bloodPressureHigh;
+	private Integer bloodPressureLow;
+	private Integer penicillinAllergy;
+	private Integer anesthesiaAllergy;
+	private Integer aspirinAllergy;
 	private String otherAllergy;
-	private Boolean excesivesBlood;
-	private Boolean bloodProblem;
-	private Boolean anemiaLeukemiaHemophilia;
-	private Boolean hiv;
-	private Boolean retroviral;
-	private Boolean pregnant;
-	private Boolean contraceptives;
-	private Boolean venereaslDiseases;
-	private Boolean heartProblems;
-	private Boolean hepatitis;
-	private Boolean asthma;
-	private Boolean rheumaticFever;
-	private Boolean diabetes;
-	private Boolean grasticUlcer;
-	private Boolean thyroid;
-	private Boolean limitationOpenCloseMouth;
-	private Boolean noiseJawOpenCloseMouth;
-	private Boolean herpesThrush;
-	private Boolean bitLipsNailsHabit;
-	private Boolean smokeHabit;
+	private Integer excesivesBlood;
+	private Integer bloodProblem;
+	private Integer anemiaLeukemiaHemophilia;
+	private Integer hiv;
+	private Integer retroviral;
+	private Integer pregnant;
+	private Integer contraceptives;
+	private Integer venereaslDiseases;
+	private Integer heartProblems;
+	private Integer hepatitis;
+	private Integer asthma;
+	private Integer rheumaticFever;
+	private Integer diabetes;
+	private Integer grasticUlcer;
+	private Integer thyroid;
+	private Integer limitationOpenCloseMouth;
+	private Integer noiseJawOpenCloseMouth;
+	private Integer herpesThrush;
+	private Integer bitLipsNailsHabit;
+	private Integer smokeHabit;
 	private Integer cigarettesDayHabit;
-	private Boolean citrusFoodsHabit;
-	private Boolean bitObjectsHabit;
-	private Boolean toothClenchHabit;
-	private Boolean mouthBreathHabit;
+	private Integer citrusFoodsHabit;
+	private Integer bitObjectsHabit;
+	private Integer toothClenchHabit;
+	private Integer mouthBreathHabit;
 	private String obs;
 
 	public CrmOdontologyPersonalRecord() {
@@ -65,21 +65,21 @@ public class CrmOdontologyPersonalRecord implements java.io.Serializable {
 	}
 
 	public CrmOdontologyPersonalRecord(CrmAppointment crmAppointment,
-			Boolean medicalTreatment, Boolean medicine, Boolean surgery,
-			Boolean bloodTransfusion, Boolean bloodPressureHigh,
-			Boolean bloodPressureLow, Boolean penicillinAllergy,
-			Boolean anesthesiaAllergy, Boolean aspirinAllergy,
-			String otherAllergy, Boolean excesivesBlood, Boolean bloodProblem,
-			Boolean anemiaLeukemiaHemophilia, Boolean hiv, Boolean retroviral,
-			Boolean pregnant, Boolean contraceptives,
-			Boolean venereaslDiseases, Boolean heartProblems,
-			Boolean hepatitis, Boolean asthma, Boolean rheumaticFever,
-			Boolean diabetes, Boolean grasticUlcer, Boolean thyroid,
-			Boolean limitationOpenCloseMouth, Boolean noiseJawOpenCloseMouth,
-			Boolean herpesThrush, Boolean bitLipsNailsHabit,
-			Boolean smokeHabit, Integer cigarettesDayHabit,
-			Boolean citrusFoodsHabit, Boolean bitObjectsHabit,
-			Boolean toothClenchHabit, Boolean mouthBreathHabit, String obs) {
+			Integer medicalTreatment, Integer medicine, Integer surgery,
+			Integer bloodTransfusion, Integer bloodPressureHigh,
+			Integer bloodPressureLow, Integer penicillinAllergy,
+			Integer anesthesiaAllergy, Integer aspirinAllergy,
+			String otherAllergy, Integer excesivesBlood, Integer bloodProblem,
+			Integer anemiaLeukemiaHemophilia, Integer hiv, Integer retroviral,
+			Integer pregnant, Integer contraceptives,
+			Integer venereaslDiseases, Integer heartProblems,
+			Integer hepatitis, Integer asthma, Integer rheumaticFever,
+			Integer diabetes, Integer grasticUlcer, Integer thyroid,
+			Integer limitationOpenCloseMouth, Integer noiseJawOpenCloseMouth,
+			Integer herpesThrush, Integer bitLipsNailsHabit,
+			Integer smokeHabit, Integer cigarettesDayHabit,
+			Integer citrusFoodsHabit, Integer bitObjectsHabit,
+			Integer toothClenchHabit, Integer mouthBreathHabit, String obs) {
 		this.crmAppointment = crmAppointment;
 		this.medicalTreatment = medicalTreatment;
 		this.medicine = medicine;
@@ -141,83 +141,83 @@ public class CrmOdontologyPersonalRecord implements java.io.Serializable {
 	}
 
 	@Column(name = "medical_treatment")
-	public Boolean getMedicalTreatment() {
+	public Integer getMedicalTreatment() {
 		return this.medicalTreatment;
 	}
 
-	public void setMedicalTreatment(Boolean medicalTreatment) {
+	public void setMedicalTreatment(Integer medicalTreatment) {
 		this.medicalTreatment = medicalTreatment;
 	}
 
 	@Column(name = "medicine")
-	public Boolean getMedicine() {
+	public Integer getMedicine() {
 		return this.medicine;
 	}
 
-	public void setMedicine(Boolean medicine) {
+	public void setMedicine(Integer medicine) {
 		this.medicine = medicine;
 	}
 
 	@Column(name = "surgery")
-	public Boolean getSurgery() {
+	public Integer getSurgery() {
 		return this.surgery;
 	}
 
-	public void setSurgery(Boolean surgery) {
+	public void setSurgery(Integer surgery) {
 		this.surgery = surgery;
 	}
 
 	@Column(name = "blood_transfusion")
-	public Boolean getBloodTransfusion() {
+	public Integer getBloodTransfusion() {
 		return this.bloodTransfusion;
 	}
 
-	public void setBloodTransfusion(Boolean bloodTransfusion) {
+	public void setBloodTransfusion(Integer bloodTransfusion) {
 		this.bloodTransfusion = bloodTransfusion;
 	}
 
 	@Column(name = "blood_pressure_high")
-	public Boolean getBloodPressureHigh() {
+	public Integer getBloodPressureHigh() {
 		return this.bloodPressureHigh;
 	}
 
-	public void setBloodPressureHigh(Boolean bloodPressureHigh) {
+	public void setBloodPressureHigh(Integer bloodPressureHigh) {
 		this.bloodPressureHigh = bloodPressureHigh;
 	}
 
 	@Column(name = "blood_pressure_low")
-	public Boolean getBloodPressureLow() {
+	public Integer getBloodPressureLow() {
 		return this.bloodPressureLow;
 	}
 
-	public void setBloodPressureLow(Boolean bloodPressureLow) {
+	public void setBloodPressureLow(Integer bloodPressureLow) {
 		this.bloodPressureLow = bloodPressureLow;
 	}
 
 	@Column(name = "penicillin_allergy")
-	public Boolean getPenicillinAllergy() {
+	public Integer getPenicillinAllergy() {
 		return this.penicillinAllergy;
 	}
 
-	public void setPenicillinAllergy(Boolean penicillinAllergy) {
+	public void setPenicillinAllergy(Integer penicillinAllergy) {
 		this.penicillinAllergy = penicillinAllergy;
 	}
 
 	@Column(name = "anesthesia_allergy")
-	public Boolean getAnesthesiaAllergy() {
+	public Integer getAnesthesiaAllergy() {
 		return this.anesthesiaAllergy;
 	}
 
-	public void setAnesthesiaAllergy(Boolean anesthesiaAllergy) {
+	public void setAnesthesiaAllergy(Integer anesthesiaAllergy) {
 		this.anesthesiaAllergy = anesthesiaAllergy;
 	}
 
 	@Column(name = "aspirin_allergy")
-	public Boolean getAspirinAllergy() {
+	public Integer getAspirinAllergy() {
 		return this.aspirinAllergy;
 	}
 
-	public void setAspirinAllergy(Boolean aspirinAllergy) {
+	public void setAspirinAllergy(Integer aspirinAllergy) {
 		this.aspirinAllergy = aspirinAllergy;
 	}
 
@@ -231,182 +231,182 @@ public class CrmOdontologyPersonalRecord implements java.io.Serializable {
 	}
 
 	@Column(name = "excesives_blood")
-	public Boolean getExcesivesBlood() {
+	public Integer getExcesivesBlood() {
 		return this.excesivesBlood;
 	}
 
-	public void setExcesivesBlood(Boolean excesivesBlood) {
+	public void setExcesivesBlood(Integer excesivesBlood) {
 		this.excesivesBlood = excesivesBlood;
 	}
 
 	@Column(name = "blood_problem")
-	public Boolean getBloodProblem() {
+	public Integer getBloodProblem() {
 		return this.bloodProblem;
 	}
 
-	public void setBloodProblem(Boolean bloodProblem) {
+	public void setBloodProblem(Integer bloodProblem) {
 		this.bloodProblem = bloodProblem;
 	}
 
 	@Column(name = "anemia_leukemia_hemophilia")
-	public Boolean getAnemiaLeukemiaHemophilia() {
+	public Integer getAnemiaLeukemiaHemophilia() {
 		return this.anemiaLeukemiaHemophilia;
 	}
 
-	public void setAnemiaLeukemiaHemophilia(Boolean anemiaLeukemiaHemophilia) {
+	public void setAnemiaLeukemiaHemophilia(Integer anemiaLeukemiaHemophilia) {
 		this.anemiaLeukemiaHemophilia = anemiaLeukemiaHemophilia;
 	}
 
 	@Column(name = "hiv")
-	public Boolean getHiv() {
+	public Integer getHiv() {
 		return this.hiv;
 	}
 
-	public void setHiv(Boolean hiv) {
+	public void setHiv(Integer hiv) {
 		this.hiv = hiv;
 	}
 
 	@Column(name = "retroviral")
-	public Boolean getRetroviral() {
+	public Integer getRetroviral() {
 		return this.retroviral;
 	}
 
-	public void setRetroviral(Boolean retroviral) {
+	public void setRetroviral(Integer retroviral) {
 		this.retroviral = retroviral;
 	}
 
 	@Column(name = "pregnant")
-	public Boolean getPregnant() {
+	public Integer getPregnant() {
 		return this.pregnant;
 	}
 
-	public void setPregnant(Boolean pregnant) {
+	public void setPregnant(Integer pregnant) {
 		this.pregnant = pregnant;
 	}
 
 	@Column(name = "contraceptives")
-	public Boolean getContraceptives() {
+	public Integer getContraceptives() {
 		return this.contraceptives;
 	}
 
-	public void setContraceptives(Boolean contraceptives) {
+	public void setContraceptives(Integer contraceptives) {
 		this.contraceptives = contraceptives;
 	}
 
 	@Column(name = "venereasl_diseases")
-	public Boolean getVenereaslDiseases() {
+	public Integer getVenereaslDiseases() {
 		return this.venereaslDiseases;
 	}
 
-	public void setVenereaslDiseases(Boolean venereaslDiseases) {
+	public void setVenereaslDiseases(Integer venereaslDiseases) {
 		this.venereaslDiseases = venereaslDiseases;
 	}
 
 	@Column(name = "heart_problems")
-	public Boolean getHeartProblems() {
+	public Integer getHeartProblems() {
 		return this.heartProblems;
 	}
 
-	public void setHeartProblems(Boolean heartProblems) {
+	public void setHeartProblems(Integer heartProblems) {
 		this.heartProblems = heartProblems;
 	}
 
 	@Column(name = "hepatitis")
-	public Boolean getHepatitis() {
+	public Integer getHepatitis() {
 		return this.hepatitis;
 	}
 
-	public void setHepatitis(Boolean hepatitis) {
+	public void setHepatitis(Integer hepatitis) {
 		this.hepatitis = hepatitis;
 	}
 
 	@Column(name = "asthma")
-	public Boolean getAsthma() {
+	public Integer getAsthma() {
 		return this.asthma;
 	}
 
-	public void setAsthma(Boolean asthma) {
+	public void setAsthma(Integer asthma) {
 		this.asthma = asthma;
 	}
 
 	@Column(name = "rheumatic_fever")
-	public Boolean getRheumaticFever() {
+	public Integer getRheumaticFever() {
 		return this.rheumaticFever;
 	}
 
-	public void setRheumaticFever(Boolean rheumaticFever) {
+	public void setRheumaticFever(Integer rheumaticFever) {
 		this.rheumaticFever = rheumaticFever;
 	}
 
 	@Column(name = "diabetes")
-	public Boolean getDiabetes() {
+	public Integer getDiabetes() {
 		return this.diabetes;
 	}
 
-	public void setDiabetes(Boolean diabetes) {
+	public void setDiabetes(Integer diabetes) {
 		this.diabetes = diabetes;
 	}
 
 	@Column(name = "grastic_ulcer")
-	public Boolean getGrasticUlcer() {
+	public Integer getGrasticUlcer() {
 		return this.grasticUlcer;
 	}
 
-	public void setGrasticUlcer(Boolean grasticUlcer) {
+	public void setGrasticUlcer(Integer grasticUlcer) {
 		this.grasticUlcer = grasticUlcer;
 	}
 
 	@Column(name = "thyroid")
-	public Boolean getThyroid() {
+	public Integer getThyroid() {
 		return this.thyroid;
 	}
 
-	public void setThyroid(Boolean thyroid) {
+	public void setThyroid(Integer thyroid) {
 		this.thyroid = thyroid;
 	}
 
 	@Column(name = "limitation_open_close_mouth")
-	public Boolean getLimitationOpenCloseMouth() {
+	public Integer getLimitationOpenCloseMouth() {
 		return this.limitationOpenCloseMouth;
 	}
 
-	public void setLimitationOpenCloseMouth(Boolean limitationOpenCloseMouth) {
+	public void setLimitationOpenCloseMouth(Integer limitationOpenCloseMouth) {
 		this.limitationOpenCloseMouth = limitationOpenCloseMouth;
 	}
 
 	@Column(name = "noise_jaw_open_close_mouth")
-	public Boolean getNoiseJawOpenCloseMouth() {
+	public Integer getNoiseJawOpenCloseMouth() {
 		return this.noiseJawOpenCloseMouth;
 	}
 
-	public void setNoiseJawOpenCloseMouth(Boolean noiseJawOpenCloseMouth) {
+	public void setNoiseJawOpenCloseMouth(Integer noiseJawOpenCloseMouth) {
 		this.noiseJawOpenCloseMouth = noiseJawOpenCloseMouth;
 	}
 
 	@Column(name = "herpes_thrush")
-	public Boolean getHerpesThrush() {
+	public Integer getHerpesThrush() {
 		return this.herpesThrush;
 	}
 
-	public void setHerpesThrush(Boolean herpesThrush) {
+	public void setHerpesThrush(Integer herpesThrush) {
 		this.herpesThrush = herpesThrush;
 	}
 
 	@Column(name = "bit_lips_nails_habit")
-	public Boolean getBitLipsNailsHabit() {
+	public Integer getBitLipsNailsHabit() {
 		return this.bitLipsNailsHabit;
 	}
 
-	public void setBitLipsNailsHabit(Boolean bitLipsNailsHabit) {
+	public void setBitLipsNailsHabit(Integer bitLipsNailsHabit) {
 		this.bitLipsNailsHabit = bitLipsNailsHabit;
 	}
 
 	@Column(name = "smoke_habit")
-	public Boolean getSmokeHabit() {
+	public Integer getSmokeHabit() {
 		return this.smokeHabit;
 	}
 
-	public void setSmokeHabit(Boolean smokeHabit) {
+	public void setSmokeHabit(Integer smokeHabit) {
 		this.smokeHabit = smokeHabit;
 	}
 
@@ -420,38 +420,38 @@ public class CrmOdontologyPersonalRecord implements java.io.Serializable {
 	}
 
 	@Column(name = "citrus_foods_habit")
-	public Boolean getCitrusFoodsHabit() {
+	public Integer getCitrusFoodsHabit() {
 		return this.citrusFoodsHabit;
 	}
 
-	public void setCitrusFoodsHabit(Boolean citrusFoodsHabit) {
+	public void setCitrusFoodsHabit(Integer citrusFoodsHabit) {
 		this.citrusFoodsHabit = citrusFoodsHabit;
 	}
 
 	@Column(name = "bit_objects_habit")
-	public Boolean getBitObjectsHabit() {
+	public Integer getBitObjectsHabit() {
 		return this.bitObjectsHabit;
 	}
 
-	public void setBitObjectsHabit(Boolean bitObjectsHabit) {
+	public void setBitObjectsHabit(Integer bitObjectsHabit) {
 		this.bitObjectsHabit = bitObjectsHabit;
 	}
 
 	@Column(name = "tooth_clench_habit")
-	public Boolean getToothClenchHabit() {
+	public Integer getToothClenchHabit() {
 		return this.toothClenchHabit;
 	}
 
-	public void setToothClenchHabit(Boolean toothClenchHabit) {
+	public void setToothClenchHabit(Integer toothClenchHabit) {
 		this.toothClenchHabit = toothClenchHabit;
 	}
 
 	@Column(name = "mouth_breath_habit")
-	public Boolean getMouthBreathHabit() {
+	public Integer getMouthBreathHabit() {
 		return this.mouthBreathHabit;
 	}
 
-	public void setMouthBreathHabit(Boolean mouthBreathHabit) {
+	public void setMouthBreathHabit(Integer mouthBreathHabit) {
 		this.mouthBreathHabit = mouthBreathHabit;
 	}
 

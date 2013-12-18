@@ -20,26 +20,26 @@ public class CrmOdontologySoftTissue implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private CrmAppointment crmAppointment;
-	private Boolean glandNormal;
-	private Boolean glandAltered;
-	private Boolean lymphNormal;
-	private Boolean lymphAltered;
-	private Boolean oralMucosaNormal;
-	private Boolean oralMucosaAltered;
-	private Boolean bracesNormal;
-	private Boolean bracesAltered;
-	private Boolean tongueNormal;
-	private Boolean tongueAltered;
-	private Boolean palateNormal;
-	private Boolean palateAltered;
-	private Boolean mounthFloorNormal;
-	private Boolean mounthFloorAltered;
-	private Boolean oropharynxNormal;
-	private Boolean oropharynxAltered;
-	private Boolean tonsilsNormal;
-	private Boolean tonsilsAltered;
-	private Boolean cheeksNormal;
-	private Boolean cheeksAltered;
+	private Integer glandNormal;
+	private Integer glandAltered;
+	private Integer lymphNormal;
+	private Integer lymphAltered;
+	private Integer oralMucosaNormal;
+	private Integer oralMucosaAltered;
+	private Integer bracesNormal;
+	private Integer bracesAltered;
+	private Integer tongueNormal;
+	private Integer tongueAltered;
+	private Integer palateNormal;
+	private Integer palateAltered;
+	private Integer mounthFloorNormal;
+	private Integer mounthFloorAltered;
+	private Integer oropharynxNormal;
+	private Integer oropharynxAltered;
+	private Integer tonsilsNormal;
+	private Integer tonsilsAltered;
+	private Integer cheeksNormal;
+	private Integer cheeksAltered;
 	private String obs;
 
 	public CrmOdontologySoftTissue() {
@@ -50,15 +50,15 @@ public class CrmOdontologySoftTissue implements java.io.Serializable {
 	}
 
 	public CrmOdontologySoftTissue(CrmAppointment crmAppointment,
-			Boolean glandNormal, Boolean glandAltered, Boolean lymphNormal,
-			Boolean lymphAltered, Boolean oralMucosaNormal,
-			Boolean oralMucosaAltered, Boolean bracesNormal,
-			Boolean bracesAltered, Boolean tongueNormal, Boolean tongueAltered,
-			Boolean palateNormal, Boolean palateAltered,
-			Boolean mounthFloorNormal, Boolean mounthFloorAltered,
-			Boolean oropharynxNormal, Boolean oropharynxAltered,
-			Boolean tonsilsNormal, Boolean tonsilsAltered,
-			Boolean cheeksNormal, Boolean cheeksAltered, String obs) {
+			Integer glandNormal, Integer glandAltered, Integer lymphNormal,
+			Integer lymphAltered, Integer oralMucosaNormal,
+			Integer oralMucosaAltered, Integer bracesNormal,
+			Integer bracesAltered, Integer tongueNormal, Integer tongueAltered,
+			Integer palateNormal, Integer palateAltered,
+			Integer mounthFloorNormal, Integer mounthFloorAltered,
+			Integer oropharynxNormal, Integer oropharynxAltered,
+			Integer tonsilsNormal, Integer tonsilsAltered,
+			Integer cheeksNormal, Integer cheeksAltered, String obs) {
 		this.crmAppointment = crmAppointment;
 		this.glandNormal = glandNormal;
 		this.glandAltered = glandAltered;
@@ -105,182 +105,182 @@ public class CrmOdontologySoftTissue implements java.io.Serializable {
 	}
 
 	@Column(name = "gland_normal")
-	public Boolean getGlandNormal() {
+	public Integer getGlandNormal() {
 		return this.glandNormal;
 	}
 
-	public void setGlandNormal(Boolean glandNormal) {
+	public void setGlandNormal(Integer glandNormal) {
 		this.glandNormal = glandNormal;
 	}
 
 	@Column(name = "gland_altered")
-	public Boolean getGlandAltered() {
+	public Integer getGlandAltered() {
 		return this.glandAltered;
 	}
 
-	public void setGlandAltered(Boolean glandAltered) {
+	public void setGlandAltered(Integer glandAltered) {
 		this.glandAltered = glandAltered;
 	}
 
 	@Column(name = "lymph_normal")
-	public Boolean getLymphNormal() {
+	public Integer getLymphNormal() {
 		return this.lymphNormal;
 	}
 
-	public void setLymphNormal(Boolean lymphNormal) {
+	public void setLymphNormal(Integer lymphNormal) {
 		this.lymphNormal = lymphNormal;
 	}
 
 	@Column(name = "lymph_altered")
-	public Boolean getLymphAltered() {
+	public Integer getLymphAltered() {
 		return this.lymphAltered;
 	}
 
-	public void setLymphAltered(Boolean lymphAltered) {
+	public void setLymphAltered(Integer lymphAltered) {
 		this.lymphAltered = lymphAltered;
 	}
 
 	@Column(name = "oral_mucosa_normal")
-	public Boolean getOralMucosaNormal() {
+	public Integer getOralMucosaNormal() {
 		return this.oralMucosaNormal;
 	}
 
-	public void setOralMucosaNormal(Boolean oralMucosaNormal) {
+	public void setOralMucosaNormal(Integer oralMucosaNormal) {
 		this.oralMucosaNormal = oralMucosaNormal;
 	}
 
 	@Column(name = "oral_mucosa_altered")
-	public Boolean getOralMucosaAltered() {
+	public Integer getOralMucosaAltered() {
 		return this.oralMucosaAltered;
 	}
 
-	public void setOralMucosaAltered(Boolean oralMucosaAltered) {
+	public void setOralMucosaAltered(Integer oralMucosaAltered) {
 		this.oralMucosaAltered = oralMucosaAltered;
 	}
 
 	@Column(name = "braces_normal")
-	public Boolean getBracesNormal() {
+	public Integer getBracesNormal() {
 		return this.bracesNormal;
 	}
 
-	public void setBracesNormal(Boolean bracesNormal) {
+	public void setBracesNormal(Integer bracesNormal) {
 		this.bracesNormal = bracesNormal;
 	}
 
 	@Column(name = "braces_altered")
-	public Boolean getBracesAltered() {
+	public Integer getBracesAltered() {
 		return this.bracesAltered;
 	}
 
-	public void setBracesAltered(Boolean bracesAltered) {
+	public void setBracesAltered(Integer bracesAltered) {
 		this.bracesAltered = bracesAltered;
 	}
 
 	@Column(name = "tongue_normal")
-	public Boolean getTongueNormal() {
+	public Integer getTongueNormal() {
 		return this.tongueNormal;
 	}
 
-	public void setTongueNormal(Boolean tongueNormal) {
+	public void setTongueNormal(Integer tongueNormal) {
 		this.tongueNormal = tongueNormal;
 	}
 
 	@Column(name = "tongue_altered")
-	public Boolean getTongueAltered() {
+	public Integer getTongueAltered() {
 		return this.tongueAltered;
 	}
 
-	public void setTongueAltered(Boolean tongueAltered) {
+	public void setTongueAltered(Integer tongueAltered) {
 		this.tongueAltered = tongueAltered;
 	}
 
 	@Column(name = "palate_normal")
-	public Boolean getPalateNormal() {
+	public Integer getPalateNormal() {
 		return this.palateNormal;
 	}
 
-	public void setPalateNormal(Boolean palateNormal) {
+	public void setPalateNormal(Integer palateNormal) {
 		this.palateNormal = palateNormal;
 	}
 
 	@Column(name = "palate_altered")
-	public Boolean getPalateAltered() {
+	public Integer getPalateAltered() {
 		return this.palateAltered;
 	}
 
-	public void setPalateAltered(Boolean palateAltered) {
+	public void setPalateAltered(Integer palateAltered) {
 		this.palateAltered = palateAltered;
 	}
 
 	@Column(name = "mounth_floor_normal")
-	public Boolean getMounthFloorNormal() {
+	public Integer getMounthFloorNormal() {
 		return this.mounthFloorNormal;
 	}
 
-	public void setMounthFloorNormal(Boolean mounthFloorNormal) {
+	public void setMounthFloorNormal(Integer mounthFloorNormal) {
 		this.mounthFloorNormal = mounthFloorNormal;
 	}
 
 	@Column(name = "mounth_floor_altered")
-	public Boolean getMounthFloorAltered() {
+	public Integer getMounthFloorAltered() {
 		return this.mounthFloorAltered;
 	}
 
-	public void setMounthFloorAltered(Boolean mounthFloorAltered) {
+	public void setMounthFloorAltered(Integer mounthFloorAltered) {
 		this.mounthFloorAltered = mounthFloorAltered;
 	}
 
 	@Column(name = "oropharynx_normal")
-	public Boolean getOropharynxNormal() {
+	public Integer getOropharynxNormal() {
 		return this.oropharynxNormal;
 	}
 
-	public void setOropharynxNormal(Boolean oropharynxNormal) {
+	public void setOropharynxNormal(Integer oropharynxNormal) {
 		this.oropharynxNormal = oropharynxNormal;
 	}
 
 	@Column(name = "oropharynx_altered")
-	public Boolean getOropharynxAltered() {
+	public Integer getOropharynxAltered() {
 		return this.oropharynxAltered;
 	}
 
-	public void setOropharynxAltered(Boolean oropharynxAltered) {
+	public void setOropharynxAltered(Integer oropharynxAltered) {
 		this.oropharynxAltered = oropharynxAltered;
 	}
 
 	@Column(name = "tonsils_normal")
-	public Boolean getTonsilsNormal() {
+	public Integer getTonsilsNormal() {
 		return this.tonsilsNormal;
 	}
 
-	public void setTonsilsNormal(Boolean tonsilsNormal) {
+	public void setTonsilsNormal(Integer tonsilsNormal) {
 		this.tonsilsNormal = tonsilsNormal;
 	}
 
 	@Column(name = "tonsils_altered")
-	public Boolean getTonsilsAltered() {
+	public Integer getTonsilsAltered() {
 		return this.tonsilsAltered;
 	}
 
-	public void setTonsilsAltered(Boolean tonsilsAltered) {
+	public void setTonsilsAltered(Integer tonsilsAltered) {
 		this.tonsilsAltered = tonsilsAltered;
 	}
 
 	@Column(name = "cheeks_normal")
-	public Boolean getCheeksNormal() {
+	public Integer getCheeksNormal() {
 		return this.cheeksNormal;
 	}
 
-	public void setCheeksNormal(Boolean cheeksNormal) {
+	public void setCheeksNormal(Integer cheeksNormal) {
 		this.cheeksNormal = cheeksNormal;
 	}
 
 	@Column(name = "cheeks_altered")
-	public Boolean getCheeksAltered() {
+	public Integer getCheeksAltered() {
 		return this.cheeksAltered;
 	}
 
-	public void setCheeksAltered(Boolean cheeksAltered) {
+	public void setCheeksAltered(Integer cheeksAltered) {
 		this.cheeksAltered = cheeksAltered;
 	}
 

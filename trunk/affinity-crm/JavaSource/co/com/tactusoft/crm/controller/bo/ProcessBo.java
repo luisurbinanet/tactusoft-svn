@@ -34,9 +34,14 @@ import co.com.tactusoft.crm.model.entities.CrmMaterialGroup;
 import co.com.tactusoft.crm.model.entities.CrmMedication;
 import co.com.tactusoft.crm.model.entities.CrmNote;
 import co.com.tactusoft.crm.model.entities.CrmNurse;
+import co.com.tactusoft.crm.model.entities.CrmOdontologyEvolution;
 import co.com.tactusoft.crm.model.entities.CrmOdontologyFamilaryRecord;
+import co.com.tactusoft.crm.model.entities.CrmOdontologyPeriodontal;
 import co.com.tactusoft.crm.model.entities.CrmOdontologyPersonalRecord;
+import co.com.tactusoft.crm.model.entities.CrmOdontologySoftTissue;
 import co.com.tactusoft.crm.model.entities.CrmOdontologyStomatolog;
+import co.com.tactusoft.crm.model.entities.CrmOdontologySupplExams;
+import co.com.tactusoft.crm.model.entities.CrmOdontologyTempJoint;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
 import co.com.tactusoft.crm.model.entities.IndPatientAppointment;
@@ -1286,6 +1291,71 @@ public class ProcessBo implements Serializable {
 		}
 	}
 
+	public CrmOdontologyTempJoint getOdontologyTempJoint(
+			BigDecimal idAppointment) {
+		List<CrmOdontologyTempJoint> list = null;
+		list = dao
+				.find("from CrmOdontologyTempJoint o where o.crmAppointment.id = "
+						+ idAppointment);
+		if (list.size() > 0) {
+			return list.get(0);
+		} else {
+			return new CrmOdontologyTempJoint();
+		}
+	}
+
+	public CrmOdontologySoftTissue getOdontologySoftTissue(
+			BigDecimal idAppointment) {
+		List<CrmOdontologySoftTissue> list = null;
+		list = dao
+				.find("from CrmOdontologySoftTissue o where o.crmAppointment.id = "
+						+ idAppointment);
+		if (list.size() > 0) {
+			return list.get(0);
+		} else {
+			return new CrmOdontologySoftTissue();
+		}
+	}
+	
+	public CrmOdontologyPeriodontal getOdontologyPeriodontal(
+			BigDecimal idAppointment) {
+		List<CrmOdontologyPeriodontal> list = null;
+		list = dao
+				.find("from CrmOdontologyPeriodontal o where o.crmAppointment.id = "
+						+ idAppointment);
+		if (list.size() > 0) {
+			return list.get(0);
+		} else {
+			return new CrmOdontologyPeriodontal();
+		}
+	}
+	
+	public CrmOdontologySupplExams getOdontologySupplExams(
+			BigDecimal idAppointment) {
+		List<CrmOdontologySupplExams> list = null;
+		list = dao
+				.find("from CrmOdontologySupplExams o where o.crmAppointment.id = "
+						+ idAppointment);
+		if (list.size() > 0) {
+			return list.get(0);
+		} else {
+			return new CrmOdontologySupplExams();
+		}
+	}
+	
+	public CrmOdontologyEvolution getOdontologyEvolution(
+			BigDecimal idAppointment) {
+		List<CrmOdontologyEvolution> list = null;
+		list = dao
+				.find("from CrmOdontologyEvolution o where o.crmAppointment.id = "
+						+ idAppointment);
+		if (list.size() > 0) {
+			return list.get(0);
+		} else {
+			return new CrmOdontologyEvolution();
+		}
+	}
+
 	public Long getDocAutomatic(String country) {
 		List<Long> list = null;
 		list = dao.find("select count(*) from CrmPatient o where o.country = '"
@@ -1329,6 +1399,10 @@ public class ProcessBo implements Serializable {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmHistoryOrganometry.class));
 		}
+		return this.persist(entity);
+	}
+	
+	public int save(Object entity) {
 		return this.persist(entity);
 	}
 

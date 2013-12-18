@@ -65,6 +65,7 @@ public class VwAppointment implements java.io.Serializable {
 	private String publicityCode;
 	private String publicityName;
 	private int untimely;
+	private String obs;
 
 	public VwAppointment() {
 	}
@@ -118,7 +119,7 @@ public class VwAppointment implements java.io.Serializable {
 			String userCheckedSurnames, Date dateChecked,
 			BigDecimal userCanceledId, String userCanceledCode,
 			String userCanceledNames, String userCanceledSurnames,
-			Date dateCanceled, int closeAppointment) {
+			Date dateCanceled, int closeAppointment, String obs) {
 		this.id = id;
 		this.code = code;
 		this.startAppointmentDate = startAppointmentDate;
@@ -165,6 +166,7 @@ public class VwAppointment implements java.io.Serializable {
 		this.userCanceledSurnames = userCanceledSurnames;
 		this.dateCanceled = dateCanceled;
 		this.closeAppointment = closeAppointment;
+		this.obs = obs;
 	}
 
 	@Id
@@ -609,4 +611,12 @@ public class VwAppointment implements java.io.Serializable {
 		this.untimely = untimely;
 	}
 
+	@Column(name = "obs")
+	public String getObs() {
+		return obs;
+	}
+
+	public void setObs(String obs) {
+		this.obs = obs;
+	}
 }

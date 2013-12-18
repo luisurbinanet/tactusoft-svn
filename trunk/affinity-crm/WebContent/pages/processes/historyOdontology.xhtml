@@ -42,23 +42,14 @@
 							<p:commandButton
 								disabled="#{not historyOdontologyBacking.currentAppointment.closeAppointment}"
 								icon="ui-icon-print"
-								rendered="#{historyOdontologyBacking.rolePrincipal eq 'DOCTOR'}"
+								rendered="#{historyOdontologyBacking.rolePrincipal eq 'DOCTOR' and false}"
 								value="#{msg['btn_print_medication']}" ajax="false"
 								action="#{historyOdontologyBacking.printFormulaAction}"
 								process="@this,toolBar" />
-							<p:commandButton
-								disabled="#{not historyOdontologyBacking.currentAppointment.closeAppointment}"
-								icon="ui-icon-print"
-								rendered="#{historyOdontologyBacking.rolePrincipal eq 'DOCTOR' and historyOdontologyBacking.currentAppointment.medicationTherapy}"
-								value="#{msg['btn_print_therapy']}" ajax="false"
-								action="#{historyOdontologyBacking.printFormulaTherapyAction}"
-								process="@this, toolBar, accordion" />
 							<p:commandButton icon="ui-icon-arrowreturnthick-1-w"
 								value="#{msg['btn_return']}" update="form"
-								process="@this, toolBar, accordion">
-								<f:setPropertyActionListener value="false"
-									target="#{historyOdontologyBacking.modeEdit}" />
-							</p:commandButton>
+								process="@this, toolBar, accordion"
+								action="#{historyOdontologyBacking.returnAction}" />
 						</p:toolbarGroup>
 					</p:toolbar>
 
@@ -156,7 +147,7 @@
 									<p:selectOneMenu
 										value="#{historyOdontologyBacking.typeHousing}"
 										style="width:408px" label="#{msg['pat_type_housing']}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											itemValue="" />
 										<f:selectItem itemLabel="#{msg['pat_type_housing_u']}"
 											itemValue="U" />
@@ -211,322 +202,276 @@
 
 									<h:outputText value="#{msg['his_medical_treatment']}" />
 									<p:selectOneMenu label="#{msg['his_medical_treatment']}"
-										required="true"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.medicalTreatment}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_medicine']}" />
-									<p:selectOneMenu label="#{msg['his_medicine']}" required="true"
+									<p:selectOneMenu label="#{msg['his_medicine']}"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.medicine }">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_surgery']}" />
-									<p:selectOneMenu label="#{msg['his_surgery']}" required="true"
+									<p:selectOneMenu label="#{msg['his_surgery']}"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.surgery}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_blood_transfusion']}" />
 									<p:selectOneMenu label="#{msg['his_blood_transfusion']}"
-										required="true"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.bloodTransfusion}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_blood_pressure_high']}" />
 									<p:selectOneMenu label="#{msg['his_blood_pressure_high']}"
-										required="true"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.bloodPressureHigh}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_blood_pressure_low']}" />
 									<p:selectOneMenu label="#{msg['his_blood_pressure_low']}"
-										required="true"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.bloodPressureLow}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_penicillin_allergy']}" />
 									<p:selectOneMenu label="#{msg['his_penicillin_allergy']}"
-										required="true"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.penicillinAllergy}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_anesthesia_allergy']}" />
 									<p:selectOneMenu label="#{msg['his_anesthesia_allergy']}"
-										required="true"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.anesthesiaAllergy}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_aspirin_allergy']}" />
 									<p:selectOneMenu label="#{msg['his_aspirin_allergy']}"
-										required="true"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.aspirinAllergy}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_other_allergy']}" />
-									<p:selectOneMenu label="#{msg['his_other_allergy']}"
-										required="true"
-										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.otherAllergy}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
-											noSelectionOption="true" />
-										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
-									</p:selectOneMenu>
+									<p:inputText value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.otherAllergy}" />
 									<h:outputText value="#{msg['his_excesives_blood']}" />
 									<p:selectOneMenu label="#{msg['his_excesives_blood']}"
-										required="true"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.excesivesBlood}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_blood_problem']}" />
 									<p:selectOneMenu label="#{msg['his_blood_problem']}"
-										required="true"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.bloodProblem}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_anemia_leukemia_hemophilia']}" />
 									<p:selectOneMenu
 										label="#{msg['his_anemia_leukemia_hemophilia']}"
-										required="true"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.anemiaLeukemiaHemophilia}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_hiv']}" />
-									<p:selectOneMenu label="#{msg['his_hiv']}" required="true"
+									<p:selectOneMenu label="#{msg['his_hiv']}"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.hiv}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_retroviral']}" />
 									<p:selectOneMenu label="#{msg['his_retroviral']}"
-										required="true"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.retroviral}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_pregnant']}" />
-									<p:selectOneMenu label="#{msg['his_pregnant']}" required="true"
+									<p:selectOneMenu label="#{msg['his_pregnant']}"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.pregnant }">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_contraceptives']}" />
 									<p:selectOneMenu label="#{msg['his_contraceptives']}"
-										required="true"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.contraceptives}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_venereasl_diseases']}" />
 									<p:selectOneMenu label="#{msg['his_venereasl_diseases']}"
-										required="true"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.venereaslDiseases}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_heart_problems']}" />
 									<p:selectOneMenu label="#{msg['his_heart_problems']}"
-										required="true"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.heartProblems}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_hepatitis']}" />
 									<p:selectOneMenu label="#{msg['his_hepatitis']}"
-										required="true"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.hepatitis}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_asthma']}" />
-									<p:selectOneMenu label="#{msg['his_asthma']}" required="true"
+									<p:selectOneMenu label="#{msg['his_asthma']}"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.asthma}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_rheumatic_fever']}" />
 									<p:selectOneMenu label="#{msg['his_rheumatic_fever']}"
-										required="true"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.rheumaticFever}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_diabetes']}" />
-									<p:selectOneMenu label="#{msg['his_diabetes']}" required="true"
+									<p:selectOneMenu label="#{msg['his_diabetes']}"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.diabetes}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_grastic_ulcer']}" />
 									<p:selectOneMenu label="#{msg['his_grastic_ulcer']}"
-										required="true"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.grasticUlcer}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_thyroid']}" />
-									<p:selectOneMenu label="#{msg['his_thyroid']}" required="true"
+									<p:selectOneMenu label="#{msg['his_thyroid']}"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.thyroid}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_limitation_open_close_mouth']}" />
 									<p:selectOneMenu
 										label="#{msg['his_limitation_open_close_mouth']}"
-										required="true"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.limitationOpenCloseMouth}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_noise_jaw_open_close_mouth']}" />
 									<p:selectOneMenu
 										label="#{msg['his_noise_jaw_open_close_mouth']}"
-										required="true"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.noiseJawOpenCloseMouth}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_herpes_thrush']}" />
 									<p:selectOneMenu label="#{msg['his_herpes_thrush']}"
-										required="true"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.herpesThrush}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_bit_lips_nails_habit']}" />
 									<p:selectOneMenu label="#{msg['his_bit_lips_nails_habit']}"
-										required="true"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.bitLipsNailsHabit}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_smoke_habit']}" />
 									<p:selectOneMenu label="#{msg['his_smoke_habit']}"
-										required="true"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.smokeHabit}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_cigarettes_day_habit']}" />
-									<p:selectOneMenu label="#{msg['his_cigarettes_day_habit']}"
-										required="true"
-										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.cigarettesDayHabit}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
-											noSelectionOption="true" />
-										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
-									</p:selectOneMenu>
+									<pe:inputNumber minValue="0" maxValue="99" decimalPlaces="0"
+										emptyValue="zero"
+										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.cigarettesDayHabit}" />
 									<h:outputText value="#{msg['his_citrus_foods_habit']}" />
 									<p:selectOneMenu label="#{msg['his_citrus_foods_habit']}"
-										required="true"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.citrusFoodsHabit}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_bit_objects_habit']}" />
 									<p:selectOneMenu label="#{msg['his_bit_objects_habit']}"
-										required="true"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.bitObjectsHabit}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_tooth_clench_habit']}" />
 									<p:selectOneMenu label="#{msg['his_tooth_clench_habit']}"
-										required="true"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.toothClenchHabit}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 									<h:outputText value="#{msg['his_mouth_breath_habit']}" />
 									<p:selectOneMenu label="#{msg['his_mouth_breath_habit']}"
-										required="true"
 										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.mouthBreathHabit}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+										<f:selectItem itemLabel="#{msg['his_refers_not']}"
 											noSelectionOption="true" />
 										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
-									</p:selectOneMenu>
-									<h:outputText value="#{msg['his_obs']}" />
-									<p:selectOneMenu label="#{msg['his_obs']}" required="true"
-										value="#{historyOdontologyBacking.crmOdontologyPersonalRecord.obs}">
-										<f:selectItem itemLabel="#{msg['glb_default_value']}"
-											noSelectionOption="true" />
-										<f:selectItem itemLabel="Si" itemValue="1" />
-										<f:selectItem itemLabel="No" itemValue="0" />
+										<f:selectItem itemLabel="No" itemValue="2" />
 									</p:selectOneMenu>
 
 								</h:panelGrid>
@@ -588,230 +533,628 @@
 									value="#{historyOdontologyBacking.selectedHistoryPhysique.bloodPressure}" />
 
 								<h:outputText value="#{msg['his_physique_brush_frecuency']}" />
-								<p:selectOneMenu label="#{msg['his_physique_brush_frecuency']}"
-									required="true"
-									value="#{historyOdontologyBacking.selectedHistoryPhysique.brushFrecuency}">
-									<f:selectItem itemLabel="#{msg['glb_default_value']}"
-										noSelectionOption="true" />
-									<f:selectItem itemLabel="Si" itemValue="1" />
-									<f:selectItem itemLabel="No" itemValue="0" />
-								</p:selectOneMenu>
+								<pe:inputNumber minValue="0" maxValue="99" decimalPlaces="0"
+									symbol="  dias" emptyValue="zero" symbolPosition="s"
+									value="#{historyOdontologyBacking.selectedHistoryPhysique.brushFrecuency}" />
 
 								<h:outputText value="#{msg['his_physique_floss']}" />
 								<p:selectOneMenu label="#{msg['his_physique_floss']}"
-									required="true"
 									value="#{historyOdontologyBacking.selectedHistoryPhysique.floss}">
-									<f:selectItem itemLabel="#{msg['glb_default_value']}"
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
 										noSelectionOption="true" />
 									<f:selectItem itemLabel="Si" itemValue="1" />
-									<f:selectItem itemLabel="No" itemValue="0" />
+									<f:selectItem itemLabel="No" itemValue="2" />
 								</p:selectOneMenu>
 
 								<h:outputText value="#{msg['his_physique_oral_hygiene_habit']}" />
 								<p:selectOneMenu
 									label="#{msg['his_physique_oral_hygiene_habit']}"
-									required="true"
 									value="#{historyOdontologyBacking.selectedHistoryPhysique.oralHygieneHabit}">
-									<f:selectItem itemLabel="#{msg['glb_default_value']}"
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
 										noSelectionOption="true" />
 									<f:selectItem itemLabel="Si" itemValue="1" />
-									<f:selectItem itemLabel="No" itemValue="0" />
+									<f:selectItem itemLabel="No" itemValue="2" />
 								</p:selectOneMenu>
 
 							</h:panelGrid>
 
 							<h:outputLabel value="#{msg['his_history_obs']}" />
-							<p:inputTextarea id="txtPersonal28" style="width:850px" rows="3"
+							<p:inputTextarea style="width:850px" rows="3"
 								value="#{historyOdontologyBacking.selectedHistoryPhysique.obs}" />
 						</p:tab>
 
 						<p:tab title="#{msg['his_stomatolog']}" id="tabStomatolog">
-							<h:panelGrid id="pnlStomatolog" columns="8" width="100%"
+							<h:panelGrid id="pnlStomatolog" columns="9" width="100%"
 								cellpadding="10">
-								<h:outputText value="#{msg['his_stomatolog_exam']}" />
-
-								<h:outputText value="#{msg['his_stomatolog_head']}" />
-
+								<h:outputText value="#{msg['his_stomatolog_head']}"
+									style="font-size:12;font-weight:bold;" />
 								<h:outputText value="#{msg['his_stomatolog_exostosis_head']}" />
 								<p:selectOneMenu label="#{msg['his_stomatolog_exostosis_head']}"
-									required="true"
 									value="#{historyOdontologyBacking.crmOdontologyStomatolog.exostosisHead}">
-									<f:selectItem itemLabel="#{msg['glb_default_value']}"
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
 										noSelectionOption="true" />
 									<f:selectItem itemLabel="Si" itemValue="1" />
-									<f:selectItem itemLabel="No" itemValue="0" />
+									<f:selectItem itemLabel="No" itemValue="2" />
 								</p:selectOneMenu>
 								<h:outputText value="#{msg['his_stomatolog_endostosis_head']}" />
 								<p:selectOneMenu
 									label="#{msg['his_stomatolog_endostosis_head']}"
-									required="true"
 									value="#{historyOdontologyBacking.crmOdontologyStomatolog.endostosisHead}">
-									<f:selectItem itemLabel="#{msg['glb_default_value']}"
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
 										noSelectionOption="true" />
 									<f:selectItem itemLabel="Si" itemValue="1" />
-									<f:selectItem itemLabel="No" itemValue="0" />
+									<f:selectItem itemLabel="No" itemValue="2" />
 								</p:selectOneMenu>
-								<h:outputText value="#{msg['his_stomatolog_face']}" />
+								<h:outputLabel value="" />
+								<h:outputLabel value="" />
+								<h:outputLabel value="" />
+								<h:outputLabel value="" />
 
+								<h:outputText value="#{msg['his_stomatolog_face']}"
+									style="font-size:12;font-weight:bold;" />
 								<h:outputText
 									value="#{msg['his_stomatolog_dolichocephalic_face']}" />
 								<p:selectOneMenu
 									label="#{msg['his_stomatolog_dolichocephalic_face']}"
-									required="true"
 									value="#{historyOdontologyBacking.crmOdontologyStomatolog.dolichocephalicFace}">
-									<f:selectItem itemLabel="#{msg['glb_default_value']}"
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
 										noSelectionOption="true" />
 									<f:selectItem itemLabel="Si" itemValue="1" />
-									<f:selectItem itemLabel="No" itemValue="0" />
+									<f:selectItem itemLabel="No" itemValue="2" />
 								</p:selectOneMenu>
 								<h:outputText value="#{msg['his_stomatolog_mesocephalic_face']}" />
 								<p:selectOneMenu
 									label="#{msg['his_stomatolog_mesocephalic_face']}"
-									required="true"
 									value="#{historyOdontologyBacking.crmOdontologyStomatolog.mesocephalicFace}">
-									<f:selectItem itemLabel="#{msg['glb_default_value']}"
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
 										noSelectionOption="true" />
 									<f:selectItem itemLabel="Si" itemValue="1" />
-									<f:selectItem itemLabel="No" itemValue="0" />
+									<f:selectItem itemLabel="No" itemValue="2" />
 								</p:selectOneMenu>
 								<h:outputText
 									value="#{msg['his_stomatolog_brachycephalic_face']}" />
 								<p:selectOneMenu
 									label="#{msg['his_stomatolog_brachycephalic_face']}"
-									required="true"
 									value="#{historyOdontologyBacking.crmOdontologyStomatolog.brachycephalicFace}">
-									<f:selectItem itemLabel="#{msg['glb_default_value']}"
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
 										noSelectionOption="true" />
 									<f:selectItem itemLabel="Si" itemValue="1" />
-									<f:selectItem itemLabel="No" itemValue="0" />
+									<f:selectItem itemLabel="No" itemValue="2" />
 								</p:selectOneMenu>
-								<h:outputText value="#{msg['his_stomatolog_skin']}" />
+								<h:outputLabel value="" />
+								<h:outputLabel value="" />
 
+								<h:outputText value="#{msg['his_stomatolog_skin']}"
+									style="font-size:12;font-weight:bold;" />
 								<h:outputText value="#{msg['his_stomatolog_normal_skin']}" />
 								<p:selectOneMenu label="#{msg['his_stomatolog_normal_skin']}"
-									required="true"
 									value="#{historyOdontologyBacking.crmOdontologyStomatolog.normalSkin}">
-									<f:selectItem itemLabel="#{msg['glb_default_value']}"
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
 										noSelectionOption="true" />
 									<f:selectItem itemLabel="Si" itemValue="1" />
-									<f:selectItem itemLabel="No" itemValue="0" />
+									<f:selectItem itemLabel="No" itemValue="2" />
 								</p:selectOneMenu>
 								<h:outputText value="#{msg['his_stomatolog_pale_skin']}" />
 								<p:selectOneMenu label="#{msg['his_stomatolog_pale_skin']}"
-									required="true"
 									value="#{historyOdontologyBacking.crmOdontologyStomatolog.paleSkin}">
-									<f:selectItem itemLabel="#{msg['glb_default_value']}"
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
 										noSelectionOption="true" />
 									<f:selectItem itemLabel="Si" itemValue="1" />
-									<f:selectItem itemLabel="No" itemValue="0" />
+									<f:selectItem itemLabel="No" itemValue="2" />
 								</p:selectOneMenu>
 								<h:outputText value="#{msg['his_stomatolog_cyanotic_skin']}" />
 								<p:selectOneMenu label="#{msg['his_stomatolog_cyanotic_skin']}"
-									required="true"
 									value="#{historyOdontologyBacking.crmOdontologyStomatolog.cyanoticSkin}">
-									<f:selectItem itemLabel="#{msg['glb_default_value']}"
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
 										noSelectionOption="true" />
 									<f:selectItem itemLabel="Si" itemValue="1" />
-									<f:selectItem itemLabel="No" itemValue="0" />
+									<f:selectItem itemLabel="No" itemValue="2" />
 								</p:selectOneMenu>
 								<h:outputText value="#{msg['his_stomatolog_red_skin']}" />
 								<p:selectOneMenu label="#{msg['his_stomatolog_red_skin']}"
-									required="true"
 									value="#{historyOdontologyBacking.crmOdontologyStomatolog.redSkin}">
-									<f:selectItem itemLabel="#{msg['glb_default_value']}"
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
 										noSelectionOption="true" />
 									<f:selectItem itemLabel="Si" itemValue="1" />
-									<f:selectItem itemLabel="No" itemValue="0" />
+									<f:selectItem itemLabel="No" itemValue="2" />
 								</p:selectOneMenu>
-								<h:outputText value="#{msg['his_stomatolog_face']}" />
 
+								<h:outputText value="#{msg['his_stomatolog_face']}"
+									style="font-size:12;font-weight:bold;" />
 								<h:outputText value="#{msg['his_stomatolog_transverse_face']}" />
 								<p:selectOneMenu
 									label="#{msg['his_stomatolog_transverse_face']}"
-									required="true"
 									value="#{historyOdontologyBacking.crmOdontologyStomatolog.transverseFace}">
-									<f:selectItem itemLabel="#{msg['glb_default_value']}"
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
 										noSelectionOption="true" />
 									<f:selectItem itemLabel="Si" itemValue="1" />
-									<f:selectItem itemLabel="No" itemValue="0" />
+									<f:selectItem itemLabel="No" itemValue="2" />
 								</p:selectOneMenu>
 								<h:outputText value="#{msg['his_stomatolog_longitudinal_face']}" />
 								<p:selectOneMenu
 									label="#{msg['his_stomatolog_longitudinal_face']}"
-									required="true"
 									value="#{historyOdontologyBacking.crmOdontologyStomatolog.longitudinalFace}">
-									<f:selectItem itemLabel="#{msg['glb_default_value']}"
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
 										noSelectionOption="true" />
 									<f:selectItem itemLabel="Si" itemValue="1" />
-									<f:selectItem itemLabel="No" itemValue="0" />
+									<f:selectItem itemLabel="No" itemValue="2" />
 								</p:selectOneMenu>
-								<h:outputText value="#{msg['his_stomatolog_side_face']}" />
-								
+								<h:outputLabel value="" />
+								<h:outputLabel value="" />
+								<h:outputLabel value="" />
+								<h:outputLabel value="" />
+
+								<h:outputText value="#{msg['his_stomatolog_side_face']}"
+									style="font-size:12;font-weight:bold;" />
 								<h:outputText value="#{msg['his_stomatolog_concave_side_face']}" />
 								<p:selectOneMenu
 									label="#{msg['his_stomatolog_concave_side_face']}"
-									required="true"
 									value="#{historyOdontologyBacking.crmOdontologyStomatolog.concaveSideFace}">
-									<f:selectItem itemLabel="#{msg['glb_default_value']}"
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
 										noSelectionOption="true" />
 									<f:selectItem itemLabel="Si" itemValue="1" />
-									<f:selectItem itemLabel="No" itemValue="0" />
+									<f:selectItem itemLabel="No" itemValue="2" />
 								</p:selectOneMenu>
 								<h:outputText value="#{msg['his_stomatolog_convex_side_face']}" />
 								<p:selectOneMenu
 									label="#{msg['his_stomatolog_convex_side_face']}"
-									required="true"
 									value="#{historyOdontologyBacking.crmOdontologyStomatolog.convexSideFace}">
-									<f:selectItem itemLabel="#{msg['glb_default_value']}"
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
 										noSelectionOption="true" />
 									<f:selectItem itemLabel="Si" itemValue="1" />
-									<f:selectItem itemLabel="No" itemValue="0" />
+									<f:selectItem itemLabel="No" itemValue="2" />
 								</p:selectOneMenu>
-								<h:outputText value="#{msg['his_stomatolog_muscles']}" />
+								<h:outputLabel value="" />
+								<h:outputLabel value="" />
+								<h:outputLabel value="" />
+								<h:outputLabel value="" />
 
+								<h:outputText value="#{msg['his_stomatolog_muscles']}"
+									style="font-size:12;font-weight:bold;" />
 								<h:outputText value="#{msg['his_stomatolog_hypotonic_muscles']}" />
 								<p:selectOneMenu
 									label="#{msg['his_stomatolog_hypotonic_muscles']}"
-									required="true"
 									value="#{historyOdontologyBacking.crmOdontologyStomatolog.hypotonicMuscles}">
-									<f:selectItem itemLabel="#{msg['glb_default_value']}"
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
 										noSelectionOption="true" />
 									<f:selectItem itemLabel="Si" itemValue="1" />
-									<f:selectItem itemLabel="No" itemValue="0" />
+									<f:selectItem itemLabel="No" itemValue="2" />
 								</p:selectOneMenu>
 								<h:outputText
 									value="#{msg['his_stomatolog_hypertonic_muscles']}" />
 								<p:selectOneMenu
 									label="#{msg['his_stomatolog_hypertonic_muscles']}"
-									required="true"
 									value="#{historyOdontologyBacking.crmOdontologyStomatolog.hypertonicMuscles}">
-									<f:selectItem itemLabel="#{msg['glb_default_value']}"
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
 										noSelectionOption="true" />
 									<f:selectItem itemLabel="Si" itemValue="1" />
-									<f:selectItem itemLabel="No" itemValue="0" />
+									<f:selectItem itemLabel="No" itemValue="2" />
 								</p:selectOneMenu>
-								<h:outputText value="#{msg['his_stomatolog_neck']}" />
+								<h:outputLabel value="" />
+								<h:outputLabel value="" />
+								<h:outputLabel value="" />
+								<h:outputLabel value="" />
 
+								<h:outputText value="#{msg['his_stomatolog_neck']}"
+									style="font-size:12;font-weight:bold;" />
 								<h:outputText value="#{msg['his_stomatolog_lymph_node_chain']}" />
 								<p:selectOneMenu
 									label="#{msg['his_stomatolog_lymph_node_chain']}"
-									required="true"
 									value="#{historyOdontologyBacking.crmOdontologyStomatolog.lymphNodeChain}">
-									<f:selectItem itemLabel="#{msg['glb_default_value']}"
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
 										noSelectionOption="true" />
 									<f:selectItem itemLabel="Si" itemValue="1" />
-									<f:selectItem itemLabel="No" itemValue="0" />
+									<f:selectItem itemLabel="No" itemValue="2" />
 								</p:selectOneMenu>
 								<h:outputText value="#{msg['his_stomatolog_othres']}" />
 								<p:selectOneMenu label="#{msg['his_stomatolog_othres']}"
-									required="true"
 									value="#{historyOdontologyBacking.crmOdontologyStomatolog.othres}">
-									<f:selectItem itemLabel="#{msg['glb_default_value']}"
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
 										noSelectionOption="true" />
 									<f:selectItem itemLabel="Si" itemValue="1" />
-									<f:selectItem itemLabel="No" itemValue="0" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+							</h:panelGrid>
+							<h:outputLabel value="#{msg['his_history_obs']}" />
+							<p:inputTextarea style="width:850px" rows="3"
+								value="#{historyOdontologyBacking.crmOdontologyStomatolog.obs}" />
+						</p:tab>
+
+						<p:tab title="#{msg['his_temp_joint']}" id="tabTempJoint">
+							<h:panelGrid id="pnlTempJoint" columns="7" width="100%"
+								cellpadding="10">
+
+								<h:outputText value="#{msg['his_temp_joint_noise']}"
+									style="font-size:12;font-weight:bold;" />
+								<h:outputText value="#{msg['his_temp_joint_opening']}" />
+								<p:selectOneMenu label="#{msg['his_temp_joint_opening']}"
+									value="#{historyOdontologyBacking.crmOdontologyTempJoint.openingNoise}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+								<h:outputText value="#{msg['his_temp_joint_closure']}" />
+								<p:selectOneMenu label="#{msg['his_temp_joint_closure']}"
+									value="#{historyOdontologyBacking.crmOdontologyTempJoint.closureNoise}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+								<h:outputText value="#{msg['his_temp_joint_laterality']}" />
+								<p:selectOneMenu label="#{msg['his_temp_joint_laterality']}"
+									value="#{historyOdontologyBacking.crmOdontologyTempJoint.lateralityNoise}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
 								</p:selectOneMenu>
 
+								<h:outputText value="#{msg['his_temp_joint_deviation']}"
+									style="font-size:12;font-weight:bold;" />
+								<h:outputText value="#{msg['his_temp_joint_opening']}" />
+								<p:selectOneMenu label="#{msg['his_temp_joint_opening']}"
+									value="#{historyOdontologyBacking.crmOdontologyTempJoint.openingDeviaton}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+								<h:outputText value="#{msg['his_temp_joint_closure']}" />
+								<p:selectOneMenu label="#{msg['his_temp_joint_closure']}"
+									value="#{historyOdontologyBacking.crmOdontologyTempJoint.closureDeviaton}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+								<h:outputText value="#{msg['his_temp_joint_laterality']}" />
+								<p:selectOneMenu label="#{msg['his_temp_joint_laterality']}"
+									value="#{historyOdontologyBacking.crmOdontologyTempJoint.lateralityDeviaton}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+
+								<h:outputText value="#{msg['his_temp_joint_pain']}"
+									style="font-size:12;font-weight:bold;" />
+								<h:outputText value="#{msg['his_temp_joint_opening']}" />
+								<p:selectOneMenu label="#{msg['his_temp_joint_opening']}"
+									value="#{historyOdontologyBacking.crmOdontologyTempJoint.openingPain}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+								<h:outputText value="#{msg['his_temp_joint_closure']}" />
+								<p:selectOneMenu label="#{msg['his_temp_joint_closure']}"
+									value="#{historyOdontologyBacking.crmOdontologyTempJoint.closurePain}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+								<h:outputText value="#{msg['his_temp_joint_laterality']}" />
+								<p:selectOneMenu label="#{msg['his_temp_joint_laterality']}"
+									value="#{historyOdontologyBacking.crmOdontologyTempJoint.lateralityPain}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+
+								<h:outputText
+									value="#{msg['his_temp_joint_fatigue_muscle_pain']}"
+									style="font-size:12;font-weight:bold;" />
+								<h:outputText value="#{msg['his_temp_joint_opening']}" />
+								<p:selectOneMenu label="#{msg['his_temp_joint_opening']}"
+									value="#{historyOdontologyBacking.crmOdontologyTempJoint.openingFatigue}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+								<h:outputText value="#{msg['his_temp_joint_closure']}" />
+								<p:selectOneMenu label="#{msg['his_temp_joint_closure']}"
+									value="#{historyOdontologyBacking.crmOdontologyTempJoint.closureFatigue}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+								<h:outputText value="#{msg['his_temp_joint_laterality']}" />
+								<p:selectOneMenu label="#{msg['his_temp_joint_laterality']}"
+									value="#{historyOdontologyBacking.crmOdontologyTempJoint.lateralityFatigue}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+
+							</h:panelGrid>
+
+							<h:outputLabel value="#{msg['his_history_obs']}" />
+							<p:inputTextarea style="width:850px" rows="3"
+								value="#{historyOdontologyBacking.crmOdontologyTempJoint.obs}" />
+						</p:tab>
+
+						<p:tab title="#{msg['his_soft_tissue']}" id="tabSoftTissue">
+							<h:panelGrid id="pnlSoftTissue" columns="5" width="100%"
+								cellpadding="10">
+
+								<h:outputText value="#{msg['his_soft_tissue_gland']}"
+									style="font-size:12;font-weight:bold;" />
+								<h:outputText value="#{msg['his_soft_tissue_normal']}" />
+								<p:selectOneMenu label="#{msg['his_soft_tissue_normal']}"
+									value="#{historyOdontologyBacking.crmOdontologySoftTissue.glandNormal}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+								<h:outputText value="#{msg['his_soft_tissue_altered']}" />
+								<p:selectOneMenu label="#{msg['his_soft_tissue_altered']}"
+									value="#{historyOdontologyBacking.crmOdontologySoftTissue.glandAltered}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+
+								<h:outputText value="#{msg['his_soft_tissue_lymph']}"
+									style="font-size:12;font-weight:bold;" />
+								<h:outputText value="#{msg['his_soft_tissue_normal']}" />
+								<p:selectOneMenu label="#{msg['his_soft_tissue_normal']}"
+									value="#{historyOdontologyBacking.crmOdontologySoftTissue.lymphNormal}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+								<h:outputText value="#{msg['his_soft_tissue_altered']}" />
+								<p:selectOneMenu label="#{msg['his_soft_tissue_altered']}"
+									value="#{historyOdontologyBacking.crmOdontologySoftTissue.lymphAltered}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+
+								<h:outputText value="#{msg['his_soft_tissue_oral_mucosa']}"
+									style="font-size:12;font-weight:bold;" />
+								<h:outputText value="#{msg['his_soft_tissue_normal']}" />
+								<p:selectOneMenu label="#{msg['his_soft_tissue_normal']}"
+									value="#{historyOdontologyBacking.crmOdontologySoftTissue.oralMucosaNormal}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+								<h:outputText value="#{msg['his_soft_tissue_altered']}" />
+								<p:selectOneMenu label="#{msg['his_soft_tissue_altered']}"
+									value="#{historyOdontologyBacking.crmOdontologySoftTissue.oralMucosaAltered}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+
+								<h:outputText value="#{msg['his_soft_tissue_braces']}"
+									style="font-size:12;font-weight:bold;" />
+								<h:outputText value="#{msg['his_soft_tissue_normal']}" />
+								<p:selectOneMenu label="#{msg['his_soft_tissue_normal']}"
+									value="#{historyOdontologyBacking.crmOdontologySoftTissue.bracesNormal}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+								<h:outputText value="#{msg['his_soft_tissue_altered']}" />
+								<p:selectOneMenu label="#{msg['his_soft_tissue_altered']}"
+									value="#{historyOdontologyBacking.crmOdontologySoftTissue.bracesAltered}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+
+								<h:outputText value="#{msg['his_soft_tissue_tongue']}"
+									style="font-size:12;font-weight:bold;" />
+								<h:outputText value="#{msg['his_soft_tissue_normal']}" />
+								<p:selectOneMenu label="#{msg['his_soft_tissue_normal']}"
+									value="#{historyOdontologyBacking.crmOdontologySoftTissue.tongueNormal}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+								<h:outputText value="#{msg['his_soft_tissue_altered']}" />
+								<p:selectOneMenu label="#{msg['his_soft_tissue_altered']}"
+									value="#{historyOdontologyBacking.crmOdontologySoftTissue.tongueAltered}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+
+								<h:outputText value="#{msg['his_soft_tissue_palate']}"
+									style="font-size:12;font-weight:bold;" />
+								<h:outputText value="#{msg['his_soft_tissue_normal']}" />
+								<p:selectOneMenu label="#{msg['his_soft_tissue_normal']}"
+									value="#{historyOdontologyBacking.crmOdontologySoftTissue.palateNormal}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+								<h:outputText value="#{msg['his_soft_tissue_altered']}" />
+								<p:selectOneMenu label="#{msg['his_soft_tissue_altered']}"
+									value="#{historyOdontologyBacking.crmOdontologySoftTissue.palateAltered}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+
+								<h:outputText value="#{msg['his_soft_tissue_mounth_floor']}"
+									style="font-size:12;font-weight:bold;" />
+								<h:outputText value="#{msg['his_soft_tissue_normal']}" />
+								<p:selectOneMenu label="#{msg['his_soft_tissue_normal']}"
+									value="#{historyOdontologyBacking.crmOdontologySoftTissue.mounthFloorNormal}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+								<h:outputText value="#{msg['his_soft_tissue_altered']}" />
+								<p:selectOneMenu label="#{msg['his_soft_tissue_altered']}"
+									value="#{historyOdontologyBacking.crmOdontologySoftTissue.mounthFloorAltered}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+
+								<h:outputText value="#{msg['his_soft_tissue_oropharynx']}"
+									style="font-size:12;font-weight:bold;" />
+								<h:outputText value="#{msg['his_soft_tissue_normal']}" />
+								<p:selectOneMenu label="#{msg['his_soft_tissue_normal']}"
+									value="#{historyOdontologyBacking.crmOdontologySoftTissue.oropharynxNormal}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+								<h:outputText value="#{msg['his_soft_tissue_altered']}" />
+								<p:selectOneMenu label="#{msg['his_soft_tissue_altered']}"
+									value="#{historyOdontologyBacking.crmOdontologySoftTissue.oropharynxAltered}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+
+								<h:outputText value="#{msg['his_soft_tissue_tonsils']}"
+									style="font-size:12;font-weight:bold;" />
+								<h:outputText value="#{msg['his_soft_tissue_normal']}" />
+								<p:selectOneMenu label="#{msg['his_soft_tissue_normal']}"
+									value="#{historyOdontologyBacking.crmOdontologySoftTissue.tonsilsNormal}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+								<h:outputText value="#{msg['his_soft_tissue_altered']}" />
+								<p:selectOneMenu label="#{msg['his_soft_tissue_altered']}"
+									value="#{historyOdontologyBacking.crmOdontologySoftTissue.tonsilsAltered}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+
+								<h:outputText value="#{msg['his_soft_tissue_cheeks']}"
+									style="font-size:12;font-weight:bold;" />
+								<h:outputText value="#{msg['his_soft_tissue_normal']}" />
+								<p:selectOneMenu label="#{msg['his_soft_tissue_normal']}"
+									value="#{historyOdontologyBacking.crmOdontologySoftTissue.cheeksNormal}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+								<h:outputText value="#{msg['his_soft_tissue_altered']}" />
+								<p:selectOneMenu label="#{msg['his_soft_tissue_altered']}"
+									value="#{historyOdontologyBacking.crmOdontologySoftTissue.cheeksAltered}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+
+							</h:panelGrid>
+							<h:outputLabel value="#{msg['his_history_obs']}" />
+							<p:inputTextarea style="width:850px" rows="3"
+								value="#{historyOdontologyBacking.crmOdontologySoftTissue.obs}" />
+						</p:tab>
+
+						<p:tab title="#{msg['his_soft_periodontal']}" id="tabPeriodontal">
+							<h:panelGrid id="pnlPeriodontal" columns="4" width="100%"
+								cellpadding="10">
+
+								<h:outputText value="#{msg['his_soft_periodontal_gingivitis']}" />
+								<p:selectOneMenu
+									label="#{msg['his_soft_periodontal_gingivitis']}"
+									value="#{historyOdontologyBacking.crmOdontologyPeriodontal.gingivitis}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+								<h:outputText
+									value="#{msg['his_soft_periodontal_periodontitis']}" />
+								<p:selectOneMenu
+									label="#{msg['his_soft_periodontal_periodontitis']}"
+									value="#{historyOdontologyBacking.crmOdontologyPeriodontal.periodontitis}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+								<h:outputText value="#{msg['his_soft_periodontal_mobility']}" />
+								<p:selectOneMenu label="#{msg['his_soft_periodontal_mobility']}"
+									value="#{historyOdontologyBacking.crmOdontologyPeriodontal.mobility}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+								<h:outputText value="#{msg['his_soft_periodontal_bag_teeth']}" />
+								<p:selectOneMenu
+									label="#{msg['his_soft_periodontal_bag_teeth']}"
+									value="#{historyOdontologyBacking.crmOdontologyPeriodontal.bagTeeth}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+								<h:outputText
+									value="#{msg['his_soft_periodontal_gingival_recession']}" />
+								<p:selectOneMenu
+									label="#{msg['his_soft_periodontal_gingival_recession']}"
+									value="#{historyOdontologyBacking.crmOdontologyPeriodontal.gingivalRecession}">
+									<f:selectItem itemLabel="#{msg['his_refers_not']}"
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Si" itemValue="1" />
+									<f:selectItem itemLabel="No" itemValue="2" />
+								</p:selectOneMenu>
+								<h:outputText
+									value="#{msg['his_soft_periodontal_plaque_index']}" />
+								<pe:inputNumber symbol="%" symbolPosition="s" emptyValue="zero"
+									decimalPlaces="2"
+									value="#{historyOdontologyBacking.crmOdontologyPeriodontal.plaqueIndex}" />
+							</h:panelGrid>
+							<h:outputLabel value="#{msg['his_history_obs']}" />
+							<p:inputTextarea style="width:850px" rows="3"
+								value="#{historyOdontologyBacking.crmOdontologyPeriodontal.obs}" />
+						</p:tab>
+
+						<p:tab title="#{msg['his_supplementary_exams']}"
+							id="tabSupplementaryExams">
+							<h:panelGrid id="pnlSupplementaryExams" columns="1" width="100%"
+								cellpadding="10">
+								<p:inputTextarea style="width:1000px" rows="5"
+									value="#{historyOdontologyBacking.crmOdontologySupplExams.obs}" />
+							</h:panelGrid>
+						</p:tab>
+
+						<p:tab title="#{msg['his_evolution']}" id="tabEvolution">
+							<h:panelGrid id="pnlEvolution" columns="1" width="100%"
+								cellpadding="10">
+								<p:inputTextarea style="width:1000px" rows="5" required="true" label="#{msg['his_evolution']}"
+									value="#{historyOdontologyBacking.crmOdontologyEvolution.obs}" />
 							</h:panelGrid>
 						</p:tab>
 

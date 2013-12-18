@@ -73,6 +73,11 @@
 							<h:outputLabel value="#{rec.prcDetName}" />
 						</p:column>
 
+						<p:column headerText="#{msg['pat_type_obs']}" style="width:100px">
+							<h:inputTextarea rows="3" style="width:200px" value="#{rec.obs}"
+								readonly="true" />
+						</p:column>
+
 						<p:column style="width:4%">
 							<p:commandButton icon="ui-icon-check"
 								title="#{msg['btn_assisted_appointment']}" update=":form"

@@ -20,22 +20,22 @@ public class CrmOdontologyStomatolog implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private CrmAppointment crmAppointment;
-	private Boolean exostosisHead;
-	private Boolean endostosisHead;
-	private Boolean dolichocephalicFace;
-	private Boolean mesocephalicFace;
-	private Boolean brachycephalicFace;
-	private Boolean normalSkin;
-	private Boolean paleSkin;
-	private Boolean cyanoticSkin;
-	private Boolean redSkin;
-	private Boolean transverseFace;
-	private Boolean longitudinalFace;
-	private Boolean concaveSideFace;
-	private Boolean convexSideFace;
-	private Boolean hypotonicMuscles;
-	private Boolean hypertonicMuscles;
-	private Boolean lymphNodeChain;
+	private Integer exostosisHead;
+	private Integer endostosisHead;
+	private Integer dolichocephalicFace;
+	private Integer mesocephalicFace;
+	private Integer brachycephalicFace;
+	private Integer normalSkin;
+	private Integer paleSkin;
+	private Integer cyanoticSkin;
+	private Integer redSkin;
+	private Integer transverseFace;
+	private Integer longitudinalFace;
+	private Integer concaveSideFace;
+	private Integer convexSideFace;
+	private Integer hypotonicMuscles;
+	private Integer hypertonicMuscles;
+	private Integer lymphNodeChain;
 	private String othres;
 	private String obs;
 
@@ -47,13 +47,13 @@ public class CrmOdontologyStomatolog implements java.io.Serializable {
 	}
 
 	public CrmOdontologyStomatolog(CrmAppointment crmAppointment,
-			Boolean exostosisHead, Boolean endostosisHead,
-			Boolean dolichocephalicFace, Boolean mesocephalicFace,
-			Boolean brachycephalicFace, Boolean normalSkin, Boolean paleSkin,
-			Boolean cyanoticSkin, Boolean redSkin, Boolean transverseFace,
-			Boolean longitudinalFace, Boolean concaveSideFace,
-			Boolean convexSideFace, Boolean hypotonicMuscles,
-			Boolean hypertonicMuscles, Boolean lymphNodeChain, String othres,
+			Integer exostosisHead, Integer endostosisHead,
+			Integer dolichocephalicFace, Integer mesocephalicFace,
+			Integer brachycephalicFace, Integer normalSkin, Integer paleSkin,
+			Integer cyanoticSkin, Integer redSkin, Integer transverseFace,
+			Integer longitudinalFace, Integer concaveSideFace,
+			Integer convexSideFace, Integer hypotonicMuscles,
+			Integer hypertonicMuscles, Integer lymphNodeChain, String othres,
 			String obs) {
 		this.crmAppointment = crmAppointment;
 		this.exostosisHead = exostosisHead;
@@ -98,146 +98,146 @@ public class CrmOdontologyStomatolog implements java.io.Serializable {
 	}
 
 	@Column(name = "exostosis_head")
-	public Boolean getExostosisHead() {
+	public Integer getExostosisHead() {
 		return this.exostosisHead;
 	}
 
-	public void setExostosisHead(Boolean exostosisHead) {
+	public void setExostosisHead(Integer exostosisHead) {
 		this.exostosisHead = exostosisHead;
 	}
 
 	@Column(name = "endostosis_head")
-	public Boolean getEndostosisHead() {
+	public Integer getEndostosisHead() {
 		return this.endostosisHead;
 	}
 
-	public void setEndostosisHead(Boolean endostosisHead) {
+	public void setEndostosisHead(Integer endostosisHead) {
 		this.endostosisHead = endostosisHead;
 	}
 
 	@Column(name = "dolichocephalic_face")
-	public Boolean getDolichocephalicFace() {
+	public Integer getDolichocephalicFace() {
 		return this.dolichocephalicFace;
 	}
 
-	public void setDolichocephalicFace(Boolean dolichocephalicFace) {
+	public void setDolichocephalicFace(Integer dolichocephalicFace) {
 		this.dolichocephalicFace = dolichocephalicFace;
 	}
 
 	@Column(name = "mesocephalic_face")
-	public Boolean getMesocephalicFace() {
+	public Integer getMesocephalicFace() {
 		return this.mesocephalicFace;
 	}
 
-	public void setMesocephalicFace(Boolean mesocephalicFace) {
+	public void setMesocephalicFace(Integer mesocephalicFace) {
 		this.mesocephalicFace = mesocephalicFace;
 	}
 
 	@Column(name = "brachycephalic_face")
-	public Boolean getBrachycephalicFace() {
+	public Integer getBrachycephalicFace() {
 		return this.brachycephalicFace;
 	}
 
-	public void setBrachycephalicFace(Boolean brachycephalicFace) {
+	public void setBrachycephalicFace(Integer brachycephalicFace) {
 		this.brachycephalicFace = brachycephalicFace;
 	}
 
 	@Column(name = "normal_skin")
-	public Boolean getNormalSkin() {
+	public Integer getNormalSkin() {
 		return this.normalSkin;
 	}
 
-	public void setNormalSkin(Boolean normalSkin) {
+	public void setNormalSkin(Integer normalSkin) {
 		this.normalSkin = normalSkin;
 	}
 
 	@Column(name = "pale_skin")
-	public Boolean getPaleSkin() {
+	public Integer getPaleSkin() {
 		return this.paleSkin;
 	}
 
-	public void setPaleSkin(Boolean paleSkin) {
+	public void setPaleSkin(Integer paleSkin) {
 		this.paleSkin = paleSkin;
 	}
 
 	@Column(name = "cyanotic_skin")
-	public Boolean getCyanoticSkin() {
+	public Integer getCyanoticSkin() {
 		return this.cyanoticSkin;
 	}
 
-	public void setCyanoticSkin(Boolean cyanoticSkin) {
+	public void setCyanoticSkin(Integer cyanoticSkin) {
 		this.cyanoticSkin = cyanoticSkin;
 	}
 
 	@Column(name = "red_skin")
-	public Boolean getRedSkin() {
+	public Integer getRedSkin() {
 		return this.redSkin;
 	}
 
-	public void setRedSkin(Boolean redSkin) {
+	public void setRedSkin(Integer redSkin) {
 		this.redSkin = redSkin;
 	}
 
 	@Column(name = "transverse_face")
-	public Boolean getTransverseFace() {
+	public Integer getTransverseFace() {
 		return this.transverseFace;
 	}
 
-	public void setTransverseFace(Boolean transverseFace) {
+	public void setTransverseFace(Integer transverseFace) {
 		this.transverseFace = transverseFace;
 	}
 
 	@Column(name = "longitudinal_face")
-	public Boolean getLongitudinalFace() {
+	public Integer getLongitudinalFace() {
 		return this.longitudinalFace;
 	}
 
-	public void setLongitudinalFace(Boolean longitudinalFace) {
+	public void setLongitudinalFace(Integer longitudinalFace) {
 		this.longitudinalFace = longitudinalFace;
 	}
 
 	@Column(name = "concave_side_face")
-	public Boolean getConcaveSideFace() {
+	public Integer getConcaveSideFace() {
 		return this.concaveSideFace;
 	}
 
-	public void setConcaveSideFace(Boolean concaveSideFace) {
+	public void setConcaveSideFace(Integer concaveSideFace) {
 		this.concaveSideFace = concaveSideFace;
 	}
 
 	@Column(name = "convex_side_face")
-	public Boolean getConvexSideFace() {
+	public Integer getConvexSideFace() {
 		return this.convexSideFace;
 	}
 
-	public void setConvexSideFace(Boolean convexSideFace) {
+	public void setConvexSideFace(Integer convexSideFace) {
 		this.convexSideFace = convexSideFace;
 	}
 
 	@Column(name = "hypotonic_muscles")
-	public Boolean getHypotonicMuscles() {
+	public Integer getHypotonicMuscles() {
 		return this.hypotonicMuscles;
 	}
 
-	public void setHypotonicMuscles(Boolean hypotonicMuscles) {
+	public void setHypotonicMuscles(Integer hypotonicMuscles) {
 		this.hypotonicMuscles = hypotonicMuscles;
 	}
 
 	@Column(name = "hypertonic_muscles")
-	public Boolean getHypertonicMuscles() {
+	public Integer getHypertonicMuscles() {
 		return this.hypertonicMuscles;
 	}
 
-	public void setHypertonicMuscles(Boolean hypertonicMuscles) {
+	public void setHypertonicMuscles(Integer hypertonicMuscles) {
 		this.hypertonicMuscles = hypertonicMuscles;
 	}
 
 	@Column(name = "lymph_node_chain")
-	public Boolean getLymphNodeChain() {
+	public Integer getLymphNodeChain() {
 		return this.lymphNodeChain;
 	}
 
-	public void setLymphNodeChain(Boolean lymphNodeChain) {
+	public void setLymphNodeChain(Integer lymphNodeChain) {
 		this.lymphNodeChain = lymphNodeChain;
 	}
 
