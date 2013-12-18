@@ -230,6 +230,44 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 		String message = null;
 		String field = null;
 
+		if (selectedPatient.getBornDate() == null) {
+			field = FacesUtil.getMessage("pat_born_date");
+			message = FacesUtil.getMessage("title_patient_complementary");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		}
+
+		if (idOccupation == null || idOccupation.intValue() == 0) {
+			field = FacesUtil.getMessage("pat_occupation");
+			message = FacesUtil.getMessage("title_patient_complementary");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		} else {
+			selectedPatient.setCrmOccupation(mapOccupation.get(idOccupation));
+		}
+
+		if (FacesUtil.isEmptyOrBlank(neighborhood)) {
+			field = FacesUtil.getMessage("pat_neighborhood");
+			message = FacesUtil.getMessage("title_patient_complementary");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		} else {
+			selectedPatient.setNeighborhood(neighborhood);
+		}
+
+		if (FacesUtil.isEmptyOrBlank(typeHousing)) {
+			field = FacesUtil.getMessage("pat_type_housing");
+			message = FacesUtil.getMessage("title_patient_complementary");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		} else {
+			selectedPatient.setTypeHousing(typeHousing);
+		}
+
 		if (this.getHeartRate() == 0) {
 			field = FacesUtil.getMessage("his_physique_heart_rate");
 			message = FacesUtil.getMessage("his_history_physique", field);
@@ -292,30 +330,40 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 				crmOdontologyEvolution.setObs("NO REFIERE");
 			}
 
-			processService.save(crmOdontologyPersonalRecord);
-			processService.save(crmOdontologyFamilaryRecord);
-			processService.saveHistoryPhysique(selectedHistoryPhysique);
-			processService.save(crmOdontologyStomatolog);
-			processService.save(crmOdontologyTempJoint);
-			processService.save(crmOdontologySoftTissue);
-			processService.save(crmOdontologyPeriodontal);
-			processService.save(crmOdontologySupplExams);
-			processService.save(crmOdontologyEvolution);
-
-			viewMode = true;
-
-			if (event != null) {
-				currentAppointment.setCloseAppointment(true);
+			if (!FacesUtil.isEmptyOrBlank(selectedPatient.getNeighborhood())) {
+				selectedPatient.setNeighborhood(selectedPatient
+						.getNeighborhood().toUpperCase());
 			}
 
-			currentAppointment.setState(Constant.APP_STATE_ATTENDED);
-			processService.saveAppointment(currentAppointment);
-			message = FacesUtil.getMessage("his_msg_message_med_ok");
-			FacesUtil.addInfo(message);
-			// refreshLists();
+			int result = processService.savePatient(selectedPatient, false,
+					false, null);
 
-			if (event != null) {
-				// refreshAction();
+			if (result == 0) {
+				processService.save(crmOdontologyPersonalRecord);
+				processService.save(crmOdontologyFamilaryRecord);
+				processService.saveHistoryPhysique(selectedHistoryPhysique);
+				processService.save(crmOdontologyStomatolog);
+				processService.save(crmOdontologyTempJoint);
+				processService.save(crmOdontologySoftTissue);
+				processService.save(crmOdontologyPeriodontal);
+				processService.save(crmOdontologySupplExams);
+				processService.save(crmOdontologyEvolution);
+
+				viewMode = true;
+
+				if (event != null) {
+					currentAppointment.setCloseAppointment(true);
+				}
+
+				currentAppointment.setState(Constant.APP_STATE_ATTENDED);
+				processService.saveAppointment(currentAppointment);
+				message = FacesUtil.getMessage("his_msg_message_med_ok");
+				FacesUtil.addInfo(message);
+				// refreshLists();
+
+				if (event != null) {
+					// refreshAction();
+				}
 			}
 		}
 	}
@@ -328,7 +376,7 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 	public String returnAction() {
 		this.modeEdit = false;
 		HistoryBacking historyBacking = FacesUtil
-				.findBean("historyOdontologyBacking");
+				.findBean("historyBacking");
 		historyBacking.setModeEdit(false);
 		historyBacking.newAction(null);
 		return "history?faces-redirect=true";
