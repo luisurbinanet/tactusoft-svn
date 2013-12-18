@@ -7,13 +7,17 @@ import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.model.entities.CrmHistoryPhysique;
 import co.com.tactusoft.crm.model.entities.CrmOccupation;
+import co.com.tactusoft.crm.model.entities.CrmOdontologyEvolution;
 import co.com.tactusoft.crm.model.entities.CrmOdontologyFamilaryRecord;
+import co.com.tactusoft.crm.model.entities.CrmOdontologyPeriodontal;
 import co.com.tactusoft.crm.model.entities.CrmOdontologyPersonalRecord;
 import co.com.tactusoft.crm.model.entities.CrmOdontologySoftTissue;
 import co.com.tactusoft.crm.model.entities.CrmOdontologyStomatolog;
+import co.com.tactusoft.crm.model.entities.CrmOdontologySupplExams;
 import co.com.tactusoft.crm.model.entities.CrmOdontologyTempJoint;
 import co.com.tactusoft.crm.model.entities.VwAppointment;
 import co.com.tactusoft.crm.util.Constant;
+import co.com.tactusoft.crm.util.FacesUtil;
 
 @Named
 @Scope("session")
@@ -27,6 +31,9 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 	private CrmOdontologyStomatolog crmOdontologyStomatolog;
 	private CrmOdontologyTempJoint crmOdontologyTempJoint;
 	private CrmOdontologySoftTissue crmOdontologySoftTissue;
+	private CrmOdontologyPeriodontal crmOdontologyPeriodontal;
+	private CrmOdontologySupplExams crmOdontologySupplExams;
+	private CrmOdontologyEvolution crmOdontologyEvolution;
 
 	public HistoryOdontologyBacking() {
 
@@ -85,6 +92,33 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 		this.crmOdontologySoftTissue = crmOdontologySoftTissue;
 	}
 
+	public CrmOdontologyPeriodontal getCrmOdontologyPeriodontal() {
+		return crmOdontologyPeriodontal;
+	}
+
+	public void setCrmOdontologyPeriodontal(
+			CrmOdontologyPeriodontal crmOdontologyPeriodontal) {
+		this.crmOdontologyPeriodontal = crmOdontologyPeriodontal;
+	}
+
+	public CrmOdontologySupplExams getCrmOdontologySupplExams() {
+		return crmOdontologySupplExams;
+	}
+
+	public void setCrmOdontologySupplExams(
+			CrmOdontologySupplExams crmOdontologySupplExams) {
+		this.crmOdontologySupplExams = crmOdontologySupplExams;
+	}
+
+	public CrmOdontologyEvolution getCrmOdontologyEvolution() {
+		return crmOdontologyEvolution;
+	}
+
+	public void setCrmOdontologyEvolution(
+			CrmOdontologyEvolution crmOdontologyEvolution) {
+		this.crmOdontologyEvolution = crmOdontologyEvolution;
+	}
+
 	public void loadValues(VwAppointment vwAppointment) {
 		this.selectedAppointment = vwAppointment;
 		modeEdit = true;
@@ -134,6 +168,30 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 		selectedHistoryPhysique.setCrmPatient(selectedPatient);
 		selectedHistoryPhysique.setCrmAppointment(currentAppointment);
 
+		crmOdontologyStomatolog = processService
+				.getOdontologyStomatolog(selectedAppointment.getId());
+		crmOdontologyStomatolog.setCrmAppointment(currentAppointment);
+
+		crmOdontologyTempJoint = processService
+				.getOdontologyTempJoint(selectedAppointment.getId());
+		crmOdontologyTempJoint.setCrmAppointment(currentAppointment);
+
+		crmOdontologySoftTissue = processService
+				.getOdontologySoftTissue(selectedAppointment.getId());
+		crmOdontologySoftTissue.setCrmAppointment(currentAppointment);
+
+		crmOdontologyPeriodontal = processService
+				.getOdontologyPeriodontal(selectedAppointment.getId());
+		crmOdontologyPeriodontal.setCrmAppointment(currentAppointment);
+
+		crmOdontologySupplExams = processService
+				.getOdontologySupplExams(selectedAppointment.getId());
+		crmOdontologySupplExams.setCrmAppointment(currentAppointment);
+
+		crmOdontologyEvolution = processService
+				.getOdontologyEvolution(selectedAppointment.getId());
+		crmOdontologyEvolution.setCrmAppointment(currentAppointment);
+
 		try {
 			this.heartRate = Integer.parseInt(selectedHistoryPhysique
 					.getHeartRate());
@@ -169,12 +227,111 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 
 	@Override
 	public void closeAppointmentAction(ActionEvent event) {
+		String message = null;
+		String field = null;
 
+		if (this.getHeartRate() == 0) {
+			field = FacesUtil.getMessage("his_physique_heart_rate");
+			message = FacesUtil.getMessage("his_history_physique", field);
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		} else {
+			selectedHistoryPhysique
+					.setHeartRate(String.valueOf(this.heartRate));
+		}
+
+		if (this.getRespiratoryRate() == 0) {
+			field = FacesUtil.getMessage("his_physique_respiratory_rate");
+			message = FacesUtil.getMessage("his_history_physique", field);
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		} else {
+			selectedHistoryPhysique.setRespiratoryRate(String
+					.valueOf(this.respiratoryRate));
+		}
+
+		if (message == null) {
+			if (FacesUtil.isEmptyOrBlank(crmOdontologyPersonalRecord.getObs())) {
+				crmOdontologyPersonalRecord.setObs("NO REFIERE");
+			}
+			if (FacesUtil.isEmptyOrBlank(crmOdontologyFamilaryRecord.getObs())) {
+				crmOdontologyFamilaryRecord.setObs("NO REFIERE");
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique.getObs())) {
+				selectedHistoryPhysique.setObs("NO REFIERE");
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique.getObs())) {
+				selectedHistoryPhysique.setObs("NO REFIERE");
+			}
+
+			if (FacesUtil.isEmptyOrBlank(crmOdontologyStomatolog.getObs())) {
+				crmOdontologyStomatolog.setObs("NO REFIERE");
+			}
+
+			if (FacesUtil.isEmptyOrBlank(crmOdontologyTempJoint.getObs())) {
+				crmOdontologyTempJoint.setObs("NO REFIERE");
+			}
+
+			if (FacesUtil.isEmptyOrBlank(crmOdontologySoftTissue.getObs())) {
+				crmOdontologySoftTissue.setObs("NO REFIERE");
+			}
+
+			if (FacesUtil.isEmptyOrBlank(crmOdontologyPeriodontal.getObs())) {
+				crmOdontologyPeriodontal.setObs("NO REFIERE");
+			}
+
+			if (FacesUtil.isEmptyOrBlank(crmOdontologySupplExams.getObs())) {
+				crmOdontologySupplExams.setObs("NO REFIERE");
+			}
+
+			if (FacesUtil.isEmptyOrBlank(crmOdontologyEvolution.getObs())) {
+				crmOdontologyEvolution.setObs("NO REFIERE");
+			}
+
+			processService.save(crmOdontologyPersonalRecord);
+			processService.save(crmOdontologyFamilaryRecord);
+			processService.saveHistoryPhysique(selectedHistoryPhysique);
+			processService.save(crmOdontologyStomatolog);
+			processService.save(crmOdontologyTempJoint);
+			processService.save(crmOdontologySoftTissue);
+			processService.save(crmOdontologyPeriodontal);
+			processService.save(crmOdontologySupplExams);
+			processService.save(crmOdontologyEvolution);
+
+			viewMode = true;
+
+			if (event != null) {
+				currentAppointment.setCloseAppointment(true);
+			}
+
+			currentAppointment.setState(Constant.APP_STATE_ATTENDED);
+			processService.saveAppointment(currentAppointment);
+			message = FacesUtil.getMessage("his_msg_message_med_ok");
+			FacesUtil.addInfo(message);
+			// refreshLists();
+
+			if (event != null) {
+				// refreshAction();
+			}
+		}
 	}
 
 	@Override
 	public void saveAction(ActionEvent event) {
 		closeAppointmentAction(null);
+	}
+
+	public String returnAction() {
+		this.modeEdit = false;
+		HistoryBacking historyBacking = FacesUtil
+				.findBean("historyOdontologyBacking");
+		historyBacking.setModeEdit(false);
+		historyBacking.newAction(null);
+		return "history?faces-redirect=true";
 	}
 
 }

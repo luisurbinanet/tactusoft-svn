@@ -20,18 +20,18 @@ public class CrmOdontologyTempJoint implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private CrmAppointment crmAppointment;
-	private Boolean openingNoise;
-	private Boolean closureNoise;
-	private Boolean laterality;
-	private Boolean openingDeviaton;
-	private Boolean closureDeviaton;
-	private Boolean lateralityDeviaton;
-	private Boolean openingPain;
-	private Boolean closurePain;
-	private Boolean lateralityPain;
-	private Boolean openingFatigue;
-	private Boolean closureFatigue;
-	private Boolean lateralityFatigue;
+	private Integer openingNoise;
+	private Integer closureNoise;
+	private Integer lateralityNoise;
+	private Integer openingDeviaton;
+	private Integer closureDeviaton;
+	private Integer lateralityDeviaton;
+	private Integer openingPain;
+	private Integer closurePain;
+	private Integer lateralityPain;
+	private Integer openingFatigue;
+	private Integer closureFatigue;
+	private Integer lateralityFatigue;
 	private String obs;
 
 	public CrmOdontologyTempJoint() {
@@ -42,16 +42,16 @@ public class CrmOdontologyTempJoint implements java.io.Serializable {
 	}
 
 	public CrmOdontologyTempJoint(CrmAppointment crmAppointment,
-			Boolean openingNoise, Boolean closureNoise, Boolean laterality,
-			Boolean openingDeviaton, Boolean closureDeviaton,
-			Boolean lateralityDeviaton, Boolean openingPain,
-			Boolean closurePain, Boolean lateralityPain,
-			Boolean openingFatigue, Boolean closureFatigue,
-			Boolean lateralityFatigue, String obs) {
+			Integer openingNoise, Integer closureNoise, Integer lateralityNoise,
+			Integer openingDeviaton, Integer closureDeviaton,
+			Integer lateralityDeviaton, Integer openingPain,
+			Integer closurePain, Integer lateralityPain,
+			Integer openingFatigue, Integer closureFatigue,
+			Integer lateralityFatigue, String obs) {
 		this.crmAppointment = crmAppointment;
 		this.openingNoise = openingNoise;
 		this.closureNoise = closureNoise;
-		this.laterality = laterality;
+		this.lateralityNoise = lateralityNoise;
 		this.openingDeviaton = openingDeviaton;
 		this.closureDeviaton = closureDeviaton;
 		this.lateralityDeviaton = lateralityDeviaton;
@@ -86,110 +86,110 @@ public class CrmOdontologyTempJoint implements java.io.Serializable {
 	}
 
 	@Column(name = "opening_noise")
-	public Boolean getOpeningNoise() {
+	public Integer getOpeningNoise() {
 		return this.openingNoise;
 	}
 
-	public void setOpeningNoise(Boolean openingNoise) {
+	public void setOpeningNoise(Integer openingNoise) {
 		this.openingNoise = openingNoise;
 	}
 
 	@Column(name = "closure_noise")
-	public Boolean getClosureNoise() {
+	public Integer getClosureNoise() {
 		return this.closureNoise;
 	}
 
-	public void setClosureNoise(Boolean closureNoise) {
+	public void setClosureNoise(Integer closureNoise) {
 		this.closureNoise = closureNoise;
 	}
 
-	@Column(name = "laterality")
-	public Boolean getLaterality() {
-		return this.laterality;
+	@Column(name = "laterality_noise")
+	public Integer getLateralityNoise() {
+		return this.lateralityNoise;
 	}
 
-	public void setLaterality(Boolean laterality) {
-		this.laterality = laterality;
+	public void setLateralityNoise(Integer lateralityNoise) {
+		this.lateralityNoise = lateralityNoise;
 	}
 
 	@Column(name = "opening_deviaton")
-	public Boolean getOpeningDeviaton() {
+	public Integer getOpeningDeviaton() {
 		return this.openingDeviaton;
 	}
 
-	public void setOpeningDeviaton(Boolean openingDeviaton) {
+	public void setOpeningDeviaton(Integer openingDeviaton) {
 		this.openingDeviaton = openingDeviaton;
 	}
 
 	@Column(name = "closure_deviaton")
-	public Boolean getClosureDeviaton() {
+	public Integer getClosureDeviaton() {
 		return this.closureDeviaton;
 	}
 
-	public void setClosureDeviaton(Boolean closureDeviaton) {
+	public void setClosureDeviaton(Integer closureDeviaton) {
 		this.closureDeviaton = closureDeviaton;
 	}
 
 	@Column(name = "laterality_deviaton")
-	public Boolean getLateralityDeviaton() {
+	public Integer getLateralityDeviaton() {
 		return this.lateralityDeviaton;
 	}
 
-	public void setLateralityDeviaton(Boolean lateralityDeviaton) {
+	public void setLateralityDeviaton(Integer lateralityDeviaton) {
 		this.lateralityDeviaton = lateralityDeviaton;
 	}
 
 	@Column(name = "opening_pain")
-	public Boolean getOpeningPain() {
+	public Integer getOpeningPain() {
 		return this.openingPain;
 	}
 
-	public void setOpeningPain(Boolean openingPain) {
+	public void setOpeningPain(Integer openingPain) {
 		this.openingPain = openingPain;
 	}
 
 	@Column(name = "closure_pain")
-	public Boolean getClosurePain() {
+	public Integer getClosurePain() {
 		return this.closurePain;
 	}
 
-	public void setClosurePain(Boolean closurePain) {
+	public void setClosurePain(Integer closurePain) {
 		this.closurePain = closurePain;
 	}
 
 	@Column(name = "laterality_pain")
-	public Boolean getLateralityPain() {
+	public Integer getLateralityPain() {
 		return this.lateralityPain;
 	}
 
-	public void setLateralityPain(Boolean lateralityPain) {
+	public void setLateralityPain(Integer lateralityPain) {
 		this.lateralityPain = lateralityPain;
 	}
 
 	@Column(name = "opening_fatigue")
-	public Boolean getOpeningFatigue() {
+	public Integer getOpeningFatigue() {
 		return this.openingFatigue;
 	}
 
-	public void setOpeningFatigue(Boolean openingFatigue) {
+	public void setOpeningFatigue(Integer openingFatigue) {
 		this.openingFatigue = openingFatigue;
 	}
 
 	@Column(name = "closure_fatigue")
-	public Boolean getClosureFatigue() {
+	public Integer getClosureFatigue() {
 		return this.closureFatigue;
 	}
 
-	public void setClosureFatigue(Boolean closureFatigue) {
+	public void setClosureFatigue(Integer closureFatigue) {
 		this.closureFatigue = closureFatigue;
 	}
 
 	@Column(name = "laterality_fatigue")
-	public Boolean getLateralityFatigue() {
+	public Integer getLateralityFatigue() {
 		return this.lateralityFatigue;
 	}
 
-	public void setLateralityFatigue(Boolean lateralityFatigue) {
+	public void setLateralityFatigue(Integer lateralityFatigue) {
 		this.lateralityFatigue = lateralityFatigue;
 	}
 

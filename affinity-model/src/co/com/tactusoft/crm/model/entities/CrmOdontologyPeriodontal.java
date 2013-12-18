@@ -20,13 +20,13 @@ public class CrmOdontologyPeriodontal implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private CrmAppointment crmAppointment;
-	private Boolean gingivitis;
-	private Boolean periodontitis;
-	private Boolean mobility;
-	private Boolean bagTeeth;
-	private Boolean gingivalRecession;
+	private Integer gingivitis;
+	private Integer periodontitis;
+	private Integer mobility;
+	private Integer bagTeeth;
+	private Integer gingivalRecession;
 	private Integer plaqueIndex;
-	private String observations;
+	private String obs;
 
 	public CrmOdontologyPeriodontal() {
 	}
@@ -36,9 +36,9 @@ public class CrmOdontologyPeriodontal implements java.io.Serializable {
 	}
 
 	public CrmOdontologyPeriodontal(CrmAppointment crmAppointment,
-			Boolean gingivitis, Boolean periodontitis, Boolean mobility,
-			Boolean bagTeeth, Boolean gingivalRecession, Integer plaqueIndex,
-			String observations) {
+			Integer gingivitis, Integer periodontitis, Integer mobility,
+			Integer bagTeeth, Integer gingivalRecession, Integer plaqueIndex,
+			String obs) {
 		this.crmAppointment = crmAppointment;
 		this.gingivitis = gingivitis;
 		this.periodontitis = periodontitis;
@@ -46,7 +46,7 @@ public class CrmOdontologyPeriodontal implements java.io.Serializable {
 		this.bagTeeth = bagTeeth;
 		this.gingivalRecession = gingivalRecession;
 		this.plaqueIndex = plaqueIndex;
-		this.observations = observations;
+		this.obs = obs;
 	}
 
 	@Id
@@ -71,47 +71,47 @@ public class CrmOdontologyPeriodontal implements java.io.Serializable {
 	}
 
 	@Column(name = "gingivitis")
-	public Boolean getGingivitis() {
+	public Integer getGingivitis() {
 		return this.gingivitis;
 	}
 
-	public void setGingivitis(Boolean gingivitis) {
+	public void setGingivitis(Integer gingivitis) {
 		this.gingivitis = gingivitis;
 	}
 
 	@Column(name = "periodontitis")
-	public Boolean getPeriodontitis() {
+	public Integer getPeriodontitis() {
 		return this.periodontitis;
 	}
 
-	public void setPeriodontitis(Boolean periodontitis) {
+	public void setPeriodontitis(Integer periodontitis) {
 		this.periodontitis = periodontitis;
 	}
 
 	@Column(name = "mobility")
-	public Boolean getMobility() {
+	public Integer getMobility() {
 		return this.mobility;
 	}
 
-	public void setMobility(Boolean mobility) {
+	public void setMobility(Integer mobility) {
 		this.mobility = mobility;
 	}
 
 	@Column(name = "bag_teeth")
-	public Boolean getBagTeeth() {
+	public Integer getBagTeeth() {
 		return this.bagTeeth;
 	}
 
-	public void setBagTeeth(Boolean bagTeeth) {
+	public void setBagTeeth(Integer bagTeeth) {
 		this.bagTeeth = bagTeeth;
 	}
 
 	@Column(name = "gingival_recession")
-	public Boolean getGingivalRecession() {
+	public Integer getGingivalRecession() {
 		return this.gingivalRecession;
 	}
 
-	public void setGingivalRecession(Boolean gingivalRecession) {
+	public void setGingivalRecession(Integer gingivalRecession) {
 		this.gingivalRecession = gingivalRecession;
 	}
 
@@ -124,13 +124,13 @@ public class CrmOdontologyPeriodontal implements java.io.Serializable {
 		this.plaqueIndex = plaqueIndex;
 	}
 
-	@Column(name = "observations", length = 65535)
-	public String getObservations() {
-		return this.observations;
+	@Column(name = "obs", length = 65535)
+	public String getObs() {
+		return this.obs;
 	}
 
-	public void setObservations(String observations) {
-		this.observations = observations;
+	public void setObs(String obs) {
+		this.obs = obs;
 	}
 
 }
