@@ -6,7 +6,7 @@
 	<sql-type jdbc-type="BOOLEAN" hibernate-type="boolean"></sql-type>
 </type-mapping>
 	<table-filter match-name="crm_appointment" match-catalog="crm_db"></table-filter>
-	<table-filter match-name="crm_odontology_suppl_exams"
+	<table-filter match-name="crm_odontology_odontogram"
 		match-catalog="crm_db">
 	</table-filter>
 </hibernate-reverse-engineering>

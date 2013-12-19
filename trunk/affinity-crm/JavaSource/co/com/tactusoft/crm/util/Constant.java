@@ -86,4 +86,7 @@ public class Constant {
 	public static final int RECALL_CONTROL = 3;
 	public static final int RECALL_MEDICATION = 4;
 	public static final int RECALL_REMINDER = 5;
+	
+	public static String ODONTOLOGY_HISTORY_TYPE = "ODONTOLOGY";
+	public static String MEDICAL_HISTORY_TYPE = "MEDICAL";
 }

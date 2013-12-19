@@ -34,6 +34,7 @@ public class VwAppointment implements java.io.Serializable {
 	private int prcAvailability;
 	private String prcFormulaDocType;
 	private String prcTypeHistory;
+	private int prcEvaluation;
 	private BigDecimal branchId;
 	private String branchCode;
 	private String branchName;
@@ -107,11 +108,11 @@ public class VwAppointment implements java.io.Serializable {
 			String patFirstnames, String patPhoneNumber, String patCellNumber,
 			BigDecimal prcDetId, String prcDetName, String prcDocType,
 			int prcAvailability, String prcFormulaDocType,
-			String prcTypeHistory, BigDecimal branchId, String branchCode,
-			String branchName, String branchSociety, BigDecimal doctorId,
-			String doctorCode, String doctorNames, BigDecimal userCreateId,
-			String userCreateCode, String userCreateNames,
-			String userCreateSurnames, Date dateCreate,
+			String prcTypeHistory, int prcEvaluation, BigDecimal branchId,
+			String branchCode, String branchName, String branchSociety,
+			BigDecimal doctorId, String doctorCode, String doctorNames,
+			BigDecimal userCreateId, String userCreateCode,
+			String userCreateNames, String userCreateSurnames, Date dateCreate,
 			BigDecimal userModifiedId, String userModifiedCode,
 			String userModifiedNames, String userModifiedSurnames,
 			Date dateModified, BigDecimal userCheckedId,
@@ -138,6 +139,7 @@ public class VwAppointment implements java.io.Serializable {
 		this.prcAvailability = prcAvailability;
 		this.prcFormulaDocType = prcFormulaDocType;
 		this.prcTypeHistory = prcTypeHistory;
+		this.prcEvaluation = prcEvaluation;
 		this.branchId = branchId;
 		this.branchCode = branchCode;
 		this.branchName = branchName;
@@ -330,6 +332,15 @@ public class VwAppointment implements java.io.Serializable {
 
 	public void setPrcTypeHistory(String prcTypeHistory) {
 		this.prcTypeHistory = prcTypeHistory;
+	}
+
+	@Column(name = "prc_evaluation", nullable = false)
+	public int getPrcEvaluation() {
+		return prcEvaluation;
+	}
+
+	public void setPrcEvaluation(int prcEvaluation) {
+		this.prcEvaluation = prcEvaluation;
 	}
 
 	@Column(name = "branch_id", nullable = false, scale = 0)

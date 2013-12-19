@@ -82,6 +82,17 @@ public class CrmHistoryRecord implements java.io.Serializable {
 	private String acvParent;
 	private String cancerParent;
 	private String diabetesParent;
+	private Byte limitationOpenCloseMouth;
+	private Byte noiseJawOpenCloseMouth;
+	private Byte herpesThrush;
+	private Byte bitLipsNailsHabit;
+	private Byte smokeHabit;
+	private Byte cigarettesDayHabit;
+	private Byte citrusFoodsHabit;
+	private Byte bitObjectsHabit;
+	private Byte toothClenchHabit;
+	private Byte mouthBreathHabit;
+	private String obs;
 
 	public CrmHistoryRecord() {
 	}
@@ -112,7 +123,12 @@ public class CrmHistoryRecord implements java.io.Serializable {
 			String perinatal, String vaccination, String growth,
 			String hypertensionParent, String epocParent,
 			String heartDiseaseParent, String asthmaParent, String acvParent,
-			String cancerParent, String diabetesParent) {
+			String cancerParent, String diabetesParent,
+			Byte limitationOpenCloseMouth, Byte noiseJawOpenCloseMouth,
+			Byte herpesThrush, Byte bitLipsNailsHabit, Byte smokeHabit,
+			Byte cigarettesDayHabit, Byte citrusFoodsHabit,
+			Byte bitObjectsHabit, Byte toothClenchHabit, Byte mouthBreathHabit,
+			String obs) {
 		this.id = id;
 		this.crmPatient = crmPatient;
 		this.crmAppointment = crmAppointment;
@@ -173,6 +189,17 @@ public class CrmHistoryRecord implements java.io.Serializable {
 		this.acvParent = acvParent;
 		this.cancerParent = cancerParent;
 		this.diabetesParent = diabetesParent;
+		this.limitationOpenCloseMouth = limitationOpenCloseMouth;
+		this.noiseJawOpenCloseMouth = noiseJawOpenCloseMouth;
+		this.herpesThrush = herpesThrush;
+		this.bitLipsNailsHabit = bitLipsNailsHabit;
+		this.smokeHabit = smokeHabit;
+		this.cigarettesDayHabit = cigarettesDayHabit;
+		this.citrusFoodsHabit = citrusFoodsHabit;
+		this.bitObjectsHabit = bitObjectsHabit;
+		this.toothClenchHabit = toothClenchHabit;
+		this.mouthBreathHabit = mouthBreathHabit;
+		this.obs = obs;
 	}
 
 	@Id
@@ -721,5 +748,105 @@ public class CrmHistoryRecord implements java.io.Serializable {
 	public void setDiabetesParent(String diabetesParent) {
 		this.diabetesParent = diabetesParent;
 	}
+	
+	@Column(name = "limitation_open_close_mouth")
+	public Byte getLimitationOpenCloseMouth() {
+		return this.limitationOpenCloseMouth;
+	}
+
+	public void setLimitationOpenCloseMouth(Byte limitationOpenCloseMouth) {
+		this.limitationOpenCloseMouth = limitationOpenCloseMouth;
+	}
+
+	@Column(name = "noise_jaw_open_close_mouth")
+	public Byte getNoiseJawOpenCloseMouth() {
+		return this.noiseJawOpenCloseMouth;
+	}
+
+	public void setNoiseJawOpenCloseMouth(Byte noiseJawOpenCloseMouth) {
+		this.noiseJawOpenCloseMouth = noiseJawOpenCloseMouth;
+	}
+
+	@Column(name = "herpes_thrush")
+	public Byte getHerpesThrush() {
+		return this.herpesThrush;
+	}
+
+	public void setHerpesThrush(Byte herpesThrush) {
+		this.herpesThrush = herpesThrush;
+	}
+
+	@Column(name = "bit_lips_nails_habit")
+	public Byte getBitLipsNailsHabit() {
+		return this.bitLipsNailsHabit;
+	}
+
+	public void setBitLipsNailsHabit(Byte bitLipsNailsHabit) {
+		this.bitLipsNailsHabit = bitLipsNailsHabit;
+	}
+
+	@Column(name = "smoke_habit")
+	public Byte getSmokeHabit() {
+		return this.smokeHabit;
+	}
+
+	public void setSmokeHabit(Byte smokeHabit) {
+		this.smokeHabit = smokeHabit;
+	}
+
+	@Column(name = "cigarettes_day_habit")
+	public Byte getCigarettesDayHabit() {
+		return this.cigarettesDayHabit;
+	}
+
+	public void setCigarettesDayHabit(Byte cigarettesDayHabit) {
+		this.cigarettesDayHabit = cigarettesDayHabit;
+	}
+
+	@Column(name = "citrus_foods_habit")
+	public Byte getCitrusFoodsHabit() {
+		return this.citrusFoodsHabit;
+	}
+
+	public void setCitrusFoodsHabit(Byte citrusFoodsHabit) {
+		this.citrusFoodsHabit = citrusFoodsHabit;
+	}
+
+	@Column(name = "bit_objects_habit")
+	public Byte getBitObjectsHabit() {
+		return this.bitObjectsHabit;
+	}
+
+	public void setBitObjectsHabit(Byte bitObjectsHabit) {
+		this.bitObjectsHabit = bitObjectsHabit;
+	}
+
+	@Column(name = "tooth_clench_habit")
+	public Byte getToothClenchHabit() {
+		return this.toothClenchHabit;
+	}
+
+	public void setToothClenchHabit(Byte toothClenchHabit) {
+		this.toothClenchHabit = toothClenchHabit;
+	}
+
+	@Column(name = "mouth_breath_habit")
+	public Byte getMouthBreathHabit() {
+		return this.mouthBreathHabit;
+	}
+
+	public void setMouthBreathHabit(Byte mouthBreathHabit) {
+		this.mouthBreathHabit = mouthBreathHabit;
+	}
+
+	@Column(name = "obs", length = 65535)
+	public String getObs() {
+		return this.obs;
+	}
+
+	public void setObs(String obs) {
+		this.obs = obs;
+	}
+
 
 }

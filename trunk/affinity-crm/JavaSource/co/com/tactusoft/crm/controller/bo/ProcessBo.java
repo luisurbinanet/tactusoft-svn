@@ -35,9 +35,8 @@ import co.com.tactusoft.crm.model.entities.CrmMedication;
 import co.com.tactusoft.crm.model.entities.CrmNote;
 import co.com.tactusoft.crm.model.entities.CrmNurse;
 import co.com.tactusoft.crm.model.entities.CrmOdontologyEvolution;
-import co.com.tactusoft.crm.model.entities.CrmOdontologyFamilaryRecord;
+import co.com.tactusoft.crm.model.entities.CrmOdontologyOdontogram;
 import co.com.tactusoft.crm.model.entities.CrmOdontologyPeriodontal;
-import co.com.tactusoft.crm.model.entities.CrmOdontologyPersonalRecord;
 import co.com.tactusoft.crm.model.entities.CrmOdontologySoftTissue;
 import co.com.tactusoft.crm.model.entities.CrmOdontologyStomatolog;
 import co.com.tactusoft.crm.model.entities.CrmOdontologySupplExams;
@@ -206,14 +205,14 @@ public class ProcessBo implements Serializable {
 				+ " ORDER BY o.startAppointmentDate DESC");
 	}
 
-	public List<CrmCie> getListCieByCode(String code) {
-		return dao.find("from CrmCie o where o.code like '%" + code
-				+ "%' order by o.description");
+	public List<CrmCie> getListCieByCode(String code, String type) {
+		return dao.find("FROM CrmCie o WHERE o.code like '%" + code
+				+ "%' AND cieType = '" + type  + "' ORDER BY o.description");
 	}
 
-	public List<CrmCie> getListCieByName(String name) {
-		return dao.find("from CrmCie o where o.description like '%" + name
-				+ "%' order by o.description");
+	public List<CrmCie> getListCieByName(String name, String type) {
+		return dao.find("FROM CrmCie o WHERE o.description like '%" + name
+				+ "%' AND cieType = '" + type  + "' ORDER BY o.description");
 	}
 
 	public List<CrmMaterialGroup> getListMaterialGroup() {
@@ -1252,32 +1251,6 @@ public class ProcessBo implements Serializable {
 				+ idPatient);
 	}
 
-	public CrmOdontologyPersonalRecord getOdontologyPersonalRecord(
-			BigDecimal idAppointment) {
-		List<CrmOdontologyPersonalRecord> list = null;
-		list = dao
-				.find("from CrmOdontologyPersonalRecord o where o.crmAppointment.id = "
-						+ idAppointment);
-		if (list.size() > 0) {
-			return list.get(0);
-		} else {
-			return new CrmOdontologyPersonalRecord();
-		}
-	}
-
-	public CrmOdontologyFamilaryRecord getOdontologyFamilaryRecord(
-			BigDecimal idAppointment) {
-		List<CrmOdontologyFamilaryRecord> list = null;
-		list = dao
-				.find("from CrmOdontologyFamilaryRecord o where o.crmAppointment.id = "
-						+ idAppointment);
-		if (list.size() > 0) {
-			return list.get(0);
-		} else {
-			return new CrmOdontologyFamilaryRecord();
-		}
-	}
-
 	public CrmOdontologyStomatolog getOdontologyStomatolog(
 			BigDecimal idAppointment) {
 		List<CrmOdontologyStomatolog> list = null;
@@ -1316,7 +1289,7 @@ public class ProcessBo implements Serializable {
 			return new CrmOdontologySoftTissue();
 		}
 	}
-	
+
 	public CrmOdontologyPeriodontal getOdontologyPeriodontal(
 			BigDecimal idAppointment) {
 		List<CrmOdontologyPeriodontal> list = null;
@@ -1329,7 +1302,7 @@ public class ProcessBo implements Serializable {
 			return new CrmOdontologyPeriodontal();
 		}
 	}
-	
+
 	public CrmOdontologySupplExams getOdontologySupplExams(
 			BigDecimal idAppointment) {
 		List<CrmOdontologySupplExams> list = null;
@@ -1342,7 +1315,7 @@ public class ProcessBo implements Serializable {
 			return new CrmOdontologySupplExams();
 		}
 	}
-	
+
 	public CrmOdontologyEvolution getOdontologyEvolution(
 			BigDecimal idAppointment) {
 		List<CrmOdontologyEvolution> list = null;
@@ -1353,6 +1326,19 @@ public class ProcessBo implements Serializable {
 			return list.get(0);
 		} else {
 			return new CrmOdontologyEvolution();
+		}
+	}
+
+	public CrmOdontologyOdontogram getOdontologyOdontogram(
+			BigDecimal idAppointment) {
+		List<CrmOdontologyOdontogram> list = null;
+		list = dao
+				.find("from CrmOdontologyOdontogram o where o.crmAppointment.id = "
+						+ idAppointment);
+		if (list.size() > 0) {
+			return list.get(0);
+		} else {
+			return new CrmOdontologyOdontogram();
 		}
 	}
 
@@ -1401,7 +1387,7 @@ public class ProcessBo implements Serializable {
 		}
 		return this.persist(entity);
 	}
-	
+
 	public int save(Object entity) {
 		return this.persist(entity);
 	}

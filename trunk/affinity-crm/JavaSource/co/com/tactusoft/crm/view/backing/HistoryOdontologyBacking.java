@@ -1,16 +1,23 @@
 package co.com.tactusoft.crm.view.backing;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 
 import org.springframework.context.annotation.Scope;
 
+import com.tactusoft.webservice.client.beans.WSBean;
+
+import co.com.tactusoft.crm.model.entities.CrmCie;
+import co.com.tactusoft.crm.model.entities.CrmDiagnosis;
 import co.com.tactusoft.crm.model.entities.CrmHistoryPhysique;
+import co.com.tactusoft.crm.model.entities.CrmMedication;
 import co.com.tactusoft.crm.model.entities.CrmOccupation;
 import co.com.tactusoft.crm.model.entities.CrmOdontologyEvolution;
-import co.com.tactusoft.crm.model.entities.CrmOdontologyFamilaryRecord;
+import co.com.tactusoft.crm.model.entities.CrmOdontologyOdontogram;
 import co.com.tactusoft.crm.model.entities.CrmOdontologyPeriodontal;
-import co.com.tactusoft.crm.model.entities.CrmOdontologyPersonalRecord;
 import co.com.tactusoft.crm.model.entities.CrmOdontologySoftTissue;
 import co.com.tactusoft.crm.model.entities.CrmOdontologyStomatolog;
 import co.com.tactusoft.crm.model.entities.CrmOdontologySupplExams;
@@ -18,6 +25,7 @@ import co.com.tactusoft.crm.model.entities.CrmOdontologyTempJoint;
 import co.com.tactusoft.crm.model.entities.VwAppointment;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
+import co.com.tactusoft.crm.view.datamodel.WSBeanDataModel;
 
 @Named
 @Scope("session")
@@ -25,8 +33,6 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 
 	private static final long serialVersionUID = 1L;
 
-	private CrmOdontologyPersonalRecord crmOdontologyPersonalRecord;
-	private CrmOdontologyFamilaryRecord crmOdontologyFamilaryRecord;
 	private CrmHistoryPhysique crmHistoryPhysique;
 	private CrmOdontologyStomatolog crmOdontologyStomatolog;
 	private CrmOdontologyTempJoint crmOdontologyTempJoint;
@@ -34,27 +40,10 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 	private CrmOdontologyPeriodontal crmOdontologyPeriodontal;
 	private CrmOdontologySupplExams crmOdontologySupplExams;
 	private CrmOdontologyEvolution crmOdontologyEvolution;
+	private CrmOdontologyOdontogram crmOdontologyOdontogram;
 
 	public HistoryOdontologyBacking() {
 
-	}
-
-	public CrmOdontologyPersonalRecord getCrmOdontologyPersonalRecord() {
-		return crmOdontologyPersonalRecord;
-	}
-
-	public void setCrmOdontologyPersonalRecord(
-			CrmOdontologyPersonalRecord crmOdontologyPersonalRecord) {
-		this.crmOdontologyPersonalRecord = crmOdontologyPersonalRecord;
-	}
-
-	public CrmOdontologyFamilaryRecord getCrmOdontologyFamilaryRecord() {
-		return crmOdontologyFamilaryRecord;
-	}
-
-	public void setCrmOdontologyFamilaryRecord(
-			CrmOdontologyFamilaryRecord crmOdontologyFamilaryRecord) {
-		this.crmOdontologyFamilaryRecord = crmOdontologyFamilaryRecord;
 	}
 
 	public CrmHistoryPhysique getCrmHistoryPhysique() {
@@ -119,6 +108,15 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 		this.crmOdontologyEvolution = crmOdontologyEvolution;
 	}
 
+	public CrmOdontologyOdontogram getCrmOdontologyOdontogram() {
+		return crmOdontologyOdontogram;
+	}
+
+	public void setCrmOdontologyOdontogram(
+			CrmOdontologyOdontogram crmOdontologyOdontogram) {
+		this.crmOdontologyOdontogram = crmOdontologyOdontogram;
+	}
+
 	public void loadValues(VwAppointment vwAppointment) {
 		this.selectedAppointment = vwAppointment;
 		modeEdit = true;
@@ -155,13 +153,15 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 
 		idMembershipType = selectedPatient.getIdMemberShip();
 
-		crmOdontologyPersonalRecord = processService
-				.getOdontologyPersonalRecord(selectedAppointment.getId());
-		crmOdontologyPersonalRecord.setCrmAppointment(currentAppointment);
+		selectedHistoryHistory = processService
+				.getHistoryHistory(selectedAppointment.getId());
+		selectedHistoryHistory.setCrmPatient(selectedPatient);
+		selectedHistoryHistory.setCrmAppointment(currentAppointment);
 
-		crmOdontologyFamilaryRecord = processService
-				.getOdontologyFamilaryRecord(selectedAppointment.getId());
-		crmOdontologyFamilaryRecord.setCrmAppointment(currentAppointment);
+		selectedHistoryRecord = processService
+				.getHistoryRecord(selectedAppointment.getId());
+		selectedHistoryRecord.setCrmPatient(selectedPatient);
+		selectedHistoryRecord.setCrmAppointment(currentAppointment);
 
 		selectedHistoryPhysique = processService
 				.getHistoryPhysique(selectedAppointment.getId());
@@ -191,6 +191,10 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 		crmOdontologyEvolution = processService
 				.getOdontologyEvolution(selectedAppointment.getId());
 		crmOdontologyEvolution.setCrmAppointment(currentAppointment);
+
+		crmOdontologyOdontogram = processService
+				.getOdontologyOdontogram(selectedAppointment.getId());
+		crmOdontologyOdontogram.setCrmAppointment(currentAppointment);
 
 		try {
 			this.heartRate = Integer.parseInt(selectedHistoryPhysique
@@ -268,9 +272,121 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 			selectedPatient.setTypeHousing(typeHousing);
 		}
 
+		if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getReason())) {
+			field = FacesUtil.getMessage("his_history_reason");
+			message = FacesUtil.getMessage("his_history_history");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		}
+
+		if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getDisease())) {
+			field = FacesUtil.getMessage("his_history_disease");
+			message = FacesUtil.getMessage("his_history_history");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		}
+
+		if (selectedHistoryRecord.getArthritis()
+				&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getArthritisTime()) || FacesUtil
+						.isEmptyOrBlank(selectedHistoryRecord
+								.getArthritisMedication()))) {
+			field = FacesUtil.getMessage("his_rec_per_arthritis");
+			message = FacesUtil.getMessage("his_history_record");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		}
+
+		if (selectedHistoryRecord.getCancer()
+				&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getCancerTime()) || FacesUtil
+						.isEmptyOrBlank(selectedHistoryRecord
+								.getCancerMedication()))) {
+			field = FacesUtil.getMessage("his_rec_per_cancer");
+			message = FacesUtil.getMessage("his_history_record");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		}
+
+		if (selectedHistoryRecord.getPulmonary()
+				&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getPulmonaryTime()) || FacesUtil
+						.isEmptyOrBlank(selectedHistoryRecord
+								.getPulmonaryMedication()))) {
+			field = FacesUtil.getMessage("his_rec_per_pulmonary");
+			message = FacesUtil.getMessage("his_history_record");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		}
+
+		if (selectedHistoryRecord.getDiabetes()
+				&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getDiabetesTime()) || FacesUtil
+						.isEmptyOrBlank(selectedHistoryRecord
+								.getDiabetesMedication()))) {
+			field = FacesUtil.getMessage("his_rec_per_diabetes");
+			message = FacesUtil.getMessage("his_history_record");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		}
+
+		if (selectedHistoryRecord.getHypertension()
+				&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getHypertensionTime()) || FacesUtil
+						.isEmptyOrBlank(selectedHistoryRecord
+								.getHypertensionMedication()))) {
+			field = FacesUtil.getMessage("his_rec_per_hypertension");
+			message = FacesUtil.getMessage("his_history_record");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		}
+
+		if (selectedHistoryRecord.getHospitalizations()
+				&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getHospitalizationsTime()) || FacesUtil
+						.isEmptyOrBlank(selectedHistoryRecord
+								.getHospitalizationsMedication()))) {
+			field = FacesUtil.getMessage("his_rec_per_hospitalizations");
+			message = FacesUtil.getMessage("his_history_record");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		}
+
+		if (selectedHistoryRecord.getAllergy()
+				&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getAllergyTime()) || FacesUtil
+						.isEmptyOrBlank(selectedHistoryRecord
+								.getAllergyMedication()))) {
+			field = FacesUtil.getMessage("his_rec_per_allergy");
+			message = FacesUtil.getMessage("his_history_record");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		}
+
+		if (selectedHistoryRecord.getInfections()
+				&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getInfectionsTime()) || FacesUtil
+						.isEmptyOrBlank(selectedHistoryRecord
+								.getInfectionsMedication()))) {
+			field = FacesUtil.getMessage("his_rec_per_infections");
+			message = FacesUtil.getMessage("his_history_record");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		}
+
 		if (this.getHeartRate() == 0) {
 			field = FacesUtil.getMessage("his_physique_heart_rate");
-			message = FacesUtil.getMessage("his_history_physique", field);
+			message = FacesUtil.getMessage("his_general_findings", field);
 			message = message + " - "
 					+ FacesUtil.getMessage("glb_required", field);
 			FacesUtil.addWarn(message);
@@ -281,7 +397,7 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 
 		if (this.getRespiratoryRate() == 0) {
 			field = FacesUtil.getMessage("his_physique_respiratory_rate");
-			message = FacesUtil.getMessage("his_history_physique", field);
+			message = FacesUtil.getMessage("his_general_findings", field);
 			message = message + " - "
 					+ FacesUtil.getMessage("glb_required", field);
 			FacesUtil.addWarn(message);
@@ -290,44 +406,66 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 					.valueOf(this.respiratoryRate));
 		}
 
+		if (this.getHeight().intValue() == 0) {
+			field = FacesUtil.getMessage("his_physique_height");
+			message = FacesUtil.getMessage("his_general_findings", field);
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		} else {
+			selectedHistoryPhysique.setHeight(String.valueOf(this.height));
+		}
+
+		if (this.getWeight().intValue() == 0) {
+			field = FacesUtil.getMessage("his_physique_weight");
+			message = FacesUtil.getMessage("his_general_findings", field);
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		} else {
+			selectedHistoryPhysique.setWeight(String.valueOf(this.weight));
+		}
+
+		if (FacesUtil
+				.isEmptyOrBlank(selectedHistoryPhysique.getBloodPressure())) {
+			field = FacesUtil.getMessage("his_physique_blood_pressure");
+			message = FacesUtil.getMessage("his_general_findings", field);
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		}
+
 		if (message == null) {
-			if (FacesUtil.isEmptyOrBlank(crmOdontologyPersonalRecord.getObs())) {
-				crmOdontologyPersonalRecord.setObs("NO REFIERE");
-			}
-			if (FacesUtil.isEmptyOrBlank(crmOdontologyFamilaryRecord.getObs())) {
-				crmOdontologyFamilaryRecord.setObs("NO REFIERE");
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique.getObs())) {
+				selectedHistoryPhysique.setObs(Constant.HISTORY_NOT_REFER);
 			}
 
 			if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique.getObs())) {
-				selectedHistoryPhysique.setObs("NO REFIERE");
-			}
-
-			if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique.getObs())) {
-				selectedHistoryPhysique.setObs("NO REFIERE");
+				selectedHistoryPhysique.setObs(Constant.HISTORY_NOT_REFER);
 			}
 
 			if (FacesUtil.isEmptyOrBlank(crmOdontologyStomatolog.getObs())) {
-				crmOdontologyStomatolog.setObs("NO REFIERE");
+				crmOdontologyStomatolog.setObs(Constant.HISTORY_NOT_REFER);
 			}
 
 			if (FacesUtil.isEmptyOrBlank(crmOdontologyTempJoint.getObs())) {
-				crmOdontologyTempJoint.setObs("NO REFIERE");
+				crmOdontologyTempJoint.setObs(Constant.HISTORY_NOT_REFER);
 			}
 
 			if (FacesUtil.isEmptyOrBlank(crmOdontologySoftTissue.getObs())) {
-				crmOdontologySoftTissue.setObs("NO REFIERE");
+				crmOdontologySoftTissue.setObs(Constant.HISTORY_NOT_REFER);
 			}
 
 			if (FacesUtil.isEmptyOrBlank(crmOdontologyPeriodontal.getObs())) {
-				crmOdontologyPeriodontal.setObs("NO REFIERE");
+				crmOdontologyPeriodontal.setObs(Constant.HISTORY_NOT_REFER);
 			}
 
 			if (FacesUtil.isEmptyOrBlank(crmOdontologySupplExams.getObs())) {
-				crmOdontologySupplExams.setObs("NO REFIERE");
+				crmOdontologySupplExams.setObs(Constant.HISTORY_NOT_REFER);
 			}
 
 			if (FacesUtil.isEmptyOrBlank(crmOdontologyEvolution.getObs())) {
-				crmOdontologyEvolution.setObs("NO REFIERE");
+				crmOdontologyEvolution.setObs(Constant.HISTORY_NOT_REFER);
 			}
 
 			if (!FacesUtil.isEmptyOrBlank(selectedPatient.getNeighborhood())) {
@@ -335,12 +473,210 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 						.getNeighborhood().toUpperCase());
 			}
 
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getHead())) {
+				selectedHistoryHistory.setHead(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory
+					.getNeuromuscular())) {
+				selectedHistoryHistory
+						.setNeuromuscular(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getOrl())) {
+				selectedHistoryHistory.setOrl(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getGu())) {
+				selectedHistoryHistory.setGu(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getCr())) {
+				selectedHistoryHistory.setCr(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory
+					.getPsychiatric())) {
+				selectedHistoryHistory
+						.setPsychiatric(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getGi())) {
+				selectedHistoryHistory.setGi(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getSkin())) {
+				selectedHistoryHistory.setSkin(Constant.HISTORY_NOT_REFER);
+			}
+
+			// RECORD
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+					.getArthritisMedication())) {
+				selectedHistoryRecord
+						.setArthritisMedication(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+					.getArthritisTime())) {
+				selectedHistoryRecord
+						.setArthritisTime(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+					.getCancerMedication())) {
+				selectedHistoryRecord
+						.setCancerMedication(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord.getCancerTime())) {
+				selectedHistoryRecord.setCancerTime(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+					.getPulmonaryMedication())) {
+				selectedHistoryRecord
+						.setPulmonaryMedication(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+					.getPulmonaryTime())) {
+				selectedHistoryRecord
+						.setPulmonaryTime(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+					.getDiabetesMedication())) {
+				selectedHistoryRecord
+						.setDiabetesMedication(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+					.getDiabetesTime())) {
+				selectedHistoryRecord
+						.setDiabetesTime(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+					.getHypertensionMedication())) {
+				selectedHistoryRecord
+						.setHypertensionMedication(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+					.getHypertensionTime())) {
+				selectedHistoryRecord
+						.setHypertensionTime(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+					.getHospitalizationsMedication())) {
+				selectedHistoryRecord
+						.setHospitalizationsMedication(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+					.getHospitalizationsTime())) {
+				selectedHistoryRecord
+						.setHospitalizationsTime(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+					.getAllergyMedication())) {
+				selectedHistoryRecord
+						.setAllergyMedication(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil
+					.isEmptyOrBlank(selectedHistoryRecord.getAllergyTime())) {
+				selectedHistoryRecord
+						.setAllergyTime(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+					.getInfectionsMedication())) {
+				selectedHistoryRecord
+						.setInfectionsMedication(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+					.getInfectionsTime())) {
+				selectedHistoryRecord
+						.setInfectionsTime(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+					.getOccupational())) {
+				selectedHistoryRecord
+						.setOccupational(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord.getToxic())) {
+				selectedHistoryRecord.setToxic(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord.getBloodType())) {
+				selectedHistoryRecord.setBloodType(Constant.HISTORY_NOT_REFER);
+			}
+
+			// PHYSIQUE
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique
+					.getGeneralState())) {
+				selectedHistoryPhysique
+						.setGeneralState(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique.getHeadNeck())) {
+				selectedHistoryPhysique.setHeadNeck(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique.getChest())) {
+				selectedHistoryPhysique.setChest(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique.getLungs())) {
+				selectedHistoryPhysique.setLungs(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique.getHeart())) {
+				selectedHistoryPhysique.setHeart(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique.getAbdomen())) {
+				selectedHistoryPhysique.setAbdomen(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique.getGenitals())) {
+				selectedHistoryPhysique.setGenitals(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique.getOsteo())) {
+				selectedHistoryPhysique.setOsteo(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique.getTips())) {
+				selectedHistoryPhysique.setTips(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique
+					.getHighlights())) {
+				selectedHistoryPhysique
+						.setHighlights(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique.getSkin())) {
+				selectedHistoryPhysique.setSkin(Constant.HISTORY_NOT_REFER);
+			}
+
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique.getObs())) {
+				selectedHistoryPhysique.setObs(Constant.HISTORY_NOT_REFER);
+			}
+
 			int result = processService.savePatient(selectedPatient, false,
 					false, null);
 
 			if (result == 0) {
-				processService.save(crmOdontologyPersonalRecord);
-				processService.save(crmOdontologyFamilaryRecord);
+				processService.saveHistoryHistory(selectedHistoryHistory);
+				processService.saveHistoryRecord(selectedHistoryRecord);
 				processService.saveHistoryPhysique(selectedHistoryPhysique);
 				processService.save(crmOdontologyStomatolog);
 				processService.save(crmOdontologyTempJoint);
@@ -348,21 +684,72 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 				processService.save(crmOdontologyPeriodontal);
 				processService.save(crmOdontologySupplExams);
 				processService.save(crmOdontologyEvolution);
+				processService.save(crmOdontologyOdontogram);
 
-				viewMode = true;
+				if (listDiagnosis.size() == 0) {
+					message = FacesUtil.getMessage("his_msg_message_dig_1");
+					FacesUtil.addWarn(message);
+				} else {
+					for (CrmDiagnosis row : listDiagnosis) {
+						if (FacesUtil.isEmptyOrBlank(row.getPosology())) {
+							message = FacesUtil
+									.getMessage("his_msg_message_dig_2");
+							FacesUtil.addWarn(message);
+							break;
+						}
+					}
 
-				if (event != null) {
-					currentAppointment.setCloseAppointment(true);
+					if (listMedication.size() == 0) {
+						message = FacesUtil.getMessage("his_msg_message_med_5");
+						FacesUtil.addWarn(message);
+					} else {
+						int idCie = listDiagnosis.get(0).getCrmCie().getId()
+								.intValue();
+						int numMedication = 0;
+						for (CrmMedication row : listMedication) {
+							if (row.getCrmCie().getId().intValue() == idCie) {
+								numMedication++;
+							}
+						}
+
+						int minMedication = currentAppointment
+								.getCrmProcedureDetail().getMinMedication();
+						int maxMedication = currentAppointment
+								.getCrmProcedureDetail().getMaxMedication();
+						if (minMedication > 0 && numMedication < minMedication) {
+							message = FacesUtil.getMessage(
+									"his_msg_message_med_1",
+									String.valueOf(minMedication));
+							FacesUtil.addWarn(message);
+						} else if (maxMedication > 0
+								&& numMedication > maxMedication) {
+							message = FacesUtil.getMessage(
+									"his_msg_message_med_3",
+									String.valueOf(maxMedication));
+							FacesUtil.addWarn(message);
+						}
+					}
 				}
 
-				currentAppointment.setState(Constant.APP_STATE_ATTENDED);
-				processService.saveAppointment(currentAppointment);
-				message = FacesUtil.getMessage("his_msg_message_med_ok");
-				FacesUtil.addInfo(message);
-				// refreshLists();
+				if (message == null) {
+					processService.saveDiagnosis(currentAppointment,
+							listDiagnosis);
+					processService.saveMedication(currentAppointment,
+							listMedication, Constant.MATERIAL_TYPE_MEDICINE);
 
-				if (event != null) {
-					// refreshAction();
+					if (event != null) {
+						currentAppointment.setCloseAppointment(true);
+					}
+
+					currentAppointment.setState(Constant.APP_STATE_ATTENDED);
+					processService.saveAppointment(currentAppointment);
+					message = FacesUtil.getMessage("his_msg_message_med_ok");
+					FacesUtil.addInfo(message);
+					refreshLists();
+
+					if (event != null) {
+						refreshAction();
+					}
 				}
 			}
 		}
@@ -375,11 +762,69 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 
 	public String returnAction() {
 		this.modeEdit = false;
-		HistoryBacking historyBacking = FacesUtil
-				.findBean("historyBacking");
+		HistoryBacking historyBacking = FacesUtil.findBean("historyBacking");
 		historyBacking.setModeEdit(false);
 		historyBacking.newAction(null);
 		return "history?faces-redirect=true";
+	}
+
+	public boolean isRenderedTab() {
+		return selectedAppointment.getPrcEvaluation() == 1 ? true : false;
+	}
+
+	@Override
+	public void searchCIEAction(ActionEvent event) {
+		if ((optionSearchCie == 1 && this.codeCIE.isEmpty())
+				|| (optionSearchCie == 2 && this.descCIE.isEmpty())) {
+			this.listCie = new ArrayList<CrmCie>();
+			disabledAddCie = true;
+		} else {
+			if (optionSearchCie == 1) {
+				this.listCie = processService.getListCieByCode(codeCIE,
+						Constant.ODONTOLOGY_HISTORY_TYPE);
+			} else {
+				this.listCie = processService.getListCieByName(descCIE,
+						Constant.ODONTOLOGY_HISTORY_TYPE);
+			}
+
+			if (listCie.size() > 0) {
+				selectedCie = listCie.get(0);
+				disabledAddCie = false;
+			} else {
+				disabledAddCie = true;
+			}
+		}
+		refreshListCie();
+	}
+
+	@Override
+	protected void refreshListMedication() {
+		List<WSBean> listFilter = new ArrayList<WSBean>();
+		for (WSBean row : listMaterial) {
+			boolean filter = true;
+			if (typeMedication.equals(Constant.MATERIAL_TYPE_MEDICINE)
+					|| typeMedication
+							.equals(Constant.MATERIAL_TYPE_OTHER_MEDICINE)) {
+				for (CrmMedication med : listMedication) {
+					if (Long.parseLong(row.getCode()) == med.getCodMaterial()) {
+						filter = false;
+						break;
+					}
+				}
+			}
+
+			if (filter) {
+				listFilter.add(row);
+			}
+		}
+
+		this.materialModel = new WSBeanDataModel(listFilter);
+		if (listFilter.size() > 0) {
+			selectedMaterial = listFilter.get(0);
+			disabledAddMaterial = false;
+		} else {
+			disabledAddMaterial = true;
+		}
 	}
 
 }

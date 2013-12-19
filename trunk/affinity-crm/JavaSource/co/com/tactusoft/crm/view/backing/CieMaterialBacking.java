@@ -382,9 +382,11 @@ public class CieMaterialBacking implements Serializable {
 			disabledAddCie = true;
 		} else {
 			if (optionSearchCie == 1) {
-				this.listCie = processService.getListCieByCode(codeCIE);
+				this.listCie = processService.getListCieByCode(codeCIE,
+						Constant.MEDICAL_HISTORY_TYPE);
 			} else {
-				this.listCie = processService.getListCieByName(descCIE);
+				this.listCie = processService.getListCieByName(descCIE,
+						Constant.MEDICAL_HISTORY_TYPE);
 			}
 
 			if (listCie.size() > 0) {

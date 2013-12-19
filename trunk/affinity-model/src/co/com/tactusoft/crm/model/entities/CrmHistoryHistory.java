@@ -33,6 +33,7 @@ public class CrmHistoryHistory implements java.io.Serializable {
 	private String gu;
 	private String psychiatric;
 	private String skin;
+	
 
 	public CrmHistoryHistory() {
 	}
@@ -190,5 +191,4 @@ public class CrmHistoryHistory implements java.io.Serializable {
 	public void setSkin(String skin) {
 		this.skin = skin;
 	}
-
 }
