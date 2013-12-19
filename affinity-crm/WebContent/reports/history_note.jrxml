@@ -61,7 +61,7 @@ ORDER by a.note_date DESC]]>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="20" splitType="Stretch">
+		<band height="80" splitType="Stretch">
 			<textField pattern="dd/MMM/yyyy">
 				<reportElement uuid="4f3546a7-c19a-48b3-8291-903480df545f" x="0" y="0" width="52" height="20"/>
 				<textElement textAlignment="Justified"/>
@@ -73,8 +73,10 @@ ORDER by a.note_date DESC]]>
 				<textFieldExpression><![CDATA[$F{Tipo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="be57bd08-0668-41eb-81f1-e802cf785277" x="130" y="0" width="425" height="20"/>
-				<textElement/>
+				<reportElement uuid="be57bd08-0668-41eb-81f1-e802cf785277" stretchType="RelativeToTallestObject" x="130" y="0" width="425" height="80"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Nota}]]></textFieldExpression>
 			</textField>
 		</band>

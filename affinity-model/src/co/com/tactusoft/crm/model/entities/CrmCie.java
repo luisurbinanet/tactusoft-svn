@@ -22,6 +22,8 @@ public class CrmCie implements java.io.Serializable {
 	private BigDecimal id;
 	private String code;
 	private String description;
+	private String cieType;
+	private String sapCode;
 	private Set<CrmDiagnosis> crmDiagnosises = new HashSet<CrmDiagnosis>(0);
 	private Set<CrmCieMaterial> crmCieMaterials = new HashSet<CrmCieMaterial>(0);
 	private Set<CrmMedication> crmMedications = new HashSet<CrmMedication>(0);
@@ -34,13 +36,15 @@ public class CrmCie implements java.io.Serializable {
 	}
 
 	public CrmCie(BigDecimal id, String code, String description,
-			Set<CrmDiagnosis> crmDiagnosises,
+			Set<CrmDiagnosis> crmDiagnosises, String cieType, String sapCode,
 			Set<CrmCieMaterial> crmCieMaterials,
 			Set<CrmMedication> crmMedications) {
 		this.id = id;
 		this.code = code;
 		this.description = description;
 		this.crmDiagnosises = crmDiagnosises;
+		this.cieType = cieType;
+		this.sapCode = sapCode;
 		this.crmCieMaterials = crmCieMaterials;
 		this.crmMedications = crmMedications;
 	}
@@ -71,6 +75,24 @@ public class CrmCie implements java.io.Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	@Column(name = "cie_type", length = 45)
+	public String getCieType() {
+		return cieType;
+	}
+
+	public void setCieType(String cieType) {
+		this.cieType = cieType;
+	}
+
+	@Column(name = "sap_code", length = 20)
+	public String getSapCode() {
+		return sapCode;
+	}
+
+	public void setSapCode(String sapCode) {
+		this.sapCode = sapCode;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmCie")
