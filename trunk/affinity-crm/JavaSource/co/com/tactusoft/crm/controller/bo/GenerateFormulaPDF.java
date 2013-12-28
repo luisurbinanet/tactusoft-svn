@@ -44,6 +44,9 @@ public class GenerateFormulaPDF {
 		} else if (type.equals(Constant.MATERIAL_TYPE_EXAMS)) {
 			path = "/reports/lab.jasper";
 			nameReport = "ExamanesLab.pdf";
+		} else if (type.equals(Constant.MATERIAL_TYPE_ODONTOLOGY)) {
+			path = "/reports/formulaOdo.jasper";
+			nameReport = "FormulaOdontologica.pdf";
 		}
 
 		String reportPath = FacesContext.getCurrentInstance()

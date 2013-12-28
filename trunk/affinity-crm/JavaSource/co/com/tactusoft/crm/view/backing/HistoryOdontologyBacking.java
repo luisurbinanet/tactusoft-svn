@@ -1,18 +1,25 @@
 package co.com.tactusoft.crm.view.backing;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 
+import net.sf.jasperreports.engine.JRException;
+
 import org.springframework.context.annotation.Scope;
 
 import com.tactusoft.webservice.client.beans.WSBean;
 
+import co.com.tactusoft.crm.controller.bo.GenerateFormulaPDF;
 import co.com.tactusoft.crm.model.entities.CrmCie;
 import co.com.tactusoft.crm.model.entities.CrmDiagnosis;
 import co.com.tactusoft.crm.model.entities.CrmHistoryPhysique;
+import co.com.tactusoft.crm.model.entities.CrmMaterialGroup;
 import co.com.tactusoft.crm.model.entities.CrmMedication;
 import co.com.tactusoft.crm.model.entities.CrmOccupation;
 import co.com.tactusoft.crm.model.entities.CrmOdontologyEvolution;
@@ -25,6 +32,8 @@ import co.com.tactusoft.crm.model.entities.CrmOdontologyTempJoint;
 import co.com.tactusoft.crm.model.entities.VwAppointment;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
+import co.com.tactusoft.crm.view.datamodel.DiagnosisDataModel;
+import co.com.tactusoft.crm.view.datamodel.MedicationDataModel;
 import co.com.tactusoft.crm.view.datamodel.WSBeanDataModel;
 
 @Named
@@ -152,6 +161,14 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 		}
 
 		idMembershipType = selectedPatient.getIdMemberShip();
+
+		listDiagnosis = processService
+				.getListDiagnosisByAppointment(currentAppointment.getId());
+		diagnosisModel = new DiagnosisDataModel(listDiagnosis);
+
+		listMedication = processService.getListMedicationByAppointment(
+				currentAppointment.getId(), Constant.MATERIAL_TYPE_ODONTOLOGY);
+		medicationModel = new MedicationDataModel(listMedication);
 
 		selectedHistoryHistory = processService
 				.getHistoryHistory(selectedAppointment.getId());
@@ -404,26 +421,6 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 		} else {
 			selectedHistoryPhysique.setRespiratoryRate(String
 					.valueOf(this.respiratoryRate));
-		}
-
-		if (this.getHeight().intValue() == 0) {
-			field = FacesUtil.getMessage("his_physique_height");
-			message = FacesUtil.getMessage("his_general_findings", field);
-			message = message + " - "
-					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addWarn(message);
-		} else {
-			selectedHistoryPhysique.setHeight(String.valueOf(this.height));
-		}
-
-		if (this.getWeight().intValue() == 0) {
-			field = FacesUtil.getMessage("his_physique_weight");
-			message = FacesUtil.getMessage("his_general_findings", field);
-			message = message + " - "
-					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addWarn(message);
-		} else {
-			selectedHistoryPhysique.setWeight(String.valueOf(this.weight));
 		}
 
 		if (FacesUtil
@@ -735,7 +732,7 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 					processService.saveDiagnosis(currentAppointment,
 							listDiagnosis);
 					processService.saveMedication(currentAppointment,
-							listMedication, Constant.MATERIAL_TYPE_MEDICINE);
+							listMedication, Constant.MATERIAL_TYPE_ODONTOLOGY);
 
 					if (event != null) {
 						currentAppointment.setCloseAppointment(true);
@@ -798,13 +795,37 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 	}
 
 	@Override
+	public void selectMedicationAction() {
+		this.typeMedication = Constant.MATERIAL_TYPE_ODONTOLOGY;
+		if (listMaterial.size() == 0) {
+			listAllMaterial = new ArrayList<WSBean>();
+			for (WSBean material : listAllBackupMaterial) {
+				boolean validateGroup = false;
+				for (CrmMaterialGroup row : listMaterialGroup) {
+					if (row.getMaterialType().equals(typeMedication)
+							&& material.getType().equals(row.getGroup())) {
+						validateGroup = true;
+						break;
+					}
+				}
+
+				if (validateGroup) {
+					listMaterial.add(material);
+					listAllMaterial.add(material);
+				}
+			}
+		}
+
+		refreshListMedication();
+		refreshMaterialFields();
+	}
+
+	@Override
 	protected void refreshListMedication() {
 		List<WSBean> listFilter = new ArrayList<WSBean>();
 		for (WSBean row : listMaterial) {
 			boolean filter = true;
-			if (typeMedication.equals(Constant.MATERIAL_TYPE_MEDICINE)
-					|| typeMedication
-							.equals(Constant.MATERIAL_TYPE_OTHER_MEDICINE)) {
+			if (typeMedication.equals(Constant.MATERIAL_TYPE_ODONTOLOGY)) {
 				for (CrmMedication med : listMedication) {
 					if (Long.parseLong(row.getCode()) == med.getCodMaterial()) {
 						filter = false;
@@ -824,6 +845,39 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 			disabledAddMaterial = false;
 		} else {
 			disabledAddMaterial = true;
+		}
+	}
+
+	@Override
+	public void addMaterialAction(ActionEvent event) {
+		BigDecimal id = new BigDecimal(listMedication.size() + 1);
+		CrmMedication medication = new CrmMedication();
+		medication.setId(id);
+		medication.setCrmAppointment(currentAppointment);
+		medication.setCrmCie(selectedDiagnosis.getCrmCie());
+		medication.setCodMaterial(Integer.parseInt(selectedMaterial.getCode()));
+		medication.setDescMaterial(selectedMaterial.getNames());
+		medication.setSapMaterialType(selectedMaterial.getType());
+		medication.setMaterialType(typeMedication);
+		medication.setUnit(amount);
+
+		listMedication.add(medication);
+		medicationModel = new MedicationDataModel(listMedication);
+
+		refreshListMedication();
+	}
+	
+	@Override
+	public void printFormulaAction() {
+		try {
+			GenerateFormulaPDF.PDF(currentAppointment.getId(),
+					Constant.MATERIAL_TYPE_ODONTOLOGY);
+		} catch (JRException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 
