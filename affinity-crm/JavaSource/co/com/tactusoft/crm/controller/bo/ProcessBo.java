@@ -71,13 +71,13 @@ public class ProcessBo implements Serializable {
 	}
 
 	public List<VwAppointment> getListVwAppointmentByHistory(BigDecimal idDoctor) {
-		/*
-		 * String startDateString = FacesUtil.formatDate(new Date(),
-		 * "yyyy-MM-dd") + " 00:00:00"; String endDateString =
-		 * FacesUtil.formatDate(new Date(), "yyyy-MM-dd") + " 23:59:59";
-		 */
-		String startDateString = "2013-12-16 00:00:00";
-		String endDateString = "2013-12-16 23:59:59";
+		String startDateString = FacesUtil.formatDate(new Date(), "yyyy-MM-dd")
+				+ " 00:00:00";
+		String endDateString = FacesUtil.formatDate(new Date(), "yyyy-MM-dd")
+				+ " 23:59:59";
+
+		// String startDateString = "2013-12-16 00:00:00";
+		// String endDateString = "2013-12-16 23:59:59";
 		return dao
 				.find("from VwAppointment o where o.doctorId = "
 						+ idDoctor
@@ -207,12 +207,12 @@ public class ProcessBo implements Serializable {
 
 	public List<CrmCie> getListCieByCode(String code, String type) {
 		return dao.find("FROM CrmCie o WHERE o.code like '%" + code
-				+ "%' AND cieType = '" + type  + "' ORDER BY o.description");
+				+ "%' AND cieType = '" + type + "' ORDER BY o.description");
 	}
 
 	public List<CrmCie> getListCieByName(String name, String type) {
 		return dao.find("FROM CrmCie o WHERE o.description like '%" + name
-				+ "%' AND cieType = '" + type  + "' ORDER BY o.description");
+				+ "%' AND cieType = '" + type + "' ORDER BY o.description");
 	}
 
 	public List<CrmMaterialGroup> getListMaterialGroup() {

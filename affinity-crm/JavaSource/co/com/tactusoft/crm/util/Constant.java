@@ -55,6 +55,7 @@ public class Constant {
 	public static final String MATERIAL_TYPE_OTHER_MEDICINE = "OTRO_MEDICAMENTO";
 	public static final String MATERIAL_TYPE_THERAPY = "TERAPIA";
 	public static final String MATERIAL_TYPE_EXAMS = "EXAMENES_COMPLEMENTARIOS";
+	public static final String MATERIAL_TYPE_ODONTOLOGY = "ODONTOLOGIA";
 
 	public static final String NOTE_TYPE_DOCTOR = "MEDICO";
 	public static final String NOTE_TYPE_NURSE = "ENFERMERA";

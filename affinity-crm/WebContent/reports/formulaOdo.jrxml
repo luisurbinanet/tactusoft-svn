@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="formula" pageWidth="396" pageHeight="612" whenNoDataType="BlankPage" columnWidth="358" leftMargin="19" rightMargin="19" topMargin="51" bottomMargin="14" uuid="c92dc5a0-c2d1-42d0-bc28-ff2011c41d76">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="dts_diagnosis" uuid="4ce141d0-9d81-44b7-a340-59801b1bfcd1">
+		<parameter name="p_appointment" class="java.lang.String">
+			<defaultValueExpression><![CDATA[195]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select a.id_appointment,  b.description, a.posology
+from crm_diagnosis a join crm_cie b
+where a.id_cie = b.id and a.id_appointment = 195
+order by a.id]]>
+		</queryString>
+		<field name="id_appointment" class="java.math.BigDecimal"/>
+		<field name="description" class="java.lang.String"/>
+		<field name="posology" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="P_APPOINTMENT" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_IMAGE" class="java.lang.String">
+		<defaultValueExpression><![CDATA["E:\\CRM\\workspace\\affinity-crm\\WebContent\\images\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select  c.id,a.id_appointment,
+		b.description desc_cie,
+		a.id_cie,
+		c.unit,
+		c.cod_material,
+		ucase(c.desc_material) desc_material,
+		ucase(a.posology) posology,
+		e.doc,
+		cast(d.start_appointment_date as Date) appointment_date,
+		concat(e.firstnames,' ', e.surnames) as name_patient,
+		e.doc as doc_patient,
+        f.medical_license,
+		f.names as name_doctor,
+		concat(g.code, ' - ',g.name) as name_branch
+from crm_diagnosis a join crm_cie b on a.id_cie = b.id
+join crm_medication c on a.id_appointment = c.id_appointment and a.id_cie = c.id_cie
+join crm_appointment d on a.id_appointment = d.id
+join crm_patient e on d.id_patient = e.id
+join crm_doctor f on d.id_doctor = f.id
+join crm_branch g on d.id_branch = g.id
+where a.id_appointment = $P{P_APPOINTMENT} and c.material_type = 'ODONTOLOGIA']]>
+	</queryString>
+	<field name="id" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_appointment" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="desc_cie" class="java.lang.String"/>
+	<field name="id_cie" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="unit" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cod_material" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="desc_material" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="posology" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="doc" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="appointment_date" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="name_patient" class="java.lang.String"/>
+	<field name="doc_patient" class="java.lang.String"/>
+	<field name="medical_license" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="name_doctor" class="java.lang.String"/>
+	<field name="name_branch" class="java.lang.String"/>
+	<group name="group_cie">
+		<groupExpression><![CDATA[$F{id_cie}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField isStretchWithOverflow="true">
+					<reportElement uuid="6734ef12-a28c-4963-8b42-50c6bfe9fd5a" isPrintRepeatedValues="false" x="0" y="0" width="358" height="20"/>
+					<textElement>
+						<font fontName="Arial" size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{desc_cie}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="12">
+				<line>
+					<reportElement uuid="5b7eb3e9-923b-4386-b701-f469eeef6d65" x="0" y="3" width="358" height="1" forecolor="#009999"/>
+					<graphicElement>
+						<pen lineWidth="2.0" lineStyle="Double"/>
+					</graphicElement>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
+	<title>
+		<band height="54" splitType="Stretch">
+			<textField>
+				<reportElement uuid="fb85831b-54e6-420d-bfcd-274dc2ff4fc3" x="235" y="1" width="123" height="15"/>
+				<textElement>
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name_doctor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="8f0bc0ea-63f2-4dec-a63a-dccc937aaefa" x="47" y="1" width="128" height="15"/>
+				<textElement>
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name_branch}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="61702f48-9bba-4e85-b708-edbce66e3d79" x="235" y="39" width="123" height="15"/>
+				<textElement>
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{appointment_date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="4837340c-f939-4456-a360-ac9d8c2d7b62" x="47" y="20" width="311" height="15"/>
+				<textElement>
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name_patient}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="6491ee03-fae5-4f3e-8d79-8c4529348a26" x="47" y="39" width="128" height="15"/>
+				<textElement>
+					<font fontName="Arial" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{doc_patient}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="31" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="535a5a5f-6fb6-4495-8f88-4ab2f31902bf" x="0" y="12" width="126" height="15"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tratamiento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5cc47441-d4fb-4934-883a-6b5a18f2758d" x="142" y="12" width="216" height="15"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Recomendaciones]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="5b7eb3e9-923b-4386-b701-f469eeef6d65" x="0" y="28" width="358" height="1" forecolor="#009999"/>
+				<graphicElement>
+					<pen lineWidth="2.0" lineStyle="Double"/>
+				</graphicElement>
+			</line>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="23" splitType="Stretch">
+			<textField>
+				<reportElement uuid="bb682a46-b8b7-4d50-a9ce-f2dedd3dfead" x="17" y="0" width="109" height="23" isPrintWhenDetailOverflows="true"/>
+				<textElement>
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{desc_material}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7b354bad-46ff-4ec4-97b9-87037b526d98" x="0" y="0" width="17" height="23"/>
+				<textElement>
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{unit}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="c97e21ae-df63-46d9-97f0-3c16107d05e1" isPrintRepeatedValues="false" x="142" y="0" width="216" height="23" printWhenGroupChanges="group_cie"/>
+				<textElement>
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{posology}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="94"/>
+	</pageFooter>
+</jasperReport>

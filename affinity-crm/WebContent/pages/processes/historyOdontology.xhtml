@@ -42,7 +42,7 @@
 							<p:commandButton
 								disabled="#{not historyOdontologyBacking.currentAppointment.closeAppointment}"
 								icon="ui-icon-print"
-								rendered="#{historyOdontologyBacking.rolePrincipal eq 'DOCTOR' and false}"
+								rendered="#{historyOdontologyBacking.rolePrincipal eq 'DOCTOR'}"
 								value="#{msg['btn_print_medication']}" ajax="false"
 								action="#{historyOdontologyBacking.printFormulaAction}"
 								process="@this,toolBar" />
@@ -727,37 +727,9 @@
 									decimalPlaces="0" style="width:300px" maxValue="70"
 									value="#{historyOdontologyBacking.respiratoryRate}" />
 
-								<h:outputLabel value="#{msg['his_physique_height']}" />
-								<pe:inputNumber symbol="   cm" symbolPosition="s"
-									decimalPlaces="0" style="width:300px" maxValue="250"
-									value="#{historyOdontologyBacking.height}" />
-
-								<h:outputLabel value="#{msg['his_physique_weight']}" />
-								<pe:inputNumber symbol="   kg" symbolPosition="s"
-									decimalPlaces="2" style="width:300px" maxValue="999"
-									value="#{historyOdontologyBacking.weight}" />
-
 								<h:outputLabel value="#{msg['his_physique_blood_pressure']}" />
 								<p:inputText maxlength="7" style="width:300px"
 									value="#{historyOdontologyBacking.selectedHistoryPhysique.bloodPressure}" />
-
-							</h:panelGrid>
-
-							<h:panelGrid id="pnlIMC" columns="4" width="100%"
-								columnClasses="width25per,width25per,width25per,width25per">
-
-								<h:outputLabel value="#{msg['his_physique_imc']}" />
-								<pe:inputNumber symbol="  Kg/m2" symbolPosition="s"
-									decimalPlaces="2" style="width:300px" maxValue="999"
-									value="#{historyOdontologyBacking.imc}" readonly="true" />
-
-								<h:outputLabel value="#{msg['his_physique_imc']}" />
-								<p:inputText value="#{historyOdontologyBacking.descImc}"
-									style="width:300px" />
-
-								<p:commandButton
-									actionListener="#{historyOdontologyBacking.calculateIMCAction}"
-									update="pnlIMC" value="#{msg['btn_calculate_imc']}" />
 
 							</h:panelGrid>
 
@@ -2926,7 +2898,7 @@
 							</h:panelGrid>
 						</p:tab>
 
-						<p:tab title="#{msg['his_history_ip']}" id="IP">
+						<p:tab title="#{msg['his_history_ip_odo']}" id="IP">
 
 							<p:dataTable id="dtbDiagnosis" var="rec"
 								value="#{historyOdontologyBacking.diagnosisModel}"
@@ -2949,14 +2921,14 @@
 										styleClass="ui-widget-content grid">
 										<p:commandButton oncomplete="dlgMedicine.show()"
 											update=":form:dialogMedicine" icon="ui-icon-plusthick"
-											title="#{msg['btn_select_medication']}"
+											title="#{msg['btn_select_medication_odo']}"
 											action="#{historyOdontologyBacking.selectMedicationAction}">
 											<f:setPropertyActionListener value="#{rec}"
 												target="#{historyOdontologyBacking.selectedDiagnosis}" />
 										</p:commandButton>
 										<p:commandButton oncomplete="dlgPosology.show()"
 											update=":form:dialogPosology" icon="ui-icon-comment"
-											title="#{msg['btn_add_posology']}">
+											title="#{msg['btn_add_posology_odo']}">
 											<f:setPropertyActionListener value="#{rec}"
 												target="#{historyOdontologyBacking.selectedDiagnosis}" />
 										</p:commandButton>
@@ -2969,7 +2941,7 @@
 										actionListener="#{historyOdontologyBacking.selectDiagnosisAction}"
 										update=":form:dialogCie" />
 									<p:commandButton oncomplete="dlgMedicationPreview.show()"
-										value="#{msg['btn_view_medication']}" icon="ui-icon-search"
+										value="#{msg['btn_view_medication_odo']}" icon="ui-icon-search"
 										disabled="#{historyOdontologyBacking.disabledMedication}"
 										update=":form:dialogMedicationPreview" />
 									<p:commandButton value="#{msg['btn_delete']}"
@@ -2992,7 +2964,7 @@
 
 					</h:panelGrid>
 
-					<p:dialog header="#{msg['his_history_ip']}" widgetVar="dlgCie"
+					<p:dialog header="#{msg['his_history_ip_odo']}" widgetVar="dlgCie"
 						resizable="false" id="dialogCie" showEffect="fade"
 						hideEffect="explode" modal="true" width="600">
 
@@ -3022,10 +2994,11 @@
 							<f:facet name="footer">
 								<p:spacer height="10" />
 								<p:commandButton value="#{msg['btn_search']}"
-									icon="ui-icon-search" update="pnlTable3 recordTable3 btnAddCIE"
+									process="dialogCie" icon="ui-icon-search"
+									update="pnlTable3 recordTable3 btnAddCIE"
 									actionListener="#{historyOdontologyBacking.searchCIEAction}" />
 								<p:commandButton id="btnAddCIE" value="#{msg['btn_add']}"
-									icon="ui-icon-plusthick"
+									icon="ui-icon-plusthick" process="dialogCie"
 									update="recordTable3 :form:accordion:dtbDiagnosis"
 									actionListener="#{historyOdontologyBacking.addCieAction}"
 									disabled="#{historyOdontologyBacking.disabledAddCie}" />
@@ -3099,7 +3072,7 @@
 									update="pnlTable4 recordTable4 btnAddMaterial"
 									actionListener="#{historyOdontologyBacking.searchMaterialAction}" />
 								<p:commandButton id="btnAddMaterial" value="#{msg['btn_add']}"
-									icon="ui-icon-plusthick"
+									icon="ui-icon-plusthick" process="@this, dialogMedicine"
 									update="recordTable4 :form:accordion:dtbDiagnosis"
 									actionListener="#{historyOdontologyBacking.addMaterialAction}"
 									disabled="#{historyOdontologyBacking.disabledAddMaterial}" />
@@ -3131,7 +3104,7 @@
 
 					</p:dialog>
 
-					<p:dialog header="#{msg['btn_add_posology']}"
+					<p:dialog header="#{msg['btn_add_posology_odo']}"
 						widgetVar="dlgPosology" resizable="false" id="dialogPosology"
 						showEffect="fade" hideEffect="explode" modal="true" width="600">
 
@@ -3140,7 +3113,7 @@
 
 					</p:dialog>
 
-					<p:dialog header="#{msg['cie_grp_medication']}"
+					<p:dialog header="#{msg['cie_grp_medication_odo']}"
 						widgetVar="dlgMedicationPreview" resizable="false"
 						id="dialogMedicationPreview" showEffect="fade"
 						hideEffect="explode" modal="true" width="800">
