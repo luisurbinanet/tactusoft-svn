@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="history_record" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="258c62b7-639f-43e7-ac7b-c289802e1be2">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="P_ID_PATIENT" class="java.math.BigDecimal">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_GENDER" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Femenino"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+a.id,
+b.start_appointment_date,
+CASE limitation_open_close_mouth
+	 WHEN '0' THEN 'NO REFERIDO'
+	 WHEN '1' THEN 'NO'
+	 WHEN '2' THEN 'SI'
+	END limitation_open_close_mouth,
+	CASE herpes_thrush
+	 WHEN '0' THEN 'NO REFERIDO'
+	 WHEN '1' THEN 'NO'
+	 WHEN '2' THEN 'SI'
+	END herpes_thrush,
+	CASE noise_jaw_open_close_mouth
+     WHEN '0' THEN 'NO REFERIDO'
+	 WHEN '1' THEN 'NO'
+	 WHEN '2' THEN 'SI'
+	END noise_jaw_open_close_mouth,
+CASE bit_lips_nails_habit
+     WHEN '0' THEN 'NO REFERIDO'
+	 WHEN '1' THEN 'NO'
+	 WHEN '2' THEN 'SI'
+	END bit_lips_nails_habit,
+	CASE smoke_habit
+     WHEN '0' THEN 'NO REFERIDO'
+	 WHEN '1' THEN 'NO'
+	 WHEN '2' THEN 'SI'
+	END smoke_habit,
+	cigarettes_day_habit,
+	CASE citrus_foods_habit
+     WHEN '0' THEN 'NO REFERIDO'
+	 WHEN '1' THEN 'NO'
+	 WHEN '2' THEN 'SI'
+	END citrus_foods_habit,
+	CASE bit_objects_habit
+     WHEN '0' THEN 'NO REFERIDO'
+	 WHEN '1' THEN 'NO'
+	 WHEN '2' THEN 'SI'
+	END bit_objects_habit,
+	CASE tooth_clench_habit
+     WHEN '0' THEN 'NO REFERIDO'
+	 WHEN '1' THEN 'NO'
+	 WHEN '2' THEN 'SI'
+	END tooth_clench_habit,
+	CASE mouth_breath_habit
+     WHEN '0' THEN 'NO REFERIDO'
+	 WHEN '1' THEN 'NO'
+	 WHEN '2' THEN 'SI'
+	END mouth_breath_habit,
+    IFNULL(a.obs,'NO REFERIDO') obs_odo
+FROM crm_db.crm_history_record a JOIN crm_db.crm_appointment b on a.id_appointment = b.id
+WHERE a.id_patient = $P{P_ID_PATIENT}
+ORDER by b.start_appointment_date DESC]]>
+	</queryString>
+	<field name="id" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="start_appointment_date" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="limitation_open_close_mouth" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="herpes_thrush" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="noise_jaw_open_close_mouth" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="bit_lips_nails_habit" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="smoke_habit" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cigarettes_day_habit" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="citrus_foods_habit" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="bit_objects_habit" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tooth_clench_habit" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="mouth_breath_habit" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="obs_odo" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="34">
+			<staticText>
+				<reportElement uuid="cccfadfe-8d80-4b4f-b9cf-727267a05009" x="3" y="0" width="552" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Antecedentes Odontológicos]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="ed1b7d1a-c512-4e53-8ad3-fa73dc9b5448" x="2" y="19" width="554" height="1"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="237" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="e1ed9247-c63e-4e37-8b9e-1b3b97f0ce65" x="2" y="1" width="63" height="20"/>
+				<textElement/>
+				<text><![CDATA[Cita del día:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="d82c8a93-5427-4d2d-b895-7722b051e68b" x="63" y="1" width="489" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{start_appointment_date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="6e3b8bcb-ad69-4592-ad5e-c7aec2506fca" x="264" y="34" width="277" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{limitation_open_close_mouth}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="6b71759a-aa4a-49d3-bb67-2c4ae700d75c" x="264" y="74" width="277" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{herpes_thrush}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="baec7b0d-a665-43ef-85c9-8b03e9a67788" x="264" y="54" width="277" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{noise_jaw_open_close_mouth}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a08db140-380a-45c9-ae09-bf0c96ff9fdf" x="121" y="114" width="77" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{smoke_habit}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="6ea8ac68-cc79-42c7-bf6c-9c1dec96d067" x="3" y="34" width="261" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Limitacion al abrir o cerrar la boca]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="90c0cdd2-50e1-4b38-b6c4-754f72181fa4" x="3" y="54" width="261" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ruido en madibula al abrir o cerrar la boca]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="89c26807-af74-45ba-90a4-f37790c144b9" x="3" y="74" width="261" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Herpes o aftas frecuente]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="e923edcf-7194-4e29-85f9-bee10db7895e" x="264" y="94" width="277" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{bit_lips_nails_habit}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="f29fec56-06ad-43a9-aefb-4eca7e29339b" x="3" y="94" width="261" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Morderse labios o uñas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6ae2adae-d7da-406f-9606-b76c5c19403d" x="3" y="114" width="118" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fuma]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="dfc76c3a-068c-47f9-8a3a-c108914bcb50" x="382" y="114" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{cigarettes_day_habit}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="66f96702-249a-4dfa-aab0-53f2da6299b2" x="264" y="114" width="118" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cigarrillos diarios]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="2e8dabb5-2cbe-4dc3-aabb-7d1733e55608" x="264" y="134" width="277" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{citrus_foods_habit}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="66469685-60ec-4994-be92-f3171f7ec235" x="3" y="134" width="261" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Alimentos citricos]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="2ded7c04-a7ea-4406-99e2-8e05d2d27345" x="264" y="154" width="277" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{bit_objects_habit}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="c677cc9a-d05a-4f47-883a-1c73b54361a4" x="264" y="174" width="277" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{tooth_clench_habit}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7b03f517-e3fc-47bd-b639-434a01e304b9" x="264" y="194" width="277" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{mouth_breath_habit}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="837c68b8-e98c-4022-a1ac-e68118eb379a" x="264" y="214" width="277" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{obs_odo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="5616fca3-8a8f-47e9-9796-a6fbd9527d7d" x="2" y="154" width="261" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Muerde objetos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="59598387-2b94-4297-97c7-26b1c91fe36b" x="2" y="174" width="261" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Apretamiento dentario]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="83216a72-fefa-4978-8e22-6f8ca01c2659" x="2" y="194" width="261" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Respiracion bucal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4d5caad6-1a49-45cb-a6de-e5ffedc48788" x="2" y="214" width="261" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Observaciones]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>
