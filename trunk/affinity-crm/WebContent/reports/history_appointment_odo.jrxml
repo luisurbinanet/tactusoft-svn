@@ -24,7 +24,7 @@ FROM crm_db.crm_appointment a JOIN crm_db.crm_branch b ON a.id_branch = b.id
 JOIN crm_db.crm_doctor c ON a.id_doctor = c.id
 JOIN crm_db.crm_procedure_detail d ON a.id_procedure_detail = d.id
 WHERE a.id_patient = $P{P_ID_PATIENT} AND a.state IN (3,4)
-AND type_history = 'MEDICAL'
+AND type_history = 'ODONTOLOGY'
 ORDER BY start_appointment_date DESC]]>
 	</queryString>
 	<field name="id" class="java.math.BigDecimal">

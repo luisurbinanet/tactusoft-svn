@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="history_record" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="258c62b7-639f-43e7-ac7b-c289802e1be2">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="P_ID_PATIENT" class="java.math.BigDecimal">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT a.id,
+	b.start_appointment_date,
+	CASE opening_noise
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END opening_noise,
+	CASE closure_noise
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END closure_noise,
+	CASE laterality_noise
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END laterality_noise,
+	CASE opening_deviaton
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END opening_deviaton,
+	CASE closure_deviaton
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END closure_deviaton,
+	CASE laterality_deviaton
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END laterality_deviaton,
+	CASE opening_pain
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END opening_pain,
+	CASE closure_pain
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END closure_pain,
+	CASE laterality_pain
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END laterality_pain,
+	CASE opening_fatigue
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END opening_fatigue,
+	CASE closure_fatigue
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END closure_fatigue,
+	CASE laterality_fatigue
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END laterality_fatigue,
+    IFNULL(a.obs,'NO REFERIDO') obs
+FROM crm_db.crm_odontology_temp_joint a JOIN crm_db.crm_appointment b on a.id_appointment = b.id
+WHERE b.id_patient = $P{P_ID_PATIENT}
+ORDER by b.start_appointment_date DESC]]>
+	</queryString>
+	<field name="id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="start_appointment_date" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="opening_noise" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="closure_noise" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="laterality_noise" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="opening_deviaton" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="closure_deviaton" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="laterality_deviaton" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="opening_pain" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="closure_pain" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="laterality_pain" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="opening_fatigue" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="closure_fatigue" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="laterality_fatigue" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="obs" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="34">
+			<staticText>
+				<reportElement uuid="cccfadfe-8d80-4b4f-b9cf-727267a05009" x="3" y="0" width="552" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Articulaciones Temporomandibular]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="ed1b7d1a-c512-4e53-8ad3-fa73dc9b5448" x="2" y="19" width="554" height="1"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="237" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="e1ed9247-c63e-4e37-8b9e-1b3b97f0ce65" x="2" y="1" width="63" height="20"/>
+				<textElement/>
+				<text><![CDATA[Cita del día:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="d82c8a93-5427-4d2d-b895-7722b051e68b" x="63" y="1" width="489" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{start_appointment_date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a82d4b46-3fee-4a2d-bb89-5184c5c8a272" x="116" y="21" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{opening_noise}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="c149bb1e-4d62-4b9c-bd34-f2118e5cf3d8" x="2" y="21" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Ruidos Apertura]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="8315dc7b-2f49-45bd-b4f2-8e81b13f8031" x="400" y="21" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{closure_noise}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="3141e8e2-aa35-4f81-9712-0cf78ce32e8d" x="300" y="21" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Ruidos Cierre]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

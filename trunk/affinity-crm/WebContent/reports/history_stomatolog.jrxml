@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="history_record" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="258c62b7-639f-43e7-ac7b-c289802e1be2">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="P_ID_PATIENT" class="java.math.BigDecimal">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_GENDER" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Femenino"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT a.id,
+b.start_appointment_date,
+	CASE exostosis_head
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END exostosis_head,
+	CASE endostosis_head
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END endostosis_head,
+	CASE dolichocephalic_face
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END dolichocephalic_face,
+	CASE mesocephalic_face
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END mesocephalic_face,
+	CASE brachycephalic_face
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END brachycephalic_face,
+	CASE normal_skin
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END normal_skin,
+	CASE pale_skin
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END pale_skin,
+	CASE cyanotic_skin
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END cyanotic_skin,
+	CASE red_skin
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END red_skin,
+	CASE transverse_face
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END transverse_face,
+	CASE longitudinal_face
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END longitudinal_face,
+	CASE concave_side_face
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END concave_side_face,
+	CASE convex_side_face
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END convex_side_face,
+	CASE hypotonic_muscles
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END hypotonic_muscles,
+	CASE hypertonic_muscles
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END hypertonic_muscles,
+	CASE lymph_node_chain
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END lymph_node_chain,
+	IFNULL(othres,'NO REFERIDO') othres,
+    IFNULL(a.obs,'NO REFERIDO') obs
+FROM crm_db.crm_odontology_stomatolog a JOIN crm_db.crm_appointment b on a.id_appointment = b.id
+WHERE b.id_patient = $P{P_ID_PATIENT}
+ORDER by b.start_appointment_date DESC]]>
+	</queryString>
+	<field name="id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="start_appointment_date" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="exostosis_head" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="endostosis_head" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="dolichocephalic_face" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="mesocephalic_face" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="brachycephalic_face" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="normal_skin" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="pale_skin" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cyanotic_skin" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="red_skin" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="transverse_face" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="longitudinal_face" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="concave_side_face" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="convex_side_face" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="hypotonic_muscles" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="hypertonic_muscles" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="lymph_node_chain" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="othres" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="obs" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="34">
+			<staticText>
+				<reportElement uuid="cccfadfe-8d80-4b4f-b9cf-727267a05009" x="3" y="0" width="552" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Hallazgos Estomatológicos]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="ed1b7d1a-c512-4e53-8ad3-fa73dc9b5448" x="2" y="19" width="554" height="1"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="237" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="e1ed9247-c63e-4e37-8b9e-1b3b97f0ce65" x="2" y="1" width="63" height="20"/>
+				<textElement/>
+				<text><![CDATA[Cita del día:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="d82c8a93-5427-4d2d-b895-7722b051e68b" x="63" y="1" width="489" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{start_appointment_date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="64f3e5f7-3680-4e6f-9ecf-4eb4826bf8e3" x="125" y="31" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{exostosis_head}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="f2a90d4d-8ef7-42b9-a28c-2635588a9d10" x="356" y="31" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{endostosis_head}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="a4f56b15-6f95-42f8-bcdb-906ed79d1379" x="3" y="31" width="122" height="20"/>
+				<textElement/>
+				<text><![CDATA[Cabeza Exostosis]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a2d817a4-7bf9-4c60-a2c0-23b247a80f34" x="235" y="31" width="122" height="20"/>
+				<textElement/>
+				<text><![CDATA[Cabeza Endostosis]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="1b6d1eb9-2fb0-41cf-9aee-d893664e652e" x="125" y="51" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{dolichocephalic_face}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="b180c5bd-1941-4757-b1ca-d72fbc2e583a" x="3" y="51" width="122" height="20"/>
+				<textElement/>
+				<text><![CDATA[Cara Dolicocefalo]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="38aef827-1655-4ca5-abca-5b1966c1d77d" x="356" y="51" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{mesocephalic_face}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="a5d9245e-5c74-438c-bd74-c57510c4430f" x="235" y="51" width="122" height="20"/>
+				<textElement/>
+				<text><![CDATA[Cara Mesocefalico]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="74850cd1-b4a9-4137-90e6-e8958d71c876" x="125" y="71" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{brachycephalic_face}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="bf5d01da-f018-4962-a214-83bd33d9eb6a" x="3" y="71" width="122" height="20"/>
+				<textElement/>
+				<text><![CDATA[Cara Braquicefalico]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="7376d831-a628-44f3-8b35-3b20a0ed90a9" x="356" y="71" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{normal_skin}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="927c339c-4479-4d11-8717-29e2bf1d796d" x="235" y="71" width="122" height="20"/>
+				<textElement/>
+				<text><![CDATA[Piel Normal]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="b0978964-869b-43e9-9bce-ddf6e1fc2864" x="125" y="91" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{pale_skin}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="fd452a2c-fd29-43e7-afba-ff4c2c4f64db" x="3" y="91" width="122" height="20"/>
+				<textElement/>
+				<text><![CDATA[Piel Palida]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="12b5a8f2-e16f-4310-8e97-64a96511eb8f" x="356" y="91" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{cyanotic_skin}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="3a49eb77-0d70-4487-b9d7-8093bd0edade" x="235" y="91" width="122" height="20"/>
+				<textElement/>
+				<text><![CDATA[Piel Cianótica]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="dff9b865-0241-4385-8210-1338dd7b556b" x="125" y="111" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{red_skin}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="ec008c5a-7863-4b30-b358-6e222625741d" x="3" y="111" width="122" height="20"/>
+				<textElement/>
+				<text><![CDATA[Piel Enrojecida]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="b75313d9-0427-4f81-b2e8-8f382fc2ee2b" x="356" y="111" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{transverse_face}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="5d8f3049-7b1d-4f9d-ba5c-0e98cd50c4e6" x="235" y="111" width="122" height="20"/>
+				<textElement/>
+				<text><![CDATA[Asimetrias Transversales]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="53d4e120-0059-4990-86cf-bf69acbc1883" x="125" y="131" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{longitudinal_face}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="713a65c2-b595-4418-bc2c-784c5e58c6ec" x="3" y="131" width="122" height="20"/>
+				<textElement/>
+				<text><![CDATA[Asimetrias Longitudinales]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="3c7b8d1a-01a5-4a11-aad9-d485ac4a9a73" x="356" y="131" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{concave_side_face}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="cc44f9a1-1070-4ac1-8528-f676099cf1dd" x="235" y="131" width="122" height="20"/>
+				<textElement/>
+				<text><![CDATA[Perfil Concavo]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="ec132122-3f5f-4741-9bd6-e70b6e4fc9a2" x="125" y="151" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{convex_side_face}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="8e3f4bf6-c31b-4cd2-a31a-20e2957ab40d" x="3" y="151" width="122" height="20"/>
+				<textElement/>
+				<text><![CDATA[Perfil Convexo]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="176d5125-ed64-4d36-ab86-511dddbd3063" x="356" y="151" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{hypotonic_muscles}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="630c15c0-6e9f-458d-b680-ecedca2796ea" x="235" y="151" width="122" height="20"/>
+				<textElement/>
+				<text><![CDATA[Musculos Hipotónicos]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="fcfb321c-74d9-4315-99fe-faef378a395a" x="357" y="171" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{lymph_node_chain}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="2df774e5-ab6d-42f0-b0b6-3df4174c4167" x="235" y="171" width="122" height="20"/>
+				<textElement/>
+				<text><![CDATA[Cadena Ganglionar]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="c693b0f0-0d04-443d-a36d-4c3bbd24c8e5" x="124" y="191" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{othres}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="360bda99-83db-42dc-9d0c-9f14240074d3" x="3" y="191" width="122" height="20"/>
+				<textElement/>
+				<text><![CDATA[Cuello Otros]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="e5b45027-4490-4565-8d96-75313e139dfb" x="357" y="191" width="100" height="46"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{obs}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="e7953342-3676-454e-83a4-25ac83a871de" x="235" y="191" width="122" height="20"/>
+				<textElement/>
+				<text><![CDATA[Obsservaciones]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="661bfccd-495f-447d-b144-908d9a8d7d34" x="125" y="171" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{hypertonic_muscles}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="b8e3e86b-2a34-4bd0-808f-0c51a2c0c359" x="3" y="171" width="122" height="20"/>
+				<textElement/>
+				<text><![CDATA[Musculos Hipertónicos]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>
