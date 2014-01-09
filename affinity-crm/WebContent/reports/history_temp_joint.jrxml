@@ -137,11 +137,11 @@ ORDER by b.start_appointment_date DESC]]>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="237" splitType="Stretch">
+		<band height="247" splitType="Stretch">
 			<staticText>
 				<reportElement uuid="e1ed9247-c63e-4e37-8b9e-1b3b97f0ce65" x="2" y="1" width="63" height="20"/>
 				<textElement/>
-				<text><![CDATA[Cita del día:]]></text>
+				<text><![CDATA[Día de la Cita]]></text>
 			</staticText>
 			<textField>
 				<reportElement uuid="d82c8a93-5427-4d2d-b895-7722b051e68b" x="63" y="1" width="489" height="20"/>
@@ -151,24 +151,186 @@ ORDER by b.start_appointment_date DESC]]>
 				<textFieldExpression><![CDATA[$F{start_appointment_date}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="a82d4b46-3fee-4a2d-bb89-5184c5c8a272" x="116" y="21" width="100" height="20"/>
+				<reportElement uuid="a82d4b46-3fee-4a2d-bb89-5184c5c8a272" x="53" y="44" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{opening_noise}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="c149bb1e-4d62-4b9c-bd34-f2118e5cf3d8" x="2" y="21" width="100" height="20"/>
-				<textElement/>
-				<text><![CDATA[Ruidos Apertura]]></text>
+				<reportElement uuid="c149bb1e-4d62-4b9c-bd34-f2118e5cf3d8" x="3" y="44" width="50" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Apertura]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="8315dc7b-2f49-45bd-b4f2-8e81b13f8031" x="400" y="21" width="100" height="20"/>
+				<reportElement uuid="8315dc7b-2f49-45bd-b4f2-8e81b13f8031" x="192" y="44" width="100" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{closure_noise}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="3141e8e2-aa35-4f81-9712-0cf78ce32e8d" x="300" y="21" width="100" height="20"/>
+				<reportElement uuid="3141e8e2-aa35-4f81-9712-0cf78ce32e8d" x="152" y="44" width="41" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cierre]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="d11c1157-99c1-441a-b8ea-428e551ad983" x="390" y="44" width="100" height="20"/>
 				<textElement/>
-				<text><![CDATA[Ruidos Cierre]]></text>
+				<textFieldExpression><![CDATA[$F{laterality_noise}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="cfa46a6e-0c9a-4b1b-ad13-fb2146a60dc2" x="291" y="44" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lateralidad]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="2eb670ce-b376-472c-96e9-7f4f65dc3998" x="53" y="84" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{opening_deviaton}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="512faeaf-9244-4cfc-b353-db7492f3e776" x="192" y="84" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{closure_deviaton}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="4adc5b37-c17d-4dde-b7d4-974b43621508" x="2" y="64" width="100" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Desviación]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="1a18b4be-3b94-406b-be2d-b1294fee3a3c" x="390" y="84" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{laterality_deviaton}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="623a00fe-bfcb-49dd-9603-669843b01690" x="53" y="122" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{opening_pain}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ce03aefc-2d1d-4404-91a9-88a6940ba1f3" x="192" y="122" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{closure_pain}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a2746ed9-2749-441b-9c6f-866506e4be29" x="390" y="122" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{laterality_pain}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="e62ad3d4-ef3b-4c15-b6bd-916549eb7308" x="53" y="163" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{opening_fatigue}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="69786d55-ea14-4726-8dcf-c7f7d7494844" x="192" y="163" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{closure_fatigue}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="8f61748b-186e-412a-965e-99530916e216" x="390" y="163" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{laterality_fatigue}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="4fc6ca00-b231-4ed0-8491-61fb3bf036ad" x="116" y="182" width="384" height="62"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{obs}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="e3f521a9-4160-4821-a055-3ee49b4210fc" x="4" y="182" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Observaciones]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f4922d1e-5fd5-4f09-b031-203b6d196e49" x="3" y="23" width="100" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ruidos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2d7d1de2-7a82-445c-844b-35fefa24d58c" x="151" y="84" width="41" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cierre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="73b64f75-fd33-4bff-bcb4-ae274b70106e" x="290" y="84" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lateralidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6af5b9cf-e0c9-4445-b566-a1f67e5e8f83" x="3" y="84" width="50" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Apertura]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="78d88e54-5556-4074-b04a-731a075b064d" x="3" y="103" width="100" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dolor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="de2665b4-72ab-49b7-993a-d0b9755d8aa5" x="3" y="122" width="50" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Apertura]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4aee6d12-2557-487b-9d8a-24f8ecfe0578" x="151" y="122" width="41" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cierre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1c10fa1b-0ef8-417d-9ea5-5f90e094644c" x="290" y="122" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lateralidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5dd2edea-71b7-4753-8542-d37a74567192" x="2" y="142" width="100" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fatiga o Dolor Muscular]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="668caad1-549c-4fa2-b512-dd166b3cab85" x="154" y="163" width="41" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cierre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b9c955c7-3f3c-4da3-9a62-24a93f678983" x="3" y="163" width="50" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Apertura]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4a915fa3-aa4b-4b24-a654-c04ef1e30941" x="293" y="163" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lateralidad]]></text>
 			</staticText>
 		</band>
 	</detail>

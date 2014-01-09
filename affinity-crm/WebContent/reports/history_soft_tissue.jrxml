@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="history_record" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="258c62b7-639f-43e7-ac7b-c289802e1be2">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="173"/>
+	<parameter name="P_ID_PATIENT" class="java.math.BigDecimal">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT a.id,
+    a.id_appointment,
+    b.start_appointment_date,
+    a.gland_normal,
+    a.gland_altered,
+    a.lymph_normal,
+    a.lymph_altered,
+    a.oral_mucosa_normal,
+    a.oral_mucosa_altered,
+    a.braces_normal,
+    a.braces_altered,
+    a.tongue_normal,
+    a.tongue_altered,
+    a.palate_normal,
+    a.palate_altered,
+    a.mounth_floor_normal,
+    a.mounth_floor_altered,
+    a.oropharynx_normal,
+    a.oropharynx_altered,
+    a.tonsils_normal,
+    a.tonsils_altered,
+    a.cheeks_normal,
+    a.cheeks_altered,
+    IFNULL(a.obs,'NO REFERIDO') obs
+FROM crm_db.crm_odontology_soft_tissue a JOIN crm_db.crm_appointment b on a.id_appointment = b.id
+WHERE b.id_patient = $P{P_ID_PATIENT}
+ORDER by b.start_appointment_date DESC]]>
+	</queryString>
+	<field name="id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_appointment" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="start_appointment_date" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gland_normal" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gland_altered" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="lymph_normal" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="lymph_altered" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="oral_mucosa_normal" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="oral_mucosa_altered" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="braces_normal" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="braces_altered" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tongue_normal" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tongue_altered" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="palate_normal" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="palate_altered" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="mounth_floor_normal" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="mounth_floor_altered" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="oropharynx_normal" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="oropharynx_altered" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tonsils_normal" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tonsils_altered" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cheeks_normal" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cheeks_altered" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="obs" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="34">
+			<staticText>
+				<reportElement uuid="cccfadfe-8d80-4b4f-b9cf-727267a05009" x="1" y="0" width="552" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tejidos Blandos]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="ed1b7d1a-c512-4e53-8ad3-fa73dc9b5448" x="2" y="19" width="554" height="1"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="483" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="e1ed9247-c63e-4e37-8b9e-1b3b97f0ce65" x="2" y="1" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Día de la Cita]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="d82c8a93-5427-4d2d-b895-7722b051e68b" x="102" y="1" width="450" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{start_appointment_date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="86def99f-3797-47cc-b301-e286bd7cfb7c" x="81" y="40" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{gland_normal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="88d964c4-74f2-4118-9cb6-ddc6d747493f" x="2" y="40" width="80" height="20"/>
+				<textElement/>
+				<text><![CDATA[Normal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a3c7dc88-82b1-4c5d-b404-79bb59e59371" x="181" y="40" width="80" height="20"/>
+				<textElement/>
+				<text><![CDATA[Alterada]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="1e348bb2-c8c7-4e0b-8719-2fa3fc18b55d" x="261" y="40" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{gland_altered}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="2e630acc-45af-483b-b723-1ae3d72af444" x="2" y="20" width="100" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Glándulas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d8447335-1488-4f09-ab85-a5f57fe3c949" x="2" y="60" width="100" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ganglios]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4b9d4c1b-a1a3-4780-9e8e-fe21cb1aef41" x="2" y="80" width="80" height="20"/>
+				<textElement/>
+				<text><![CDATA[Normal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8bca9d15-8bb6-472e-88d5-28bee6bf68d4" x="181" y="80" width="80" height="20"/>
+				<textElement/>
+				<text><![CDATA[Alterada]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="cfe7e70c-f562-4c0f-b447-2244103afc97" x="82" y="80" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{lymph_normal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="1af04491-9c56-4fdb-8f02-eeea5af17d5a" x="261" y="80" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{lymph_altered}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="f3aac665-fb5b-4a03-8845-288396f29fd7" x="2" y="100" width="100" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Mucosa Oral]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9bfaf4ac-2e75-42d3-a146-a987ffe54466" x="181" y="120" width="80" height="20"/>
+				<textElement/>
+				<text><![CDATA[Alterada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5983b490-2316-4bb0-89a3-3efed8c6e1dd" x="2" y="120" width="80" height="20"/>
+				<textElement/>
+				<text><![CDATA[Normal]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="197d7be1-3011-4952-88d9-5e26eb0bd1e5" x="81" y="120" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{oral_mucosa_normal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="2e9099f6-6750-4985-a015-62185ecebf49" x="261" y="120" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{oral_mucosa_altered}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="7e07b464-bace-437c-8b9d-d86757f753b5" x="2" y="159" width="80" height="20"/>
+				<textElement/>
+				<text><![CDATA[Normal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="85bcb0be-0718-4afe-a593-1bb63c1eb88d" x="2" y="139" width="100" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Frenillos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ab089231-0263-46dd-8e51-2462085b5339" x="181" y="159" width="80" height="20"/>
+				<textElement/>
+				<text><![CDATA[Alterada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a2ac5ba7-1e28-4aeb-a4cf-47e347a51a3b" x="181" y="198" width="80" height="20"/>
+				<textElement/>
+				<text><![CDATA[Alterada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1dbc1df3-4ba1-4f58-bfb9-9a90b1095abd" x="2" y="178" width="100" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lengua]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2ae0db07-bdd0-4b09-aae3-b95c2b609d53" x="2" y="198" width="80" height="20"/>
+				<textElement/>
+				<text><![CDATA[Normal]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="e3a63467-9c21-4ea8-b29f-6fd0be640399" x="261" y="159" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{braces_altered}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="71812e7e-8de5-40db-853f-a55f1b2c8744" x="81" y="159" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{braces_normal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="2d5f867a-db6e-404e-8bb9-308b6576094a" x="81" y="198" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{tongue_normal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="4ae6163b-2a2c-4e50-bb91-d2ee4ae50a14" x="261" y="198" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{tongue_altered}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="11ee4a2f-5cee-408e-b933-5a5a8fec595a" x="182" y="237" width="80" height="20"/>
+				<textElement/>
+				<text><![CDATA[Alterada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b4c0736f-4a30-4bcb-be16-3affc9524e4b" x="3" y="237" width="80" height="20"/>
+				<textElement/>
+				<text><![CDATA[Normal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d31e7d31-6594-4a76-8014-81994d48df51" x="3" y="217" width="100" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Paladar]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="f189c6fa-6373-4d18-b2f3-0995f1e1182f" x="83" y="237" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{palate_normal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="4bc5bcbc-e351-48be-87f6-3e3624935c79" x="261" y="237" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{palate_altered}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="fdd959b0-e08d-4e7d-9729-72fa20671e17" x="3" y="257" width="100" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Piso de Boca]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="894b2dec-2a20-4dab-b222-d763bc346c11" x="3" y="277" width="80" height="20"/>
+				<textElement/>
+				<text><![CDATA[Normal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7ae54925-d601-40b7-b0ba-ca47881606a1" x="182" y="277" width="80" height="20"/>
+				<textElement/>
+				<text><![CDATA[Alterada]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="301dad00-0064-4a07-94e3-78a93bf5d96f" x="83" y="277" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{mounth_floor_normal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="8d6cead8-ba39-477b-a986-1e552de62581" x="261" y="277" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{mounth_floor_altered}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="45179d12-e337-4120-a68d-f500cb4b9dbe" x="2" y="295" width="100" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Orofaringe]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="962563f5-37fe-4381-b136-e30c5d501a14" x="181" y="315" width="80" height="20"/>
+				<textElement/>
+				<text><![CDATA[Alterada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1354e29d-51c2-4858-85ac-2a27a6030afe" x="2" y="315" width="80" height="20"/>
+				<textElement/>
+				<text><![CDATA[Normal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f3614695-5e60-466d-9b4d-71c1b1c37184" x="181" y="353" width="80" height="20"/>
+				<textElement/>
+				<text><![CDATA[Alterada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f5f53ae6-4d87-4849-a85a-f8074b3e67fb" x="2" y="333" width="100" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Amigdalas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f9a2e522-5bbf-4b01-b70d-cc4b188a4789" x="2" y="353" width="80" height="20"/>
+				<textElement/>
+				<text><![CDATA[Normal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2eadc5db-9197-4141-81ab-2b8d4444bffa" x="2" y="373" width="100" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Carrillos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1efadf5b-426b-491a-a08b-b19b1294f5f7" x="181" y="393" width="80" height="20"/>
+				<textElement/>
+				<text><![CDATA[Alterada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5f68f9c6-4c0c-4dab-858e-7a33a2d5ad09" x="2" y="393" width="80" height="20"/>
+				<textElement/>
+				<text><![CDATA[Normal]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="52f98af3-4b22-49e1-ad06-1be527bd1a6f" x="83" y="413" width="278" height="70"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{obs}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="27c6579a-6245-410b-9616-0061f2ab446a" x="3" y="413" width="80" height="20"/>
+				<textElement/>
+				<text><![CDATA[Observaciones]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="7ffad3dc-8ede-4a22-9073-bf4f51d5d180" x="81" y="313" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{oropharynx_normal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="5b11a339-5a38-418e-9b23-e0a379b3139d" x="261" y="315" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{oropharynx_altered}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="e5385964-586f-462c-a96d-e58e0eec6e5a" x="81" y="353" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{tonsils_normal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a9cf145d-0797-41f9-b0b3-b1123c4d01f4" x="81" y="393" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{cheeks_normal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="4981728e-ac45-4c77-b8f9-8ee8e57b4b93" x="261" y="353" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{tonsils_altered}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="c35e7107-1382-4596-b562-e2add0ca295c" x="262" y="393" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{cheeks_altered}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
