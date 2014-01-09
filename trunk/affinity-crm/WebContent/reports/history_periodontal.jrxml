@@ -89,7 +89,7 @@ ORDER by b.start_appointment_date DESC]]>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="483" splitType="Stretch">
+		<band height="146" splitType="Stretch">
 			<staticText>
 				<reportElement uuid="e1ed9247-c63e-4e37-8b9e-1b3b97f0ce65" x="2" y="1" width="100" height="20"/>
 				<textElement/>
@@ -102,6 +102,76 @@ ORDER by b.start_appointment_date DESC]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{start_appointment_date}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement uuid="6c9c49ae-4db6-45fe-b8e4-40e9529189f8" x="102" y="21" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{gingivitis}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="577e2580-7744-462a-a0f4-86d8e903ad1e" x="2" y="21" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Gingivitis]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="2f0e9f06-70e9-493a-8325-0aa635a9dff2" x="345" y="21" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{periodontitis}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="802f53f1-6a54-4133-a4f0-9c7ef2757358" x="202" y="21" width="143" height="20"/>
+				<textElement/>
+				<text><![CDATA[Periodontitis]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="8d036546-a7b3-4411-a548-f2f045c0bad5" x="102" y="41" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{mobility}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="bd77d928-a6c8-47fc-b9fa-bb8ac395e61a" x="2" y="41" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Movilidad]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="7215a977-a0a6-40b5-8073-865e49b22ee4" x="345" y="41" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{bag_teeth}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="4c43ff56-8a12-4c8b-bf58-54597fa0fd14" x="202" y="41" width="143" height="20"/>
+				<textElement/>
+				<text><![CDATA[Bolsas]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="e525729c-aaa3-4aaa-92ab-090ab26314f1" x="102" y="61" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{gingival_recession}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="550a8d3a-b0c4-45d0-9c98-2ba1dfa28018" x="2" y="61" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Recesion Gingival]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="16d6067f-6384-4562-a035-84949661fa31" x="345" y="61" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{plaque_index}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="d60638db-a41a-4fb4-b82c-d2f40320e566" x="202" y="61" width="143" height="20"/>
+				<textElement/>
+				<text><![CDATA[Indice de Placa Bacteriana]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="8a8a83bb-7f9f-4e6b-a1a3-ecf926955a01" x="102" y="81" width="343" height="65"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{obs}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="80723742-4e35-4b3a-b6b3-0436fc055feb" x="2" y="81" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Observaciones]]></text>
+			</staticText>
 		</band>
 	</detail>
 </jasperReport>

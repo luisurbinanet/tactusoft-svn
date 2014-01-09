@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="history" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fd0c4e58-f656-4c05-98c1-fe624cdd738d">
 	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="44"/>
-	<property name="ireport.y" value="459"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="513"/>
 	<parameter name="P_ID_PATIENT" class="java.math.BigDecimal">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -421,6 +421,16 @@ WHERE a.id = $P{P_ID_PATIENT}]]>
 		</band>
 		<band height="52">
 			<subreport>
+				<reportElement uuid="dc087f66-9ef2-405f-8352-e301ae1b9556" x="0" y="0" width="555" height="52"/>
+				<subreportParameter name="P_ID_PATIENT">
+					<subreportParameterExpression><![CDATA[$P{P_ID_PATIENT}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "history_periodontal.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="52">
+			<subreport>
 				<reportElement uuid="8921b40d-5a4f-4805-9fd6-560dac13c631" x="0" y="0" width="555" height="52"/>
 				<subreportParameter name="P_ID_PATIENT">
 					<subreportParameterExpression><![CDATA[$P{P_ID_PATIENT}]]></subreportParameterExpression>
@@ -442,6 +452,8 @@ WHERE a.id = $P{P_ID_PATIENT}]]>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "history_medication.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
+		<band height="50"/>
+		<band height="50"/>
 	</detail>
 	<columnFooter>
 		<band height="21" splitType="Stretch"/>
