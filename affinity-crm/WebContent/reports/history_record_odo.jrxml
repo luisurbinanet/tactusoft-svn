@@ -121,12 +121,12 @@ ORDER by b.start_appointment_date DESC]]>
 	<detail>
 		<band height="237" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="e1ed9247-c63e-4e37-8b9e-1b3b97f0ce65" x="2" y="1" width="63" height="20"/>
+				<reportElement uuid="e1ed9247-c63e-4e37-8b9e-1b3b97f0ce65" x="2" y="1" width="81" height="20"/>
 				<textElement/>
-				<text><![CDATA[Cita del día:]]></text>
+				<text><![CDATA[Día de la Cita]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="d82c8a93-5427-4d2d-b895-7722b051e68b" x="63" y="1" width="489" height="20"/>
+				<reportElement uuid="d82c8a93-5427-4d2d-b895-7722b051e68b" x="83" y="1" width="469" height="20"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>

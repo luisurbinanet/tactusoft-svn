@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="history_ip" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="258c62b7-639f-43e7-ac7b-c289802e1be2">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="P_ID_PATIENT" class="java.math.BigDecimal">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+a.id,
+b.start_appointment_date,
+c.description "Diagnóstico",
+posology "Posología"
+FROM crm_db.crm_diagnosis a JOIN crm_db.crm_appointment b on a.id_appointment = b.id
+JOIN crm_cie c ON a.id_cie = c.id
+JOIN crm_db.crm_procedure_detail d ON b.id_procedure_detail = d.id
+WHERE b.id_patient = $P{P_ID_PATIENT}
+AND type_history = 'ODONTOLOGY'
+ORDER by b.start_appointment_date DESC]]>
+	</queryString>
+	<field name="id" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="start_appointment_date" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Diagnóstico" class="java.lang.String"/>
+	<field name="Posología" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="60" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="cccfadfe-8d80-4b4f-b9cf-727267a05009" x="0" y="0" width="552" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Impresión Diagnóstica]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="ed1b7d1a-c512-4e53-8ad3-fa73dc9b5448" x="1" y="19" width="554" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="78af3c13-1bd5-4f9d-a568-3059fea9ba3c" x="1" y="40" width="94" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Cita]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0a2e796e-51f9-48cc-bb2c-53f51d909757" x="95" y="40" width="460" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Diagnóstico]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField pattern="dd/MMM/yyyy">
+				<reportElement uuid="a240b31a-7d6f-483b-9ca0-c6450d5b0014" x="0" y="0" width="95" height="20"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{start_appointment_date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="52a31099-b15f-4f52-af6e-442c93e87f3f" x="95" y="0" width="459" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Diagnóstico}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
