@@ -85,6 +85,7 @@ public class DaoAuthenticationProviderCustom extends
 			user.setOpenAppointment(false);
 			user.setPrintFormula(false);
 			user.setPrintHistorial(false);
+			user.setPrintHistorialOdo(false);
 
 			String idRoles = "";
 			for (CrmRole row : listRole) {
@@ -98,6 +99,10 @@ public class DaoAuthenticationProviderCustom extends
 
 				if (row.getPrintHistorial()) {
 					user.setPrintHistorial(true);
+				}
+
+				if (row.getPrintHistorialOdo()) {
+					user.setPrintHistorialOdo(true);
 				}
 			}
 

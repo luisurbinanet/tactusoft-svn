@@ -42,6 +42,7 @@ public class UserData implements UserDetails {
 	private boolean openAppointment;
 	private boolean printFormula;
 	private boolean printHistorial;
+	private boolean printHistorialOdo;
 
 	private boolean accountNonExpired = true;
 	private boolean credentialsNonExpired = true;
@@ -214,6 +215,14 @@ public class UserData implements UserDetails {
 
 	public void setPrintHistorial(boolean printHistorial) {
 		this.printHistorial = printHistorial;
+	}
+
+	public boolean isPrintHistorialOdo() {
+		return printHistorialOdo;
+	}
+
+	public void setPrintHistorialOdo(boolean printHistorialOdo) {
+		this.printHistorialOdo = printHistorialOdo;
 	}
 
 	@Override

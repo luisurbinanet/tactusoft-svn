@@ -14,9 +14,10 @@ c.description "Diagnóstico",
 posology "Posología"
 FROM crm_db.crm_diagnosis a JOIN crm_db.crm_appointment b on a.id_appointment = b.id
 JOIN crm_cie c ON a.id_cie = c.id
+JOIN crm_db.crm_procedure_detail d ON b.id_procedure_detail = d.id
 WHERE b.id_patient = $P{P_ID_PATIENT}
-ORDER by b.start_appointment_date DESC
-]]>
+AND type_history = 'MEDICAL'
+ORDER by b.start_appointment_date DESC]]>
 	</queryString>
 	<field name="id" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>

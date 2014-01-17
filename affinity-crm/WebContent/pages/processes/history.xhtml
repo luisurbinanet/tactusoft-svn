@@ -1389,6 +1389,16 @@
 					hideEffect="explode" modal="true" width="600">
 
 					<h:panelGrid columns="2" width="100%">
+						<h:outputLabel value="#{msg['his_type']}" />
+						<p:selectOneMenu style="width:350px">
+							<f:selectItem itemLabel="#{msg['his_medical_type']}"
+								itemValue="1" />
+							<f:selectItem itemLabel="#{msg['his_odontology_type']}"
+								itemValue="2" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+
+					<h:panelGrid columns="2" width="100%">
 
 						<p:outputPanel id="customPanel">
 							<p:selectOneRadio id="customRadio"
