@@ -81,7 +81,7 @@
 
 					<h:outputLabel value="#{msg['rol_description']}" />
 					<p:inputTextarea value="#{roleBacking.selected.description}"
-						style="width:100%" rows="3" />
+						style="width:100%" rows="1" />
 
 					<h:outputLabel value="#{msg['rol_open_app']}" />
 					<p:selectBooleanCheckbox
@@ -94,6 +94,10 @@
 					<h:outputLabel value="#{msg['rol_print_historial']}" />
 					<p:selectBooleanCheckbox
 						value="#{roleBacking.selected.printHistorial}" />
+
+					<h:outputLabel value="#{msg['rol_print_historial_odo']}" />
+					<p:selectBooleanCheckbox
+						value="#{roleBacking.selected.printHistorialOdo}" />
 
 					<h:outputLabel value="#{msg['glb_state']}"
 						rendered="#{roleBacking.selected.id!=null?true:false}" />

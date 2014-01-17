@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 
@@ -50,6 +52,8 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 	private CrmOdontologySupplExams crmOdontologySupplExams;
 	private CrmOdontologyEvolution crmOdontologyEvolution;
 	private CrmOdontologyOdontogram crmOdontologyOdontogram;
+
+	private Integer currentProcedure;
 
 	public HistoryOdontologyBacking() {
 
@@ -124,6 +128,14 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 	public void setCrmOdontologyOdontogram(
 			CrmOdontologyOdontogram crmOdontologyOdontogram) {
 		this.crmOdontologyOdontogram = crmOdontologyOdontogram;
+	}
+
+	public Integer getCurrentProcedure() {
+		return currentProcedure;
+	}
+
+	public void setCurrentProcedure(Integer currentProcedure) {
+		this.currentProcedure = currentProcedure;
 	}
 
 	public void loadValues(VwAppointment vwAppointment) {
@@ -866,7 +878,7 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 
 		refreshListMedication();
 	}
-	
+
 	@Override
 	public void printFormulaAction() {
 		try {
@@ -879,6 +891,13 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void getCurrentTooth(final String current) {
+		this.currentProcedure = null;
+		final FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+				"ActionListener called", "Parte Seleccionada: " + current);
+		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
 
 }
