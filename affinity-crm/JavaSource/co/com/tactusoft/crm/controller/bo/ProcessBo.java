@@ -1329,17 +1329,18 @@ public class ProcessBo implements Serializable {
 		}
 	}
 
-	public CrmOdontologyOdontogram getOdontologyOdontogram(
+	public List<CrmOdontologyOdontogram> getOdontologyOdontogram(
 			BigDecimal idAppointment) {
 		List<CrmOdontologyOdontogram> list = null;
 		list = dao
 				.find("from CrmOdontologyOdontogram o where o.crmAppointment.id = "
 						+ idAppointment);
-		if (list.size() > 0) {
-			return list.get(0);
-		} else {
-			return new CrmOdontologyOdontogram();
-		}
+		return list;
+	}
+
+	public void removeOdontologyOdontogram(BigDecimal id) {
+		dao.executeHQL("delete from CrmOdontologyOdontogram o where o.crmAppointment.id = "
+				+ id);
 	}
 
 	public Long getDocAutomatic(String country) {

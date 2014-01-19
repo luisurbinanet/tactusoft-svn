@@ -15,7 +15,7 @@ import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.datamodel.BranchDataModel;
 
 @Named
-@Scope("view")
+@Scope("session")
 public class BranchBacking implements Serializable {
 
 	private static final long serialVersionUID = 1L;

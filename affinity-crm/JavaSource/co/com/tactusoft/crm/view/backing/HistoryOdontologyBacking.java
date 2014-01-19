@@ -4,18 +4,20 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
+import javax.annotation.PostConstruct;
 import javax.faces.event.ActionEvent;
+import javax.faces.model.SelectItem;
 import javax.inject.Named;
 
 import net.sf.jasperreports.engine.JRException;
 
+import org.primefaces.context.RequestContext;
 import org.springframework.context.annotation.Scope;
-
-import com.tactusoft.webservice.client.beans.WSBean;
 
 import co.com.tactusoft.crm.controller.bo.GenerateFormulaPDF;
 import co.com.tactusoft.crm.model.entities.CrmCie;
@@ -31,12 +33,17 @@ import co.com.tactusoft.crm.model.entities.CrmOdontologySoftTissue;
 import co.com.tactusoft.crm.model.entities.CrmOdontologyStomatolog;
 import co.com.tactusoft.crm.model.entities.CrmOdontologySupplExams;
 import co.com.tactusoft.crm.model.entities.CrmOdontologyTempJoint;
+import co.com.tactusoft.crm.model.entities.CrmOdotogramProcedure;
 import co.com.tactusoft.crm.model.entities.VwAppointment;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
+import co.com.tactusoft.crm.view.beans.OdontogramBean;
 import co.com.tactusoft.crm.view.datamodel.DiagnosisDataModel;
 import co.com.tactusoft.crm.view.datamodel.MedicationDataModel;
 import co.com.tactusoft.crm.view.datamodel.WSBeanDataModel;
+
+import com.google.gson.Gson;
+import com.tactusoft.webservice.client.beans.WSBean;
 
 @Named
 @Scope("session")
@@ -51,12 +58,31 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 	private CrmOdontologyPeriodontal crmOdontologyPeriodontal;
 	private CrmOdontologySupplExams crmOdontologySupplExams;
 	private CrmOdontologyEvolution crmOdontologyEvolution;
-	private CrmOdontologyOdontogram crmOdontologyOdontogram;
+	private List<CrmOdontologyOdontogram> crmOdontologyOdontogram;
 
+	private String currentTooth;
 	private Integer currentProcedure;
+	private Map<String, CrmOdotogramProcedure> mapProcedureTooth;
+	private List<SelectItem> listOdotogramProcedure;
+	private Map<Integer, CrmOdotogramProcedure> mapOdotogramProcedure;
+	private List<OdontogramBean> listOdontogramBean;
 
 	public HistoryOdontologyBacking() {
 
+	}
+
+	@PostConstruct
+	public void init() {
+		List<CrmOdotogramProcedure> listTemp = tablesService
+				.getListOdotogramProcedureActive();
+		try {
+			listOdotogramProcedure = FacesUtil.entityToSelectItem(listTemp,
+					"getId", "getName", true);
+			mapOdotogramProcedure = FacesUtil.entityToMapInteger(listTemp,
+					"getId");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public CrmHistoryPhysique getCrmHistoryPhysique() {
@@ -121,13 +147,21 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 		this.crmOdontologyEvolution = crmOdontologyEvolution;
 	}
 
-	public CrmOdontologyOdontogram getCrmOdontologyOdontogram() {
+	public List<CrmOdontologyOdontogram> getCrmOdontologyOdontogram() {
 		return crmOdontologyOdontogram;
 	}
 
 	public void setCrmOdontologyOdontogram(
-			CrmOdontologyOdontogram crmOdontologyOdontogram) {
+			List<CrmOdontologyOdontogram> crmOdontologyOdontogram) {
 		this.crmOdontologyOdontogram = crmOdontologyOdontogram;
+	}
+
+	public String getCurrentTooth() {
+		return currentTooth;
+	}
+
+	public void setCurrentTooth(String currentTooth) {
+		this.currentTooth = currentTooth;
 	}
 
 	public Integer getCurrentProcedure() {
@@ -136,6 +170,24 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 
 	public void setCurrentProcedure(Integer currentProcedure) {
 		this.currentProcedure = currentProcedure;
+	}
+
+	public Map<String, CrmOdotogramProcedure> getMapProcedureTooth() {
+		return mapProcedureTooth;
+	}
+
+	public void setMapProcedureTooth(
+			Map<String, CrmOdotogramProcedure> mapProcedureTooth) {
+		this.mapProcedureTooth = mapProcedureTooth;
+	}
+
+	public List<SelectItem> getListOdotogramProcedure() {
+		return listOdotogramProcedure;
+	}
+
+	public void setListOdotogramProcedure(
+			List<SelectItem> listOdotogramProcedure) {
+		this.listOdotogramProcedure = listOdotogramProcedure;
 	}
 
 	public void loadValues(VwAppointment vwAppointment) {
@@ -221,10 +273,6 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 				.getOdontologyEvolution(selectedAppointment.getId());
 		crmOdontologyEvolution.setCrmAppointment(currentAppointment);
 
-		crmOdontologyOdontogram = processService
-				.getOdontologyOdontogram(selectedAppointment.getId());
-		crmOdontologyOdontogram.setCrmAppointment(currentAppointment);
-
 		try {
 			this.heartRate = Integer.parseInt(selectedHistoryPhysique
 					.getHeartRate());
@@ -256,6 +304,15 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 		crmOdontologyStomatolog = processService
 				.getOdontologyStomatolog(selectedAppointment.getId());
 		crmOdontologyStomatolog.setCrmAppointment(currentAppointment);
+
+		mapProcedureTooth = new HashMap<String, CrmOdotogramProcedure>();
+		crmOdontologyOdontogram = processService
+				.getOdontologyOdontogram(selectedAppointment.getId());
+		listOdontogramBean = new ArrayList<OdontogramBean>();
+		for (CrmOdontologyOdontogram row : crmOdontologyOdontogram) {
+			mapProcedureTooth.put(row.getTooth(),
+					row.getCrmOdotogramProcedure());
+		}
 	}
 
 	@Override
@@ -693,7 +750,18 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 				processService.save(crmOdontologyPeriodontal);
 				processService.save(crmOdontologySupplExams);
 				processService.save(crmOdontologyEvolution);
-				processService.save(crmOdontologyOdontogram);
+
+				processService.removeOdontologyOdontogram(currentAppointment
+						.getId());
+				for (Entry<String, CrmOdotogramProcedure> entry : mapProcedureTooth
+						.entrySet()) {
+					CrmOdontologyOdontogram entity = new CrmOdontologyOdontogram();
+					CrmOdotogramProcedure value = entry.getValue();
+					entity.setCrmAppointment(currentAppointment);
+					entity.setCrmOdotogramProcedure(value);
+					entity.setTooth(entry.getKey());
+					processService.save(entity);
+				}
 
 				if (listDiagnosis.size() == 0) {
 					message = FacesUtil.getMessage("his_msg_message_dig_1");
@@ -894,10 +962,47 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 	}
 
 	public void getCurrentTooth(final String current) {
-		this.currentProcedure = null;
-		final FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
-				"ActionListener called", "Parte Seleccionada: " + current);
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+		this.currentTooth = current;
+		CrmOdotogramProcedure value = mapProcedureTooth.get(currentTooth);
+		if (value != null) {
+			this.currentProcedure = value.getId();
+		} else {
+			this.currentProcedure = null;
+		}
+	}
+
+	public void handleProcedureChange() {
+		RequestContext context = RequestContext.getCurrentInstance();
+		boolean apply = false;
+		String descProcedure = null;
+		if (currentProcedure != null && currentProcedure > 0) {
+			apply = true;
+			descProcedure = mapOdotogramProcedure.get(currentProcedure)
+					.getName();
+			mapProcedureTooth.put(this.currentTooth,
+					mapOdotogramProcedure.get(currentProcedure));
+		} else {
+			descProcedure = "";
+			mapProcedureTooth.remove(this.currentTooth);
+		}
+		context.addCallbackParam("apply", apply);
+		context.addCallbackParam("descProcedure", descProcedure);
+	}
+
+	public void loadProcedureTooth() {
+		RequestContext context = RequestContext.getCurrentInstance();
+
+		listOdontogramBean = new ArrayList<OdontogramBean>();
+		for (Entry<String, CrmOdotogramProcedure> entry : mapProcedureTooth
+				.entrySet()) {
+			CrmOdotogramProcedure value = entry.getValue();
+			listOdontogramBean.add(new OdontogramBean(entry.getKey(), value
+					.getId(), value.getName()));
+		}
+
+		context.addCallbackParam("procedureTooth",
+				new Gson().toJson(
+				listOdontogramBean));
 	}
 
 }
