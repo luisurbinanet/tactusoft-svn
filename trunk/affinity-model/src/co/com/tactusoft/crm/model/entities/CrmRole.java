@@ -29,6 +29,7 @@ public class CrmRole implements java.io.Serializable {
 	private Boolean openAppointment;
 	private Boolean printFormula;
 	private Boolean printHistorial;
+	private Boolean printHistorialOdo;
 	private int state;
 	private Set<CrmPageRole> crmPageRoles = new HashSet<CrmPageRole>(0);
 	private Set<CrmUserRole> crmUserRoles = new HashSet<CrmUserRole>(0);
@@ -44,8 +45,8 @@ public class CrmRole implements java.io.Serializable {
 
 	public CrmRole(BigDecimal id, CrmPage crmPage, String name,
 			String description, Boolean openAppointment, Boolean printFormula,
-			Boolean printHistorial, int state, Set<CrmPageRole> crmPageRoles,
-			Set<CrmUserRole> crmUserRoles) {
+			Boolean printHistorial, Boolean printHistorialOdo, int state,
+			Set<CrmPageRole> crmPageRoles, Set<CrmUserRole> crmUserRoles) {
 		this.id = id;
 		this.crmPage = crmPage;
 		this.name = name;
@@ -53,6 +54,7 @@ public class CrmRole implements java.io.Serializable {
 		this.openAppointment = openAppointment;
 		this.printFormula = printFormula;
 		this.printHistorial = printHistorial;
+		this.printHistorialOdo = printHistorialOdo;
 		this.state = state;
 		this.crmPageRoles = crmPageRoles;
 		this.crmUserRoles = crmUserRoles;
@@ -121,6 +123,15 @@ public class CrmRole implements java.io.Serializable {
 
 	public void setPrintHistorial(Boolean printHistorial) {
 		this.printHistorial = printHistorial;
+	}
+	
+	@Column(name = "print_historial_odo")
+	public Boolean getPrintHistorialOdo() {
+		return printHistorialOdo;
+	}
+
+	public void setPrintHistorialOdo(Boolean printHistorialOdo) {
+		this.printHistorialOdo = printHistorialOdo;
 	}
 
 	@Column(name = "state", nullable = false)
