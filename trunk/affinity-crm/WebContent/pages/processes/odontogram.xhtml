@@ -12,28 +12,10 @@
 		<p:selectOneMenu label="Tratamiento"
 			value="#{historyOdontologyBacking.currentProcedure}"
 			style="width:700px">
-			<f:selectItem itemLabel="#{msg['his_refers_not']}"
-				noSelectionOption="true" />
-			<f:selectItem itemLabel="Caries/Obt. Temporal" itemValue="1" />
-			<f:selectItem itemLabel="Diente Incluido" itemValue="2" />
-			<f:selectItem itemLabel="Superficie Sellada" itemValue="3" />
-			<f:selectItem itemLabel="Corona Adaptada" itemValue="4" />
-			<f:selectItem itemLabel="Núcleo" itemValue="5" />
-			<f:selectItem itemLabel="Amalgama" itemValue="6" />
-			<f:selectItem itemLabel="Sin Erupcionar" itemValue="7" />
-			<f:selectItem itemLabel="Sellante Indicado" itemValue="8" />
-			<f:selectItem itemLabel="Corona Desadaptada" itemValue="9" />
-			<f:selectItem itemLabel="Póntico" itemValue="10" />
-			<f:selectItem itemLabel="Ausente" itemValue="11" />
-			<f:selectItem itemLabel="Endodoncia Realizada" itemValue="12" />
-			<f:selectItem itemLabel="Erosión" itemValue="13" />
-			<f:selectItem itemLabel="Protección Removible" itemValue="14" />
-			<f:selectItem itemLabel="Diente Sano" itemValue="15" />
-			<f:selectItem itemLabel="Exodoncia Simple Indicada" itemValue="16" />
-			<f:selectItem itemLabel="Endodoncia a Realizar" itemValue="17" />
-			<f:selectItem itemLabel="Resina" itemValue="18" />
-			<f:selectItem itemLabel="Resto Radicular" itemValue="19" />
-			<f:selectItem itemLabel="Implante" itemValue="20" />
+			<p:ajax listener="#{historyOdontologyBacking.handleProcedureChange}"
+				oncomplete="applyProcedure(xhr, status, args);" />
+			<f:selectItems
+				value="#{historyOdontologyBacking.listOdotogramProcedure}" />
 		</p:selectOneMenu>
 	</h:panelGrid>
 </p:panel>

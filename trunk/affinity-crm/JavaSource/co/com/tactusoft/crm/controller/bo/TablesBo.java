@@ -35,6 +35,7 @@ import co.com.tactusoft.crm.model.entities.CrmHoliday;
 import co.com.tactusoft.crm.model.entities.CrmHolidayBranch;
 import co.com.tactusoft.crm.model.entities.CrmNurse;
 import co.com.tactusoft.crm.model.entities.CrmOccupation;
+import co.com.tactusoft.crm.model.entities.CrmOdotogramProcedure;
 import co.com.tactusoft.crm.model.entities.CrmPage;
 import co.com.tactusoft.crm.model.entities.CrmPageRole;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
@@ -54,6 +55,7 @@ import co.com.tactusoft.crm.model.entities.CrmUserProfile;
 import co.com.tactusoft.crm.model.entities.CrmUserRole;
 import co.com.tactusoft.crm.model.entities.DatesBean;
 import co.com.tactusoft.crm.model.entities.PrcReportCampaign;
+import co.com.tactusoft.crm.model.entities.Producto;
 import co.com.tactusoft.crm.model.entities.VwCallRange;
 import co.com.tactusoft.crm.model.entities.VwPatientTicket;
 import co.com.tactusoft.crm.model.entities.VwProcedure;
@@ -427,6 +429,10 @@ public class TablesBo implements Serializable {
 		return dao.find("from CrmBranch o");
 	}
 
+	public List<Producto> getListProducto() {
+		return dao.find("from Producto o");
+	}
+
 	public List<CrmBranch> getListBranchActive() {
 		return dao.find("from CrmBranch o where o.state = 1");
 	}
@@ -555,6 +561,14 @@ public class TablesBo implements Serializable {
 			BigDecimal idDoctor) {
 		return dao.find("from CrmDoctorException o where o.crmDoctor.id = "
 				+ idDoctor + " order by o.startHour");
+	}
+
+	public List<CrmOdotogramProcedure> getListOdotogramProcedure() {
+		return dao.find("from CrmOdotogramProcedure o");
+	}
+
+	public List<CrmOdotogramProcedure> getListOdotogramProcedureActive() {
+		return dao.find("from CrmOdotogramProcedure o where o.status = 1");
 	}
 
 	public CrmDoctor getCrmDoctor(BigDecimal idUser) {
