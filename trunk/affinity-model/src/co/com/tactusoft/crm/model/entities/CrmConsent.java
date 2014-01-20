@@ -25,6 +25,7 @@ public class CrmConsent implements java.io.Serializable {
 	private CrmPatient crmPatient;
 	private Date dateInformed;
 	private byte[] consentFile;
+	private String consentType;
 
 	public CrmConsent() {
 	}
@@ -74,6 +75,15 @@ public class CrmConsent implements java.io.Serializable {
 
 	public void setConsentFile(byte[] consentFile) {
 		this.consentFile = consentFile;
+	}
+
+	@Column(name = "consent_type", nullable = false)
+	public String getConsentType() {
+		return consentType;
+	}
+
+	public void setConsentType(String consentType) {
+		this.consentType = consentType;
 	}
 
 }
