@@ -21,8 +21,11 @@ import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.controller.bo.GenerateFormulaPDF;
 import co.com.tactusoft.crm.model.entities.CrmCie;
+import co.com.tactusoft.crm.model.entities.CrmConsent;
 import co.com.tactusoft.crm.model.entities.CrmDiagnosis;
+import co.com.tactusoft.crm.model.entities.CrmHistoryHistory;
 import co.com.tactusoft.crm.model.entities.CrmHistoryPhysique;
+import co.com.tactusoft.crm.model.entities.CrmHistoryRecord;
 import co.com.tactusoft.crm.model.entities.CrmMaterialGroup;
 import co.com.tactusoft.crm.model.entities.CrmMedication;
 import co.com.tactusoft.crm.model.entities.CrmOccupation;
@@ -39,7 +42,11 @@ import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.beans.OdontogramBean;
 import co.com.tactusoft.crm.view.datamodel.DiagnosisDataModel;
+import co.com.tactusoft.crm.view.datamodel.HistoryHistoryDataModel;
+import co.com.tactusoft.crm.view.datamodel.HistoryPhysiqueDataModel;
+import co.com.tactusoft.crm.view.datamodel.HistoryRecordDataModel;
 import co.com.tactusoft.crm.view.datamodel.MedicationDataModel;
+import co.com.tactusoft.crm.view.datamodel.VwAppointmentDataModel;
 import co.com.tactusoft.crm.view.datamodel.WSBeanDataModel;
 
 import com.google.gson.Gson;
@@ -199,6 +206,7 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 		age = 0;
 		imc = 0;
 		descImc = null;
+		consentType = Constant.ODONTOLOGY_HISTORY_TYPE;
 
 		newAction(null);
 
@@ -961,6 +969,77 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 		}
 	}
 
+	@Override
+	public void saveConsentAction() {
+		RequestContext context = RequestContext.getCurrentInstance();
+		String message = null;
+		boolean saved = false;
+		CrmConsent crmConsent = new CrmConsent();
+
+		if (consentFile != null) {
+			crmConsent.setCrmPatient(this.selectedPatient);
+			crmConsent.setConsentFile(consentFile);
+			crmConsent.setDateInformed(consentDate);
+			crmConsent.setConsentType(consentType);
+			processService.persist(crmConsent);
+			listConsentView.add(crmConsent);
+			saved = true;
+			message = FacesUtil.getMessage("msg_record_ok");
+			FacesUtil.addInfo(message);
+		} else {
+			saved = false;
+			String field = FacesUtil.getMessage("con_consent");
+			message = FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		}
+
+		context.addCallbackParam("saved", saved);
+	}
+
+	@Override
+	protected void refreshLists() {
+		List<VwAppointment> listTempApp = processService
+				.getListByAppointmentByPatient(selectedPatient.getId(),
+						consentType);
+		historyAppointmentModel = new VwAppointmentDataModel(listTempApp);
+
+		List<CrmHistoryHistory> listTempHistory = processService
+				.getListHistoryHistory(selectedPatient.getId(), consentType);
+		historyHistoryModel = new HistoryHistoryDataModel(listTempHistory);
+
+		List<CrmHistoryRecord> listTempRecord = processService
+				.getListHistoryRecord(selectedPatient.getId(), consentType);
+		historyRecordModel = new HistoryRecordDataModel(listTempRecord);
+
+		List<CrmHistoryPhysique> listTempPhysique = processService
+				.getListHistoryPhysique(selectedPatient.getId(), consentType);
+		historyPhysiqueModel = new HistoryPhysiqueDataModel(listTempPhysique);
+
+		listDiagnosisView = processService.getListDiagnosisByPatient(
+				selectedPatient.getId(), consentType);
+
+		List<CrmMedication> listAllMedication = processService
+				.getListMedicationByPatient(selectedPatient.getId(),
+						consentType);
+
+		for (CrmMedication row : listAllMedication) {
+			if (row.getMaterialType().equals(Constant.MATERIAL_TYPE_MEDICINE)
+					|| row.getMaterialType().equals(
+							Constant.MATERIAL_TYPE_OTHER_MEDICINE)) {
+				listMedicationView.add(row);
+			} else if (row.getMaterialType().equals(
+					Constant.MATERIAL_TYPE_THERAPY)) {
+				listTherapyView.add(row);
+			} else if (row.getMaterialType().equals(
+					Constant.MATERIAL_TYPE_EXAMS)) {
+				listExamView.add(row);
+			}
+		}
+
+		listConsentView = processService
+				.getListConsentByPatient(selectedPatient.getId(), consentType);
+	}
+
 	public void getCurrentTooth(final String current) {
 		this.currentTooth = current;
 		CrmOdotogramProcedure value = mapProcedureTooth.get(currentTooth);
@@ -1001,8 +1080,7 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 		}
 
 		context.addCallbackParam("procedureTooth",
-				new Gson().toJson(
-				listOdontogramBean));
+				new Gson().toJson(listOdontogramBean));
 	}
 
 }

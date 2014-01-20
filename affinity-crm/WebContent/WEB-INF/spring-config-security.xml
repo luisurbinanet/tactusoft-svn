@@ -24,7 +24,6 @@
 	</http>
 
 	<authentication-manager alias="authenticationManager">
-		<authentication-provider ref="ldapAuthProvider" />
 		<authentication-provider ref="daoAuthenticationProvider" />
 	</authentication-manager>
 
@@ -117,50 +116,6 @@
 
 	<beans:bean id="passwordEncoder"
 		class="org.springframework.security.authentication.encoding.Md5PasswordEncoder">
-	</beans:bean>
-
-	<!-- *************ldap**************** -->
-
-	<!-- <beans:bean id="contextSource" class="org.springframework.security.ldap.DefaultSpringSecurityContextSource"> 
-		<beans:constructor-arg value="ldap://192.168.1.8:389/dc=naturizza,dc=net" 
-		/> <beans:property name="userDn" value="tactusoft@naturizza.net" /> <beans:property 
-		name="password" value="apache2012" /> </beans:bean> -->
-
-	<beans:bean id="contextSource"
-		class="co.com.tactusoft.crm.security.ldap.LdapContextSourceCustom" />
-
-	<beans:bean id="ldapAuthProvider"
-		class="org.springframework.security.ldap.authentication.LdapAuthenticationProvider">
-		<beans:constructor-arg>
-			<beans:bean
-				class="org.springframework.security.ldap.authentication.BindAuthenticator">
-				<beans:constructor-arg ref="contextSource" />
-				<beans:property name="userSearch" ref="ldapUserSearch" />
-			</beans:bean>
-		</beans:constructor-arg>
-		<beans:constructor-arg ref="authoritiesPopulator" />
-		<beans:property name="userDetailsContextMapper" ref="ldapUserDetailsMapperCustom" />
-	</beans:bean>
-
-	<beans:bean id="ldapUserSearch"
-		class="org.springframework.security.ldap.search.FilterBasedLdapUserSearch">
-		<beans:constructor-arg index="0" value="" />
-		<beans:constructor-arg index="1"
-			value="sAMAccountName={0}" />
-		<beans:constructor-arg index="2" ref="contextSource" />
-	</beans:bean>
-
-	<beans:bean id="authoritiesPopulator"
-		class="org.springframework.security.ldap.userdetails.DefaultLdapAuthoritiesPopulator">
-		<beans:constructor-arg ref="contextSource" />
-		<beans:constructor-arg value="cn=Users" />
-		<beans:property name="groupRoleAttribute" value="cn" />
-		<beans:property name="convertToUpperCase" value="true" />
-		<beans:property name="searchSubtree" value="true" />
-	</beans:bean>
-
-	<beans:bean id="ldapUserDetailsMapperCustom"
-		class="co.com.tactusoft.crm.security.ldap.LdapUserDetailsMapperCustom">
 	</beans:bean>
 
 </beans:beans>

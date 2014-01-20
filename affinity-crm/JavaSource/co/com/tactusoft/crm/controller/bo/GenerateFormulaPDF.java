@@ -94,8 +94,8 @@ public class GenerateFormulaPDF {
 		FacesContext.getCurrentInstance().responseComplete();
 	}
 
-	public static void historyPDF(BigDecimal idPatient) throws JRException,
-			IOException, SQLException {
+	public static void historyPDF(BigDecimal idPatient, String type)
+			throws JRException, IOException, SQLException {
 		String imagePath = FacesUtil.getRealPath("/images/");
 		String subreportsPath = FacesUtil.getRealPath("/reports/") + "/";
 		Map<String, Object> param = new HashMap<String, Object>();
@@ -109,6 +109,9 @@ public class GenerateFormulaPDF {
 				sessionFactory).getConnection();
 
 		String path = "/reports/history.jasper";
+		if (type.equals(Constant.ODONTOLOGY_HISTORY_TYPE)) {
+			path = "/reports/historyOdo.jasper";
+		}
 		String nameReport = "HistoriaClinica" + idPatient + ".pdf";
 
 		String reportPath = FacesContext.getCurrentInstance()

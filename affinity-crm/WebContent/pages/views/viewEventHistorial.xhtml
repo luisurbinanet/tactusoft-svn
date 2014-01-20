@@ -28,6 +28,11 @@
 							disabled="#{eventsHistorialBacking.disabledSelectedPatient or not eventsHistorialBacking.printHistorial}"
 							action="#{eventsHistorialBacking.printHistoryAction}"
 							ajax="false" />
+						<p:commandButton id="btnPrintOdo"
+							value="#{msg['btn_print_history_odo']}" icon="ui-icon-print"
+							disabled="#{eventsHistorialBacking.disabledSelectedPatient or not eventsHistorialBacking.printHistorialOdo}"
+							action="#{eventsHistorialBacking.printHistoryOdoAction}"
+							ajax="false" />
 
 					</p:toolbarGroup>
 				</p:toolbar>
