@@ -10,7 +10,7 @@
 	<ui:define name="body">
 
 		<p:panel style="width:100%;height:100%;"
-			header="#{msg['title_view_history']}">
+			header="#{msg['title_view_history_odo']}">
 
 			<p:spacer height="5" />
 
@@ -1444,7 +1444,7 @@
 					<h:panelGrid id="pnlHistorial"
 						rendered="#{historyOdontologyBacking.modeHistorial}" width="100%">
 
-						<ui:include src="historial.xhtml">
+						<ui:include src="historialOdo.xhtml">
 							<ui:param name="prefix" value="pnlHistorial" />
 						</ui:include>
 
@@ -1660,6 +1660,47 @@
 							onclick="confirmation.hide()" type="button" />
 
 					</p:confirmDialog>
+
+					<p:dialog id="dialogHistorial" widgetVar="dlgHistorial"
+						resizable="true" draggable="true" width="1000" height="400"
+						header="#{msg['btn_view_history']}">
+
+						<ui:include src="historialOdo.xhtml">
+							<ui:param name="prefix" value="dlgHistorial" />
+						</ui:include>
+
+					</p:dialog>
+
+					<p:dialog header="#{msg['his_history_consent']}"
+						widgetVar="dlgConsent" resizable="false" id="dialogConsent"
+						showEffect="fade" hideEffect="explode" modal="true" width="600"
+						dynamic="true">
+
+						<h:panelGrid id="pnlConsent" columns="2" width="100%">
+							<h:outputLabel value="#{msg['con_date_informed']}" />
+							<p:calendar value="#{historyOdontologyBacking.consentDate}" required="true"
+								id="calConsentDate" showOn="button" navigator="true"
+								pattern="dd/MM/yyyy" readonlyInput="true" locale="es"
+								label="#{msg['con_date_informed']}"
+								maxdate="#{historyOdontologyBacking.today}" />
+
+							<h:outputLabel value="#{msg['con_consent']}" />
+							<p:fileUpload cancelLabel="#{msg['file_cancel']}"
+								invalidFileMessage="#{msg['file_invalid_size']}"
+								uploadLabel="#{msg['file_upload']}"
+								label="#{msg['file_choose']}"
+								fileUploadListener="#{historyOdontologyBacking.handleFileUpload}"
+								mode="advanced" sizeLimit="10000000" auto="true"
+								allowTypes="/(\.|\/)(pdf)$/" />
+
+							<p:commandButton value="#{msg['btn_add']}"
+								process="@this,pnlConsent"
+								actionListener="#{historyOdontologyBacking.saveConsentAction}"
+								update=":form:growl :form:pnlHistorial_tabview:tblConsent :form:dlgHistorial_tabview:tblConsent"
+								oncomplete="handleConsentComplete(xhr, status, args)" />
+						</h:panelGrid>
+
+					</p:dialog>
 
 				</h:panelGrid>
 

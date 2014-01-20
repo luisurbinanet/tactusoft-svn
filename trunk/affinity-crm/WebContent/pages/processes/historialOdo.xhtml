@@ -7,14 +7,12 @@
 
 <p:tabView style="width:100%;height:100%" dynamic="true"
 	id="#{prefix}_tabview"
-	rendered="#{historyBacking.rolePrincipal eq 'DOCTOR' 
-	or historyBacking.rolePrincipal eq 'NURSE' 
-	or historyBacking.rolePrincipal eq 'NURSE_AUX'}">
+	rendered="#{historyOdontologyBacking.rolePrincipal eq 'DOCTOR'}">
 
 	<p:tab id="tab1" title="#{msg['his_history']}"
-		rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
+		rendered="#{historyOdontologyBacking.rolePrincipal eq 'DOCTOR'}">
 		<p:dataTable id="tblHistoryAppointment" var="rec"
-			value="#{historyBacking.historyAppointmentModel}"
+			value="#{historyOdontologyBacking.historyAppointmentModel}"
 			rowKey="#{rec.code}" style="width:100%" paginator="true" rows="10"
 			emptyMessage="#{msg['glb_no_records_found']}">
 
@@ -39,10 +37,10 @@
 			<p:column style="width:4%">
 				<p:commandButton icon="ui-icon-print" ajax="false"
 					title="#{msg['btn_print_medication']}"
-					action="#{historyBacking.printFormulaHistorialAction}"
+					action="#{historyOdontologyBacking.printFormulaHistorialAction}"
 					disabled="#{rec.state ne 4 or rec.closeAppointment eq 0}">
 					<f:setPropertyActionListener value="#{rec}"
-						target="#{historyBacking.selectedAppointmentPrint}" />
+						target="#{historyOdontologyBacking.selectedAppointmentPrint}" />
 				</p:commandButton>
 			</p:column>
 
@@ -50,10 +48,10 @@
 	</p:tab>
 
 	<p:tab id="tab2" title="#{msg['his_history_history']}"
-		rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
+		rendered="#{historyOdontologyBacking.rolePrincipal eq 'DOCTOR'}">
 		<p:dataTable id="tblHistory" var="rec"
-			value="#{historyBacking.historyHistoryModel}" rowKey="#{rec.code}"
-			style="width:100%" paginator="true" rows="5"
+			value="#{historyOdontologyBacking.historyHistoryModel}"
+			rowKey="#{rec.code}" style="width:100%" paginator="true" rows="5"
 			emptyMessage="#{msg['glb_no_records_found']}">
 
 			<p:column headerText="#{msg['app_date']}">
@@ -74,11 +72,11 @@
 				<h:outputLabel value="#{rec.disease}" />
 			</p:column>
 
-			<p:column style="width:4%">
+			<p:column style="width:4%" rendered="false">
 				<p:commandButton icon="ui-icon-search" title="#{msg['btn_view']}"
 					update=":form:dialogHistory" oncomplete="dlgHistory.show();">
 					<f:setPropertyActionListener value="#{rec}"
-						target="#{historyBacking.selectedHistoryHistory}" />
+						target="#{historyOdontologyBacking.selectedHistoryHistory}" />
 				</p:commandButton>
 			</p:column>
 
@@ -86,10 +84,10 @@
 	</p:tab>
 
 	<p:tab id="tab3" title="#{msg['his_history_record']}"
-		rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
+		rendered="#{historyOdontologyBacking.rolePrincipal eq 'DOCTOR'}">
 		<p:dataTable id="tblRecord" var="rec"
-			value="#{historyBacking.historyRecordModel}" rowKey="#{rec.code}"
-			style="width:100%" paginator="true" rows="5"
+			value="#{historyOdontologyBacking.historyRecordModel}"
+			rowKey="#{rec.code}" style="width:100%" paginator="true" rows="5"
 			emptyMessage="#{msg['glb_no_records_found']}">
 
 			<p:column headerText="#{msg['app_date']}">
@@ -134,62 +132,22 @@
 				<h:outputLabel value="#{rec.infections?'SI':'NO'}" />
 			</p:column>
 
-			<p:column style="width:4%">
+			<p:column style="width:4%" rendered="false">
 				<p:commandButton icon="ui-icon-search" title="#{msg['btn_view']}"
 					update=":form:dialogRecord" oncomplete="dlgRecord.show();">
 					<f:setPropertyActionListener value="#{rec}"
-						target="#{historyBacking.selectedHistoryRecord}" />
+						target="#{historyOdontologyBacking.selectedHistoryRecord}" />
 				</p:commandButton>
 			</p:column>
 
 		</p:dataTable>
 	</p:tab>
 
-	<p:tab id="tab4" title="#{msg['his_history_homeopathic']}"
-		rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
-		<p:dataTable id="tblHomeopathic" var="rec"
-			value="#{historyBacking.historyHomeopathicModel}"
-			rowKey="#{rec.code}" style="width:100%" paginator="true" rows="5"
-			emptyMessage="#{msg['glb_no_records_found']}">
-
-			<p:column headerText="#{msg['app_date']}">
-				<h:outputLabel value="#{rec.crmAppointment.startAppointmentDate}">
-					<f:convertDateTime pattern="dd/MM/yyyy" />
-				</h:outputLabel>
-			</p:column>
-
-			<p:column headerText="#{msg['exp_doctor']}">
-				<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
-			</p:column>
-
-			<p:column headerText="#{msg['his_homeopathic_biotipology']}">
-				<h:outputLabel value="#{rec.descBiotypology}" />
-			</p:column>
-
-			<p:column headerText="#{msg['his_homeopathic_mental']}">
-				<h:outputLabel value="#{rec.mental}" />
-			</p:column>
-
-			<p:column headerText="#{msg['his_homeopathic_special']}">
-				<h:outputLabel value="#{rec.special}" />
-			</p:column>
-
-			<p:column headerText="#{msg['his_homeopathic_general']}">
-				<h:outputLabel value="#{rec.general}" />
-			</p:column>
-
-			<p:column headerText="#{msg['his_homeopathic_miasm']}">
-				<h:outputLabel value="#{rec.miasm}" />
-			</p:column>
-
-		</p:dataTable>
-	</p:tab>
-
-	<p:tab id="tab5" title="#{msg['his_history_physique']}"
-		rendered="#{historyBacking.rolePrincipal eq 'NURSE_AUX' or historyBacking.rolePrincipal eq 'DOCTOR'}">
+	<p:tab id="tab5" title="#{msg['his_general_findings']}"
+		rendered="#{historyOdontologyBacking.rolePrincipal eq 'NURSE_AUX' or historyOdontologyBacking.rolePrincipal eq 'DOCTOR'}">
 		<p:dataTable id="tblPhysique" var="rec"
-			value="#{historyBacking.historyPhysiqueModel}" rowKey="#{rec.code}"
-			style="width:100%" paginator="true" rows="5"
+			value="#{historyOdontologyBacking.historyPhysiqueModel}"
+			rowKey="#{rec.code}" style="width:100%" paginator="true" rows="5"
 			emptyMessage="#{msg['glb_no_records_found']}">
 
 			<p:column headerText="#{msg['app_date']}">
@@ -210,63 +168,37 @@
 				<h:outputLabel value="#{rec.respiratoryRate}" />
 			</p:column>
 
-			<p:column headerText="#{msg['his_physique_height']}">
-				<h:outputLabel value="#{rec.height}" />
-			</p:column>
-
-			<p:column headerText="#{msg['his_physique_weight']}">
-				<h:outputLabel value="#{rec.weight}" />
-			</p:column>
-
 			<p:column headerText="#{msg['his_physique_blood_pressure']}">
 				<h:outputLabel value="#{rec.bloodPressure}" />
 			</p:column>
 
-			<p:column headerText="#{msg['his_physique_general_state']}">
-				<h:outputLabel value="#{rec.generalState}" />
+			<p:column headerText="#{msg['his_physique_brush_frecuency']}">
+				<h:outputLabel value="#{rec.brushFrecuency}" />
 			</p:column>
 
-			<p:column style="width:4%">
+			<p:column headerText="#{msg['his_physique_floss']}">
+				<h:outputLabel value="#{rec.floss?'SI':'NO'}" />
+			</p:column>
+
+			<p:column headerText="#{msg['his_physique_oral_hygiene_habit']}">
+				<h:outputLabel value="#{rec.oralHygieneHabit?'SI':'NO'}" />
+			</p:column>
+
+			<p:column style="width:4%" rendered="false">
 				<p:commandButton icon="ui-icon-search" title="#{msg['btn_view']}"
 					update=":form:dialogPhysique" oncomplete="dlgPhysique.show();">
 					<f:setPropertyActionListener value="#{rec}"
-						target="#{historyBacking.selectedHistoryPhysique}" />
+						target="#{historyOdontologyBacking.selectedHistoryPhysique}" />
 				</p:commandButton>
 			</p:column>
 
 		</p:dataTable>
 	</p:tab>
 
-	<p:tab id="tab6" title="#{msg['his_history_organometry']}"
-		rendered="#{historyBacking.rolePrincipal eq 'NURSE_AUX' or historyBacking.rolePrincipal eq 'DOCTOR'}">
-		<p:dataTable id="tblOrganometry" var="rec"
-			value="#{historyBacking.historyOrganometryModel}"
-			rowKey="#{rec.code}" style="width:100%" paginator="true" rows="5"
-			emptyMessage="#{msg['glb_no_records_found']}">
-
-			<p:column headerText="#{msg['app_date']}">
-				<h:outputLabel value="#{rec.crmAppointment.startAppointmentDate}">
-					<f:convertDateTime pattern="dd/MM/yyyy" />
-				</h:outputLabel>
-			</p:column>
-
-			<p:column headerText="#{msg['exp_doctor']}">
-				<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
-			</p:column>
-
-			<p:column headerText="#{msg['his_organometry_check']}">
-				<h:outputLabel value="#{rec.organometryCheck?'SI':'NO'}" />
-			</p:column>
-
-			<p:column headerText="#{msg['his_organometry_analysis']}">
-				<h:outputLabel value="#{rec.organometryAnalysis}" />
-			</p:column>
-		</p:dataTable>
-	</p:tab>
-
-	<p:tab id="tab7" title="#{msg['his_history_ip']}"
-		rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
-		<p:dataTable var="rec" value="#{historyBacking.listDiagnosisView}"
+	<p:tab id="tab7" title="#{msg['his_history_ip_odo']}"
+		rendered="#{historyOdontologyBacking.rolePrincipal eq 'DOCTOR'}">
+		<p:dataTable var="rec"
+			value="#{historyOdontologyBacking.listDiagnosisView}"
 			paginator="true" rows="15" style="width:100%"
 			emptyMessage="#{msg['glb_no_records_found']}">
 
@@ -289,8 +221,9 @@
 	</p:tab>
 
 	<p:tab id="tab8" title="#{msg['his_history_medicaction']}"
-		rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
-		<p:dataTable var="rec" value="#{historyBacking.listMedicationView}"
+		rendered="#{historyOdontologyBacking.rolePrincipal eq 'DOCTOR'}">
+		<p:dataTable var="rec"
+			value="#{historyOdontologyBacking.listMedicationView}"
 			paginator="true" rows="15" style="width:100%"
 			emptyMessage="#{msg['glb_no_records_found']}">
 
@@ -319,129 +252,21 @@
 		</p:dataTable>
 	</p:tab>
 
-	<p:tab id="tab9" title="#{msg['his_history_therapy']}"
-		rendered="#{historyBacking.rolePrincipal eq 'NURSE_AUX' or historyBacking.rolePrincipal eq 'DOCTOR'}">
-		<p:dataTable var="rec" value="#{historyBacking.listTherapyView}"
-			paginator="true" rows="15" style="width:100%"
-			emptyMessage="#{msg['glb_no_records_found']}">
-
-			<p:column headerText="#{msg['app_date']}">
-				<h:outputLabel value="#{rec.crmAppointment.startAppointmentDate}">
-					<f:convertDateTime pattern="dd/MM/yyyy" />
-				</h:outputLabel>
-			</p:column>
-
-			<p:column headerText="#{msg['app_doctor']}">
-				<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
-			</p:column>
-
-			<p:column headerText="#{msg['sal_material_descr']}">
-				<h:outputLabel value="#{rec.descMaterial}" />
-			</p:column>
-
-			<p:column headerText="#{msg['sal_material_amount']}"
-				style="width:100px">
-				<h:outputLabel value="#{rec.unit}" />
-			</p:column>
-		</p:dataTable>
-	</p:tab>
-
-	<p:tab id="tab10" title="#{msg['his_history_examinations']}"
-		rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
-		<p:dataTable var="rec" value="#{historyBacking.listExamView}"
-			paginator="true" rows="15" style="width:100%"
-			emptyMessage="#{msg['glb_no_records_found']}">
-
-			<p:column headerText="#{msg['app_date']}">
-				<h:outputLabel value="#{rec.crmAppointment.startAppointmentDate}">
-					<f:convertDateTime pattern="dd/MM/yyyy" />
-				</h:outputLabel>
-			</p:column>
-
-			<p:column headerText="#{msg['app_doctor']}">
-				<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
-			</p:column>
-
-			<p:column headerText="#{msg['sal_material_descr']}">
-				<h:outputLabel value="#{rec.descMaterial}" />
-			</p:column>
-
-			<p:column headerText="#{msg['sal_material_amount']}"
-				style="width:100px">
-				<h:outputLabel value="#{rec.unit}" />
-			</p:column>
-		</p:dataTable>
-	</p:tab>
-
-	<p:tab id="tab11" title="#{msg['his_history_note']}"
-		rendered="#{historyBacking.rolePrincipal eq 'NURSE' or historyBacking.rolePrincipal eq 'DOCTOR'}">
-
-		<h:panelGrid width="100%">
-
-			<p:commandButton value="#{msg['btn_create_note']}"
-				actionListener="#{historyBacking.cleanNoteAction}"
-				oncomplete="dlgNote.show()" update=":form:dialogNote"
-				rendered="#{historyBacking.rolePrincipal eq 'NURSE' or historyBacking.rolePrincipal eq 'DOCTOR'}" />
-
-			<p:spacer
-				rendered="#{historyBacking.rolePrincipal eq 'NURSE' or historyBacking.rolePrincipal eq 'DOCTOR'}" />
-
-			<p:dataTable id="tblNotes" var="rec"
-				value="#{historyBacking.listNoteView}" paginator="true" rows="15"
-				style="width:100%" emptyMessage="#{msg['glb_no_records_found']}">
-
-				<p:column headerText="#{msg['app_date']}">
-					<h:outputLabel value="#{rec.noteDate}">
-						<f:convertDateTime pattern="dd/MM/yyyy" />
-					</h:outputLabel>
-				</p:column>
-
-				<p:column
-					headerText="#{msg['app_doctor']} / #{msg['prc_time_nurse']}">
-					<h:outputLabel
-						value="#{rec.crmDoctor ne null?rec.crmDoctor.names:rec.crmNurse.names}" />
-				</p:column>
-
-				<p:column headerText="#{msg['his_history_note_type']}">
-					<h:outputLabel value="#{rec.noteType}" />
-				</p:column>
-
-				<p:column headerText="#{msg['his_history_therapy']}">
-					<h:outputLabel value="#{rec.otherNoteType}" />
-				</p:column>
-
-				<p:column headerText="#{msg['his_history_note']}"
-					style="width:560px">
-					<h:outputLabel value="#{rec.note}" />
-				</p:column>
-
-				<p:column style="width:40px">
-					<p:commandButton title="#{msg['btn_print']}" icon="ui-icon-print"
-						action="#{historyBacking.printRemissiomAction}" ajax="false"
-						disabled="#{rec.noteType ne 'REMISION'}" process="@this,tblNotes">
-						<f:setPropertyActionListener value="#{rec}"
-							target="#{historyBacking.currentNote}" />
-					</p:commandButton>
-				</p:column>
-			</p:dataTable>
-
-		</h:panelGrid>
-	</p:tab>
-
 	<p:tab id="tab12" title="#{msg['his_history_consent']}"
-		rendered="#{historyBacking.rolePrincipal eq 'NURSE' or historyBacking.rolePrincipal eq 'DOCTOR'}">
+		rendered="#{historyOdontologyBacking.rolePrincipal eq 'DOCTOR'}">
 
 		<h:panelGrid width="100%">
 			<p:commandButton value="#{msg['btn_add']}"
-				actionListener="#{historyBacking.newConsentAction}"
+				actionListener="#{historyOdontologyBacking.newConsentAction}"
 				oncomplete="dlgConsent.show()" update=":form:dialogConsent"
-				rendered="#{historyBacking.rolePrincipal eq 'NURSE' or historyBacking.rolePrincipal eq 'DOCTOR'}" />
+				rendered="#{historyOdontologyBacking.rolePrincipal eq 'DOCTOR'}" />
 
 			<p:spacer />
 
 			<p:dataTable id="tblConsent" var="rec"
-				value="#{historyBacking.listConsentView}" paginator="true" rows="15"
-				style="width:100%" emptyMessage="#{msg['glb_no_records_found']}">
+				value="#{historyOdontologyBacking.listConsentView}" paginator="true"
+				rows="15" style="width:100%"
+				emptyMessage="#{msg['glb_no_records_found']}">
 
 				<p:column headerText="#{msg['con_date_informed']}" width="80%">
 					<h:outputLabel value="#{rec.dateInformed}">
@@ -453,50 +278,12 @@
 					<p:commandButton id="downloadLink" value="#{msg['btn_download']}"
 						ajax="false" icon="ui-icon-carat-1-s"
 						onclick="PrimeFaces.monitorDownload(start, stop)">
-						<p:fileDownload value="#{historyBacking.getFile(rec.consentFile)}" />
+						<p:fileDownload
+							value="#{historyOdontologyBacking.getFile(rec.consentFile)}" />
 					</p:commandButton>
 				</p:column>
 			</p:dataTable>
 		</h:panelGrid>
-	</p:tab>
-
-	<p:tab id="tab13" title="#{msg['title_case_study']}"
-		rendered="#{historyBacking.rolePrincipal eq 'NURSE' or historyBacking.rolePrincipal eq 'DOCTOR'}">
-
-		<p:dataTable id="tblSuccessStory" var="rec"
-			value="#{historyBacking.listSuccessStoryView}"
-			resizableColumns="true" paginator="true" rows="15" style="width:100%"
-			emptyMessage="#{msg['glb_no_records_found']}">
-
-			<p:column headerText="#{msg['app_doctor']}">
-				<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
-			</p:column>
-
-			<p:column headerText="#{msg['cst_start_date']}">
-				<h:outputLabel value="#{rec.startDate}">
-					<f:convertDateTime pattern="dd/MM/yyyy" />
-				</h:outputLabel>
-			</p:column>
-
-			<p:column headerText="#{msg['cst_end_date']}">
-				<h:outputLabel value="#{rec.crmAppointment.startAppointmentDate}">
-					<f:convertDateTime pattern="dd/MM/yyyy" />
-				</h:outputLabel>
-			</p:column>
-
-			<p:column headerText="#{msg['cst_perc']}">
-				<h:outputLabel value="#{rec.percent}" />
-			</p:column>
-
-			<p:column headerText="#{msg['cst_patology']}">
-				<h:outputLabel value="#{rec.crmCie.description}" />
-			</p:column>
-
-			<p:column headerText="#{msg['cst_reason']}">
-				<h:outputLabel value="#{rec.reason}" />
-			</p:column>
-
-		</p:dataTable>
 	</p:tab>
 
 </p:tabView>

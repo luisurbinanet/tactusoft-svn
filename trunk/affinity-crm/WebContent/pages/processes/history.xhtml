@@ -1390,7 +1390,8 @@
 
 					<h:panelGrid columns="2" width="100%">
 						<h:outputLabel value="#{msg['his_type']}" />
-						<p:selectOneMenu style="width:350px">
+						<p:selectOneMenu style="width:350px"
+							value="#{historyBacking.typeHistory}">
 							<f:selectItem itemLabel="#{msg['his_medical_type']}"
 								itemValue="1" />
 							<f:selectItem itemLabel="#{msg['his_odontology_type']}"

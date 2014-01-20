@@ -855,6 +855,10 @@ public class BaseBacking implements Serializable {
 		return FacesUtil.getCurrentUserData().isPrintHistorial();
 	}
 
+	public boolean isPrintHistorialOdo() {
+		return FacesUtil.getCurrentUserData().isPrintHistorialOdo();
+	}
+
 	public List<SelectItem> getListOccupation() {
 		if (listOccupation == null) {
 			listOccupation = new LinkedList<SelectItem>();
@@ -1099,7 +1103,21 @@ public class BaseBacking implements Serializable {
 
 	public void printHistoryAction() {
 		try {
-			GenerateFormulaPDF.historyPDF(selectedPatient.getId());
+			GenerateFormulaPDF.historyPDF(selectedPatient.getId(),
+					Constant.MEDICAL_HISTORY_TYPE);
+		} catch (JRException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void printHistoryOdoAction() {
+		try {
+			GenerateFormulaPDF.historyPDF(selectedPatient.getId(),
+					Constant.ODONTOLOGY_HISTORY_TYPE);
 		} catch (JRException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

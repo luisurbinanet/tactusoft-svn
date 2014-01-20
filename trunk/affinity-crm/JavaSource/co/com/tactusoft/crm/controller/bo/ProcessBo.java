@@ -192,11 +192,13 @@ public class ProcessBo implements Serializable {
 	}
 
 	public List<VwAppointment> getListByAppointmentByPatient(
-			BigDecimal idPatient) {
+			BigDecimal idPatient, String type) {
 		return dao
 				.find("from VwAppointment o where o.patId = "
 						+ idPatient
-						+ " and o.state in (3,4,5) order by o.startAppointmentDate DESC");
+						+ " and prcTypeHistory = '"
+						+ type
+						+ "' and o.state in (3,4,5) order by o.startAppointmentDate DESC");
 	}
 
 	public List<VwAppointment> getListByAppointmentAllByPatient(
@@ -1177,9 +1179,12 @@ public class ProcessBo implements Serializable {
 		}
 	}
 
-	public List<CrmHistoryHistory> getListHistoryHistory(BigDecimal idPatient) {
+	public List<CrmHistoryHistory> getListHistoryHistory(BigDecimal idPatient,
+			String type) {
 		return dao.find("from CrmHistoryHistory o where o.crmPatient.id = "
-				+ idPatient);
+				+ idPatient
+				+ " and o.crmAppointment.crmProcedureDetail.typeHistory = '"
+				+ type + "'");
 	}
 
 	public CrmHistoryRecord getHistoryRecord(BigDecimal idAppointment) {
@@ -1193,9 +1198,12 @@ public class ProcessBo implements Serializable {
 		}
 	}
 
-	public List<CrmHistoryRecord> getListHistoryRecord(BigDecimal idPatient) {
+	public List<CrmHistoryRecord> getListHistoryRecord(BigDecimal idPatient,
+			String type) {
 		return dao.find("from CrmHistoryRecord o where o.crmPatient.id = "
-				+ idPatient);
+				+ idPatient
+				+ " and o.crmAppointment.crmProcedureDetail.typeHistory = '"
+				+ type + "'");
 	}
 
 	public CrmHistoryHomeopathic getHistoryHomeopathic(BigDecimal idAppointment) {
@@ -1228,9 +1236,12 @@ public class ProcessBo implements Serializable {
 		}
 	}
 
-	public List<CrmHistoryPhysique> getListHistoryPhysique(BigDecimal idPatient) {
+	public List<CrmHistoryPhysique> getListHistoryPhysique(
+			BigDecimal idPatient, String type) {
 		return dao.find("from CrmHistoryPhysique o where o.crmPatient.id = "
-				+ idPatient);
+				+ idPatient
+				+ " and o.crmAppointment.crmProcedureDetail.typeHistory = '"
+				+ type + "'");
 	}
 
 	public CrmHistoryOrganometry getHistoryOrganometry(BigDecimal idAppointment) {
@@ -1437,10 +1448,14 @@ public class ProcessBo implements Serializable {
 		return this.persist(entity);
 	}
 
-	public List<CrmDiagnosis> getListDiagnosisByPatient(BigDecimal idPatient) {
+	public List<CrmDiagnosis> getListDiagnosisByPatient(BigDecimal idPatient,
+			String type) {
 		List<CrmDiagnosis> list = dao
 				.find("from CrmDiagnosis o where o.crmAppointment.crmPatient.id = "
 						+ idPatient
+						+ " and o.crmAppointment.crmProcedureDetail.typeHistory = '"
+						+ type
+						+ "'"
 						+ " order by o.crmAppointment.startAppointmentDate desc");
 		return list;
 	}
@@ -1453,10 +1468,14 @@ public class ProcessBo implements Serializable {
 		return list;
 	}
 
-	public List<CrmMedication> getListMedicationByPatient(BigDecimal idPatient) {
+	public List<CrmMedication> getListMedicationByPatient(BigDecimal idPatient,
+			String type) {
 		List<CrmMedication> list = dao
 				.find("from CrmMedication o where o.crmAppointment.crmPatient.id = "
 						+ idPatient
+						+ " and o.crmAppointment.crmProcedureDetail.typeHistory = '"
+						+ type
+						+ "'"
 						+ " order by o.crmAppointment.startAppointmentDate desc");
 		return list;
 	}
@@ -1484,10 +1503,12 @@ public class ProcessBo implements Serializable {
 		return list;
 	}
 
-	public List<CrmConsent> getListConsentByPatient(BigDecimal idPatient) {
+	public List<CrmConsent> getListConsentByPatient(BigDecimal idPatient,
+			String type) {
 		List<CrmConsent> list = dao
 				.find("from CrmConsent o where o.crmPatient.id = " + idPatient
-						+ " order by o.dateInformed desc");
+						+ " and o.consentType = '" + type
+						+ "' order by o.dateInformed desc");
 		return list;
 	}
 

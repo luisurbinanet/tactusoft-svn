@@ -181,8 +181,10 @@ public class HistoryBacking extends BaseBacking {
 
 	protected byte[] consentFile;
 	protected Date consentDate;
+	protected String consentType;
 
 	protected HtmlPanelGrid containerComponent;
+	protected int typeHistory;
 
 	public HistoryBacking() {
 		newAction(null);
@@ -1066,6 +1068,22 @@ public class HistoryBacking extends BaseBacking {
 				: false;
 	}
 
+	public String getConsentType() {
+		return consentType;
+	}
+
+	public void setConsentType(String consentType) {
+		this.consentType = consentType;
+	}
+
+	public int getTypeHistory() {
+		return typeHistory;
+	}
+
+	public void setTypeHistory(int typeHistory) {
+		this.typeHistory = typeHistory;
+	}
+
 	public void calculateIMCAction(ActionEvent event) {
 		double weight = this.getWeight();
 		double height = this.getHeight() / 100;
@@ -1136,10 +1154,12 @@ public class HistoryBacking extends BaseBacking {
 		listCaseStudyCie = new ArrayList<SelectItem>();
 		listCaseStudyHistory = new ArrayList<SelectItem>();
 		idCaseStudyCie = null;
+		typeHistory = 1;
 	}
 
 	public String editAppointmentAction() {
 		if (!selectedAppointment.getPrcTypeHistory().equals("ODONTOLOGY")) {
+			consentType = Constant.MEDICAL_HISTORY_TYPE;
 			modeEdit = true;
 			modeHistorial = false;
 			part = Constant.HISTORY_HISTORY;
@@ -1274,15 +1294,28 @@ public class HistoryBacking extends BaseBacking {
 			HistoryOdontologyBacking historyOdontologyBacking = FacesUtil
 					.findBean("historyOdontologyBacking");
 			historyOdontologyBacking.loadValues(this.selectedAppointment);
+			this.consentType = Constant.ODONTOLOGY_HISTORY_TYPE;
+			this.selectedPatient = historyOdontologyBacking.selectedPatient;
 			return "historyOdontology?faces-redirect=true";
 		}
 	}
 
-	public void showHistorialAction() {
-		modeEdit = true;
-		modeHistorial = true;
-		selectedPatient = selectedPatientTemp;
-		refreshLists();
+	public String showHistorialAction() {
+		if (typeHistory == 1) {
+			modeEdit = true;
+			modeHistorial = true;
+			selectedPatient = selectedPatientTemp;
+			refreshLists();
+			return null;
+		} else {
+			HistoryOdontologyBacking historyOdontologyBacking = FacesUtil
+					.findBean("historyOdontologyBacking");
+			historyOdontologyBacking.modeEdit = true;
+			historyOdontologyBacking.modeHistorial = true;
+			historyOdontologyBacking.selectedPatient = selectedPatientTemp;
+			historyOdontologyBacking.refreshLists();
+			return "historyOdontology?faces-redirect=true";
+		}
 	}
 
 	public void viewHistoryAction() {
@@ -1663,15 +1696,16 @@ public class HistoryBacking extends BaseBacking {
 	protected void refreshLists() {
 
 		List<VwAppointment> listTempApp = processService
-				.getListByAppointmentByPatient(selectedPatient.getId());
+				.getListByAppointmentByPatient(selectedPatient.getId(),
+						consentType);
 		historyAppointmentModel = new VwAppointmentDataModel(listTempApp);
 
 		List<CrmHistoryHistory> listTempHistory = processService
-				.getListHistoryHistory(selectedPatient.getId());
+				.getListHistoryHistory(selectedPatient.getId(), consentType);
 		historyHistoryModel = new HistoryHistoryDataModel(listTempHistory);
 
 		List<CrmHistoryRecord> listTempRecord = processService
-				.getListHistoryRecord(selectedPatient.getId());
+				.getListHistoryRecord(selectedPatient.getId(), consentType);
 		historyRecordModel = new HistoryRecordDataModel(listTempRecord);
 
 		List<CrmHistoryHomeopathic> listTempHomeopathic = processService
@@ -1680,22 +1714,23 @@ public class HistoryBacking extends BaseBacking {
 				listTempHomeopathic);
 
 		List<CrmHistoryPhysique> listTempPhysique = processService
-				.getListHistoryPhysique(selectedPatient.getId());
+				.getListHistoryPhysique(selectedPatient.getId(), consentType);
 		historyPhysiqueModel = new HistoryPhysiqueDataModel(listTempPhysique);
 
 		List<CrmHistoryOrganometry> listTempOrganometry = processService
 				.getListHistoryOrganometry(selectedPatient.getId());
 		historyOrganometryModel = new HistoryOrganometryDataModel(
 				listTempOrganometry);
-		listDiagnosisView = processService
-				.getListDiagnosisByPatient(selectedPatient.getId());
+		listDiagnosisView = processService.getListDiagnosisByPatient(
+				selectedPatient.getId(), consentType);
 
 		listMedicationView = new ArrayList<CrmMedication>();
 		listTherapyView = new ArrayList<CrmMedication>();
 		listExamView = new ArrayList<CrmMedication>();
 
 		List<CrmMedication> listAllMedication = processService
-				.getListMedicationByPatient(selectedPatient.getId());
+				.getListMedicationByPatient(selectedPatient.getId(),
+						consentType);
 
 		for (CrmMedication row : listAllMedication) {
 			if (row.getMaterialType().equals(Constant.MATERIAL_TYPE_MEDICINE)
@@ -1713,8 +1748,8 @@ public class HistoryBacking extends BaseBacking {
 
 		listNoteView = processService.getListNoteByPatient(selectedPatient
 				.getId());
-		listConsentView = processService
-				.getListConsentByPatient(selectedPatient.getId());
+		listConsentView = processService.getListConsentByPatient(
+				selectedPatient.getId(), consentType);
 		listSuccessStoryView = processService
 				.getListSuccessStoryByPatient(selectedPatient.getId());
 	}
@@ -2406,19 +2441,6 @@ public class HistoryBacking extends BaseBacking {
 		}
 	}
 
-	public void printHistoryAction() {
-		try {
-			GenerateFormulaPDF.historyPDF(currentAppointment.getCrmPatient()
-					.getId());
-		} catch (JRException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
 	public void printRemissiomAction() {
 		try {
 			GenerateFormulaPDF.remissionPDF(currentNote.getId());
@@ -2606,6 +2628,7 @@ public class HistoryBacking extends BaseBacking {
 			crmConsent.setCrmPatient(this.selectedPatient);
 			crmConsent.setConsentFile(consentFile);
 			crmConsent.setDateInformed(consentDate);
+			crmConsent.setConsentType(consentType);
 			processService.persist(crmConsent);
 			listConsentView.add(crmConsent);
 			saved = true;

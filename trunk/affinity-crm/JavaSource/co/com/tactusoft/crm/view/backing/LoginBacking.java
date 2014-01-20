@@ -21,7 +21,6 @@ import co.com.tactusoft.crm.controller.bo.ParameterBo;
 import co.com.tactusoft.crm.controller.bo.SecurityBo;
 import co.com.tactusoft.crm.controller.bo.TablesBo;
 import co.com.tactusoft.crm.model.entities.CrmParameter;
-import co.com.tactusoft.crm.model.entities.CrmUser;
 import co.com.tactusoft.crm.security.UserData;
 import co.com.tactusoft.crm.util.FacesUtil;
 
@@ -186,9 +185,9 @@ public class LoginBacking {
 				
 				UserData user = (UserData) authenticationResponseToken
 						.getPrincipal();
-				CrmUser crmUser = user.getUser();
+				/*CrmUser crmUser = user.getUser();
 				crmUser.setPassword(FacesUtil.getMD5(this.password));
-				tablesBo.saveUser(crmUser);
+				tablesBo.saveUser(crmUser);*/
 
 				this.password = null;
 				this.visibleBadCredentials = false;
