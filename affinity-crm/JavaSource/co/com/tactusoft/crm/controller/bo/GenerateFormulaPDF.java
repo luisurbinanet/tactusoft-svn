@@ -108,11 +108,14 @@ public class GenerateFormulaPDF {
 		Connection connection = SessionFactoryUtils.getDataSource(
 				sessionFactory).getConnection();
 
+		String nameReport = "HistoriaClinica";
 		String path = "/reports/history.jasper";
 		if (type.equals(Constant.ODONTOLOGY_HISTORY_TYPE)) {
 			path = "/reports/historyOdo.jasper";
+			nameReport = "HistoriaOdontologica";
 		}
-		String nameReport = "HistoriaClinica" + idPatient + ".pdf";
+		
+		nameReport = nameReport + idPatient + ".pdf";
 
 		String reportPath = FacesContext.getCurrentInstance()
 				.getExternalContext().getRealPath(path);

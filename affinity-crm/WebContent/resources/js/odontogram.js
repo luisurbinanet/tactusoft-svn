@@ -3,6 +3,7 @@ var svgNS;
 var currentTarget;
 var previousTarget;
 var procedureTooth = {};
+var selected = false;
 
 function handleNoteComplete(xhr, status, args) {
 	if (args.validationFailed || !args.saved) {
@@ -42,6 +43,7 @@ function createRectangle(id, x, y, width, height) {
 	rect.setAttribute('fill', '#eeeeee');
 	rect.setAttribute('stroke', '#000000');
 	rect.setAttribute('selected', -1);
+	rect.setAttribute('colorApply', "eeeeee");
 	rect.addEventListener("click", selectTooth, false);
 	rect.addEventListener("mouseover", mouseOver, false);
 	rect.addEventListener("mouseout", mouseOut, false);
@@ -65,7 +67,7 @@ function loadOdontogram() {
 	currentTarget = null;
 	previousTarget = null;
 	procedureTooth = {};
-	
+
 	svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 	svgNS = svg.namespaceURI;
 	svg.setAttribute('width', 850);
@@ -209,10 +211,21 @@ function loadOdontogram() {
 	loadProcedureTooth();
 }
 
+function createAnimation(id) {
+	var animate = document.createElementNS(svgNS, 'animate');
+	animate.setAttribute('id', "a" + id);
+	animate.setAttribute('attributeName', "stroke-width");
+	animate.setAttribute('from', 0);
+	animate.setAttribute('to', 6);
+	animate.setAttribute('dur', "1s");
+	animate.setAttribute('repeatCount', "indefinite");
+	return animate;
+}
+
 function mouseOver(evt) {
 	var target = evt.target;
-	target.setAttributeNS(null, "stroke", "#ffff00");
-	target.setAttributeNS(null, "stroke-width", "3");
+	target.setAttributeNS(null, "stroke", "#000000");
+	target.setAttributeNS(null, "stroke-width", "4");
 }
 
 function mouseOut(evt) {
@@ -224,22 +237,30 @@ function mouseOut(evt) {
 function selectTooth(evt) {
 	currentTarget = evt.target;
 	if (previousTarget) {
-		if (previousTarget.getAttribute("selected") == -1) {
+		/*if (previousTarget.getAttribute("selected") == -1) {
 			previousTarget.setAttributeNS(null, "fill", "#eeeeee");
 		} else {
-			previousTarget.setAttributeNS(null, "fill", "#ff0000");
-		}
+			var color = "#" + previousTarget.getAttribute("colorApply");
+			previousTarget.setAttributeNS(null, "fill", color);
+		}*/
+		var animate = document.getElementById("a" + previousTarget.id);
+		previousTarget.removeChild(animate);
 	}
-	currentTarget.setAttributeNS(null, "fill", "#ffff00");
+
+	currentTarget.appendChild(createAnimation(currentTarget.id));
+
 	previousTarget = currentTarget;
 	getCurrentTooth(currentTarget.id);
+	selected = true;
 }
 
 function applyProcedure(xhr, status, args) {
 	if (currentTarget) {
 		if (args.apply) {
-			currentTarget.setAttribute("selected", 1);
+			currentTarget.setAttribute("selected", args.descProcedure);
+			currentTarget.setAttribute("fill", "#" + args.color);
 		} else {
+			currentTarget.setAttribute("fill", "#eeeeee");
 			currentTarget.setAttribute("selected", -1);
 		}
 		currentTarget.children[0].innerHTML = args.descProcedure;
@@ -251,7 +272,7 @@ function showProcedureTooth(xhr, status, args) {
 	jQuery.each(procedures, function(i, val) {
 		var rect = document.getElementById(val.tooth);
 		rect.setAttribute("selected", 1);
-		rect.setAttribute("fill", "#ff0000");
+		rect.setAttribute("fill", "#" + val.color);
 		rect.children[0].innerHTML = val.descProcedure;
 	});
 }

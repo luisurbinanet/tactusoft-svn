@@ -253,7 +253,7 @@
 	</p:tab>
 
 	<p:tab id="tab12" title="#{msg['his_history_consent']}"
-		rendered="#{historyOdontologyBacking.rolePrincipal eq 'DOCTOR'}">
+		rendered="#{historyOdontologyBacking.rolePrincipal eq 'NURSE' or historyOdontologyBacking.rolePrincipal eq 'DOCTOR'}">
 
 		<h:panelGrid width="100%">
 			<p:commandButton value="#{msg['btn_add']}"

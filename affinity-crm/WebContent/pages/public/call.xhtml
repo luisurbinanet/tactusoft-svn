@@ -203,7 +203,7 @@
 
 					<p:dataTable id="dtbSearchPatient" var="rec"
 						value="#{callBacking.patientModel}" rowKey="#{rec.id}"
-						selection="#{callBacking.tmpSelectedPatient}" paginator="true"
+						selection="#{callBacking.selectedPatientTemp}" paginator="true"
 						rows="15" style="width:100%"
 						emptyMessage="#{msg['glb_no_records_found']}">
 

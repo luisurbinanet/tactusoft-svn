@@ -18,7 +18,7 @@
 
 				<p:growl id="growl" showDetail="true" />
 
-				<p:toolbar style="width:100%">
+				<p:toolbar id="toolBar" style="width:100%">
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_add_patient']}"
 							icon="ui-icon-circle-check" oncomplete="dlg2.show()"
@@ -359,7 +359,7 @@
 								action="#{eventsHistorialBacking.searchPatientAction}" />
 							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
 								icon="ui-icon-plusthick"
-								update=":form:pnlDetail :form:pnlTable :form:btnPrint"
+								update=":form:pnlDetail :form:pnlTable :form:toolBar"
 								oncomplete="dlg2.hide()" process="dialog2"
 								action="#{eventsHistorialBacking.addPatientAction}"
 								disabled="#{eventsHistorialBacking.disabledAddPatient}" />

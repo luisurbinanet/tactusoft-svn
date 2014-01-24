@@ -35,7 +35,7 @@
 						<p:commandButton value="#{msg['btn_update']}"
 							process="@this,selsalesOff" icon="ui-icon-refresh"
 							oncomplete="updateDlg.show()" update="updateDialog"
-							disabled="#{contactBacking.newRecord or not contactBacking.existsSAP}" />
+							disabled="#{contactBacking.newRecord or contactBacking.existsSAP}" />
 						<p:splitButton icon="ui-icon-arrowrefresh-1-w"
 							value="#{msg['btn_actions']}"
 							disabled="#{contactBacking.selectedPatient.id == null?true:false}">

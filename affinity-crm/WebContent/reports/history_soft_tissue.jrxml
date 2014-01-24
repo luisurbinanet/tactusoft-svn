@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="history_record" pageWidth="555" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="258c62b7-639f-43e7-ac7b-c289802e1be2">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="173"/>
+	<property name="ireport.y" value="149"/>
 	<parameter name="P_ID_PATIENT" class="java.math.BigDecimal">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -10,103 +10,135 @@
 		<![CDATA[SELECT a.id,
     a.id_appointment,
     b.start_appointment_date,
-    a.gland_normal,
-    a.gland_altered,
-    a.lymph_normal,
-    a.lymph_altered,
-    a.oral_mucosa_normal,
-    a.oral_mucosa_altered,
-    a.braces_normal,
-    a.braces_altered,
-    a.tongue_normal,
-    a.tongue_altered,
-    a.palate_normal,
-    a.palate_altered,
-    a.mounth_floor_normal,
-    a.mounth_floor_altered,
-    a.oropharynx_normal,
-    a.oropharynx_altered,
-    a.tonsils_normal,
-    a.tonsils_altered,
-    a.cheeks_normal,
-    a.cheeks_altered,
+	CASE gland_normal
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END gland_normal,
+	CASE gland_altered
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END gland_altered,
+	CASE lymph_normal
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END lymph_normal,
+	CASE lymph_altered
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END lymph_altered,
+	CASE oral_mucosa_normal
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END oral_mucosa_normal,
+	CASE oral_mucosa_altered
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END oral_mucosa_altered,
+	CASE braces_normal
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END braces_normal,
+	CASE braces_altered
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END braces_altered,
+	CASE tongue_normal
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END tongue_normal,
+	CASE tongue_altered
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END tongue_altered,
+	CASE palate_normal
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END palate_normal,
+	CASE palate_altered
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END palate_altered,
+	CASE mounth_floor_normal
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END mounth_floor_normal,
+	CASE mounth_floor_altered
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END mounth_floor_altered,
+	CASE oropharynx_normal
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END oropharynx_normal,
+	CASE oropharynx_altered
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END oropharynx_altered,
+	CASE tonsils_normal
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END tonsils_normal,
+	CASE tonsils_altered
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END tonsils_altered,
+	CASE cheeks_normal
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END cheeks_normal,
+	CASE cheeks_altered
+	WHEN '0' THEN 'NO REFERIDO'
+	WHEN '1' THEN 'NO'
+	WHEN '2' THEN 'SI'
+	END cheeks_altered,
     IFNULL(a.obs,'NO REFERIDO') obs
 FROM crm_db.crm_odontology_soft_tissue a JOIN crm_db.crm_appointment b on a.id_appointment = b.id
 WHERE b.id_patient = $P{P_ID_PATIENT}
 ORDER by b.start_appointment_date DESC]]>
 	</queryString>
-	<field name="id" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="id_appointment" class="java.math.BigDecimal">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="start_appointment_date" class="java.sql.Timestamp">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="gland_normal" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="gland_altered" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="lymph_normal" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="lymph_altered" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="oral_mucosa_normal" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="oral_mucosa_altered" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="braces_normal" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="braces_altered" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="tongue_normal" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="tongue_altered" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="palate_normal" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="palate_altered" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="mounth_floor_normal" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="mounth_floor_altered" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="oropharynx_normal" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="oropharynx_altered" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="tonsils_normal" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="tonsils_altered" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="cheeks_normal" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="cheeks_altered" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="obs" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
+	<field name="id" class="java.lang.Integer"/>
+	<field name="id_appointment" class="java.math.BigDecimal"/>
+	<field name="start_appointment_date" class="java.sql.Timestamp"/>
+	<field name="gland_normal" class="java.lang.String"/>
+	<field name="gland_altered" class="java.lang.String"/>
+	<field name="lymph_normal" class="java.lang.String"/>
+	<field name="lymph_altered" class="java.lang.String"/>
+	<field name="oral_mucosa_normal" class="java.lang.String"/>
+	<field name="oral_mucosa_altered" class="java.lang.String"/>
+	<field name="braces_normal" class="java.lang.String"/>
+	<field name="braces_altered" class="java.lang.String"/>
+	<field name="tongue_normal" class="java.lang.String"/>
+	<field name="tongue_altered" class="java.lang.String"/>
+	<field name="palate_normal" class="java.lang.String"/>
+	<field name="palate_altered" class="java.lang.String"/>
+	<field name="mounth_floor_normal" class="java.lang.String"/>
+	<field name="mounth_floor_altered" class="java.lang.String"/>
+	<field name="oropharynx_normal" class="java.lang.String"/>
+	<field name="oropharynx_altered" class="java.lang.String"/>
+	<field name="tonsils_normal" class="java.lang.String"/>
+	<field name="tonsils_altered" class="java.lang.String"/>
+	<field name="cheeks_normal" class="java.lang.String"/>
+	<field name="cheeks_altered" class="java.lang.String"/>
+	<field name="obs" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>

@@ -49,7 +49,7 @@
 								process="@this,toolBar" />
 							<p:commandButton icon="ui-icon-arrowreturnthick-1-w"
 								value="#{msg['btn_return']}" update="form"
-								process="@this, toolBar, accordion"
+								process="@this, toolBar, accordion" immediate="true"
 								action="#{historyOdontologyBacking.returnAction}" />
 						</p:toolbarGroup>
 					</p:toolbar>
@@ -740,7 +740,7 @@
 								<h:panelGrid width="100%" columns="2">
 									<h:outputText value="#{msg['his_physique_brush_frecuency']}" />
 									<pe:inputNumber minValue="0" maxValue="99" decimalPlaces="0"
-										symbol="  dias" emptyValue="zero" symbolPosition="s"
+										symbol="  X dia" emptyValue="zero" symbolPosition="s"
 										style="width:150px;"
 										value="#{historyOdontologyBacking.selectedHistoryPhysique.brushFrecuency}" />
 
@@ -1377,7 +1377,7 @@
 						<p:tab title="#{msg['his_evolution']}" id="tabEvolution">
 							<h:panelGrid id="pnlEvolution" columns="1" width="100%"
 								cellpadding="10">
-								<p:inputTextarea style="width:1000px" rows="5" required="true"
+								<p:inputTextarea style="width:1000px" rows="5"
 									label="#{msg['his_evolution']}"
 									value="#{historyOdontologyBacking.crmOdontologyEvolution.obs}" />
 							</h:panelGrid>
@@ -1515,7 +1515,7 @@
 
 					</p:dialog>
 
-					<p:dialog header="#{historyOdontologyBacking.titleMedication}"
+					<p:dialog header="#{msg['his_history_medicaction']}"
 						widgetVar="dlgMedicine" resizable="false" id="dialogMedicine"
 						showEffect="fade" hideEffect="explode" modal="true" width="600"
 						height="500">
@@ -1546,7 +1546,7 @@
 									<h:outputLabel />
 									<h:outputLabel value="#{msg['sal_material_amount']}" />
 									<pe:inputNumber value="#{historyOdontologyBacking.amount}"
-										minValue="1" maxValue="99" />
+										decimalPlaces="0" />
 								</h:panelGrid>
 							</p:outputPanel>
 
@@ -1592,10 +1592,18 @@
 
 					<p:dialog header="#{msg['btn_add_posology_odo']}"
 						widgetVar="dlgPosology" resizable="false" id="dialogPosology"
-						showEffect="fade" hideEffect="explode" modal="true" width="600">
+						showEffect="fade" hideEffect="explode" modal="true" width="600"
+						closable="false">
 
-						<p:inputTextarea rows="7" style="width:560px"
-							value="#{historyOdontologyBacking.selectedDiagnosis.posology}" />
+						<h:panelGrid width="100%">
+
+							<p:inputTextarea rows="7" style="width:560px"
+								value="#{historyOdontologyBacking.selectedDiagnosis.posology}" />
+
+							<p:commandButton value="Aceptar" update=":form:dialogPosology"
+								oncomplete="dlgPosology.hide()" />
+						</h:panelGrid>
+
 
 					</p:dialog>
 
@@ -1627,8 +1635,7 @@
 							<p:column headerText="#{msg['sal_material_amount']}"
 								style="width:100px">
 								<pe:inputNumber value="#{rec.unit}" symbolPosition="s"
-									decimalPlaces="0" style="width:100px" minValue="1"
-									maxValue="99" />
+									decimalPlaces="0" style="width:100px" />
 							</p:column>
 
 							<f:facet name="footer">
@@ -1678,10 +1685,10 @@
 
 						<h:panelGrid id="pnlConsent" columns="2" width="100%">
 							<h:outputLabel value="#{msg['con_date_informed']}" />
-							<p:calendar value="#{historyOdontologyBacking.consentDate}" required="true"
-								id="calConsentDate" showOn="button" navigator="true"
-								pattern="dd/MM/yyyy" readonlyInput="true" locale="es"
-								label="#{msg['con_date_informed']}"
+							<p:calendar value="#{historyOdontologyBacking.consentDate}"
+								required="true" id="calConsentDate" showOn="button"
+								navigator="true" pattern="dd/MM/yyyy" readonlyInput="true"
+								locale="es" label="#{msg['con_date_informed']}"
 								maxdate="#{historyOdontologyBacking.today}" />
 
 							<h:outputLabel value="#{msg['con_consent']}" />
@@ -1691,7 +1698,7 @@
 								label="#{msg['file_choose']}"
 								fileUploadListener="#{historyOdontologyBacking.handleFileUpload}"
 								mode="advanced" sizeLimit="10000000" auto="true"
-								allowTypes="/(\.|\/)(pdf)$/" />
+								allowTypes="/(\.|\/)(pdf|jpe?g|png)$/" />
 
 							<p:commandButton value="#{msg['btn_add']}"
 								process="@this,pnlConsent"
