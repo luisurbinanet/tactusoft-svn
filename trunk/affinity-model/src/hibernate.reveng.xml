@@ -2,10 +2,12 @@
 <!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
 
 <hibernate-reverse-engineering>
-<type-mapping>
-	<sql-type jdbc-type="BOOLEAN" hibernate-type="boolean"></sql-type>
-</type-mapping>
-	<table-filter match-name="crm_appointment" match-catalog="crm_db"></table-filter>
+	<type-mapping>
+		<sql-type jdbc-type="BOOLEAN" hibernate-type="boolean"></sql-type>
+	</type-mapping>
+	<table-filter match-name="crm_odotogram_procedure"
+		match-catalog="crm_db">
+	</table-filter>
 	<table-filter match-name="crm_odontology_odontogram"
 		match-catalog="crm_db">
 	</table-filter>
