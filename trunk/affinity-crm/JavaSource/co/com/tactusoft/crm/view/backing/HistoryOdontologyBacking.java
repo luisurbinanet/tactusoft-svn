@@ -74,6 +74,8 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 	private Map<Integer, CrmOdotogramProcedure> mapOdotogramProcedure;
 	private List<OdontogramBean> listOdontogramBean;
 
+	private String posology;
+
 	public HistoryOdontologyBacking() {
 
 	}
@@ -197,7 +199,16 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 		this.listOdotogramProcedure = listOdotogramProcedure;
 	}
 
+	public String getPosology() {
+		return posology;
+	}
+
+	public void setPosology(String posology) {
+		this.posology = posology;
+	}
+
 	public void loadValues(VwAppointment vwAppointment) {
+		listMaterialGroup = processService.getListMaterialGroup();
 		this.selectedAppointment = vwAppointment;
 		modeEdit = true;
 		modeHistorial = false;
@@ -504,6 +515,14 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 				.isEmptyOrBlank(selectedHistoryPhysique.getBloodPressure())) {
 			field = FacesUtil.getMessage("his_physique_blood_pressure");
 			message = FacesUtil.getMessage("his_general_findings", field);
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		}
+
+		if (FacesUtil.isEmptyOrBlank(crmOdontologyEvolution.getObs())) {
+			field = FacesUtil.getMessage("his_evolution");
+			message = FacesUtil.getMessage("his_evolution", field);
 			message = message + " - "
 					+ FacesUtil.getMessage("glb_required", field);
 			FacesUtil.addWarn(message);
@@ -1036,8 +1055,8 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 			}
 		}
 
-		listConsentView = processService
-				.getListConsentByPatient(selectedPatient.getId(), consentType);
+		listConsentView = processService.getListConsentByPatient(
+				selectedPatient.getId(), consentType);
 	}
 
 	public void getCurrentTooth(final String current) {
@@ -1053,11 +1072,13 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 	public void handleProcedureChange() {
 		RequestContext context = RequestContext.getCurrentInstance();
 		boolean apply = false;
-		String descProcedure = null;
+		String descProcedure = " ";
+		String color = " ";
 		if (currentProcedure != null && currentProcedure > 0) {
 			apply = true;
 			descProcedure = mapOdotogramProcedure.get(currentProcedure)
 					.getName();
+			color = mapOdotogramProcedure.get(currentProcedure).getColor();
 			mapProcedureTooth.put(this.currentTooth,
 					mapOdotogramProcedure.get(currentProcedure));
 		} else {
@@ -1066,6 +1087,7 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 		}
 		context.addCallbackParam("apply", apply);
 		context.addCallbackParam("descProcedure", descProcedure);
+		context.addCallbackParam("color", color);
 	}
 
 	public void loadProcedureTooth() {
@@ -1076,11 +1098,15 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 				.entrySet()) {
 			CrmOdotogramProcedure value = entry.getValue();
 			listOdontogramBean.add(new OdontogramBean(entry.getKey(), value
-					.getId(), value.getName()));
+					.getId(), value.getName(), value.getColor()));
 		}
 
 		context.addCallbackParam("procedureTooth",
 				new Gson().toJson(listOdontogramBean));
+	}
+
+	public void updatePosology() {
+		this.selectedDiagnosis.setPosology(posology);
 	}
 
 }

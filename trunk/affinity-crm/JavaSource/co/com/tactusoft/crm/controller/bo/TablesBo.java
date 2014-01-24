@@ -55,7 +55,6 @@ import co.com.tactusoft.crm.model.entities.CrmUserProfile;
 import co.com.tactusoft.crm.model.entities.CrmUserRole;
 import co.com.tactusoft.crm.model.entities.DatesBean;
 import co.com.tactusoft.crm.model.entities.PrcReportCampaign;
-import co.com.tactusoft.crm.model.entities.Producto;
 import co.com.tactusoft.crm.model.entities.VwCallRange;
 import co.com.tactusoft.crm.model.entities.VwPatientTicket;
 import co.com.tactusoft.crm.model.entities.VwProcedure;
@@ -70,8 +69,7 @@ public class TablesBo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Inject
-	private CustomHibernateDao dao;
+	@Inject	private CustomHibernateDao dao;
 
 	public List<VwCallRange> getVwCallRange() {
 		return dao.find("from VwCallRange o");
@@ -429,10 +427,6 @@ public class TablesBo implements Serializable {
 		return dao.find("from CrmBranch o");
 	}
 
-	public List<Producto> getListProducto() {
-		return dao.find("from Producto o");
-	}
-
 	public List<CrmBranch> getListBranchActive() {
 		return dao.find("from CrmBranch o where o.state = 1");
 	}
@@ -568,7 +562,7 @@ public class TablesBo implements Serializable {
 	}
 
 	public List<CrmOdotogramProcedure> getListOdotogramProcedureActive() {
-		return dao.find("from CrmOdotogramProcedure o where o.status = 1");
+		return dao.find("from CrmOdotogramProcedure o where o.status = 1 order by name");
 	}
 
 	public CrmDoctor getCrmDoctor(BigDecimal idUser) {

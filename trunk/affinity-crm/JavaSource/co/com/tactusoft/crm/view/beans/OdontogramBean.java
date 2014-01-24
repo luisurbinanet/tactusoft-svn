@@ -8,6 +8,7 @@ public class OdontogramBean implements Serializable {
 	private String tooth;
 	private Integer procedure;
 	private String descProcedure;
+	private String color;
 
 	public OdontogramBean() {
 
@@ -18,11 +19,12 @@ public class OdontogramBean implements Serializable {
 	 * @param procedure
 	 * @param descProcedure
 	 */
-	public OdontogramBean(String tooth, Integer procedure, String descProcedure) {
+	public OdontogramBean(String tooth, Integer procedure, String descProcedure, String color) {
 		super();
 		this.tooth = tooth;
 		this.procedure = procedure;
 		this.descProcedure = descProcedure;
+		this.color = color;
 	}
 
 	public String getTooth() {
@@ -48,5 +50,15 @@ public class OdontogramBean implements Serializable {
 	public void setDescProcedure(String descProcedure) {
 		this.descProcedure = descProcedure;
 	}
+
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+	
+	
 
 }

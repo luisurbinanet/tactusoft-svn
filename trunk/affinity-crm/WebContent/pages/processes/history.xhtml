@@ -1394,8 +1394,7 @@
 							value="#{historyBacking.typeHistory}">
 							<f:selectItem itemLabel="#{msg['his_medical_type']}"
 								itemValue="1" />
-							<f:selectItem itemLabel="#{msg['his_odontology_type']}"
-								itemValue="2" />
+							
 						</p:selectOneMenu>
 					</h:panelGrid>
 
@@ -1561,7 +1560,7 @@
 							uploadLabel="#{msg['file_upload']}" label="#{msg['file_choose']}"
 							fileUploadListener="#{historyBacking.handleFileUpload}"
 							mode="advanced" sizeLimit="10000000" auto="true"
-							allowTypes="/(\.|\/)(pdf)$/" />
+							allowTypes="/(\.|\/)(pdf|jpe?g|png)$/" />
 
 						<p:commandButton value="#{msg['btn_add']}"
 							process="@this,pnlConsent"
