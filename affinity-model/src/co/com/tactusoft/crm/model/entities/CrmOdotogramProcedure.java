@@ -22,6 +22,7 @@ public class CrmOdotogramProcedure implements java.io.Serializable {
 	private String cod;
 	private boolean appliedTooth;
 	private boolean appliedFace;
+	private String color;
 	private boolean status;
 
 	public CrmOdotogramProcedure() {
@@ -36,11 +37,12 @@ public class CrmOdotogramProcedure implements java.io.Serializable {
 	}
 
 	public CrmOdotogramProcedure(String name, String cod, boolean appliedTooth,
-			boolean appliedFace, boolean status) {
+			boolean appliedFace, String color, boolean status) {
 		this.name = name;
 		this.cod = cod;
 		this.appliedTooth = appliedTooth;
 		this.appliedFace = appliedFace;
+		this.color = color;
 		this.status = status;
 	}
 
@@ -89,6 +91,15 @@ public class CrmOdotogramProcedure implements java.io.Serializable {
 
 	public void setAppliedFace(boolean appliedFace) {
 		this.appliedFace = appliedFace;
+	}
+	
+	@Column(name = "color", nullable = false)
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
 	}
 
 	@Column(name = "status", nullable = false)
