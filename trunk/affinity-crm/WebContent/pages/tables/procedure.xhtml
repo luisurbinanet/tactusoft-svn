@@ -76,7 +76,7 @@
 
 				<p:dialog header="#{msg['prc_detail']}" widgetVar="dlg"
 					resizable="false" id="dialog" showEffect="fade"
-					hideEffect="explode" modal="true" width="500">
+					hideEffect="explode" modal="true" width="520">
 
 					<p:toolbar style="width:100%">
 						<p:toolbarGroup align="left">
@@ -89,94 +89,113 @@
 
 					<p:spacer height="5" />
 
-					<h:panelGrid id="pnlProcedureDetail" columns="2" cellpadding="2"
-						style="margin:0 auto;" width="100%">
+					<p:scrollPanel style="width:500px;height:500px;">
 
-						<h:outputLabel value="#{msg['prc_name']}" />
-						<p:inputText value="#{procedureBacking.selected.name}"
-							style="width:350px" />
+						<h:panelGrid id="pnlProcedureDetail" columns="2" cellpadding="2"
+							style="margin:0 auto;" width="100%">
 
-						<h:outputLabel value="#{msg['prc_time_doctor']}" />
-						<pe:inputNumber value="#{procedureBacking.selected.timeDoctor}"
-							symbol=" Min" symbolPosition="s" decimalPlaces="0"
-							style="width:70px" />
+							<h:outputLabel value="#{msg['prc_name']}" />
+							<p:inputText value="#{procedureBacking.selected.name}"
+								style="width:350px" />
 
-						<h:outputLabel value="#{msg['prc_time_nurse']}" />
-						<pe:inputNumber value="#{procedureBacking.selected.timeNurses}"
-							symbol=" Min" symbolPosition="s" decimalPlaces="0"
-							style="width:70px" />
+							<h:outputLabel value="#{msg['prc_time_doctor']}" />
+							<pe:inputNumber value="#{procedureBacking.selected.timeDoctor}"
+								symbol=" Min" symbolPosition="s" decimalPlaces="0"
+								style="width:70px" />
 
-						<h:outputLabel value="#{msg['prc_time_stretcher']}" />
-						<pe:inputNumber
-							value="#{procedureBacking.selected.timeStretchers}" symbol=" Min"
-							symbolPosition="s" decimalPlaces="0" style="width:70px" />
+							<h:outputLabel value="#{msg['prc_time_nurse']}" />
+							<pe:inputNumber value="#{procedureBacking.selected.timeNurses}"
+								symbol=" Min" symbolPosition="s" decimalPlaces="0"
+								style="width:70px" />
 
-						<h:outputText value="#{msg['prc_noRepeat']}" />
-						<h:panelGrid columns="2">
+							<h:outputLabel value="#{msg['prc_time_stretcher']}" />
+							<pe:inputNumber
+								value="#{procedureBacking.selected.timeStretchers}"
+								symbol=" Min" symbolPosition="s" decimalPlaces="0"
+								style="width:70px" />
+
+							<h:outputText value="#{msg['prc_noRepeat']}" />
+							<h:panelGrid columns="2">
+								<p:selectBooleanCheckbox
+									value="#{procedureBacking.selected.noRepeat}">
+									<p:ajax update="txtNoRepeatDays" />
+								</p:selectBooleanCheckbox>
+								<pe:inputNumber id="txtNoRepeatDays"
+									disabled="#{not procedureBacking.selected.noRepeat}"
+									value="#{procedureBacking.selected.noRepeatDays}"
+									symbol=" Días" symbolPosition="s" decimalPlaces="0"
+									style="width:80px" minValue="0" />
+							</h:panelGrid>
+
+							<h:outputText value="#{msg['prc_availability']}" />
 							<p:selectBooleanCheckbox
-								value="#{procedureBacking.selected.noRepeat}">
-								<p:ajax update="txtNoRepeatDays" />
-							</p:selectBooleanCheckbox>
-							<pe:inputNumber id="txtNoRepeatDays"
-								disabled="#{not procedureBacking.selected.noRepeat}"
-								value="#{procedureBacking.selected.noRepeatDays}" symbol=" Días"
-								symbolPosition="s" decimalPlaces="0" style="width:80px"
-								minValue="0" />
+								value="#{procedureBacking.selected.availability}" />
+
+							<h:outputText value="#{msg['prc_min_medicamento']}" />
+							<pe:inputNumber
+								value="#{procedureBacking.selected.minMedication}"
+								symbolPosition="s" decimalPlaces="0" style="width:70px" />
+
+							<h:outputText value="#{msg['prc_max_medicamento']}" />
+							<pe:inputNumber
+								value="#{procedureBacking.selected.maxMedication}"
+								symbolPosition="s" decimalPlaces="0" style="width:70px" />
+
+							<h:outputText value="#{msg['prc_study_case']}" />
+							<p:selectBooleanCheckbox
+								value="#{procedureBacking.selected.caseStudy}" />
+
+							<h:outputText value="#{msg['prc_dependent']}" />
+							<p:selectBooleanCheckbox
+								value="#{procedureBacking.selected.dependent}" />
+
+							<h:outputLabel value="#{msg['prc_seller_group']}" />
+							<p:selectOneMenu style="width:350px"
+								value="#{procedureBacking.selected.codPublicity}">
+								<f:selectItems value="#{procedureBacking.listWSGroupSellers}" />
+							</p:selectOneMenu>
+
+							<h:outputText value="#{msg['prc_evaluation']}" />
+							<p:selectBooleanCheckbox
+								value="#{procedureBacking.selected.evaluation}" />
+
+							<h:outputLabel value="#{msg['prc_history_type']}" />
+							<p:selectOneMenu value="#{procedureBacking.selected.typeHistory}"
+								style="width:350px">
+								<f:selectItem itemValue="MEDICAL"
+									itemLabel="#{msg['prc_history_type_med']}" />
+								<f:selectItem itemValue="ODONTOLOGY"
+									itemLabel="#{msg['prc_history_type_odo']}" />
+							</p:selectOneMenu>
+
+							<h:outputLabel value="#{msg['glb_state']}"
+								rendered="#{procedureBacking.selected.id!=null?true:false}" />
+							<p:selectOneMenu value="#{procedureBacking.selected.state}"
+								style="width:350px"
+								rendered="#{procedureBacking.selected.id!=null?true:false}">
+								<f:selectItem itemValue="1"
+									itemLabel="#{msg['glb_state_active']}" />
+								<f:selectItem itemValue="0"
+									itemLabel="#{msg['glb_state_inactive']}" />
+							</p:selectOneMenu>
+
 						</h:panelGrid>
 
-						<h:outputText value="#{msg['prc_availability']}" />
-						<p:selectBooleanCheckbox
-							value="#{procedureBacking.selected.availability}" />
+						<h:panelGrid columns="4" cellpadding="4" style="margin:0 auto;"
+							width="100%">
+							<h:outputLabel value="" />
+							<h:outputLabel value="" />
 
-						<h:outputText value="#{msg['prc_min_medicamento']}" />
-						<pe:inputNumber value="#{procedureBacking.selected.minMedication}"
-							symbolPosition="s" decimalPlaces="0" style="width:70px" />
+							<p:pickList var="row" value="#{procedureBacking.listModelBranch}"
+								converter="branchConverter" itemValue="#{row}"
+								itemLabel="#{row.name} (#{row.society})" showSourceFilter="true"
+								showTargetFilter="true" filterMatchMode="contains">
 
-						<h:outputText value="#{msg['prc_max_medicamento']}" />
-						<pe:inputNumber value="#{procedureBacking.selected.maxMedication}"
-							symbolPosition="s" decimalPlaces="0" style="width:70px" />
-
-						<h:outputText value="#{msg['prc_study_case']}" />
-						<p:selectBooleanCheckbox
-							value="#{procedureBacking.selected.caseStudy}" />
-
-						<h:outputText value="#{msg['prc_dependent']}" />
-						<p:selectBooleanCheckbox
-							value="#{procedureBacking.selected.dependent}" />
-
-						<h:outputLabel value="#{msg['prc_seller_group']}" />
-						<p:selectOneMenu style="width:350px"
-							value="#{procedureBacking.selected.codPublicity}">
-							<f:selectItems value="#{procedureBacking.listWSGroupSellers}" />
-						</p:selectOneMenu>
-
-						<h:outputLabel value="#{msg['glb_state']}"
-							rendered="#{procedureBacking.selected.id!=null?true:false}" />
-						<p:selectOneMenu value="#{procedureBacking.selected.state}"
-							style="width:350px"
-							rendered="#{procedureBacking.selected.id!=null?true:false}">
-							<f:selectItem itemValue="1"
-								itemLabel="#{msg['glb_state_active']}" />
-							<f:selectItem itemValue="0"
-								itemLabel="#{msg['glb_state_inactive']}" />
-						</p:selectOneMenu>
-
-					</h:panelGrid>
-
-					<h:panelGrid columns="4" cellpadding="4" style="margin:0 auto;"
-						width="100%">
-						<h:outputLabel value="" />
-						<h:outputLabel value="" />
-
-						<p:pickList var="row" value="#{procedureBacking.listModelBranch}"
-							converter="branchConverter" itemValue="#{row}"
-							itemLabel="#{row.name} (#{row.society})" showSourceFilter="true"
-							showTargetFilter="true" filterMatchMode="contains">
-
-							<f:facet name="sourceCaption">#{msg['usr_branch']}</f:facet>
-							<f:facet name="targetCaption">#{msg['glb_target_caption']}</f:facet>
-						</p:pickList>
-					</h:panelGrid>
+								<f:facet name="sourceCaption">#{msg['usr_branch']}</f:facet>
+								<f:facet name="targetCaption">#{msg['glb_target_caption']}</f:facet>
+							</p:pickList>
+						</h:panelGrid>
+					</p:scrollPanel>
 				</p:dialog>
 			</h:form>
 

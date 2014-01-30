@@ -78,6 +78,7 @@ public class ProcedureBacking extends BaseBacking {
 		selected.setTimeDoctor(0);
 		selected.setTimeNurses(0);
 		selected.setTimeStretchers(0);
+		selected.setTypeHistory(Constant.MEDICAL_HISTORY_TYPE);
 
 		List<CrmBranch> listSourceBranch = FacesUtil.getCurrentUserData()
 				.getListBranchAll();

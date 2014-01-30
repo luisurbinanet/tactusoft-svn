@@ -16,6 +16,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.inject.Named;
@@ -184,7 +185,7 @@ public class HistoryBacking extends BaseBacking {
 	protected String consentType;
 
 	protected HtmlPanelGrid containerComponent;
-	protected int typeHistory;
+	protected String typeHistory;
 
 	public HistoryBacking() {
 		newAction(null);
@@ -1076,11 +1077,11 @@ public class HistoryBacking extends BaseBacking {
 		this.consentType = consentType;
 	}
 
-	public int getTypeHistory() {
+	public String getTypeHistory() {
 		return typeHistory;
 	}
 
-	public void setTypeHistory(int typeHistory) {
+	public void setTypeHistory(String typeHistory) {
 		this.typeHistory = typeHistory;
 	}
 
@@ -1154,7 +1155,7 @@ public class HistoryBacking extends BaseBacking {
 		listCaseStudyCie = new ArrayList<SelectItem>();
 		listCaseStudyHistory = new ArrayList<SelectItem>();
 		idCaseStudyCie = null;
-		typeHistory = 1;
+		typeHistory = Constant.MEDICAL_HISTORY_TYPE;
 	}
 
 	public String editAppointmentAction() {
@@ -1300,13 +1301,12 @@ public class HistoryBacking extends BaseBacking {
 		}
 	}
 
-	public String showHistorialAction() {
-		if (typeHistory == 1) {
+	public void showHistorialAction() {
+		if (typeHistory.equals(Constant.MEDICAL_HISTORY_TYPE)) {
 			modeEdit = true;
 			modeHistorial = true;
 			selectedPatient = selectedPatientTemp;
 			refreshLists();
-			return null;
 		} else {
 			HistoryOdontologyBacking historyOdontologyBacking = FacesUtil
 					.findBean("historyOdontologyBacking");
@@ -1314,7 +1314,12 @@ public class HistoryBacking extends BaseBacking {
 			historyOdontologyBacking.modeHistorial = true;
 			historyOdontologyBacking.selectedPatient = selectedPatientTemp;
 			historyOdontologyBacking.refreshLists();
-			return "historyOdontology?faces-redirect=true";
+			try {
+				FacesContext.getCurrentInstance().getExternalContext()
+						.redirect("historyOdontology.jsf");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -1353,11 +1358,9 @@ public class HistoryBacking extends BaseBacking {
 			disabledAddCie = true;
 		} else {
 			if (optionSearchCie == 1) {
-				this.listCie = processService.getListCieByCode(codeCIE,
-						Constant.MEDICAL_HISTORY_TYPE);
+				this.listCie = processService.getListCieByCodeMedical(codeCIE);
 			} else {
-				this.listCie = processService.getListCieByName(descCIE,
-						Constant.MEDICAL_HISTORY_TYPE);
+				this.listCie = processService.getListCieByNameMedical(descCIE);
 			}
 
 			if (listCie.size() > 0) {
@@ -1694,6 +1697,7 @@ public class HistoryBacking extends BaseBacking {
 	}
 
 	protected void refreshLists() {
+		this.consentType = Constant.MEDICAL_HISTORY_TYPE;
 
 		List<VwAppointment> listTempApp = processService
 				.getListByAppointmentByPatient(selectedPatient.getId(),
