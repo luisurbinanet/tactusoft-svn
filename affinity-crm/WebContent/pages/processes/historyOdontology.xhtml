@@ -1413,7 +1413,8 @@
 										</p:commandButton>
 										<p:commandButton oncomplete="dlgPosology.show()"
 											update=":form:dialogPosology" icon="ui-icon-comment"
-											title="#{msg['btn_add_posology_odo']}">
+											title="#{msg['btn_add_posology_odo']}"
+											action="#{historyOdontologyBacking.selectPosologyAction}">
 											<f:setPropertyActionListener value="#{rec}"
 												target="#{historyOdontologyBacking.selectedDiagnosis}" />
 										</p:commandButton>
@@ -1598,9 +1599,10 @@
 						<h:panelGrid width="100%">
 
 							<p:inputTextarea rows="7" style="width:560px"
-								value="#{historyOdontologyBacking.selectedDiagnosis.posology}" />
+								value="#{historyOdontologyBacking.posology}" />
 
 							<p:commandButton value="Aceptar" update=":form:dialogPosology"
+								action="#{historyOdontologyBacking.savePosologyAction}"
 								oncomplete="dlgPosology.hide()" />
 						</h:panelGrid>
 

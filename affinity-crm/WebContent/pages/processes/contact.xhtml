@@ -146,14 +146,14 @@
 					<p:inputText value="#{contactBacking.selectedPatient.phoneNumber}"
 						style="width:240px" label="#{msg['pat_phone_number']}"
 						maxlength="#{contactBacking.numPhone}" validator="numberValidator">
-						<pe:keyFilter regEx="/[\d]/" />
+						<pe:keyFilter regEx="/[\d]/" preventPaste="false" />
 					</p:inputText>
 
 					<h:outputText value="#{msg['pat_cell_number']}" />
 					<p:inputText value="#{contactBacking.selectedPatient.cellNumber}"
 						style="width:240px" label="#{msg['pat_cell_number']}"
 						maxlength="#{contactBacking.numCell}" validator="numberValidator">
-						<pe:keyFilter regEx="/[\d]/" />
+						<pe:keyFilter regEx="/[\d]/" preventPaste="false" />
 					</p:inputText>
 
 					<h:outputLabel value="#{msg['pat_sales_off']}" style="width:40%" />
@@ -401,7 +401,7 @@
 								<p:inputText value="#{contactBacking.namePatient}"
 									style="width:100%"
 									disabled="#{contactBacking.optionSearchPatient ne 2}">
-									<pe:keyFilter regEx="/[a-zA-Z\s]/i" />
+									<pe:keyFilter regEx="/[a-zA-ZñÑ\s]/i" preventPaste="false" />
 								</p:inputText>
 
 								<p:radioButton id="opt3" for="customRadio" itemIndex="2" />

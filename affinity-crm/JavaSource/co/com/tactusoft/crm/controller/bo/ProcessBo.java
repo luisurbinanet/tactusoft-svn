@@ -207,14 +207,24 @@ public class ProcessBo implements Serializable {
 				+ " ORDER BY o.startAppointmentDate DESC");
 	}
 
-	public List<CrmCie> getListCieByCode(String code, String type) {
+	public List<CrmCie> getListCieByCodeMedical(String code) {
 		return dao.find("FROM CrmCie o WHERE o.code like '%" + code
-				+ "%' AND cieType = '" + type + "' ORDER BY o.description");
+				+ "%' AND medical = 1 ORDER BY o.description");
 	}
 
-	public List<CrmCie> getListCieByName(String name, String type) {
+	public List<CrmCie> getListCieByCodeOdontology(String code) {
+		return dao.find("FROM CrmCie o WHERE o.code like '%" + code
+				+ "%' AND odontology = 1 ORDER BY o.description");
+	}
+
+	public List<CrmCie> getListCieByNameMedical(String name) {
 		return dao.find("FROM CrmCie o WHERE o.description like '%" + name
-				+ "%' AND cieType = '" + type + "' ORDER BY o.description");
+				+ "%' AND medical = 1 ORDER BY o.description");
+	}
+
+	public List<CrmCie> getListCieByNameOdontology(String name) {
+		return dao.find("FROM CrmCie o WHERE o.description like '%" + name
+				+ "%' AND odontology = 1 ORDER BY o.description");
 	}
 
 	public List<CrmMaterialGroup> getListMaterialGroup() {

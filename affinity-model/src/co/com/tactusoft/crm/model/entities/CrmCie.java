@@ -22,8 +22,9 @@ public class CrmCie implements java.io.Serializable {
 	private BigDecimal id;
 	private String code;
 	private String description;
-	private String cieType;
 	private String sapCode;
+	private boolean medical;
+	private boolean odontology;
 	private Set<CrmDiagnosis> crmDiagnosises = new HashSet<CrmDiagnosis>(0);
 	private Set<CrmCieMaterial> crmCieMaterials = new HashSet<CrmCieMaterial>(0);
 	private Set<CrmMedication> crmMedications = new HashSet<CrmMedication>(0);
@@ -36,15 +37,16 @@ public class CrmCie implements java.io.Serializable {
 	}
 
 	public CrmCie(BigDecimal id, String code, String description,
-			Set<CrmDiagnosis> crmDiagnosises, String cieType, String sapCode,
-			Set<CrmCieMaterial> crmCieMaterials,
+			Set<CrmDiagnosis> crmDiagnosises, String sapCode, boolean medical,
+			boolean odontology, Set<CrmCieMaterial> crmCieMaterials,
 			Set<CrmMedication> crmMedications) {
 		this.id = id;
 		this.code = code;
 		this.description = description;
 		this.crmDiagnosises = crmDiagnosises;
-		this.cieType = cieType;
 		this.sapCode = sapCode;
+		this.medical = medical;
+		this.odontology = odontology;
 		this.crmCieMaterials = crmCieMaterials;
 		this.crmMedications = crmMedications;
 	}
@@ -77,15 +79,6 @@ public class CrmCie implements java.io.Serializable {
 		this.description = description;
 	}
 
-	@Column(name = "cie_type", length = 45)
-	public String getCieType() {
-		return cieType;
-	}
-
-	public void setCieType(String cieType) {
-		this.cieType = cieType;
-	}
-
 	@Column(name = "sap_code", length = 20)
 	public String getSapCode() {
 		return sapCode;
@@ -93,6 +86,22 @@ public class CrmCie implements java.io.Serializable {
 
 	public void setSapCode(String sapCode) {
 		this.sapCode = sapCode;
+	}
+
+	public boolean isMedical() {
+		return medical;
+	}
+
+	public void setMedical(boolean medical) {
+		this.medical = medical;
+	}
+
+	public boolean isOdontology() {
+		return odontology;
+	}
+
+	public void setOdontology(boolean odontology) {
+		this.odontology = odontology;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmCie")

@@ -884,11 +884,11 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 			disabledAddCie = true;
 		} else {
 			if (optionSearchCie == 1) {
-				this.listCie = processService.getListCieByCode(codeCIE,
-						Constant.ODONTOLOGY_HISTORY_TYPE);
+				this.listCie = processService
+						.getListCieByCodeOdontology(codeCIE);
 			} else {
-				this.listCie = processService.getListCieByName(descCIE,
-						Constant.ODONTOLOGY_HISTORY_TYPE);
+				this.listCie = processService
+						.getListCieByNameOdontology(descCIE);
 			}
 
 			if (listCie.size() > 0) {
@@ -1017,6 +1017,8 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 
 	@Override
 	protected void refreshLists() {
+		this.consentType = Constant.ODONTOLOGY_HISTORY_TYPE;
+
 		List<VwAppointment> listTempApp = processService
 				.getListByAppointmentByPatient(selectedPatient.getId(),
 						consentType);
@@ -1107,6 +1109,17 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 
 	public void updatePosology() {
 		this.selectedDiagnosis.setPosology(posology);
+	}
+
+	public void selectPosologyAction() {
+		this.posology = null;
+		if (this.selectedDiagnosis != null) {
+			this.posology = selectedDiagnosis.getPosology();
+		}
+	}
+
+	public void savePosologyAction() {
+		selectedDiagnosis.setPosology(this.posology);
 	}
 
 }
