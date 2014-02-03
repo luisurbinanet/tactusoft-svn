@@ -31,7 +31,10 @@
 							icon="ui-icon-disk" action="#{contactBacking.saveAction}"
 							update="growl toolBar pnlDetail pnlDetail2 pnlDetail3"
 							process="toolBar pnlDetail pnlDetail2 pnlDetail3"
-							disabled="#{contactBacking.existsSAP}" />
+							disabled="#{contactBacking.existsSAP}">
+							<f:setPropertyActionListener
+								target="#{contactBacking.validateTicket}" value="false" />
+						</p:commandButton>
 						<p:commandButton value="#{msg['btn_update']}"
 							process="@this,selsalesOff" icon="ui-icon-refresh"
 							oncomplete="updateDlg.show()" update="updateDialog"

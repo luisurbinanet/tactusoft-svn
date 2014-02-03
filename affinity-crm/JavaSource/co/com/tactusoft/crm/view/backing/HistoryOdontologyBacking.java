@@ -338,186 +338,191 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 	public void closeAppointmentAction(ActionEvent event) {
 		String message = null;
 		String field = null;
+		boolean isEvaluation = selectedAppointment.getPrcEvaluation() == 1 ? true
+				: false;
 
-		if (selectedPatient.getBornDate() == null) {
-			field = FacesUtil.getMessage("pat_born_date");
-			message = FacesUtil.getMessage("title_patient_complementary");
-			message = message + " - "
-					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addWarn(message);
-		}
+		if (isEvaluation) {
+			if (selectedPatient.getBornDate() == null) {
+				field = FacesUtil.getMessage("pat_born_date");
+				message = FacesUtil.getMessage("title_patient_complementary");
+				message = message + " - "
+						+ FacesUtil.getMessage("glb_required", field);
+				FacesUtil.addWarn(message);
+			}
 
-		if (idOccupation == null || idOccupation.intValue() == 0) {
-			field = FacesUtil.getMessage("pat_occupation");
-			message = FacesUtil.getMessage("title_patient_complementary");
-			message = message + " - "
-					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addWarn(message);
-		} else {
-			selectedPatient.setCrmOccupation(mapOccupation.get(idOccupation));
-		}
+			if (idOccupation == null || idOccupation.intValue() == 0) {
+				field = FacesUtil.getMessage("pat_occupation");
+				message = FacesUtil.getMessage("title_patient_complementary");
+				message = message + " - "
+						+ FacesUtil.getMessage("glb_required", field);
+				FacesUtil.addWarn(message);
+			} else {
+				selectedPatient.setCrmOccupation(mapOccupation
+						.get(idOccupation));
+			}
 
-		if (FacesUtil.isEmptyOrBlank(neighborhood)) {
-			field = FacesUtil.getMessage("pat_neighborhood");
-			message = FacesUtil.getMessage("title_patient_complementary");
-			message = message + " - "
-					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addWarn(message);
-		} else {
-			selectedPatient.setNeighborhood(neighborhood);
-		}
+			if (FacesUtil.isEmptyOrBlank(neighborhood)) {
+				field = FacesUtil.getMessage("pat_neighborhood");
+				message = FacesUtil.getMessage("title_patient_complementary");
+				message = message + " - "
+						+ FacesUtil.getMessage("glb_required", field);
+				FacesUtil.addWarn(message);
+			} else {
+				selectedPatient.setNeighborhood(neighborhood);
+			}
 
-		if (FacesUtil.isEmptyOrBlank(typeHousing)) {
-			field = FacesUtil.getMessage("pat_type_housing");
-			message = FacesUtil.getMessage("title_patient_complementary");
-			message = message + " - "
-					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addWarn(message);
-		} else {
-			selectedPatient.setTypeHousing(typeHousing);
-		}
+			if (FacesUtil.isEmptyOrBlank(typeHousing)) {
+				field = FacesUtil.getMessage("pat_type_housing");
+				message = FacesUtil.getMessage("title_patient_complementary");
+				message = message + " - "
+						+ FacesUtil.getMessage("glb_required", field);
+				FacesUtil.addWarn(message);
+			} else {
+				selectedPatient.setTypeHousing(typeHousing);
+			}
 
-		if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getReason())) {
-			field = FacesUtil.getMessage("his_history_reason");
-			message = FacesUtil.getMessage("his_history_history");
-			message = message + " - "
-					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addWarn(message);
-		}
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getReason())) {
+				field = FacesUtil.getMessage("his_history_reason");
+				message = FacesUtil.getMessage("his_history_history");
+				message = message + " - "
+						+ FacesUtil.getMessage("glb_required", field);
+				FacesUtil.addWarn(message);
+			}
 
-		if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getDisease())) {
-			field = FacesUtil.getMessage("his_history_disease");
-			message = FacesUtil.getMessage("his_history_history");
-			message = message + " - "
-					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addWarn(message);
-		}
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getDisease())) {
+				field = FacesUtil.getMessage("his_history_disease");
+				message = FacesUtil.getMessage("his_history_history");
+				message = message + " - "
+						+ FacesUtil.getMessage("glb_required", field);
+				FacesUtil.addWarn(message);
+			}
 
-		if (selectedHistoryRecord.getArthritis()
-				&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
-						.getArthritisTime()) || FacesUtil
-						.isEmptyOrBlank(selectedHistoryRecord
-								.getArthritisMedication()))) {
-			field = FacesUtil.getMessage("his_rec_per_arthritis");
-			message = FacesUtil.getMessage("his_history_record");
-			message = message + " - "
-					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addWarn(message);
-		}
+			if (selectedHistoryRecord.getArthritis()
+					&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+							.getArthritisTime()) || FacesUtil
+							.isEmptyOrBlank(selectedHistoryRecord
+									.getArthritisMedication()))) {
+				field = FacesUtil.getMessage("his_rec_per_arthritis");
+				message = FacesUtil.getMessage("his_history_record");
+				message = message + " - "
+						+ FacesUtil.getMessage("glb_required", field);
+				FacesUtil.addWarn(message);
+			}
 
-		if (selectedHistoryRecord.getCancer()
-				&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
-						.getCancerTime()) || FacesUtil
-						.isEmptyOrBlank(selectedHistoryRecord
-								.getCancerMedication()))) {
-			field = FacesUtil.getMessage("his_rec_per_cancer");
-			message = FacesUtil.getMessage("his_history_record");
-			message = message + " - "
-					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addWarn(message);
-		}
+			if (selectedHistoryRecord.getCancer()
+					&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+							.getCancerTime()) || FacesUtil
+							.isEmptyOrBlank(selectedHistoryRecord
+									.getCancerMedication()))) {
+				field = FacesUtil.getMessage("his_rec_per_cancer");
+				message = FacesUtil.getMessage("his_history_record");
+				message = message + " - "
+						+ FacesUtil.getMessage("glb_required", field);
+				FacesUtil.addWarn(message);
+			}
 
-		if (selectedHistoryRecord.getPulmonary()
-				&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
-						.getPulmonaryTime()) || FacesUtil
-						.isEmptyOrBlank(selectedHistoryRecord
-								.getPulmonaryMedication()))) {
-			field = FacesUtil.getMessage("his_rec_per_pulmonary");
-			message = FacesUtil.getMessage("his_history_record");
-			message = message + " - "
-					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addWarn(message);
-		}
+			if (selectedHistoryRecord.getPulmonary()
+					&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+							.getPulmonaryTime()) || FacesUtil
+							.isEmptyOrBlank(selectedHistoryRecord
+									.getPulmonaryMedication()))) {
+				field = FacesUtil.getMessage("his_rec_per_pulmonary");
+				message = FacesUtil.getMessage("his_history_record");
+				message = message + " - "
+						+ FacesUtil.getMessage("glb_required", field);
+				FacesUtil.addWarn(message);
+			}
 
-		if (selectedHistoryRecord.getDiabetes()
-				&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
-						.getDiabetesTime()) || FacesUtil
-						.isEmptyOrBlank(selectedHistoryRecord
-								.getDiabetesMedication()))) {
-			field = FacesUtil.getMessage("his_rec_per_diabetes");
-			message = FacesUtil.getMessage("his_history_record");
-			message = message + " - "
-					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addWarn(message);
-		}
+			if (selectedHistoryRecord.getDiabetes()
+					&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+							.getDiabetesTime()) || FacesUtil
+							.isEmptyOrBlank(selectedHistoryRecord
+									.getDiabetesMedication()))) {
+				field = FacesUtil.getMessage("his_rec_per_diabetes");
+				message = FacesUtil.getMessage("his_history_record");
+				message = message + " - "
+						+ FacesUtil.getMessage("glb_required", field);
+				FacesUtil.addWarn(message);
+			}
 
-		if (selectedHistoryRecord.getHypertension()
-				&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
-						.getHypertensionTime()) || FacesUtil
-						.isEmptyOrBlank(selectedHistoryRecord
-								.getHypertensionMedication()))) {
-			field = FacesUtil.getMessage("his_rec_per_hypertension");
-			message = FacesUtil.getMessage("his_history_record");
-			message = message + " - "
-					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addWarn(message);
-		}
+			if (selectedHistoryRecord.getHypertension()
+					&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+							.getHypertensionTime()) || FacesUtil
+							.isEmptyOrBlank(selectedHistoryRecord
+									.getHypertensionMedication()))) {
+				field = FacesUtil.getMessage("his_rec_per_hypertension");
+				message = FacesUtil.getMessage("his_history_record");
+				message = message + " - "
+						+ FacesUtil.getMessage("glb_required", field);
+				FacesUtil.addWarn(message);
+			}
 
-		if (selectedHistoryRecord.getHospitalizations()
-				&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
-						.getHospitalizationsTime()) || FacesUtil
-						.isEmptyOrBlank(selectedHistoryRecord
-								.getHospitalizationsMedication()))) {
-			field = FacesUtil.getMessage("his_rec_per_hospitalizations");
-			message = FacesUtil.getMessage("his_history_record");
-			message = message + " - "
-					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addWarn(message);
-		}
+			if (selectedHistoryRecord.getHospitalizations()
+					&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+							.getHospitalizationsTime()) || FacesUtil
+							.isEmptyOrBlank(selectedHistoryRecord
+									.getHospitalizationsMedication()))) {
+				field = FacesUtil.getMessage("his_rec_per_hospitalizations");
+				message = FacesUtil.getMessage("his_history_record");
+				message = message + " - "
+						+ FacesUtil.getMessage("glb_required", field);
+				FacesUtil.addWarn(message);
+			}
 
-		if (selectedHistoryRecord.getAllergy()
-				&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
-						.getAllergyTime()) || FacesUtil
-						.isEmptyOrBlank(selectedHistoryRecord
-								.getAllergyMedication()))) {
-			field = FacesUtil.getMessage("his_rec_per_allergy");
-			message = FacesUtil.getMessage("his_history_record");
-			message = message + " - "
-					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addWarn(message);
-		}
+			if (selectedHistoryRecord.getAllergy()
+					&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+							.getAllergyTime()) || FacesUtil
+							.isEmptyOrBlank(selectedHistoryRecord
+									.getAllergyMedication()))) {
+				field = FacesUtil.getMessage("his_rec_per_allergy");
+				message = FacesUtil.getMessage("his_history_record");
+				message = message + " - "
+						+ FacesUtil.getMessage("glb_required", field);
+				FacesUtil.addWarn(message);
+			}
 
-		if (selectedHistoryRecord.getInfections()
-				&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
-						.getInfectionsTime()) || FacesUtil
-						.isEmptyOrBlank(selectedHistoryRecord
-								.getInfectionsMedication()))) {
-			field = FacesUtil.getMessage("his_rec_per_infections");
-			message = FacesUtil.getMessage("his_history_record");
-			message = message + " - "
-					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addWarn(message);
-		}
+			if (selectedHistoryRecord.getInfections()
+					&& (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+							.getInfectionsTime()) || FacesUtil
+							.isEmptyOrBlank(selectedHistoryRecord
+									.getInfectionsMedication()))) {
+				field = FacesUtil.getMessage("his_rec_per_infections");
+				message = FacesUtil.getMessage("his_history_record");
+				message = message + " - "
+						+ FacesUtil.getMessage("glb_required", field);
+				FacesUtil.addWarn(message);
+			}
 
-		if (this.getHeartRate() == 0) {
-			field = FacesUtil.getMessage("his_physique_heart_rate");
-			message = FacesUtil.getMessage("his_general_findings", field);
-			message = message + " - "
-					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addWarn(message);
-		} else {
-			selectedHistoryPhysique
-					.setHeartRate(String.valueOf(this.heartRate));
-		}
+			if (this.getHeartRate() == 0) {
+				field = FacesUtil.getMessage("his_physique_heart_rate");
+				message = FacesUtil.getMessage("his_general_findings", field);
+				message = message + " - "
+						+ FacesUtil.getMessage("glb_required", field);
+				FacesUtil.addWarn(message);
+			} else {
+				selectedHistoryPhysique.setHeartRate(String
+						.valueOf(this.heartRate));
+			}
 
-		if (this.getRespiratoryRate() == 0) {
-			field = FacesUtil.getMessage("his_physique_respiratory_rate");
-			message = FacesUtil.getMessage("his_general_findings", field);
-			message = message + " - "
-					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addWarn(message);
-		} else {
-			selectedHistoryPhysique.setRespiratoryRate(String
-					.valueOf(this.respiratoryRate));
-		}
+			if (this.getRespiratoryRate() == 0) {
+				field = FacesUtil.getMessage("his_physique_respiratory_rate");
+				message = FacesUtil.getMessage("his_general_findings", field);
+				message = message + " - "
+						+ FacesUtil.getMessage("glb_required", field);
+				FacesUtil.addWarn(message);
+			} else {
+				selectedHistoryPhysique.setRespiratoryRate(String
+						.valueOf(this.respiratoryRate));
+			}
 
-		if (FacesUtil
-				.isEmptyOrBlank(selectedHistoryPhysique.getBloodPressure())) {
-			field = FacesUtil.getMessage("his_physique_blood_pressure");
-			message = FacesUtil.getMessage("his_general_findings", field);
-			message = message + " - "
-					+ FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addWarn(message);
+			if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique
+					.getBloodPressure())) {
+				field = FacesUtil.getMessage("his_physique_blood_pressure");
+				message = FacesUtil.getMessage("his_general_findings", field);
+				message = message + " - "
+						+ FacesUtil.getMessage("glb_required", field);
+				FacesUtil.addWarn(message);
+			}
 		}
 
 		if (FacesUtil.isEmptyOrBlank(crmOdontologyEvolution.getObs())) {
@@ -768,13 +773,15 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 					false, null);
 
 			if (result == 0) {
-				processService.saveHistoryHistory(selectedHistoryHistory);
-				processService.saveHistoryRecord(selectedHistoryRecord);
-				processService.saveHistoryPhysique(selectedHistoryPhysique);
-				processService.save(crmOdontologyStomatolog);
-				processService.save(crmOdontologyTempJoint);
-				processService.save(crmOdontologySoftTissue);
-				processService.save(crmOdontologyPeriodontal);
+				if (isEvaluation) {
+					processService.saveHistoryHistory(selectedHistoryHistory);
+					processService.saveHistoryRecord(selectedHistoryRecord);
+					processService.saveHistoryPhysique(selectedHistoryPhysique);
+					processService.save(crmOdontologyStomatolog);
+					processService.save(crmOdontologyTempJoint);
+					processService.save(crmOdontologySoftTissue);
+					processService.save(crmOdontologyPeriodontal);
+				}
 				processService.save(crmOdontologySupplExams);
 				processService.save(crmOdontologyEvolution);
 

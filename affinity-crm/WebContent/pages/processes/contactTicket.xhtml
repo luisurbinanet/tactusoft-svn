@@ -31,7 +31,10 @@
 							icon="ui-icon-disk" action="#{contactBacking.saveAction}"
 							update="growl toolBar pnlDetail pnlDetail2 pnlDetail3"
 							process="toolBar pnlDetail pnlDetail2 pnlDetail3"
-							disabled="#{contactBacking.existsSAP}" />
+							disabled="#{contactBacking.existsSAP}">
+							<f:setPropertyActionListener
+								target="#{contactBacking.validateTicket}" value="true" />
+						</p:commandButton>
 						<p:commandButton value="#{msg['btn_update']}"
 							process="@this,selsalesOff" icon="ui-icon-refresh"
 							oncomplete="updateDlg.show()" update="updateDialog"
@@ -172,11 +175,46 @@
 					<p:inputTextarea value="#{contactBacking.selectedPatient.obs}"
 						style="width:240px" rows="4" />
 
-					<h:outputText value="#{msg['pat_ticket']}" />
-					<p:inputText value="#{contactBacking.selectedPatient.ticket}"
-						style="width:240px" label="#{msg['pat_ticket']}" required="true"
-						disabled="#{contactBacking.disabledTicket}" />
 				</h:panelGrid>
+
+				<p:dataTable id="tblTicket" value="#{contactBacking.listTickets}"
+					style="width:100%" var="row"
+					emptyMessage="#{msg['glb_no_records_found']}" paginator="true"
+					rows="5">
+
+					<f:facet name="header">
+						<h:panelGrid columns="5" width="100%">
+							<h:outputText value="#{msg['pat_lot']}" style="width:100%" />
+							<p:selectOneMenu style="width:200px"
+								value="#{contactBacking.crmPatientTicketSelected.crmTicket.id}"
+								label="#{msg['pat_lot']}">
+								<f:selectItems value="#{contactBacking.listTicketItems}" />
+							</p:selectOneMenu>
+							<h:outputText value="#{msg['pat_ticket']}" />
+							<p:inputText
+								value="#{contactBacking.crmPatientTicketSelected.ticket}"
+								style="width:200px" label="#{msg['pat_ticket']}" />
+							<p:commandButton value="Agregar" update="tblTicket :form:growl"
+								action="#{contactBacking.addTicket}" process="@this,tblTicket"
+								disabled="#{contactBacking.selectedPatient.id ne null}" />
+						</h:panelGrid>
+					</f:facet>
+
+					<p:column headerText="#{msg['pat_ticket']}">
+						<h:outputLabel value="#{row.ticket}" />
+					</p:column>
+
+					<p:column style="width:10%">
+						<p:commandButton icon="ui-icon-trash" title="#{msg['btn_delete']}"
+							action="#{contactBacking.removeTicket}" process="@this"
+							update="tblTicket"
+							disabled="#{contactBacking.selectedPatient.id ne null}">
+							<f:setPropertyActionListener value="#{row}"
+								target="#{contactBacking.crmPatientTicketSelected}" />
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
 
 				<p:dialog header="#{msg['btn_update']}" widgetVar="updateDlg"
 					resizable="false" id="updateDialog" showEffect="fade"
