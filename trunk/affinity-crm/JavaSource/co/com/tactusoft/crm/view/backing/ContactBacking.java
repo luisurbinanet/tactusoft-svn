@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.inject.Named;
@@ -19,8 +20,10 @@ import co.com.tactusoft.crm.model.entities.CrmCity;
 import co.com.tactusoft.crm.model.entities.CrmCountry;
 import co.com.tactusoft.crm.model.entities.CrmOccupation;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
+import co.com.tactusoft.crm.model.entities.CrmPatientTicket;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
 import co.com.tactusoft.crm.model.entities.CrmRegion;
+import co.com.tactusoft.crm.model.entities.CrmTicket;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.util.SAPEnvironment;
@@ -43,10 +46,22 @@ public class ContactBacking extends BaseBacking {
 	private List<SelectItem> listDocType;
 	private List<String> selectedSendOptions;
 
+	private List<CrmPatientTicket> listTickets;
+	private CrmPatientTicket crmPatientTicketSelected;
+	private boolean validateTicket;
+	private List<SelectItem> listTicketItems;
+
 	private boolean saved;
 
 	public ContactBacking() {
 		newAction(null);
+	}
+
+	@PostConstruct
+	public void init() {
+		List<CrmTicket> listCrmTicket = tablesService.getListTicketActive();
+		listTicketItems = FacesUtil.entityToSelectItem(listCrmTicket, "getId",
+				"getName");
 	}
 
 	public boolean isDisabledSaveButton() {
@@ -110,6 +125,39 @@ public class ContactBacking extends BaseBacking {
 				&& !FacesUtil.isEmptyOrBlank(this.selectedPatient.getTicket());
 	}
 
+	public List<CrmPatientTicket> getListTickets() {
+		return listTickets;
+	}
+
+	public void setListTickets(List<CrmPatientTicket> listTickets) {
+		this.listTickets = listTickets;
+	}
+
+	public CrmPatientTicket getCrmPatientTicketSelected() {
+		return crmPatientTicketSelected;
+	}
+
+	public void setCrmPatientTicketSelected(
+			CrmPatientTicket crmPatientTicketSelected) {
+		this.crmPatientTicketSelected = crmPatientTicketSelected;
+	}
+
+	public boolean isValidateTicket() {
+		return validateTicket;
+	}
+
+	public void setValidateTicket(boolean validateTicket) {
+		this.validateTicket = validateTicket;
+	}
+
+	public List<SelectItem> getListTicketItems() {
+		return listTicketItems;
+	}
+
+	public void setListTicketItems(List<SelectItem> listTicketItems) {
+		this.listTicketItems = listTicketItems;
+	}
+
 	public void newAction(ActionEvent event) {
 		selectedPatient = new CrmPatient();
 		selectedPatient.setCrmProfile(new CrmProfile());
@@ -119,6 +167,10 @@ public class ContactBacking extends BaseBacking {
 		newRecord = true;
 		saved = false;
 		existsSAP = false;
+
+		crmPatientTicketSelected = new CrmPatientTicket();
+		crmPatientTicketSelected.setCrmTicket(new CrmTicket());
+		listTickets = new LinkedList<CrmPatientTicket>();
 
 		// Busquedas
 		optionSearchPatient = 1;
@@ -131,12 +183,15 @@ public class ContactBacking extends BaseBacking {
 
 	public void saveAction() {
 		String message = null;
-		boolean validateTicket = true;
+		boolean isExistsTickets = true;
 
-		if (!FacesUtil.isEmptyOrBlank(selectedPatient.getTicket())
-				&& this.selectedPatient.getId() == null) {
-			validateTicket = tablesService.isValidateTicket(selectedPatient
-					.getTicket());
+		if (this.validateTicket) {
+			if (listTickets.isEmpty()) {
+				message = FacesUtil.getMessage("pat_msg_ticket");
+				FacesUtil.addError(message);
+			} else {
+				isExistsTickets = processService.isExistsTickets(listTickets);
+			}
 		}
 
 		if (FacesUtil.isEmptyOrBlank(selectedPatient.getPhoneNumber())
@@ -171,7 +226,7 @@ public class ContactBacking extends BaseBacking {
 				FacesUtil.addError(message);
 			}
 
-			if (!validateTicket) {
+			if (!isExistsTickets) {
 				this.selectedPatient.setTicket(null);
 				message = FacesUtil.getMessage("con_msg_ticket_fail");
 				FacesUtil.addError(message);
@@ -226,6 +281,10 @@ public class ContactBacking extends BaseBacking {
 							.toUpperCase());
 					processService.savePatient(selectedPatient, automatic
 							&& newRecord, false, crmCountry.getCode());
+					if (newRecord) {
+						processService.savePatientTicket(selectedPatient,
+								listTickets);
+					}
 					message = FacesUtil.getMessage("con_msg_update_ok",
 							selectedPatient.getNames());
 					FacesUtil.addInfo(message);
@@ -261,6 +320,8 @@ public class ContactBacking extends BaseBacking {
 				listPatient.add(selectedPatientTemp);
 				patientModel = new PatientDataModel(listPatient);
 				disabledAddPatient = false;
+				listTickets = processService
+						.getListPatientTicket(selectedPatient.getId());
 			} else {
 				SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
 				CrmProfile profile = mapProfile.get(this.idProfile);
@@ -316,6 +377,8 @@ public class ContactBacking extends BaseBacking {
 			if (listPatient.size() > 0) {
 				selectedPatientTemp = listPatient.get(0);
 				disabledAddPatient = false;
+				listTickets = processService
+						.getListPatientTicket(selectedPatient.getId());
 			}
 		} else if (optionSearchPatient == 3) {
 			listPatient = processService.getListPatientByField("PHONE",
@@ -324,7 +387,13 @@ public class ContactBacking extends BaseBacking {
 			if (listPatient.size() > 0) {
 				selectedPatientTemp = listPatient.get(0);
 				disabledAddPatient = false;
+				listTickets = processService
+						.getListPatientTicket(selectedPatient.getId());
 			}
+		}
+
+		if (listTickets == null) {
+			listTickets = new LinkedList<CrmPatientTicket>();
 		}
 	}
 
@@ -540,6 +609,22 @@ public class ContactBacking extends BaseBacking {
 		appointmentPatientBacking.setSelectedPatient(selectedPatient);
 		appointmentPatientBacking.searchAppoinmnetConfirmedAction();
 		return "/pages/processes/appointmentCheck.jsf?faces-redirect=true";
+	}
+
+	public void addTicket() {
+		if (FacesUtil.isEmptyOrBlank(this.crmPatientTicketSelected.getTicket())) {
+			String field = FacesUtil.getMessage("pat_ticket");
+			String message = FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addError(message);
+		} else {
+			this.listTickets.add(crmPatientTicketSelected);
+			crmPatientTicketSelected = new CrmPatientTicket();
+			crmPatientTicketSelected.setCrmTicket(new CrmTicket());
+		}
+	}
+
+	public void removeTicket() {
+		this.listTickets.remove(crmPatientTicketSelected);
 	}
 
 }

@@ -48,6 +48,7 @@ import co.com.tactusoft.crm.model.entities.CrmRegion;
 import co.com.tactusoft.crm.model.entities.CrmRole;
 import co.com.tactusoft.crm.model.entities.CrmSpeciality;
 import co.com.tactusoft.crm.model.entities.CrmTherapy;
+import co.com.tactusoft.crm.model.entities.CrmTicket;
 import co.com.tactusoft.crm.model.entities.CrmUser;
 import co.com.tactusoft.crm.model.entities.CrmUserBranch;
 import co.com.tactusoft.crm.model.entities.CrmUserBranchPostsale;
@@ -69,7 +70,12 @@ public class TablesBo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Inject	private CustomHibernateDao dao;
+	@Inject
+	private CustomHibernateDao dao;
+
+	public List<CrmTicket> getListTicketActive() {
+		return dao.find("from CrmTicket o where status = 1");
+	}
 
 	public List<VwCallRange> getVwCallRange() {
 		return dao.find("from VwCallRange o");
@@ -562,7 +568,8 @@ public class TablesBo implements Serializable {
 	}
 
 	public List<CrmOdotogramProcedure> getListOdotogramProcedureActive() {
-		return dao.find("from CrmOdotogramProcedure o where o.status = 1 order by name");
+		return dao
+				.find("from CrmOdotogramProcedure o where o.status = 1 order by name");
 	}
 
 	public CrmDoctor getCrmDoctor(BigDecimal idUser) {

@@ -42,6 +42,7 @@ import co.com.tactusoft.crm.model.entities.CrmOdontologyStomatolog;
 import co.com.tactusoft.crm.model.entities.CrmOdontologySupplExams;
 import co.com.tactusoft.crm.model.entities.CrmOdontologyTempJoint;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
+import co.com.tactusoft.crm.model.entities.CrmPatientTicket;
 import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
 import co.com.tactusoft.crm.model.entities.IndPatientAppointment;
 import co.com.tactusoft.crm.model.entities.VwAppointment;
@@ -1133,6 +1134,14 @@ public class ProcessBo implements Serializable {
 		return this.persist(entity);
 	}
 
+	public void savePatientTicket(CrmPatient crmPatient,
+			List<CrmPatientTicket> listTickets) {
+		for (CrmPatientTicket row : listTickets) {
+			row.setCrmPatient(crmPatient);
+			this.persist(row);
+		}
+	}
+
 	public void removePatient(BigDecimal id) {
 		dao.executeHQL("delete from CrmPatient o where o.id = " + id);
 	}
@@ -1175,6 +1184,27 @@ public class ProcessBo implements Serializable {
 			return list.get(0);
 		} else {
 			return new CrmPatient();
+		}
+	}
+
+	public List<CrmPatientTicket> getListPatientTicket(BigDecimal idPatient) {
+		return dao.find("FROM CrmPatientTicket o WHERE o.crmPatient.id = "
+				+ idPatient);
+	}
+
+	public boolean isExistsTickets(List<CrmPatientTicket> list) {
+		String rows = "";
+		for (CrmPatientTicket row : list) {
+			rows = rows + "'" + row.getTicket() + "',";
+		}
+		rows = rows.substring(0, rows.length() - 1);
+		List<CrmPatientTicket> listTemp = dao
+				.find("FROM CrmPatientTicket o WHERE TRIM(ticket) IN (" + rows
+						+ ")");
+		if (listTemp.isEmpty()) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 
