@@ -126,6 +126,15 @@
 						<h:outputLabel value="#{rec.brancheName}" />
 					</p:column>
 
+					<p:column style="width:4%">
+						<p:commandButton update=":form:display"
+							oncomplete="obsDialog.show()" icon="ui-icon-search"
+							title="#{msg['app_obs']}">
+							<f:setPropertyActionListener value="#{rec}"
+								target="#{ticketBacking.selected}" />
+						</p:commandButton>
+					</p:column>
+
 				</p:dataTable>
 
 				<p:dialog id="branchDialog" widgetVar="branchDlg" modal="true"
@@ -196,6 +205,21 @@
 
 					</h:panelGrid>
 				</p:dialog>
+
+				<p:dialog header="#{msg['app_obs']}" widgetVar="obsDialog"
+					resizable="false" id="obsDlg" showEffect="fade"
+					hideEffect="explode" modal="true">
+
+					<h:panelGrid id="display" columns="1" cellpadding="4"
+						style="margin:0 auto;" width="100%">
+
+						<h:inputTextarea style="width:500px;"
+							value="#{ticketBacking.selected.obs}" readonly="true" rows="5" />
+
+					</h:panelGrid>
+
+				</p:dialog>
+
 			</h:form>
 		</p:panel>
 

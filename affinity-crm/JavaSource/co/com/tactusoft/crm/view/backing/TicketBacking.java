@@ -21,6 +21,7 @@ public class TicketBacking extends BaseBacking {
 
 	private List<VwPatientTicket> list;
 	private VwPatientTicketDataModel model;
+	private VwPatientTicket selected;
 
 	private Date startDate;
 	private Date endDate;
@@ -48,6 +49,14 @@ public class TicketBacking extends BaseBacking {
 
 	public void setModel(VwPatientTicketDataModel model) {
 		this.model = model;
+	}
+
+	public VwPatientTicket getSelected() {
+		return selected;
+	}
+
+	public void setSelected(VwPatientTicket selected) {
+		this.selected = selected;
 	}
 
 	public Date getStartDate() {
