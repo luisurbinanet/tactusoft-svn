@@ -28,6 +28,7 @@ public class VwPatientTicket implements java.io.Serializable {
 	private BigDecimal branchId;
 	private String branchCode;
 	private String brancheName;
+	private String obs;
 
 	public VwPatientTicket() {
 	}
@@ -49,7 +50,7 @@ public class VwPatientTicket implements java.io.Serializable {
 			String patientNames, String patientSurnames, Date createDate,
 			String username, String userNames, String userSurnames,
 			String ticket, BigDecimal branchId, String branchCode,
-			String brancheName) {
+			String brancheName, String obs) {
 		this.id = id;
 		this.pacientDoc = pacientDoc;
 		this.patientNames = patientNames;
@@ -62,6 +63,7 @@ public class VwPatientTicket implements java.io.Serializable {
 		this.branchId = branchId;
 		this.branchCode = branchCode;
 		this.brancheName = brancheName;
+		this.obs = obs;
 	}
 
 	@Id
@@ -171,6 +173,15 @@ public class VwPatientTicket implements java.io.Serializable {
 
 	public void setBrancheName(String brancheName) {
 		this.brancheName = brancheName;
+	}
+
+	@Column(name = "obs", length = 65535)
+	public String getObs() {
+		return obs;
+	}
+
+	public void setObs(String obs) {
+		this.obs = obs;
 	}
 
 }
