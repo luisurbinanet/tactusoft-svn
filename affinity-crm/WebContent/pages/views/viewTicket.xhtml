@@ -126,13 +126,12 @@
 						<h:outputLabel value="#{rec.brancheName}" />
 					</p:column>
 
-					<p:column style="width:4%">
-						<p:commandButton update=":form:display"
-							oncomplete="obsDialog.show()" icon="ui-icon-search"
-							title="#{msg['app_obs']}">
-							<f:setPropertyActionListener value="#{rec}"
-								target="#{ticketBacking.selected}" />
-						</p:commandButton>
+					<p:column style="width:100px">
+						<f:facet name="header">
+							<h:outputText value="#{msg['pat_type_obs']}" />
+						</f:facet>
+						<h:inputTextarea rows="3" style="width:200px" value="#{rec.obs}"
+							readonly="true" />
 					</p:column>
 
 				</p:dataTable>

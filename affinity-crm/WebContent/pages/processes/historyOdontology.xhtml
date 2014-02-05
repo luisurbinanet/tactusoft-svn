@@ -488,64 +488,6 @@
 								</p:fieldset>
 
 								<p:spacer height="5"
-									rendered="#{historyOdontologyBacking.renderedRecord eq 2?true:false}" />
-
-								<p:fieldset legend="#{msg['his_record_women']}"
-									rendered="#{historyOdontologyBacking.renderedRecord eq 2?true:false}">
-									<h:panelGrid columns="4" width="100%"
-										columnClasses="width25per,width75per">
-
-										<h:outputText value="#{msg['his_rec_pregnancy']}" />
-										<p:inputText style="width:350px"
-											value="#{historyOdontologyBacking.selectedHistoryRecord.pregnancy}" />
-
-										<h:outputText value="#{msg['his_rec_parity']}" />
-										<p:inputText style="width:350px"
-											value="#{historyOdontologyBacking.selectedHistoryRecord.parity}" />
-
-										<h:outputText value="#{msg['his_rec_abortions']}" />
-										<p:inputText style="width:350px"
-											value="#{historyOdontologyBacking.selectedHistoryRecord.abortions}" />
-
-										<h:outputText value="#{msg['his_rec_caesarean']}" />
-										<p:inputText style="width:350px"
-											value="#{historyOdontologyBacking.selectedHistoryRecord.caesarean}" />
-
-										<h:outputText value="#{msg['his_rec_stillbirths']}" />
-										<p:inputText style="width:350px"
-											value="#{historyOdontologyBacking.selectedHistoryRecord.stillbirths}" />
-
-										<h:outputLabel />
-										<h:outputLabel />
-
-										<h:outputText value="#{msg['his_rec_menarche']}" />
-										<p:inputText style="width:350px"
-											value="#{historyOdontologyBacking.selectedHistoryRecord.menarche}" />
-
-										<h:outputText value="#{msg['his_rec_sexarca']}" />
-										<p:inputText style="width:350px"
-											value="#{historyOdontologyBacking.selectedHistoryRecord.sexarca}" />
-
-										<h:outputLabel value="#{msg['his_rec_fur']}" />
-										<p:calendar
-											value="#{historyOdontologyBacking.selectedHistoryRecord.fur}"
-											readonlyInput="true" pattern="dd/MM/yyyy" showOn="button"
-											navigator="true" locale="es" yearRange="-100:+0" />
-
-										<h:outputText value="#{msg['his_rec_bleeding']}" />
-										<p:inputText style="width:350px"
-											value="#{historyOdontologyBacking.selectedHistoryRecord.bleeding}" />
-
-										<h:outputLabel value="#{msg['his_rec_fuc']}" />
-										<p:calendar
-											value="#{historyOdontologyBacking.selectedHistoryRecord.fuc}"
-											readonlyInput="true" pattern="dd/MM/yyyy" showOn="button"
-											navigator="true" locale="es" yearRange="-100:+0" />
-
-									</h:panelGrid>
-								</p:fieldset>
-
-								<p:spacer height="5"
 									rendered="#{historyOdontologyBacking.renderedRecord eq 1?true:false}" />
 
 								<p:fieldset legend="#{msg['his_record_children']}"
