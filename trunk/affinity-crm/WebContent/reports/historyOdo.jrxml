@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="history" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fd0c4e58-f656-4c05-98c1-fe624cdd738d">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="600"/>
+	<property name="ireport.y" value="361"/>
 	<parameter name="P_ID_PATIENT" class="java.math.BigDecimal">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -376,7 +376,7 @@ WHERE a.id = $P{P_ID_PATIENT}]]>
 					<subreportParameterExpression><![CDATA[$P{P_ID_PATIENT}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "history_record_odo.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "history_record_odo_2.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="52">
@@ -437,6 +437,16 @@ WHERE a.id = $P{P_ID_PATIENT}]]>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "history_suppl_exams.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="52">
+			<subreport>
+				<reportElement uuid="f088dfd9-1927-41e9-816c-a60f7b9b0493" x="0" y="0" width="555" height="52"/>
+				<subreportParameter name="P_ID_PATIENT">
+					<subreportParameterExpression><![CDATA[$P{P_ID_PATIENT}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "history_odontogram.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="52">

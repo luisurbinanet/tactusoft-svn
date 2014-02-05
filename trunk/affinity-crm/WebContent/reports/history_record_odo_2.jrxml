@@ -1,0 +1,811 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="history_record" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="258c62b7-639f-43e7-ac7b-c289802e1be2">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="4"/>
+	<property name="ireport.y" value="257"/>
+	<parameter name="P_ID_PATIENT" class="java.math.BigDecimal">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_GENDER" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Femenino"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+a.id,
+b.start_appointment_date,
+CASE arthritis
+ WHEN '0' THEN 'NO'
+ WHEN '1' THEN 'SI'
+END AS "Artritis",
+arthritis_time,
+arthritis_medication,
+CASE cancer
+ WHEN '0' THEN 'NO'
+ WHEN '1' THEN 'SI'
+END AS "Cancer",
+cancer_time,
+cancer_medication,
+CASE pulmonary
+ WHEN '0' THEN 'NO'
+ WHEN '1' THEN 'SI'
+END AS "Enfermedad Pulmonar",
+pulmonary_time,
+pulmonary_medication,
+CASE diabetes
+ WHEN '0' THEN 'NO'
+ WHEN '1' THEN 'SI'
+END AS "Diabetes",
+diabetes_time,
+diabetes_medication,
+CASE hypertension
+ WHEN '0' THEN 'NO'
+ WHEN '1' THEN 'SI'
+END AS "Hipertensión",
+hypertension_time,
+hypertension_medication,
+CASE hospitalizations
+ WHEN '0' THEN 'NO'
+ WHEN '1' THEN 'SI'
+END AS "Hospitalizaciones",
+hospitalizations_time,
+hospitalizations_medication,
+CASE allergy
+ WHEN '0' THEN 'NO'
+ WHEN '1' THEN 'SI'
+END AS "Alergia",
+allergy_time,
+allergy_medication,
+CASE infections
+ WHEN '0' THEN 'NO'
+ WHEN '1' THEN 'SI'
+END AS "Infecciones",
+infections_time,
+infections_medication,
+occupational "Ocupacionales",
+toxic "Tóxicos",
+blood_type "Grupo Sanguíneo",
+pregnancy "Gravidez",
+parity "Paridad",
+abortions "Abortos",
+family_history ,
+stillbirths "Mortinatos",
+caesarean "Cesareas",
+menarche "Menarca",
+sexarca "Sexarca",
+fur "Fecha Última Regla",
+bleeding "Sangrado",
+fuc "Fecha Última Citología",
+fuep "Fecha ultimo examen de próstata",
+psa "Niveles de PSA",
+psa_date "Fecha PSA",
+neonatal "Antecedentes Neonatales",
+perinatal "Perinatales",
+vaccination "Vacunación",
+growth "Crecimiento y Desarrollo",
+hypertension_parent,
+epoc_parent,
+heart_disease_parent,
+asthma_parent,
+acv_parent,
+cancer_parent,
+diabetes_parent,
+IFNULL(surgical,'NO REFERIDO')  "Quirúrgicos",
+IFNULL(pharmacological,'NO REFERIDO')  "Farmacológicos",
+IFNULL(immunizations,'NO REFERIDO')  "Inmunizaciones",
+IFNULL(transfusion,'NO REFERIDO')  "Transfusionales",
+IFNULL(other,'NO REFERIDO') "Otros",
+CASE limitation_open_close_mouth
+	 WHEN '0' THEN 'NO REFERIDO'
+	 WHEN '1' THEN 'NO'
+	 WHEN '2' THEN 'SI'
+	END limitation_open_close_mouth,
+	CASE herpes_thrush
+	 WHEN '0' THEN 'NO REFERIDO'
+	 WHEN '1' THEN 'NO'
+	 WHEN '2' THEN 'SI'
+	END herpes_thrush,
+	CASE noise_jaw_open_close_mouth
+     WHEN '0' THEN 'NO REFERIDO'
+	 WHEN '1' THEN 'NO'
+	 WHEN '2' THEN 'SI'
+	END noise_jaw_open_close_mouth,
+CASE bit_lips_nails_habit
+     WHEN '0' THEN 'NO REFERIDO'
+	 WHEN '1' THEN 'NO'
+	 WHEN '2' THEN 'SI'
+	END bit_lips_nails_habit,
+	CASE smoke_habit
+     WHEN '0' THEN 'NO REFERIDO'
+	 WHEN '1' THEN 'NO'
+	 WHEN '2' THEN 'SI'
+	END smoke_habit,
+	cigarettes_day_habit,
+	CASE citrus_foods_habit
+     WHEN '0' THEN 'NO REFERIDO'
+	 WHEN '1' THEN 'NO'
+	 WHEN '2' THEN 'SI'
+	END citrus_foods_habit,
+	CASE bit_objects_habit
+     WHEN '0' THEN 'NO REFERIDO'
+	 WHEN '1' THEN 'NO'
+	 WHEN '2' THEN 'SI'
+	END bit_objects_habit,
+	CASE tooth_clench_habit
+     WHEN '0' THEN 'NO REFERIDO'
+	 WHEN '1' THEN 'NO'
+	 WHEN '2' THEN 'SI'
+	END tooth_clench_habit,
+	CASE mouth_breath_habit
+     WHEN '0' THEN 'NO REFERIDO'
+	 WHEN '1' THEN 'NO'
+	 WHEN '2' THEN 'SI'
+	END mouth_breath_habit,
+    IFNULL(a.obs,'NO REFERIDO') obs_odo
+FROM crm_db.crm_history_record a JOIN crm_db.crm_appointment b on a.id_appointment = b.id
+WHERE a.id_patient = $P{P_ID_PATIENT}
+ORDER by b.start_appointment_date DESC]]>
+	</queryString>
+	<field name="id" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="start_appointment_date" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Artritis" class="java.lang.String"/>
+	<field name="arthritis_time" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="arthritis_medication" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Cancer" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cancer_time" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cancer_medication" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Enfermedad Pulmonar" class="java.lang.String"/>
+	<field name="pulmonary_time" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="pulmonary_medication" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Diabetes" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="diabetes_time" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="diabetes_medication" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Hipertensión" class="java.lang.String"/>
+	<field name="hypertension_time" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="hypertension_medication" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Hospitalizaciones" class="java.lang.String"/>
+	<field name="hospitalizations_time" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="hospitalizations_medication" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Alergia" class="java.lang.String"/>
+	<field name="allergy_time" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="allergy_medication" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Infecciones" class="java.lang.String"/>
+	<field name="infections_time" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="infections_medication" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Ocupacionales" class="java.lang.String"/>
+	<field name="Tóxicos" class="java.lang.String"/>
+	<field name="Grupo Sanguíneo" class="java.lang.String"/>
+	<field name="Gravidez" class="java.lang.String"/>
+	<field name="Paridad" class="java.lang.String"/>
+	<field name="Abortos" class="java.lang.String"/>
+	<field name="family_history" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Mortinatos" class="java.lang.String"/>
+	<field name="Cesareas" class="java.lang.String"/>
+	<field name="Menarca" class="java.lang.String"/>
+	<field name="Sexarca" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Fecha Última Regla" class="java.sql.Date"/>
+	<field name="Sangrado" class="java.lang.String"/>
+	<field name="Fecha Última Citología" class="java.sql.Date"/>
+	<field name="Fecha ultimo examen de próstata" class="java.sql.Date"/>
+	<field name="Niveles de PSA" class="java.lang.String"/>
+	<field name="Fecha PSA" class="java.sql.Date"/>
+	<field name="Antecedentes Neonatales" class="java.lang.String"/>
+	<field name="Perinatales" class="java.lang.String"/>
+	<field name="Vacunación" class="java.lang.String"/>
+	<field name="Crecimiento y Desarrollo" class="java.lang.String"/>
+	<field name="hypertension_parent" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="epoc_parent" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="heart_disease_parent" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="asthma_parent" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="acv_parent" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cancer_parent" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="diabetes_parent" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Quirúrgicos" class="java.lang.String"/>
+	<field name="Farmacológicos" class="java.lang.String"/>
+	<field name="Inmunizaciones" class="java.lang.String"/>
+	<field name="Transfusionales" class="java.lang.String"/>
+	<field name="Otros" class="java.lang.String"/>
+	<field name="limitation_open_close_mouth" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="herpes_thrush" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="noise_jaw_open_close_mouth" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="bit_lips_nails_habit" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="smoke_habit" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cigarettes_day_habit" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="citrus_foods_habit" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="bit_objects_habit" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tooth_clench_habit" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="mouth_breath_habit" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="obs_odo" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="34">
+			<staticText>
+				<reportElement uuid="cccfadfe-8d80-4b4f-b9cf-727267a05009" x="3" y="0" width="552" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Antecedentes]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="ed1b7d1a-c512-4e53-8ad3-fa73dc9b5448" x="2" y="19" width="554" height="1"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="597" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="e1ed9247-c63e-4e37-8b9e-1b3b97f0ce65" x="2" y="1" width="63" height="20"/>
+				<textElement/>
+				<text><![CDATA[Cita del día:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="d82c8a93-5427-4d2d-b895-7722b051e68b" x="63" y="1" width="489" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{start_appointment_date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="158d0032-1d9e-428c-b2e3-d2269735d540" x="113" y="41" width="39" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Artritis}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="236350e5-6de2-4099-8e4e-f9c717442ee5" x="152" y="41" width="211" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{arthritis_time}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="8f833f70-eb20-456a-ace0-f127317525cd" x="363" y="41" width="189" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{arthritis_medication}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="045bf06a-9ece-4499-9e7b-83cc71c7fa62" x="2" y="41" width="110" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Artritis]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="1feb29d4-1a54-46a5-8b23-fadbbcecfe16" x="113" y="61" width="39" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Cancer}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="23cedd68-45c4-4b05-843e-6683396f1765" x="152" y="61" width="211" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{cancer_time}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7275a9a3-08b2-4b15-8983-28d823c13c63" x="363" y="61" width="189" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{cancer_medication}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="22ab5f0d-3aeb-405b-b06c-c477a730c200" x="2" y="61" width="110" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cancer]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="4fa9fe0e-db0b-4efd-a422-0e76cfd77946" x="113" y="81" width="39" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Enfermedad Pulmonar}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="74847a4d-5efd-44a5-a46d-dc6c386e75e0" x="152" y="81" width="211" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{pulmonary_time}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="746d3d19-e27f-43b8-8868-e1cfa1bc4f35" x="363" y="81" width="189" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{pulmonary_medication}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="6801590a-3e1d-4dcd-8c63-068a51e3ad89" x="2" y="81" width="110" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Enfermedad Pulmonar]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="3edf7f6f-dcd3-43ae-95cd-31ff5d95d7b9" x="113" y="101" width="39" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Diabetes}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="0bb67104-36d3-4a6d-8527-3fce565f67be" x="152" y="101" width="211" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{diabetes_time}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="91a9dcb5-4d55-4f82-b637-f86657598a49" x="363" y="101" width="189" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{diabetes_medication}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="5ddcb949-8328-46cf-98a8-dfbe0f99e225" x="2" y="101" width="110" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Diabetes]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="bfbfeae7-c22f-4100-9cf7-29bfd5a083d3" x="113" y="121" width="39" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Hipertensión}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="264facf9-5ea8-449f-838c-b557bc7c3082" x="152" y="121" width="211" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{hypertension_time}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="81b13dab-223a-4f6d-83cf-b99b50b34729" x="363" y="121" width="189" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{hypertension_medication}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="b3a94aeb-d1d3-4876-9408-051f79138172" x="2" y="121" width="110" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Hipertensión]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="cec65f5c-505a-48b8-9eaf-92ecccfd86b7" x="113" y="141" width="39" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Hospitalizaciones}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="40a6daca-fa39-40c8-95aa-40217741f7b4" x="152" y="141" width="211" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{hospitalizations_time}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="8a98bce8-4b63-407a-a28f-8d59cdec9ee8" x="363" y="141" width="189" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{hospitalizations_medication}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="2694c71e-4563-4fa4-a7c3-979b42195aa9" x="2" y="141" width="110" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Hospitalizaciones]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="1c2dadc5-8ac1-4d6d-a681-9d8410ca57d4" x="113" y="161" width="39" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Alergia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="c93f0290-62fe-4c8f-9927-afc06c37c352" x="152" y="161" width="211" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{allergy_time}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ee16eb88-08c4-497e-a27d-fc0b6c4679fc" x="363" y="161" width="189" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{allergy_medication}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="8703cb76-dcc8-483c-ac1e-2892c5ac7492" x="2" y="161" width="110" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Alergia]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="2bd098fe-dd87-465a-b0be-315ba2743d53" x="113" y="181" width="39" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Infecciones}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="0be3b91a-8193-461d-a3b1-2976c793ecd2" x="152" y="181" width="211" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{infections_time}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d3fe0361-6e74-4c59-a544-eef0623d65d1" x="363" y="181" width="189" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{infections_medication}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="1a3c234c-944f-4533-9ed7-0d29bbba7e35" x="2" y="181" width="110" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Infecciones]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="907a1e06-8029-4f61-9de1-957542febac1" x="2" y="21" width="550" height="20"/>
+				<textElement>
+					<font size="12" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Personales]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="6c574240-6134-4cab-82a1-deeb271c030a" x="113" y="201" width="439" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Ocupacionales}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="c62a92ef-8aa8-4445-83fc-7419be78d1c3" x="2" y="201" width="110" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ocupacionales]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="43e154a0-c370-47c3-a3d1-ca3a25cad85f" x="113" y="221" width="439" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Tóxicos}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d5e74ed9-0174-4d3d-914a-3a6aa8ec331a" x="113" y="241" width="439" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Grupo Sanguíneo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="b1e657f6-8754-45d4-b2f5-54b667abc477" x="2" y="221" width="110" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tóxicos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="42dc1d8d-8274-434b-81d0-b3e704ac1d39" x="2" y="241" width="110" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Grupo Sanguíneo]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="df58b336-eeab-4b7a-9832-ca36f383d2d2" x="113" y="261" width="439" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Quirúrgicos}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="c24346ef-7729-4fc9-8fd4-b438d0008dba" x="113" y="281" width="439" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Farmacológicos}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="5885db13-366d-43eb-94f6-74d71cd8eb4c" x="113" y="301" width="439" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Inmunizaciones}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="592c4b44-fc89-4811-ad85-8ec50dd0d683" x="113" y="321" width="439" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Transfusionales}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="773bf25c-336d-4351-a702-776b9a3547e3" x="113" y="341" width="439" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Otros}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="291972d8-17da-4180-992b-f4d32bf6e57a" x="2" y="261" width="110" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Quirúrgicos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2766eb7e-6532-4f50-8d25-2411273ca29a" x="2" y="281" width="110" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Farmacológicos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7d374f21-83a3-4f5c-a45b-a31037102ff4" x="2" y="301" width="110" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Inmunizaciones]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="29d0e802-5340-405a-bfb8-0ab39542bf5a" x="2" y="321" width="110" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Transfusionales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8748636d-62e3-4b87-9830-38f6f24310c3" x="2" y="341" width="110" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Otros]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1212cdaf-6408-4673-8fed-166b09574108" x="3" y="361" width="549" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Masculino")]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="12" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Hombres]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement uuid="2e404d51-f16b-4d3d-bc99-b143a737595e" x="171" y="380" width="76" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Masculino")]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Fecha ultimo examen de próstata}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="b59048f9-f093-4102-a676-377639fea5a7" x="325" y="380" width="67" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Masculino")]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Niveles de PSA}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement uuid="d6280a3a-f1e7-4d8c-9710-9a06ea15d00c" x="452" y="380" width="100" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Masculino")]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Fecha PSA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="623d65fc-a387-4e64-8583-8f7bb42c87b6" x="3" y="380" width="168" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Masculino")]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha ultimo examen de próstata]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="41f31468-f9d7-4c46-a1db-3b954b5d2b64" x="246" y="380" width="80" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Masculino")]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Niveles de PSA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b55a607d-b6f7-4551-b115-5fde6a3de916" x="395" y="380" width="58" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Masculino")]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha PSA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="34ba0095-7358-4e59-aec3-c3f4b28bdd86" x="3" y="400" width="549" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement>
+					<font size="12" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Menores de 5 años]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="a809f3cb-3c42-4cfd-aa5f-5f810b09d6c9" x="141" y="420" width="411" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Antecedentes Neonatales}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="cd99b728-03a5-4d85-b655-b8c93fe8a77c" x="141" y="440" width="411" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Perinatales}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="4d2ecfa0-d2e4-4cda-874b-0d1bb144d72c" x="141" y="460" width="411" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Vacunación}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="946781c8-2fa8-4658-8822-75340f688353" x="142" y="480" width="410" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Crecimiento y Desarrollo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="0f35e067-2110-4ea8-9d2d-76c1436a52b9" x="3" y="440" width="139" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Perinatales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="68300168-ac4d-4f3e-9392-8a12b926c07b" x="3" y="460" width="139" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Vacunación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2d8114f7-99f7-4efb-a665-f9b27c8aa95c" x="3" y="480" width="139" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Crecimiento y Desarrollo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a6bde75f-d4c2-409a-acbd-dd03d76bcd0a" x="3" y="420" width="139" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Antecedentes Neonatales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="66fd0445-eb1f-4c84-9886-8c9759e6dca4" x="3" y="500" width="549" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement>
+					<font size="12" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Familiares]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="7fafd656-136c-4c55-8ff8-45f758339b90" x="65" y="520" width="178" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{hypertension_parent}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="9032039a-4590-46a1-896d-64394718de20" x="65" y="539" width="178" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{epoc_parent}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="88cec89e-f453-44ff-b880-6c21af1391a7" x="312" y="520" width="240" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{heart_disease_parent}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="6e2fc635-7808-4d5a-a4c1-9b0926481090" x="312" y="539" width="240" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{asthma_parent}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="00da3e01-41a4-4641-9ac1-fc56dc07f6a4" x="3" y="520" width="62" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Hipertensión]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="672c2ef6-a312-4cd1-8cf5-72b6b251c962" x="3" y="539" width="62" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Epoc]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="01b66e52-09f5-466c-835d-9c363c469705" x="243" y="520" width="69" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cardiapatias]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="19fa4a11-352d-4f7a-aa24-257bbe409cc5" x="243" y="539" width="69" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Asma]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="8f19b5ed-eeea-433f-9872-691c61c0cdf8" x="65" y="558" width="178" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{acv_parent}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="4ff3e7dd-0d3e-44e8-8cd6-ef7bbe3b1afd" x="313" y="558" width="239" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{cancer_parent}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="2a304056-cca7-416d-84ac-30876095a770" x="65" y="577" width="178" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{diabetes_parent}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="b99209e0-c94b-4fa5-a948-8f80f087e3f8" x="3" y="558" width="62" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Acv]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7dc09618-ec4a-45c7-92b5-71713f3999a2" x="243" y="558" width="69" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cancer]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="21982429-3e3e-497e-8732-98cbca330080" x="3" y="577" width="62" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Diabetes]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>
