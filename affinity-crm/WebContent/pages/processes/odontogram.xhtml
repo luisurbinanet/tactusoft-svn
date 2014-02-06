@@ -5,7 +5,8 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions">
 
-<h:panelGroup id="svgContainer" layout="block" style="width:100%" />
+<h:panelGroup id="svgContainer" layout="block" style="width:100%"
+	rendered="#{not historyOdontologyBacking.modeHistorial}" />
 
 <p:panel header="Procedimientos">
 	<h:panelGrid id="pnlOdontogramProcedure" width="100%" columns="1">

@@ -18,6 +18,22 @@
 
 				<p:growl id="growl" showDetail="true" />
 
+				<p:toolbar id="toolBarPatient" style="width:100%"
+					rendered="#{historyOdontologyBacking.modeHistorial}">
+					<p:toolbarGroup align="left">
+						<p:commandButton icon="ui-icon-arrowreturnthick-1-w"
+							value="#{msg['btn_return']}"
+							action="#{historyOdontologyBacking.returnAction}"
+							rendered="#{historyOdontologyBacking.modeHistorial}"
+							immediate="true">
+							<f:setPropertyActionListener value="false"
+								target="#{historyOdontologyBacking.modeEdit}" />
+						</p:commandButton>
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer rendered="#{historyOdontologyBacking.modeHistorial}" />
+
 				<!-- TACTU CITAS -->
 				<h:panelGrid id="tblPart" columns="1" width="100%"
 					rendered="#{historyOdontologyBacking.modeEdit}">
