@@ -143,7 +143,7 @@
 		</p:dataTable>
 	</p:tab>
 
-	<p:tab id="tab5" title="#{msg['his_general_findings']}"
+	<p:tab id="tab4" title="#{msg['his_general_findings']}"
 		rendered="#{historyOdontologyBacking.rolePrincipal eq 'NURSE_AUX' or historyOdontologyBacking.rolePrincipal eq 'DOCTOR'}">
 		<p:dataTable id="tblPhysique" var="rec"
 			value="#{historyOdontologyBacking.historyPhysiqueModel}"
@@ -182,6 +182,59 @@
 
 			<p:column headerText="#{msg['his_physique_oral_hygiene_habit']}">
 				<h:outputLabel value="#{rec.oralHygieneHabit?'SI':'NO'}" />
+			</p:column>
+
+			<p:column style="width:4%" rendered="false">
+				<p:commandButton icon="ui-icon-search" title="#{msg['btn_view']}"
+					update=":form:dialogPhysique" oncomplete="dlgPhysique.show();">
+					<f:setPropertyActionListener value="#{rec}"
+						target="#{historyOdontologyBacking.selectedHistoryPhysique}" />
+				</p:commandButton>
+			</p:column>
+
+		</p:dataTable>
+	</p:tab>
+
+	<p:tab id="tab5" title="#{msg['his_stomatolog']}"
+		rendered="#{historyOdontologyBacking.rolePrincipal eq 'NURSE_AUX' or historyOdontologyBacking.rolePrincipal eq 'DOCTOR'}">
+		<p:dataTable id="tblStomatolog" var="rec"
+			value="#{historyOdontologyBacking.historyStomatologModel}"
+			rowKey="#{rec.code}" style="width:100%" paginator="true" rows="5"
+			emptyMessage="#{msg['glb_no_records_found']}">
+
+			<p:column headerText="#{msg['app_date']}">
+				<h:outputLabel value="#{rec.crmAppointment.startAppointmentDate}">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+				</h:outputLabel>
+			</p:column>
+
+			<p:column headerText="#{msg['exp_doctor']}">
+				<h:outputLabel value="#{rec.crmAppointment.crmDoctor.names}" />
+			</p:column>
+
+			<p:column
+				headerText="#{msg['his_stomatolog_head']} #{msg['his_stomatolog_exostosis_head']}">
+				<h:outputLabel value="#{rec.exostosisHead eq 1?'SI':'NO'}" />
+			</p:column>
+
+			<p:column
+				headerText="#{msg['his_stomatolog_head']} #{msg['his_stomatolog_endostosis_head']}">
+				<h:outputLabel value="#{rec.endostosisHead eq 1?'SI':'NO'}" />
+			</p:column>
+
+			<p:column
+				headerText="#{msg['his_stomatolog_face']} #{msg['his_stomatolog_dolichocephalic_face']}">
+				<h:outputLabel value="#{rec.dolichocephalicFace eq 1?'SI':'NO'}" />
+			</p:column>
+
+			<p:column
+				headerText="#{msg['his_stomatolog_face']} #{msg['his_stomatolog_mesocephalic_face']}">
+				<h:outputLabel value="#{rec.mesocephalicFace eq 1?'SI':'NO'}" />
+			</p:column>
+
+			<p:column
+				headerText="#{msg['his_stomatolog_face']} #{msg['his_stomatolog_brachycephalic_face']}">
+				<h:outputLabel value="#{rec.brachycephalicFace eq 1?'SI':'NO'}" />
 			</p:column>
 
 			<p:column style="width:4%" rendered="false">

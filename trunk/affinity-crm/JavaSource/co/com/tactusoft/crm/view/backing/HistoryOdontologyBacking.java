@@ -42,9 +42,15 @@ import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.beans.OdontogramBean;
 import co.com.tactusoft.crm.view.datamodel.DiagnosisDataModel;
+import co.com.tactusoft.crm.view.datamodel.HistoryEvolutionDataModel;
 import co.com.tactusoft.crm.view.datamodel.HistoryHistoryDataModel;
+import co.com.tactusoft.crm.view.datamodel.HistoryPeriodontalDataModel;
 import co.com.tactusoft.crm.view.datamodel.HistoryPhysiqueDataModel;
 import co.com.tactusoft.crm.view.datamodel.HistoryRecordDataModel;
+import co.com.tactusoft.crm.view.datamodel.HistorySoftTissueDataModel;
+import co.com.tactusoft.crm.view.datamodel.HistoryStomatologDataModel;
+import co.com.tactusoft.crm.view.datamodel.HistorySupplExamsDataModel;
+import co.com.tactusoft.crm.view.datamodel.HistoryTempJointDataModel;
 import co.com.tactusoft.crm.view.datamodel.MedicationDataModel;
 import co.com.tactusoft.crm.view.datamodel.VwAppointmentDataModel;
 import co.com.tactusoft.crm.view.datamodel.WSBeanDataModel;
@@ -75,6 +81,13 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 	private List<OdontogramBean> listOdontogramBean;
 
 	private String posology;
+
+	protected HistoryStomatologDataModel historyStomatologModel;
+	protected HistoryTempJointDataModel historyTempJointModel;
+	protected HistorySoftTissueDataModel historySoftTissueModel;
+	protected HistoryPeriodontalDataModel historyPeriodontalModel;
+	protected HistorySupplExamsDataModel historySupplExamsModel;
+	protected HistoryEvolutionDataModel historyEvolutionModel;
 
 	public HistoryOdontologyBacking() {
 
@@ -205,6 +218,60 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 
 	public void setPosology(String posology) {
 		this.posology = posology;
+	}
+
+	public HistoryStomatologDataModel getHistoryStomatologModel() {
+		return historyStomatologModel;
+	}
+
+	public void setHistoryStomatologModel(
+			HistoryStomatologDataModel historyStomatologModel) {
+		this.historyStomatologModel = historyStomatologModel;
+	}
+
+	public HistoryTempJointDataModel getHistoryTempJointModel() {
+		return historyTempJointModel;
+	}
+
+	public void setHistoryTempJointModel(
+			HistoryTempJointDataModel historyTempJointModel) {
+		this.historyTempJointModel = historyTempJointModel;
+	}
+
+	public HistorySoftTissueDataModel getHistorySoftTissueModel() {
+		return historySoftTissueModel;
+	}
+
+	public void setHistorySoftTissueModel(
+			HistorySoftTissueDataModel historySoftTissueModel) {
+		this.historySoftTissueModel = historySoftTissueModel;
+	}
+
+	public HistoryPeriodontalDataModel getHistoryPeriodontalModel() {
+		return historyPeriodontalModel;
+	}
+
+	public void setHistoryPeriodontalModel(
+			HistoryPeriodontalDataModel historyPeriodontalModel) {
+		this.historyPeriodontalModel = historyPeriodontalModel;
+	}
+
+	public HistorySupplExamsDataModel getHistorySupplExamsModel() {
+		return historySupplExamsModel;
+	}
+
+	public void setHistorySupplExamsModel(
+			HistorySupplExamsDataModel historySupplExamsModel) {
+		this.historySupplExamsModel = historySupplExamsModel;
+	}
+
+	public HistoryEvolutionDataModel getHistoryEvolutionModel() {
+		return historyEvolutionModel;
+	}
+
+	public void setHistoryEvolutionModel(
+			HistoryEvolutionDataModel historyEvolutionModel) {
+		this.historyEvolutionModel = historyEvolutionModel;
 	}
 
 	public void loadValues(VwAppointment vwAppointment) {
@@ -1022,6 +1089,7 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 		context.addCallbackParam("saved", saved);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void refreshLists() {
 		this.consentType = Constant.ODONTOLOGY_HISTORY_TYPE;
@@ -1042,6 +1110,23 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 		List<CrmHistoryPhysique> listTempPhysique = processService
 				.getListHistoryPhysique(selectedPatient.getId(), consentType);
 		historyPhysiqueModel = new HistoryPhysiqueDataModel(listTempPhysique);
+
+		List<CrmOdontologyStomatolog> listTempStomatolog = (List<CrmOdontologyStomatolog>) processService
+				.getListHistoryOdontology(selectedPatient.getId(),
+						"CrmOdontologyStomatolog");
+		historyStomatologModel = new HistoryStomatologDataModel(
+				listTempStomatolog);
+
+		List<CrmOdontologyTempJoint> listTempJoint = (List<CrmOdontologyTempJoint>) processService
+				.getListHistoryOdontology(selectedPatient.getId(),
+						"CrmOdontologyTempJoint");
+		historyTempJointModel = new HistoryTempJointDataModel(listTempJoint);
+
+		List<CrmOdontologySoftTissue> listTempSoftTissue = (List<CrmOdontologySoftTissue>) processService
+				.getListHistoryOdontology(selectedPatient.getId(),
+						"CrmOdontologyTempJoint");
+		historySoftTissueModel = new HistorySoftTissueDataModel(
+				listTempSoftTissue);
 
 		listDiagnosisView = processService.getListDiagnosisByPatient(
 				selectedPatient.getId(), consentType);

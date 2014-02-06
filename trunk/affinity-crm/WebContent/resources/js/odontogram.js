@@ -64,151 +64,152 @@ function createText(x, y, value) {
 }
 
 function loadOdontogram() {
-	currentTarget = null;
-	previousTarget = null;
-	procedureTooth = {};
-
-	svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-	svgNS = svg.namespaceURI;
-	svg.setAttribute('width', 850);
-	svg.setAttribute('height', 310);
-
-	var x = 15;
-	var y = 10;
-	var id = 18;
-	var cont = -1;
-	for ( var i = 0; i < 16; i++) {
-		svg.appendChild(createRectangle("v" + id, x, y, 20, 10));
-		document.body.appendChild(svg);
-
-		svg.appendChild(createRectangle("m" + id, x - 12, y + 12, 10, 20));
-		document.body.appendChild(svg);
-
-		svg.appendChild(createRectangle("t" + id, x, y + 12, 20, 20));
-		document.body.appendChild(svg);
-
-		svg.appendChild(createRectangle("d" + id, x + 22, y + 12, 10, 20));
-		document.body.appendChild(svg);
-
-		svg.appendChild(createRectangle("p" + id, x, y + 34, 20, 10));
-		document.body.appendChild(svg);
-
-		svg.appendChild(createText(x + 3, y + 60, id));
-		document.body.appendChild(svg);
-
-		x = x + 50;
-		id = id + cont;
-
-		if (id == 10) {
-			id = 21;
-			cont = 1;
-			x = x + 50;
-		}
-	}
-
-	x = 165;
-	y = 80;
-	id = 55;
-	cont = -1;
-	for ( var i = 0; i < 10; i++) {
-		svg.appendChild(createRectangle("v" + id, x, y, 20, 10));
-		document.body.appendChild(svg);
-
-		svg.appendChild(createRectangle("m" + id, x - 12, y + 12, 10, 20));
-		document.body.appendChild(svg);
-
-		svg.appendChild(createRectangle("t" + id, x, y + 12, 20, 20));
-		document.body.appendChild(svg);
-
-		svg.appendChild(createRectangle("d" + id, x + 22, y + 12, 10, 20));
-		document.body.appendChild(svg);
-
-		svg.appendChild(createRectangle("p" + id, x, y + 34, 20, 10));
-		document.body.appendChild(svg);
-
-		svg.appendChild(createText(x + 3, y + 60, id));
-		document.body.appendChild(svg);
-
-		x = x + 50;
-		id = id + cont;
-
-		if (id == 50) {
-			id = 61;
-			cont = 1;
-			x = x + 50;
-		}
-	}
-
-	x = 165;
-	y = 150;
-	id = 85;
-	cont = -1;
-	for ( var i = 0; i < 10; i++) {
-		svg.appendChild(createRectangle("v" + id, x, y, 20, 10));
-		document.body.appendChild(svg);
-
-		svg.appendChild(createRectangle("m" + id, x - 12, y + 12, 10, 20));
-		document.body.appendChild(svg);
-
-		svg.appendChild(createRectangle("t" + id, x, y + 12, 20, 20));
-		document.body.appendChild(svg);
-
-		svg.appendChild(createRectangle("d" + id, x + 22, y + 12, 10, 20));
-		document.body.appendChild(svg);
-
-		svg.appendChild(createRectangle("p" + id, x, y + 34, 20, 10));
-		document.body.appendChild(svg);
-
-		svg.appendChild(createText(x + 3, y + 60, id));
-		document.body.appendChild(svg);
-
-		x = x + 50;
-		id = id + cont;
-
-		if (id == 80) {
-			id = 71;
-			cont = 1;
-			x = x + 50;
-		}
-	}
-
-	x = 15;
-	y = 230;
-	id = 48;
-	cont = -1;
-	for ( var i = 0; i < 16; i++) {
-		svg.appendChild(createRectangle("v" + id, x, y, 20, 10));
-		document.body.appendChild(svg);
-
-		svg.appendChild(createRectangle("m" + id, x - 12, y + 12, 10, 20));
-		document.body.appendChild(svg);
-
-		svg.appendChild(createRectangle("t" + id, x, y + 12, 20, 20));
-		document.body.appendChild(svg);
-
-		svg.appendChild(createRectangle("d" + id, x + 22, y + 12, 10, 20));
-		document.body.appendChild(svg);
-
-		svg.appendChild(createRectangle("p" + id, x, y + 34, 20, 10));
-		document.body.appendChild(svg);
-
-		svg.appendChild(createText(x + 3, y + 60, id));
-		document.body.appendChild(svg);
-
-		x = x + 50;
-		id = id + cont;
-
-		if (id == 40) {
-			id = 31;
-			cont = 1;
-			x = x + 50;
-		}
-	}
-
 	var svgContainer = document.getElementById("form:accordion:svgContainer");
-	svgContainer.appendChild(svg);
+	if (svgContainer) {
+		currentTarget = null;
+		previousTarget = null;
+		procedureTooth = {};
 
-	loadProcedureTooth();
+		svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+		svgNS = svg.namespaceURI;
+		svg.setAttribute('width', 850);
+		svg.setAttribute('height', 310);
+
+		var x = 15;
+		var y = 10;
+		var id = 18;
+		var cont = -1;
+		for ( var i = 0; i < 16; i++) {
+			svg.appendChild(createRectangle("v" + id, x, y, 20, 10));
+			document.body.appendChild(svg);
+
+			svg.appendChild(createRectangle("m" + id, x - 12, y + 12, 10, 20));
+			document.body.appendChild(svg);
+
+			svg.appendChild(createRectangle("t" + id, x, y + 12, 20, 20));
+			document.body.appendChild(svg);
+
+			svg.appendChild(createRectangle("d" + id, x + 22, y + 12, 10, 20));
+			document.body.appendChild(svg);
+
+			svg.appendChild(createRectangle("p" + id, x, y + 34, 20, 10));
+			document.body.appendChild(svg);
+
+			svg.appendChild(createText(x + 3, y + 60, id));
+			document.body.appendChild(svg);
+
+			x = x + 50;
+			id = id + cont;
+
+			if (id == 10) {
+				id = 21;
+				cont = 1;
+				x = x + 50;
+			}
+		}
+
+		x = 165;
+		y = 80;
+		id = 55;
+		cont = -1;
+		for ( var i = 0; i < 10; i++) {
+			svg.appendChild(createRectangle("v" + id, x, y, 20, 10));
+			document.body.appendChild(svg);
+
+			svg.appendChild(createRectangle("m" + id, x - 12, y + 12, 10, 20));
+			document.body.appendChild(svg);
+
+			svg.appendChild(createRectangle("t" + id, x, y + 12, 20, 20));
+			document.body.appendChild(svg);
+
+			svg.appendChild(createRectangle("d" + id, x + 22, y + 12, 10, 20));
+			document.body.appendChild(svg);
+
+			svg.appendChild(createRectangle("p" + id, x, y + 34, 20, 10));
+			document.body.appendChild(svg);
+
+			svg.appendChild(createText(x + 3, y + 60, id));
+			document.body.appendChild(svg);
+
+			x = x + 50;
+			id = id + cont;
+
+			if (id == 50) {
+				id = 61;
+				cont = 1;
+				x = x + 50;
+			}
+		}
+
+		x = 165;
+		y = 150;
+		id = 85;
+		cont = -1;
+		for ( var i = 0; i < 10; i++) {
+			svg.appendChild(createRectangle("v" + id, x, y, 20, 10));
+			document.body.appendChild(svg);
+
+			svg.appendChild(createRectangle("m" + id, x - 12, y + 12, 10, 20));
+			document.body.appendChild(svg);
+
+			svg.appendChild(createRectangle("t" + id, x, y + 12, 20, 20));
+			document.body.appendChild(svg);
+
+			svg.appendChild(createRectangle("d" + id, x + 22, y + 12, 10, 20));
+			document.body.appendChild(svg);
+
+			svg.appendChild(createRectangle("p" + id, x, y + 34, 20, 10));
+			document.body.appendChild(svg);
+
+			svg.appendChild(createText(x + 3, y + 60, id));
+			document.body.appendChild(svg);
+
+			x = x + 50;
+			id = id + cont;
+
+			if (id == 80) {
+				id = 71;
+				cont = 1;
+				x = x + 50;
+			}
+		}
+
+		x = 15;
+		y = 230;
+		id = 48;
+		cont = -1;
+		for ( var i = 0; i < 16; i++) {
+			svg.appendChild(createRectangle("v" + id, x, y, 20, 10));
+			document.body.appendChild(svg);
+
+			svg.appendChild(createRectangle("m" + id, x - 12, y + 12, 10, 20));
+			document.body.appendChild(svg);
+
+			svg.appendChild(createRectangle("t" + id, x, y + 12, 20, 20));
+			document.body.appendChild(svg);
+
+			svg.appendChild(createRectangle("d" + id, x + 22, y + 12, 10, 20));
+			document.body.appendChild(svg);
+
+			svg.appendChild(createRectangle("p" + id, x, y + 34, 20, 10));
+			document.body.appendChild(svg);
+
+			svg.appendChild(createText(x + 3, y + 60, id));
+			document.body.appendChild(svg);
+
+			x = x + 50;
+			id = id + cont;
+
+			if (id == 40) {
+				id = 31;
+				cont = 1;
+				x = x + 50;
+			}
+		}
+
+		svgContainer.appendChild(svg);
+		loadProcedureTooth();
+	}
 }
 
 function createAnimation(id) {
@@ -237,12 +238,12 @@ function mouseOut(evt) {
 function selectTooth(evt) {
 	currentTarget = evt.target;
 	if (previousTarget) {
-		/*if (previousTarget.getAttribute("selected") == -1) {
-			previousTarget.setAttributeNS(null, "fill", "#eeeeee");
-		} else {
-			var color = "#" + previousTarget.getAttribute("colorApply");
-			previousTarget.setAttributeNS(null, "fill", color);
-		}*/
+		/*
+		 * if (previousTarget.getAttribute("selected") == -1) {
+		 * previousTarget.setAttributeNS(null, "fill", "#eeeeee"); } else { var
+		 * color = "#" + previousTarget.getAttribute("colorApply");
+		 * previousTarget.setAttributeNS(null, "fill", color); }
+		 */
 		var animate = document.getElementById("a" + previousTarget.id);
 		previousTarget.removeChild(animate);
 	}

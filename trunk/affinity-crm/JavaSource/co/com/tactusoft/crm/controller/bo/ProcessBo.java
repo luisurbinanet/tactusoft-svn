@@ -1283,6 +1283,12 @@ public class ProcessBo implements Serializable {
 				+ " and o.crmAppointment.crmProcedureDetail.typeHistory = '"
 				+ type + "'");
 	}
+	
+	public List<?> getListHistoryOdontology(
+			BigDecimal idPatient, String table) {
+		return dao.find("from " + table + " o where o.crmAppointment.crmPatient.id = "
+				+ idPatient);
+	}
 
 	public CrmHistoryOrganometry getHistoryOrganometry(BigDecimal idAppointment) {
 		List<CrmHistoryOrganometry> list = null;
