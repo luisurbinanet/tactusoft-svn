@@ -1283,11 +1283,10 @@ public class ProcessBo implements Serializable {
 				+ " and o.crmAppointment.crmProcedureDetail.typeHistory = '"
 				+ type + "'");
 	}
-	
-	public List<?> getListHistoryOdontology(
-			BigDecimal idPatient, String table) {
-		return dao.find("from " + table + " o where o.crmAppointment.crmPatient.id = "
-				+ idPatient);
+
+	public List<?> getListHistoryOdontology(BigDecimal idPatient, String table) {
+		return dao.find("from " + table
+				+ " o where o.crmAppointment.crmPatient.id = " + idPatient);
 	}
 
 	public CrmHistoryOrganometry getHistoryOrganometry(BigDecimal idAppointment) {
@@ -1387,11 +1386,15 @@ public class ProcessBo implements Serializable {
 	}
 
 	public List<CrmOdontologyOdontogram> getOdontologyOdontogram(
-			BigDecimal idAppointment) {
+			VwAppointment crmAppointment) {
 		List<CrmOdontologyOdontogram> list = null;
 		list = dao
 				.find("from CrmOdontologyOdontogram o where o.crmAppointment.id = "
-						+ idAppointment);
+						+ "(SELECT MAX(b.crmAppointment.id) FROM CrmOdontologyOdontogram b WHERE b.crmAppointment.crmPatient.id = "
+						+ crmAppointment.getPatId() + ")");
+		for (CrmOdontologyOdontogram row : list) {
+			row.setCrmAppointment(null);
+		}
 		return list;
 	}
 

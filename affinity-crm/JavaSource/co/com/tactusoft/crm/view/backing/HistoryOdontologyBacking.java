@@ -393,7 +393,7 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 
 		mapProcedureTooth = new HashMap<String, CrmOdotogramProcedure>();
 		crmOdontologyOdontogram = processService
-				.getOdontologyOdontogram(selectedAppointment.getId());
+				.getOdontologyOdontogram(selectedAppointment);
 		listOdontogramBean = new ArrayList<OdontogramBean>();
 		for (CrmOdontologyOdontogram row : crmOdontologyOdontogram) {
 			mapProcedureTooth.put(row.getTooth(),
@@ -1124,9 +1124,25 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 
 		List<CrmOdontologySoftTissue> listTempSoftTissue = (List<CrmOdontologySoftTissue>) processService
 				.getListHistoryOdontology(selectedPatient.getId(),
-						"CrmOdontologyTempJoint");
+						"CrmOdontologySoftTissue");
 		historySoftTissueModel = new HistorySoftTissueDataModel(
 				listTempSoftTissue);
+
+		List<CrmOdontologyPeriodontal> listPeriodontalTissue = (List<CrmOdontologyPeriodontal>) processService
+				.getListHistoryOdontology(selectedPatient.getId(),
+						"CrmOdontologyPeriodontal");
+		historyPeriodontalModel = new HistoryPeriodontalDataModel(
+				listPeriodontalTissue);
+
+		List<CrmOdontologySupplExams> listSupplExams = (List<CrmOdontologySupplExams>) processService
+				.getListHistoryOdontology(selectedPatient.getId(),
+						"CrmOdontologySupplExams");
+		historySupplExamsModel = new HistorySupplExamsDataModel(listSupplExams);
+
+		List<CrmOdontologyEvolution> listEvolution = (List<CrmOdontologyEvolution>) processService
+				.getListHistoryOdontology(selectedPatient.getId(),
+						"CrmOdontologyEvolution");
+		historyEvolutionModel = new HistoryEvolutionDataModel(listEvolution);
 
 		listDiagnosisView = processService.getListDiagnosisByPatient(
 				selectedPatient.getId(), consentType);

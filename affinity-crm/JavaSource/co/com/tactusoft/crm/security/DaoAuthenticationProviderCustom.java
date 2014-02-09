@@ -137,7 +137,7 @@ public class DaoAuthenticationProviderCustom extends
 			SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
 			sap.getLisParameter();
 
-			listBranch = tableService.getListBranch();
+			listBranch = tableService.getListBranchActive1000();
 			user.setListBranchAll(listBranch);
 
 			try {
