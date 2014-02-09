@@ -1009,6 +1009,9 @@ public class TablesBo implements Serializable {
 				result = -1;
 			} else if (ex.getCause() instanceof DataIntegrityViolationException) {
 				result = -2;
+			} else {
+				ex.printStackTrace();
+				result = -3;
 			}
 		}
 		return result;

@@ -202,6 +202,18 @@ public class UserBacking extends BaseBacking {
 		}
 	}
 
+	public void copyUserAction(ActionEvent event) {
+		generateListAction(null);
+		listUsersItems = null;
+		this.getListUsersItems();
+		CrmUser old = selected;
+		selected = new CrmUser();
+		selected.setCrmDepartment(old.getCrmDepartment());
+		selected.setState(Constant.STATE_ACTIVE);
+		crmDoctor = null;
+		crmNurse = null;
+	}
+
 	public void saveAction() {
 		String message = null;
 		boolean validatePassword = true;
@@ -289,7 +301,7 @@ public class UserBacking extends BaseBacking {
 
 			int result = tablesService.saveUser(selected, crmDoctor, crmNurse);
 
-			if (result != -1) {
+			if (result == 0) {
 				tablesService.saveUserBranch(selected,
 						listBranchUser.getTarget());
 				tablesService.saveUserRole(selected, listRole.getTarget());
@@ -314,6 +326,9 @@ public class UserBacking extends BaseBacking {
 				String paramValue = FacesUtil.getMessage("usr_username");
 				message = FacesUtil.getMessage("msg_record_unique_exception",
 						paramValue);
+				FacesUtil.addError(message);
+			} else {
+				message = FacesUtil.getMessage("msg_record_unique_exception");
 				FacesUtil.addError(message);
 			}
 		}
@@ -434,9 +449,11 @@ public class UserBacking extends BaseBacking {
 			}
 		} else {
 			if (tablesService != null) {
-				listSourceBranch = tablesService.getListBranchActive();
+				listSourceBranch = tablesService.getListBranchActive1000();
 				listSourceRole = tablesService.getListRoleActive();
 				listSourceProfile = tablesService.getListProfileActive();
+				listSourceBranchPostsale = tablesService
+						.getListBranchActive1000();
 			}
 		}
 
@@ -460,21 +477,6 @@ public class UserBacking extends BaseBacking {
 			message = FacesUtil.getMessage("msg_record_ok");
 			FacesUtil.addInfo(message);
 		}
-	}
-
-	public void copyUserAction(ActionEvent event) {
-		generateListAction(null);
-		listUsersItems = null;
-		this.getListUsersItems();
-		this.selected.setId(null);
-		this.selected.setUsername(null);
-		this.selected.setDoc(null);
-		this.selected.setNames(null);
-		this.selected.setSurnames(null);
-		this.selected.setEmail(null);
-		this.selected.setPhone(null);
-		this.selected.setExtension(null);
-		this.selected.setPassword(null);
 	}
 
 }
