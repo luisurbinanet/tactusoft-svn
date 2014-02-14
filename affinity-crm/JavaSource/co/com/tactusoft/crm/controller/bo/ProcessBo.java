@@ -240,7 +240,7 @@ public class ProcessBo implements Serializable {
 		if (entity.getId() == null) {
 			BigDecimal id = getId(CrmAppointment.class);
 			entity.setId(id);
-			String code = "C" + FacesUtil.lpad(id.toString(), '0', 5);
+			String code = "C" + FacesUtil.lpad(id.toString(), '0', 10);
 			entity.setCode(code);
 		}
 
