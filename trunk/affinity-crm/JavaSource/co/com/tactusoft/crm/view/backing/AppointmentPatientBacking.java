@@ -243,6 +243,7 @@ public class AppointmentPatientBacking extends BaseBacking {
 	}
 
 	public void addPatientAction(ActionEvent event) {
+		selectedPatient = selectedPatientTemp;
 		searchAppoinmnetConfirmedAction();
 	}
 

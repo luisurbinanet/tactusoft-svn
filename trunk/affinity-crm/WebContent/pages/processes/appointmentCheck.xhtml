@@ -139,13 +139,13 @@
 					<p:toolbar id="toolBar" style="width:100%">
 						<p:toolbarGroup align="left">
 							<p:commandButton value="#{msg['btn_search']}"
-								icon="ui-icon-search"
+								icon="ui-icon-search" process="@this,dialog2"
 								update="pnlTable2 recordTable2 btnAddPatient :form:growl"
 								action="#{appointmentPatientBacking.searchPatientAction}" />
 							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
 								icon="ui-icon-plusthick"
 								update=":form:pnlPatient :form:selectedTable"
-								oncomplete="dlg2.hide()"
+								oncomplete="dlg2.hide()" process="@this,dialog2"
 								actionListener="#{appointmentPatientBacking.addPatientAction}"
 								disabled="#{appointmentPatientBacking.disabledAddPatient}" />
 						</p:toolbarGroup>

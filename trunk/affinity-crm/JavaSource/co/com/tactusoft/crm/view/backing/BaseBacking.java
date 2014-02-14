@@ -948,6 +948,7 @@ public class BaseBacking implements Serializable {
 		patientModel = new PatientDataModel(listPatient);
 		docPatient = null;
 		namePatient = null;
+		telPatient = null;
 	}
 
 	public void handleCountryChange() {

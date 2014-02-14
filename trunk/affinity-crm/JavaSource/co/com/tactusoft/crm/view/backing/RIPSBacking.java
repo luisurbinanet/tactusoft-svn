@@ -13,6 +13,7 @@ import javax.inject.Named;
 import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.controller.bo.RIPSBo;
+import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 
 @Named("RIPSBacking")
@@ -27,6 +28,7 @@ public class RIPSBacking extends BaseBacking implements Serializable {
 	private Date startDate;
 	private Date endDate;
 
+	private String typeHistory;
 	private Map<String, String> options;
 	private List<String> selectedOptions;
 
@@ -41,6 +43,7 @@ public class RIPSBacking extends BaseBacking implements Serializable {
 		options.put("Archivo de Procedimientos", "RIPS3");
 		options.put("Archivo de Medicamentos", "RIPS4");
 		options.put("Archivo de Transacciones", "RIPS5");
+		typeHistory = Constant.MEDICAL_HISTORY_TYPE;
 	}
 
 	public Date getStartDate() {
@@ -57,6 +60,14 @@ public class RIPSBacking extends BaseBacking implements Serializable {
 
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+
+	public String getTypeHistory() {
+		return typeHistory;
+	}
+
+	public void setTypeHistory(String typeHistory) {
+		this.typeHistory = typeHistory;
 	}
 
 	public Map<String, String> getOptions() {
@@ -79,11 +90,23 @@ public class RIPSBacking extends BaseBacking implements Serializable {
 		return (files == null || files.length == 0) ? true : false;
 	}
 
+	public void handleHistoryTypeChange() {
+		options = new HashMap<String, String>();
+		options.put("Archivo de Usuarios", "RIPS1");
+		options.put("Archivo de Consulta", "RIPS2");
+		options.put("Archivo de Procedimientos", "RIPS3");
+		options.put("Archivo de Transacciones", "RIPS5");
+		if (typeHistory.equals(Constant.MEDICAL_HISTORY_TYPE)) {
+			options.put("Archivo de Medicamentos", "RIPS4");
+		}
+	}
+
 	public void generateAction() {
 		if (selectedOptions.size() > 0) {
 
 			fileName = FacesUtil.formatDate(new Date(), "yyyyMMddHHmmssS");
-			path = "/opt/rips/";
+			// path = "/opt/rips/";
+			path = "E:/CRM/rips/";
 
 			String startDateString = FacesUtil.formatDate(this.startDate,
 					"yyyy-MM-dd") + " 00:00:00";
@@ -96,7 +119,8 @@ public class RIPSBacking extends BaseBacking implements Serializable {
 			for (String option : selectedOptions) {
 				if (option.equals("RIPS1")) {
 					files[index] = this.RIPSService.getListPatient(path,
-							fileName, idBranch, startDateString, endDateString);
+							fileName, idBranch, startDateString, endDateString,
+							typeHistory);
 					index++;
 				} else if (option.equals("RIPS2")) {
 					files[index] = this.RIPSService.getListAppointment(path,

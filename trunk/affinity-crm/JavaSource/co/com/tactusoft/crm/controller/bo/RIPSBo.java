@@ -29,7 +29,8 @@ public class RIPSBo implements Serializable {
 	private CustomHibernateDao dao;
 
 	public File getListPatient(String path, String fileName,
-			BigDecimal idBranch, String startDate, String endDate) {
+			BigDecimal idBranch, String startDate, String endDate,
+			String typeHistory) {
 		File file = new File(path + "/rips_paciente" + fileName + ".txt");
 		try {
 			FileWriter outFile = null;
@@ -41,7 +42,7 @@ public class RIPSBo implements Serializable {
 					+ "' AND '"
 					+ endDate
 					+ "' AND o.idBranch = "
-					+ idBranch;
+					+ idBranch + " AND typeHistory = '" + typeHistory + "'";
 			List<VwRipsPatient> list = dao.find(sql);
 
 			for (VwRipsPatient row : list) {
