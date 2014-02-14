@@ -38,7 +38,7 @@ import javax.persistence.TemporalType;
 		+ "from (select t9.* , (select max(aubel) as aubel from sapsr3.vbrp t8 where t9.vbeln=t8.vbeln and mandt=300 ) as aubel\n"
 		+ "from sapsr3.vbrk t9 where t9.mandt=300 ) FacEnc \n"
 		+ "left join sapsr3.vbrp FacDet on FacEnc.vbeln=FacDet.vbeln  and FacDet.mandt=FacEnc.mandt\n"
-		+ "left join sapsr3.vbak Ped on (FacEnc.aubel=Ped.vbeln and Ped.mandt=FacEnc.mandt and Ped.auart in ('ZCM','ZCMT','ZFCS','ZFCT','ZOP','ZOT'))\n"
+		+ "left join sapsr3.vbak Ped on (FacEnc.aubel=Ped.vbeln and Ped.mandt=FacEnc.mandt and Ped.auart in ('ZCM','ZCMT','ZFCS','ZFCT','ZOP','ZOT','ZODT'))\n"
 		+ "left join sapsr3.kna1 Cli on FacEnc.KUNRG=Cli.kunnr and Cli.mandt=FacEnc.mandt\n"
 		+ "left join (select * from sapsr3.vbpa where parvw  ='Z2'  ) Intr on ( Intr.vbeln=Ped.vbeln and Intr.mandt=FacEnc.mandt)    \n"
 		+ "left join sapsr3.makt Mat on FacDet.mandt = Mat.mandt and FacDet.matnr = Mat.matnr and MAt.SPRAS = 'S'\n"
