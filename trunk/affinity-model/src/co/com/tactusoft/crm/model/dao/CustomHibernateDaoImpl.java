@@ -46,6 +46,7 @@ public class CustomHibernateDaoImpl implements CustomHibernateDao, Serializable 
 	public Integer persist(Object entity) {
 		int result = 0;
 		try {
+			getCurrentSession().clear();
 			getCurrentSession().saveOrUpdate(entity);
 			getCurrentSession().flush();
 		} catch (ConstraintViolationException ex) {

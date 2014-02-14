@@ -35,14 +35,15 @@ public class VwRipsPatient implements java.io.Serializable {
 	private String region;
 	private String city;
 	private String typeHousing;
+	private String typeHistory;
 
 	public VwRipsPatient() {
 	}
 
 	public VwRipsPatient(BigDecimal idPatient, BigDecimal idBranch,
-			int membership, String surnames, String surnames2, String firstnames,
-			String firstnames2, double age, int sizeUnit, String gender,
-			String typeHousing) {
+			int membership, String surnames, String surnames2,
+			String firstnames, String firstnames2, double age, int sizeUnit,
+			String gender, String typeHousing, String typeHistory) {
 		this.idPatient = idPatient;
 		this.idBranch = idBranch;
 		this.membership = membership;
@@ -54,13 +55,14 @@ public class VwRipsPatient implements java.io.Serializable {
 		this.sizeUnit = sizeUnit;
 		this.gender = gender;
 		this.typeHousing = typeHousing;
+		this.typeHistory = typeHistory;
 	}
 
 	public VwRipsPatient(BigDecimal idPatient, BigDecimal idBranch,
 			Date appointmentDate, String branch, String docType, String doc,
-			int membership, String surnames, String surnames2, String firstnames,
-			String firstnames2, double age, int sizeUnit, String gender,
-			String region, String city, String typeHousing) {
+			int membership, String surnames, String surnames2,
+			String firstnames, String firstnames2, double age, int sizeUnit,
+			String gender, String region, String city, String typeHousing) {
 		this.idPatient = idPatient;
 		this.idBranch = idBranch;
 		this.appointmentDate = appointmentDate;
@@ -234,4 +236,12 @@ public class VwRipsPatient implements java.io.Serializable {
 		this.typeHousing = typeHousing;
 	}
 
+	@Column(name = "type_history", nullable = false, length = 45)
+	public String getTypeHistory() {
+		return typeHistory;
+	}
+
+	public void setTypeHistory(String typeHistory) {
+		this.typeHistory = typeHistory;
+	}
 }
