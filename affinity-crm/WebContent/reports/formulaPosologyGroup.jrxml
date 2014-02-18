@@ -110,7 +110,7 @@ order by a.id]]>
 		c.unit,
 		c.cod_material,
 		ucase(c.desc_material) desc_material,
-		ucase(c.posology) posology,
+		ucase(a.posology) posology,
 		e.doc,
 		cast(d.start_appointment_date as Date) appointment_date,
 		concat(e.firstnames,' ', e.surnames) as name_patient,
