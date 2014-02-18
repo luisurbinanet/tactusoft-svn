@@ -141,6 +141,14 @@
 								value="#{procedureBacking.selected.maxMedication}"
 								symbolPosition="s" decimalPlaces="0" style="width:70px" />
 
+							<h:outputText value="#{msg['prc_min_diagnosis']}" />
+							<pe:inputNumber value="#{procedureBacking.selected.minDiagnosis}"
+								symbolPosition="s" decimalPlaces="0" style="width:70px" />
+
+							<h:outputText value="#{msg['prc_max_diagnosis']}" />
+							<pe:inputNumber value="#{procedureBacking.selected.maxDiagnosis}"
+								symbolPosition="s" decimalPlaces="0" style="width:70px" />
+
 							<h:outputText value="#{msg['prc_study_case']}" />
 							<p:selectBooleanCheckbox
 								value="#{procedureBacking.selected.caseStudy}" />
