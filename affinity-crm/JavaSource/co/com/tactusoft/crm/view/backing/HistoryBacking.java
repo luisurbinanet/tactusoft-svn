@@ -2278,18 +2278,31 @@ public class HistoryBacking extends BaseBacking {
 
 				if (this.getRolePrincipal().equals(Constant.ROLE_DOCTOR)) {
 
-					if (listDiagnosis.size() == 0) {
+					int numDiagnosis = listDiagnosis.size();
+					if (numDiagnosis == 0) {
 						message = FacesUtil.getMessage("his_msg_message_dig_1");
 						FacesUtil.addWarn(message);
 					} else {
-						for (CrmDiagnosis row : listDiagnosis) {
-							if (FacesUtil.isEmptyOrBlank(row.getPosology())) {
-								message = FacesUtil
-										.getMessage("his_msg_message_dig_2");
-								FacesUtil.addWarn(message);
-								break;
-							}
+						int minDiagnosis = currentAppointment
+								.getCrmProcedureDetail().getMinDiagnosis();
+						int maxDiagnosis = currentAppointment
+								.getCrmProcedureDetail().getMaxDiagnosis();
+						if (numDiagnosis < minDiagnosis
+								|| numDiagnosis > maxDiagnosis) {
+							message = FacesUtil.getMessage(
+									"his_msg_message_med_6",
+									String.valueOf(minDiagnosis),
+									String.valueOf(maxDiagnosis));
+							FacesUtil.addWarn(message);
 						}
+
+						/*
+						 * for (CrmDiagnosis row : listDiagnosis) { if
+						 * (FacesUtil.isEmptyOrBlank(row.getPosology())) {
+						 * message = FacesUtil
+						 * .getMessage("his_msg_message_dig_2");
+						 * FacesUtil.addWarn(message); break; } }
+						 */
 
 						if (listMedication.size() == 0) {
 							message = FacesUtil
@@ -2321,6 +2334,15 @@ public class HistoryBacking extends BaseBacking {
 										"his_msg_message_med_3",
 										String.valueOf(maxMedication));
 								FacesUtil.addWarn(message);
+							}
+
+							for (CrmMedication row : listMedication) {
+								if (FacesUtil.isEmptyOrBlank(row.getPosology())) {
+									message = FacesUtil
+											.getMessage("his_msg_message_dig_2");
+									FacesUtil.addWarn(message);
+									break;
+								}
 							}
 						}
 					}
