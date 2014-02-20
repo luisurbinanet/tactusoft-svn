@@ -86,7 +86,14 @@ public class TablesBo implements Serializable {
 	}
 
 	public List<CrmDoctor> getListDoctor() {
-		return dao.find("from CrmDoctor o");
+		String branchs = "";
+		for (CrmBranch row : FacesUtil.getCurrentUserData().getListBranch()) {
+			branchs = branchs + row.getId() + ",";
+		}
+		branchs = branchs.substring(0, branchs.length() - 1);
+		return dao
+				.find("select distinct o.crmDoctor from CrmDoctorSchedule o where o.crmBranch.id in ("
+						+ branchs + ")");
 	}
 
 	public List<CrmCaseStudy> getListCaseStudy(String startDate, String endDate) {

@@ -60,7 +60,7 @@
 
 				<p:dataTable id="recordTable" var="rec"
 					value="#{scheduleBacking.listScheduleBranch}" paginator="true"
-					rows="20" style="width:100%">
+					rows="20" style="width:100%" emptyMessage="#{msg['glb_no_records_found']}">
 
 					<p:column headerText="#{msg['spc_code']}">
 						<h:outputLabel value="#{rec.line}" />

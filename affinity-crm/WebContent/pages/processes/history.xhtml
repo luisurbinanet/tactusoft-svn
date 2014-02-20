@@ -919,18 +919,13 @@
 									</p:column>
 
 									<p:column style="width:8%">
-										<h:panelGrid columns="2" width="100%"
+										<h:panelGrid columns="1" width="100%"
 											styleClass="ui-widget-content grid">
 											<p:commandButton oncomplete="dlgMedicine.show()"
 												update=":form:dialogMedicine" icon="ui-icon-plusthick"
 												title="#{msg['btn_select_medication']}"
-												action="#{historyBacking.selectMedicationAction}">
-												<f:setPropertyActionListener value="#{rec}"
-													target="#{historyBacking.selectedDiagnosis}" />
-											</p:commandButton>
-											<p:commandButton oncomplete="dlgPosology.show()"
-												update=":form:dialogPosology" icon="ui-icon-comment"
-												title="#{msg['btn_add_posology']}">
+												action="#{historyBacking.selectMedicationAction}"
+												process="@this,dtbDiagnosis">
 												<f:setPropertyActionListener value="#{rec}"
 													target="#{historyBacking.selectedDiagnosis}" />
 											</p:commandButton>
@@ -1137,8 +1132,7 @@
 									</p:selectOneMenu>
 
 									<h:outputLabel value="#{msg['cst_perc']}" />
-									<p:selectOneMenu style="width:600px" required="true"
-										label="#{msg['cst_perc']}"
+									<p:selectOneMenu style="width:600px" label="#{msg['cst_perc']}"
 										value="#{historyBacking.selectedCaseStudy.percent}">
 										<f:selectItem itemValue=""
 											itemLabel="#{msg['glb_default_value']}" />
@@ -1210,10 +1204,11 @@
 						<f:facet name="footer">
 							<p:spacer height="10" />
 							<p:commandButton value="#{msg['btn_search']}"
-								icon="ui-icon-search" update="pnlTable3 recordTable3 btnAddCIE"
+								process="@this,dialogCie" icon="ui-icon-search"
+								update="pnlTable3 recordTable3 btnAddCIE"
 								actionListener="#{historyBacking.searchCIEAction}" />
 							<p:commandButton id="btnAddCIE" value="#{msg['btn_add']}"
-								icon="ui-icon-plusthick"
+								icon="ui-icon-plusthick" process="@this,dialogCie"
 								update="recordTable3 :form:accordion:dtbDiagnosis :form:accordion:dtbTherapy :form:accordion:dtbOtherMedication :form:accordion:dtbExamns :form:accordion:pnlStudyCase"
 								actionListener="#{historyBacking.addCieAction}"
 								disabled="#{historyBacking.disabledAddCie}" />
@@ -1246,7 +1241,7 @@
 
 				<p:dialog header="#{historyBacking.titleMedication}"
 					widgetVar="dlgMedicine" resizable="false" id="dialogMedicine"
-					showEffect="fade" hideEffect="explode" modal="true" width="600"
+					showEffect="fade" hideEffect="explode" modal="true" width="650"
 					height="500">
 
 					<h:panelGrid columns="2" width="100%">
@@ -1297,7 +1292,7 @@
 						<p:dataTable id="recordTable4" var="rec"
 							value="#{historyBacking.materialModel}" rowKey="#{rec.code}"
 							selection="#{historyBacking.selectedMaterial}" paginator="true"
-							rows="15" style="width:570px"
+							rows="15" style="width:600px"
 							emptyMessage="#{msg['glb_no_records_found']}">
 
 							<p:column selectionMode="single" style="width:18px" />
@@ -1333,7 +1328,8 @@
 						value="#{historyBacking.medicationModel}"
 						selection="#{historyBacking.selectedMedication}"
 						rowKey="#{rec.id}" paginator="true" rows="15" style="width:100%"
-						emptyMessage="#{msg['glb_no_records_found']}">
+						emptyMessage="#{msg['glb_no_records_found']}" editable="true"
+						editMode="cell">
 
 						<p:column selectionMode="multiple" style="width:18px" />
 
@@ -1353,6 +1349,11 @@
 							style="width:100px">
 							<pe:inputNumber value="#{rec.unit}" symbolPosition="s"
 								decimalPlaces="0" style="width:100px" minValue="1" maxValue="99" />
+						</p:column>
+
+						<p:column headerText="#{msg['cie_grp_posology']}">
+							<h:inputTextarea id="txtPosology" value="#{rec.posology}"
+								rows="5" />
 						</p:column>
 
 						<f:facet name="footer">

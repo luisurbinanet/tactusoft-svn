@@ -2001,6 +2001,14 @@ public class HistoryBacking extends BaseBacking {
 						+ FacesUtil.getMessage("glb_required", field);
 				FacesUtil.addWarn(message);
 			}
+
+			if (selectedCaseStudy.getPercent() == 0) {
+				field = FacesUtil.getMessage("cst_perc");
+				message = FacesUtil.getMessage("title_case_study", field);
+				message = message + " - "
+						+ FacesUtil.getMessage("glb_required", field);
+				FacesUtil.addWarn(message);
+			}
 		}
 
 		if (message == null) {
