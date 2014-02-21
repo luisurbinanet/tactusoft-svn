@@ -160,14 +160,13 @@ public class TablesBo implements Serializable {
 	private List<CrmCampaign> getListCampaignActive(int type) {
 		String callDate = FacesUtil.formatDate(new Date(), "yyyy-MM-dd");
 		return dao
-				.find("SELECT DISTINCT o.crmCampaign FROM CrmCampaignDetail o WHERE o.crmCampaign.crmUser.id = "
+				.find("FROM CrmCampaign a WHERE a.crmUser.id = "
 						+ FacesUtil.getCurrentIdUsuario()
-						+ " AND Date(o.callDate) <= '"
-						+ callDate
-						+ "' AND o.idCampaignType = "
-						+ type
-						+ " AND o.status = 0 ORDER BY o.crmCampaign.state, o.crmCampaign.dateCall, o.crmCampaign.orderField",
-						1);
+						+ " AND a.id IN (SELECT b.crmCampaign.id FROM CrmCampaignDetail b"
+						+ " WHERE Date(b.callDate) <= '" + callDate
+						+ "' AND b.idCampaignType = " + type
+						+ " AND b.status = 0)"
+						+ " ORDER BY a.state, a.dateCall, a.orderField", 1);
 	}
 
 	public List<CrmCampaignMedication> getListCampaignMedication(
@@ -961,6 +960,10 @@ public class TablesBo implements Serializable {
 	}
 
 	public Integer saveCampaignDetail(CrmCampaignDetail entity) {
+		return this.persist(entity);
+	}
+
+	public Integer saveCampaignMedication(CrmCampaignMedication entity) {
 		return this.persist(entity);
 	}
 

@@ -22,7 +22,8 @@
 							action="#{guidelineBacking.newAction}" oncomplete="dlg.show()"
 							update=":editForm:dialog" />
 						<p:commandButton value="#{msg['btn_edit']}" icon="ui-icon-pencil"
-							oncomplete="dlg.show()" update=":editForm:pnlDetail :editForm:editor" />
+							oncomplete="dlg.show()"
+							update=":editForm:pnlDetail :editForm:editor" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -35,15 +36,18 @@
 
 					<p:column selectionMode="single" style="width:18px" />
 
-					<p:column headerText="#{msg['gui_desc_media']}">
+					<p:column headerText="#{msg['gui_desc_media']}"
+						filterMatchMode="contains" filterBy="descMedia">
 						<h:outputLabel value="#{rec.descMedia}" />
 					</p:column>
 
-					<p:column headerText="#{msg['gui_phone']}">
+					<p:column headerText="#{msg['gui_phone']}"
+						filterMatchMode="contains" filterBy="phone">
 						<h:outputLabel value="#{rec.phone}" />
 					</p:column>
 
-					<p:column headerText="#{msg['gui_guideline']}">
+					<p:column headerText="#{msg['gui_guideline']}"
+						filterMatchMode="contains" filterBy="guideline">
 						<h:outputLabel value="#{rec.guideline}" />
 					</p:column>
 
@@ -65,8 +69,7 @@
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_save']}" icon="ui-icon-disk"
 							action="#{guidelineBacking.saveAction}"
-							update="growl :form:recordTable"
-							oncomplete="dlg.hide();" />
+							update="growl :form:recordTable" oncomplete="dlg.hide();" />
 						<p:commandButton value="#{msg['btn_close']}"
 							icon="ui-icon-closethick" update="growl :form:recordTable"
 							process="@none" oncomplete="dlg.hide();" />

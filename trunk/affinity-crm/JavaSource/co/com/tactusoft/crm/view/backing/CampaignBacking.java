@@ -1164,6 +1164,16 @@ public class CampaignBacking extends BaseBacking {
 			newCrmCampaignDetail.setCallDate(currentDate);
 			newCrmCampaignDetail.setStatus(0);
 			tablesService.saveCampaignDetail(newCrmCampaignDetail);
+
+			if (newCrmCampaignDetail.getIdCampaignType() == Constant.RECALL_MEDICATION) {
+				for (CrmCampaignMedication row : listDetailMedication) {
+					CrmCampaignMedication newCrmCampaignMedication = new CrmCampaignMedication();
+					newCrmCampaignMedication = row;
+					newCrmCampaignMedication.setCrmCampaign(newCrmCampaign);
+					tablesService
+							.saveCampaignMedication(newCrmCampaignMedication);
+				}
+			}
 		}
 	}
 
