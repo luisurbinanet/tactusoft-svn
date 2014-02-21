@@ -2029,6 +2029,28 @@ public class HistoryBacking extends BaseBacking {
 
 			if (result == 0) {
 
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getPharmacological())) {
+					selectedHistoryRecord
+							.setPharmacological(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getImmunizations())) {
+					selectedHistoryRecord
+							.setImmunizations(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getTransfusion())) {
+					selectedHistoryRecord
+							.setTransfusion(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord.getOther())) {
+					selectedHistoryRecord.setOther(Constant.HISTORY_NOT_REFER);
+				}
+
 				if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getHead())) {
 					selectedHistoryHistory.setHead(Constant.HISTORY_NOT_REFER);
 				}
@@ -2207,67 +2229,62 @@ public class HistoryBacking extends BaseBacking {
 				if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique
 						.getGeneralState())) {
 					selectedHistoryPhysique
-							.setGeneralState(Constant.HISTORY_NOT_REFER);
+							.setGeneralState(Constant.HISTORY_NORMAL);
 				}
 
 				if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique
 						.getHeadNeck())) {
 					selectedHistoryPhysique
-							.setHeadNeck(Constant.HISTORY_NOT_REFER);
+							.setHeadNeck(Constant.HISTORY_NORMAL);
 				}
 
 				if (FacesUtil
 						.isEmptyOrBlank(selectedHistoryPhysique.getChest())) {
-					selectedHistoryPhysique
-							.setChest(Constant.HISTORY_NOT_REFER);
+					selectedHistoryPhysique.setChest(Constant.HISTORY_NORMAL);
 				}
 
 				if (FacesUtil
 						.isEmptyOrBlank(selectedHistoryPhysique.getLungs())) {
-					selectedHistoryPhysique
-							.setLungs(Constant.HISTORY_NOT_REFER);
+					selectedHistoryPhysique.setLungs(Constant.HISTORY_NORMAL);
 				}
 
 				if (FacesUtil
 						.isEmptyOrBlank(selectedHistoryPhysique.getHeart())) {
-					selectedHistoryPhysique
-							.setHeart(Constant.HISTORY_NOT_REFER);
+					selectedHistoryPhysique.setHeart(Constant.HISTORY_NORMAL);
 				}
 
 				if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique
 						.getAbdomen())) {
-					selectedHistoryPhysique
-							.setAbdomen(Constant.HISTORY_NOT_REFER);
+					selectedHistoryPhysique.setAbdomen(Constant.HISTORY_NORMAL);
 				}
 
 				if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique
 						.getGenitals())) {
 					selectedHistoryPhysique
-							.setGenitals(Constant.HISTORY_NOT_REFER);
+							.setGenitals(Constant.HISTORY_NORMAL);
 				}
 
 				if (FacesUtil
 						.isEmptyOrBlank(selectedHistoryPhysique.getOsteo())) {
-					selectedHistoryPhysique
-							.setOsteo(Constant.HISTORY_NOT_REFER);
+					selectedHistoryPhysique.setOsteo(Constant.HISTORY_NORMAL);
 				}
 
 				if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique.getTips())) {
-					selectedHistoryPhysique.setTips(Constant.HISTORY_NOT_REFER);
+					selectedHistoryPhysique.setTips(Constant.HISTORY_NORMAL);
 				}
 
 				if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique
 						.getHighlights())) {
 					selectedHistoryPhysique
-							.setHighlights(Constant.HISTORY_NOT_REFER);
+							.setHighlights(Constant.HISTORY_NORMAL);
 				}
 
 				if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique.getSkin())) {
-					selectedHistoryPhysique.setSkin(Constant.HISTORY_NOT_REFER);
+					selectedHistoryPhysique.setSkin(Constant.HISTORY_NORMAL);
 				}
 
 				if (FacesUtil.isEmptyOrBlank(selectedHistoryPhysique.getObs())) {
-					selectedHistoryPhysique.setObs(Constant.HISTORY_NOT_REFER);
+					selectedHistoryPhysique.setObs(Constant.HISTORY_NORMAL);
 				}
 
 				if (this.getRolePrincipal().equals(Constant.ROLE_DOCTOR)) {

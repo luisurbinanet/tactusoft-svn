@@ -1347,13 +1347,31 @@
 
 						<p:column headerText="#{msg['sal_material_amount']}"
 							style="width:100px">
-							<pe:inputNumber value="#{rec.unit}" symbolPosition="s"
-								decimalPlaces="0" style="width:100px" minValue="1" maxValue="99" />
+							<p:cellEditor>
+								<f:facet name="output">
+									<pe:inputNumber value="#{rec.unit}" symbolPosition="s"
+										decimalPlaces="0" style="width:100px" minValue="1"
+										maxValue="99" />
+								</f:facet>
+								<f:facet name="input">
+									<pe:inputNumber value="#{rec.unit}" symbolPosition="s"
+										decimalPlaces="0" style="width:100px" minValue="1"
+										maxValue="99" />
+								</f:facet>
+							</p:cellEditor>
 						</p:column>
 
 						<p:column headerText="#{msg['cie_grp_posology']}">
-							<h:inputTextarea id="txtPosology" value="#{rec.posology}"
-								rows="5" />
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:inputTextarea id="txtPosologyOut" value="#{rec.posology}"
+										rows="5" />
+								</f:facet>
+								<f:facet name="input">
+									<h:inputTextarea id="txtPosologyIn" value="#{rec.posology}"
+										rows="5" />
+								</f:facet>
+							</p:cellEditor>
 						</p:column>
 
 						<f:facet name="footer">
