@@ -125,7 +125,12 @@
 					<h:outputLabel value="#{msg['doc_medical_license']}" />
 					<p:inputText value="#{doctorBacking.selected.medicalLicense}"
 						style="width:250px" label="#{msg['doc_medical_license']}"
-						required="true" />
+						required="true" maxlength="100" />
+
+					<h:outputLabel value="#{msg['doc_university']}" />
+					<p:inputText value="#{doctorBacking.selected.university}"
+						style="width:250px" label="#{msg['doc_university']}"
+						maxlength="1000" />
 
 					<h:outputLabel value="#{msg['doc_speciality']}" />
 					<p:selectOneMenu value="#{doctorBacking.selected.crmSpeciality.id}"

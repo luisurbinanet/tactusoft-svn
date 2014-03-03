@@ -101,7 +101,7 @@ order by a.id]]>
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<parameter name="P_IMAGE" class="java.lang.String">
-		<defaultValueExpression><![CDATA["E:\\CRM\\workspace\\affinity-crm\\WebContent\\images\\"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["E:\\workspace\\affinity-crm\\WebContent\\images\\"]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[select  c.id,a.id_appointment,
@@ -111,12 +111,12 @@ order by a.id]]>
 		c.cod_material,
 		ucase(c.desc_material) desc_material,
 		ucase(c.posology) posology,
+		ucase(a.posology) posology_group,
 		e.doc,
 		cast(d.start_appointment_date as Date) appointment_date,
 		concat(e.firstnames,' ', e.surnames) as name_patient,
 		e.doc as doc_patient,
-        f.medical_license,
-		f.names as name_doctor,
+		CONCAT(IFNULL(f.medical_license,''), ' ', f.names) as name_doctor,
 		concat(g.code, ' - ',g.name) as name_branch
 from crm_diagnosis a join crm_cie b on a.id_cie = b.id
 join crm_medication c on a.id_appointment = c.id_appointment and a.id_cie = c.id_cie
@@ -133,12 +133,12 @@ select  c.id,c.id_appointment,
 		c.cod_material,
 		ucase(c.desc_material),
 		ucase(posology),
+		' ' posology_group,
 		e.doc,
 		cast(d.start_appointment_date as Date) appointment_date,
 		concat(e.firstnames,' ', e.surnames) as name_patient,
         e.doc as doc_patient,
-		f.medical_license,
-		f.names as name_doctor,
+		CONCAT(IFNULL(f.medical_license,''), ' ', f.names) as name_doctor,
 		concat(g.code, ' - ',g.name) as name_branch
 from crm_medication c
 join crm_appointment d on c.id_appointment = d.id
@@ -172,6 +172,7 @@ ORDER BY 1]]>
 	<field name="posology" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="posology_group" class="java.lang.String"/>
 	<field name="doc" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -182,28 +183,29 @@ ORDER BY 1]]>
 	<field name="doc_patient" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="medical_license" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
 	<field name="name_doctor" class="java.lang.String"/>
 	<field name="name_branch" class="java.lang.String"/>
 	<group name="group_cie">
 		<groupExpression><![CDATA[$F{id_cie}]]></groupExpression>
 		<groupHeader>
-			<band height="20">
+			<band height="39">
 				<textField isStretchWithOverflow="true">
-					<reportElement uuid="6734ef12-a28c-4963-8b42-50c6bfe9fd5a" isPrintRepeatedValues="false" x="0" y="0" width="358" height="20"/>
+					<reportElement isPrintRepeatedValues="false" x="0" y="0" width="204" height="39" uuid="6734ef12-a28c-4963-8b42-50c6bfe9fd5a"/>
 					<textElement>
 						<font fontName="Arial" size="10" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{desc_cie}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="204" y="0" width="154" height="39" uuid="a6736508-7be0-49ca-920e-403ed3383e8f"/>
+					<textFieldExpression><![CDATA[$F{posology_group}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
 		<groupFooter>
 			<band height="12">
 				<line>
-					<reportElement uuid="5b7eb3e9-923b-4386-b701-f469eeef6d65" x="0" y="3" width="358" height="1" forecolor="#009999"/>
+					<reportElement x="0" y="3" width="358" height="1" forecolor="#009999" uuid="5b7eb3e9-923b-4386-b701-f469eeef6d65"/>
 					<graphicElement>
 						<pen lineWidth="2.0" lineStyle="Double"/>
 					</graphicElement>
@@ -214,35 +216,35 @@ ORDER BY 1]]>
 	<title>
 		<band height="54" splitType="Stretch">
 			<textField>
-				<reportElement uuid="fb85831b-54e6-420d-bfcd-274dc2ff4fc3" x="235" y="1" width="123" height="15"/>
+				<reportElement x="235" y="1" width="123" height="15" uuid="fb85831b-54e6-420d-bfcd-274dc2ff4fc3"/>
 				<textElement>
-					<font fontName="Arial" size="9"/>
+					<font fontName="Arial" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name_doctor}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="8f0bc0ea-63f2-4dec-a63a-dccc937aaefa" x="47" y="1" width="128" height="15"/>
+				<reportElement x="47" y="1" width="128" height="15" uuid="8f0bc0ea-63f2-4dec-a63a-dccc937aaefa"/>
 				<textElement>
 					<font fontName="Arial" size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name_branch}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement uuid="61702f48-9bba-4e85-b708-edbce66e3d79" x="235" y="39" width="123" height="15"/>
+				<reportElement x="235" y="39" width="123" height="15" uuid="61702f48-9bba-4e85-b708-edbce66e3d79"/>
 				<textElement>
 					<font fontName="Arial" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{appointment_date}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="4837340c-f939-4456-a360-ac9d8c2d7b62" x="47" y="20" width="311" height="15"/>
+				<reportElement x="47" y="20" width="311" height="15" uuid="4837340c-f939-4456-a360-ac9d8c2d7b62"/>
 				<textElement>
 					<font fontName="Arial" size="9" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name_patient}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="6491ee03-fae5-4f3e-8d79-8c4529348a26" x="47" y="39" width="128" height="15"/>
+				<reportElement x="47" y="39" width="128" height="15" uuid="6491ee03-fae5-4f3e-8d79-8c4529348a26"/>
 				<textElement>
 					<font fontName="Arial" isBold="false"/>
 				</textElement>
@@ -253,21 +255,21 @@ ORDER BY 1]]>
 	<pageHeader>
 		<band height="31" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="535a5a5f-6fb6-4495-8f88-4ab2f31902bf" x="0" y="12" width="126" height="15"/>
+				<reportElement x="0" y="12" width="126" height="15" uuid="535a5a5f-6fb6-4495-8f88-4ab2f31902bf"/>
 				<textElement textAlignment="Center">
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Medicamentos]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="5cc47441-d4fb-4934-883a-6b5a18f2758d" x="142" y="12" width="216" height="15"/>
+				<reportElement x="142" y="12" width="216" height="15" uuid="5cc47441-d4fb-4934-883a-6b5a18f2758d"/>
 				<textElement textAlignment="Center">
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Posología]]></text>
 			</staticText>
 			<line>
-				<reportElement uuid="5b7eb3e9-923b-4386-b701-f469eeef6d65" x="0" y="28" width="358" height="1" forecolor="#009999"/>
+				<reportElement x="0" y="28" width="358" height="1" forecolor="#009999" uuid="5b7eb3e9-923b-4386-b701-f469eeef6d65"/>
 				<graphicElement>
 					<pen lineWidth="2.0" lineStyle="Double"/>
 				</graphicElement>
@@ -275,23 +277,23 @@ ORDER BY 1]]>
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="23" splitType="Stretch">
+		<band height="37" splitType="Stretch">
 			<textField>
-				<reportElement uuid="bb682a46-b8b7-4d50-a9ce-f2dedd3dfead" x="17" y="0" width="109" height="23" isPrintWhenDetailOverflows="true"/>
+				<reportElement x="17" y="0" width="109" height="23" isPrintWhenDetailOverflows="true" uuid="bb682a46-b8b7-4d50-a9ce-f2dedd3dfead"/>
 				<textElement>
 					<font fontName="Arial" size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{desc_material}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="7b354bad-46ff-4ec4-97b9-87037b526d98" x="0" y="0" width="17" height="23"/>
+				<reportElement x="0" y="0" width="17" height="23" uuid="7b354bad-46ff-4ec4-97b9-87037b526d98"/>
 				<textElement>
 					<font fontName="Arial" size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{unit}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement uuid="c97e21ae-df63-46d9-97f0-3c16107d05e1" isPrintRepeatedValues="false" x="142" y="0" width="216" height="23" printWhenGroupChanges="group_cie"/>
+				<reportElement x="142" y="0" width="216" height="23" printWhenGroupChanges="group_cie" uuid="c97e21ae-df63-46d9-97f0-3c16107d05e1"/>
 				<textElement>
 					<font fontName="Arial" size="9"/>
 				</textElement>

@@ -919,13 +919,20 @@
 									</p:column>
 
 									<p:column style="width:8%">
-										<h:panelGrid columns="1" width="100%"
+										<h:panelGrid columns="2" width="100%"
 											styleClass="ui-widget-content grid">
 											<p:commandButton oncomplete="dlgMedicine.show()"
 												update=":form:dialogMedicine" icon="ui-icon-plusthick"
 												title="#{msg['btn_select_medication']}"
 												action="#{historyBacking.selectMedicationAction}"
 												process="@this,dtbDiagnosis">
+												<f:setPropertyActionListener value="#{rec}"
+													target="#{historyBacking.selectedDiagnosis}" />
+											</p:commandButton>
+											<p:commandButton oncomplete="dlgPosology.show()"
+												update=":form:dialogPosology" icon="ui-icon-comment"
+												title="#{msg['btn_add_posology_odo']}"
+												action="#{historyBacking.selectPosologyAction}">
 												<f:setPropertyActionListener value="#{rec}"
 													target="#{historyBacking.selectedDiagnosis}" />
 											</p:commandButton>
@@ -1314,8 +1321,15 @@
 					widgetVar="dlgPosology" resizable="false" id="dialogPosology"
 					showEffect="fade" hideEffect="explode" modal="true" width="600">
 
-					<p:inputTextarea rows="7" style="width:560px"
-						value="#{historyBacking.selectedDiagnosis.posology}" />
+					<h:panelGrid width="100%">
+						<p:inputTextarea rows="7" style="width:560px"
+							value="#{historyBacking.posology}" />
+
+						<p:commandButton value="#{msg['btn_save']}"
+							update=":form:dialogPosology"
+							action="#{historyBacking.savePosologyAction}"
+							oncomplete="dlgPosology.hide()" />
+					</h:panelGrid>
 
 				</p:dialog>
 
@@ -1324,70 +1338,71 @@
 					id="dialogMedicationPreview" showEffect="fade" hideEffect="explode"
 					modal="true" width="800">
 
-					<p:dataTable id="dtbMedication" var="rec"
-						value="#{historyBacking.medicationModel}"
-						selection="#{historyBacking.selectedMedication}"
-						rowKey="#{rec.id}" paginator="true" rows="15" style="width:100%"
-						emptyMessage="#{msg['glb_no_records_found']}" editable="true"
-						editMode="cell">
+					<p:scrollPanel style="width:780px;height:600px;">
+						<p:dataTable id="dtbMedication" var="rec"
+							value="#{historyBacking.medicationModel}"
+							selection="#{historyBacking.selectedMedication}"
+							rowKey="#{rec.id}" paginator="true" rows="15" style="width:100%"
+							emptyMessage="#{msg['glb_no_records_found']}" editable="true"
+							editMode="cell">
 
-						<p:column selectionMode="multiple" style="width:18px" />
+							<p:column selectionMode="multiple" style="width:18px" />
 
-						<p:column headerText="#{msg['cie_grp_diagnosis']}">
-							<h:outputLabel value="#{rec.crmCie.description}" />
-						</p:column>
+							<p:column headerText="#{msg['cie_grp_diagnosis']}">
+								<h:outputLabel value="#{rec.crmCie.description}" />
+							</p:column>
 
-						<p:column headerText="#{msg['sal_material_code']}">
-							<h:outputLabel value="#{rec.codMaterial}" />
-						</p:column>
+							<p:column headerText="#{msg['sal_material_code']}">
+								<h:outputLabel value="#{rec.codMaterial}" />
+							</p:column>
 
-						<p:column headerText="#{msg['sal_material_descr']}">
-							<h:outputLabel value="#{rec.descMaterial}" />
-						</p:column>
+							<p:column headerText="#{msg['sal_material_descr']}">
+								<h:outputLabel value="#{rec.descMaterial}" />
+							</p:column>
 
-						<p:column headerText="#{msg['sal_material_amount']}"
-							style="width:100px">
-							<p:cellEditor>
-								<f:facet name="output">
-									<pe:inputNumber value="#{rec.unit}" symbolPosition="s"
-										decimalPlaces="0" style="width:100px" minValue="1"
-										maxValue="99" />
-								</f:facet>
-								<f:facet name="input">
-									<pe:inputNumber value="#{rec.unit}" symbolPosition="s"
-										decimalPlaces="0" style="width:100px" minValue="1"
-										maxValue="99" />
-								</f:facet>
-							</p:cellEditor>
-						</p:column>
+							<p:column headerText="#{msg['sal_material_amount']}"
+								style="width:100px">
+								<p:cellEditor>
+									<f:facet name="output">
+										<pe:inputNumber value="#{rec.unit}" symbolPosition="s"
+											decimalPlaces="0" style="width:100px" minValue="1"
+											maxValue="99" />
+									</f:facet>
+									<f:facet name="input">
+										<pe:inputNumber value="#{rec.unit}" symbolPosition="s"
+											decimalPlaces="0" style="width:100px" minValue="1"
+											maxValue="99" />
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
 
-						<p:column headerText="#{msg['cie_grp_posology']}">
-							<p:cellEditor>
-								<f:facet name="output">
-									<h:inputTextarea id="txtPosologyOut" value="#{rec.posology}"
-										rows="5" />
-								</f:facet>
-								<f:facet name="input">
-									<h:inputTextarea id="txtPosologyIn" value="#{rec.posology}"
-										rows="5" />
-								</f:facet>
-							</p:cellEditor>
-						</p:column>
+							<p:column headerText="#{msg['cie_grp_posology']}">
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:inputTextarea id="txtPosologyOut" value="#{rec.posology}"
+											rows="5" />
+									</f:facet>
+									<f:facet name="input">
+										<h:inputTextarea id="txtPosologyIn" value="#{rec.posology}"
+											rows="5" />
+									</f:facet>
+								</p:cellEditor>
+							</p:column>
 
-						<f:facet name="footer">
-							<p:commandButton id="btnSelMaterial"
-								oncomplete="dlgMedicine.show()" update=":form:dialogMedicine"
-								disabled="#{historyBacking.disabledDiagnosis}"
-								value="#{msg['btn_select']}" icon="ui-icon-search"
-								actionListener="#{historyBacking.selectMedicationAction}" />
-							<p:commandButton value="#{msg['btn_delete']}"
-								disabled="#{historyBacking.disabledMedication}"
-								icon="ui-icon-closethick" update="dtbMedication"
-								actionListener="#{historyBacking.removeMedicationAction}" />
-						</f:facet>
+							<f:facet name="footer">
+								<p:commandButton id="btnSelMaterial"
+									oncomplete="dlgMedicine.show()" update=":form:dialogMedicine"
+									disabled="#{historyBacking.disabledDiagnosis}"
+									value="#{msg['btn_select']}" icon="ui-icon-search"
+									actionListener="#{historyBacking.selectMedicationAction}" />
+								<p:commandButton value="#{msg['btn_delete']}"
+									disabled="#{historyBacking.disabledMedication}"
+									icon="ui-icon-closethick" update="dtbMedication"
+									actionListener="#{historyBacking.removeMedicationAction}" />
+							</f:facet>
 
-					</p:dataTable>
-
+						</p:dataTable>
+					</p:scrollPanel>
 				</p:dialog>
 
 				<p:confirmDialog id="confirmDialog" message="#{msg['glb_question']}"
