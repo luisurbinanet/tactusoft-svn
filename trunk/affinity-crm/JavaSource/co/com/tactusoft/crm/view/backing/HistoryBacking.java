@@ -186,6 +186,7 @@ public class HistoryBacking extends BaseBacking {
 
 	protected HtmlPanelGrid containerComponent;
 	protected String typeHistory;
+	protected String posology;
 
 	public HistoryBacking() {
 		newAction(null);
@@ -827,14 +828,6 @@ public class HistoryBacking extends BaseBacking {
 		this.listMaterialGroup = listMaterialGroup;
 	}
 
-	/*
-	 * public List<CrmCieMaterial> getListCieMaterial() { return
-	 * listCieMaterial; }
-	 * 
-	 * public void setListCieMaterial(List<CrmCieMaterial> listCieMaterial) {
-	 * this.listCieMaterial = listCieMaterial; }
-	 */
-
 	public List<CrmDiagnosis> getListDiagnosisView() {
 		return listDiagnosisView;
 	}
@@ -1083,6 +1076,14 @@ public class HistoryBacking extends BaseBacking {
 
 	public void setTypeHistory(String typeHistory) {
 		this.typeHistory = typeHistory;
+	}
+
+	public String getPosology() {
+		return posology;
+	}
+
+	public void setPosology(String posology) {
+		this.posology = posology;
 	}
 
 	public void calculateIMCAction(ActionEvent event) {
@@ -2361,14 +2362,26 @@ public class HistoryBacking extends BaseBacking {
 								FacesUtil.addWarn(message);
 							}
 
+							/*boolean validate = true;
 							for (CrmMedication row : listMedication) {
 								if (FacesUtil.isEmptyOrBlank(row.getPosology())) {
-									message = FacesUtil
-											.getMessage("his_msg_message_dig_2");
-									FacesUtil.addWarn(message);
+									validate = false;
 									break;
 								}
 							}
+
+							for (CrmDiagnosis row : listDiagnosis) {
+								if (FacesUtil.isEmptyOrBlank(row.getPosology())) {
+									validate = false;
+									break;
+								}
+							}
+
+							if (!validate) {
+								message = FacesUtil
+										.getMessage("his_msg_message_dig_2");
+								FacesUtil.addWarn(message);
+							}*/
 						}
 					}
 
@@ -2750,5 +2763,16 @@ public class HistoryBacking extends BaseBacking {
 						.getReason(), selectedHistoryHistory.getReason()));
 			}
 		}
+	}
+
+	public void selectPosologyAction() {
+		this.posology = null;
+		if (this.selectedDiagnosis != null) {
+			this.posology = selectedDiagnosis.getPosology();
+		}
+	}
+
+	public void savePosologyAction() {
+		selectedDiagnosis.setPosology(this.posology);
 	}
 }

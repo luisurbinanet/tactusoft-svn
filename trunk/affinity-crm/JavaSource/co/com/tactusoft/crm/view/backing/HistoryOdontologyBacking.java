@@ -80,8 +80,6 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 	private Map<Integer, CrmOdotogramProcedure> mapOdotogramProcedure;
 	private List<OdontogramBean> listOdontogramBean;
 
-	private String posology;
-
 	protected HistoryStomatologDataModel historyStomatologModel;
 	protected HistoryTempJointDataModel historyTempJointModel;
 	protected HistorySoftTissueDataModel historySoftTissueModel;
@@ -210,14 +208,6 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 	public void setListOdotogramProcedure(
 			List<SelectItem> listOdotogramProcedure) {
 		this.listOdotogramProcedure = listOdotogramProcedure;
-	}
-
-	public String getPosology() {
-		return posology;
-	}
-
-	public void setPosology(String posology) {
-		this.posology = posology;
 	}
 
 	public HistoryStomatologDataModel getHistoryStomatologModel() {
@@ -1213,10 +1203,6 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 
 		context.addCallbackParam("procedureTooth",
 				new Gson().toJson(listOdontogramBean));
-	}
-
-	public void updatePosology() {
-		this.selectedDiagnosis.setPosology(posology);
 	}
 
 	public void selectPosologyAction() {
