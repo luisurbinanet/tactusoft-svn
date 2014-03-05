@@ -111,13 +111,17 @@ order by a.id]]>
 		c.cod_material,
 		ucase(c.desc_material) desc_material,
 		ucase(c.posology) posology,
-		ucase(a.posology) posology_group,
+		ifnull(ucase(a.posology),'') posology_group,
 		e.doc,
 		cast(d.start_appointment_date as Date) appointment_date,
 		concat(e.firstnames,' ', e.surnames) as name_patient,
 		e.doc as doc_patient,
 		CONCAT(IFNULL(f.medical_license,''), ' ', f.names) as name_doctor,
-		concat(g.code, ' - ',g.name) as name_branch
+		concat(g.code, ' - ',g.name) as name_branch,
+		concat(b.description, case when a.posology is not null then concat('\n',a.posology  ) else '' end ,'\n\n\t'
+,group_concat( concat( convert(c.unit using utf8),'\t'  , ucase(c.desc_material)
+		,case when length(ifnull(trim(c.posology),'')) > 0  then  concat('\n\t',c.posology  ) else '' end) separator '\n\t')
+) posology_concatenated
 from crm_diagnosis a join crm_cie b on a.id_cie = b.id
 join crm_medication c on a.id_appointment = c.id_appointment and a.id_cie = c.id_cie
 join crm_appointment d on a.id_appointment = d.id
@@ -125,6 +129,7 @@ join crm_patient e on d.id_patient = e.id
 join crm_doctor f on d.id_doctor = f.id
 join crm_branch g on d.id_branch = g.id
 where a.id_appointment = $P{P_APPOINTMENT} and c.material_type = 'MEDICAMENTO'
+group by b.description,a.posology
 UNION
 select  c.id,c.id_appointment,
 		c.diagnosis desc_cie,
@@ -138,14 +143,18 @@ select  c.id,c.id_appointment,
 		cast(d.start_appointment_date as Date) appointment_date,
 		concat(e.firstnames,' ', e.surnames) as name_patient,
         e.doc as doc_patient,
-		CONCAT(IFNULL(f.medical_license,''), ' ', f.names) as name_doctor,
-		concat(g.code, ' - ',g.name) as name_branch
+		concat(IFNULL(f.medical_license,''), ' ', f.names) as name_doctor,
+		concat(g.code, ' - ',g.name) as name_branch,
+		concat(c.diagnosis, '\n\n\t', group_concat( concat( convert(c.unit using utf8),'\t'  , ucase(c.desc_material),
+		case when length(ifnull(trim(posology),'')) > 0  then  concat('\n\t',posology  ) else '' end) separator '\n\t')) posology_concatenated
 from crm_medication c
 join crm_appointment d on c.id_appointment = d.id
 join crm_patient e on d.id_patient = e.id
 join crm_doctor f on d.id_doctor = f.id
 join crm_branch g on d.id_branch = g.id
-where c.id_appointment = $P{P_APPOINTMENT} and c.material_type = 'OTRO_MEDICAMENTO'
+where c.id_appointment = $P{P_APPOINTMENT}
+and c.material_type = 'OTRO_MEDICAMENTO'
+group by c.diagnosis,posology
 ORDER BY 1]]>
 	</queryString>
 	<field name="id" class="java.math.BigDecimal">
@@ -185,40 +194,13 @@ ORDER BY 1]]>
 	</field>
 	<field name="name_doctor" class="java.lang.String"/>
 	<field name="name_branch" class="java.lang.String"/>
-	<group name="group_cie">
-		<groupExpression><![CDATA[$F{id_cie}]]></groupExpression>
-		<groupHeader>
-			<band height="39">
-				<textField isStretchWithOverflow="true">
-					<reportElement isPrintRepeatedValues="false" x="0" y="0" width="204" height="39" uuid="6734ef12-a28c-4963-8b42-50c6bfe9fd5a"/>
-					<textElement>
-						<font fontName="Arial" size="10" isBold="false"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{desc_cie}]]></textFieldExpression>
-				</textField>
-				<textField isBlankWhenNull="true">
-					<reportElement x="204" y="0" width="154" height="39" uuid="a6736508-7be0-49ca-920e-403ed3383e8f"/>
-					<textFieldExpression><![CDATA[$F{posology_group}]]></textFieldExpression>
-				</textField>
-			</band>
-		</groupHeader>
-		<groupFooter>
-			<band height="12">
-				<line>
-					<reportElement x="0" y="3" width="358" height="1" forecolor="#009999" uuid="5b7eb3e9-923b-4386-b701-f469eeef6d65"/>
-					<graphicElement>
-						<pen lineWidth="2.0" lineStyle="Double"/>
-					</graphicElement>
-				</line>
-			</band>
-		</groupFooter>
-	</group>
+	<field name="posology_concatenated" class="java.lang.String"/>
 	<title>
 		<band height="54" splitType="Stretch">
 			<textField>
 				<reportElement x="235" y="1" width="123" height="15" uuid="fb85831b-54e6-420d-bfcd-274dc2ff4fc3"/>
 				<textElement>
-					<font fontName="Arial" size="8"/>
+					<font fontName="Arial" size="6"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name_doctor}]]></textFieldExpression>
 			</textField>
@@ -253,23 +235,16 @@ ORDER BY 1]]>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="31" splitType="Stretch">
+		<band height="20" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="12" width="126" height="15" uuid="535a5a5f-6fb6-4495-8f88-4ab2f31902bf"/>
+				<reportElement x="0" y="1" width="358" height="16" uuid="535a5a5f-6fb6-4495-8f88-4ab2f31902bf"/>
 				<textElement textAlignment="Center">
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Medicamentos]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="142" y="12" width="216" height="15" uuid="5cc47441-d4fb-4934-883a-6b5a18f2758d"/>
-				<textElement textAlignment="Center">
-					<font fontName="Arial" size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Posología]]></text>
+				<text><![CDATA[Diagnòsticos, Medicamentos y Posología]]></text>
 			</staticText>
 			<line>
-				<reportElement x="0" y="28" width="358" height="1" forecolor="#009999" uuid="5b7eb3e9-923b-4386-b701-f469eeef6d65"/>
+				<reportElement x="0" y="18" width="358" height="1" forecolor="#009999" uuid="5b7eb3e9-923b-4386-b701-f469eeef6d65"/>
 				<graphicElement>
 					<pen lineWidth="2.0" lineStyle="Double"/>
 				</graphicElement>
@@ -277,31 +252,17 @@ ORDER BY 1]]>
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="37" splitType="Stretch">
+		<band height="97" splitType="Stretch">
 			<textField>
-				<reportElement x="17" y="0" width="109" height="23" isPrintWhenDetailOverflows="true" uuid="bb682a46-b8b7-4d50-a9ce-f2dedd3dfead"/>
-				<textElement>
-					<font fontName="Arial" size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{desc_material}]]></textFieldExpression>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="358" height="96" uuid="11c650be-32f8-4b9c-b770-4b96d8975d9c"/>
+				<textFieldExpression><![CDATA[$F{posology_concatenated}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="0" y="0" width="17" height="23" uuid="7b354bad-46ff-4ec4-97b9-87037b526d98"/>
-				<textElement>
-					<font fontName="Arial" size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{unit}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement x="142" y="0" width="216" height="23" printWhenGroupChanges="group_cie" uuid="c97e21ae-df63-46d9-97f0-3c16107d05e1"/>
-				<textElement>
-					<font fontName="Arial" size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{posology}]]></textFieldExpression>
-			</textField>
+			<line>
+				<reportElement x="0" y="96" width="358" height="1" forecolor="#009999" uuid="6b4d4c3d-23fa-457e-a005-97be921d9c29"/>
+				<graphicElement>
+					<pen lineWidth="2.0" lineStyle="Double"/>
+				</graphicElement>
+			</line>
 		</band>
 	</detail>
-	<pageFooter>
-		<band height="94"/>
-	</pageFooter>
 </jasperReport>

@@ -17,6 +17,7 @@ import co.com.tactusoft.crm.model.entities.VwRipsMedication;
 import co.com.tactusoft.crm.model.entities.VwRipsPatient;
 import co.com.tactusoft.crm.model.entities.VwRipsProcedure;
 import co.com.tactusoft.crm.model.entities.VwRipsTransaction;
+import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 
 @Named
@@ -45,35 +46,70 @@ public class RIPSBo implements Serializable {
 					+ idBranch + " AND typeHistory = '" + typeHistory + "'";
 			List<VwRipsPatient> list = dao.find(sql);
 
-			for (VwRipsPatient row : list) {
-				StringBuilder result = new StringBuilder();
-				result.append(row.getBranch());
-				result.append(SEPARATOR);
-				result.append(row.getDocType());
-				result.append(SEPARATOR);
-				result.append(row.getDoc());
-				result.append(SEPARATOR);
-				result.append(row.getMembership());
-				result.append(SEPARATOR);
-				result.append(row.getSurnames());
-				result.append(SEPARATOR);
-				result.append(row.getSurnames2());
-				result.append(SEPARATOR);
-				result.append(row.getFirstnames());
-				result.append(SEPARATOR);
-				result.append(row.getFirstnames2());
-				result.append(SEPARATOR);
-				result.append(row.getAge());
-				result.append(SEPARATOR);
-				result.append(row.getSizeUnit());
-				result.append(SEPARATOR);
-				result.append(row.getRegion());
-				result.append(SEPARATOR);
-				result.append(row.getCity());
-				result.append(SEPARATOR);
-				result.append(row.getTypeHousing());
-				out.println(result.toString());
+			if (typeHistory.equals(Constant.MEDICAL_HISTORY_TYPE)) {
+				for (VwRipsPatient row : list) {
+					StringBuilder result = new StringBuilder();
+					result.append(row.getBranch());
+					result.append(SEPARATOR);
+					result.append(row.getDocType());
+					result.append(SEPARATOR);
+					result.append(row.getDoc());
+					result.append(SEPARATOR);
+					result.append(row.getMembership());
+					result.append(SEPARATOR);
+					result.append(row.getSurnames());
+					result.append(SEPARATOR);
+					result.append(row.getSurnames2());
+					result.append(SEPARATOR);
+					result.append(row.getFirstnames());
+					result.append(SEPARATOR);
+					result.append(row.getFirstnames2());
+					result.append(SEPARATOR);
+					result.append(row.getAge());
+					result.append(SEPARATOR);
+					result.append(row.getSizeUnit());
+					result.append(SEPARATOR);
+					result.append(row.getRegion());
+					result.append(SEPARATOR);
+					result.append(row.getCity());
+					result.append(SEPARATOR);
+					result.append(row.getTypeHousing());
+					out.println(result.toString());
+				}
+			} else {
+				for (VwRipsPatient row : list) {
+					StringBuilder result = new StringBuilder();
+					result.append(row.getDocType());
+					result.append(SEPARATOR);
+					result.append(row.getDoc());
+					result.append(SEPARATOR);
+					result.append(row.getIdEps());
+					result.append(SEPARATOR);
+					result.append("4");
+					result.append(SEPARATOR);
+					result.append(row.getSurnames());
+					result.append(SEPARATOR);
+					result.append(row.getSurnames2());
+					result.append(SEPARATOR);
+					result.append(row.getFirstnames());
+					result.append(SEPARATOR);
+					result.append(row.getFirstnames2());
+					result.append(SEPARATOR);
+					result.append(row.getAge());
+					result.append(SEPARATOR);
+					result.append(row.getSizeUnit());
+					result.append(SEPARATOR);
+					result.append(row.getGender());
+					result.append(SEPARATOR);
+					result.append(row.getRegion());
+					result.append(SEPARATOR);
+					result.append(row.getCity());
+					result.append(SEPARATOR);
+					result.append(row.getTypeHousing());
+					out.println(result.toString());
+				}
 			}
+
 			out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -82,7 +118,8 @@ public class RIPSBo implements Serializable {
 	}
 
 	public File getListAppointment(String path, String fileName,
-			BigDecimal idBranch, String startDate, String endDate) {
+			BigDecimal idBranch, String startDate, String endDate,
+			String typeHistory) {
 		File file = new File(path + "/rips_consultas" + fileName + ".txt");
 		try {
 			FileWriter outFile = new FileWriter(file);
@@ -92,7 +129,9 @@ public class RIPSBo implements Serializable {
 					+ startDate
 					+ "' AND '"
 					+ endDate
-					+ "' AND o.id.idBranch = " + idBranch;
+					+ "' AND o.id.idBranch = "
+					+ idBranch
+					+ " AND typeHistory = '" + typeHistory + "'";
 			List<VwRipsAppointment> list = dao.find(sql);
 
 			for (VwRipsAppointment row : list) {
@@ -110,8 +149,10 @@ public class RIPSBo implements Serializable {
 						result.append(FacesUtil.formatDate(
 								row.getAppointmentDate(), "dd/MM/yyyy"));
 						result.append(SEPARATOR);
-						result.append(row.getAppointmentType());
-						result.append(SEPARATOR);
+						if (typeHistory.equals(Constant.MEDICAL_HISTORY_TYPE)) {
+							result.append(row.getAppointmentType());
+							result.append(SEPARATOR);
+						}
 						result.append(row.getAutorization());
 						result.append(SEPARATOR);
 						result.append(row.getAppointmentCode());
@@ -149,7 +190,8 @@ public class RIPSBo implements Serializable {
 	}
 
 	public File getListProcedure(String path, String fileName,
-			BigDecimal idBranch, String startDate, String endDate) {
+			BigDecimal idBranch, String startDate, String endDate,
+			String typeHistory) {
 		File file = new File(path + "/rips_procedimientos" + fileName + ".txt");
 		try {
 			FileWriter outFile = new FileWriter(path + "/rips_procedimientos"
@@ -160,7 +202,9 @@ public class RIPSBo implements Serializable {
 					+ startDate
 					+ "' AND '"
 					+ endDate
-					+ "' AND o.id.idBranch = " + idBranch;
+					+ "' AND o.id.idBranch = "
+					+ idBranch
+					+ " AND o.id.typeHistory = '" + typeHistory + "'";
 			List<VwRipsProcedure> list = dao.find(sql);
 
 			for (VwRipsProcedure row : list) {
@@ -178,8 +222,10 @@ public class RIPSBo implements Serializable {
 				result.append(SEPARATOR);
 				result.append(row.getId().getAutorization());
 				result.append(SEPARATOR);
-				result.append(row.getId().getProcedureType());
-				result.append(SEPARATOR);
+				if (typeHistory.equals(Constant.MEDICAL_HISTORY_TYPE)) {
+					result.append(row.getId().getProcedureType());
+					result.append(SEPARATOR);
+				}
 				result.append(row.getId().getProcedureCode());
 				result.append(SEPARATOR);
 				result.append(row.getId().getProcedureScope());
@@ -190,8 +236,10 @@ public class RIPSBo implements Serializable {
 				result.append(SEPARATOR);
 				result.append(row.getId().getDiagnosis1());
 				result.append(SEPARATOR);
-				result.append(row.getId().getDiagnosis2());
-				result.append(SEPARATOR);
+				if (typeHistory.equals(Constant.MEDICAL_HISTORY_TYPE)) {
+					result.append(row.getId().getDiagnosis2());
+					result.append(SEPARATOR);
+				}
 				result.append(row.getId().getComplication());
 				result.append(SEPARATOR);
 				result.append(row.getId().getSurgical());
@@ -262,7 +310,8 @@ public class RIPSBo implements Serializable {
 	}
 
 	public File getListTransaction(String path, String fileName,
-			BigDecimal idBranch, String startDate, String endDate) {
+			BigDecimal idBranch, String startDate, String endDate,
+			String typeHistory) {
 		File file = new File(path + "/rips_transacciones" + fileName + ".txt");
 		try {
 			FileWriter outFile = new FileWriter(file);
@@ -272,7 +321,10 @@ public class RIPSBo implements Serializable {
 					+ startDate
 					+ "' AND '"
 					+ endDate
-					+ "' AND o.id.idBranch = " + idBranch;
+					+ "' AND o.id.idBranch = "
+					+ idBranch
+					+ " AND o.id.typeHistory = '" + typeHistory + "'";
+
 			List<VwRipsTransaction> list = dao.find(sql);
 
 			for (VwRipsTransaction row : list) {
