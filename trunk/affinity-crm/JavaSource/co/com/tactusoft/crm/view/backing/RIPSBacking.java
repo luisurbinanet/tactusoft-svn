@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -44,6 +45,12 @@ public class RIPSBacking extends BaseBacking implements Serializable {
 		options.put("Archivo de Medicamentos", "RIPS4");
 		options.put("Archivo de Transacciones", "RIPS5");
 		typeHistory = Constant.MEDICAL_HISTORY_TYPE;
+	}
+
+	@PostConstruct
+	public void init() {
+		path = FacesUtil.getParameterTextValue("RUTA_ARCHIVOS_TEMPORALES")
+				+ "/rips/";
 	}
 
 	public Date getStartDate() {
@@ -105,8 +112,7 @@ public class RIPSBacking extends BaseBacking implements Serializable {
 		if (selectedOptions.size() > 0) {
 
 			fileName = FacesUtil.formatDate(new Date(), "yyyyMMddHHmmssS");
-			// path = "/opt/rips/";
-			path = "E:/CRM/rips/";
+			//path = "E:/CRM/rips/";
 
 			String startDateString = FacesUtil.formatDate(this.startDate,
 					"yyyy-MM-dd") + " 00:00:00";
@@ -124,11 +130,13 @@ public class RIPSBacking extends BaseBacking implements Serializable {
 					index++;
 				} else if (option.equals("RIPS2")) {
 					files[index] = this.RIPSService.getListAppointment(path,
-							fileName, idBranch, startDateString, endDateString);
+							fileName, idBranch, startDateString, endDateString,
+							typeHistory);
 					index++;
 				} else if (option.equals("RIPS3")) {
 					files[index] = this.RIPSService.getListProcedure(path,
-							fileName, idBranch, startDateString, endDateString);
+							fileName, idBranch, startDateString, endDateString,
+							typeHistory);
 					index++;
 				} else if (option.equals("RIPS4")) {
 					files[index] = this.RIPSService.getListMedication(path,
@@ -136,7 +144,8 @@ public class RIPSBacking extends BaseBacking implements Serializable {
 					index++;
 				} else if (option.equals("RIPS5")) {
 					files[index] = this.RIPSService.getListTransaction(path,
-							fileName, idBranch, startDateString, endDateString);
+							fileName, idBranch, startDateString, endDateString,
+							typeHistory);
 					index++;
 				}
 			}

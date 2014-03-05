@@ -22,7 +22,7 @@
 	</context-param>
 	<context-param>
 		<param-name>primefaces.THEME</param-name>
-		<param-value>cupertino</param-value>
+		<param-value>start</param-value>
 	</context-param>
 	<filter>
 		<filter-name>Character Encoding Filter</filter-name>

@@ -10,19 +10,24 @@
 		<p:spacer height="200" />
 
 		<center>
-			<p:panel style="width:25%;height:200px"
+			<p:panel style="width:40%;height:200px"
 				header="#{msg['title_login']}">
 
 				<p:spacer height="5" />
 
 				<h:form id="form" prependId="false">
 					<h:panelGrid columns="2">
-						<h:outputLabel value="#{msg['log_username']}" style="width:100%" />
-						<h:inputText id="txtUsuario" value="#{loginBacking.userName}"
-							style="width:100%" />
-						<h:outputLabel value="#{msg['log_password']}" style="width:100%" />
-						<h:inputSecret id="txtPwd" value="#{loginBacking.password}"
-							style="width:100%" />
+						<h:graphicImage value="/images/img_login.png" width="200" />
+						<h:panelGrid columns="2">
+
+							<h:outputLabel value="#{msg['log_username']}" style="width:100%" />
+							<h:inputText id="txtUsuario" value="#{loginBacking.userName}"
+								style="width:100%" />
+							<h:outputLabel value="#{msg['log_password']}" style="width:100%" />
+							<h:inputSecret id="txtPwd" value="#{loginBacking.password}"
+								style="width:100%" />
+
+						</h:panelGrid>
 
 						<f:facet name="footer">
 							<p:spacer />
