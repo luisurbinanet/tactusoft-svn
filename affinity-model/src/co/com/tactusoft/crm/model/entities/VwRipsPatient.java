@@ -35,6 +35,7 @@ public class VwRipsPatient implements java.io.Serializable {
 	private String region;
 	private String city;
 	private String typeHousing;
+	private BigDecimal idEps;
 	private String typeHistory;
 
 	public VwRipsPatient() {
@@ -62,7 +63,8 @@ public class VwRipsPatient implements java.io.Serializable {
 			Date appointmentDate, String branch, String docType, String doc,
 			int membership, String surnames, String surnames2,
 			String firstnames, String firstnames2, double age, int sizeUnit,
-			String gender, String region, String city, String typeHousing) {
+			String gender, String region, String city, BigDecimal idEps,
+			String typeHousing) {
 		this.idPatient = idPatient;
 		this.idBranch = idBranch;
 		this.appointmentDate = appointmentDate;
@@ -79,6 +81,7 @@ public class VwRipsPatient implements java.io.Serializable {
 		this.gender = gender;
 		this.region = region;
 		this.city = city;
+		this.idEps = idEps;
 		this.typeHousing = typeHousing;
 	}
 
@@ -234,6 +237,15 @@ public class VwRipsPatient implements java.io.Serializable {
 
 	public void setTypeHousing(String typeHousing) {
 		this.typeHousing = typeHousing;
+	}
+
+	@Column(name = "id_eps", nullable = false, scale = 0)
+	public BigDecimal getIdEps() {
+		return idEps;
+	}
+
+	public void setIdEps(BigDecimal idEps) {
+		this.idEps = idEps;
 	}
 
 	@Column(name = "type_history", nullable = false, length = 45)

@@ -32,6 +32,7 @@ public class VwRipsTransactionId implements java.io.Serializable {
 	private int commission;
 	private int discount;
 	private BigDecimal amount;
+	private String typeHistory;
 
 	public VwRipsTransactionId() {
 	}
@@ -58,7 +59,8 @@ public class VwRipsTransactionId implements java.io.Serializable {
 			String clinic, String docType, String doc, String idBill,
 			Date dateBill, String startDate, String endDate, String epsCode,
 			String epsName, String contract, String benefitPlan, String policy,
-			int copayment, int commission, int discount, BigDecimal amount) {
+			int copayment, int commission, int discount, BigDecimal amount,
+			String typeHistory) {
 		this.idBranch = idBranch;
 		this.appointmentDate = appointmentDate;
 		this.clinic = clinic;
@@ -77,6 +79,7 @@ public class VwRipsTransactionId implements java.io.Serializable {
 		this.commission = commission;
 		this.discount = discount;
 		this.amount = amount;
+		this.typeHistory = typeHistory;
 	}
 
 	@Column(name = "id_branch", nullable = false, scale = 0)
@@ -240,4 +243,14 @@ public class VwRipsTransactionId implements java.io.Serializable {
 	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
+
+	@Column(name = "type_history")
+	public String getTypeHistory() {
+		return typeHistory;
+	}
+
+	public void setTypeHistory(String typeHistory) {
+		this.typeHistory = typeHistory;
+	}
+
 }
