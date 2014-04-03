@@ -4,6 +4,7 @@ package co.com.tactusoft.crm.model.entities;
 
 import java.math.BigDecimal;
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
@@ -31,14 +32,15 @@ public class VwRipsProcedureId implements java.io.Serializable {
 	private String complication;
 	private String surgical;
 	private BigDecimal amount;
+	private String typeHistory;
 
 	public VwRipsProcedureId() {
 	}
 
 	public VwRipsProcedureId(BigDecimal idBranch, String idBill,
 			String autorization, int procedureScope, int procedureTarget,
-			String personal, String diagnosis1, String diagnosis2, String complication,
-			String surgical) {
+			String personal, String diagnosis1, String diagnosis2,
+			String complication, String surgical) {
 		this.idBranch = idBranch;
 		this.idBill = idBill;
 		this.autorization = autorization;
@@ -55,8 +57,8 @@ public class VwRipsProcedureId implements java.io.Serializable {
 			String idBill, String clinic, String docType, String doc,
 			String autorization, String procedureType, String procedureCode,
 			int procedureScope, int procedureTarget, String personal,
-			String diagnosis1, String diagnosis2, String complication, String surgical,
-			BigDecimal amount) {
+			String diagnosis1, String diagnosis2, String complication,
+			String surgical, BigDecimal amount, String typeHistory) {
 		this.idBranch = idBranch;
 		this.appointmentDate = appointmentDate;
 		this.idBill = idBill;
@@ -74,6 +76,7 @@ public class VwRipsProcedureId implements java.io.Serializable {
 		this.complication = complication;
 		this.surgical = surgical;
 		this.amount = amount;
+		this.typeHistory = typeHistory;
 	}
 
 	@Column(name = "id_branch", nullable = false, scale = 0)
@@ -227,5 +230,14 @@ public class VwRipsProcedureId implements java.io.Serializable {
 
 	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
+	}
+
+	@Column(name = "type_history")
+	public String getTypeHistory() {
+		return typeHistory;
+	}
+
+	public void setTypeHistory(String typeHistory) {
+		this.typeHistory = typeHistory;
 	}
 }

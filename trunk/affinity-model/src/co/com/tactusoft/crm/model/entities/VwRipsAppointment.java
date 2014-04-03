@@ -36,16 +36,17 @@ public class VwRipsAppointment implements java.io.Serializable {
 	private BigDecimal amount;
 	private int quote;
 	private BigDecimal total;
+	private String typeHistory;
 
 	public VwRipsAppointment() {
 	}
-	
+
 	public VwRipsAppointment(BigDecimal idAppointment) {
 		this.idAppointment = idAppointment;
 	}
 
-	public VwRipsAppointment(BigDecimal idBranch, String idBill,
-			String clinic, String appointmentType, String autorization,
+	public VwRipsAppointment(BigDecimal idBranch, String idBill, String clinic,
+			String appointmentType, String autorization,
 			String appointmentCode, int appointmentTarget,
 			int appointmentExternal, String diagnosis2, String diagnosis3,
 			String diagnosis4, int diagnosisType, int quote) {
@@ -64,12 +65,13 @@ public class VwRipsAppointment implements java.io.Serializable {
 		this.quote = quote;
 	}
 
-	public VwRipsAppointment(BigDecimal idBranch, String idBill,
-			String clinic, String docType, String doc, Date appointmentDate,
-			String appointmentType, String autorization, String appointmentCode,
-			int appointmentTarget, int appointmentExternal, String diagnosis1,
-			String diagnosis2, String diagnosis3, String diagnosis4,
-			int diagnosisType, BigDecimal amount, int quote, BigDecimal total) {
+	public VwRipsAppointment(BigDecimal idBranch, String idBill, String clinic,
+			String docType, String doc, Date appointmentDate,
+			String appointmentType, String autorization,
+			String appointmentCode, int appointmentTarget,
+			int appointmentExternal, String diagnosis1, String diagnosis2,
+			String diagnosis3, String diagnosis4, int diagnosisType,
+			BigDecimal amount, int quote, BigDecimal total, String typeHistory) {
 		this.idBranch = idBranch;
 		this.idBill = idBill;
 		this.clinic = clinic;
@@ -89,9 +91,9 @@ public class VwRipsAppointment implements java.io.Serializable {
 		this.amount = amount;
 		this.quote = quote;
 		this.total = total;
+		this.typeHistory = typeHistory;
 	}
-	
-	
+
 	@Id
 	@Column(name = "id_appointment", nullable = false, scale = 0)
 	public BigDecimal getIdAppointment() {
@@ -271,5 +273,14 @@ public class VwRipsAppointment implements java.io.Serializable {
 
 	public void setTotal(BigDecimal total) {
 		this.total = total;
+	}
+
+	@Column(name = "type_history")
+	public String getTypeHistory() {
+		return typeHistory;
+	}
+
+	public void setTypeHistory(String typeHistory) {
+		this.typeHistory = typeHistory;
 	}
 }

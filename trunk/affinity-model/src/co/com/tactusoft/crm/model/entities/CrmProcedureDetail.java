@@ -35,6 +35,8 @@ public class CrmProcedureDetail implements java.io.Serializable {
 	private boolean availability;
 	private int minMedication;
 	private int maxMedication;
+	private int minDiagnosis;
+	private int maxDiagnosis;
 	private boolean caseStudy;
 	private String codPublicity;
 	private boolean dependent;
@@ -207,6 +209,24 @@ public class CrmProcedureDetail implements java.io.Serializable {
 
 	public void setMaxMedication(int maxMedication) {
 		this.maxMedication = maxMedication;
+	}
+
+	@Column(name = "min_diagnosis")
+	public int getMinDiagnosis() {
+		return minDiagnosis;
+	}
+
+	public void setMinDiagnosis(int minDiagnosis) {
+		this.minDiagnosis = minDiagnosis;
+	}
+
+	@Column(name = "max_diagnosis")
+	public int getMaxDiagnosis() {
+		return maxDiagnosis;
+	}
+
+	public void setMaxDiagnosis(int maxDiagnosis) {
+		this.maxDiagnosis = maxDiagnosis;
 	}
 
 	@Column(name = "cod_publicity", length = 4)

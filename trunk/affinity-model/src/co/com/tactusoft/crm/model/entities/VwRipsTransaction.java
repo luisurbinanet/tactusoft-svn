@@ -45,7 +45,8 @@ public class VwRipsTransaction implements java.io.Serializable {
 			@AttributeOverride(name = "copayment", column = @Column(name = "copayment", nullable = false)),
 			@AttributeOverride(name = "commission", column = @Column(name = "commission", nullable = false)),
 			@AttributeOverride(name = "discount", column = @Column(name = "discount", nullable = false)),
-			@AttributeOverride(name = "amount", column = @Column(name = "amount", precision = 10)) })
+			@AttributeOverride(name = "amount", column = @Column(name = "amount", precision = 10)),
+			@AttributeOverride(name = "typeHistory", column = @Column(name = "type_history")) })
 	public VwRipsTransactionId getId() {
 		return this.id;
 	}
