@@ -28,7 +28,7 @@
 							actionListener="#{contactBacking.refreshSearchAction}"
 							update=":editForm:searchDialog" />
 						<p:commandButton id="btnSavePatient" value="#{msg['btn_save']}"
-							icon="ui-icon-disk" action="#{contactBacking.saveAction}"
+							icon="ui-icon-disk" action="#{contactBacking.saveAction(false)}"
 							update="growl toolBar pnlDetail pnlDetail2 pnlDetail3"
 							process="toolBar pnlDetail pnlDetail2 pnlDetail3"
 							disabled="#{contactBacking.existsSAP}">

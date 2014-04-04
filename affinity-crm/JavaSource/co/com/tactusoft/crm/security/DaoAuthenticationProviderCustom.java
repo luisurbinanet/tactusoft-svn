@@ -202,7 +202,7 @@ public class DaoAuthenticationProviderCustom extends
 			CrmDoctor doctor = tableService
 					.getCrmDoctor(user.getUser().getId());
 			if (doctor != null) {
-				user.setRolePrincipal(Constant.ROLE_DOCTOR);
+				user.setRolePrincipal(doctor.getMedicalType());
 			} else {
 				CrmNurse nurse = tableService.getCrmNurse(user.getUser()
 						.getId());

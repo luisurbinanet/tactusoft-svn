@@ -9,10 +9,11 @@
 	id="#{prefix}_tabview"
 	rendered="#{historyBacking.rolePrincipal eq 'DOCTOR' 
 	or historyBacking.rolePrincipal eq 'NURSE' 
-	or historyBacking.rolePrincipal eq 'NURSE_AUX'}">
+	or historyBacking.rolePrincipal eq 'NURSE_AUX'
+	or historyBacking.rolePrincipal eq 'CONSULTANT'}">
 
 	<p:tab id="tab1" title="#{msg['his_history']}"
-		rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
+		rendered="#{historyBacking.rolePrincipal eq 'DOCTOR' or historyBacking.rolePrincipal eq 'CONSULTANT'}">
 		<p:dataTable id="tblHistoryAppointment" var="rec"
 			value="#{historyBacking.historyAppointmentModel}"
 			rowKey="#{rec.code}" style="width:100%" paginator="true" rows="10"
@@ -265,7 +266,7 @@
 	</p:tab>
 
 	<p:tab id="tab7" title="#{msg['his_history_ip']}"
-		rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
+		rendered="#{historyBacking.rolePrincipal eq 'DOCTOR' or historyBacking.rolePrincipal eq 'CONSULTANT'}">
 		<p:dataTable var="rec" value="#{historyBacking.listDiagnosisView}"
 			paginator="true" rows="15" style="width:100%"
 			emptyMessage="#{msg['glb_no_records_found']}">
@@ -289,7 +290,7 @@
 	</p:tab>
 
 	<p:tab id="tab8" title="#{msg['his_history_medicaction']}"
-		rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
+		rendered="#{historyBacking.rolePrincipal eq 'DOCTOR' or historyBacking.rolePrincipal eq 'CONSULTANT'}">
 		<p:dataTable var="rec" value="#{historyBacking.listMedicationView}"
 			paginator="true" rows="15" style="width:100%"
 			emptyMessage="#{msg['glb_no_records_found']}">
@@ -496,6 +497,19 @@
 				<h:outputLabel value="#{rec.reason}" />
 			</p:column>
 
+		</p:dataTable>
+	</p:tab>
+
+	<p:tab id="tab14" title="#{msg['his_consultant']}"
+		rendered="#{historyBacking.rolePrincipal eq 'CONSULTANT'}">
+		<p:dataTable id="tblConsultant" var="rec"
+			value="#{historyBacking.historyConsultantModel}"
+			rowKey="#{rec.code}" style="width:100%" paginator="true" rows="5"
+			emptyMessage="#{msg['glb_no_records_found']}">
+
+			<p:column headerText="#{msg['his_obs']}">
+				<h:outputLabel value="#{rec.obs}" />
+			</p:column>
 		</p:dataTable>
 	</p:tab>
 

@@ -24,6 +24,7 @@ import co.com.tactusoft.crm.model.entities.CrmDiagnosis;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmDoctorException;
 import co.com.tactusoft.crm.model.entities.CrmDoctorSchedule;
+import co.com.tactusoft.crm.model.entities.CrmHistoryConsultant;
 import co.com.tactusoft.crm.model.entities.CrmHistoryHistory;
 import co.com.tactusoft.crm.model.entities.CrmHistoryHomeopathic;
 import co.com.tactusoft.crm.model.entities.CrmHistoryOrganometry;
@@ -244,8 +245,12 @@ public class ProcessBo implements Serializable {
 			entity.setCode(code);
 		}
 
-		this.persist(entity);
-		return entity;
+		int result = this.persist(entity);
+		if (result == 0) {
+			return entity;
+		} else {
+			return null;
+		}
 	}
 
 	public <T> void remove(Class<T> entity) {
@@ -890,7 +895,10 @@ public class ProcessBo implements Serializable {
 		String dateString = FacesUtil.formatDate(currentDate, "yyyy-MM-dd");
 		List<CrmAppointment> list = dao
 				.find("from CrmAppointment o where Date(o.startAppointmentDate) = '"
-						+ dateString + "' AND o.crmPatient.id = " + idPatient);
+						+ dateString
+						+ "' AND o.crmPatient.id = "
+						+ idPatient
+						+ " AND state = 1");
 		if (list.size() > 0) {
 			result = -5;
 		}
@@ -1136,9 +1144,11 @@ public class ProcessBo implements Serializable {
 
 	public void savePatientTicket(CrmPatient crmPatient,
 			List<CrmPatientTicket> listTickets) {
-		for (CrmPatientTicket row : listTickets) {
-			row.setCrmPatient(crmPatient);
-			this.persist(row);
+		if (listTickets != null && !listTickets.isEmpty()) {
+			for (CrmPatientTicket row : listTickets) {
+				row.setCrmPatient(crmPatient);
+				this.persist(row);
+			}
 		}
 	}
 
@@ -1192,15 +1202,10 @@ public class ProcessBo implements Serializable {
 				+ idPatient);
 	}
 
-	public boolean isExistsTickets(List<CrmPatientTicket> list) {
-		String rows = "";
-		for (CrmPatientTicket row : list) {
-			rows = rows + "'" + row.getTicket() + "',";
-		}
-		rows = rows.substring(0, rows.length() - 1);
+	public boolean isExistsTickets(String ticket) {
 		List<CrmPatientTicket> listTemp = dao
-				.find("FROM CrmPatientTicket o WHERE TRIM(ticket) IN (" + rows
-						+ ")");
+				.find("FROM CrmPatientTicket o WHERE TRIM(ticket) = "
+						+ ticket.trim());
 		if (listTemp.isEmpty()) {
 			return true;
 		} else {
@@ -1276,6 +1281,18 @@ public class ProcessBo implements Serializable {
 		}
 	}
 
+	public CrmHistoryConsultant getHistoryConsultant(BigDecimal idAppointment) {
+		List<CrmHistoryConsultant> list = null;
+		list = dao
+				.find("from CrmHistoryConsultant o where o.crmAppointment.id = "
+						+ idAppointment);
+		if (list.size() > 0) {
+			return list.get(0);
+		} else {
+			return new CrmHistoryConsultant();
+		}
+	}
+
 	public List<CrmHistoryPhysique> getListHistoryPhysique(
 			BigDecimal idPatient, String type) {
 		return dao.find("from CrmHistoryPhysique o where o.crmPatient.id = "
@@ -1305,6 +1322,13 @@ public class ProcessBo implements Serializable {
 			BigDecimal idPatient) {
 		return dao.find("from CrmHistoryOrganometry o where o.crmPatient.id = "
 				+ idPatient);
+	}
+
+	public List<CrmHistoryConsultant> getListHistoryConsultant(
+			BigDecimal idPatient) {
+		return dao
+				.find("from CrmHistoryConsultant o where o.crmAppointment.crmPatient.id = "
+						+ idPatient);
 	}
 
 	public CrmOdontologyStomatolog getOdontologyStomatolog(
@@ -1636,10 +1660,14 @@ public class ProcessBo implements Serializable {
 		try {
 			result = dao.persist(entity);
 		} catch (RuntimeException ex) {
+			System.out.println("ERROR_CRM");
+			ex.printStackTrace();
 			if (ex.getCause() instanceof ConstraintViolationException) {
 				result = -1;
 			} else if (ex.getCause() instanceof DataIntegrityViolationException) {
 				result = -2;
+			} else {
+				result = -3;
 			}
 		}
 		return result;

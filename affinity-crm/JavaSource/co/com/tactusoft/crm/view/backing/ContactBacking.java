@@ -121,8 +121,9 @@ public class ContactBacking extends BaseBacking {
 	}
 
 	public boolean isDisabledTicket() {
-		return this.selectedPatient != null
-				&& !FacesUtil.isEmptyOrBlank(this.selectedPatient.getTicket());
+		boolean result = (this.selectedPatient == null || (this.selectedPatient != null && this.selectedPatient
+				.getId() == null));
+		return result;
 	}
 
 	public List<CrmPatientTicket> getListTickets() {
@@ -181,16 +182,13 @@ public class ContactBacking extends BaseBacking {
 		mapOccupation = new HashMap<BigDecimal, CrmOccupation>();
 	}
 
-	public void saveAction() {
+	public void saveAction(boolean validateAddTicket) {
 		String message = null;
-		boolean isExistsTickets = true;
 
-		if (this.validateTicket) {
+		if (validateAddTicket) {
 			if (listTickets.isEmpty()) {
 				message = FacesUtil.getMessage("pat_msg_ticket");
 				FacesUtil.addError(message);
-			} else {
-				isExistsTickets = processService.isExistsTickets(listTickets);
 			}
 		}
 
@@ -223,12 +221,6 @@ public class ContactBacking extends BaseBacking {
 
 			if (profile == null) {
 				message = FacesUtil.getMessage("pat_msg_profile");
-				FacesUtil.addError(message);
-			}
-
-			if (!isExistsTickets) {
-				this.selectedPatient.setTicket(null);
-				message = FacesUtil.getMessage("con_msg_ticket_fail");
 				FacesUtil.addError(message);
 			}
 
@@ -279,9 +271,16 @@ public class ContactBacking extends BaseBacking {
 							.getFirstnames().toUpperCase());
 					selectedPatient.setSurnames(selectedPatient.getSurnames()
 							.toUpperCase());
-					processService.savePatient(selectedPatient, automatic
-							&& newRecord, false, crmCountry.getCode());
-					if (newRecord) {
+					int result = processService
+							.savePatient(selectedPatient, automatic
+									&& newRecord, false, crmCountry.getCode());
+					if (result != 0) {
+						String field = FacesUtil.getMessage("con");
+						message = FacesUtil.getMessage(
+								"msg_record_unique_exception", field);
+						throw new Exception(message);
+					}
+					if (validateAddTicket) {
 						processService.savePatientTicket(selectedPatient,
 								listTickets);
 					}
@@ -320,8 +319,6 @@ public class ContactBacking extends BaseBacking {
 				listPatient.add(selectedPatientTemp);
 				patientModel = new PatientDataModel(listPatient);
 				disabledAddPatient = false;
-				listTickets = processService
-						.getListPatientTicket(selectedPatient.getId());
 			} else {
 				SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
 				CrmProfile profile = mapProfile.get(this.idProfile);
@@ -402,6 +399,9 @@ public class ContactBacking extends BaseBacking {
 		newRecord = false;
 		idCountry = selectedPatient.getIdCountry();
 		handleCountryChange();
+
+		listTickets = processService.getListPatientTicket(selectedPatient
+				.getId());
 
 		if (existsSAP) {
 			String message = FacesUtil.getMessage("pat_msg_exists_sap_4");
@@ -617,9 +617,17 @@ public class ContactBacking extends BaseBacking {
 			String message = FacesUtil.getMessage("glb_required", field);
 			FacesUtil.addError(message);
 		} else {
-			this.listTickets.add(crmPatientTicketSelected);
-			crmPatientTicketSelected = new CrmPatientTicket();
-			crmPatientTicketSelected.setCrmTicket(new CrmTicket());
+			boolean isExistsTickets = processService
+					.isExistsTickets(this.crmPatientTicketSelected.getTicket());
+			if (isExistsTickets) {
+				this.listTickets.add(crmPatientTicketSelected);
+				crmPatientTicketSelected = new CrmPatientTicket();
+				crmPatientTicketSelected.setCrmTicket(new CrmTicket());
+			} else {
+				this.crmPatientTicketSelected.setTicket(null);
+				String message = FacesUtil.getMessage("con_msg_ticket_fail");
+				FacesUtil.addError(message);
+			}
 		}
 	}
 

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="formula_concatenada" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c9cc06ac-957f-4178-a988-65e601b97fb0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[select
+concat(
+b.description
+,  case when a.posology  is not null then  concat('\n',a.posology  ) else '' end
+,'\n\n\t'
+,group_concat( concat( convert(c.unit using utf8),'\t'  , ucase(c.desc_material)
+		,case when length(ifnull(trim(c.posology),'')) > 0  then  concat('\n\t',c.posology  ) else '' end
+		)
+	separator '\n\t')
+) pos
+
+from crm_diagnosis a join crm_cie b on a.id_cie = b.id
+join crm_medication c on a.id_appointment = c.id_appointment and a.id_cie = c.id_cie
+join crm_appointment d on a.id_appointment = d.id
+join crm_patient e on d.id_patient = e.id
+join crm_doctor f on d.id_doctor = f.id
+join crm_branch g on d.id_branch = g.id
+where a.id_appointment = 53348 and c.material_type = 'MEDICAMENTO'
+group by b.description ,a.posology]]>
+	</queryString>
+	<field name="pos" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="33" y="2" width="100" height="20" uuid="46ac399c-a051-47b3-8e8e-17ca411d1cc7"/>
+				<text><![CDATA[diag]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="95" y="2" width="100" height="20" uuid="1c178f58-6a85-46fa-b058-7e253898b26a"/>
+				<text><![CDATA[med]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="50" y="2" width="100" height="20" uuid="6f212e4b-0cf3-42e7-9467-0df3c26c5d4c"/>
+				<text><![CDATA[pos]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="35" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="10" y="3" width="545" height="27" isPrintWhenDetailOverflows="true" uuid="3b1cd37a-2de2-4535-bb92-6c6f3eafd7ec"/>
+				<textFieldExpression><![CDATA[$F{pos}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

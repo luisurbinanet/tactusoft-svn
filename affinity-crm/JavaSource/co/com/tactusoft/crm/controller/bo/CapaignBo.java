@@ -62,8 +62,10 @@ public class CapaignBo implements Serializable {
 		return getListCallType(Constant.CALLED_TYPE_OUT);
 	}
 
-	public CrmCall getListCallById(BigDecimal id) {
-		return (CrmCall) dao.find("from CrmCall where idCall = " + id).get(0);
+	public CrmCall getListCallById(BigDecimal id, String idCampaign) {
+		return (CrmCall) dao.find(
+				"FROM CrmCall WHERE idCall = " + id + " AND idCampaign = '"
+						+ idCampaign + "'").get(0);
 	}
 
 	public CrmCampaign getCampaignByPatientAndDate(BigDecimal idPatient,

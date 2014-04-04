@@ -212,7 +212,7 @@ public class CallBacking extends ContactBacking {
 			try {
 				int result = capaignService.saveCall(call);
 				if (result == -1) {
-					call = capaignService.getListCallById(callId);
+					call = capaignService.getListCallById(callId, camapignId);
 					call.setAgentNumber(agentNumber);
 					call.setCallType(callType);
 					call.setIdCampaign(camapignId);
@@ -367,7 +367,6 @@ public class CallBacking extends ContactBacking {
 		patientGridType = 2;
 	}
 
-	@Override
 	public void saveAction() {
 		if (patientGridType == 2) {
 			this.getSelectedPatient().setCrmUserByIdUserCreate(
@@ -375,7 +374,7 @@ public class CallBacking extends ContactBacking {
 			this.getSelectedPatient().setIdCountry(idCountry);
 			this.getSelectedPatient().setIdRegion(idRegion);
 			this.getSelectedPatient().setIdCity(callId);
-			super.saveAction();
+			super.saveAction(false);
 		}
 
 		if (this.selectedPatient.getId() != null) {

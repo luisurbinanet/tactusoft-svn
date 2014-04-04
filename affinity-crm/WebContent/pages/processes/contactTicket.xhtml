@@ -9,7 +9,7 @@
 
 	<ui:define name="body">
 
-		<p:panel style="width:100%;height:700px;"
+		<p:panel style="width:100%;height:100%;"
 			header="#{msg['title_contact_ticket']}">
 
 			<p:spacer height="5" />
@@ -22,13 +22,14 @@
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
 							actionListener="#{contactBacking.newAction}"
-							update="pnlDetail pnlDetail2 pnlDetail3 toolBar" process="@this" />
+							update="pnlDetail pnlDetail2 pnlDetail3 toolBar :form:tblTicket"
+							process="@this" />
 						<p:commandButton value="#{msg['btn_search']}" process="@this"
 							icon="ui-icon-search" oncomplete="searchDlg.show()"
 							actionListener="#{contactBacking.refreshSearchAction}"
 							update=":editForm:searchDialog" />
 						<p:commandButton id="btnSavePatient" value="#{msg['btn_save']}"
-							icon="ui-icon-disk" action="#{contactBacking.saveAction}"
+							icon="ui-icon-disk" action="#{contactBacking.saveAction(true)}"
 							update="growl toolBar pnlDetail pnlDetail2 pnlDetail3"
 							process="toolBar pnlDetail pnlDetail2 pnlDetail3"
 							disabled="#{contactBacking.existsSAP}">
@@ -108,7 +109,7 @@
 						rendered="#{!contactBacking.automatic or !contactBacking.newRecord}" />
 					<p:inputText id="txtDoc"
 						value="#{contactBacking.selectedPatient.doc}" style="width:240px;"
-						label="#{msg['pat_code']}" maxlength="16" required="true"
+						label="#{msg['pat_code']}" maxlength="16"
 						rendered="#{!contactBacking.automatic or !contactBacking.newRecord}">
 						<pe:keyFilter regEx="/[\d]/" preventPaste="false" />
 					</p:inputText>
@@ -195,8 +196,7 @@
 								value="#{contactBacking.crmPatientTicketSelected.ticket}"
 								style="width:200px" label="#{msg['pat_ticket']}" />
 							<p:commandButton value="Agregar" update="tblTicket :form:growl"
-								action="#{contactBacking.addTicket}" process="@this,tblTicket"
-								disabled="#{contactBacking.selectedPatient.id ne null}" />
+								action="#{contactBacking.addTicket}" process="@this,tblTicket" />
 						</h:panelGrid>
 					</f:facet>
 
@@ -208,7 +208,7 @@
 						<p:commandButton icon="ui-icon-trash" title="#{msg['btn_delete']}"
 							action="#{contactBacking.removeTicket}" process="@this"
 							update="tblTicket"
-							disabled="#{contactBacking.selectedPatient.id ne null}">
+							disabled="#{row.id ne null}">
 							<f:setPropertyActionListener value="#{row}"
 								target="#{contactBacking.crmPatientTicketSelected}" />
 						</p:commandButton>
@@ -413,7 +413,7 @@
 								process="@this,pnlParameter" />
 							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
 								icon="ui-icon-plusthick"
-								update=":form:pnlDetail :form:pnlDetail2 :form:pnlDetail3 toolBar :form:growl :form:toolBar"
+								update=":form:pnlDetail :form:pnlDetail2 :form:pnlDetail3 toolBar :form:growl :form:toolBar :form:tblTicket"
 								actionListener="#{contactBacking.addContactAction}"
 								process="@this,searchDialog" oncomplete="searchDlg.hide();"
 								disabled="#{contactBacking.disabledAddPatient}" />
