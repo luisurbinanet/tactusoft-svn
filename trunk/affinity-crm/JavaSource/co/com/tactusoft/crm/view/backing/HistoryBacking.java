@@ -38,6 +38,7 @@ import co.com.tactusoft.crm.model.entities.CrmCie;
 import co.com.tactusoft.crm.model.entities.CrmConsent;
 import co.com.tactusoft.crm.model.entities.CrmDiagnosis;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
+import co.com.tactusoft.crm.model.entities.CrmHistoryConsultant;
 import co.com.tactusoft.crm.model.entities.CrmHistoryHistory;
 import co.com.tactusoft.crm.model.entities.CrmHistoryHomeopathic;
 import co.com.tactusoft.crm.model.entities.CrmHistoryOrganometry;
@@ -51,6 +52,7 @@ import co.com.tactusoft.crm.model.entities.CrmOccupation;
 import co.com.tactusoft.crm.model.entities.CrmTherapy;
 import co.com.tactusoft.crm.model.entities.VwAppointment;
 import co.com.tactusoft.crm.util.Constant;
+import co.com.tactusoft.crm.util.DataModelCustom;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.util.SAPEnvironment;
 import co.com.tactusoft.crm.view.datamodel.CieDataModel;
@@ -93,12 +95,14 @@ public class HistoryBacking extends BaseBacking {
 	protected HistoryHomeopathicDataModel historyHomeopathicModel;
 	protected HistoryPhysiqueDataModel historyPhysiqueModel;
 	protected HistoryOrganometryDataModel historyOrganometryModel;
+	protected DataModelCustom<CrmHistoryConsultant> historyConsultantModel;
 
 	protected CrmHistoryHistory selectedHistoryHistory;
 	protected CrmHistoryRecord selectedHistoryRecord;
 	protected CrmHistoryHomeopathic selectedHistoryHomeopathic;
 	protected CrmHistoryPhysique selectedHistoryPhysique;
 	protected CrmHistoryOrganometry selectedHistoryOrganometry;
+	protected CrmHistoryConsultant selectedHistoryConsultant;
 
 	protected int activeIndex = -1;
 	protected BigDecimal idOccupation;
@@ -362,6 +366,15 @@ public class HistoryBacking extends BaseBacking {
 		this.historyOrganometryModel = historyOrganometryModel;
 	}
 
+	public DataModelCustom<CrmHistoryConsultant> getHistoryConsultantModel() {
+		return historyConsultantModel;
+	}
+
+	public void setHistoryConsultantModel(
+			DataModelCustom<CrmHistoryConsultant> historyConsultantModel) {
+		this.historyConsultantModel = historyConsultantModel;
+	}
+
 	public CrmHistoryHistory getSelectedHistoryHistory() {
 		return selectedHistoryHistory;
 	}
@@ -404,6 +417,15 @@ public class HistoryBacking extends BaseBacking {
 	public void setSelectedHistoryOrganometry(
 			CrmHistoryOrganometry selectedHistoryOrganometry) {
 		this.selectedHistoryOrganometry = selectedHistoryOrganometry;
+	}
+
+	public CrmHistoryConsultant getSelectedHistoryConsultant() {
+		return selectedHistoryConsultant;
+	}
+
+	public void setSelectedHistoryConsultant(
+			CrmHistoryConsultant selectedHistoryConsultant) {
+		this.selectedHistoryConsultant = selectedHistoryConsultant;
 	}
 
 	public int getActiveIndex() {
@@ -1195,15 +1217,17 @@ public class HistoryBacking extends BaseBacking {
 							Constant.MATERIAL_TYPE_OTHER_MEDICINE);
 			otherMedicationModel = new MedicationDataModel(listOtherMedication);
 
-			listTherapy = processService
-					.getListMedicationByAppointment(
-							selectedAppointment.getId(),
-							Constant.MATERIAL_TYPE_THERAPY);
-			therapyModel = new MedicationDataModel(listTherapy);
+			if (this.getRolePrincipal().equals(Constant.ROLE_DOCTOR)) {
+				listTherapy = processService.getListMedicationByAppointment(
+						selectedAppointment.getId(),
+						Constant.MATERIAL_TYPE_THERAPY);
+				therapyModel = new MedicationDataModel(listTherapy);
 
-			listExam = processService.getListMedicationByAppointment(
-					selectedAppointment.getId(), Constant.MATERIAL_TYPE_EXAMS);
-			examModel = new MedicationDataModel(listExam);
+				listExam = processService.getListMedicationByAppointment(
+						selectedAppointment.getId(),
+						Constant.MATERIAL_TYPE_EXAMS);
+				examModel = new MedicationDataModel(listExam);
+			}
 
 			if (selectedPatient.getCrmOccupation() == null) {
 				selectedPatient.setCrmOccupation(new CrmOccupation());
@@ -1221,74 +1245,85 @@ public class HistoryBacking extends BaseBacking {
 
 			idMembershipType = selectedPatient.getIdMemberShip();
 
-			selectedHistoryHistory = processService
-					.getHistoryHistory(selectedAppointment.getId());
-			selectedHistoryHistory.setCrmPatient(selectedPatient);
-			selectedHistoryHistory.setCrmAppointment(currentAppointment);
+			if (this.getRolePrincipal().equals(Constant.ROLE_DOCTOR)) {
+				selectedHistoryHistory = processService
+						.getHistoryHistory(selectedAppointment.getId());
+				selectedHistoryHistory.setCrmPatient(selectedPatient);
+				selectedHistoryHistory.setCrmAppointment(currentAppointment);
 
-			selectedHistoryRecord = processService
-					.getHistoryRecord(selectedAppointment.getId());
-			selectedHistoryRecord.setCrmPatient(selectedPatient);
-			selectedHistoryRecord.setCrmAppointment(currentAppointment);
+				selectedHistoryRecord = processService
+						.getHistoryRecord(selectedAppointment.getId());
+				selectedHistoryRecord.setCrmPatient(selectedPatient);
+				selectedHistoryRecord.setCrmAppointment(currentAppointment);
 
-			selectedHistoryHomeopathic = processService
-					.getHistoryHomeopathic(selectedAppointment.getId());
-			selectedHistoryHomeopathic.setBiotypology("");
-			selectedHistoryHomeopathic.setCrmPatient(selectedPatient);
-			selectedHistoryHomeopathic.setCrmAppointment(currentAppointment);
+				selectedHistoryHomeopathic = processService
+						.getHistoryHomeopathic(selectedAppointment.getId());
+				selectedHistoryHomeopathic.setBiotypology("");
+				selectedHistoryHomeopathic.setCrmPatient(selectedPatient);
+				selectedHistoryHomeopathic
+						.setCrmAppointment(currentAppointment);
 
-			selectedHistoryPhysique = processService
-					.getHistoryPhysique(selectedAppointment.getId());
-			selectedHistoryPhysique.setCrmPatient(selectedPatient);
-			selectedHistoryPhysique.setCrmAppointment(currentAppointment);
+				selectedHistoryPhysique = processService
+						.getHistoryPhysique(selectedAppointment.getId());
+				selectedHistoryPhysique.setCrmPatient(selectedPatient);
+				selectedHistoryPhysique.setCrmAppointment(currentAppointment);
 
-			try {
-				this.heartRate = Integer.parseInt(selectedHistoryPhysique
-						.getHeartRate());
-			} catch (Exception ex) {
-				this.heartRate = 0;
-			}
+				try {
+					this.heartRate = Integer.parseInt(selectedHistoryPhysique
+							.getHeartRate());
+				} catch (Exception ex) {
+					this.heartRate = 0;
+				}
 
-			try {
-				this.respiratoryRate = Integer.parseInt(selectedHistoryPhysique
-						.getRespiratoryRate());
-			} catch (Exception ex) {
-				this.respiratoryRate = 0;
-			}
+				try {
+					this.respiratoryRate = Integer
+							.parseInt(selectedHistoryPhysique
+									.getRespiratoryRate());
+				} catch (Exception ex) {
+					this.respiratoryRate = 0;
+				}
 
-			try {
-				this.weight = Double.parseDouble(selectedHistoryPhysique
-						.getWeight());
-			} catch (Exception ex) {
-				this.weight = 0d;
-			}
+				try {
+					this.weight = Double.parseDouble(selectedHistoryPhysique
+							.getWeight());
+				} catch (Exception ex) {
+					this.weight = 0d;
+				}
 
-			try {
-				this.height = Double.parseDouble(selectedHistoryPhysique
-						.getHeight());
-			} catch (Exception ex) {
-				this.height = 0d;
-			}
+				try {
+					this.height = Double.parseDouble(selectedHistoryPhysique
+							.getHeight());
+				} catch (Exception ex) {
+					this.height = 0d;
+				}
 
-			selectedHistoryOrganometry = processService
-					.getHistoryOrganometry(selectedAppointment.getId());
-			selectedHistoryOrganometry.setCrmPatient(selectedPatient);
-			selectedHistoryOrganometry.setCrmAppointment(currentAppointment);
+				selectedHistoryOrganometry = processService
+						.getHistoryOrganometry(selectedAppointment.getId());
+				selectedHistoryOrganometry.setCrmPatient(selectedPatient);
+				selectedHistoryOrganometry
+						.setCrmAppointment(currentAppointment);
 
-			if (currentAppointment.getCrmProcedureDetail().isCaseStudy()) {
-				Date firstDate = FacesUtil.getDateWithoutTime(processService
-						.getFirstAppointmentbyPatient(selectedPatient.getId())
-						.getStartAppointmentDate());
-				selectedCaseStudy.setCrmAppointment(currentAppointment);
-				selectedCaseStudy.setStartDate(firstDate);
+				if (currentAppointment.getCrmProcedureDetail().isCaseStudy()) {
+					Date firstDate = FacesUtil
+							.getDateWithoutTime(processService
+									.getFirstAppointmentbyPatient(
+											selectedPatient.getId())
+									.getStartAppointmentDate());
+					selectedCaseStudy.setCrmAppointment(currentAppointment);
+					selectedCaseStudy.setStartDate(firstDate);
 
-				listCaseStudyCieTemp = processService
-						.getListCieByPatient(selectedPatient.getId());
+					listCaseStudyCieTemp = processService
+							.getListCieByPatient(selectedPatient.getId());
 
-				listCaseStudyHistoryTemp = processService
-						.getListHistoryByPatient(selectedPatient.getId());
-				refreshCaseStudyCie();
-				refreshCaseStudyHistory();
+					listCaseStudyHistoryTemp = processService
+							.getListHistoryByPatient(selectedPatient.getId());
+					refreshCaseStudyCie();
+					refreshCaseStudyHistory();
+				}
+			} else {
+				selectedHistoryConsultant = processService
+						.getHistoryConsultant(selectedAppointment.getId());
+				selectedHistoryConsultant.setCrmAppointment(currentAppointment);
 			}
 
 			return null;
@@ -1726,6 +1761,12 @@ public class HistoryBacking extends BaseBacking {
 				.getListHistoryOrganometry(selectedPatient.getId());
 		historyOrganometryModel = new HistoryOrganometryDataModel(
 				listTempOrganometry);
+
+		List<CrmHistoryConsultant> listTempConsultant = processService
+				.getListHistoryConsultant(selectedPatient.getId());
+		historyConsultantModel = new DataModelCustom<CrmHistoryConsultant>(
+				listTempConsultant);
+
 		listDiagnosisView = processService.getListDiagnosisByPatient(
 				selectedPatient.getId(), consentType);
 
@@ -1760,6 +1801,141 @@ public class HistoryBacking extends BaseBacking {
 	}
 
 	public void closeAppointmentAction(ActionEvent event) {
+		if (this.getRolePrincipal().equals(Constant.ROLE_DOCTOR)) {
+			closeAppointmentDoctorAction(event);
+		} else {
+			closeAppointmentConsultanAction(event);
+		}
+	}
+
+	public void closeAppointmentConsultanAction(ActionEvent event) {
+		String message = null;
+
+		String field = null;
+
+		if (selectedPatient == null || selectedPatient.getId() == null) {
+			message = FacesUtil.getMessage("his_msg_error_1");
+			FacesUtil.addWarn(message);
+		}
+
+		if (selectedPatient.getBornDate() == null) {
+			field = FacesUtil.getMessage("pat_born_date");
+			message = FacesUtil.getMessage("title_patient_complementary");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		}
+
+		if (idOccupation == null || idOccupation.intValue() == 0) {
+			field = FacesUtil.getMessage("pat_occupation");
+			message = FacesUtil.getMessage("title_patient_complementary");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		} else {
+			selectedPatient.setCrmOccupation(mapOccupation.get(idOccupation));
+		}
+
+		if (FacesUtil.isEmptyOrBlank(neighborhood)) {
+			field = FacesUtil.getMessage("pat_neighborhood");
+			message = FacesUtil.getMessage("title_patient_complementary");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		} else {
+			selectedPatient.setNeighborhood(neighborhood);
+		}
+
+		if (FacesUtil.isEmptyOrBlank(typeHousing)) {
+			field = FacesUtil.getMessage("pat_type_housing");
+			message = FacesUtil.getMessage("title_patient_complementary");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		} else {
+			selectedPatient.setTypeHousing(typeHousing);
+		}
+
+		if (FacesUtil.isEmptyOrBlank(selectedHistoryConsultant.getObs())) {
+			field = FacesUtil.getMessage("his_consultant");
+			message = FacesUtil.getMessage("his_consultant");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		}
+
+		int numDiagnosis = listDiagnosis.size();
+		if (numDiagnosis == 0) {
+			message = FacesUtil.getMessage("his_msg_message_dig_1");
+			FacesUtil.addWarn(message);
+		} else {
+			int minDiagnosis = currentAppointment.getCrmProcedureDetail()
+					.getMinDiagnosis();
+			int maxDiagnosis = currentAppointment.getCrmProcedureDetail()
+					.getMaxDiagnosis();
+			if (numDiagnosis < minDiagnosis || numDiagnosis > maxDiagnosis) {
+				message = FacesUtil.getMessage("his_msg_message_med_6",
+						String.valueOf(minDiagnosis),
+						String.valueOf(maxDiagnosis));
+				FacesUtil.addWarn(message);
+			}
+
+			if (listMedication.size() == 0) {
+				message = FacesUtil.getMessage("his_msg_message_med_5");
+				FacesUtil.addWarn(message);
+			} else {
+				int idCie = listDiagnosis.get(0).getCrmCie().getId().intValue();
+				int numMedication = 0;
+				for (CrmMedication row : listMedication) {
+					if (row.getCrmCie().getId().intValue() == idCie) {
+						numMedication++;
+					}
+				}
+
+				int minMedication = currentAppointment.getCrmProcedureDetail()
+						.getMinMedication();
+				int maxMedication = currentAppointment.getCrmProcedureDetail()
+						.getMaxMedication();
+				if (minMedication > 0 && numMedication < minMedication) {
+					message = FacesUtil.getMessage("his_msg_message_med_1",
+							String.valueOf(minMedication));
+					FacesUtil.addWarn(message);
+				} else if (maxMedication > 0 && numMedication > maxMedication) {
+					message = FacesUtil.getMessage("his_msg_message_med_3",
+							String.valueOf(maxMedication));
+					FacesUtil.addWarn(message);
+				}
+			}
+		}
+
+		processService.save(selectedHistoryConsultant);
+
+		if (message == null) {
+			processService.saveDiagnosis(currentAppointment, listDiagnosis);
+			processService.saveMedication(currentAppointment, listMedication,
+					Constant.MATERIAL_TYPE_MEDICINE);
+			processService.saveMedication(currentAppointment,
+					listOtherMedication, Constant.MATERIAL_TYPE_OTHER_MEDICINE);
+
+			viewMode = true;
+
+			if (event != null) {
+				currentAppointment.setCloseAppointment(true);
+			}
+
+			currentAppointment.setState(Constant.APP_STATE_ATTENDED);
+			processService.saveAppointment(currentAppointment);
+			message = FacesUtil.getMessage("his_msg_message_med_ok");
+			FacesUtil.addInfo(message);
+			refreshLists();
+
+			if (event != null) {
+				refreshAction();
+			}
+		}
+	}
+
+	public void closeAppointmentDoctorAction(ActionEvent event) {
 		String message = null;
 		boolean medicationTherapy = false;
 
@@ -2362,26 +2538,20 @@ public class HistoryBacking extends BaseBacking {
 								FacesUtil.addWarn(message);
 							}
 
-							/*boolean validate = true;
-							for (CrmMedication row : listMedication) {
-								if (FacesUtil.isEmptyOrBlank(row.getPosology())) {
-									validate = false;
-									break;
-								}
-							}
-
-							for (CrmDiagnosis row : listDiagnosis) {
-								if (FacesUtil.isEmptyOrBlank(row.getPosology())) {
-									validate = false;
-									break;
-								}
-							}
-
-							if (!validate) {
-								message = FacesUtil
-										.getMessage("his_msg_message_dig_2");
-								FacesUtil.addWarn(message);
-							}*/
+							/*
+							 * boolean validate = true; for (CrmMedication row :
+							 * listMedication) { if
+							 * (FacesUtil.isEmptyOrBlank(row.getPosology())) {
+							 * validate = false; break; } }
+							 * 
+							 * for (CrmDiagnosis row : listDiagnosis) { if
+							 * (FacesUtil.isEmptyOrBlank(row.getPosology())) {
+							 * validate = false; break; } }
+							 * 
+							 * if (!validate) { message = FacesUtil
+							 * .getMessage("his_msg_message_dig_2");
+							 * FacesUtil.addWarn(message); }
+							 */
 						}
 					}
 

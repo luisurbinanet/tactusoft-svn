@@ -231,9 +231,9 @@ public class DoctorBacking extends BaseBacking {
 		if (selected.getId() == null && selectedWSDoctor.endsWith("-1")) {
 			message = FacesUtil.getMessage("doc_msg_error_select");
 			FacesUtil.addError(message);
-		} else if (listDoctorSchedule.size() == 0) {
+		/*} else if (listDoctorSchedule.size() == 0) {
 			message = FacesUtil.getMessage("sal_msg_error_schedule");
-			FacesUtil.addError(message);
+			FacesUtil.addError(message);*/
 		} else {
 			if (selected.getId() == null) {
 				selected.setCode(selectedWSDoctor);

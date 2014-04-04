@@ -16,6 +16,10 @@
 
 			<h:form id="form">
 
+				<p:poll rendered="#{not historyBacking.modeEdit}"
+					update="selectedTable" interval="60"
+					listener="#{historyBacking.refreshAction}" />
+
 				<p:growl id="growl" showDetail="true" />
 
 				<p:toolbar id="toolBarPatient" style="width:100%"
@@ -105,7 +109,7 @@
 								icon="ui-icon-locked" onclick="confirmation.show()"
 								disabled="#{historyBacking.currentAppointment.closeAppointment}"
 								process="@this, accordion"
-								rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}" />
+								rendered="#{historyBacking.rolePrincipal eq 'DOCTOR' or historyBacking.rolePrincipal eq 'CONSULTANT'}" />
 							<p:commandButton icon="ui-icon-bookmark"
 								value="#{msg['btn_view_history']}" update="form"
 								oncomplete="dlgHistorial.show()"
@@ -113,7 +117,7 @@
 							<p:commandButton
 								disabled="#{not historyBacking.currentAppointment.closeAppointment}"
 								icon="ui-icon-print"
-								rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}"
+								rendered="#{historyBacking.rolePrincipal eq 'DOCTOR' or historyBacking.rolePrincipal eq 'CONSULTANT'}"
 								value="#{msg['btn_print_medication']}" ajax="false"
 								action="#{historyBacking.printFormulaAction}"
 								process="@this,toolBar" />
@@ -231,9 +235,11 @@
 								</h:panelGrid>
 							</p:fieldset>
 
-							<p:spacer height="8" />
+							<p:spacer height="8"
+								rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}" />
 
-							<p:fieldset legend="#{msg['pat_guardian_data']}">
+							<p:fieldset legend="#{msg['pat_guardian_data']}"
+								rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
 								<h:panelGrid id="pnlDetail2" columns="4" style="margin:0 auto;"
 									width="100%">
 
@@ -727,7 +733,8 @@
 							</h:panelGrid>
 						</p:tab>
 
-						<p:tab title="#{msg['his_history_physique']}" id="PHYSIQUE">
+						<p:tab title="#{msg['his_history_physique']}" id="PHYSIQUE"
+							rendered="#{historyBacking.rolePrincipal ne 'CONSULTANT'}">>
 							<h:panelGrid columns="4" width="100%"
 								columnClasses="width25per,width25per,width25per,width25per">
 
@@ -883,7 +890,8 @@
 							</h:panelGrid>
 						</p:tab>
 
-						<p:tab title="#{msg['his_history_organometry']}" id="ORGANOMETRY">
+						<p:tab title="#{msg['his_history_organometry']}" id="ORGANOMETRY"
+							rendered="#{historyBacking.rolePrincipal ne 'CONSULTANT'}">
 							<h:panelGrid id="pnlOrganometry" columns="1" width="100%">
 								<p:selectBooleanCheckbox
 									value="#{historyBacking.selectedHistoryOrganometry.organometryCheck}"
@@ -896,8 +904,17 @@
 							</h:panelGrid>
 						</p:tab>
 
+						<p:tab title="#{msg['his_consultant']}" id="history_consultant"
+							rendered="#{historyBacking.rolePrincipal eq 'CONSULTANT'}">
+
+							<p:inputTextarea id="txtConsultant"
+								value="#{historyBacking.selectedHistoryConsultant.obs}"
+								style="width:950px" rows="10" label="#{msg['his_consultant']}" />
+
+						</p:tab>
+
 						<p:tab title="#{msg['his_history_ip']}" id="IP"
-							rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
+							rendered="#{historyBacking.rolePrincipal eq 'DOCTOR' or historyBacking.rolePrincipal eq 'CONSULTANT'}">
 
 							<p:fieldset legend="#{msg['his_history_ip']}">
 
@@ -960,7 +977,8 @@
 
 							<p:spacer />
 
-							<p:fieldset legend="#{msg['his_history_other_medicaction']}">
+							<p:fieldset legend="#{msg['his_history_other_medicaction']}"
+								rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
 								<p:dataTable id="dtbOtherMedication" var="rec"
 									value="#{historyBacking.otherMedicationModel}"
 									selection="#{historyBacking.selectedOtherMedication}"
@@ -1014,7 +1032,8 @@
 
 							<p:spacer />
 
-							<p:fieldset legend="#{msg['his_history_therapy']}">
+							<p:fieldset legend="#{msg['his_history_therapy']}"
+								rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
 
 								<p:dataTable id="dtbTherapy" var="rec"
 									value="#{historyBacking.therapyModel}"
@@ -1063,7 +1082,8 @@
 
 							<p:spacer />
 
-							<p:fieldset legend="#{msg['his_history_examinations']}">
+							<p:fieldset legend="#{msg['his_history_examinations']}"
+								rendered="#{historyBacking.rolePrincipal eq 'DOCTOR'}">
 
 								<p:dataTable id="dtbExamns" var="rec"
 									value="#{historyBacking.examModel}"

@@ -246,7 +246,8 @@ public class UserBacking extends BaseBacking {
 			FacesUtil.addError(message);
 		}
 
-		if (rolePrincipal.equals(Constant.ROLE_DOCTOR)
+		if ((rolePrincipal.equals(Constant.ROLE_DOCTOR) || rolePrincipal
+				.equals(Constant.ROLE_CONSULTANT))
 				&& idSpeciality.intValue() == -1) {
 			message = FacesUtil.getMessage("usr_msg_error_speciality");
 			FacesUtil.addError(message);
@@ -261,12 +262,19 @@ public class UserBacking extends BaseBacking {
 			selected.setCrmDepartment(mapDepartment.get(selected
 					.getCrmDepartment().getId()));
 
-			if (crmDoctor == null && rolePrincipal.equals(Constant.ROLE_DOCTOR)) {
+			if (crmDoctor == null
+					&& (rolePrincipal.equals(Constant.ROLE_DOCTOR) || rolePrincipal
+							.equals(Constant.ROLE_CONSULTANT))) {
 				crmDoctor = new CrmDoctor();
 				crmDoctor.setCode(selected.getDoc());
 				crmDoctor.setNames(selected.getSurnames().toUpperCase() + " "
 						+ selected.getNames().toUpperCase());
 				crmDoctor.setCrmSpeciality(mapCrmSpeciality.get(idSpeciality));
+				if (rolePrincipal.equals(Constant.ROLE_DOCTOR)) {
+					crmDoctor.setMedicalType(Constant.ROLE_DOCTOR);
+				} else {
+					crmDoctor.setMedicalType(Constant.ROLE_CONSULTANT);
+				}
 				crmDoctor.setState(Constant.STATE_ACTIVE);
 			} else if (crmDoctor != null) {
 				crmDoctor.setCode(selected.getDoc());
@@ -274,7 +282,8 @@ public class UserBacking extends BaseBacking {
 						+ selected.getNames().toUpperCase());
 				crmDoctor.setCrmSpeciality(mapCrmSpeciality.get(idSpeciality));
 				crmDoctor
-						.setState(rolePrincipal.equals(Constant.ROLE_DOCTOR) ? Constant.STATE_ACTIVE
+						.setState((rolePrincipal.equals(Constant.ROLE_DOCTOR) || rolePrincipal
+								.equals(Constant.ROLE_CONSULTANT)) ? Constant.STATE_ACTIVE
 								: Constant.STATE_INACTIVE);
 			}
 
@@ -357,7 +366,7 @@ public class UserBacking extends BaseBacking {
 				crmDoctor = listDoctor.get(0);
 				idSpeciality = crmDoctor.getCrmSpeciality().getId();
 				if (crmDoctor.getState() == Constant.STATE_ACTIVE) {
-					rolePrincipal = Constant.ROLE_DOCTOR;
+					rolePrincipal = crmDoctor.getMedicalType();
 				} else {
 					rolePrincipal = Constant.ROLE_USER;
 				}

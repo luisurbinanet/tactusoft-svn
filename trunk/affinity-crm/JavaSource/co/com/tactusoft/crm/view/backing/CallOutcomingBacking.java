@@ -400,7 +400,6 @@ public class CallOutcomingBacking extends ContactBacking {
 		}
 	}
 
-	@Override
 	public void saveAction() {
 		call.setIdCall(idCall);
 		call.setAgentNumber("Agent/" + agentNumber);

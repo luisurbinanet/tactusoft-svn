@@ -796,6 +796,8 @@ public class AppointmentBacking extends BaseBacking {
 
 			if (this.generateNew) {
 				this.selected.setId(null);
+				this.selected.setCrmDiagnosises(null);
+				this.selected.setCrmMedications(null);
 			}
 
 			if (validateApp == 0) {
@@ -875,10 +877,15 @@ public class AppointmentBacking extends BaseBacking {
 
 				CrmAppointment crmAppointment = processService
 						.saveAppointment(selected);
-				infoMessage = FacesUtil.getMessage("app_msg_ok",
-						crmAppointment.getCode());
 
-				saved = true;
+				if (crmAppointment != null) {
+					infoMessage = FacesUtil.getMessage("app_msg_ok",
+							crmAppointment.getCode());
+					saved = true;
+				} else {
+					infoMessage = FacesUtil.getMessage("app_msg_error");
+					saved = false;
+				}
 			}
 		}
 	}

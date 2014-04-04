@@ -455,9 +455,18 @@ public class PatientBacking extends BaseBacking {
 								selectedPatient.setAddress(selectedPatient
 										.getAddress().toUpperCase());
 
-								processService.savePatient(selectedPatient,
-										automatic, existsSAP,
+								int result = processService.savePatient(
+										selectedPatient, automatic, existsSAP,
 										crmCountry.getCode());
+
+								if (result != 0) {
+									String field = FacesUtil.getMessage("con");
+									message = FacesUtil.getMessage(
+											"msg_record_unique_exception",
+											field);
+									throw new Exception(message);
+								}
+
 							}
 							FacesUtil.addInfo(message);
 
