@@ -790,6 +790,7 @@ public class CampaignBacking extends BaseBacking {
 		return "Tipo de Identificación Desconocida";
 	}
 
+	@SuppressWarnings("el-syntax")
 	public HtmlPanelGroup createPanelGroup(int type,
 			List<CrmRecall> listAllLevel, Integer[] levelValues) {
 		Application application = FacesUtil.getApplication();
@@ -1139,9 +1140,14 @@ public class CampaignBacking extends BaseBacking {
 		}
 
 		selected.setState(2);
+		selected.setCrmUserByIdUserModified(FacesUtil.getCurrentUser());
+		selected.setDateModified(new Date());
 		tablesService.saveCampaign(selected);
 
 		crmCampaignDetail.setStatus(value);
+		crmCampaignDetail
+				.setCrmUserByIdUserModified(FacesUtil.getCurrentUser());
+		crmCampaignDetail.setDateModified(new Date());
 		tablesService.saveCampaignDetail(crmCampaignDetail);
 
 		if (newRecord) {
@@ -1155,6 +1161,9 @@ public class CampaignBacking extends BaseBacking {
 				newCrmCampaign = crmCampaignDetail.getCrmCampaign();
 				newCrmCampaign.setId(null);
 				newCrmCampaign.setDateCall(currentDate);
+				newCrmCampaign.setCrmUserByIdUserCreate(FacesUtil
+						.getCurrentUser());
+				newCrmCampaign.setDateCreated(new Date());
 				tablesService.saveCampaign(newCrmCampaign);
 			}
 
@@ -1163,6 +1172,9 @@ public class CampaignBacking extends BaseBacking {
 			newCrmCampaignDetail.setId(null);
 			newCrmCampaignDetail.setCallDate(currentDate);
 			newCrmCampaignDetail.setStatus(0);
+			newCrmCampaignDetail.setCrmUserByIdUserCreate(FacesUtil
+					.getCurrentUser());
+			newCrmCampaignDetail.setDateCreated(new Date());
 			tablesService.saveCampaignDetail(newCrmCampaignDetail);
 
 			if (newCrmCampaignDetail.getIdCampaignType() == Constant.RECALL_MEDICATION) {
