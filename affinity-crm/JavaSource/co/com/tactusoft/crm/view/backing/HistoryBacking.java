@@ -7,8 +7,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.annotation.PostConstruct;
 import javax.faces.component.UIColumn;
@@ -24,6 +27,7 @@ import javax.inject.Named;
 import net.sf.jasperreports.engine.JRException;
 
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.CloseEvent;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.TabChangeEvent;
@@ -33,6 +37,7 @@ import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.controller.bo.GenerateFormulaPDF;
 import co.com.tactusoft.crm.model.entities.CrmAppointment;
+import co.com.tactusoft.crm.model.entities.CrmBranch;
 import co.com.tactusoft.crm.model.entities.CrmCaseStudy;
 import co.com.tactusoft.crm.model.entities.CrmCie;
 import co.com.tactusoft.crm.model.entities.CrmConsent;
@@ -44,17 +49,22 @@ import co.com.tactusoft.crm.model.entities.CrmHistoryHomeopathic;
 import co.com.tactusoft.crm.model.entities.CrmHistoryOrganometry;
 import co.com.tactusoft.crm.model.entities.CrmHistoryPhysique;
 import co.com.tactusoft.crm.model.entities.CrmHistoryRecord;
+import co.com.tactusoft.crm.model.entities.CrmHoliday;
 import co.com.tactusoft.crm.model.entities.CrmMaterialGroup;
 import co.com.tactusoft.crm.model.entities.CrmMedication;
 import co.com.tactusoft.crm.model.entities.CrmNote;
 import co.com.tactusoft.crm.model.entities.CrmNurse;
 import co.com.tactusoft.crm.model.entities.CrmOccupation;
+import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
 import co.com.tactusoft.crm.model.entities.CrmTherapy;
 import co.com.tactusoft.crm.model.entities.VwAppointment;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.DataModelCustom;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.util.SAPEnvironment;
+import co.com.tactusoft.crm.view.beans.Candidate;
+import co.com.tactusoft.crm.view.beans.ResultSearchAppointment;
+import co.com.tactusoft.crm.view.datamodel.CandidateDataModel;
 import co.com.tactusoft.crm.view.datamodel.CieDataModel;
 import co.com.tactusoft.crm.view.datamodel.DiagnosisDataModel;
 import co.com.tactusoft.crm.view.datamodel.HistoryHistoryDataModel;
@@ -192,6 +202,27 @@ public class HistoryBacking extends BaseBacking {
 	protected String typeHistory;
 	protected String posology;
 
+	private List<SelectItem> listBranchByConsultant;
+	private Map<BigDecimal, CrmBranch> mapBranchByConsultant;
+	private List<SelectItem> listProcedureDetail;
+	private Map<BigDecimal, CrmProcedureDetail> mapProcedureDetail;
+	private BigDecimal idProcedureDetail;
+	private CrmProcedureDetail procedureDetail;
+	private Date currentDate;
+	private int minutes = 0;
+	private String timeType = null;
+	private String infoMessageDate;
+	private List<Candidate> listCandidate;
+	private CandidateDataModel modelCandidate;
+	private Candidate selectedCandidate;
+	private Candidate selectedCandidateTemp;
+	private int appointmentsNumber;
+	private String infoMessage;
+	private boolean saved;
+	private CrmAppointment selectedApp;
+	private boolean validate;
+	private boolean disabledSearch;
+
 	public HistoryBacking() {
 		newAction(null);
 	}
@@ -260,6 +291,27 @@ public class HistoryBacking extends BaseBacking {
 			if (currentDoctor != null) {
 				listAppointment = processService
 						.getListVwAppointmentByHistory(currentDoctor.getId());
+				if (this.getRolePrincipal().equals(Constant.ROLE_CONSULTANT)) {
+					newAppAction(null);
+					List<CrmBranch> listBranchByConsultantTemp = processService
+							.getListBranchByDoctor(currentDoctor.getId());
+					try {
+						listBranchByConsultant = FacesUtil.entityToSelectItem(
+								listBranchByConsultantTemp, "getId", "getName");
+						mapBranchByConsultant = FacesUtil.entityToMap(
+								listBranchByConsultantTemp, "getId");
+						if (listBranchByConsultantTemp != null
+								&& !listBranchByConsultantTemp.isEmpty()) {
+							idBranch = listBranchByConsultantTemp.get(0)
+									.getId();
+							handleBranchChange();
+						} else {
+							disabledSearch = true;
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
 			} else {
 				if (this.getRolePrincipal().equals(Constant.ROLE_NURSE_AUX)) {
 					BigDecimal idBranch = FacesUtil.getCurrentUserData()
@@ -1108,6 +1160,169 @@ public class HistoryBacking extends BaseBacking {
 		this.posology = posology;
 	}
 
+	public List<SelectItem> getListBranchByConsultant() {
+		return listBranchByConsultant;
+	}
+
+	public void setListBranchByConsultant(
+			List<SelectItem> listBranchByConsultant) {
+		this.listBranchByConsultant = listBranchByConsultant;
+	}
+
+	public List<SelectItem> getListProcedureDetail() {
+		return listProcedureDetail;
+	}
+
+	public void setListProcedureDetail(List<SelectItem> listProcedureDetail) {
+		this.listProcedureDetail = listProcedureDetail;
+	}
+
+	public Map<BigDecimal, CrmProcedureDetail> getMapProcedureDetail() {
+		return mapProcedureDetail;
+	}
+
+	public void setMapProcedureDetail(
+			Map<BigDecimal, CrmProcedureDetail> mapProcedureDetail) {
+		this.mapProcedureDetail = mapProcedureDetail;
+	}
+
+	public BigDecimal getIdProcedureDetail() {
+		return idProcedureDetail;
+	}
+
+	public void setIdProcedureDetail(BigDecimal idProcedureDetail) {
+		this.idProcedureDetail = idProcedureDetail;
+	}
+
+	public CrmProcedureDetail getProcedureDetail() {
+		return procedureDetail;
+	}
+
+	public void setProcedureDetail(CrmProcedureDetail procedureDetail) {
+		this.procedureDetail = procedureDetail;
+	}
+
+	public Map<BigDecimal, CrmBranch> getMapBranchByConsultant() {
+		return mapBranchByConsultant;
+	}
+
+	public void setMapBranchByConsultant(
+			Map<BigDecimal, CrmBranch> mapBranchByConsultant) {
+		this.mapBranchByConsultant = mapBranchByConsultant;
+	}
+
+	public Date getCurrentDate() {
+		return currentDate;
+	}
+
+	public void setCurrentDate(Date currentDate) {
+		this.currentDate = currentDate;
+	}
+
+	public int getMinutes() {
+		return minutes;
+	}
+
+	public void setMinutes(int minutes) {
+		this.minutes = minutes;
+	}
+
+	public String getTimeType() {
+		return timeType;
+	}
+
+	public void setTimeType(String timeType) {
+		this.timeType = timeType;
+	}
+
+	public String getInfoMessageDate() {
+		return infoMessageDate;
+	}
+
+	public void setInfoMessageDate(String infoMessageDate) {
+		this.infoMessageDate = infoMessageDate;
+	}
+
+	public List<Candidate> getListCandidate() {
+		return listCandidate;
+	}
+
+	public void setListCandidate(List<Candidate> listCandidate) {
+		this.listCandidate = listCandidate;
+	}
+
+	public CandidateDataModel getModelCandidate() {
+		return modelCandidate;
+	}
+
+	public void setModelCandidate(CandidateDataModel modelCandidate) {
+		this.modelCandidate = modelCandidate;
+	}
+
+	public Candidate getSelectedCandidate() {
+		return selectedCandidate;
+	}
+
+	public void setSelectedCandidate(Candidate selectedCandidate) {
+		this.selectedCandidate = selectedCandidate;
+	}
+
+	public Candidate getSelectedCandidateTemp() {
+		return selectedCandidateTemp;
+	}
+
+	public void setSelectedCandidateTemp(Candidate selectedCandidateTemp) {
+		this.selectedCandidateTemp = selectedCandidateTemp;
+	}
+
+	public int getAppointmentsNumber() {
+		return appointmentsNumber;
+	}
+
+	public void setAppointmentsNumber(int appointmentsNumber) {
+		this.appointmentsNumber = appointmentsNumber;
+	}
+
+	public String getInfoMessage() {
+		return infoMessage;
+	}
+
+	public void setInfoMessage(String infoMessage) {
+		this.infoMessage = infoMessage;
+	}
+
+	public boolean isSaved() {
+		return saved;
+	}
+
+	public void setSaved(boolean saved) {
+		this.saved = saved;
+	}
+
+	public CrmAppointment getSelectedApp() {
+		return selectedApp;
+	}
+
+	public void setSelectedApp(CrmAppointment selectedApp) {
+		this.selectedApp = selectedApp;
+	}
+
+	public boolean isValidate() {
+		return validate;
+	}
+
+	public void setValidate(boolean validate) {
+		this.validate = validate;
+	}
+
+	public boolean isDisabledSearch() {
+		return disabledSearch;
+	}
+
+	public void setDisabledSearch(boolean disabledSearch) {
+		this.disabledSearch = disabledSearch;
+	}
+
 	public void calculateIMCAction(ActionEvent event) {
 		double weight = this.getWeight();
 		double height = this.getHeight() / 100;
@@ -1921,6 +2136,9 @@ public class HistoryBacking extends BaseBacking {
 
 			if (event != null) {
 				currentAppointment.setCloseAppointment(true);
+				currentAppointment.setCrmUserByIdUserClosed(FacesUtil
+						.getCurrentUser());
+				currentAppointment.setDateClosed(new Date());
 			}
 
 			currentAppointment.setState(Constant.APP_STATE_ATTENDED);
@@ -2603,6 +2821,10 @@ public class HistoryBacking extends BaseBacking {
 
 						if (event != null) {
 							currentAppointment.setCloseAppointment(true);
+							currentAppointment
+									.setCrmUserByIdUserClosed(FacesUtil
+											.getCurrentUser());
+							currentAppointment.setDateClosed(new Date());
 						}
 
 						currentAppointment
@@ -2915,22 +3137,25 @@ public class HistoryBacking extends BaseBacking {
 	}
 
 	public void handleTabChange() {
-		refreshCaseStudyHistory();
-		if (!FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getReason())) {
-			boolean exists = false;
-			for (SelectItem row : listCaseStudyHistory) {
-				if (row.getValue()
-						.toString()
-						.toUpperCase()
-						.equals(selectedHistoryHistory.getReason()
-								.toUpperCase())) {
-					exists = true;
-					break;
+		if (this.getRolePrincipal().equals(Constant.ROLE_DOCTOR)) {
+			refreshCaseStudyHistory();
+			if (!FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getReason())) {
+				boolean exists = false;
+				for (SelectItem row : listCaseStudyHistory) {
+					if (row.getValue()
+							.toString()
+							.toUpperCase()
+							.equals(selectedHistoryHistory.getReason()
+									.toUpperCase())) {
+						exists = true;
+						break;
+					}
 				}
-			}
-			if (!exists) {
-				listCaseStudyHistory.add(new SelectItem(selectedHistoryHistory
-						.getReason(), selectedHistoryHistory.getReason()));
+				if (!exists) {
+					listCaseStudyHistory.add(new SelectItem(
+							selectedHistoryHistory.getReason(),
+							selectedHistoryHistory.getReason()));
+				}
 			}
 		}
 	}
@@ -2944,5 +3169,323 @@ public class HistoryBacking extends BaseBacking {
 
 	public void savePosologyAction() {
 		selectedDiagnosis.setPosology(this.posology);
+	}
+
+	public void handleBranchChange() {
+		listProcedureDetail = new LinkedList<SelectItem>();
+		mapProcedureDetail = new LinkedHashMap<BigDecimal, CrmProcedureDetail>();
+		List<CrmProcedureDetail> listProcedureDetailTemp = tablesService
+				.getListProcedureByBranchConsultant(idBranch);
+		if (listProcedureDetailTemp != null) {
+			for (CrmProcedureDetail row : listProcedureDetailTemp) {
+				mapProcedureDetail.put(row.getId(), row);
+				listProcedureDetail.add(new SelectItem(row.getId(), row
+						.getName()));
+			}
+		}
+
+		if (listProcedureDetail.size() > 0) {
+			idProcedureDetail = (BigDecimal) listProcedureDetail.get(0)
+					.getValue();
+			handleProcedureDetailChange();
+		} else {
+			disabledSearch = true;
+		}
+
+		currentDate = new Date();
+	}
+
+	public void handleProcedureDetailChange() {
+		if (listProcedureDetail.size() > 0) {
+			String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
+			try {
+				String codeBranch = mapBranchByConsultant.get(idBranch)
+						.getCode();
+
+				List<WSBean> result = FacesUtil.getCurrentUserData()
+						.getListWSGroupSellers();
+
+				listWSGroupSellers = new ArrayList<SelectItem>();
+				mapWSGroupSellers = new TreeMap<String, String>();
+				listWSGroupSellers.add(new SelectItem(
+						Constant.DEFAULT_VALUE_STRING, label));
+				for (WSBean row : result) {
+					if (row.getBranch().equals(codeBranch)) {
+						mapWSGroupSellers.put(row.getCode(), row.getNames());
+						listWSGroupSellers.add(new SelectItem(row.getCode(),
+								row.getNames()));
+					}
+				}
+			} catch (Exception ex) {
+				listWSGroupSellers = new ArrayList<SelectItem>();
+				listWSGroupSellers.add(new SelectItem(
+						Constant.DEFAULT_VALUE_STRING, label));
+			}
+
+			selectedWSGroupSellers = "-1";
+
+			procedureDetail = mapProcedureDetail.get(idProcedureDetail);
+
+			String codPublicity = procedureDetail.getCodPublicity();
+			if (!FacesUtil.isEmptyOrBlank(codPublicity)
+					&& !codPublicity.equals(Constant.DEFAULT_VALUE_STRING)) {
+
+				String namePublicity = null;
+				List<WSBean> result = FacesUtil.getCurrentUserData()
+						.getListWSGroupSellers();
+				for (WSBean row : result) {
+					if (row.getCode().equals(codPublicity)) {
+						namePublicity = row.getNames();
+						break;
+					}
+				}
+
+				listWSGroupSellers = new ArrayList<SelectItem>();
+				mapWSGroupSellers = new TreeMap<String, String>();
+				mapWSGroupSellers.put(codPublicity, namePublicity);
+				listWSGroupSellers.add(new SelectItem(codPublicity,
+						namePublicity));
+			}
+
+			if ((procedureDetail.getTimeDoctor() > procedureDetail
+					.getTimeNurses())
+					&& (procedureDetail.getTimeDoctor() > procedureDetail
+							.getTimeStretchers())) {
+				minutes = procedureDetail.getTimeDoctor();
+				timeType = Constant.TIME_TYPE_DOCTOR;
+			} else if ((procedureDetail.getTimeNurses() > procedureDetail
+					.getTimeDoctor())
+					&& (procedureDetail.getTimeNurses() > procedureDetail
+							.getTimeStretchers())) {
+				minutes = procedureDetail.getTimeNurses();
+				timeType = Constant.TIME_TYPE_NURSE;
+			} else {
+				minutes = procedureDetail.getTimeStretchers();
+				timeType = Constant.TIME_TYPE_STRETCHERS;
+			}
+
+			handleDateSelect(null);
+			selectedCandidate = null;
+		}
+	}
+
+	public void handleDateSelect(SelectEvent event) {
+		if (event != null) {
+			currentDate = (Date) event.getObject();
+		} else {
+			currentDate = FacesUtil.getDateWithoutTime(today);
+		}
+
+		List<CrmHoliday> listHoliday = processService.getListHoliday(
+				currentDate, idBranch);
+		if (listHoliday.size() > 0) {
+			infoMessageDate = FacesUtil.getMessage("app_msg_error_1");
+		} else {
+			infoMessageDate = null;
+		}
+	}
+
+	public String getDetSelectedCandidate() {
+		String result = "";
+		if (selectedCandidate != null) {
+			String message = FacesUtil.getMessage("app_msg_selected");
+			result = message + " " + selectedCandidate.getDateDetail();
+		}
+		return result;
+	}
+
+	public void addAppointmentAction() {
+		this.selectedCandidate = this.selectedCandidateTemp;
+	}
+
+	public void newAppAction(ActionEvent event) {
+		selectedApp = new CrmAppointment();
+		selectedApp.setCrmBranch(new CrmBranch());
+		selectedApp.setCrmDoctor(new CrmDoctor());
+		selectedApp.setCrmProcedureDetail(new CrmProcedureDetail());
+
+		currentDate = new Date();
+		selectedWSGroupSellers = "-1";
+
+		listCandidate = new LinkedList<Candidate>();
+		modelCandidate = new CandidateDataModel(listCandidate);
+		selectedCandidate = null;
+		selectedCandidateTemp = null;
+
+		infoMessage = null;
+		saved = false;
+		disabledSearch = false;
+
+		today = new Date();
+		todayMax = FacesUtil.addHoursToDate(
+				FacesUtil.getDateWithoutTime(today), 18);
+	}
+
+	public void searchAppointMentAction() {
+		boolean validateNoRepeat = true;
+		infoMessage = null;
+
+		if (procedureDetail.isNoRepeat()
+				&& procedureDetail.getNoRepeatDays() > 0 && infoMessage == null) {
+			Date maxDate = processService.getMaxDateByProcedure(
+					selectedPatient.getId(), procedureDetail.getId());
+			if (maxDate != null) {
+				maxDate = FacesUtil.getDateWithoutTime(maxDate);
+				Date currentDate = new Date(this.currentDate.getTime());
+				currentDate = FacesUtil.getDateWithoutTime(currentDate);
+				long diff = currentDate.getTime() - maxDate.getTime();
+				diff = diff / (1000 * 60 * 60 * 24);
+				if (diff < procedureDetail.getNoRepeatDays()) {
+					validateNoRepeat = false;
+				}
+			}
+		}
+
+		if (validateNoRepeat && infoMessage == null) {
+			ResultSearchAppointment resultSearchAppointment = processService
+					.getScheduleAppointmentForDoctor(
+							mapBranchByConsultant.get(idBranch), currentDoctor,
+							this.appointmentsNumber, procedureDetail,
+							this.currentDate);
+			listCandidate = resultSearchAppointment.getListCandidate();
+			infoMessage = resultSearchAppointment.getMessage();
+
+			modelCandidate = new CandidateDataModel(listCandidate);
+
+			if (listAppointment.size() > 0) {
+				selectedCandidateTemp = listCandidate.get(0);
+			} else {
+				selectedCandidate = null;
+				selectedCandidateTemp = null;
+			}
+		} else {
+			listCandidate = new ArrayList<Candidate>();
+			modelCandidate = new CandidateDataModel(listCandidate);
+			selectedCandidate = null;
+			selectedCandidateTemp = null;
+			if (!validateNoRepeat) {
+				String message = procedureDetail.getNoRepeatDays().toString();
+				infoMessage = FacesUtil.getMessage("app_msg_error_procedure",
+						message);
+			}
+		}
+	}
+
+	public void validateAction() {
+		String appType = FacesUtil.getParam("APP_TYPE");
+		infoMessage = "";
+		validate = true;
+
+		// validar Selección Pauta
+		if (this.selectedWSGroupSellers.equals(Constant.DEFAULT_VALUE_STRING)) {
+			String field = FacesUtil.getMessage("app_seller_group");
+			infoMessage = FacesUtil.getMessage("glb_required", field);
+			validate = false;
+		}
+
+		// validar Selección Cita
+		if ((selectedCandidate == null) && (appType.equals("ORDINARY"))) {
+			infoMessage = FacesUtil.getMessage("app_msg_error_app");
+			validate = false;
+		}
+	}
+
+	public void saveAppAction() {
+		String appType = FacesUtil.getParam("APP_TYPE");
+		infoMessage = "";
+		validate = true;
+
+		// validar Selección Pauta
+		if (this.selectedWSGroupSellers.equals(Constant.DEFAULT_VALUE_STRING)) {
+			String field = FacesUtil.getMessage("app_seller_group");
+			infoMessage = FacesUtil.getMessage("glb_required", field);
+			validate = false;
+		}
+
+		// validar Selección Cita
+		if ((selectedCandidate == null) && (appType.equals("ORDINARY"))) {
+			infoMessage = FacesUtil.getMessage("app_msg_error_app");
+			validate = false;
+		}
+
+		if (validate) {
+			CrmBranch branch = mapBranchByConsultant.get(idBranch);
+
+			int validateApp = 0;
+			validateApp = processService.validateAppointmentForDate(
+					selectedCandidate.getStartDate(), selectedPatient.getId());
+
+			this.selectedApp.setId(null);
+			this.selectedApp.setCrmDiagnosises(null);
+			this.selectedApp.setCrmMedications(null);
+
+			if (validateApp == 0) {
+				validateApp = processService.validateAppointmentForDate(
+						branch.getId(), selectedCandidate.getStartDate(),
+						selectedCandidate.getEndDate(), procedureDetail,
+						selectedCandidate.getDoctor().getId(),
+						selectedPatient.getId(), timeType, false);
+			}
+
+			if (validateApp != 0) {
+				switch (validateApp) {
+				case -1:
+					infoMessage = FacesUtil.getMessage("app_msg_error_1");
+					break;
+				case -2:
+					infoMessage = FacesUtil.getMessage("app_msg_error_2");
+					break;
+				case -3:
+					infoMessage = FacesUtil.getMessage("app_msg_error_3");
+					break;
+				case -4:
+					infoMessage = FacesUtil.getMessage("app_msg_error_4");
+					break;
+				case -5:
+					infoMessage = FacesUtil.getMessage("app_msg_error_5");
+					break;
+				}
+			} else {
+				selectedApp.setCrmPatient(selectedPatient);
+				selectedApp.setPatientNames(selectedPatient.getFirstnames()
+						+ " " + selectedPatient.getSurnames());
+				selectedApp.setCrmDoctor(selectedCandidate.getDoctor());
+				selectedApp.setCrmBranch(branch);
+				selectedApp.setCrmProcedureDetail(procedureDetail);
+
+				selectedApp.setCodPublicity(selectedWSGroupSellers);
+				selectedApp.setNamePublicity(mapWSGroupSellers
+						.get(selectedWSGroupSellers));
+
+				selectedApp.setStartAppointmentDate(selectedCandidate
+						.getStartDate());
+				selectedApp.setEndAppointmentDate(selectedCandidate
+						.getEndDate());
+				selectedApp.setCloseAppointment(false);
+				selectedApp.setUntimely(false);
+				selectedApp.setState(Constant.APP_STATE_CONFIRMED);
+				selectedApp
+						.setCrmUserByIdUserCreate(FacesUtil.getCurrentUser());
+				selectedApp.setDateCreate(new Date());
+
+				CrmAppointment crmAppointment = processService
+						.saveAppointment(selectedApp);
+
+				if (crmAppointment != null) {
+					infoMessage = FacesUtil.getMessage("app_msg_ok",
+							crmAppointment.getCode());
+					saved = true;
+				} else {
+					infoMessage = FacesUtil.getMessage("app_msg_error");
+					saved = false;
+				}
+			}
+		}
+	}
+
+	public void handleClose(CloseEvent event) {
+		if (saved) {
+			newAppAction(null);
+		}
 	}
 }

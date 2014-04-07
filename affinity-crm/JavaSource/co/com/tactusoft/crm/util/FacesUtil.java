@@ -557,9 +557,10 @@ public class FacesUtil {
 		}
 	}
 
-	public static Map<BigDecimal, Object> entityToMap(List<?> list,
+	@SuppressWarnings("unchecked")
+	public static <T> Map<BigDecimal, T> entityToMap(List<?> list,
 			String getIdMethod) throws Exception {
-		Map<BigDecimal, Object> items = new HashMap<BigDecimal, Object>();
+		Map<BigDecimal, T> items = new HashMap<BigDecimal, T>();
 
 		Method idMethod = null;
 
@@ -572,7 +573,7 @@ public class FacesUtil {
 			}
 			// invoke Methods
 			BigDecimal id = (BigDecimal) idMethod.invoke(item, new Object[] {});
-			items.put(id, item);
+			items.put(id, (T) item);
 		}
 
 		return items;

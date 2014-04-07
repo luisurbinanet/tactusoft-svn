@@ -2011,4 +2011,10 @@ public class ProcessBo implements Serializable {
 		List<CrmAppointment> result = dao.findNative(sql, CrmAppointment.class);
 		return result;
 	}
+
+	public List<CrmBranch> getListBranchByDoctor(BigDecimal idDoctor) {
+		return dao
+				.find("SELECT DISTINCT o.crmBranch from CrmDoctorSchedule o WHERE o.crmDoctor.id = "
+						+ idDoctor);
+	}
 }

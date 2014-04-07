@@ -1179,6 +1179,109 @@
 
 						</p:tab>
 
+						<p:tab title="#{msg['title_appointment']}" id="tab_app_consultant"
+							rendered="#{historyBacking.rolePrincipal eq 'CONSULTANT'}">
+
+							<p:toolbar id="toolBarApp" style="width:100%">
+								<p:toolbarGroup align="left">
+									<p:commandButton value="#{msg['btn_new']}"
+										icon="ui-icon-document"
+										actionListener="#{historyBacking.newAppAction}"
+										process="@this"
+										update=":form:accordion:toolBarApp :form:accordion:pnlDetailApp :form:accordion:pnlDetailApp2 :form:accordion:pnlDetailApp3 :form:accordion:pnlDetailApp4" />
+									<p:commandButton id="btnSearch"
+										value="#{msg['btn_search_app']}" icon="ui-icon-search"
+										update=":form:dialog3 :form:accordion:pnlDetailApp4"
+										action="#{historyBacking.searchAppointMentAction}"
+										disabled="#{historyBacking.disabledSearch or historyBacking.saved}"
+										oncomplete="dlg3.show()" />
+									<p:commandButton id="btnSaveApp" value="#{msg['btn_save']}"
+										icon="ui-icon-disk" update=":form:dialogConfirmation"
+										oncomplete="dlgConfirmation.show()"
+										action="#{historyBacking.validateAction}"
+										disabled="#{historyBacking.saved or historyBacking.selectedCandidate == null}" />
+								</p:toolbarGroup>
+							</p:toolbar>
+
+							<p:spacer height="10" />
+
+							<h:panelGrid id="pnlDetailApp" columns="2" width="100%"
+								columnClasses="width25per,width75per">
+								<h:outputLabel value="#{msg['app_branch']}" />
+								<p:selectOneMenu style="width:700px" filter="true"
+									filterMatchMode="contains" panelStyle="width:700px"
+									value="#{historyBacking.idBranch}">
+									<f:selectItems value="#{historyBacking.listBranchByConsultant}" />
+									<p:ajax update="tab_app_consultant"
+										listener="#{historyBacking.handleBranchChange}" />
+								</p:selectOneMenu>
+
+								<h:outputLabel value="#{msg['app_procedure']}" />
+								<p:selectOneMenu id="selProcedure" style="width:700px"
+									value="#{historyBacking.idProcedureDetail}"
+									filterMatchMode="contains" panelStyle="width:700px">
+									<f:selectItems value="#{historyBacking.listProcedureDetail}" />
+									<p:ajax update="tab_app_consultant"
+										listener="#{historyBacking.handleProcedureDetailChange}" />
+								</p:selectOneMenu>
+
+								<h:outputLabel value="#{msg['app_seller_group']}" />
+								<p:selectOneMenu style="width:700px"
+									value="#{historyBacking.selectedWSGroupSellers}"
+									filterMatchMode="contains" panelStyle="width:700px">
+									<f:selectItems value="#{historyBacking.listWSGroupSellers}" />
+								</p:selectOneMenu>
+
+							</h:panelGrid>
+
+							<h:panelGrid id="pnlDetailApp2" columns="2" width="100%"
+								columnClasses="width25per,width75per">
+
+								<h:outputLabel id="lblCurrentDate" value="#{msg['app_date']}" />
+								<h:panelGrid columns="2">
+									<p:calendar value="#{historyBacking.currentDate}"
+										id="calCurrentDate" showOn="button" navigator="true"
+										pattern="dd/MM/yyyy" readonlyInput="true"
+										mindate="#{historyBacking.today}" locale="es">
+										<p:ajax event="dateSelect"
+											listener="#{historyBacking.handleDateSelect}"
+											update="lblMessageDate" />
+									</p:calendar>
+									<h:outputLabel id="lblMessageDate" style="font-weight:bold;"
+										value="#{historyBacking.infoMessageDate}" />
+								</h:panelGrid>
+
+								<h:outputLabel value="#{msg['app_num']}" />
+								<p:selectOneMenu style="width:700px"
+									value="#{historyBacking.appointmentsNumber}">
+									<f:selectItem itemLabel="#{msg['app_first_10_app']}"
+										itemValue="10" />
+									<f:selectItem itemLabel="#{msg['app_first_20_app']}"
+										itemValue="20" />
+									<f:selectItem itemLabel="#{msg['app_first_30_app']}"
+										itemValue="30" />
+									<f:selectItem itemLabel="#{msg['app_first_50_app']}"
+										itemValue="50" />
+								</p:selectOneMenu>
+
+							</h:panelGrid>
+
+							<h:panelGrid id="pnlDetailApp3" columns="2" width="100%"
+								columnClasses="width25per,width75per">
+								<h:outputLabel value="#{msg['app_obs']}" />
+								<p:inputTextarea value="#{historyBacking.selectedApp.obs}"
+									style="width:700px" rows="3" />
+							</h:panelGrid>
+
+							<h:panelGrid id="pnlDetailApp4" width="100%">
+								<p:spacer height="5" />
+								<h:outputLabel
+									style="text-align:center;font-size:large;font-weight:bold;"
+									value="#{historyBacking.detSelectedCandidate}" />
+
+							</h:panelGrid>
+						</p:tab>
+
 					</p:accordionPanel>
 
 					<h:panelGrid id="pnlHistorial"
@@ -2040,6 +2143,111 @@
 								value="#{historyBacking.selectedHistoryRecord.diabetesParent}" />
 						</h:panelGrid>
 					</p:fieldset>
+
+				</p:dialog>
+
+				<p:dialog header="#{msg['app_avalaible']}" widgetVar="dlg3"
+					resizable="false" id="dialog3" showEffect="fade"
+					hideEffect="explode" modal="true" width="700">
+
+					<h:outputText value="#{historyBacking.infoMessage}"
+						style="font-size:large;font-weight:bold;" />
+
+					<p:spacer rendered="#{historyBacking.infoMessage ne null}" />
+
+					<p:dataTable id="selectedTableApp" var="rec"
+						value="#{historyBacking.modelCandidate}" rowKey="#{rec.id}"
+						style="width:100%"
+						selection="#{historyBacking.selectedCandidateTemp}"
+						paginator="true" rows="10"
+						emptyMessage="#{msg['glb_no_records_found']}">
+
+						<p:column selectionMode="single" style="width:18px" />
+
+						<p:column headerText="#{msg['app_date']}">
+							<h:outputLabel value="#{rec.startDate}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+						</p:column>
+
+						<p:column headerText="#{msg['app_start_hour']}">
+							<h:outputLabel value="#{rec.startDate}">
+								<f:convertDateTime pattern="HH:mm" />
+							</h:outputLabel>
+						</p:column>
+
+						<p:column headerText="#{msg['app_end_hour']}">
+							<h:outputLabel value="#{rec.endDate}">
+								<f:convertDateTime pattern="HH:mm" />
+							</h:outputLabel>
+						</p:column>
+
+						<p:column headerText="#{msg['app_doctor']}" rendered="false">
+							<h:outputLabel value="#{rec.doctor.names}" />
+						</p:column>
+
+						<f:facet name="footer">
+							<p:commandButton value="#{msg['btn_add_app']}"
+								action="#{historyBacking.addAppointmentAction}"
+								oncomplete="dlg3.hide()"
+								update=":form:accordion:pnlDetailApp4 :form:accordion:toolBarApp" />
+						</f:facet>
+
+					</p:dataTable>
+
+				</p:dialog>
+
+				<p:dialog id="dialogConfirmation" modal="true"
+					header="#{msg['title_appointment']}" severity="alert"
+					widgetVar="dlgConfirmation" width="450" resizable="false">
+
+					<h:outputLabel value="#{msg['glb_question']}"
+						rendered="#{historyBacking.validate}" />
+
+					<h:panelGrid width="100%">
+						<h:outputLabel value="#{historyBacking.infoMessage}"
+							rendered="#{not historyBacking.validate}"
+							style="text-align:center;font-size:large;font-weight:bold;" />
+						<p:spacer height="5" rendered="#{not historyBacking.validate}" />
+						<h:outputLabel value="#{historyBacking.detSelectedCandidate}"
+							rendered="#{historyBacking.validate}"
+							style="text-align:center;font-weight:bold;" />
+					</h:panelGrid>
+
+					<f:facet name="footer">
+
+						<p:commandButton value="#{msg['btn_ok']}"
+							oncomplete="dlgConfirmation.hide();dlg.show();"
+							update=":form:toolBar conffirmation"
+							action="#{historyBacking.saveAppAction}"
+							rendered="#{historyBacking.validate}">
+							<f:param name="APP_TYPE" value="ORDINARY" />
+						</p:commandButton>
+
+						<p:commandButton rendered="#{historyBacking.validate}"
+							value="#{msg['btn_cancel']}" onclick="dlgConfirmation.hide()"
+							type="button" />
+
+					</f:facet>
+
+				</p:dialog>
+
+				<p:dialog id="conffirmation" widgetVar="dlg"
+					header="#{msg['app_title']}" width="450" resizable="false"
+					showEffect="clip" hideEffect="clip" modal="true">
+
+					<p:ajax event="close"
+						update=":form:accordion:toolBarApp :form:accordion:pnlDetailApp :form:accordion:pnlDetailApp2 :form:accordion:pnlDetailApp3 :form:accordion:pnlDetailApp4"
+						listener="#{historyBacking.handleClose}" />
+
+					<h:panelGrid width="100%">
+						<h:outputLabel value="#{historyBacking.infoMessage}"
+							style="text-align:center;font-size:large;font-weight:bold;" />
+						<p:spacer height="5" rendered="#{historyBacking.saved}" />
+						<h:outputLabel value="#{historyBacking.detSelectedCandidate}"
+							rendered="#{historyBacking.saved}"
+							style="text-align:center;font-size:large;font-weight:bold;" />
+					</h:panelGrid>
 
 				</p:dialog>
 

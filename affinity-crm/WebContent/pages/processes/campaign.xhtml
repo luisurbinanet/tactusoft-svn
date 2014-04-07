@@ -527,6 +527,9 @@
 						rendered="#{campaignBacking.selectedDetailNoAttendet ne null}" />
 
 					<h:panelGrid id="pnlAttributes" columns="2" width="100%">
+						<h:outputLabel value="#{msg['cam_app_number']}" />
+						<p:inputText value="#{campaignBacking.selected.appointmentNumber}"
+							maxlength="45" required="true" label="#{msg['cam_app_number']}" />
 						<h:outputLabel value="#{msg['pat_type_obs']}" />
 						<p:inputTextarea value="#{campaignBacking.selected.observation}"
 							style="width:500px" rows="3" label="#{msg['pat_type_obs']}" />
