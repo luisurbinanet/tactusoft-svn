@@ -1,0 +1,175 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="../templates/common.xhtml">
+
+	<ui:define name="body">
+
+		<p:panel style="width:100%;height:100%"
+			header="#{msg['title_first_diagnosis']}">
+
+			<p:spacer height="5" />
+
+			<h:form id="form">
+
+				<p:growl id="growl" showDetail="true" />
+
+				<p:toolbar id="toolbar" style="width:100%">
+					<p:toolbarGroup align="left">
+						<p:commandButton id="btnSearch" value="#{msg['btn_search']}"
+							icon="ui-icon-search" update="pnlResults growl btnExport"
+							actionListener="#{firstDiagnosisBacking.searchAction}" />
+						<p:commandButton id="btnBranch" oncomplete="branchDlg.show();"
+							value="#{msg['usr_branch']}" icon="ui-icon-bookmark" />
+						<p:commandButton id="btnExport" oncomplete="exportDlg.show();"
+							value="#{msg['btn_export']}" icon="ui-icon-disk"
+							disabled="#{empty firstDiagnosisBacking.list}" />
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="5" />
+
+				<h:panelGrid id="pnlDetail" columns="2" cellpadding="4"
+					style="margin:0 auto;" width="100%">
+
+					<h:outputLabel value="#{msg['src_star_date']}" style="width:40%" />
+					<p:calendar id="calSD" value="#{firstDiagnosisBacking.startDate}"
+						label="#{msg['src_star_date']}" readonlyInput="true"
+						pattern="dd/MM/yyyy" showOn="button" navigator="true" locale="es"
+						required="true" mindate="#{firstDiagnosisBacking.today}" />
+
+					<h:outputLabel value="#{msg['src_end_date']}" style="width:40%" />
+					<p:calendar id="calED" value="#{firstDiagnosisBacking.endDate}"
+						label="#{msg['src_end_date']}" readonlyInput="true"
+						pattern="dd/MM/yyyy" showOn="button" navigator="true" locale="es"
+						required="true" mindate="#{firstDiagnosisBacking.today}" />
+				</h:panelGrid>
+
+				<p:spacer height="5" />
+
+				<h:panelGrid id="pnlResults" width="100%">
+
+					<p:dataTable id="selectedTable" var="rec"
+						value="#{firstDiagnosisBacking.list}" rowKey="#{rec.code}"
+						style="width:100%;" paginator="true" rows="20"
+						resizableColumns="true"
+						emptyMessage="#{msg['glb_no_records_found']}">
+
+						<p:column filterBy="idCie" filterMatchMode="contains" width="20%">
+							<f:facet name="header">
+								<h:outputText value="#{msg['fsd_id_cie']}" />
+							</f:facet>
+							<h:outputLabel value="#{rec.idCie}" />
+						</p:column>
+
+						<p:column filterBy="descCie" filterMatchMode="contains">
+							<f:facet name="header">
+								<h:outputText value="#{msg['fsd_desc_cie']}" />
+							</f:facet>
+							<h:outputLabel value="#{rec.descCie}" />
+						</p:column>
+
+						<p:column width="10%">
+							<f:facet name="header">
+								<h:outputText value="#{msg['fsd_count']}" />
+							</f:facet>
+							<h:outputLabel value="#{rec.countCie}" />
+						</p:column>
+
+					</p:dataTable>
+
+				</h:panelGrid>
+
+				<p:dialog id="branchDialog" widgetVar="branchDlg" modal="true"
+					closable="true" header="#{msg['usr_branch']}">
+
+					<p:toolbar id="toolBar" style="width:100%">
+						<p:toolbarGroup align="left">
+							<p:commandButton id="btnAdd" value="#{msg['btn_add']}"
+								icon="ui-icon-plusthick" update=":form:pnlDetail growl"
+								oncomplete="handleComplete(xhr, status, args)"
+								actionListener="#{firstDiagnosisBacking.addBranchAction(true)}" />
+						</p:toolbarGroup>
+					</p:toolbar>
+
+					<p:spacer />
+
+					<p:dataTable id="selectedTableBranch" var="rec"
+						value="#{firstDiagnosisBacking.listBranchObject}"
+						rowKey="#{rec.id}" style="width:100%"
+						selection="#{firstDiagnosisBacking.selectedsBranchObject}"
+						paginator="true" rows="10"
+						emptyMessage="#{msg['glb_no_records_found']}">
+
+						<p:column selectionMode="multiple" style="width:18px" />
+
+						<p:column headerText="#{msg['bra_sales_off']}"
+							filterBy="#{rec.code}" filterMatchMode="contains">
+							<h:outputLabel value="#{rec.code}" />
+						</p:column>
+
+						<p:column headerText="#{msg['bra_name']}" filterBy="#{rec.name}"
+							filterMatchMode="contains">
+							<h:outputLabel value="#{rec.name}" />
+						</p:column>
+					</p:dataTable>
+
+				</p:dialog>
+
+				<p:dialog id="exportDialog" widgetVar="exportDlg" modal="true"
+					closable="true" header="#{msg['btn_export']}">
+
+					<h:outputLabel value="#{msg['app_src_format']}"
+						style="font-size:medium;" />
+
+					<h:panelGrid width="100%" columns="3">
+
+						<h:commandLink>
+							<p:graphicImage id="imgExcel" value="../../images/excel.png"
+								alt="Excel" />
+							<p:dataExporter type="xls"
+								target="#{firstDiagnosisBacking.target}" fileName="indicador" />
+							<p:tooltip for="imgExcel" value="#{msg['btn_export_excel']}"
+								showEffect="fade" hideEffect="fade" />
+						</h:commandLink>
+
+						<h:commandLink>
+							<p:graphicImage id="imgCSV" value="../../images/csv.png" />
+							<p:dataExporter type="csv"
+								target="#{firstDiagnosisBacking.target}" fileName="indicador" />
+							<p:tooltip for="imgCSV" value="#{msg['btn_export_csv']}"
+								showEffect="fade" hideEffect="fade" />
+						</h:commandLink>
+
+						<h:commandLink>
+							<p:graphicImage id="imgXML" value="../../images/xml.png" />
+							<p:dataExporter type="xml" target="selectedTable"
+								fileName="indicador" />
+							<p:tooltip for="imgXML" value="#{msg['btn_export_xml']}"
+								showEffect="fade" hideEffect="fade" />
+						</h:commandLink>
+
+					</h:panelGrid>
+				</p:dialog>
+
+			</h:form>
+
+		</p:panel>
+
+		<script type="text/javascript">
+			function handleComplete(xhr, status, args) {
+				if (args.validate) {
+					branchDlg.hide();
+				} else {
+					branchDlg.show();
+				}
+			}
+		</script>
+
+	</ui:define>
+</ui:composition>
+</html>

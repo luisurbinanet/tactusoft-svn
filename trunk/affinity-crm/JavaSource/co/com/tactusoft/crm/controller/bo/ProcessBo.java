@@ -47,6 +47,7 @@ import co.com.tactusoft.crm.model.entities.CrmPatientTicket;
 import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
 import co.com.tactusoft.crm.model.entities.IndPatientAppointment;
 import co.com.tactusoft.crm.model.entities.VwAppointment;
+import co.com.tactusoft.crm.model.entities.VwFirstDiagnosis;
 import co.com.tactusoft.crm.model.entities.VwMedicationSold;
 import co.com.tactusoft.crm.model.entities.VwTherapyMaterials;
 import co.com.tactusoft.crm.util.Constant;
@@ -1889,6 +1890,32 @@ public class ProcessBo implements Serializable {
 				+ "' GROUP BY id_patient, id_branch " + "ORDER by 1,6,5";
 		List<IndPatientAppointment> result = dao.findNative(sql,
 				IndPatientAppointment.class);
+		return result;
+	}
+
+	public List<VwFirstDiagnosis> getListFirstDiagnosist(
+			CrmBranch[] listBranch, Date startDate, Date endDate) {
+		String branchs = "";
+		for (CrmBranch crmBranch : listBranch) {
+			branchs = branchs + crmBranch.getId() + ",";
+		}
+		branchs = branchs.substring(0, branchs.length() - 1);
+
+		String sql = "SELECT c.code as id_cie, c.description as desc_cie, count(1) as count_cie\n "
+				+ "FROM crm_db.crm_diagnosis a JOIN\n "
+				+ "(SELECT id_appointment, MIN(id) min_id\n "
+				+ "FROM crm_db.crm_diagnosis\n "
+				+ "GROUP BY id_appointment) b ON a.id = b.min_id\n "
+				+ "JOIN crm_cie c ON c.id = a.id_cie\n "
+				+ "JOIN crm_appointment d ON d.id = a.id_appointment\n "
+				+ "WHERE Date(d.start_appointment_date) BETWEEN '"
+				+ FacesUtil.formatDate(startDate, "yyyy-MM-dd")
+				+ "' AND '"
+				+ FacesUtil.formatDate(endDate, "yyyy-MM-dd")
+				+ "'\n GROUP BY c.code, c.description";
+
+		List<VwFirstDiagnosis> result = dao.findNative(sql,
+				VwFirstDiagnosis.class);
 		return result;
 	}
 
