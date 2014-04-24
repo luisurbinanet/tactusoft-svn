@@ -31,12 +31,17 @@ public class CrmCampaign implements java.io.Serializable {
 	private CrmUser crmUser;
 	private CrmLog crmLog;
 	private CrmBranch crmBranch;
+	private CrmUser crmUserByIdUserCreate;
+	private CrmUser crmUserByIdUserModified;
 	private Date dateCall;
 	private String observation;
 	private Integer days;
 	private int state;
 	private Integer orderField;
 	private Integer poll;
+	private String appointmentNumber;
+	private Date dateCreated;
+	private Date dateModified;
 	private List<CrmCampaignDetail> crmCampaignDetails = new ArrayList<CrmCampaignDetail>();
 	private List<CrmCampaignMedication> crmCampaignMedications = new ArrayList<CrmCampaignMedication>();
 
@@ -123,6 +128,26 @@ public class CrmCampaign implements java.io.Serializable {
 		this.crmBranch = crmBranch;
 	}
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_user_modified")
+	public CrmUser getCrmUserByIdUserModified() {
+		return this.crmUserByIdUserModified;
+	}
+
+	public void setCrmUserByIdUserModified(CrmUser crmUserByIdUserModified) {
+		this.crmUserByIdUserModified = crmUserByIdUserModified;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_user_created")
+	public CrmUser getCrmUserByIdUserCreate() {
+		return this.crmUserByIdUserCreate;
+	}
+
+	public void setCrmUserByIdUserCreate(CrmUser crmUserByIdUserCreate) {
+		this.crmUserByIdUserCreate = crmUserByIdUserCreate;
+	}
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "date_call", nullable = false, length = 19)
 	public Date getDateCall() {
@@ -176,6 +201,35 @@ public class CrmCampaign implements java.io.Serializable {
 
 	public void setPoll(Integer poll) {
 		this.poll = poll;
+	}
+
+	@Column(name = "appointment_number")
+	public String getAppointmentNumber() {
+		return appointmentNumber;
+	}
+
+	public void setAppointmentNumber(String appointmentNumber) {
+		this.appointmentNumber = appointmentNumber;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "date_created", length = 19)
+	public Date getDateCreated() {
+		return this.dateCreated;
+	}
+
+	public void setDateCreated(Date dateCreated) {
+		this.dateCreated = dateCreated;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "date_modified", length = 19)
+	public Date getDateModified() {
+		return this.dateModified;
+	}
+
+	public void setDateModified(Date dateModified) {
+		this.dateModified = dateModified;
 	}
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "crmCampaign")
