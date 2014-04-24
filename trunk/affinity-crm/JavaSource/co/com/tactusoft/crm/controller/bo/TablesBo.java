@@ -91,8 +91,7 @@ public class TablesBo implements Serializable {
 			branchs = branchs + row.getId() + ",";
 		}
 		branchs = branchs.substring(0, branchs.length() - 1);
-		return dao
-				.find("FROM CrmDoctor o ORDER BY o.names");
+		return dao.find("FROM CrmDoctor o ORDER BY o.names");
 	}
 
 	public List<CrmCaseStudy> getListCaseStudy(String startDate, String endDate) {
@@ -527,11 +526,13 @@ public class TablesBo implements Serializable {
 				.find("select o.crmProcedure from CrmProcedureBranch o where o.crmProcedure.state = 1 and o.crmBranch.id = "
 						+ idBranch + " ORDER BY o.crmProcedure.name");
 	}
-	
-	public List<CrmProcedureDetail> getListProcedureByBranchConsultant(BigDecimal idBranch) {
+
+	public List<CrmProcedureDetail> getListProcedureByBranchConsultant(
+			BigDecimal idBranch) {
 		return dao
 				.find("select o.crmProcedure from CrmProcedureBranch o where o.crmProcedure.state = 1 and o.crmBranch.id = "
-						+ idBranch + " AND o.crmProcedure.typeHistory = 'CONSULTANT' ORDER BY o.crmProcedure.name");
+						+ idBranch
+						+ " AND o.crmProcedure.typeHistory = 'CONSULTANT' ORDER BY o.crmProcedure.name");
 	}
 
 	public List<VwProcedure> getListVwProcedureByBranch(BigDecimal idBranch) {
@@ -667,6 +668,7 @@ public class TablesBo implements Serializable {
 
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmUser.class));
+			entity.setPassword(FacesUtil.getMD5(Constant.PASSWORD_DEFAULT));
 		}
 
 		result = this.persist(entity);

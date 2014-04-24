@@ -1205,8 +1205,8 @@ public class ProcessBo implements Serializable {
 
 	public boolean isExistsTickets(String ticket) {
 		List<CrmPatientTicket> listTemp = dao
-				.find("FROM CrmPatientTicket o WHERE TRIM(ticket) = "
-						+ ticket.trim());
+				.find("FROM CrmPatientTicket o WHERE TRIM(ticket) = '"
+						+ ticket.trim() + "'");
 		if (listTemp.isEmpty()) {
 			return true;
 		} else {
@@ -1912,7 +1912,7 @@ public class ProcessBo implements Serializable {
 				+ FacesUtil.formatDate(startDate, "yyyy-MM-dd")
 				+ "' AND '"
 				+ FacesUtil.formatDate(endDate, "yyyy-MM-dd")
-				+ "'\n GROUP BY c.code, c.description";
+				+ "'\n GROUP BY c.code, c.description ORDER BY 3 DESC";
 
 		List<VwFirstDiagnosis> result = dao.findNative(sql,
 				VwFirstDiagnosis.class);

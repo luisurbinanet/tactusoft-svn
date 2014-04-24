@@ -76,7 +76,8 @@
 
 					<h:outputText value="#{msg['pat_region']}" style="width:100%" />
 					<p:selectOneMenu id="selRegion" value="#{contactBacking.idRegion}"
-						style="width:248px" required="true" label="#{msg['pat_region']}">
+						style="width:248px" required="true" label="#{msg['pat_region']}"
+						filter="true" filterMatchMode="contains">
 						<f:selectItems value="#{contactBacking.listRegion}" />
 						<p:ajax update="selCity"
 							listener="#{contactBacking.handleRegionChange}" />
@@ -84,7 +85,8 @@
 
 					<h:outputText value="#{msg['pat_city']}" style="width:100%" />
 					<p:selectOneMenu id="selCity" value="#{contactBacking.idCity}"
-						style="width:248px" required="true" label="#{msg['pat_city']}">
+						style="width:248px" required="true" label="#{msg['pat_city']}"
+						filter="true" filterMatchMode="contains">
 						<f:selectItems value="#{contactBacking.listCity}" />
 					</p:selectOneMenu>
 

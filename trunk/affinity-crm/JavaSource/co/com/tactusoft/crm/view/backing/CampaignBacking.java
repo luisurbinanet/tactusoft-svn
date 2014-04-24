@@ -1103,7 +1103,7 @@ public class CampaignBacking extends BaseBacking {
 			List<CrmCampaignDetail> list = tablesService
 					.getListCampaignByAppointment(crmCampaignDetail
 							.getCrmAppointment().getId(),
-							Constant.RECALL_NO_ATTENDET);
+							type);
 			if (list.size() <= crmRecall.getOccurrences()) {
 				currentDate = FacesUtil.getDateWithoutTime(currentDate);
 				if (crmRecall.getNumDays() > 0) {

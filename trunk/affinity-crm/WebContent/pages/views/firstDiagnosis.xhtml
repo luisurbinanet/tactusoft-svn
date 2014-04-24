@@ -40,13 +40,13 @@
 					<p:calendar id="calSD" value="#{firstDiagnosisBacking.startDate}"
 						label="#{msg['src_star_date']}" readonlyInput="true"
 						pattern="dd/MM/yyyy" showOn="button" navigator="true" locale="es"
-						required="true" mindate="#{firstDiagnosisBacking.today}" />
+						required="true" maxdate="#{firstDiagnosisBacking.today}" />
 
 					<h:outputLabel value="#{msg['src_end_date']}" style="width:40%" />
 					<p:calendar id="calED" value="#{firstDiagnosisBacking.endDate}"
 						label="#{msg['src_end_date']}" readonlyInput="true"
 						pattern="dd/MM/yyyy" showOn="button" navigator="true" locale="es"
-						required="true" mindate="#{firstDiagnosisBacking.today}" />
+						required="true" maxdate="#{firstDiagnosisBacking.today}" />
 				</h:panelGrid>
 
 				<p:spacer height="5" />
