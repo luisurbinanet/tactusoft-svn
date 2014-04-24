@@ -3,11 +3,14 @@ package co.com.tactusoft.crm.model.entities;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+
 import static javax.persistence.GenerationType.IDENTITY;
+
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -27,9 +30,13 @@ public class CrmCampaignDetail implements java.io.Serializable {
 	private Integer id;
 	private CrmCampaign crmCampaign;
 	private CrmAppointment crmAppointment;
+	private CrmUser crmUserByIdUserCreate;
+	private CrmUser crmUserByIdUserModified;
 	private int idCampaignType;
 	private Date callDate;
 	private String obs;
+	private Date dateCreated;
+	private Date dateModified;
 	private int status;
 	private Set<CrmCampaignTask> crmCampaignTasks = new HashSet<CrmCampaignTask>(
 			0);
@@ -88,6 +95,26 @@ public class CrmCampaignDetail implements java.io.Serializable {
 		this.crmAppointment = crmAppointment;
 	}
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_user_modified")
+	public CrmUser getCrmUserByIdUserModified() {
+		return this.crmUserByIdUserModified;
+	}
+
+	public void setCrmUserByIdUserModified(CrmUser crmUserByIdUserModified) {
+		this.crmUserByIdUserModified = crmUserByIdUserModified;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_user_created")
+	public CrmUser getCrmUserByIdUserCreate() {
+		return this.crmUserByIdUserCreate;
+	}
+
+	public void setCrmUserByIdUserCreate(CrmUser crmUserByIdUserCreate) {
+		this.crmUserByIdUserCreate = crmUserByIdUserCreate;
+	}
+
 	@Column(name = "id_campaign_type", nullable = false)
 	public int getIdCampaignType() {
 		return this.idCampaignType;
@@ -114,6 +141,26 @@ public class CrmCampaignDetail implements java.io.Serializable {
 
 	public void setObs(String obs) {
 		this.obs = obs;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "date_created", length = 19)
+	public Date getDateCreated() {
+		return this.dateCreated;
+	}
+
+	public void setDateCreated(Date dateCreated) {
+		this.dateCreated = dateCreated;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "date_modified", length = 19)
+	public Date getDateModified() {
+		return this.dateModified;
+	}
+
+	public void setDateModified(Date dateModified) {
+		this.dateModified = dateModified;
 	}
 
 	@Column(name = "status", nullable = false)

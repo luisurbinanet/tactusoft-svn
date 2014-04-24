@@ -33,6 +33,7 @@ public class CrmAppointment implements java.io.Serializable {
 	private CrmBranch crmBranch;
 	private CrmUser crmUserByIdUserCanceled;
 	private CrmUser crmUserByIdUserOpened;
+	private CrmUser crmUserByIdUserClosed;
 	private CrmDoctor crmDoctor;
 	private String code;
 	private String patientNames;
@@ -51,6 +52,7 @@ public class CrmAppointment implements java.io.Serializable {
 	private Date dateCanceled;
 	private Date dateOpened;
 	private String obsOpened;
+	private Date dateClosed;
 	private Long sapMaterialCode;
 	private String sapMaterialDesc;
 	private String obsCancel;
@@ -206,6 +208,16 @@ public class CrmAppointment implements java.io.Serializable {
 
 	public void setCrmUserByIdUserOpened(CrmUser crmUserByIdUserOpened) {
 		this.crmUserByIdUserOpened = crmUserByIdUserOpened;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_user_closed")
+	public CrmUser getCrmUserByIdUserClosed() {
+		return crmUserByIdUserClosed;
+	}
+
+	public void setCrmUserByIdUserClosed(CrmUser crmUserByIdUserClosed) {
+		this.crmUserByIdUserClosed = crmUserByIdUserClosed;
 	}
 
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -376,6 +388,16 @@ public class CrmAppointment implements java.io.Serializable {
 
 	public void setObsOpened(String obsOpened) {
 		this.obsOpened = obsOpened;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "date_closed", length = 19)
+	public Date getDateClosed() {
+		return dateClosed;
+	}
+
+	public void setDateClosed(Date dateClosed) {
+		this.dateClosed = dateClosed;
 	}
 
 	@Column(name = "sap_material_code")
