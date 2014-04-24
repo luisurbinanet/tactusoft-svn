@@ -84,9 +84,6 @@ public class UserBacking extends BaseBacking {
 
 	public void setSelected(CrmUser selected) {
 		this.selected = selected;
-		if (selected != null) {
-			password = this.selected.getPassword();
-		}
 	}
 
 	public List<SelectItem> getListDepartment() {
@@ -216,20 +213,18 @@ public class UserBacking extends BaseBacking {
 
 	public void saveAction() {
 		String message = null;
-		boolean validatePassword = true;
-
-		if (FacesUtil.isEmptyOrBlank(selected.getPassword())
-				&& selected.getId() == null) {
-			String field = FacesUtil.getMessage("usr_password");
-			message = FacesUtil.getMessage("glb_required", field);
-			FacesUtil.addError(message);
-		} else {
-			if (FacesUtil.isEmptyOrBlank(selected.getPassword())
-					&& selected.getId() != null) {
-				selected.setPassword(password);
-				validatePassword = false;
-			}
-		}
+		/*
+		 * boolean validatePassword = true;
+		 * 
+		 * if (FacesUtil.isEmptyOrBlank(selected.getPassword()) &&
+		 * selected.getId() == null) { String field =
+		 * FacesUtil.getMessage("usr_password"); message =
+		 * FacesUtil.getMessage("glb_required", field);
+		 * FacesUtil.addError(message); } else { if
+		 * (FacesUtil.isEmptyOrBlank(selected.getPassword()) && selected.getId()
+		 * != null) { selected.setPassword(password); validatePassword = false;
+		 * } }
+		 */
 
 		if (listBranchUser.getTarget().size() == 0) {
 			message = FacesUtil.getMessage("usr_msg_error_branch");
@@ -255,10 +250,6 @@ public class UserBacking extends BaseBacking {
 
 		if (message == null) {
 			selected.setUsername(selected.getUsername().toLowerCase());
-			if (validatePassword) {
-				selected.setPassword(FacesUtil.getMD5(selected.getPassword()));
-			}
-
 			selected.setCrmDepartment(mapDepartment.get(selected
 					.getCrmDepartment().getId()));
 
@@ -473,6 +464,11 @@ public class UserBacking extends BaseBacking {
 				listTargetProfile);
 		listBranchPostsale = new DualListModel<CrmBranch>(
 				listSourceBranchPostsale, listTargetBranchPostsale);
+	}
+
+	public void refreshPasswordAction(ActionEvent event) {
+		this.password = Constant.PASSWORD_DEFAULT;
+		updatePasswordAction();
 	}
 
 	public void updatePasswordAction() {

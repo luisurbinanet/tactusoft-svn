@@ -77,7 +77,8 @@
 
 					<h:outputText value="#{msg['pat_region']}" style="width:100%" />
 					<p:selectOneMenu id="selRegion" value="#{contactBacking.idRegion}"
-						style="width:248px" required="true" label="#{msg['pat_region']}">
+						style="width:248px" required="true" label="#{msg['pat_region']}"
+						filter="true" filterMatchMode="contains">
 						<f:selectItems value="#{contactBacking.listRegion}" />
 						<p:ajax update="selCity"
 							listener="#{contactBacking.handleRegionChange}" />
@@ -85,7 +86,8 @@
 
 					<h:outputText value="#{msg['pat_city']}" style="width:100%" />
 					<p:selectOneMenu id="selCity" value="#{contactBacking.idCity}"
-						style="width:248px" required="true" label="#{msg['pat_city']}">
+						style="width:248px" required="true" label="#{msg['pat_city']}"
+						filter="true" filterMatchMode="contains">
 						<f:selectItems value="#{contactBacking.listCity}" />
 					</p:selectOneMenu>
 
@@ -207,8 +209,7 @@
 					<p:column style="width:10%">
 						<p:commandButton icon="ui-icon-trash" title="#{msg['btn_delete']}"
 							action="#{contactBacking.removeTicket}" process="@this"
-							update="tblTicket"
-							disabled="#{row.id ne null}">
+							update="tblTicket" disabled="#{row.id ne null}">
 							<f:setPropertyActionListener value="#{row}"
 								target="#{contactBacking.crmPatientTicketSelected}" />
 						</p:commandButton>
