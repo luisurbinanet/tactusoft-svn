@@ -1,8 +1,10 @@
 package co.com.tactusoft.crm.model.entities;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
 /**
@@ -24,12 +28,16 @@ public class CrmDoctor implements java.io.Serializable {
 	private BigDecimal id;
 	private CrmUser crmUser;
 	private CrmSpeciality crmSpeciality;
+	private CrmUser crmUserByIdUserCreate;
+	private CrmUser crmUserByIdUserModified;
 	private String code;
 	private String names;
 	private String medicalLicense;
 	private String university;
 	private String medicalType;
 	private int state;
+	private Date dateCreate;
+	private Date dateModified;
 	private Set<CrmAppointment> crmAppointments = new HashSet<CrmAppointment>(0);
 	private Set<CrmDoctorSchedule> crmDoctorSchedules = new HashSet<CrmDoctorSchedule>(
 			0);
@@ -95,6 +103,26 @@ public class CrmDoctor implements java.io.Serializable {
 		this.crmSpeciality = crmSpeciality;
 	}
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_user_modified")
+	public CrmUser getCrmUserByIdUserModified() {
+		return this.crmUserByIdUserModified;
+	}
+
+	public void setCrmUserByIdUserModified(CrmUser crmUserByIdUserModified) {
+		this.crmUserByIdUserModified = crmUserByIdUserModified;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_user_create")
+	public CrmUser getCrmUserByIdUserCreate() {
+		return this.crmUserByIdUserCreate;
+	}
+
+	public void setCrmUserByIdUserCreate(CrmUser crmUserByIdUserCreate) {
+		this.crmUserByIdUserCreate = crmUserByIdUserCreate;
+	}
+
 	@Column(name = "code", unique = true, nullable = false, length = 45)
 	public String getCode() {
 		return this.code;
@@ -130,8 +158,7 @@ public class CrmDoctor implements java.io.Serializable {
 	public void setUniversity(String university) {
 		this.university = university;
 	}
-	
-	
+
 	@Column(name = "medical_type")
 	public String getMedicalType() {
 		return medicalType;
@@ -148,6 +175,26 @@ public class CrmDoctor implements java.io.Serializable {
 
 	public void setState(int state) {
 		this.state = state;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "date_create", length = 19)
+	public Date getDateCreate() {
+		return this.dateCreate;
+	}
+
+	public void setDateCreate(Date dateCreate) {
+		this.dateCreate = dateCreate;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "date_modified", length = 19)
+	public Date getDateModified() {
+		return this.dateModified;
+	}
+
+	public void setDateModified(Date dateModified) {
+		this.dateModified = dateModified;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmDoctor")
