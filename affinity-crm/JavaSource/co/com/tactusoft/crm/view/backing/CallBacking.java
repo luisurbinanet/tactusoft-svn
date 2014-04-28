@@ -76,6 +76,7 @@ public class CallBacking extends ContactBacking {
 	public boolean renderedError;
 
 	private String calls = "-1";
+	private String appointmentNumber;
 
 	public CallBacking() {
 		crmGuideline = new CrmGuideline();
@@ -193,6 +194,14 @@ public class CallBacking extends ContactBacking {
 
 	public void setCalls(String calls) {
 		this.calls = calls;
+	}
+
+	public String getAppointmentNumber() {
+		return appointmentNumber;
+	}
+
+	public void setAppointmentNumber(String appointmentNumber) {
+		this.appointmentNumber = appointmentNumber;
 	}
 
 	@PostConstruct
@@ -369,6 +378,8 @@ public class CallBacking extends ContactBacking {
 
 	public void saveAction() {
 		if (patientGridType == 2) {
+			super.numCell = 10;
+			super.numPhone = 7;
 			this.getSelectedPatient().setCrmUserByIdUserCreate(
 					securityService.getObject("usuario"));
 			this.getSelectedPatient().setIdCountry(idCountry);
@@ -381,6 +392,7 @@ public class CallBacking extends ContactBacking {
 			call.setCrmCallTypeDetail(mapCallTypeDetail.get(idCallTypeDetail));
 			call.setCrmPatient(this.selectedPatient);
 			call.setCallType(Constant.CALLED_TYPE_IN);
+			call.setAppointmentNumber(this.appointmentNumber);
 			capaignService.saveCall(call);
 			String message = FacesUtil.getMessage("cam_msg_update_ok",
 					selectedPatient.getNames());

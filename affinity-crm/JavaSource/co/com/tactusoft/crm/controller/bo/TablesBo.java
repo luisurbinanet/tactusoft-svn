@@ -627,6 +627,11 @@ public class TablesBo implements Serializable {
 	public Integer saveDoctor(CrmDoctor entity) {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmDoctor.class));
+			entity.setCrmUserByIdUserCreate(FacesUtil.getCurrentUser());
+			entity.setDateCreate(new Date());
+		} else {
+			entity.setCrmUserByIdUserModified(FacesUtil.getCurrentUser());
+			entity.setDateModified(new Date());
 		}
 		return this.persist(entity);
 	}
@@ -669,6 +674,11 @@ public class TablesBo implements Serializable {
 		if (entity.getId() == null) {
 			entity.setId(getId(CrmUser.class));
 			entity.setPassword(FacesUtil.getMD5(Constant.PASSWORD_DEFAULT));
+			entity.setCrmUserByIdUserCreate(FacesUtil.getCurrentUser());
+			entity.setDateCreate(new Date());
+		} else {
+			entity.setCrmUserByIdUserModified(FacesUtil.getCurrentUser());
+			entity.setDateModified(new Date());
 		}
 
 		result = this.persist(entity);
