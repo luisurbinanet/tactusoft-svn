@@ -51,12 +51,15 @@
 								value="#{callBacking.idCallTypeDetail}" style="width:500px"
 								required="true" label="#{msg['cam_call_level2']}">
 								<f:selectItems value="#{callBacking.listCallTypeDetail}" />
-								<p:ajax listener="#{callBacking.handleCallTypeDetailChange}"/>
+								<p:ajax listener="#{callBacking.handleCallTypeDetailChange}" />
 							</p:selectOneMenu>
+							<h:outputLabel value="#{msg['cam_app_number']}" />
+							<p:inputText value="#{callBacking.appointmentNumber}"
+								maxlength="45" required="true" label="#{msg['cam_app_number']}" />
 						</h:panelGrid>
 					</p:fieldset>
-					
-					<p:spacer/>
+
+					<p:spacer />
 
 					<p:fieldset legend="#{msg['gui_libretto']}" toggleable="true"
 						toggleSpeed="500">

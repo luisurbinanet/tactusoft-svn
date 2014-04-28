@@ -2445,6 +2445,11 @@ public class HistoryBacking extends BaseBacking {
 				if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord.getOther())) {
 					selectedHistoryRecord.setOther(Constant.HISTORY_NOT_REFER);
 				}
+				
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getResults())) {
+					selectedHistoryHistory
+							.setResults(Constant.HISTORY_NOT_REFER);
+				}
 
 				if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getHead())) {
 					selectedHistoryHistory.setHead(Constant.HISTORY_NOT_REFER);
