@@ -39,7 +39,6 @@ public class CrmCampaign implements java.io.Serializable {
 	private int state;
 	private Integer orderField;
 	private Integer poll;
-	private String appointmentNumber;
 	private Date dateCreated;
 	private Date dateModified;
 	private List<CrmCampaignDetail> crmCampaignDetails = new ArrayList<CrmCampaignDetail>();
@@ -201,15 +200,6 @@ public class CrmCampaign implements java.io.Serializable {
 
 	public void setPoll(Integer poll) {
 		this.poll = poll;
-	}
-
-	@Column(name = "appointment_number")
-	public String getAppointmentNumber() {
-		return appointmentNumber;
-	}
-
-	public void setAppointmentNumber(String appointmentNumber) {
-		this.appointmentNumber = appointmentNumber;
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)

@@ -36,6 +36,7 @@ public class CrmCall implements java.io.Serializable {
 	private BigDecimal idCallFinal;
 	private Date callDate;
 	private String asteriskId;
+	private String appointmentNumber;
 
 	public CrmCall() {
 	}
@@ -184,6 +185,15 @@ public class CrmCall implements java.io.Serializable {
 
 	public void setAsteriskId(String asteriskId) {
 		this.asteriskId = asteriskId;
+	}
+
+	@Column(name = "appointment_number")
+	public String getAppointmentNumber() {
+		return appointmentNumber;
+	}
+
+	public void setAppointmentNumber(String appointmentNumber) {
+		this.appointmentNumber = appointmentNumber;
 	}
 
 }
