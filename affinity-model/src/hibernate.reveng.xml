@@ -2,5 +2,10 @@
 <!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
 
 <hibernate-reverse-engineering>
-	<table-filter match-name="vw_first_diagnosis" match-catalog="crm_db"></table-filter>
+	<table-filter match-name="crm_rep_medication"
+		match-catalog="crm_db">
+	</table-filter>
+	<table-filter match-name="crm_rep_symptom"
+		match-catalog="crm_db">
+	</table-filter>
 </hibernate-reverse-engineering>
