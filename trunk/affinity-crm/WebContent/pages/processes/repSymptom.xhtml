@@ -1,0 +1,96 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="../templates/common.xhtml">
+
+	<ui:define name="body">
+
+		<p:panel style="width:1150px;height:100%;"
+			header="#{msg['title_rep_symptom']}">
+
+			<p:spacer height="5" />
+
+			<h:form id="form">
+
+				<p:growl id="growl" showDetail="true" />
+
+				<h:panelGrid width="100%" columns="2">
+					<h:outputLabel value="Síntomas" />
+					<p:inputText value="#{repSymptomBacking.symptom}" label="Síntomas">
+						<f:validateLength minimum="3" />
+					</p:inputText>
+					<p:commandButton value="Buscar" update="pnlDetail growl"
+						actionListener="#{repSymptomBacking.searchAction}" />
+				</h:panelGrid>
+
+				<p:spacer height="5" />
+
+				<p:layout id="pnlDetail" style="max-width:95%;min-height:400px;">
+
+					<p:layoutUnit position="west" minSize="400" maxSize="400"
+						header="Síntomas" collapsible="true">
+						<h:panelGrid id="panel1" style="width: 99%;">
+							<p:tree id="treeSymptom" value="#{repSymptomBacking.root}"
+								var="row" style="width:100%" dynamic="true" cache="false"
+								selectionMode="single"
+								selection="#{repSymptomBacking.selectedNode}">
+
+								<p:ajax event="select" update=":form:treeMedication"
+									listener="#{repSymptomBacking.onNodeSelect}" />
+
+								<p:treeNode expandedIcon="ui-icon-folder-open"
+									collapsedIcon="ui-icon-folder-collapsed">
+									<h:outputText value="#{row.chapter}" />
+								</p:treeNode>
+
+								<p:treeNode type="symptom" icon="ui-icon-document">
+									<h:outputText value="#{row.description}" />
+								</p:treeNode>
+
+							</p:tree>
+						</h:panelGrid>
+					</p:layoutUnit>
+
+					<p:layoutUnit position="center" minSize="400" maxSize="380"
+						header="Medicamentos">
+						<h:panelGrid id="panel2" style="width: 99%;">
+							<p:tree id="treeMedication"
+								value="#{repSymptomBacking.rootMedication}" var="row"
+								style="width:100%">
+
+								<p:treeNode expandedIcon="ui-icon-folder-open"
+									collapsedIcon="ui-icon-folder-collapsed">
+									<h:outputText value="#{row.chapter}" />
+								</p:treeNode>
+
+								<p:treeNode type="medication" icon="ui-icon-document">
+									<h:outputText value="#{row.description}" />
+								</p:treeNode>
+
+							</p:tree>
+						</h:panelGrid>
+					</p:layoutUnit>
+
+				</p:layout>
+
+
+			</h:form>
+		</p:panel>
+
+		<script type="text/javascript">
+			function handleComplete(xhr, status, args) {
+				if (args.validate) {
+					
+				} else {
+					
+				}
+			}
+		</script>
+
+	</ui:define>
+</ui:composition>
+</html>

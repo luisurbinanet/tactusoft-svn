@@ -211,3 +211,7 @@ input,select,textarea {
 .style_no_available {
     background-color: yellow;
 }
+
+.remove-all-border {
+   border: none;
+}

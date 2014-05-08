@@ -471,11 +471,11 @@ public class TablesBo implements Serializable {
 	}
 
 	public List<CrmRegion> getListRegion() {
-		return dao.find("from CrmRegion o");
+		return dao.find("from CrmRegion o order by o.name");
 	}
 
 	public List<CrmCity> getListCity() {
-		return dao.find("from CrmCity o");
+		return dao.find("from CrmCity o order by o.name");
 	}
 
 	public List<CrmBranch> getListBranchByUser(BigDecimal idUser) {

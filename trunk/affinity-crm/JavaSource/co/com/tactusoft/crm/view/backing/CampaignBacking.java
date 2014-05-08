@@ -730,16 +730,18 @@ public class CampaignBacking extends BaseBacking {
 
 		List<CrmCampaignDetail> listDetail = selected.getCrmCampaignDetails();
 		for (CrmCampaignDetail row : listDetail) {
-			if (row.getIdCampaignType() == Constant.RECALL_NO_ATTENDET) {
-				selectedDetailNoAttendet = row;
-			} else if (row.getIdCampaignType() == Constant.RECALL_CONFIRMED) {
-				selectedDetailConfirmed = row;
-			} else if (row.getIdCampaignType() == Constant.RECALL_CONTROL) {
-				selectedDetailControl = row;
-			} else if (row.getIdCampaignType() == Constant.RECALL_MEDICATION) {
-				selectedDetailMediaction = row;
-			} else if (row.getIdCampaignType() == Constant.RECALL_REMINDER) {
-				selectedDetailReminder = row;
+			if (row.getStatus() == 0) {
+				if (row.getIdCampaignType() == Constant.RECALL_NO_ATTENDET) {
+					selectedDetailNoAttendet = row;
+				} else if (row.getIdCampaignType() == Constant.RECALL_CONFIRMED) {
+					selectedDetailConfirmed = row;
+				} else if (row.getIdCampaignType() == Constant.RECALL_CONTROL) {
+					selectedDetailControl = row;
+				} else if (row.getIdCampaignType() == Constant.RECALL_MEDICATION) {
+					selectedDetailMediaction = row;
+				} else if (row.getIdCampaignType() == Constant.RECALL_REMINDER) {
+					selectedDetailReminder = row;
+				}
 			}
 		}
 
@@ -1102,8 +1104,7 @@ public class CampaignBacking extends BaseBacking {
 		if (crmRecall.getOccurrences() > 0) {
 			List<CrmCampaignDetail> list = tablesService
 					.getListCampaignByAppointment(crmCampaignDetail
-							.getCrmAppointment().getId(),
-							type);
+							.getCrmAppointment().getId(), type);
 			if (list.size() <= crmRecall.getOccurrences()) {
 				currentDate = FacesUtil.getDateWithoutTime(currentDate);
 				if (crmRecall.getNumDays() > 0) {
