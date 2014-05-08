@@ -82,8 +82,10 @@
 						<p:commandButton value="#{msg['btn_close']}"
 							icon="ui-icon-closethick" update="growl :form:recordTable"
 							process="@none" oncomplete="dlg.hide()" />
-						<p:commandButton value="#{msg['btn_refresh_key']}" icon="ui-icon-key"
-							actionListener="#{userBacking.refreshPasswordAction}" update="growl" />
+						<p:commandButton value="#{msg['btn_refresh_key']}"
+							icon="ui-icon-key"
+							actionListener="#{userBacking.refreshPasswordAction}"
+							update="growl" />
 					</p:toolbarGroup>
 				</p:toolbar>
 
@@ -149,6 +151,8 @@
 								itemLabel="#{msg['user_role_principal_nurse']}" />
 							<f:selectItem itemValue="NURSE_AUX"
 								itemLabel="#{msg['user_role_principal_nurse_aux']}" />
+							<f:selectItem itemValue="CONSULTANT"
+								itemLabel="#{msg['user_role_principal_consultant']}" />
 						</p:selectOneMenu>
 
 						<h:outputLabel id="lblSpeciality" value="#{msg['doc_speciality']}"

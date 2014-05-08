@@ -45,6 +45,8 @@ import co.com.tactusoft.crm.model.entities.CrmOdontologyTempJoint;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmPatientTicket;
 import co.com.tactusoft.crm.model.entities.CrmProcedureDetail;
+import co.com.tactusoft.crm.model.entities.CrmRepMedication;
+import co.com.tactusoft.crm.model.entities.CrmRepSymptom;
 import co.com.tactusoft.crm.model.entities.IndPatientAppointment;
 import co.com.tactusoft.crm.model.entities.VwAppointment;
 import co.com.tactusoft.crm.model.entities.VwFirstDiagnosis;
@@ -2043,5 +2045,16 @@ public class ProcessBo implements Serializable {
 		return dao
 				.find("SELECT DISTINCT o.crmBranch from CrmDoctorSchedule o WHERE o.crmDoctor.id = "
 						+ idDoctor);
+	}
+
+	public List<CrmRepSymptom> getListRepSymptom(String symptom) {
+		return dao.find("FROM CrmRepSymptom o WHERE o.description like '%"
+				+ symptom + "%' OR o.description like '%" + symptom
+				+ "%' ORDER BY o.chapter, o.description");
+	}
+
+	public List<CrmRepMedication> getListRepMedication(Integer idSymptom) {
+		return dao.find("FROM CrmRepMedication o WHERE o.crmRepSymptom.id = "
+				+ idSymptom + " ORDER BY o.description");
 	}
 }
