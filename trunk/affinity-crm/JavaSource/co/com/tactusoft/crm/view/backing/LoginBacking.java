@@ -19,7 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import co.com.tactusoft.crm.controller.bo.ParameterBo;
 import co.com.tactusoft.crm.controller.bo.SecurityBo;
-import co.com.tactusoft.crm.controller.bo.TablesBo;
+//import co.com.tactusoft.crm.controller.bo.TablesBo;
 import co.com.tactusoft.crm.model.entities.CrmParameter;
 import co.com.tactusoft.crm.security.UserData;
 import co.com.tactusoft.crm.util.FacesUtil;
@@ -34,8 +34,8 @@ public class LoginBacking {
 	@Inject
 	private SecurityBo securityBo;
 
-	@Inject
-	private TablesBo tablesBo;
+	//@Inject
+	//private TablesBo tablesBo;
 
 	private String userName;
 	private String password;

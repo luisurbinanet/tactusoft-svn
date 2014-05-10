@@ -467,8 +467,16 @@ public class UserBacking extends BaseBacking {
 	}
 
 	public void refreshPasswordAction(ActionEvent event) {
+		String message = null;
 		this.password = Constant.PASSWORD_DEFAULT;
-		updatePasswordAction();
+		selected.setPassword(FacesUtil.getMD5(this.password));
+		int result = tablesService.saveUser(selected, null, null);
+
+		if (result == 0) {
+			model = new UserDataModel(list);
+			message = FacesUtil.getMessage("msg_record_ok");
+			FacesUtil.addInfo(message);
+		}
 	}
 
 	public void updatePasswordAction() {

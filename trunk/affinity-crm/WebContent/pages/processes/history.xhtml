@@ -174,6 +174,14 @@
 							rendered="#{historyBacking.selectedPatient.id eq null?false:true}"
 							value="#{historyBacking.selectedPatient.gender eq 'W'?msg['glb_gender_woman']:historyBacking.selectedPatient.gender eq 'M'?msg['glb_gender_man']:''}" />
 
+						<h:outputLabel value="#{msg['pat_age']}"
+							rendered="#{historyBacking.selectedPatient.id eq null?false:true}" />
+						<p:inputText
+							style="width:400px;background-color:#FFFF80;font-weight:bold;"
+							readonly="true"
+							rendered="#{historyBacking.selectedPatient.id eq null?false:true}"
+							value="#{historyBacking.selectedPatient.age}" />
+
 					</p:panelGrid>
 
 					<p:spacer />
@@ -195,10 +203,11 @@
 
 									<h:outputLabel value="#{msg['pat_born_date']}" />
 									<p:calendar value="#{historyBacking.selectedPatient.bornDate}"
-										label="#{msg['pat_born_date']}" readonlyInput="true"
+										label="#{msg['pat_born_date']}" readonlyInput="false"
 										pattern="dd/MM/yyyy" showOn="button" navigator="true"
 										locale="es" yearRange="-100:+0"
 										maxdate="#{historyBacking.maxDate}">
+										<f:convertDateTime pattern="dd/MM/yyyy" />
 										<p:ajax event="dateSelect"
 											listener="#{historyBacking.handleBornDateSelect}"
 											update="txtAge pnlGender" />
@@ -501,6 +510,11 @@
 
 								<h:panelGrid columns="1" width="100%"
 									columnClasses="width25per,width75per">
+
+									<h:outputText value="#{msg['his_rec_per_surgical']}" />
+									<p:inputTextarea style="width:950px" rows="3"
+										value="#{historyBacking.selectedHistoryRecord.surgical}" />
+
 									<h:outputText value="#{msg['his_rec_per_occupational']}" />
 									<p:inputTextarea style="width:950px" rows="3"
 										value="#{historyBacking.selectedHistoryRecord.occupational}" />
@@ -512,10 +526,6 @@
 									<h:outputText value="#{msg['his_rec_blood_type']}" />
 									<p:inputTextarea style="width:950px" rows="3"
 										value="#{historyBacking.selectedHistoryRecord.bloodType}" />
-
-									<h:outputText value="#{msg['his_rec_per_surgical']}" />
-									<p:inputTextarea style="width:950px" rows="3"
-										value="#{historyBacking.selectedHistoryRecord.surgical}" />
 
 									<h:outputText value="#{msg['his_rec_per_pharmacological']}" />
 									<p:inputTextarea style="width:950px" rows="3"
@@ -532,6 +542,12 @@
 									<h:outputText value="#{msg['his_rec_per_other']}" />
 									<p:inputTextarea style="width:950px" rows="3"
 										value="#{historyBacking.selectedHistoryRecord.other}" />
+
+									<h:outputText value="#{msg['his_rec_per_planning']}"
+										rendered="#{historyBacking.renderedRecord eq 2?true:false}" />
+									<p:inputTextarea style="width:950px" rows="3"
+										value="#{historyBacking.selectedHistoryRecord.planning}"
+										rendered="#{historyBacking.renderedRecord eq 2?true:false}" />
 								</h:panelGrid>
 							</p:fieldset>
 
@@ -548,8 +564,10 @@
 										<h:outputLabel value="#{msg['his_rec_fuep']}" />
 										<p:calendar
 											value="#{historyBacking.selectedHistoryRecord.fuep}"
-											readonlyInput="true" pattern="dd/MM/yyyy" showOn="button"
-											navigator="true" locale="es" yearRange="-100:+0" />
+											readonlyInput="false" pattern="dd/MM/yyyy" showOn="button"
+											navigator="true" locale="es" yearRange="-100:+0">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</p:calendar>
 
 										<h:outputText value="#{msg['his_rec_psa']}" />
 										<p:inputText
@@ -558,8 +576,10 @@
 										<h:outputLabel value="#{msg['his_rec_psa_date']}" />
 										<p:calendar
 											value="#{historyBacking.selectedHistoryRecord.psaDate}"
-											readonlyInput="true" pattern="dd/MM/yyyy" showOn="button"
-											navigator="true" locale="es" yearRange="-100:+0" />
+											readonlyInput="false" pattern="dd/MM/yyyy" showOn="button"
+											navigator="true" locale="es" yearRange="-100:+0">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</p:calendar>
 									</h:panelGrid>
 								</p:fieldset>
 
@@ -605,8 +625,10 @@
 										<h:outputLabel value="#{msg['his_rec_fur']}" />
 										<p:calendar
 											value="#{historyBacking.selectedHistoryRecord.fur}"
-											readonlyInput="true" pattern="dd/MM/yyyy" showOn="button"
-											navigator="true" locale="es" yearRange="-100:+0" />
+											readonlyInput="false" pattern="dd/MM/yyyy" showOn="button"
+											navigator="true" locale="es" yearRange="-100:+0">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</p:calendar>
 
 										<h:outputText value="#{msg['his_rec_bleeding']}" />
 										<p:inputText style="width:350px"
@@ -615,8 +637,10 @@
 										<h:outputLabel value="#{msg['his_rec_fuc']}" />
 										<p:calendar
 											value="#{historyBacking.selectedHistoryRecord.fuc}"
-											readonlyInput="true" pattern="dd/MM/yyyy" showOn="button"
-											navigator="true" locale="es" yearRange="-100:+0" />
+											readonlyInput="false" pattern="dd/MM/yyyy" showOn="button"
+											navigator="true" locale="es" yearRange="-100:+0">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</p:calendar>
 
 									</h:panelGrid>
 								</p:fieldset>
@@ -1287,7 +1311,7 @@
 					<h:panelGrid id="pnlHistorial"
 						rendered="#{historyBacking.modeHistorial}" width="100%">
 
-						<ui:include src="historial.xhtml">
+						<ui:include src="historialNew.xhtml">
 							<ui:param name="prefix" value="pnlHistorial" />
 						</ui:include>
 
@@ -1296,10 +1320,10 @@
 				</h:panelGrid>
 
 				<p:dialog id="dialogHistorial" widgetVar="dlgHistorial"
-					resizable="true" draggable="true" width="1000" height="400"
+					resizable="true" draggable="true" width="1000" height="600"
 					header="#{msg['btn_view_history']}">
 
-					<ui:include src="historial.xhtml">
+					<ui:include src="historialNew.xhtml">
 						<ui:param name="prefix" value="dlgHistorial" />
 					</ui:include>
 
@@ -1309,49 +1333,35 @@
 					resizable="false" id="dialogCie" showEffect="fade"
 					hideEffect="explode" modal="true" width="600">
 
+					<p:defaultCommand target="btnSearchCIE" />
+
 					<h:panelGrid columns="2" width="100%">
-
-						<p:outputPanel>
-							<p:selectOneRadio id="sorCIE"
-								value="#{historyBacking.optionSearchCie}" layout="custom">
-								<f:selectItem itemLabel="#{msg['cie_code']}" itemValue="1" />
-								<f:selectItem itemLabel="#{msg['cie_desc']}" itemValue="2" />
-							</p:selectOneRadio>
-
-							<h:panelGrid columns="3" width="100%">
-								<p:radioButton id="rdbCIE1" for="sorCIE" itemIndex="0" />
-								<h:outputLabel for="rdbCIE1" value="#{msg['cie_code']}" />
-								<p:inputText value="#{historyBacking.codeCIE}"
-									style="width:100%" />
-
-								<p:radioButton id="rdbCIE2" for="sorCIE" itemIndex="1" />
-								<h:outputLabel for="rdbCIE2" value="#{msg['cie_desc']}" />
-								<p:inputText value="#{historyBacking.descCIE}"
-									style="width:100%" />
-							</h:panelGrid>
-						</p:outputPanel>
-
-						<f:facet name="footer">
-							<p:spacer height="10" />
-							<p:commandButton value="#{msg['btn_search']}"
-								process="@this,dialogCie" icon="ui-icon-search"
-								update="pnlTable3 recordTable3 btnAddCIE"
-								actionListener="#{historyBacking.searchCIEAction}" />
-							<p:commandButton id="btnAddCIE" value="#{msg['btn_add']}"
-								icon="ui-icon-plusthick" process="@this,dialogCie"
-								update="recordTable3 :form:accordion:dtbDiagnosis :form:accordion:dtbTherapy :form:accordion:dtbOtherMedication :form:accordion:dtbExamns :form:accordion:pnlStudyCase"
-								actionListener="#{historyBacking.addCieAction}"
-								disabled="#{historyBacking.disabledAddCie}" />
-						</f:facet>
+						<h:outputLabel for="rdbCIE2" value="#{msg['cie_desc']}" />
+						<p:inputText value="#{historyBacking.descCIE}" style="width:300px" />
 					</h:panelGrid>
+
+					<p:spacer />
+
+					<h:panelGrid columns="2">
+						<p:commandButton id="btnSearchCIE" value="#{msg['btn_search']}"
+							process="@this,dialogCie" icon="ui-icon-search"
+							update="pnlTable3 recordTable3 btnAddCIE"
+							actionListener="#{historyBacking.searchCIEAction}" />
+						<p:commandButton id="btnAddCIE" value="#{msg['btn_add']}"
+							icon="ui-icon-plusthick" process="@this,dialogCie"
+							update="recordTable3 :form:accordion:dtbDiagnosis :form:accordion:dtbTherapy :form:accordion:dtbOtherMedication :form:accordion:dtbExamns :form:accordion:pnlStudyCase"
+							actionListener="#{historyBacking.addCieAction}"
+							disabled="#{historyBacking.disabledAddCie}" />
+					</h:panelGrid>
+
 
 					<p:spacer height="10" />
 
-					<p:scrollPanel id="pnlTable3" style="width:580px;height:400px">
+					<p:scrollPanel id="pnlTable3" style="width:99%;height:380px">
 						<p:dataTable id="recordTable3" var="rec"
 							value="#{historyBacking.cieModel}" rowKey="#{rec.id}"
 							selection="#{historyBacking.selectedCie}" paginator="true"
-							rows="15" style="width:570px"
+							rows="15" style="width:100%"
 							emptyMessage="#{msg['glb_no_records_found']}">
 
 							<p:column selectionMode="single" style="width:18px" />
@@ -1371,58 +1381,42 @@
 
 				<p:dialog header="#{historyBacking.titleMedication}"
 					widgetVar="dlgMedicine" resizable="false" id="dialogMedicine"
-					showEffect="fade" hideEffect="explode" modal="true" width="650"
-					height="500">
+					showEffect="fade" hideEffect="explode" modal="true" width="600">
+
+					<p:defaultCommand target="btnMedicationSearch" />
 
 					<h:panelGrid columns="2" width="100%">
+						<h:outputLabel for="rdbMedicine2" value="#{msg['cie_desc']}" />
+						<p:inputText value="#{historyBacking.descMaterial}"
+							style="width:300px" />
 
-						<p:outputPanel>
-							<p:selectOneRadio id="sorMedicine"
-								value="#{historyBacking.optionSearchMaterial}" layout="custom">
-								<f:selectItem itemLabel="#{msg['cie_code']}" itemValue="1" />
-								<f:selectItem itemLabel="#{msg['cie_desc']}" itemValue="2" />
-							</p:selectOneRadio>
+						<h:outputLabel value="#{msg['sal_material_amount']}" />
+						<pe:inputNumber value="#{historyBacking.amount}" minValue="1"
+							maxValue="99" />
+					</h:panelGrid>
 
-							<h:panelGrid columns="3" width="100%">
-								<p:radioButton id="rdbMedicine1" for="sorMedicine" itemIndex="0" />
-								<h:outputLabel for="rdbMedicine1" value="#{msg['cie_code']}" />
-								<p:inputText value="#{historyBacking.codeMaterial}"
-									style="width:100%" />
+					<p:spacer />
 
-								<p:radioButton id="rdbMedicine2" for="sorMedicine" itemIndex="1" />
-								<h:outputLabel for="rdbMedicine2" value="#{msg['cie_desc']}" />
-								<p:inputText value="#{historyBacking.descMaterial}"
-									style="width:100%" />
-
-								<h:outputLabel />
-								<h:outputLabel value="#{msg['sal_material_amount']}" />
-								<pe:inputNumber value="#{historyBacking.amount}" minValue="1"
-									maxValue="99" />
-							</h:panelGrid>
-						</p:outputPanel>
-
-						<f:facet name="footer">
-							<p:spacer height="10" />
-
-							<p:commandButton value="#{msg['btn_search']}"
-								icon="ui-icon-search" process="@this, dialogMedicine"
-								update="pnlTable4 recordTable4 btnAddMaterial"
-								actionListener="#{historyBacking.searchMaterialAction}" />
-							<p:commandButton id="btnAddMaterial" value="#{msg['btn_add']}"
-								icon="ui-icon-plusthick"
-								update="recordTable4 :form:accordion:dtbDiagnosis :form:accordion:dtbOtherMedication :form:accordion:dtbTherapy :form:accordion:dtbExamns"
-								actionListener="#{historyBacking.addMaterialAction}"
-								disabled="#{historyBacking.disabledAddMaterial}" />
-						</f:facet>
+					<h:panelGrid columns="2">
+						<p:commandButton id="btnMedicationSearch"
+							value="#{msg['btn_search']}" icon="ui-icon-search"
+							process="@this, dialogMedicine"
+							update="pnlTable4 recordTable4 btnAddMaterial"
+							actionListener="#{historyBacking.searchMaterialAction}" />
+						<p:commandButton id="btnAddMaterial" value="#{msg['btn_add']}"
+							icon="ui-icon-plusthick"
+							update="recordTable4 :form:accordion:dtbDiagnosis :form:accordion:dtbOtherMedication :form:accordion:dtbTherapy :form:accordion:dtbExamns"
+							actionListener="#{historyBacking.addMaterialAction}"
+							disabled="#{historyBacking.disabledAddMaterial}" />
 					</h:panelGrid>
 
 					<p:spacer height="10" />
 
-					<p:scrollPanel id="pnlTable4" style="width:580px;height:400px">
+					<p:scrollPanel id="pnlTable4" style="width:99%;height:380px">
 						<p:dataTable id="recordTable4" var="rec"
 							value="#{historyBacking.materialModel}" rowKey="#{rec.code}"
 							selection="#{historyBacking.selectedMaterial}" paginator="true"
-							rows="15" style="width:600px"
+							rows="15" style="width:100%"
 							emptyMessage="#{msg['glb_no_records_found']}">
 
 							<p:column selectionMode="single" style="width:18px" />
@@ -1442,7 +1436,7 @@
 
 				<p:dialog header="#{msg['btn_add_posology']}"
 					widgetVar="dlgPosology" resizable="false" id="dialogPosology"
-					showEffect="fade" hideEffect="explode" modal="true" width="600">
+					showEffect="fade" hideEffect="explode" modal="true" width="610">
 
 					<h:panelGrid width="100%">
 						<p:inputTextarea rows="7" style="width:560px"
@@ -1556,61 +1550,25 @@
 						</p:selectOneMenu>
 					</h:panelGrid>
 
-					<h:panelGrid columns="2" width="100%">
+					<h:panelGrid columns="1" width="100%">
+						<h:outputLabel
+							value="Digite #{msg['sal_key_press_doc']} ó #{msg['sal_key_press_nom']}" />
+						<p:inputText value="#{historyBacking.docPatient}"
+							style="width:100%" />
+					</h:panelGrid>
 
-						<p:outputPanel id="customPanel">
-							<p:selectOneRadio id="customRadio"
-								value="#{historyBacking.optionSearchPatient}" layout="custom">
-								<p:ajax update="customPanel"
-									listener="#{historyBacking.cleanPatientFields}" />
-								<f:selectItem itemLabel="#{msg['sal_key_press_doc']}"
-									itemValue="1" />
-								<f:selectItem itemLabel="#{msg['sal_key_press_nom']}"
-									itemValue="2" />
-								<f:selectItem itemLabel="#{msg['sal_key_press_tel']}"
-									itemValue="3" />
-							</p:selectOneRadio>
+					<p:spacer height="10" />
 
-							<h:panelGrid columns="3" width="100%">
-								<p:radioButton id="opt1" for="customRadio" itemIndex="0" />
-								<h:outputLabel for="opt1" value="#{msg['sal_key_press_doc']}" />
-								<p:inputText value="#{historyBacking.docPatient}"
-									style="width:100%"
-									disabled="#{historyBacking.optionSearchPatient ne 1}">
-									<pe:keyFilter regEx="/[\d]/" preventPaste="false" />
-								</p:inputText>
-
-								<p:radioButton id="opt2" for="customRadio" itemIndex="1" />
-								<h:outputLabel for="opt2" value="#{msg['sal_key_press_nom']}" />
-								<p:inputText value="#{historyBacking.namePatient}"
-									style="width:100%"
-									disabled="#{historyBacking.optionSearchPatient ne 2}">
-									<pe:keyFilter regEx="/[a-zA-Z\s]/i" />
-								</p:inputText>
-
-								<p:radioButton id="opt3" for="customRadio" itemIndex="2" />
-								<h:outputLabel for="opt3" value="#{msg['sal_key_press_tel']}" />
-								<p:inputText value="#{historyBacking.telPatient}"
-									style="width:100%"
-									disabled="#{historyBacking.optionSearchPatient ne 3}">
-									<pe:keyFilter regEx="/[\d]/" preventPaste="false" />
-								</p:inputText>
-							</h:panelGrid>
-						</p:outputPanel>
-
-						<f:facet name="footer">
-							<p:spacer height="10" />
-
-							<p:commandButton value="#{msg['btn_search']}"
-								icon="ui-icon-search" process="dialogPatient"
-								update="pnlTable2 recordTable2 btnAddPatient"
-								action="#{historyBacking.searchPatientAction}" />
-							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
-								icon="ui-icon-plusthick" update=":form" process="dialogPatient"
-								actionListener="#{historyBacking.showHistorialAction}"
-								disabled="#{historyBacking.disabledAddPatient}"
-								oncomplete="dlgPatient.hide()" />
-						</f:facet>
+					<h:panelGrid columns="2">
+						<p:commandButton value="#{msg['btn_search']}"
+							icon="ui-icon-search" process="dialogPatient"
+							update="pnlTable2 recordTable2 btnAddPatient"
+							action="#{historyBacking.searchPatientNewAction}" />
+						<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
+							icon="ui-icon-plusthick" update=":form" process="dialogPatient"
+							actionListener="#{historyBacking.showHistorialAction}"
+							disabled="#{historyBacking.disabledAddPatient}"
+							oncomplete="dlgPatient.hide()" />
 					</h:panelGrid>
 
 					<p:spacer height="10" />
@@ -1709,8 +1667,10 @@
 						<h:outputLabel value="#{msg['con_date_informed']}" />
 						<p:calendar value="#{historyBacking.consentDate}" required="true"
 							id="calConsentDate" showOn="button" navigator="true"
-							pattern="dd/MM/yyyy" readonlyInput="true" locale="es"
-							label="#{msg['con_date_informed']}" />
+							pattern="dd/MM/yyyy" readonlyInput="false" locale="es"
+							label="#{msg['con_date_informed']}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</p:calendar>
 
 						<h:outputLabel value="#{msg['con_consent']}" />
 						<p:fileUpload cancelLabel="#{msg['file_cancel']}"

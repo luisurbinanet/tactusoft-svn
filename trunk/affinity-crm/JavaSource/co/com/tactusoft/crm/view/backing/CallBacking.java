@@ -109,6 +109,7 @@ public class CallBacking extends ContactBacking {
 			}
 			remoteChannel = req.getParameter("_REMOTE_CHANNEL_");
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			renderedError = true;
 		}
 	}
@@ -273,6 +274,7 @@ public class CallBacking extends ContactBacking {
 			mapCountry.put(crmCountry.getId(), crmCountry);
 			generateDocType(crmCountry.getCode());
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			super.newAction(null);
 			patientGridType = 1;
 		}

@@ -775,6 +775,14 @@ public class AppointmentBacking extends BaseBacking {
 			if (this.selectedPatient.getId() == null) {
 				infoMessage = FacesUtil.getMessage("app_msg_error_pat_sap");
 				validate = false;
+			} else {
+				if ((selectedPatient.getCodeSap() == null)
+						|| (selectedPatient.getCodeSap().equals(selectedPatient
+								.getDoc()))) {
+					infoMessage = FacesUtil
+							.getMessage("app_msg_error_pat_update");
+					validate = false;
+				}
 			}
 		}
 

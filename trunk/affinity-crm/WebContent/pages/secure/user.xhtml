@@ -155,11 +155,10 @@
 								itemLabel="#{msg['user_role_principal_consultant']}" />
 						</p:selectOneMenu>
 
-						<h:outputLabel id="lblSpeciality" value="#{msg['doc_speciality']}"
-							disabled="#{userBacking.rolePrincipal ne 'DOCTOR'?true:false}" />
+						<h:outputLabel id="lblSpeciality" value="#{msg['doc_speciality']}" />
 						<p:selectOneMenu id="cmbSpeciality"
 							value="#{userBacking.idSpeciality}" style="width:250px"
-							disabled="#{userBacking.rolePrincipal ne 'DOCTOR'?true:false}">
+							disabled="#{userBacking.rolePrincipal ne 'DOCTOR' and userBacking.rolePrincipal ne 'CONSULTANT'?true:false}">
 							<f:selectItems value="#{userBacking.listCrmSpeciality}" />
 						</p:selectOneMenu>
 

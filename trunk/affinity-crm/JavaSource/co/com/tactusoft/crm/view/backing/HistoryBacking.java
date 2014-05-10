@@ -222,6 +222,7 @@ public class HistoryBacking extends BaseBacking {
 	private CrmAppointment selectedApp;
 	private boolean validate;
 	private boolean disabledSearch;
+	private StreamedContent contentHistory;
 
 	public HistoryBacking() {
 		newAction(null);
@@ -1323,6 +1324,14 @@ public class HistoryBacking extends BaseBacking {
 		this.disabledSearch = disabledSearch;
 	}
 
+	public StreamedContent getContentHistory() {
+		return contentHistory;
+	}
+
+	public void setContentHistory(StreamedContent contentHistory) {
+		this.contentHistory = contentHistory;
+	}
+
 	public void calculateIMCAction(ActionEvent event) {
 		double weight = this.getWeight();
 		double height = this.getHeight() / 100;
@@ -1553,6 +1562,17 @@ public class HistoryBacking extends BaseBacking {
 	}
 
 	public void showHistorialAction() {
+		try {
+			contentHistory = GenerateFormulaPDF.getHistoryPDF(
+					selectedPatient.getId(), typeHistory);
+		} catch (JRException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+
 		if (typeHistory.equals(Constant.MEDICAL_HISTORY_TYPE)) {
 			modeEdit = true;
 			modeHistorial = true;
@@ -1603,17 +1623,11 @@ public class HistoryBacking extends BaseBacking {
 	}
 
 	public void searchCIEAction(ActionEvent event) {
-		if ((optionSearchCie == 1 && this.codeCIE.isEmpty())
-				|| (optionSearchCie == 2 && this.descCIE.isEmpty())) {
+		if (this.descCIE.isEmpty()) {
 			this.listCie = new ArrayList<CrmCie>();
 			disabledAddCie = true;
 		} else {
-			if (optionSearchCie == 1) {
-				this.listCie = processService.getListCieByCodeMedical(codeCIE);
-			} else {
-				this.listCie = processService.getListCieByNameMedical(descCIE);
-			}
-
+			this.listCie = processService.getListCieMedeicalByAll(descCIE);
 			if (listCie.size() > 0) {
 				selectedCie = listCie.get(0);
 				disabledAddCie = false;
@@ -1688,23 +1702,17 @@ public class HistoryBacking extends BaseBacking {
 
 	// Medication
 	public void searchMaterialAction(ActionEvent event) {
-		if ((optionSearchMaterial == 1 && this.codeMaterial.isEmpty())
-				|| (optionSearchMaterial == 2 && this.descMaterial.isEmpty())) {
+		if (this.descMaterial.isEmpty()) {
 			this.listMaterial = new ArrayList<WSBean>();
 			disabledAddMaterial = true;
 		} else {
 			this.listMaterial = new ArrayList<WSBean>();
 			for (WSBean material : listAllMaterial) {
-				if (optionSearchMaterial == 1) {
-					if (material.getCode().toUpperCase()
-							.contains(codeMaterial.toUpperCase())) {
-						this.listMaterial.add(material);
-					}
-				} else {
-					if (material.getNames().toUpperCase()
-							.contains(descMaterial.toUpperCase())) {
-						this.listMaterial.add(material);
-					}
+				if ((material.getCode().toUpperCase().contains(descMaterial
+						.toUpperCase()))
+						|| (material.getNames().toUpperCase()
+								.contains(descMaterial.toUpperCase()))) {
+					this.listMaterial.add(material);
 				}
 			}
 
@@ -2445,8 +2453,15 @@ public class HistoryBacking extends BaseBacking {
 				if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord.getOther())) {
 					selectedHistoryRecord.setOther(Constant.HISTORY_NOT_REFER);
 				}
-				
-				if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory.getResults())) {
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryRecord
+						.getPlanning())) {
+					selectedHistoryRecord
+							.setPlanning(Constant.HISTORY_NOT_REFER);
+				}
+
+				if (FacesUtil.isEmptyOrBlank(selectedHistoryHistory
+						.getResults())) {
 					selectedHistoryHistory
 							.setResults(Constant.HISTORY_NOT_REFER);
 				}
