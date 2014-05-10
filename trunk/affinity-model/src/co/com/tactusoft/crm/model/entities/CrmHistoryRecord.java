@@ -93,6 +93,7 @@ public class CrmHistoryRecord implements java.io.Serializable {
 	private Byte toothClenchHabit;
 	private Byte mouthBreathHabit;
 	private String obs;
+	private String planning;
 
 	public CrmHistoryRecord() {
 	}
@@ -128,7 +129,7 @@ public class CrmHistoryRecord implements java.io.Serializable {
 			Byte herpesThrush, Byte bitLipsNailsHabit, Byte smokeHabit,
 			Byte cigarettesDayHabit, Byte citrusFoodsHabit,
 			Byte bitObjectsHabit, Byte toothClenchHabit, Byte mouthBreathHabit,
-			String obs) {
+			String obs, String planning) {
 		this.id = id;
 		this.crmPatient = crmPatient;
 		this.crmAppointment = crmAppointment;
@@ -200,6 +201,7 @@ public class CrmHistoryRecord implements java.io.Serializable {
 		this.toothClenchHabit = toothClenchHabit;
 		this.mouthBreathHabit = mouthBreathHabit;
 		this.obs = obs;
+		this.planning = planning;
 	}
 
 	@Id
@@ -748,7 +750,7 @@ public class CrmHistoryRecord implements java.io.Serializable {
 	public void setDiabetesParent(String diabetesParent) {
 		this.diabetesParent = diabetesParent;
 	}
-	
+
 	@Column(name = "limitation_open_close_mouth")
 	public Byte getLimitationOpenCloseMouth() {
 		return this.limitationOpenCloseMouth;
@@ -848,5 +850,13 @@ public class CrmHistoryRecord implements java.io.Serializable {
 		this.obs = obs;
 	}
 
+	@Column(name = "planning", length = 65535)
+	public String getPlanning() {
+		return planning;
+	}
+
+	public void setPlanning(String planning) {
+		this.planning = planning;
+	}
 
 }
