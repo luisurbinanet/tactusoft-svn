@@ -1,6 +1,8 @@
 package co.com.tactusoft.crm.controller.bo;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -17,6 +19,8 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 
 import org.hibernate.internal.SessionFactoryImpl;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.springframework.orm.hibernate4.SessionFactoryUtils;
 
 import co.com.tactusoft.crm.util.Constant;
@@ -114,7 +118,7 @@ public class GenerateFormulaPDF {
 			path = "/reports/historyOdo.jasper";
 			nameReport = "HistoriaOdontologica";
 		}
-		
+
 		nameReport = nameReport + idPatient + ".pdf";
 
 		String reportPath = FacesContext.getCurrentInstance()
@@ -130,6 +134,40 @@ public class GenerateFormulaPDF {
 		JasperExportManager.exportReportToPdfStream(jasperPrint,
 				servletOutputStream);
 		FacesContext.getCurrentInstance().responseComplete();
+	}
+
+	public static StreamedContent getHistoryPDF(BigDecimal idPatient,
+			String type) throws JRException, IOException, SQLException {
+		byte[] reportPdf = null;
+		String imagePath = FacesUtil.getRealPath("/images/");
+		String subreportsPath = FacesUtil.getRealPath("/reports/") + "/";
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("P_ID_PATIENT", idPatient);
+		param.put("SUBREPORT_DIR", subreportsPath);
+		param.put("P_IMAGE", imagePath);
+
+		SessionFactoryImpl sessionFactory = FacesUtil
+				.findBean("sessionFactory");
+		Connection connection = SessionFactoryUtils.getDataSource(
+				sessionFactory).getConnection();
+
+		String nameReport = "HistoriaClinica";
+		String path = "/reports/history.jasper";
+		if (type.equals(Constant.ODONTOLOGY_HISTORY_TYPE)) {
+			path = "/reports/historyOdo.jasper";
+			nameReport = "HistoriaOdontologica";
+		}
+
+		nameReport = nameReport + idPatient + ".pdf";
+
+		String reportPath = FacesContext.getCurrentInstance()
+				.getExternalContext().getRealPath(path);
+		JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath,
+				param, connection);
+		reportPdf = JasperExportManager.exportReportToPdf(jasperPrint);
+		InputStream fis = new ByteArrayInputStream(reportPdf);
+		return new DefaultStreamedContent(fis,
+				"application/pdf; charset=UTF-8", nameReport);
 	}
 
 }

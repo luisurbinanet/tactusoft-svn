@@ -329,6 +329,41 @@ public class BaseBacking implements Serializable {
 		}
 	}
 
+	public void searchPatientNewAction() {
+		if (FacesUtil.isEmptyOrBlank(this.docPatient)) {
+			this.listPatient = new ArrayList<CrmPatient>();
+			this.patientModel = new PatientDataModel(listPatient);
+		} else {
+			listPatient = new ArrayList<CrmPatient>();
+			List<WSBean> result = null;
+			listPatient = processService.getListPatientByAll(this.docPatient);
+			if (listPatient.size() == 0) {
+				try {
+					SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
+					CrmProfile profile = mapProfile.get(idProfile);
+					result = CustomerExecute.findByDoc(sap.getUrlCustomer2(),
+							sap.getUsername(), sap.getPassword(),
+							profile.getSociety(), this.docPatient);
+
+					if (result.size() > 0) {
+						String message = FacesUtil
+								.getMessage("pat_msg_exists_sap_2");
+						FacesUtil.addWarn(message);
+					}
+				} catch (Exception ex) {
+
+				}
+			}
+
+			patientModel = new PatientDataModel(listPatient);
+
+			if (listPatient.size() > 0) {
+				selectedPatient = listPatient.get(0);
+				selectedPatientTemp = listPatient.get(0);
+			}
+		}
+	}
+
 	public void patientHandleClose(CloseEvent event) {
 		// selectedPatient = null;
 	}

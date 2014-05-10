@@ -212,25 +212,35 @@ public class ProcessBo implements Serializable {
 				+ " ORDER BY o.startAppointmentDate DESC");
 	}
 
-	public List<CrmCie> getListCieByCodeMedical(String code) {
-		return dao.find("FROM CrmCie o WHERE o.code like '%" + code
-				+ "%' AND medical = 1 ORDER BY o.description");
+	public List<CrmCie> getListCieMedeicalByAll(String name) {
+		return dao.find("FROM CrmCie o WHERE (o.code like '%" + name
+				+ "%' OR o.description like '%" + name
+				+ "%') AND medical = 1 ORDER BY o.description");
 	}
 
-	public List<CrmCie> getListCieByCodeOdontology(String code) {
-		return dao.find("FROM CrmCie o WHERE o.code like '%" + code
-				+ "%' AND odontology = 1 ORDER BY o.description");
+	public List<CrmCie> getListCieOdontologyByAll(String name) {
+		return dao.find("FROM CrmCie o WHERE (o.code like '%" + name
+				+ "%' OR o.description like '%" + name
+				+ "%') AND odontology = 1 ORDER BY o.description");
 	}
 
-	public List<CrmCie> getListCieByNameMedical(String name) {
-		return dao.find("FROM CrmCie o WHERE o.description like '%" + name
-				+ "%' AND medical = 1 ORDER BY o.description");
-	}
-
-	public List<CrmCie> getListCieByNameOdontology(String name) {
-		return dao.find("FROM CrmCie o WHERE o.description like '%" + name
-				+ "%' AND odontology = 1 ORDER BY o.description");
-	}
+	/*
+	 * public List<CrmCie> getListCieByCodeMedical(String code) { return
+	 * dao.find("FROM CrmCie o WHERE o.code like '%" + code +
+	 * "%' AND medical = 1 ORDER BY o.description"); }
+	 * 
+	 * public List<CrmCie> getListCieByCodeOdontology(String code) { return
+	 * dao.find("FROM CrmCie o WHERE o.code like '%" + code +
+	 * "%' AND odontology = 1 ORDER BY o.description"); }
+	 * 
+	 * public List<CrmCie> getListCieByNameMedical(String name) { return
+	 * dao.find("FROM CrmCie o WHERE o.description like '%" + name +
+	 * "%' AND medical = 1 ORDER BY o.description"); }
+	 * 
+	 * public List<CrmCie> getListCieByNameOdontology(String name) { return
+	 * dao.find("FROM CrmCie o WHERE o.description like '%" + name +
+	 * "%' AND odontology = 1 ORDER BY o.description"); }
+	 */
 
 	public List<CrmMaterialGroup> getListMaterialGroup() {
 		return dao.find("from CrmMaterialGroup");
@@ -1176,6 +1186,18 @@ public class ProcessBo implements Serializable {
 					+ "' OR cellNumber = '" + value + "'");
 		}
 
+		return list;
+	}
+
+	public List<CrmPatient> getListPatientByAll(String value) {
+		List<CrmPatient> list = null;
+		list = dao.find("FROM CrmPatient o WHERE doc = '" + value
+				+ "' OR phoneNumber = '" + value + "' OR cellNumber = '"
+				+ value + "' OR o.firstnames LIKE '%" + value
+				+ "%' or o.surnames LIKE '%" + value
+				+ "%' OR UPPER(firstnames || ' ' || surnames) LIKE '%" + value
+				+ "%' OR UPPER(surnames || ' ' || firstnames) LIKE '%" + value
+				+ "%'");
 		return list;
 	}
 

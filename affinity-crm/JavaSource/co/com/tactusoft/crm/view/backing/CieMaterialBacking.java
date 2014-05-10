@@ -376,17 +376,11 @@ public class CieMaterialBacking implements Serializable {
 	}
 
 	public void searchCIEAction(ActionEvent event) {
-		if ((optionSearchCie == 1 && this.codeCIE.isEmpty())
-				|| (optionSearchCie == 2 && this.descCIE.isEmpty())) {
+		if (this.descCIE.isEmpty()) {
 			this.listCie = new ArrayList<CrmCie>();
 			disabledAddCie = true;
 		} else {
-			if (optionSearchCie == 1) {
-				this.listCie = processService.getListCieByCodeMedical(codeCIE);
-			} else {
-				this.listCie = processService.getListCieByNameMedical(descCIE);
-			}
-
+			this.listCie = processService.getListCieMedeicalByAll(descCIE);
 			if (listCie.size() > 0) {
 				selectedCie = listCie.get(0);
 				disabledAddCie = false;

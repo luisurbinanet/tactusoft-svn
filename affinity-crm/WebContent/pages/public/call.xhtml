@@ -110,7 +110,8 @@
 						<h:outputText value="#{msg['pat_region']}" style="width:100%" />
 						<p:selectOneMenu id="selRegion" value="#{callBacking.idRegion}"
 							style="width:248px" required="true" label="#{msg['pat_region']}"
-							disabled="#{callBacking.patientGridType eq 0}">
+							disabled="#{callBacking.patientGridType eq 0}" filter="true"
+							filterMatchMode="contains">
 							<f:selectItems value="#{callBacking.listRegion}" />
 							<p:ajax update="selCity"
 								listener="#{callBacking.handleRegionChange}" />
@@ -119,7 +120,8 @@
 						<h:outputText value="#{msg['pat_city']}" style="width:100%" />
 						<p:selectOneMenu id="selCity" value="#{callBacking.idCity}"
 							style="width:248px" required="true" label="#{msg['pat_city']}"
-							disabled="#{callBacking.patientGridType eq 0}">
+							disabled="#{callBacking.patientGridType eq 0}" filter="true"
+							filterMatchMode="contains">
 							<f:selectItems value="#{callBacking.listCity}" />
 						</p:selectOneMenu>
 

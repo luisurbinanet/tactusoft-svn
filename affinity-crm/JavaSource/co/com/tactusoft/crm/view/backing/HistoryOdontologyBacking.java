@@ -942,19 +942,11 @@ public class HistoryOdontologyBacking extends HistoryBacking {
 
 	@Override
 	public void searchCIEAction(ActionEvent event) {
-		if ((optionSearchCie == 1 && this.codeCIE.isEmpty())
-				|| (optionSearchCie == 2 && this.descCIE.isEmpty())) {
+		if (this.descCIE.isEmpty()) {
 			this.listCie = new ArrayList<CrmCie>();
 			disabledAddCie = true;
 		} else {
-			if (optionSearchCie == 1) {
-				this.listCie = processService
-						.getListCieByCodeOdontology(codeCIE);
-			} else {
-				this.listCie = processService
-						.getListCieByNameOdontology(descCIE);
-			}
-
+			this.listCie = processService.getListCieOdontologyByAll(descCIE);
 			if (listCie.size() > 0) {
 				selectedCie = listCie.get(0);
 				disabledAddCie = false;
