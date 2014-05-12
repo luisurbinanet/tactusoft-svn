@@ -22,7 +22,7 @@
 					<p:toolbarGroup align="left">
 						<p:commandButton id="btnSearch" value="#{msg['btn_search']}"
 							icon="ui-icon-search"
-							update="recordTable recordTableDetail toolbar growl"
+							update="recordTableTotal recordTable recordTableDetail toolbar growl"
 							actionListener="#{campaignReportBacking.searchAction}" />
 						<p:commandButton id="btnBranch" oncomplete="branchDlg.show();"
 							value="#{msg['usr_branch']}" icon="ui-icon-bookmark" />
@@ -56,11 +56,56 @@
 
 				<p:spacer height="5" />
 
+				<p:dataTable id="recordTableTotal" var="rec"
+					value="#{campaignReportBacking.modelTotal}" rowKey="#{rec.id}"
+					resizableColumns="true" paginator="true" rows="10"
+					style="width:100%" emptyMessage="#{msg['glb_no_records_found']}">
+
+					<f:facet name="header">
+						<h:outputLabel value="#{msg['cam_title_1']}" />
+					</f:facet>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['cam_task_type']}" />
+						</f:facet>
+						<h:outputLabel value="#{rec.campaignTypeName}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['cam_total_attendet']}" />
+						</f:facet>
+						<h:outputLabel value="#{rec.totalAttendet}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['cam_total']}" />
+						</f:facet>
+						<h:outputLabel value="#{rec.total}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{msg['cam_percent']}" />
+						</f:facet>
+						<h:outputLabel value="#{rec.percent}" />
+					</p:column>
+
+				</p:dataTable>
+
+				<p:spacer height="5" />
+
 				<p:dataTable id="recordTable" var="rec"
 					value="#{campaignReportBacking.model}" rowKey="#{rec.id}"
 					resizableColumns="true" paginator="true" rows="10"
 					style="width:100%" emptyMessage="#{msg['glb_no_records_found']}"
 					selection="#{campaignReportBacking.selected}">
+
+					<f:facet name="header">
+						<h:outputLabel value="#{msg['cam_title_2']}" />
+					</f:facet>
 
 					<p:column selectionMode="single" style="width:18px" />
 
@@ -107,6 +152,10 @@
 					value="#{campaignReportBacking.modelDetail}" rowKey="#{rec.id}"
 					resizableColumns="true" paginator="true" rows="10"
 					style="width:100%" emptyMessage="#{msg['glb_no_records_found']}">
+
+					<f:facet name="header">
+						<h:outputLabel value="#{msg['cam_title_3']}" />
+					</f:facet>
 
 					<p:column>
 						<f:facet name="header">

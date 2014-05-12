@@ -11,9 +11,11 @@ import org.springframework.context.annotation.Scope;
 
 import co.com.tactusoft.crm.model.entities.CrmCampaignDetail;
 import co.com.tactusoft.crm.model.entities.PrcReportCampaign;
+import co.com.tactusoft.crm.model.entities.PrcReportCampaignTotal;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.view.datamodel.CampaignDetailDataModel;
 import co.com.tactusoft.crm.view.datamodel.PrcReportCampaignDataModel;
+import co.com.tactusoft.crm.view.datamodel.PrcReportCampaignTotalDataModel;
 
 @Named
 @Scope("view")
@@ -21,6 +23,8 @@ public class CampaignReportBacking extends BaseBacking {
 
 	private static final long serialVersionUID = 1L;
 
+	private List<PrcReportCampaignTotal> listTotal;
+	private PrcReportCampaignTotalDataModel modelTotal;
 	private List<PrcReportCampaign> list;
 	private PrcReportCampaignDataModel model;
 	private PrcReportCampaign selected;
@@ -36,6 +40,22 @@ public class CampaignReportBacking extends BaseBacking {
 	@PostConstruct
 	public void init() {
 
+	}
+
+	public List<PrcReportCampaignTotal> getListTotal() {
+		return listTotal;
+	}
+
+	public void setListTotal(List<PrcReportCampaignTotal> listTotal) {
+		this.listTotal = listTotal;
+	}
+
+	public PrcReportCampaignTotalDataModel getModelTotal() {
+		return modelTotal;
+	}
+
+	public void setModelTotal(PrcReportCampaignTotalDataModel modelTotal) {
+		this.modelTotal = modelTotal;
 	}
 
 	public List<PrcReportCampaign> getList() {
@@ -98,10 +118,14 @@ public class CampaignReportBacking extends BaseBacking {
 					"yyyy-MM-dd");
 			String endDateString = FacesUtil.formatDate(endDate, "yyyy-MM-dd");
 
-			list = tablesService.getListPrcReportCampaign(
+			listTotal = tablesService.getListPrcReportCampaignTotal(
 					selectedsBranchObject, startDateString, endDateString);
-			model = new PrcReportCampaignDataModel(list);
-			if (list.size() > 0) {
+			modelTotal = new PrcReportCampaignTotalDataModel(listTotal);
+			if (listTotal.size() > 0) {
+				list = tablesService.getListPrcReportCampaign(
+						selectedsBranchObject, startDateString, endDateString);
+				model = new PrcReportCampaignDataModel(list);
+
 				selected = list.get(0);
 				List<CrmCampaignDetail> listDetail = tablesService
 						.getListCampaignByBranchCampaignType(

@@ -238,7 +238,10 @@ public class CallBacking extends ContactBacking {
 
 			if (companyPhone != null) {
 				crmGuideline = capaignService.getGuideline(companyPhone);
+			} else {
+				crmGuideline = capaignService.getGuideline("0");
 			}
+			
 			generateProfile();
 
 			List<CrmPatient> listCrmPatient;
