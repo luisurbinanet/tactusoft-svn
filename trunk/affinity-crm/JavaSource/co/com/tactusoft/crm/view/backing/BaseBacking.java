@@ -1137,10 +1137,30 @@ public class BaseBacking implements Serializable {
 		context.addCallbackParam("validate", validate);
 	}
 
+	public int getRenderedRecord() {
+		int result = 0;
+		if (selectedPatient == null) {
+			result = 0;
+		} else if (selectedPatient.getId() == null) {
+			result = 0;
+		} else {
+			if (selectedPatient.getAge() <= 5) {
+				result = 1;
+			} else {
+				if (selectedPatient.getGender().equals("W")) {
+					result = 2;
+				} else {
+					result = 3;
+				}
+			}
+		}
+		return result;
+	}
+
 	public void printHistoryAction() {
 		try {
 			GenerateFormulaPDF.historyPDF(selectedPatient.getId(),
-					Constant.MEDICAL_HISTORY_TYPE);
+					Constant.MEDICAL_HISTORY_TYPE, getRenderedRecord());
 		} catch (JRException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -1153,7 +1173,7 @@ public class BaseBacking implements Serializable {
 	public void printHistoryOdoAction() {
 		try {
 			GenerateFormulaPDF.historyPDF(selectedPatient.getId(),
-					Constant.ODONTOLOGY_HISTORY_TYPE);
+					Constant.ODONTOLOGY_HISTORY_TYPE, getRenderedRecord());
 		} catch (JRException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

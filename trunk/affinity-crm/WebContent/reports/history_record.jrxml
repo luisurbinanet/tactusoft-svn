@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="history_record" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="258c62b7-639f-43e7-ac7b-c289802e1be2">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="352"/>
+	<property name="ireport.y" value="185"/>
 	<parameter name="P_ID_PATIENT" class="java.math.BigDecimal">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -98,7 +98,7 @@ CASE IFNULL(sexarca,'')
  ELSE sexarca
 END AS "Sexarca",
 CASE IFNULL(fur,'')
- WHEN '' THEN 'NO REFERIDO'
+ WHEN '' THEN null
  ELSE fur
 END AS "Fecha Última Regla",
 CASE IFNULL(bleeding,'')
@@ -106,11 +106,11 @@ CASE IFNULL(bleeding,'')
  ELSE bleeding
 END AS "Sangrado",
 CASE IFNULL(fuc,'')
- WHEN '' THEN 'NO REFERIDO'
+ WHEN '' THEN null
  ELSE fuc
 END AS "Fecha Última Citología",
 CASE IFNULL(fuep,'')
- WHEN '' THEN 'NO REFERIDO'
+ WHEN '' THEN null
  ELSE fuep
 END AS "Fecha ultimo examen de próstata",
 CASE IFNULL(psa,'')
@@ -118,7 +118,7 @@ CASE IFNULL(psa,'')
  ELSE psa
 END AS "Niveles de PSA",
 CASE IFNULL(psa_date,'')
- WHEN '' THEN 'NO REFERIDO'
+ WHEN '' THEN null
  ELSE psa_date
 END AS "Fecha PSA",
 CASE IFNULL(neonatal,'')
@@ -597,13 +597,13 @@ ORDER by b.start_appointment_date DESC]]>
 			</staticText>
 			<textField>
 				<reportElement x="51" y="381" width="61" height="20" isRemoveLineWhenBlank="true" uuid="e384a827-4d27-4059-b3a8-206ce2cdafb0">
-					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Femenino")]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("2")]]></printWhenExpression>
 				</reportElement>
 				<textFieldExpression><![CDATA[$F{Gravidez}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="2" y="381" width="50" height="20" isRemoveLineWhenBlank="true" uuid="e3a3ab82-c2c8-4afe-95fe-7e6a0c6745c2">
-					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Femenino")]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("2")]]></printWhenExpression>
 				</reportElement>
 				<textElement>
 					<font isBold="true"/>
@@ -612,19 +612,19 @@ ORDER by b.start_appointment_date DESC]]>
 			</staticText>
 			<textField>
 				<reportElement x="160" y="381" width="61" height="20" isRemoveLineWhenBlank="true" uuid="bc980dc0-57f3-4a9a-9adf-a36b0d16dabc">
-					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Femenino")]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("2")]]></printWhenExpression>
 				</reportElement>
 				<textFieldExpression><![CDATA[$F{Paridad}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="269" y="381" width="61" height="20" isRemoveLineWhenBlank="true" uuid="987498e6-dd88-437a-9fc6-281c2eae431d">
-					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Femenino")]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("2")]]></printWhenExpression>
 				</reportElement>
 				<textFieldExpression><![CDATA[$F{Abortos}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="111" y="381" width="50" height="20" isRemoveLineWhenBlank="true" uuid="09a394e1-e841-4011-a9ab-f25aa181cef7">
-					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Femenino")]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("2")]]></printWhenExpression>
 				</reportElement>
 				<textElement>
 					<font isBold="true"/>
@@ -633,7 +633,7 @@ ORDER by b.start_appointment_date DESC]]>
 			</staticText>
 			<staticText>
 				<reportElement x="220" y="381" width="50" height="20" isRemoveLineWhenBlank="true" uuid="bd1d1f7c-88b7-4c95-8eaa-0ffb2e98cc1f">
-					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Femenino")]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("2")]]></printWhenExpression>
 				</reportElement>
 				<textElement>
 					<font isBold="true"/>
@@ -642,25 +642,25 @@ ORDER by b.start_appointment_date DESC]]>
 			</staticText>
 			<textField>
 				<reportElement x="378" y="381" width="61" height="20" isRemoveLineWhenBlank="true" uuid="f38f5ead-6211-4caf-b298-f6ea904d7f73">
-					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Femenino")]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("2")]]></printWhenExpression>
 				</reportElement>
 				<textFieldExpression><![CDATA[$F{Cesareas}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="487" y="381" width="65" height="20" isRemoveLineWhenBlank="true" uuid="91781c79-bfbe-4f86-9175-4cc882abb70c">
-					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Femenino")]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("2")]]></printWhenExpression>
 				</reportElement>
 				<textFieldExpression><![CDATA[$F{Menarca}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="52" y="400" width="42" height="20" isRemoveLineWhenBlank="true" uuid="9b28f462-b918-436e-b224-8a877620367e">
-					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Femenino")]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("2")]]></printWhenExpression>
 				</reportElement>
 				<textFieldExpression><![CDATA[$F{Sexarca}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="329" y="381" width="50" height="20" uuid="e7b422f4-073b-4d8e-a971-baf3b919d439">
-					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Femenino")]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("2")]]></printWhenExpression>
 				</reportElement>
 				<textElement>
 					<font isBold="true"/>
@@ -669,7 +669,7 @@ ORDER by b.start_appointment_date DESC]]>
 			</staticText>
 			<staticText>
 				<reportElement x="438" y="381" width="50" height="20" isRemoveLineWhenBlank="true" uuid="122a5a5f-42b6-4474-a586-7cdbc8926419">
-					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Femenino")]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("2")]]></printWhenExpression>
 				</reportElement>
 				<textElement>
 					<font isBold="true"/>
@@ -678,13 +678,13 @@ ORDER by b.start_appointment_date DESC]]>
 			</staticText>
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement x="192" y="400" width="80" height="20" isRemoveLineWhenBlank="true" uuid="4c0dcdac-dd5c-4e14-9ffb-61d693e96336">
-					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Femenino")]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("2")]]></printWhenExpression>
 				</reportElement>
 				<textFieldExpression><![CDATA[$F{Fecha Última Regla}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="2" y="400" width="50" height="20" isRemoveLineWhenBlank="true" uuid="48948399-3bef-491b-bd91-4224bdf184e0">
-					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Femenino")]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("2")]]></printWhenExpression>
 				</reportElement>
 				<textElement>
 					<font isBold="true"/>
@@ -693,7 +693,7 @@ ORDER by b.start_appointment_date DESC]]>
 			</staticText>
 			<staticText>
 				<reportElement x="93" y="400" width="100" height="20" isRemoveLineWhenBlank="true" uuid="f02639bc-f811-4a72-a8dc-d48dd727064a">
-					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Femenino")]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("2")]]></printWhenExpression>
 				</reportElement>
 				<textElement>
 					<font isBold="true"/>
@@ -702,13 +702,13 @@ ORDER by b.start_appointment_date DESC]]>
 			</staticText>
 			<textField>
 				<reportElement x="322" y="400" width="57" height="20" isRemoveLineWhenBlank="true" uuid="a400845f-d1dc-4a87-83ab-9f3b49c50709">
-					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Femenino")]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("2")]]></printWhenExpression>
 				</reportElement>
 				<textFieldExpression><![CDATA[$F{Sangrado}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="271" y="400" width="52" height="20" isRemoveLineWhenBlank="true" uuid="b1618d82-a424-46e2-adeb-4136fa27b7ee">
-					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Femenino")]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("2")]]></printWhenExpression>
 				</reportElement>
 				<textElement>
 					<font isBold="true"/>
@@ -717,13 +717,13 @@ ORDER by b.start_appointment_date DESC]]>
 			</staticText>
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement x="495" y="401" width="57" height="20" isRemoveLineWhenBlank="true" uuid="c00ab199-ace0-4b9a-99b3-064e4bd61af7">
-					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Femenino")]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("2")]]></printWhenExpression>
 				</reportElement>
 				<textFieldExpression><![CDATA[$F{Fecha Última Citología}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="378" y="401" width="117" height="20" isRemoveLineWhenBlank="true" uuid="0b808b38-1996-4b48-8f28-d4e6b89efdd6">
-					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Femenino")]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("2")]]></printWhenExpression>
 				</reportElement>
 				<textElement>
 					<font isBold="true"/>
@@ -732,7 +732,7 @@ ORDER by b.start_appointment_date DESC]]>
 			</staticText>
 			<staticText>
 				<reportElement x="3" y="419" width="549" height="20" isRemoveLineWhenBlank="true" uuid="1212cdaf-6408-4673-8fed-166b09574108">
-					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Masculino")]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("3")]]></printWhenExpression>
 				</reportElement>
 				<textElement>
 					<font size="12" isBold="true" isUnderline="true"/>
@@ -741,25 +741,25 @@ ORDER by b.start_appointment_date DESC]]>
 			</staticText>
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement x="171" y="438" width="76" height="20" isRemoveLineWhenBlank="true" uuid="2e404d51-f16b-4d3d-bc99-b143a737595e">
-					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Masculino")]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("3")]]></printWhenExpression>
 				</reportElement>
 				<textFieldExpression><![CDATA[$F{Fecha ultimo examen de próstata}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="325" y="438" width="67" height="20" isRemoveLineWhenBlank="true" uuid="b59048f9-f093-4102-a676-377639fea5a7">
-					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Masculino")]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("3")]]></printWhenExpression>
 				</reportElement>
 				<textFieldExpression><![CDATA[$F{Niveles de PSA}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement x="452" y="438" width="100" height="20" isRemoveLineWhenBlank="true" uuid="d6280a3a-f1e7-4d8c-9710-9a06ea15d00c">
-					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Masculino")]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("3")]]></printWhenExpression>
 				</reportElement>
 				<textFieldExpression><![CDATA[$F{Fecha PSA}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="3" y="438" width="168" height="20" isRemoveLineWhenBlank="true" uuid="623d65fc-a387-4e64-8583-8f7bb42c87b6">
-					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Masculino")]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("3")]]></printWhenExpression>
 				</reportElement>
 				<textElement>
 					<font isBold="true"/>
@@ -768,7 +768,7 @@ ORDER by b.start_appointment_date DESC]]>
 			</staticText>
 			<staticText>
 				<reportElement x="246" y="438" width="80" height="20" isRemoveLineWhenBlank="true" uuid="41f31468-f9d7-4c46-a1db-3b954b5d2b64">
-					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Masculino")]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("3")]]></printWhenExpression>
 				</reportElement>
 				<textElement>
 					<font isBold="true"/>
@@ -777,7 +777,7 @@ ORDER by b.start_appointment_date DESC]]>
 			</staticText>
 			<staticText>
 				<reportElement x="395" y="438" width="58" height="20" isRemoveLineWhenBlank="true" uuid="b55a607d-b6f7-4551-b115-5fde6a3de916">
-					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("Masculino")]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("3")]]></printWhenExpression>
 				</reportElement>
 				<textElement>
 					<font isBold="true"/>
@@ -785,51 +785,69 @@ ORDER by b.start_appointment_date DESC]]>
 				<text><![CDATA[Fecha PSA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="3" y="458" width="549" height="20" isRemoveLineWhenBlank="true" uuid="34ba0095-7358-4e59-aec3-c3f4b28bdd86"/>
+				<reportElement x="3" y="458" width="549" height="20" isRemoveLineWhenBlank="true" uuid="34ba0095-7358-4e59-aec3-c3f4b28bdd86">
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("1")]]></printWhenExpression>
+				</reportElement>
 				<textElement>
 					<font size="12" isBold="true" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[Menores de 5 años]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="141" y="478" width="411" height="20" isRemoveLineWhenBlank="true" uuid="a809f3cb-3c42-4cfd-aa5f-5f810b09d6c9"/>
+				<reportElement x="141" y="478" width="411" height="20" isRemoveLineWhenBlank="true" uuid="a809f3cb-3c42-4cfd-aa5f-5f810b09d6c9">
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("1")]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{Antecedentes Neonatales}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="141" y="498" width="411" height="20" isRemoveLineWhenBlank="true" uuid="cd99b728-03a5-4d85-b655-b8c93fe8a77c"/>
+				<reportElement x="141" y="498" width="411" height="20" isRemoveLineWhenBlank="true" uuid="cd99b728-03a5-4d85-b655-b8c93fe8a77c">
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("1")]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{Perinatales}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="141" y="518" width="411" height="20" isRemoveLineWhenBlank="true" uuid="4d2ecfa0-d2e4-4cda-874b-0d1bb144d72c"/>
+				<reportElement x="141" y="518" width="411" height="20" isRemoveLineWhenBlank="true" uuid="4d2ecfa0-d2e4-4cda-874b-0d1bb144d72c">
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("1")]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{Vacunación}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="142" y="538" width="410" height="20" isRemoveLineWhenBlank="true" uuid="946781c8-2fa8-4658-8822-75340f688353"/>
+				<reportElement x="142" y="538" width="410" height="20" isRemoveLineWhenBlank="true" uuid="946781c8-2fa8-4658-8822-75340f688353">
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("1")]]></printWhenExpression>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{Crecimiento y Desarrollo}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="3" y="498" width="139" height="20" isRemoveLineWhenBlank="true" uuid="0f35e067-2110-4ea8-9d2d-76c1436a52b9"/>
+				<reportElement x="3" y="498" width="139" height="20" isRemoveLineWhenBlank="true" uuid="0f35e067-2110-4ea8-9d2d-76c1436a52b9">
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("1")]]></printWhenExpression>
+				</reportElement>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Perinatales]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="3" y="518" width="139" height="20" isRemoveLineWhenBlank="true" uuid="68300168-ac4d-4f3e-9392-8a12b926c07b"/>
+				<reportElement x="3" y="518" width="139" height="20" isRemoveLineWhenBlank="true" uuid="68300168-ac4d-4f3e-9392-8a12b926c07b">
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("1")]]></printWhenExpression>
+				</reportElement>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Vacunación]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="3" y="538" width="139" height="20" isRemoveLineWhenBlank="true" uuid="2d8114f7-99f7-4efb-a665-f9b27c8aa95c"/>
+				<reportElement x="3" y="538" width="139" height="20" isRemoveLineWhenBlank="true" uuid="2d8114f7-99f7-4efb-a665-f9b27c8aa95c">
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("1")]]></printWhenExpression>
+				</reportElement>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Crecimiento y Desarrollo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="3" y="478" width="139" height="20" isRemoveLineWhenBlank="true" uuid="a6bde75f-d4c2-409a-acbd-dd03d76bcd0a"/>
+				<reportElement x="3" y="478" width="139" height="20" isRemoveLineWhenBlank="true" uuid="a6bde75f-d4c2-409a-acbd-dd03d76bcd0a">
+					<printWhenExpression><![CDATA[$P{P_GENDER}.equals("1")]]></printWhenExpression>
+				</reportElement>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
