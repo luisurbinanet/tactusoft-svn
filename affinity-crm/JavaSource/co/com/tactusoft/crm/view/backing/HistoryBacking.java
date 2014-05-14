@@ -1564,7 +1564,7 @@ public class HistoryBacking extends BaseBacking {
 	public void showHistorialAction() {
 		try {
 			contentHistory = GenerateFormulaPDF.getHistoryPDF(
-					selectedPatient.getId(), typeHistory);
+					selectedPatient.getId(), typeHistory, getRenderedRecord());
 		} catch (JRException e1) {
 			e1.printStackTrace();
 		} catch (IOException e1) {
@@ -2908,6 +2908,19 @@ public class HistoryBacking extends BaseBacking {
 		try {
 			GenerateFormulaPDF.PDF(currentAppointment.getId(),
 					Constant.MATERIAL_TYPE_THERAPY);
+		} catch (JRException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void printFormulaLabAction() {
+		try {
+			GenerateFormulaPDF.PDF(currentAppointment.getId(),
+					Constant.MATERIAL_TYPE_EXAMS);
 		} catch (JRException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="formula" pageWidth="396" pageHeight="612" whenNoDataType="BlankPage" columnWidth="358" leftMargin="19" rightMargin="19" topMargin="51" bottomMargin="14" uuid="c92dc5a0-c2d1-42d0-bc28-ff2011c41d76">
-	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.x" value="322"/>
+	<property name="ireport.y" value="104"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -115,7 +115,7 @@ order by a.id]]>
 		cast(d.start_appointment_date as Date) appointment_date,
                      e.doc as doc_patient,
 		concat(e.firstnames,' ', e.surnames) as name_patient,
-		f.names as name_doctor,
+		concat(IFNULL(f.medical_license,''), ' ', f.names) as name_doctor,
 		concat(g.code, ' - ',g.name) as name_branch
 from crm_medication c
 join crm_appointment d on c.id_appointment = d.id
@@ -147,7 +147,9 @@ order by c.id]]>
 	<field name="doc" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="appointment_date" class="java.sql.Date"/>
+	<field name="appointment_date" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="doc_patient" class="java.lang.String"/>
 	<field name="name_patient" class="java.lang.String"/>
 	<field name="name_doctor" class="java.lang.String"/>
@@ -155,9 +157,9 @@ order by c.id]]>
 	<group name="group_cie">
 		<groupExpression><![CDATA[$F{id_cie}]]></groupExpression>
 		<groupFooter>
-			<band height="11">
+			<band height="5">
 				<line>
-					<reportElement uuid="5b7eb3e9-923b-4386-b701-f469eeef6d65" x="0" y="5" width="358" height="1" forecolor="#009999"/>
+					<reportElement x="0" y="2" width="358" height="1" forecolor="#009999" uuid="5b7eb3e9-923b-4386-b701-f469eeef6d65"/>
 					<graphicElement>
 						<pen lineWidth="2.0" lineStyle="Double"/>
 					</graphicElement>
@@ -168,35 +170,35 @@ order by c.id]]>
 	<title>
 		<band height="53" splitType="Stretch">
 			<textField>
-				<reportElement uuid="fce7d11e-b57d-4728-9604-2e0997e8e2a2" x="47" y="0" width="128" height="15"/>
+				<reportElement x="47" y="0" width="128" height="15" uuid="fce7d11e-b57d-4728-9604-2e0997e8e2a2"/>
 				<textElement>
 					<font fontName="Arial" size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name_branch}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="63573343-23b8-4a7a-b19b-91659ff12401" x="235" y="0" width="123" height="15"/>
+				<reportElement x="235" y="0" width="123" height="15" uuid="63573343-23b8-4a7a-b19b-91659ff12401"/>
 				<textElement>
-					<font fontName="Arial" size="9"/>
+					<font fontName="Arial" size="6"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{name_doctor}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement uuid="5162d3e7-855b-446d-982d-e10ac3292d30" x="235" y="38" width="123" height="15"/>
+				<reportElement x="235" y="38" width="123" height="15" uuid="5162d3e7-855b-446d-982d-e10ac3292d30"/>
 				<textElement>
 					<font fontName="Arial" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{appointment_date}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="3c236c50-3232-413b-b0b1-9f655662ade0" x="47" y="38" width="128" height="15"/>
+				<reportElement x="47" y="38" width="128" height="15" uuid="3c236c50-3232-413b-b0b1-9f655662ade0"/>
 				<textElement>
 					<font fontName="Arial" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{doc_patient}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="4da3c7ab-425b-40c4-babd-9fae7671ff35" x="47" y="19" width="311" height="15"/>
+				<reportElement x="47" y="19" width="311" height="15" uuid="4da3c7ab-425b-40c4-babd-9fae7671ff35"/>
 				<textElement>
 					<font fontName="Arial" size="9" isBold="false"/>
 				</textElement>
@@ -207,21 +209,21 @@ order by c.id]]>
 	<pageHeader>
 		<band height="33" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="4fecec29-edfb-43b7-a3b5-68630a905c95" x="0" y="16" width="175" height="15"/>
+				<reportElement x="183" y="17" width="175" height="15" uuid="4fecec29-edfb-43b7-a3b5-68630a905c95"/>
 				<textElement textAlignment="Center">
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Diagnóstico / Frecuencia]]></text>
+				<text><![CDATA[Diagnóstico]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="535a5a5f-6fb6-4495-8f88-4ab2f31902bf" x="187" y="16" width="171" height="15"/>
+				<reportElement x="0" y="17" width="171" height="15" uuid="535a5a5f-6fb6-4495-8f88-4ab2f31902bf"/>
 				<textElement textAlignment="Center">
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Terapias]]></text>
 			</staticText>
 			<line>
-				<reportElement uuid="5b7eb3e9-923b-4386-b701-f469eeef6d65" x="0" y="31" width="358" height="1" forecolor="#009999"/>
+				<reportElement x="0" y="31" width="358" height="1" forecolor="#009999" uuid="5b7eb3e9-923b-4386-b701-f469eeef6d65"/>
 				<graphicElement>
 					<pen lineWidth="2.0" lineStyle="Double"/>
 				</graphicElement>
@@ -229,23 +231,23 @@ order by c.id]]>
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="34" splitType="Stretch">
+		<band height="33" splitType="Stretch">
 			<textField>
-				<reportElement uuid="bb682a46-b8b7-4d50-a9ce-f2dedd3dfead" x="204" y="0" width="154" height="34"/>
+				<reportElement x="17" y="0" width="154" height="33" uuid="bb682a46-b8b7-4d50-a9ce-f2dedd3dfead"/>
 				<textElement>
 					<font fontName="Arial" size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{desc_material}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="7b354bad-46ff-4ec4-97b9-87037b526d98" x="187" y="0" width="17" height="34"/>
+				<reportElement x="0" y="0" width="17" height="33" uuid="7b354bad-46ff-4ec4-97b9-87037b526d98"/>
 				<textElement>
 					<font fontName="Arial" size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{unit}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="6734ef12-a28c-4963-8b42-50c6bfe9fd5a" isPrintRepeatedValues="false" x="4" y="0" width="171" height="34"/>
+				<reportElement x="183" y="0" width="175" height="33" uuid="6734ef12-a28c-4963-8b42-50c6bfe9fd5a"/>
 				<textElement>
 					<font fontName="Arial" size="9"/>
 				</textElement>
