@@ -34,11 +34,12 @@ public class LoginBacking {
 	@Inject
 	private SecurityBo securityBo;
 
-	//@Inject
-	//private TablesBo tablesBo;
+	// @Inject
+	// private TablesBo tablesBo;
 
 	private String userName;
 	private String password;
+	private Integer idUser;
 	private boolean visibleBadCredentials;
 	private boolean authenticated;
 	private String message;
@@ -50,6 +51,14 @@ public class LoginBacking {
 	public void init() {
 		// TimerBacking timerBacking = FacesUtil.findBean("timerBacking");
 		// timerBacking.execute();
+	}
+
+	public Integer getIdUser() {
+		return idUser;
+	}
+
+	public void setIdUser(Integer idUser) {
+		this.idUser = idUser;
 	}
 
 	public String getUserName() {
@@ -114,8 +123,11 @@ public class LoginBacking {
 				this.password = null;
 				this.visibleBadCredentials = false;
 				this.authenticated = true;
-				page = ((UserData) authenticationResponseToken.getPrincipal())
-						.getPageDefault() + "?faces-redirect=true";
+
+				UserData userData = (UserData) authenticationResponseToken
+						.getPrincipal();
+				page = userData.getPageDefault() + "?faces-redirect=true";
+				idUser = userData.getUser().getId().intValue();
 
 				SessionBacking sessionBacking = FacesUtil
 						.findBean("sessionBacking");
@@ -182,12 +194,15 @@ public class LoginBacking {
 							.getMessage("log_msg_validate_credentials");
 					throw new AccessDeniedException(message);
 				}
-				
+
 				UserData user = (UserData) authenticationResponseToken
 						.getPrincipal();
-				/*CrmUser crmUser = user.getUser();
-				crmUser.setPassword(FacesUtil.getMD5(this.password));
-				tablesBo.saveUser(crmUser);*/
+				idUser = user.getUser().getId().intValue();
+				/*
+				 * CrmUser crmUser = user.getUser();
+				 * crmUser.setPassword(FacesUtil.getMD5(this.password));
+				 * tablesBo.saveUser(crmUser);
+				 */
 
 				this.password = null;
 				this.visibleBadCredentials = false;
