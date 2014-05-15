@@ -38,7 +38,8 @@ public class SecurityMetadataSourceCustom implements
 				String page = menu.getPage();
 				if (page != null && url.contains(page)
 						|| (url.contains("appointmentEdit"))
-						|| (url.contains("Odontology"))) {
+						|| (url.contains("Odontology"))
+						|| (url.contains("pdf"))) {
 					return null;
 				}
 			}

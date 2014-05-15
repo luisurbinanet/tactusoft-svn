@@ -144,10 +144,10 @@ public class GenerateFormulaPDF {
 		FacesContext.getCurrentInstance().responseComplete();
 	}
 
-	public static StreamedContent getHistoryPDF(BigDecimal idPatient,
+	public static void getHistoryPDF(BigDecimal idPatient,
 			String type, Integer gender) throws JRException, IOException,
 			SQLException {
-		byte[] reportPdf = null;
+		String reportPdf = null;
 		String imagePath = FacesUtil.getRealPath("/images/");
 		String subreportsPath = FacesUtil.getRealPath("/reports/") + "/";
 		Map<String, Object> param = new HashMap<String, Object>();
@@ -168,15 +168,18 @@ public class GenerateFormulaPDF {
 			nameReport = "HistoriaOdontologica";
 		}
 
-		nameReport = nameReport + idPatient + ".pdf";
+		nameReport = nameReport + FacesUtil.getCurrentUser().getId() + ".pdf";
 
 		String reportPath = FacesContext.getCurrentInstance()
 				.getExternalContext().getRealPath(path);
+		String reportPathPDF = FacesContext.getCurrentInstance()
+				.getExternalContext().getRealPath("/pdf/");
 		JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath,
 				param, connection);
-		reportPdf = JasperExportManager.exportReportToPdf(jasperPrint);
+		JasperExportManager.exportReportToPdfFile(jasperPrint, reportPathPDF + "/" + nameReport);
+		System.out.println(reportPdf);
 
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		/*ByteArrayOutputStream out = new ByteArrayOutputStream();
 		JRPdfExporter exporter = new JRPdfExporter();
 		exporter.setParameter(JRPdfExporterParameter.IS_ENCRYPTED, new Boolean(
 				true));
@@ -185,7 +188,7 @@ public class GenerateFormulaPDF {
 		/*
 		 * exporter.setParameter(JRPdfExporterParameter.PERMISSIONS, new
 		 * Integer( PdfWriter.ALLOW_PRINTING | PdfWriter.ALLOW_COPY));
-		 */
+		 
 		// exporter.setParameter(JRPdfExporterParameter.USER_PASSWORD, "crm");
 		exporter.setParameter(JRPdfExporterParameter.OWNER_PASSWORD, "1c2rm3");
 		exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, out);
@@ -193,10 +196,10 @@ public class GenerateFormulaPDF {
 		exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, nameReport);
 		exporter.exportReport();
 
-		InputStream fis = new ByteArrayInputStream(out.toByteArray());
+		InputStream fis = new ByteArrayInputStream(out.toByteArray());*
 
 		return new DefaultStreamedContent(fis,
-				"application/pdf; charset=UTF-8", nameReport);
+				"application/pdf; charset=UTF-8", nameReport);*/
 	}
 
 }

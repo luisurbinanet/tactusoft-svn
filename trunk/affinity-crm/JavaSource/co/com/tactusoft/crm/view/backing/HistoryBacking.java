@@ -1470,6 +1470,8 @@ public class HistoryBacking extends BaseBacking {
 			idMembershipType = selectedPatient.getIdMemberShip();
 
 			if (this.getRolePrincipal().equals(Constant.ROLE_DOCTOR)) {
+				generateHistorial();
+
 				selectedHistoryHistory = processService
 						.getHistoryHistory(selectedAppointment.getId());
 				selectedHistoryHistory.setCrmPatient(selectedPatient);
@@ -1562,16 +1564,7 @@ public class HistoryBacking extends BaseBacking {
 	}
 
 	public void showHistorialAction() {
-		try {
-			contentHistory = GenerateFormulaPDF.getHistoryPDF(
-					selectedPatient.getId(), typeHistory, getRenderedRecord());
-		} catch (JRException e1) {
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
+		generateHistorial();
 
 		if (typeHistory.equals(Constant.MEDICAL_HISTORY_TYPE)) {
 			modeEdit = true;
@@ -1591,6 +1584,19 @@ public class HistoryBacking extends BaseBacking {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+
+	public void generateHistorial() {
+		try {
+			GenerateFormulaPDF.getHistoryPDF(selectedPatient.getId(),
+					typeHistory, getRenderedRecord());
+		} catch (JRException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
 		}
 	}
 

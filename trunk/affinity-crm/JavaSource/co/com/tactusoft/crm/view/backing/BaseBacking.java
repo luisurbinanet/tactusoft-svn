@@ -42,6 +42,7 @@ import co.com.tactusoft.crm.model.entities.VwProcedure;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.util.SAPEnvironment;
+import co.com.tactusoft.crm.view.datamodel.BranchDataModel;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 
 import com.tactusoft.webservice.client.beans.WSBean;
@@ -90,6 +91,7 @@ public class BaseBacking implements Serializable {
 
 	protected List<CrmBranch> listBranchObject;
 	protected CrmBranch[] selectedsBranchObject;
+	protected BranchDataModel branchDataModel;
 
 	protected List<SelectItem> listCrmBranch;
 	protected Map<BigDecimal, CrmBranch> mapCrmBranch;
@@ -539,6 +541,18 @@ public class BaseBacking implements Serializable {
 		}
 
 		return listBranchObject;
+	}
+
+	public BranchDataModel getBranchDataModel() {
+		if (listBranchObject == null) {
+			listBranchObject = tablesService.getListBranchSelected();
+			branchDataModel = new BranchDataModel(listBranchObject);
+		}
+		return branchDataModel;
+	}
+
+	public void setBranchDataModel(BranchDataModel branchDataModel) {
+		this.branchDataModel = branchDataModel;
 	}
 
 	public CrmBranch[] getSelectedsBranchObject() {

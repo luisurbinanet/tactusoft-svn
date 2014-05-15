@@ -190,23 +190,20 @@
 				<p:dialog id="branchDialog" widgetVar="branchDlg" modal="true"
 					closable="true" header="#{msg['usr_branch']}">
 
-					<p:toolbar id="toolBar" style="width:100%">
-						<p:toolbarGroup align="left">
-							<p:commandButton id="btnAdd" value="#{msg['btn_add']}"
-								icon="ui-icon-plusthick" update="pnlDetail growl"
-								oncomplete="handleComplete(xhr, status, args)"
-								actionListener="#{campaignReportBacking.addBranchAction(true)}" />
-						</p:toolbarGroup>
-					</p:toolbar>
-
-					<p:spacer />
-
 					<p:dataTable id="selectedTableBranch" var="rec"
-						value="#{campaignReportBacking.listBranchObject}"
+						value="#{campaignReportBacking.branchDataModel}"
 						rowKey="#{rec.id}" style="width:100%"
 						selection="#{campaignReportBacking.selectedsBranchObject}"
 						paginator="true" rows="10"
 						emptyMessage="#{msg['glb_no_records_found']}">
+
+						<f:facet name="header">
+							<p:commandButton id="btnAdd" value="#{msg['btn_add']}"
+								icon="ui-icon-plusthick" update=":form:pnlDetail :form:growl"
+								oncomplete="handleComplete(xhr, status, args)"
+								actionListener="#{campaignReportBacking.addBranchAction(true)}"
+								process="@this,selectedTableBranch" />
+						</f:facet>
 
 						<p:column selectionMode="multiple" style="width:18px" />
 
