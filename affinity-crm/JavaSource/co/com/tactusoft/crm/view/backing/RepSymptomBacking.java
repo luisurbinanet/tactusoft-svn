@@ -25,8 +25,10 @@ public class RepSymptomBacking extends BaseBacking implements Serializable {
 
 	private TreeNode root;
 	private TreeNode rootMedication;
+	private TreeNode rootFormula;
 	private TreeNode selectedNode;
 	private String symptom;
+	private List<CrmRepMedication> listCrmMedication;
 
 	public RepSymptomBacking() {
 
@@ -34,7 +36,7 @@ public class RepSymptomBacking extends BaseBacking implements Serializable {
 
 	@PostConstruct
 	public void init() {
-		root = new DefaultTreeNode("root", null);
+		newAction(null);
 	}
 
 	public TreeNode getRoot() {
@@ -53,6 +55,14 @@ public class RepSymptomBacking extends BaseBacking implements Serializable {
 		this.rootMedication = rootMedication;
 	}
 
+	public TreeNode getRootFormula() {
+		return rootFormula;
+	}
+
+	public void setRootFormula(TreeNode rootFormula) {
+		this.rootFormula = rootFormula;
+	}
+
 	public TreeNode getSelectedNode() {
 		return selectedNode;
 	}
@@ -69,8 +79,16 @@ public class RepSymptomBacking extends BaseBacking implements Serializable {
 		this.symptom = symptom;
 	}
 
+	public void newAction(ActionEvent event) {
+		root = new DefaultTreeNode("root", null);
+		rootFormula = new DefaultTreeNode("root", null);
+		rootMedication = new DefaultTreeNode("root", null);
+		symptom = null;
+	}
+
 	public void searchAction(ActionEvent event) {
 		root = new DefaultTreeNode("root", null);
+		rootMedication = new DefaultTreeNode("root", null);
 
 		List<CrmRepSymptom> listCrmRepSymptom = processService
 				.getListRepSymptom(symptom);
@@ -93,13 +111,22 @@ public class RepSymptomBacking extends BaseBacking implements Serializable {
 
 	public void onNodeSelect(NodeSelectEvent event) {
 		CrmRepSymptom crmRepSymptom = (CrmRepSymptom) selectedNode.getData();
-		List<CrmRepMedication> listCrmRepSymptom = processService
-				.getListRepMedication(crmRepSymptom.getId());
+		listCrmMedication = processService.getListRepMedication(crmRepSymptom
+				.getId());
 
 		rootMedication = new DefaultTreeNode("root", null);
-		for (CrmRepMedication row : listCrmRepSymptom) {
+		for (CrmRepMedication row : listCrmMedication) {
 			TreeNode med = new DefaultTreeNode("medication", row,
 					rootMedication);
+		}
+	}
+
+	public void addMedication() {
+		CrmRepSymptom crmRepSymptom = (CrmRepSymptom) selectedNode.getData();
+		TreeNode sym = new DefaultTreeNode("symptom", crmRepSymptom,
+				rootFormula);
+		for (CrmRepMedication row : listCrmMedication) {
+			TreeNode med = new DefaultTreeNode("medication", row, sym);
 		}
 	}
 
