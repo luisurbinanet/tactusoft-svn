@@ -1,6 +1,7 @@
 package co.com.tactusoft.crm.security;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -30,6 +31,7 @@ import co.com.tactusoft.crm.model.entities.CrmRole;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.util.SAPEnvironment;
+import co.com.tactusoft.crm.view.backing.ApplicationBacking;
 
 import com.tactusoft.webservice.client.beans.WSBean;
 import com.tactusoft.webservice.client.execute.CustomListsExecute;
@@ -140,64 +142,76 @@ public class DaoAuthenticationProviderCustom extends
 			listBranch = tableService.getListBranchActive1000();
 			user.setListBranchAll(listBranch);
 
-			try {
+			ApplicationBacking applicationBacking = FacesUtil
+					.findBean("applicationBacking");
 
-				List<WSBean> result = new ArrayList<WSBean>();
+			Date newCurrentDate = FacesUtil.getDateWithoutTime(new Date());
+			if (applicationBacking.getCurrentDate() == null
+					|| applicationBacking.getCurrentDate().compareTo(newCurrentDate) < 0) {
+				applicationBacking.setCurrentDate(newCurrentDate);
+
 				try {
-					result = CustomListsExecute.getBranchs(sap.getUrlWebList(),
-							sap.getUsername(), sap.getPassword());
-				} catch (Exception ex) {
-					result = new ArrayList<WSBean>();
-				}
+					for (WSBean row : applicationBacking.getListBranchs()) {
+						boolean notExists = true;
+						for (CrmBranch rowDB : listBranch) {
+							if (row.getCode().equals(rowDB.getCode())) {
+								notExists = false;
+							}
+						}
 
-				for (WSBean row : result) {
-					boolean notExists = true;
-					for (CrmBranch rowDB : listBranch) {
-						if (row.getCode().equals(rowDB.getCode())) {
-							notExists = false;
+						if (notExists) {
+							CrmBranch newBranch = new CrmBranch();
+							newBranch.setCode(row.getCode());
+							newBranch.setName(row.getNames());
+							newBranch.setSociety(row.getSociety());
+							newBranch.setState(Constant.STATE_ACTIVE);
+							tableService.saveBranch(newBranch);
+							user.getListBranchAll().add(newBranch);
 						}
 					}
-
-					if (notExists) {
-						CrmBranch newBranch = new CrmBranch();
-						newBranch.setCode(row.getCode());
-						newBranch.setName(row.getNames());
-						newBranch.setSociety(row.getSociety());
-						newBranch.setState(Constant.STATE_ACTIVE);
-						tableService.saveBranch(newBranch);
-						user.getListBranchAll().add(newBranch);
-					}
+				} catch (Exception ex) {
+					user.setListBranchAll(listBranch);
 				}
-			} catch (Exception ex) {
-				user.setListBranchAll(listBranch);
+
+				try {
+					applicationBacking.setListBranchs(CustomListsExecute
+							.getBranchs(sap.getUrlWebList(), sap.getUsername(),
+									sap.getPassword()));
+				} catch (Exception ex) {
+					applicationBacking.setListBranchs(new ArrayList<WSBean>());
+				}
+
+				try {
+					applicationBacking.setListGroupSellers(CustomListsExecute
+							.getGroupSellers(sap.getUrlWebList(),
+									sap.getUsername(), sap.getPassword()));
+				} catch (Exception ex) {
+					applicationBacking
+							.setListGroupSellers(new ArrayList<WSBean>());
+				}
+
+				try {
+					applicationBacking.setListMaterials(CustomListsExecute
+							.getMaterials(sap.getUrlWebList(),
+									sap.getUsername(), sap.getPassword()));
+				} catch (Exception ex) {
+					applicationBacking
+							.setListMaterials(new ArrayList<WSBean>());
+				}
+
+				try {
+					applicationBacking.setListDocTypes(CustomListsExecute
+							.getDocTypes(sap.getUrlWebList(),
+									sap.getUsername(), sap.getPassword()));
+				} catch (Exception ex) {
+					applicationBacking.setListDocTypes(new ArrayList<WSBean>());
+				}
+
 			}
 
-			try {
-				List<WSBean> result = CustomListsExecute.getGroupSellers(
-						sap.getUrlWebList(), sap.getUsername(),
-						sap.getPassword());
-				user.setListWSGroupSellers(result);
-			} catch (Exception ex) {
-				user.setListWSGroupSellers(new ArrayList<WSBean>());
-			}
-
-			try {
-				List<WSBean> result = CustomListsExecute.getMaterials(
-						sap.getUrlWebList(), sap.getUsername(),
-						sap.getPassword());
-				user.setListWSMaterials(result);
-			} catch (Exception ex) {
-				user.setListWSMaterials(new ArrayList<WSBean>());
-			}
-
-			try {
-				List<WSBean> result = CustomListsExecute.getDocTypes(
-						sap.getUrlWebList(), sap.getUsername(),
-						sap.getPassword());
-				user.setListWSDocType(result);
-			} catch (Exception ex) {
-				user.setListWSDocType(new ArrayList<WSBean>());
-			}
+			user.setListWSGroupSellers(applicationBacking.getListGroupSellers());
+			user.setListWSMaterials(applicationBacking.getListMaterials());
+			user.setListWSDocType(applicationBacking.getListDocTypes());
 
 			CrmDoctor doctor = tableService
 					.getCrmDoctor(user.getUser().getId());

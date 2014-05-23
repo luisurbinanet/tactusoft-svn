@@ -1550,6 +1550,7 @@ public class HistoryBacking extends BaseBacking {
 				selectedHistoryConsultant = processService
 						.getHistoryConsultant(selectedAppointment.getId());
 				selectedHistoryConsultant.setCrmAppointment(currentAppointment);
+				handleBranchChange();
 			}
 
 			return null;
