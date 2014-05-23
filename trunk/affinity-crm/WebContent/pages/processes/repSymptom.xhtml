@@ -17,8 +17,9 @@
 				<p:growl id="growl" showDetail="true" />
 
 				<h:panelGrid id="pnlParams" width="100%" columns="2">
-					<h:outputLabel value="Síntomas" />
-					<p:inputText value="#{repSymptomBacking.symptom}" label="Síntomas">
+					<h:outputLabel value="#{msg['sym_symptom']}" />
+					<p:inputText value="#{repSymptomBacking.symptom}"
+						label="#{msg['sym_symptom']}">
 						<f:validateLength minimum="3" />
 					</p:inputText>
 					<f:facet name="footer">
@@ -39,7 +40,7 @@
 
 				<h:panelGrid id="pnlDetail" style="width: 100%;" columns="2">
 
-					<p:fieldset legend="Sintomas">
+					<p:fieldset legend="#{msg['sym_symptom']}">
 						<p:tree id="treeSymptom" value="#{repSymptomBacking.root}"
 							var="row" style="width:750px;height:250px; overflow: auto"
 							dynamic="true" cache="false" selectionMode="single"
@@ -59,7 +60,7 @@
 						</p:tree>
 					</p:fieldset>
 
-					<p:fieldset legend="Medicamentos">
+					<p:fieldset legend="#{msg['sym_medication']}">
 						<p:tree id="treeMedication"
 							value="#{repSymptomBacking.rootMedication}" var="row"
 							style="width:300px;height:250px;overflow: auto">
@@ -77,7 +78,7 @@
 				</h:panelGrid>
 
 				<h:panelGrid id="pnlDetail2" style="width: 100%;">
-					<p:fieldset legend="Receta">
+					<p:fieldset legend="#{msg['sym_formula']}">
 						<p:tree id="treeFormula" value="#{repSymptomBacking.rootFormula}"
 							var="row" style="width:1100px;height:200px;overflow: auto">
 

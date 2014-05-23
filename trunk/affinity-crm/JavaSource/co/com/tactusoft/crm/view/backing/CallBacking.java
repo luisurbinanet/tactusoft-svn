@@ -241,7 +241,7 @@ public class CallBacking extends ContactBacking {
 			} else {
 				crmGuideline = capaignService.getGuideline("0");
 			}
-			
+
 			generateProfile();
 
 			List<CrmPatient> listCrmPatient;
@@ -312,7 +312,12 @@ public class CallBacking extends ContactBacking {
 	}
 
 	private void generateProfile() {
-		profile = tablesService.getProfileById(crmGuideline.getIdProfile());
+		try {
+			profile = tablesService.getProfileById(crmGuideline.getIdProfile());
+		} catch (Exception ex) {
+			crmGuideline = capaignService.getGuideline("0");
+			profile = tablesService.getProfileById(crmGuideline.getIdProfile());
+		}
 
 		this.setListProfile(new ArrayList<SelectItem>());
 		this.getListProfile().add(
