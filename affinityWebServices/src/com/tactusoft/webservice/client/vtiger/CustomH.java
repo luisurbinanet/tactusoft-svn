@@ -95,7 +95,6 @@ public class CustomH extends DefaultHttpClient {
 	}
 
 	public JSONObject getDescribe(String module) throws JSONException {
-
 		Map<String, String> getdata = new HashMap<String, String>();
 		getdata.put("operation", "describe");
 		getdata.put("sessionName", sessionId);
@@ -158,9 +157,9 @@ public class CustomH extends DefaultHttpClient {
 
 		Object response = this.doGet(postdata);
 		if (!getError(response).isResult()) {
-			JSONObject result = (JSONObject) response;
-			JSONObject resultError = (JSONObject) result.get("error");
-			return resultError;
+			//JSONObject result = (JSONObject) response;
+			//JSONObject resultError = (JSONObject) result.get("error");
+			return null;
 		}
 
 		JSONArray result = (JSONArray) ((JSONObject) response).get("result");
@@ -169,6 +168,27 @@ public class CustomH extends DefaultHttpClient {
 			resultUk = (JSONObject) result.get(0);
 		}
 		return resultUk;
+	}
+
+	public JSONObject update(Map<String, Object> valueMap) throws JSONException {
+		// Assign record to logged in user if not specified
+		if (!valueMap.containsKey("assigned_user_id")) {
+			valueMap.put("assigned_user_id", userId);
+		}
+
+		Map<String, String> getdata = new HashMap<String, String>();
+		getdata.put("operation", "update");
+		getdata.put("sessionName", sessionId);
+		getdata.put("element", toJSONString(valueMap));
+
+		Object response = this.doPost(getdata);
+
+		if (!getError(response).isResult()) {
+			return null;
+		}
+
+		JSONObject result = (JSONObject) ((JSONObject) response).get("result");
+		return result;
 	}
 
 	private VTError getError(Object result) {

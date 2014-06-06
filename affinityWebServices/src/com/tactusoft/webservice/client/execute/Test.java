@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.primefaces.json.JSONException;
+import org.primefaces.json.JSONObject;
 
 import com.tactusoft.webservice.client.objects.Bapicustomer04;
 import com.tactusoft.webservice.client.vtiger.CustomH;
@@ -150,10 +151,13 @@ public class Test {
 
 	public static void getJson() {
 		CreateSugarContact createSugarContact = new CreateSugarContact("http://192.168.1.47/vtigercrm6", "admin", "iMc5y2W2cDQg2vJr");
-		String result = /*createSugarContact.createAccounts(2,"8647362", "Sarmiento Royero",
+		/*String result = /*createSugarContact.createAccounts(2,"8647362", "Sarmiento Royero",
 				"Carlos Arturo", "Colombia", "Cundinamarca", "Bogotá", "Carrera 55A 163 35", "00000", "6501550",
-				"3003044115", "tactusoft@hotmail.com");*/createSugarContact.getAccounts(5);
-		System.out.println(result);
+				"3003044115", "tactusoft@hotmail.com");createSugarContact.getAccounts(5);*/
+		System.out.println(createSugarContact.updateAccount(5,"864736", "Sarmiento Royero",
+				"Carlos", "Colombia", "Cundinamarca", "Bogotá", "Carrera 55A 163 35", "00000", "6501550",
+				"3003044115", "tactusoft@hotmail.com"));
+		//System.out.println(result);
 	}
 
 	public static String convertStreamToString(InputStream is) {
