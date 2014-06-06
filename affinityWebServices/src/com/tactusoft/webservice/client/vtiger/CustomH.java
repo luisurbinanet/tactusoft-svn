@@ -83,7 +83,7 @@ public class CustomH extends DefaultHttpClient {
 				object.setUsername(username);
 				object.setSessionId(result.get("sessionName").toString());
 				object.setUserId(result.get("userId").toString());
-				
+
 				sessionId = result.get("sessionName").toString();
 				userId = result.get("userId").toString();
 
@@ -126,11 +126,49 @@ public class CustomH extends DefaultHttpClient {
 
 		Object response = this.doPost(postdata);
 		if (!getError(response).isResult()) {
-			return null;
+			JSONObject result = (JSONObject) response;
+			JSONObject resultError = (JSONObject) result.get("error");
+			return resultError;
 		}
 
 		JSONObject result = (JSONObject) ((JSONObject) response).get("result");
 		return result;
+	}
+
+	public JSONArray queryList(String query) throws JSONException {
+		Map<String, String> postdata = new HashMap<String, String>();
+		postdata.put("operation", "query");
+		postdata.put("sessionName", sessionId);
+		postdata.put("query", query);
+
+		Object response = this.doGet(postdata);
+		if (!getError(response).isResult()) {
+			return null;
+		}
+
+		JSONArray result = (JSONArray) ((JSONObject) response).get("result");
+		return result;
+	}
+
+	public JSONObject queryObject(String query) throws JSONException {
+		Map<String, String> postdata = new HashMap<String, String>();
+		postdata.put("operation", "query");
+		postdata.put("sessionName", sessionId);
+		postdata.put("query", query);
+
+		Object response = this.doGet(postdata);
+		if (!getError(response).isResult()) {
+			JSONObject result = (JSONObject) response;
+			JSONObject resultError = (JSONObject) result.get("error");
+			return resultError;
+		}
+
+		JSONArray result = (JSONArray) ((JSONObject) response).get("result");
+		JSONObject resultUk = null;
+		if (result.length() > 0) {
+			resultUk = (JSONObject) result.get(0);
+		}
+		return resultUk;
 	}
 
 	private VTError getError(Object result) {
