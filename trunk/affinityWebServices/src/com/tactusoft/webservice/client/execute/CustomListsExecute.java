@@ -2,7 +2,9 @@ package com.tactusoft.webservice.client.execute;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.axis2.client.Options;
 import org.apache.axis2.client.ServiceClient;
@@ -190,7 +192,7 @@ public class CustomListsExecute {
 				WSBean bean = new WSBean();
 				bean.setCode(row.getText2().toString());
 				bean.setNames(row.getText3().toString());
-				bean.setType(row.getText4().toString());
+				bean.setType(row.getText5().toString());
 				list.add(bean);
 			}
 		}
@@ -267,18 +269,23 @@ public class CustomListsExecute {
 	}
 
 	public static void main(String args[]) {
-		List<WSBean> list = getSalesDocuments(
-				"http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zweblist/300/zweblist/zweblist",
-				"TACTUSOFT", "AFFINITY");
+		/*List<WSBean> list = getMaterials(
+				"http://192.168.1.210:8000/sap/bc/srt/rfc/sap/zweblist/300/zweblist/zweblist",
+				"CRMWS", "K4N5L2X9H5");*/
+		List<WSBean> list = getMaterials(
+				"http://192.168.1.32:8001/sap/bc/srt/rfc/sap/zweblist/300/zweblist/zweblist",
+				"CRMWSTEST", "123456789");
+		Map<String,String> map = new HashMap<String,String>();
 		for (WSBean row : list) {
-			if (row.getCode().equals("ZCM") || row.getCode().equals("ZCMT")
-					|| row.getCode().equals("ZOT")
-					|| row.getCode().equals("ZFCT")
-					|| row.getCode().equals("ZFCS")
-					|| row.getCode().equals("ZOP")) {
+			map.put(row.getType(), row.getType());
+			if (row.getType().equals("LB")) {
 				System.out.println(row.getCode() + " - " + row.getNames()
 						+ " - " + row.getType());
 			}
+		}
+		for (Map.Entry<String, String> entry : map.entrySet()) {
+			System.out.println("Key : " + entry.getKey() + " Value : "
+				+ entry.getValue());
 		}
 	}
 

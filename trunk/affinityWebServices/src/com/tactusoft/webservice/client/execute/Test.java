@@ -46,7 +46,7 @@ public class Test {
 		getJson();
 
 		// CREAR CLIENTES
-		String url = "http://ansrvsap2.affinity.net:8001/sap/bc/srt/rfc/sap/z_sd_customer_maintain_all/300/z_sd_customer_maintain_all/z_sd_customer_maintain_all";
+		/*String url = "http://ansrvsap2.affinity.net:8001/sap/bc/srt/rfc/sap/z_sd_customer_maintain_all/300/z_sd_customer_maintain_all/z_sd_customer_maintain_all";
 		String username = "TACTUSOFT";
 		String password = "AFFINITY";
 
@@ -98,10 +98,10 @@ public class Test {
 		 * System.out.println(row.getCode()); }
 		 */
 
-		url = "http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zcustomer2/300/zcustomer2/zcustomer2";
+		/*url = "http://192.168.1.212:8001/sap/bc/srt/rfc/sap/zcustomer2/300/zcustomer2/zcustomer2";
 		Bapicustomer04 detail = CustomerExecute.getDetail(url, username,
 				password, "3000", "0000765694");
-		System.out.println("PRUEBA");
+		System.out.println("PRUEBA");*/
 
 		/*
 		 * BapicustomerAddressdata[] add = CustomerExecute
@@ -149,9 +149,10 @@ public class Test {
 	}
 
 	public static void getJson() {
-		String result = CreateSugarContact.createContact("http://192.168.1.42/vtigercrm", "admin", "ADXdOCL86knRsTC", "8647362", "Sarmiento Royero",
-				"Carlos Arturo", "Colombia", "Cundinamarca", "Bogot‡", "Carrera 55A 163 35", "00000", "6501550",
-				"3003044115", "tactusoft@hotmail.com");
+		CreateSugarContact createSugarContact = new CreateSugarContact("http://192.168.1.47/vtigercrm6", "admin", "iMc5y2W2cDQg2vJr");
+		String result = /*createSugarContact.createAccounts(2,"8647362", "Sarmiento Royero",
+				"Carlos Arturo", "Colombia", "Cundinamarca", "Bogotá", "Carrera 55A 163 35", "00000", "6501550",
+				"3003044115", "tactusoft@hotmail.com");*/createSugarContact.getAccounts(5);
 		System.out.println(result);
 	}
 
