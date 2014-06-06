@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.primefaces.json.JSONException;
+import org.primefaces.json.JSONObject;
 
 import com.tactusoft.webservice.client.vtiger.CustomH;
 import com.tactusoft.webservice.client.vtiger.VTLogin;
@@ -100,6 +101,49 @@ public class CreateSugarContact {
 		return result;
 	}
 
+	public String updateLead(Integer id, String doc, String lastname,
+			String firstname, String country, String state, String city,
+			String address, String zipCode, String numberPhone, String mobile,
+			String email) {
+		String result = null;
+		CustomH customH = new CustomH(url);
+		VTLogin login;
+		try {
+			login = customH.login(user, keyUser);
+			if (login != null) {
+				JSONObject element = customH
+						.queryObject("SELECT * FROM Leads WHERE cf_707 = " + id
+								+ ";");
+				if (element != null) {
+					String objectTypeId = element.getString("id");
+					Map<String, Object> valueMap = new HashMap<String, Object>();
+					valueMap.put("id", objectTypeId);
+					valueMap.put("lastname", lastname);
+					valueMap.put("firstname", firstname);
+					valueMap.put("mobile", mobile);
+					valueMap.put("phone", numberPhone);
+					valueMap.put("lane", address);
+					valueMap.put("country", country);
+					valueMap.put("state", state);
+					valueMap.put("city", city);
+					valueMap.put("code", zipCode);
+					valueMap.put("email", email);
+					valueMap.put("leadsource", "Self Generated");
+					valueMap.put("leadstatus", "Contacted");
+					valueMap.put("cf_707", id);
+					valueMap.put("cf_709", doc);
+					result = customH.update(valueMap).toString();
+				}
+			} else {
+				result = "Error en autenticación de credenciales";
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
 	public String createAccounts(Integer id, String doc, String lastname,
 			String firstname, String country, String state, String city,
 			String address, String zipCode, String numberPhone, String mobile,
@@ -140,6 +184,55 @@ public class CreateSugarContact {
 		return result;
 	}
 
+	public String updateAccount(Integer id, String doc, String lastname,
+			String firstname, String country, String state, String city,
+			String address, String zipCode, String numberPhone, String mobile,
+			String email) {
+		String result = null;
+		CustomH customH = new CustomH(url);
+		VTLogin login;
+		try {
+			login = customH.login(user, keyUser);
+			if (login != null) {
+				JSONObject element = customH
+						.queryObject("SELECT * FROM Accounts WHERE cf_717 = "
+								+ id + ";");
+				if (element != null) {
+					String objectTypeId = element.getString("id");
+					Map<String, Object> valueMap = new HashMap<String, Object>();
+					valueMap.put("id", objectTypeId);
+					valueMap.put("accountname", firstname);
+					valueMap.put("phone", numberPhone);
+					valueMap.put("otherphone", mobile);
+					valueMap.put("bill_street", address);
+					valueMap.put("bill_country", country);
+					valueMap.put("bill_state", state);
+					valueMap.put("bill_city", city);
+					valueMap.put("bill_code", zipCode);
+					valueMap.put("ship_street", address);
+					valueMap.put("ship_country", country);
+					valueMap.put("ship_state", state);
+					valueMap.put("ship_city", city);
+					valueMap.put("ship_code", zipCode);
+					valueMap.put("email1", email);
+					valueMap.put("accounttype", "Customer");
+					valueMap.put("cf_715", lastname);
+					valueMap.put("cf_717", id);
+					valueMap.put("cf_719", doc);
+					result = customH.create("Accounts", valueMap).toString();
+				} else {
+					result = "-2;Cliente no Existe!";
+				}
+			} else {
+				result = "-1;Error en autenticación de credenciales";
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
 	public String getAccounts(Integer id) {
 		String result = null;
 		CustomH customH = new CustomH(url);
@@ -147,7 +240,8 @@ public class CreateSugarContact {
 		try {
 			login = customH.login(user, keyUser);
 			if (login != null) {
-				String query = "SELECT * FROM Accounts WHERE cf_717 = " + id + ";";
+				String query = "SELECT * FROM Accounts WHERE cf_717 = " + id
+						+ ";";
 				result = customH.queryObject(query).toString();
 			} else {
 				result = "Error en autenticación de credenciales";
