@@ -30,9 +30,11 @@ import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmDoctorException;
 import co.com.tactusoft.crm.model.entities.CrmDoctorSchedule;
 import co.com.tactusoft.crm.model.entities.CrmDomain;
+import co.com.tactusoft.crm.model.entities.CrmEps;
 import co.com.tactusoft.crm.model.entities.CrmGuideline;
 import co.com.tactusoft.crm.model.entities.CrmHoliday;
 import co.com.tactusoft.crm.model.entities.CrmHolidayBranch;
+import co.com.tactusoft.crm.model.entities.CrmMarketingActivity;
 import co.com.tactusoft.crm.model.entities.CrmNurse;
 import co.com.tactusoft.crm.model.entities.CrmOccupation;
 import co.com.tactusoft.crm.model.entities.CrmOdotogramProcedure;
@@ -73,6 +75,35 @@ public class TablesBo implements Serializable {
 
 	@Inject
 	private CustomHibernateDao dao;
+
+	public Integer save(Object entity) {
+		return this.persist(entity);
+	}
+
+	public List<CrmEps> getListEPSActive() {
+		return dao.find("from CrmEps o where o.status = 1");
+	}
+
+	public List<CrmEps> getListEPS() {
+		return dao.find("from CrmEps o");
+	}
+
+	public List<CrmMarketingActivity> getListMarketingActivity() {
+		return dao.find("from CrmMarketingActivity o");
+	}
+
+	public List<CrmMarketingActivity> getListMarketingActivityActive() {
+		return dao.find("from CrmMarketingActivity o where o.status = 1");
+	}
+
+	public List<CrmPatient> getListGroup() {
+		return dao.find("from CrmPatient o where o.patientType = 3");
+	}
+
+	public List<CrmPatient> getListGroupActive() {
+		return dao
+				.find("from CrmPatient o where o.patientType = 3 and o.state = 1");
+	}
 
 	public List<CrmTicket> getListTicketActive() {
 		return dao.find("from CrmTicket o where status = 1");
@@ -474,8 +505,10 @@ public class TablesBo implements Serializable {
 		return dao.find("from CrmOccupation o");
 	}
 
-	public List<CrmOccupation> getListOccupationActive() {
-		return dao.find("from CrmOccupation o where o.state = 1");
+	public List<CrmOccupation> getListOccupationActive(Integer occupationType) {
+		return dao
+				.find("from CrmOccupation o where o.state = 1 AND occupationType = "
+						+ occupationType);
 	}
 
 	public List<CrmCountry> getListCountry() {

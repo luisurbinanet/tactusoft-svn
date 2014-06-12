@@ -92,5 +92,12 @@ public class Constant {
 	public static String ODONTOLOGY_HISTORY_TYPE = "ODONTOLOGY";
 	public static String MEDICAL_HISTORY_TYPE = "MEDICAL";
 	
-	public static final String PASSWORD_DEFAULT = "123456";;
+	public static final String PASSWORD_DEFAULT = "123456";
+	
+	public static final int PATIENT_TYPE_CONTACT = 1;
+	public static final int PATIENT_TYPE_PATIENT = 2;
+	public static final int PATIENT_TYPE_ACCOUNT = 3;
+	
+	public static final int OCCUPATION_TYPE_OCCUPATION = 1;
+	public static final int OCCUPATION_TYPE_JOB = 2;
 }

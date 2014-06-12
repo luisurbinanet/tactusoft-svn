@@ -5,6 +5,9 @@
         <dependent-module archiveName="affinity-model.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/affinity-model/affinity-model">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="affinityWebServices.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/affinityWebServices/affinityWebServices">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="affinity-crm"/>
         <property name="java-output-path" value="/affinity-crm/WebContent/WEB-INF/classes"/>
     </wb-module>

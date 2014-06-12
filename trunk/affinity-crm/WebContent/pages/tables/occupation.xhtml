@@ -39,6 +39,11 @@
 						<h:outputLabel value="#{rec.name}" />
 					</p:column>
 
+					<p:column headerText="#{msg['ocu_type']}">
+						<h:outputLabel
+							value="#{rec.occupationType==1?msg['ocu_type_occupation']:msg['ocu_type_job']}" />
+					</p:column>
+
 					<p:column headerText="#{msg['glb_state']}">
 						<h:outputLabel
 							value="#{rec.state==1?msg['glb_state_active']:msg['glb_state_inactive']}" />
@@ -75,8 +80,17 @@
 					style="margin:0 auto;" width="100%">
 
 					<h:outputLabel value="#{msg['ocu_name']}" />
-					<h:inputText value="#{occupationBacking.selected.name}"
+					<p:inputText value="#{occupationBacking.selected.name}"
 						style="width:100%" label="#{msg['ocu_name']}" required="true" />
+
+					<h:outputLabel value="#{msg['ocu_type']}" />
+					<p:selectOneMenu
+						value="#{occupationBacking.selected.occupationType}"
+						style="width:250px">
+						<f:selectItem itemValue="1"
+							itemLabel="#{msg['ocu_type_occupation']}" />
+						<f:selectItem itemValue="2" itemLabel="#{msg['ocu_type_job']}" />
+					</p:selectOneMenu>
 
 					<h:outputLabel value="#{msg['glb_state']}"
 						rendered="#{occupationBacking.selected.id!=null?true:false}" />

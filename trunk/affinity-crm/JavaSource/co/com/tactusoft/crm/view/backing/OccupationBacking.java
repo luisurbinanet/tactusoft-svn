@@ -66,6 +66,7 @@ public class OccupationBacking implements Serializable {
 	public void newAction() {
 		selected = new CrmOccupation();
 		selected.setState(Constant.STATE_ACTIVE);
+		selected.setOccupationType(Constant.OCCUPATION_TYPE_OCCUPATION);
 	}
 
 	public void saveAction() {

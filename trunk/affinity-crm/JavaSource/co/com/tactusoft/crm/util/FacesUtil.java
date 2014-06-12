@@ -691,4 +691,35 @@ public class FacesUtil {
 		return FacesContext.getCurrentInstance().getApplication();
 	}
 
+	public static SelectItem[] getSelectItems(List<?> entities,
+			boolean selectOne) {
+		int size = selectOne ? entities.size() + 1 : entities.size();
+		SelectItem[] items = new SelectItem[size];
+		int i = 0;
+		if (selectOne) {
+			items[0] = new SelectItem(null, "Seleccione");
+			i++;
+		}
+		for (Object x : entities) {
+			items[i++] = new SelectItem(x, x.toString());
+		}
+		return items;
+	}
+
+	public static SelectItem[] getSelectItemsId(List<?> entities,
+			boolean selectOne) {
+		int size = selectOne ? entities.size() + 1 : entities.size();
+		SelectItem[] items = new SelectItem[size];
+		int i = 0;
+		if (selectOne) {
+			items[0] = new SelectItem(null, "Seleccione");
+			i++;
+		}
+		for (Object obj : entities) {
+			EntityId entityId = (EntityId) obj;
+			items[i++] = new SelectItem(entityId.getId(), obj.toString());
+		}
+		return items;
+	}
+
 }

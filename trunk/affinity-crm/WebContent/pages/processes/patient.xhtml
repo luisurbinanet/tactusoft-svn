@@ -9,7 +9,7 @@
 
 	<ui:define name="body">
 
-		<p:panel style="width:100%;height:700px;"
+		<p:panel style="width:100%;height:100%;"
 			header="#{msg['title_patient']}">
 
 			<p:spacer height="5" />
@@ -22,15 +22,15 @@
 					<p:toolbarGroup align="left">
 						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
 							actionListener="#{patientBacking.newAction}"
-							update="pnlDetail pnlDetail2 pnlDetail3 toolBar :editForm:searchDialog"
+							update="pnlDetail pnlDetail2 pnlDetail3 pnlDetail4 toolBar :editForm:searchDialog"
 							process="@this" />
 						<p:commandButton value="#{msg['btn_search']}" process="@this"
 							icon="ui-icon-search" oncomplete="searchDlg.show()"
 							update=":editForm:searchDialog" />
 						<p:commandButton id="btnSavePatient" value="#{msg['btn_save']}"
 							icon="ui-icon-disk" action="#{patientBacking.saveAction}"
-							update="growl toolBar pnlDetail pnlDetail2 pnlDetail3"
-							process="toolBar pnlDetail pnlDetail2 pnlDetail3" />
+							update="growl toolBar pnlDetail pnlDetail2 pnlDetail3 pnlDetail4"
+							process="toolBar pnlDetail pnlDetail2 pnlDetail3 pnlDetail4" />
 						<p:splitButton icon="ui-icon-arrowrefresh-1-w"
 							value="#{msg['btn_actions']}"
 							disabled="#{patientBacking.selectedPatient.id == null?true:false}">
@@ -136,14 +136,14 @@
 					<p:inputText value="#{patientBacking.selectedPatient.firstnames}"
 						maxlength="35" style="width:240px" label="#{msg['pat_names']}"
 						required="true">
-						<pe:keyFilter regEx="/[a-zA-ZñÑ\s]/i" preventPaste="false"/>
+						<pe:keyFilter regEx="/[a-zA-ZñÑ\s]/i" preventPaste="false" />
 					</p:inputText>
 
 					<h:outputLabel value="#{msg['pat_surnames']}" />
 					<p:inputText value="#{patientBacking.selectedPatient.surnames}"
 						maxlength="35" style="width:240px" label="#{msg['pat_surnames']}"
 						required="true">
-						<pe:keyFilter regEx="/[a-zA-ZñÑ\s]/i" preventPaste="false"/>
+						<pe:keyFilter regEx="/[a-zA-ZñÑ\s]/i" preventPaste="false" />
 					</p:inputText>
 
 					<h:outputText value="#{msg['glb_gender']}" />
@@ -175,14 +175,14 @@
 					<p:inputText value="#{patientBacking.selectedPatient.phoneNumber}"
 						style="width:240px" label="#{msg['pat_phone_number']}"
 						maxlength="#{patientBacking.numPhone}" validator="numberValidator">
-						<pe:keyFilter regEx="/[\d]/" preventPaste="false"/>
+						<pe:keyFilter regEx="/[\d]/" preventPaste="false" />
 					</p:inputText>
 
 					<h:outputText value="#{msg['pat_cell_number']}" />
 					<p:inputText value="#{patientBacking.selectedPatient.cellNumber}"
 						style="width:240px" label="#{msg['pat_cell_number']}"
 						maxlength="#{patientBacking.numCell}" validator="numberValidator">
-						<pe:keyFilter regEx="/[\d]/" preventPaste="false"/>
+						<pe:keyFilter regEx="/[\d]/" preventPaste="false" />
 					</p:inputText>
 
 					<h:outputText value="#{msg['pat_email']}" />
@@ -206,25 +206,25 @@
 						<f:selectItems value="#{patientBacking.listMembershipType}" />
 					</p:selectOneMenu>
 
-					<h:outputText value="#{msg['pat_cycle']}" />
-					<p:selectOneRadio id="optionsCycle" layout="pageDirection"
-						value="#{patientBacking.selectedPatient.cycle}">
-						<f:selectItem itemLabel="#{msg['glb_state_yes']}" itemValue="true" />
-						<f:selectItem itemLabel="#{msg['glb_state_no']}" itemValue="false" />
-					</p:selectOneRadio>
-
-					<h:outputText value="#{msg['pat_send']}" />
-					<p:selectManyCheckbox id="optionsSend" layout="pageDirection"
-						value="#{patientBacking.selectedPatientSendOptions}">
-						<f:selectItem itemLabel="#{msg['pat_send_phone']}" itemValue="1" />
-						<f:selectItem itemLabel="#{msg['pat_send_email']}" itemValue="2" />
-						<f:selectItem itemLabel="#{msg['pat_send_postal']}" itemValue="3" />
-						<f:selectItem itemLabel="#{msg['pat_send_sms']}" itemValue="4" />
-					</p:selectManyCheckbox>
-
 					<h:outputText value="#{msg['pat_type_obs']}" />
 					<p:inputTextarea value="#{patientBacking.selectedPatient.obs}"
 						style="width:240px" rows="4" />
+				</h:panelGrid>
+
+				<h:panelGrid id="pnlDetail4" columns="1" cellspacing="5"
+					columnClasses="width250per,width250per,width250per,width250per"
+					width="100%">
+					<h:outputText value="#{msg['privacy_text']}" escape="false" />
+					<h:panelGrid width="100%" columns="2">
+						<h:outputText value="#{msg['pat_cycle']}" />
+						<p:selectOneRadio id="optionsCycle" layout="lineDirection"
+							value="#{patientBacking.selectedPatient.cycle}">
+							<f:selectItem itemLabel="#{msg['glb_state_yes']}"
+								itemValue="true" />
+							<f:selectItem itemLabel="#{msg['glb_state_no']}"
+								itemValue="false" />
+						</p:selectOneRadio>
+					</h:panelGrid>
 				</h:panelGrid>
 
 			</h:form>
@@ -243,7 +243,7 @@
 								process="@this,pnlParameter" />
 							<p:commandButton id="btnAddPatient" value="#{msg['btn_add']}"
 								icon="ui-icon-plusthick"
-								update=":form:pnlDetail :form:pnlDetail2 :form:pnlDetail3 toolBar :form:growl"
+								update=":form:pnlDetail :form:pnlDetail2 :form:pnlDetail3 :form:pnlDetail4 toolBar :form:growl"
 								actionListener="#{patientBacking.addPatientAction}"
 								process="@this,searchDialog" oncomplete="searchDlg.hide();"
 								disabled="#{patientBacking.disabledAddPatient}" />
@@ -279,7 +279,7 @@
 								<p:inputText value="#{patientBacking.namePatient}"
 									style="width:100%"
 									disabled="#{patientBacking.optionSearchPatient ne 2}">
-									<pe:keyFilter regEx="/[a-zA-ZñÑ\s]/i" preventPaste="false"/>
+									<pe:keyFilter regEx="/[a-zA-ZñÑ\s]/i" preventPaste="false" />
 								</p:inputText>
 
 								<p:radioButton id="opt3" for="customRadio" itemIndex="2" />

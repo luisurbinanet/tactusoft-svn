@@ -33,50 +33,47 @@ ORDER by b.start_appointment_date DESC]]>
 	<columnHeader>
 		<band height="30" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="cccfadfe-8d80-4b4f-b9cf-727267a05009" x="0" y="0" width="552" height="20"/>
+				<reportElement x="0" y="0" width="552" height="20" uuid="cccfadfe-8d80-4b4f-b9cf-727267a05009"/>
 				<textElement textAlignment="Center">
 					<font size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Exámen Organométrico]]></text>
 			</staticText>
 			<line>
-				<reportElement uuid="ed1b7d1a-c512-4e53-8ad3-fa73dc9b5448" x="1" y="19" width="554" height="1"/>
+				<reportElement x="1" y="19" width="554" height="1" uuid="ed1b7d1a-c512-4e53-8ad3-fa73dc9b5448"/>
 			</line>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="91" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="e1ed9247-c63e-4e37-8b9e-1b3b97f0ce65" x="0" y="4" width="63" height="20"/>
-				<textElement/>
+				<reportElement x="0" y="4" width="63" height="20" uuid="e1ed9247-c63e-4e37-8b9e-1b3b97f0ce65"/>
 				<text><![CDATA[Cita del día:]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="d82c8a93-5427-4d2d-b895-7722b051e68b" x="63" y="4" width="489" height="20"/>
+				<reportElement x="63" y="4" width="489" height="20" uuid="d82c8a93-5427-4d2d-b895-7722b051e68b"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{start_appointment_date}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="ece62d12-263d-4e81-b75d-1bce2b434f82" x="168" y="24" width="100" height="20"/>
-				<textElement/>
+				<reportElement x="168" y="24" width="100" height="20" uuid="ece62d12-263d-4e81-b75d-1bce2b434f82"/>
 				<textFieldExpression><![CDATA[$F{Se tienen resultados del exámen?}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="f832738f-349b-41e8-a11d-5b81b475980d" x="1" y="24" width="167" height="20"/>
+				<reportElement x="1" y="24" width="167" height="20" uuid="f832738f-349b-41e8-a11d-5b81b475980d"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Se tienen resultados del exámen?]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="d14b6720-e72b-4d5b-a40d-df36d1755e51" x="168" y="44" width="384" height="47"/>
-				<textElement/>
+				<reportElement stretchType="RelativeToTallestObject" x="168" y="44" width="384" height="47" uuid="d14b6720-e72b-4d5b-a40d-df36d1755e51"/>
 				<textFieldExpression><![CDATA[$F{Análisis}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="eff1c2f7-2393-4f2f-b892-986cffb77c35" x="1" y="44" width="167" height="20"/>
+				<reportElement x="1" y="44" width="167" height="20" uuid="eff1c2f7-2393-4f2f-b892-986cffb77c35"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>

@@ -35,38 +35,38 @@ ORDER by b.start_appointment_date DESC]]>
 	<columnHeader>
 		<band height="60" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="cccfadfe-8d80-4b4f-b9cf-727267a05009" x="0" y="0" width="552" height="20"/>
+				<reportElement x="0" y="0" width="552" height="20" uuid="cccfadfe-8d80-4b4f-b9cf-727267a05009"/>
 				<textElement textAlignment="Center">
 					<font size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Medicamentos, Exámenes y Terapias]]></text>
 			</staticText>
 			<line>
-				<reportElement uuid="ed1b7d1a-c512-4e53-8ad3-fa73dc9b5448" x="1" y="19" width="554" height="1"/>
+				<reportElement x="1" y="19" width="554" height="1" uuid="ed1b7d1a-c512-4e53-8ad3-fa73dc9b5448"/>
 			</line>
 			<staticText>
-				<reportElement uuid="5c60051c-2949-4190-af9c-c653615430fc" x="3" y="40" width="84" height="20"/>
+				<reportElement x="3" y="40" width="84" height="20" uuid="5c60051c-2949-4190-af9c-c653615430fc"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Fecha Cita]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="5bad86f6-6424-4781-9d25-cc0d31e8086a" x="87" y="40" width="77" height="20"/>
+				<reportElement x="87" y="40" width="77" height="20" uuid="5bad86f6-6424-4781-9d25-cc0d31e8086a"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Tipo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="e84d3747-7a8d-43f1-bd6f-b65c816d28ae" x="179" y="40" width="328" height="20"/>
+				<reportElement x="177" y="40" width="328" height="20" uuid="e84d3747-7a8d-43f1-bd6f-b65c816d28ae"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Medicamento/Examen/Terapia]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="79efb33f-5629-4b52-b864-eb6eb7d163a3" x="507" y="40" width="48" height="20"/>
+				<reportElement x="505" y="40" width="50" height="20" uuid="79efb33f-5629-4b52-b864-eb6eb7d163a3"/>
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
@@ -75,25 +75,24 @@ ORDER by b.start_appointment_date DESC]]>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="20" splitType="Stretch">
+		<band height="31" splitType="Stretch">
 			<textField pattern="dd/MMM/yyyy">
-				<reportElement uuid="7cc29600-c362-46e0-bb3c-2d3fed413f93" x="3" y="0" width="84" height="20"/>
-				<textElement/>
+				<reportElement x="3" y="0" width="84" height="20" uuid="7cc29600-c362-46e0-bb3c-2d3fed413f93"/>
 				<textFieldExpression><![CDATA[$F{start_appointment_date}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="674711e0-160d-44c2-a189-9cc18aa682fb" x="87" y="0" width="77" height="20"/>
-				<textElement/>
+				<reportElement x="87" y="0" width="77" height="20" uuid="674711e0-160d-44c2-a189-9cc18aa682fb"/>
 				<textFieldExpression><![CDATA[$F{Tipo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="03da76fd-29b8-40c3-b0bd-5725e0ac9c86" x="179" y="0" width="328" height="20"/>
-				<textElement textAlignment="Justified"/>
+				<reportElement stretchType="RelativeToTallestObject" x="177" y="0" width="328" height="31" uuid="03da76fd-29b8-40c3-b0bd-5725e0ac9c86"/>
+				<textElement textAlignment="Justified">
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Medicamento/Examen/Terapia}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="f50d1907-d523-45d8-af35-fe10c24a3655" x="507" y="0" width="48" height="20"/>
-				<textElement/>
+				<reportElement x="505" y="0" width="50" height="20" uuid="f50d1907-d523-45d8-af35-fe10c24a3655"/>
 				<textFieldExpression><![CDATA[$F{Unidades}]]></textFieldExpression>
 			</textField>
 		</band>

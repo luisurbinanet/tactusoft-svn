@@ -49,7 +49,7 @@ public class RIPSBo implements Serializable {
 			if (typeHistory.equals(Constant.MEDICAL_HISTORY_TYPE)) {
 				for (VwRipsPatient row : list) {
 					StringBuilder result = new StringBuilder();
-					result.append(row.getBranch());
+					result.append("");
 					result.append(SEPARATOR);
 					result.append(row.getDocType());
 					result.append(SEPARATOR);
@@ -65,9 +65,11 @@ public class RIPSBo implements Serializable {
 					result.append(SEPARATOR);
 					result.append(row.getFirstnames2());
 					result.append(SEPARATOR);
-					result.append(row.getAge());
+					result.append(row.getAge().intValue());
 					result.append(SEPARATOR);
 					result.append(row.getSizeUnit());
+					result.append(SEPARATOR);
+					result.append(row.getGender());
 					result.append(SEPARATOR);
 					result.append(row.getRegion());
 					result.append(SEPARATOR);
@@ -278,9 +280,9 @@ public class RIPSBo implements Serializable {
 				result.append(SEPARATOR);
 				result.append(row.getId().getDoc());
 				result.append(SEPARATOR);
-				result.append(FacesUtil.formatDate(row.getId()
+				/*result.append(FacesUtil.formatDate(row.getId()
 						.getAppointmentDate(), "dd/MM/yyyy"));
-				result.append(SEPARATOR);
+				result.append(SEPARATOR);*/
 				result.append(row.getId().getAutorization());
 				result.append(SEPARATOR);
 				result.append(row.getId().getMedicationCode());
@@ -340,9 +342,11 @@ public class RIPSBo implements Serializable {
 				result.append(FacesUtil.formatDate(row.getId().getDateBill(),
 						"dd/MM/yyyy"));
 				result.append(SEPARATOR);
-				result.append(row.getId().getStartDate());
+				result.append(FacesUtil.formatDate(row.getId().getDateBill(),
+						"dd/MM/yyyy"));
 				result.append(SEPARATOR);
-				result.append(row.getId().getEndDate());
+				result.append(FacesUtil.formatDate(row.getId().getDateBill(),
+						"dd/MM/yyyy"));
 				result.append(SEPARATOR);
 				result.append(row.getId().getEpsCode());
 				result.append(SEPARATOR);

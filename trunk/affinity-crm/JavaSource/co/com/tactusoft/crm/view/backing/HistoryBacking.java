@@ -2056,6 +2056,14 @@ public class HistoryBacking extends BaseBacking {
 			FacesUtil.addWarn(message);
 		}
 
+		if (selectedPatient.getIdMaritalState() == null) {
+			field = FacesUtil.getMessage("pat_marital_state");
+			message = FacesUtil.getMessage("title_patient_complementary");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		}
+
 		if (idOccupation == null || idOccupation.intValue() == 0) {
 			field = FacesUtil.getMessage("pat_occupation");
 			message = FacesUtil.getMessage("title_patient_complementary");
@@ -2064,6 +2072,22 @@ public class HistoryBacking extends BaseBacking {
 			FacesUtil.addWarn(message);
 		} else {
 			selectedPatient.setCrmOccupation(mapOccupation.get(idOccupation));
+		}
+		
+		if (selectedPatient.getIdMemberShip() == null) {
+			field = FacesUtil.getMessage("pat_membership_type");
+			message = FacesUtil.getMessage("title_patient_complementary");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
+		}
+		
+		if (selectedPatient.getIdEps() == null) {
+			field = FacesUtil.getMessage("pat_eps");
+			message = FacesUtil.getMessage("title_patient_complementary");
+			message = message + " - "
+					+ FacesUtil.getMessage("glb_required", field);
+			FacesUtil.addWarn(message);
 		}
 
 		if (FacesUtil.isEmptyOrBlank(neighborhood)) {

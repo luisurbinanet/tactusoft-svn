@@ -18,6 +18,7 @@ import co.com.tactusoft.crm.model.entities.CrmCountry;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
 import co.com.tactusoft.crm.model.entities.CrmRegion;
+import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.util.SAPEnvironment;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
@@ -311,11 +312,11 @@ public class PatientBacking extends BaseBacking {
 				FacesUtil.addError(message);
 			}
 
-			if (selectedPatient.isCycle()
+			/*if (selectedPatient.isCycle()
 					&& selectedPatientSendOptions.isEmpty()) {
 				message = FacesUtil.getMessage("pat_msg_send");
 				FacesUtil.addError(message);
-			}
+			}*/
 
 			CrmProfile profile = mapProfile.get(selectedPatient.getCrmProfile()
 					.getId());
@@ -377,7 +378,7 @@ public class PatientBacking extends BaseBacking {
 						selectedPatient.setSendPostal(false);
 						selectedPatient.setSendSms(false);
 
-						for (String send : selectedPatientSendOptions) {
+						/*for (String send : selectedPatientSendOptions) {
 							if (send.equals("1")) {
 								selectedPatient.setSendPhone(true);
 							} else if (send.equals("2")) {
@@ -387,7 +388,7 @@ public class PatientBacking extends BaseBacking {
 							} else if (send.equals("4")) {
 								selectedPatient.setSendSms(true);
 							}
-						}
+						}*/
 
 						String docType = selectedPatient.getDocType();
 						if (automatic) {
@@ -448,6 +449,8 @@ public class PatientBacking extends BaseBacking {
 							}
 
 							if (!existsSAP) {
+								selectedPatient
+								.setPatientType(Constant.PATIENT_TYPE_PATIENT);
 								selectedPatient.setFirstnames(selectedPatient
 										.getFirstnames().toUpperCase());
 								selectedPatient.setSurnames(selectedPatient

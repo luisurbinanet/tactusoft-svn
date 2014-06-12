@@ -23,6 +23,7 @@ import co.com.tactusoft.crm.security.UserData;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.util.SAPEnvironment;
+import co.com.tactusoft.crm.util.SugarEnvironment;
 
 import com.tactusoft.webservice.client.beans.WSBean;
 import com.tactusoft.webservice.client.execute.CustomListsExecute;
@@ -108,6 +109,9 @@ public class LdapAuthenticationProviderCustom {
 		// get listWSGroupSellers
 		SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
 		sap.getLisParameter();
+
+		SugarEnvironment sugar = FacesUtil.findBean("sugarEnvironment");
+		sugar.getLisParameter();
 
 		listBranch = tableService.getListBranch();
 		user.setListBranchAll(listBranch);

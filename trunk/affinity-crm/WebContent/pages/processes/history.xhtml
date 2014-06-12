@@ -10,7 +10,7 @@
 	<ui:define name="body">
 
 		<p:panel style="width:100%;height:100%;"
-			header="#{msg['title_view_history']}">
+			header="#{msg['title_view_history']} No. #{historyBacking.currentAppointment.id}">
 
 			<p:spacer height="5" />
 
@@ -213,7 +213,7 @@
 										label="#{msg['pat_born_date']}" readonlyInput="false"
 										pattern="dd/MM/yyyy" showOn="button" navigator="true"
 										locale="es" yearRange="-100:+0"
-										maxdate="#{historyBacking.maxDate}">
+										maxdate="#{historyBacking.maxDate}" required="true">
 										<f:convertDateTime pattern="dd/MM/yyyy" />
 										<p:ajax event="dateSelect"
 											listener="#{historyBacking.handleBornDateSelect}"
@@ -226,10 +226,41 @@
 										readonly="true"
 										value="#{historyBacking.age} #{msg['glb_age']}" />
 
+									<h:outputLabel value="#{msg['pat_marital_state']}" />
+									<p:selectOneMenu style="width:408px"
+										value="#{historyBacking.selectedPatient.idMaritalState}"
+										label="#{msg['pat_marital_state']}" required="true">
+										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+											itemValue="" />
+										<f:selectItems value="#{historyBacking.listMaritalStatus}" />
+									</p:selectOneMenu>
+
 									<h:outputLabel value="#{msg['pat_occupation']}" />
 									<p:selectOneMenu value="#{historyBacking.idOccupation}"
-										style="width:408px" label="#{msg['pat_occupation']}">
+										style="width:408px" label="#{msg['pat_occupation']}"
+										required="true">
 										<f:selectItems value="#{historyBacking.listOccupation}" />
+									</p:selectOneMenu>
+
+									<h:outputLabel value="#{msg['pat_membership_type']}"
+										style="width:40%" />
+									<p:selectOneMenu
+										value="#{historyBacking.selectedPatient.idMemberShip}"
+										label="#{msg['pat_membership_type']}" style="width:408px"
+										required="true">
+										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+											itemValue="" />
+										<f:selectItems value="#{patientBacking.listMembershipType}" />
+									</p:selectOneMenu>
+
+									<h:outputLabel value="#{msg['pat_eps']}" style="width:40%" />
+									<p:selectOneMenu
+										value="#{historyBacking.selectedPatient.idEps}"
+										label="#{msg['pat_eps']}" style="width:408px" filter="true"
+										filterMatchMode="contains" required="true">
+										<f:selectItem itemLabel="#{msg['glb_default_value']}"
+											itemValue="" />
+										<f:selectItems value="#{patientBacking.listEps}" />
 									</p:selectOneMenu>
 
 									<h:outputLabel value="#{msg['pat_neighborhood']}" />
@@ -239,7 +270,8 @@
 
 									<h:outputLabel value="#{msg['pat_type_housing']}" />
 									<p:selectOneMenu value="#{historyBacking.typeHousing}"
-										style="width:408px" label="#{msg['pat_type_housing']}">
+										style="width:408px" label="#{msg['pat_type_housing']}"
+										required="true">
 										<f:selectItem itemLabel="#{msg['glb_default_value']}"
 											itemValue="" />
 										<f:selectItem itemLabel="#{msg['pat_type_housing_u']}"
