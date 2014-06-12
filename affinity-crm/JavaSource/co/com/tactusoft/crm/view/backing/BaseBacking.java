@@ -33,6 +33,7 @@ import co.com.tactusoft.crm.model.entities.CrmCity;
 import co.com.tactusoft.crm.model.entities.CrmCountry;
 import co.com.tactusoft.crm.model.entities.CrmDoctor;
 import co.com.tactusoft.crm.model.entities.CrmDomain;
+import co.com.tactusoft.crm.model.entities.CrmEps;
 import co.com.tactusoft.crm.model.entities.CrmOccupation;
 import co.com.tactusoft.crm.model.entities.CrmPatient;
 import co.com.tactusoft.crm.model.entities.CrmProfile;
@@ -130,6 +131,9 @@ public class BaseBacking implements Serializable {
 	protected BigDecimal idMembershipType;
 	protected Map<BigDecimal, CrmCountry> mapMembershipType;
 
+	protected List<SelectItem> listEps;
+	protected BigDecimal idEps;
+
 	protected List<SelectItem> listKin;
 	protected BigDecimal idKin;
 	protected Map<BigDecimal, CrmCountry> mapKin;
@@ -137,6 +141,11 @@ public class BaseBacking implements Serializable {
 	protected List<SelectItem> listOccupation;
 	protected Map<BigDecimal, CrmOccupation> mapOccupation;
 	protected BigDecimal idOccupation;
+
+	protected List<SelectItem> listGroup;
+	protected BigDecimal idGroup;
+
+	protected List<SelectItem> listJob;
 
 	protected Integer numPhone;
 	protected Integer numCell;
@@ -846,6 +855,28 @@ public class BaseBacking implements Serializable {
 		this.mapMembershipType = mapMembershipType;
 	}
 
+	public List<SelectItem> getListEps() {
+		if (listEps == null) {
+			listEps = new LinkedList<SelectItem>();
+			for (CrmEps row : tablesService.getListEPSActive()) {
+				listEps.add(new SelectItem(row.getId(), row.getName()));
+			}
+		}
+		return listEps;
+	}
+
+	public void setListEps(List<SelectItem> listEps) {
+		this.listEps = listEps;
+	}
+
+	public BigDecimal getIdEps() {
+		return idEps;
+	}
+
+	public void setIdEps(BigDecimal idEps) {
+		this.idEps = idEps;
+	}
+
 	public List<SelectItem> getListKin() {
 		if (listKin == null) {
 			listKin = new LinkedList<SelectItem>();
@@ -914,7 +945,8 @@ public class BaseBacking implements Serializable {
 			mapOccupation = new HashMap<BigDecimal, CrmOccupation>();
 			String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
 			listOccupation.add(new SelectItem(null, label));
-			for (CrmOccupation row : tablesService.getListOccupationActive()) {
+			for (CrmOccupation row : tablesService
+					.getListOccupationActive(Constant.OCCUPATION_TYPE_OCCUPATION)) {
 				mapOccupation.put(row.getId(), row);
 				listOccupation.add(new SelectItem(row.getId(), row.getName()));
 			}
@@ -924,6 +956,23 @@ public class BaseBacking implements Serializable {
 
 	public void setListOccupation(List<SelectItem> listOccupation) {
 		this.listOccupation = listOccupation;
+	}
+
+	public List<SelectItem> getListJob() {
+		if (listJob == null) {
+			listJob = new LinkedList<SelectItem>();
+			String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
+			listJob.add(new SelectItem(null, label));
+			for (CrmOccupation row : tablesService
+					.getListOccupationActive(Constant.OCCUPATION_TYPE_JOB)) {
+				listJob.add(new SelectItem(row.getId(), row.getName()));
+			}
+		}
+		return listJob;
+	}
+
+	public void setListJob(List<SelectItem> listJob) {
+		this.listJob = listJob;
 	}
 
 	public Map<BigDecimal, CrmOccupation> getMapOccupation() {
@@ -940,6 +989,30 @@ public class BaseBacking implements Serializable {
 
 	public void setIdOccupation(BigDecimal idOccupation) {
 		this.idOccupation = idOccupation;
+	}
+
+	public List<SelectItem> getListGroup() {
+		if (listGroup == null) {
+			listGroup = new LinkedList<SelectItem>();
+			String label = FacesUtil.getMessage(Constant.DEFAULT_LABEL);
+			listGroup.add(new SelectItem(null, label));
+			for (CrmPatient row : tablesService.getListGroup()) {
+				listGroup.add(new SelectItem(row.getId(), row.getFirstnames()));
+			}
+		}
+		return listGroup;
+	}
+
+	public void setListGroup(List<SelectItem> listGroup) {
+		this.listGroup = listGroup;
+	}
+
+	public BigDecimal getIdGroup() {
+		return idGroup;
+	}
+
+	public void setIdGroup(BigDecimal idGroup) {
+		this.idGroup = idGroup;
 	}
 
 	public Integer getNumPhone() {

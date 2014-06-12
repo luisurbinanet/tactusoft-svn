@@ -27,11 +27,13 @@ import co.com.tactusoft.crm.model.entities.CrmTicket;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.util.SAPEnvironment;
+import co.com.tactusoft.crm.util.SugarEnvironment;
 import co.com.tactusoft.crm.view.datamodel.PatientDataModel;
 
 import com.tactusoft.webservice.client.beans.WSBean;
 import com.tactusoft.webservice.client.beans.WSBeanPatient;
 import com.tactusoft.webservice.client.execute.CustomerExecute;
+import com.tactusoft.webservice.client.execute.SugarWS;
 
 @Named
 @Scope("session")
@@ -178,6 +180,7 @@ public class ContactBacking extends BaseBacking {
 		cleanPatientFields();
 		patientModel = new PatientDataModel();
 		selectedPatientTemp = null;
+		idGroup = null;
 
 		mapOccupation = new HashMap<BigDecimal, CrmOccupation>();
 	}
@@ -227,6 +230,9 @@ public class ContactBacking extends BaseBacking {
 			if (message == null) {
 
 				CrmCountry crmCountry = mapCountry.get(idCountry);
+				CrmRegion crmRegion = mapRegion.get(idRegion);
+				CrmCity crmCity = mapCity.get(idCity);
+
 				selectedPatient.setIdCountry(idCountry);
 				selectedPatient.setIdRegion(idRegion);
 				selectedPatient.setIdCity(idCity);
@@ -267,6 +273,9 @@ public class ContactBacking extends BaseBacking {
 				selectedPatient.setDocType(docType);
 
 				try {
+					selectedPatient.setCrmPatient(new CrmPatient(idGroup));
+					selectedPatient
+							.setPatientType(Constant.PATIENT_TYPE_CONTACT);
 					selectedPatient.setFirstnames(selectedPatient
 							.getFirstnames().toUpperCase());
 					selectedPatient.setSurnames(selectedPatient.getSurnames()
@@ -289,6 +298,23 @@ public class ContactBacking extends BaseBacking {
 					FacesUtil.addInfo(message);
 					disabledSaveButton = true;
 					newRecord = false;
+					/*SugarEnvironment sugarEnvironment = FacesUtil
+							.findBean("sugarEnvironment");
+					SugarWS createSugarContact = new SugarWS(
+							sugarEnvironment.getUrl(),
+							sugarEnvironment.getUsername(),
+							sugarEnvironment.getKey());
+					String res = createSugarContact.persitLead(selectedPatient.getId()
+							.intValue(), selectedPatient.getDoc(),
+							selectedPatient.getSurnames(), selectedPatient
+									.getFirstnames(), crmCountry.getName(),
+							crmRegion.getName(), crmCity.getName(),
+							selectedPatient.getAddress(), selectedPatient
+									.getZipCode(), String
+									.valueOf(selectedPatient.getPhoneNumber()),
+							selectedPatient.getCellNumber(), selectedPatient
+									.getEmail());
+					System.out.println(res);*/
 				} catch (Exception ex) {
 					String field = FacesUtil.getMessage("con");
 					message = FacesUtil.getMessage(
@@ -397,6 +423,8 @@ public class ContactBacking extends BaseBacking {
 	public void addContactAction(ActionEvent event) {
 		selectedPatient = selectedPatientTemp;
 		newRecord = false;
+		idGroup = selectedPatientTemp.getCrmPatient() != null ? selectedPatientTemp
+				.getCrmPatient().getId() : null;
 		idCountry = selectedPatient.getIdCountry();
 		handleCountryChange();
 

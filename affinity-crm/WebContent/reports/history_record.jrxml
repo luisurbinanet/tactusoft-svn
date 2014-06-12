@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="history_record" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="258c62b7-639f-43e7-ac7b-c289802e1be2">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="185"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="P_ID_PATIENT" class="java.math.BigDecimal">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -345,10 +345,16 @@ ORDER by b.start_appointment_date DESC]]>
 			</textField>
 			<textField>
 				<reportElement x="152" y="41" width="211" height="20" uuid="236350e5-6de2-4099-8e4e-f9c717442ee5"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{arthritis_time}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="363" y="41" width="189" height="20" uuid="8f833f70-eb20-456a-ace0-f127317525cd"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{arthritis_medication}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -364,10 +370,16 @@ ORDER by b.start_appointment_date DESC]]>
 			</textField>
 			<textField>
 				<reportElement x="152" y="61" width="211" height="20" uuid="23cedd68-45c4-4b05-843e-6683396f1765"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{cancer_time}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="363" y="61" width="189" height="20" uuid="7275a9a3-08b2-4b15-8983-28d823c13c63"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{cancer_medication}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -383,10 +395,16 @@ ORDER by b.start_appointment_date DESC]]>
 			</textField>
 			<textField>
 				<reportElement x="152" y="81" width="211" height="20" uuid="74847a4d-5efd-44a5-a46d-dc6c386e75e0"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{pulmonary_time}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="363" y="81" width="189" height="20" uuid="746d3d19-e27f-43b8-8868-e1cfa1bc4f35"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{pulmonary_medication}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -402,10 +420,16 @@ ORDER by b.start_appointment_date DESC]]>
 			</textField>
 			<textField>
 				<reportElement x="152" y="101" width="211" height="20" uuid="0bb67104-36d3-4a6d-8527-3fce565f67be"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{diabetes_time}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="363" y="101" width="189" height="20" uuid="91a9dcb5-4d55-4f82-b637-f86657598a49"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{diabetes_medication}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -421,10 +445,16 @@ ORDER by b.start_appointment_date DESC]]>
 			</textField>
 			<textField>
 				<reportElement x="152" y="121" width="211" height="20" uuid="264facf9-5ea8-449f-838c-b557bc7c3082"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{hypertension_time}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="363" y="121" width="189" height="20" uuid="81b13dab-223a-4f6d-83cf-b99b50b34729"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{hypertension_medication}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -440,10 +470,16 @@ ORDER by b.start_appointment_date DESC]]>
 			</textField>
 			<textField>
 				<reportElement x="152" y="141" width="211" height="20" uuid="40a6daca-fa39-40c8-95aa-40217741f7b4"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{hospitalizations_time}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="363" y="141" width="189" height="20" uuid="8a98bce8-4b63-407a-a28f-8d59cdec9ee8"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{hospitalizations_medication}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -459,10 +495,16 @@ ORDER by b.start_appointment_date DESC]]>
 			</textField>
 			<textField>
 				<reportElement x="152" y="161" width="211" height="20" uuid="c93f0290-62fe-4c8f-9927-afc06c37c352"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{allergy_time}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="363" y="161" width="189" height="20" uuid="ee16eb88-08c4-497e-a27d-fc0b6c4679fc"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{allergy_medication}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -478,10 +520,16 @@ ORDER by b.start_appointment_date DESC]]>
 			</textField>
 			<textField>
 				<reportElement x="152" y="181" width="211" height="20" uuid="0be3b91a-8193-461d-a3b1-2976c793ecd2"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{infections_time}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="363" y="181" width="189" height="20" uuid="d3fe0361-6e74-4c59-a544-eef0623d65d1"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{infections_medication}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -500,6 +548,9 @@ ORDER by b.start_appointment_date DESC]]>
 			</staticText>
 			<textField>
 				<reportElement x="113" y="201" width="439" height="20" uuid="6c574240-6134-4cab-82a1-deeb271c030a"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Ocupacionales}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -511,10 +562,16 @@ ORDER by b.start_appointment_date DESC]]>
 			</staticText>
 			<textField>
 				<reportElement x="113" y="221" width="439" height="20" uuid="43e154a0-c370-47c3-a3d1-ca3a25cad85f"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Tóxicos}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="113" y="241" width="439" height="20" uuid="d5e74ed9-0174-4d3d-914a-3a6aa8ec331a"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Grupo Sanguíneo}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -533,22 +590,37 @@ ORDER by b.start_appointment_date DESC]]>
 			</staticText>
 			<textField>
 				<reportElement x="113" y="261" width="439" height="20" uuid="df58b336-eeab-4b7a-9832-ca36f383d2d2"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Quirúrgicos}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="113" y="281" width="439" height="20" uuid="c24346ef-7729-4fc9-8fd4-b438d0008dba"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Farmacológicos}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="113" y="301" width="439" height="20" uuid="5885db13-366d-43eb-94f6-74d71cd8eb4c"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Inmunizaciones}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="113" y="321" width="439" height="20" uuid="592c4b44-fc89-4811-ad85-8ec50dd0d683"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Transfusionales}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="113" y="341" width="439" height="20" uuid="773bf25c-336d-4351-a702-776b9a3547e3"/>
+				<reportElement stretchType="RelativeToTallestObject" x="113" y="341" width="439" height="20" isPrintWhenDetailOverflows="true" uuid="773bf25c-336d-4351-a702-776b9a3547e3"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Otros}]]></textFieldExpression>
 			</textField>
 			<staticText>

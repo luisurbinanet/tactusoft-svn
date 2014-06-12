@@ -1,0 +1,164 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+<ui:composition template="../templates/common.xhtml">
+
+	<ui:define name="body">
+
+		<p:panel style="width:100%;height:600px;"
+			header="#{msg['title_account']}">
+
+			<p:spacer height="10" />
+
+			<h:form id="form">
+
+				<p:toolbar style="width:100%">
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{msg['btn_new']}" icon="ui-icon-document"
+							action="#{accountBacking.newAction}" oncomplete="dlg.show()"
+							update=":editForm:pnlDetail" />
+						<p:commandButton value="#{msg['btn_edit']}" icon="ui-icon-pencil"
+							oncomplete="dlg.show()" update=":editForm:pnlDetail"
+							action="#{accountBacking.editAction}" />
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="10" />
+
+				<p:dataTable id="recordTable" var="rec"
+					value="#{accountBacking.model}" rowKey="#{rec.id}"
+					selection="#{accountBacking.selected}" paginator="true" rows="10"
+					style="width:100%" emptyMessage="#{msg['glb_no_records_found']}">
+
+					<p:column selectionMode="single" style="width:18px" />
+
+					<p:column headerText="#{msg['acc_name']}">
+						<h:outputLabel value="#{rec.firstnames}" />
+					</p:column>
+
+					<p:column headerText="#{msg['acc_principal_contact']}">
+						<h:outputLabel value="#{rec.surnames}" />
+					</p:column>
+
+					<p:column headerText="#{msg['acc_phone']}">
+						<h:outputLabel value="#{rec.phoneNumber}" />
+					</p:column>
+
+				</p:dataTable>
+
+			</h:form>
+
+		</p:panel>
+
+		<h:form id="editForm">
+
+			<p:growl id="growl" showDetail="true" />
+
+			<p:dialog header="#{msg['msg_detail']}" widgetVar="dlg"
+				resizable="false" id="dialogDetail" showEffect="fade"
+				hideEffect="explode" modal="true" width="500">
+
+				<p:toolbar style="width:100%">
+					<p:toolbarGroup align="left">
+						<p:commandButton value="#{msg['btn_save']}" icon="ui-icon-disk"
+							action="#{accountBacking.saveAction}"
+							update="growl :form:recordTable"
+							oncomplete="handleLoginRequest(xhr, status, args);" />
+						<p:commandButton value="#{msg['btn_close']}"
+							icon="ui-icon-closethick" update="growl :form:recordTable"
+							process="@none" oncomplete="dlg.hide()" />
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:spacer height="10" />
+
+				<h:panelGrid id="pnlDetail" columns="2" cellpadding="4"
+					style="margin:0 auto;" width="100%">
+
+					<h:outputLabel value="#{msg['acc_code']}" />
+					<p:inputText value="#{accountBacking.selected.doc}"
+						style="width:100%" label="#{msg['acc_code']}" maxlength="45" />
+
+					<h:outputLabel value="#{msg['acc_name']}" />
+					<p:inputText value="#{accountBacking.selected.firstnames}"
+						style="width:100%" label="#{msg['acc_name']}" required="true"
+						maxlength="255" />
+
+					<h:outputLabel value="#{msg['acc_principal_contact']}" />
+					<p:inputText value="#{accountBacking.selected.surnames}"
+						style="width:100%" label="#{msg['acc_principal_contact']}"
+						required="true" maxlength="255" />
+
+					<h:outputLabel value="#{msg['acc_phone']}" />
+					<p:inputText value="#{accountBacking.selected.phoneNumber}"
+						style="width:100%" label="#{msg['pat_phone_number']}"
+						maxlength="10" validator="numberValidator" required="true">
+						<pe:keyFilter regEx="/[\d]/" preventPaste="false" />
+					</p:inputText>
+
+					<h:outputText value="#{msg['acc_email']}" />
+					<p:inputText value="#{accountBacking.selected.email}"
+						style="width:100%" label="#{msg['acc_email']}"
+						validator="emailValidator" maxlength="1000" />
+
+					<h:outputText value="#{msg['pat_country']}" />
+					<p:selectOneMenu value="#{accountBacking.idCountry}"
+						label="#{msg['pat_country']}" style="width:100%" required="true"
+						converter="entityConverter" filter="true"
+						filterMatchMode="contains">
+						<p:ajax update="selRegion selCity"
+							listener="#{accountBacking.handleCountryChange}" />
+						<f:selectItems value="#{accountBacking.listCountry}" />
+					</p:selectOneMenu>
+
+					<h:outputText value="#{msg['pat_region']}" />
+					<p:selectOneMenu id="selRegion" value="#{accountBacking.idRegion}"
+						label="#{msg['pat_region']}" style="width:100%" required="true"
+						converter="entityConverter" filter="true"
+						filterMatchMode="contains">
+						<p:ajax update="selCity"
+							listener="#{accountBacking.handleRegionChange}" />
+						<f:selectItems value="#{accountBacking.listRegion}" />
+					</p:selectOneMenu>
+
+					<h:outputText value="#{msg['pat_city']}" />
+					<p:selectOneMenu id="selCity" value="#{accountBacking.idCity}"
+						label="#{msg['pat_city']}" style="width:100%" required="true"
+						converter="entityConverter" filter="true"
+						filterMatchMode="contains">
+						<f:selectItems value="#{accountBacking.listCity}" />
+					</p:selectOneMenu>
+
+					<h:outputText value="#{msg['acc_job']}" />
+					<p:selectOneMenu
+						value="#{accountBacking.selected.crmOccupation.id}"
+						label="#{msg['acc_job']}" style="width:100%" required="true"
+						converter="entityConverter" filter="true"
+						filterMatchMode="contains">
+						<f:selectItems value="#{accountBacking.listJob}" />
+					</p:selectOneMenu>
+
+				</h:panelGrid>
+
+			</p:dialog>
+		</h:form>
+
+		<script type="text/javascript">
+			function handleLoginRequest(xhr, status, args) {
+				if (args.validationFailed || !args.saved) {
+					/*jQuery('#:editForm:dialogDetail').effect("shake", {
+						times : 3
+					}, 100);*/
+				} else {
+					dlg.hide();
+				}
+			}
+		</script>
+
+	</ui:define>
+</ui:composition>
+</html>

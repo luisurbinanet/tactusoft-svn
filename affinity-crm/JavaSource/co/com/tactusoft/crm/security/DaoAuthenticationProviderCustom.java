@@ -31,6 +31,7 @@ import co.com.tactusoft.crm.model.entities.CrmRole;
 import co.com.tactusoft.crm.util.Constant;
 import co.com.tactusoft.crm.util.FacesUtil;
 import co.com.tactusoft.crm.util.SAPEnvironment;
+import co.com.tactusoft.crm.util.SugarEnvironment;
 import co.com.tactusoft.crm.view.backing.ApplicationBacking;
 
 import com.tactusoft.webservice.client.beans.WSBean;
@@ -138,6 +139,9 @@ public class DaoAuthenticationProviderCustom extends
 			// get listWSGroupSellers
 			SAPEnvironment sap = FacesUtil.findBean("SAPEnvironment");
 			sap.getLisParameter();
+			
+			SugarEnvironment sugar = FacesUtil.findBean("sugarEnvironment");
+			sugar.getLisParameter();
 
 			listBranch = tableService.getListBranchActive1000();
 			user.setListBranchAll(listBranch);

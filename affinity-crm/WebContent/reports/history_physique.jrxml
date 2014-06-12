@@ -74,7 +74,7 @@ ORDER by b.start_appointment_date DESC]]>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="326" splitType="Stretch">
+		<band height="438" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="4" width="63" height="20" uuid="e1ed9247-c63e-4e37-8b9e-1b3b97f0ce65"/>
 				<text><![CDATA[Cita del día:]]></text>
@@ -131,7 +131,10 @@ ORDER by b.start_appointment_date DESC]]>
 				<text><![CDATA[Peso]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="121" y="82" width="431" height="20" uuid="98e148be-785f-475f-8ffc-5f5d42062909"/>
+				<reportElement stretchType="RelativeToTallestObject" x="118" y="82" width="434" height="30" uuid="98e148be-785f-475f-8ffc-5f5d42062909"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Estado General}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -139,7 +142,7 @@ ORDER by b.start_appointment_date DESC]]>
 				<textFieldExpression><![CDATA[$F{Tensión Arterial}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="82" width="121" height="20" uuid="5d59fe26-8808-47e5-8188-243273848182"/>
+				<reportElement x="0" y="82" width="118" height="30" uuid="5d59fe26-8808-47e5-8188-243273848182"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
@@ -153,121 +156,154 @@ ORDER by b.start_appointment_date DESC]]>
 				<text><![CDATA[Tensión Arterial]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="121" y="101" width="431" height="20" uuid="5da9127a-30ca-4d9c-8cf6-af9d41f54ef1"/>
+				<reportElement stretchType="RelativeToTallestObject" x="118" y="112" width="434" height="30" uuid="5da9127a-30ca-4d9c-8cf6-af9d41f54ef1"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Cabeza Cuello}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="101" width="121" height="20" uuid="1f5b557d-a427-4045-9c9d-5094bea7b876"/>
+				<reportElement x="0" y="112" width="118" height="30" uuid="1f5b557d-a427-4045-9c9d-5094bea7b876"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Cabeza Cuello]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="121" y="120" width="431" height="20" uuid="befbe322-99e1-4b35-9c7a-de80b2fd92b8"/>
+				<reportElement stretchType="RelativeToTallestObject" x="118" y="142" width="434" height="30" uuid="befbe322-99e1-4b35-9c7a-de80b2fd92b8"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Torax}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="120" width="121" height="20" uuid="cd4ad0c9-309b-479a-abee-91788d6c6df2"/>
+				<reportElement x="0" y="142" width="118" height="30" uuid="cd4ad0c9-309b-479a-abee-91788d6c6df2"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Torax]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="121" y="140" width="431" height="20" uuid="a2bcd2d6-6888-4666-bb5e-e5148994e56c"/>
+				<reportElement stretchType="RelativeToTallestObject" x="118" y="172" width="434" height="30" uuid="a2bcd2d6-6888-4666-bb5e-e5148994e56c"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Pulmones}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="140" width="121" height="20" uuid="61ff4a38-7f49-4734-b7de-743d11cffdb7"/>
+				<reportElement x="0" y="172" width="118" height="30" uuid="61ff4a38-7f49-4734-b7de-743d11cffdb7"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Pulmones]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="121" y="160" width="431" height="20" uuid="41e416f7-b6ca-490c-9053-60225e2e148e"/>
+				<reportElement stretchType="RelativeToTallestObject" x="118" y="200" width="434" height="30" uuid="41e416f7-b6ca-490c-9053-60225e2e148e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Corazón}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="160" width="121" height="20" uuid="5566fbf4-74f6-4ecc-a704-d24ecf4500dc"/>
+				<reportElement x="0" y="200" width="118" height="30" uuid="5566fbf4-74f6-4ecc-a704-d24ecf4500dc"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Corazón]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="121" y="180" width="431" height="20" uuid="32def67f-65ee-41fd-8609-741124accecf"/>
+				<reportElement stretchType="RelativeToTallestObject" x="118" y="228" width="434" height="30" uuid="32def67f-65ee-41fd-8609-741124accecf"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Abdomen}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="180" width="121" height="20" uuid="75b9f43c-8c82-4750-8e56-ced0b7eeacec"/>
+				<reportElement x="0" y="228" width="118" height="30" uuid="75b9f43c-8c82-4750-8e56-ced0b7eeacec"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Abdomen]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="121" y="200" width="431" height="20" uuid="eb3c5b35-0bee-4abe-962d-7cf8feacb7cc"/>
+				<reportElement stretchType="RelativeToTallestObject" x="118" y="258" width="434" height="30" uuid="eb3c5b35-0bee-4abe-962d-7cf8feacb7cc"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Genitourinario}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="200" width="121" height="20" uuid="e23d8fca-c608-4662-9381-eabbe5bdbd49"/>
+				<reportElement x="0" y="258" width="118" height="30" uuid="e23d8fca-c608-4662-9381-eabbe5bdbd49"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Genitourinario]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="121" y="220" width="431" height="20" uuid="df517a13-f3f0-4d49-a648-6d63f498c1a8"/>
+				<reportElement stretchType="RelativeToTallestObject" x="118" y="288" width="434" height="30" uuid="df517a13-f3f0-4d49-a648-6d63f498c1a8"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Osteoarticulares}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="220" width="121" height="20" uuid="48c7f64f-ffda-424f-b22d-dfdea81b007f"/>
+				<reportElement x="0" y="288" width="118" height="30" uuid="48c7f64f-ffda-424f-b22d-dfdea81b007f"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Osteoarticulares]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="121" y="240" width="431" height="20" uuid="c79d196e-55e6-4f0c-a6bb-75eef9d20213"/>
+				<reportElement stretchType="RelativeToTallestObject" x="118" y="318" width="434" height="30" uuid="c79d196e-55e6-4f0c-a6bb-75eef9d20213"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Extremidades}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="240" width="121" height="20" uuid="875f26dd-d63c-42e0-a87e-bc92d851799e"/>
+				<reportElement x="0" y="318" width="118" height="30" uuid="875f26dd-d63c-42e0-a87e-bc92d851799e"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Extremidades]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="121" y="260" width="431" height="20" uuid="aa42a015-2f57-4fc6-b950-3be150bc9735"/>
+				<reportElement stretchType="RelativeToTallestObject" x="118" y="348" width="434" height="30" uuid="aa42a015-2f57-4fc6-b950-3be150bc9735"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Neurológicos y Reflejos }]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="260" width="121" height="20" uuid="9d7b1b81-876a-4278-94b1-387aafa9186c"/>
+				<reportElement x="0" y="348" width="118" height="30" uuid="9d7b1b81-876a-4278-94b1-387aafa9186c"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Neurológicos y Reflejos ]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="121" y="280" width="431" height="20" uuid="417629cc-f94f-4777-96c3-b8ceb96e9c77"/>
+				<reportElement stretchType="RelativeToTallestObject" x="118" y="378" width="434" height="30" uuid="417629cc-f94f-4777-96c3-b8ceb96e9c77"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Piel}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="280" width="121" height="20" uuid="863fa9bd-27a6-4296-8358-b4ba4b684d37"/>
+				<reportElement x="0" y="378" width="118" height="30" uuid="863fa9bd-27a6-4296-8358-b4ba4b684d37"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Piel]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="121" y="300" width="431" height="20" uuid="d419b8c7-f3ad-4109-b546-bff6aa02db7b"/>
+				<reportElement stretchType="RelativeToTallestObject" x="118" y="408" width="434" height="30" uuid="d419b8c7-f3ad-4109-b546-bff6aa02db7b"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Observaciones}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="300" width="121" height="20" uuid="c710ffed-0cc7-407c-94e8-2e66d51fc2b0"/>
+				<reportElement x="0" y="408" width="118" height="30" uuid="c710ffed-0cc7-407c-94e8-2e66d51fc2b0"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
