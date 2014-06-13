@@ -35,6 +35,8 @@ public class CrmPatient implements java.io.Serializable {
 	private CrmUser crmUserByIdUserCreate;
 	private CrmUser crmUserByIdUserModified;
 	private CrmProfile crmProfile;
+	private CrmCity crmCity;
+	private CrmPatient crmPatient;
 	private String doc;
 	private String codeSap;
 	private String docType;
@@ -51,7 +53,6 @@ public class CrmPatient implements java.io.Serializable {
 	private String typeHousing;
 	private BigDecimal idCountry;
 	private BigDecimal idRegion;
-	private CrmCity crmCity;
 	private BigDecimal idCity;
 	private BigDecimal idGuardianType;
 	private String guardian;
@@ -59,7 +60,7 @@ public class CrmPatient implements java.io.Serializable {
 	private String guardianRelationship;
 	private String guardianTelephone;
 	private String obs;
-	private Boolean cycle;
+	private boolean cycle;
 	private Boolean sendPhone;
 	private Boolean sendEmail;
 	private Boolean sendPostal;
@@ -71,6 +72,7 @@ public class CrmPatient implements java.io.Serializable {
 	private BigDecimal idMemberShip;
 	private BigDecimal idEps;
 	private String ticket;
+	private Integer patientType;
 	private Set<CrmHistoryPhysique> crmHistoryPhysiques = new HashSet<CrmHistoryPhysique>(
 			0);
 	private Set<CrmHistoryHomeopathic> crmHistoryHomeopathics = new HashSet<CrmHistoryHomeopathic>(
@@ -90,6 +92,10 @@ public class CrmPatient implements java.io.Serializable {
 	private int age;
 
 	public CrmPatient() {
+	}
+	
+	public CrmPatient(BigDecimal id) {
+		this.id = id;
 	}
 
 	public CrmPatient(BigDecimal id, String doc, String codeSap, String docType) {
@@ -209,6 +215,26 @@ public class CrmPatient implements java.io.Serializable {
 
 	public void setCrmProfile(CrmProfile crmProfile) {
 		this.crmProfile = crmProfile;
+	}
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "id_city", updatable = false, insertable = false)
+	public CrmCity getCrmCity() {
+		return crmCity;
+	}
+
+	public void setCrmCity(CrmCity crmCity) {
+		this.crmCity = crmCity;
+	}
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "id_group")
+	public CrmPatient getCrmPatient() {
+		return crmPatient;
+	}
+
+	public void setCrmPatient(CrmPatient crmPatient) {
+		this.crmPatient = crmPatient;
 	}
 
 	@Column(name = "doc", nullable = false, length = 45)
@@ -354,16 +380,6 @@ public class CrmPatient implements java.io.Serializable {
 
 	public void setIdRegion(BigDecimal idRegion) {
 		this.idRegion = idRegion;
-	}
-
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_city", updatable = false, insertable = false)
-	public CrmCity getCrmCity() {
-		return crmCity;
-	}
-
-	public void setCrmCity(CrmCity crmCity) {
-		this.crmCity = crmCity;
 	}
 
 	@Column(name = "id_city", scale = 0)
@@ -537,6 +553,15 @@ public class CrmPatient implements java.io.Serializable {
 
 	public void setTicket(String ticket) {
 		this.ticket = ticket;
+	}
+
+	@Column(name = "patient_type")
+	public Integer getPatientType() {
+		return patientType;
+	}
+
+	public void setPatientType(Integer patientType) {
+		this.patientType = patientType;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "crmPatient")

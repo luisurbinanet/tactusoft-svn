@@ -29,7 +29,7 @@ public class VwRipsPatient implements java.io.Serializable {
 	private String surnames2;
 	private String firstnames;
 	private String firstnames2;
-	private double age;
+	private Double age;
 	private int sizeUnit;
 	private String gender;
 	private String region;
@@ -43,7 +43,7 @@ public class VwRipsPatient implements java.io.Serializable {
 
 	public VwRipsPatient(BigDecimal idPatient, BigDecimal idBranch,
 			int membership, String surnames, String surnames2,
-			String firstnames, String firstnames2, double age, int sizeUnit,
+			String firstnames, String firstnames2, Double age, int sizeUnit,
 			String gender, String typeHousing, String typeHistory) {
 		this.idPatient = idPatient;
 		this.idBranch = idBranch;
@@ -62,7 +62,7 @@ public class VwRipsPatient implements java.io.Serializable {
 	public VwRipsPatient(BigDecimal idPatient, BigDecimal idBranch,
 			Date appointmentDate, String branch, String docType, String doc,
 			int membership, String surnames, String surnames2,
-			String firstnames, String firstnames2, double age, int sizeUnit,
+			String firstnames, String firstnames2, Double age, int sizeUnit,
 			String gender, String region, String city, BigDecimal idEps,
 			String typeHousing) {
 		this.idPatient = idPatient;
@@ -186,11 +186,11 @@ public class VwRipsPatient implements java.io.Serializable {
 	}
 
 	@Column(name = "age", nullable = false, precision = 17, scale = 0)
-	public double getAge() {
+	public Double getAge() {
 		return this.age;
 	}
 
-	public void setAge(double age) {
+	public void setAge(Double age) {
 		this.age = age;
 	}
 

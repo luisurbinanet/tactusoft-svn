@@ -3,6 +3,7 @@ package co.com.tactusoft.crm.model.entities;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -97,6 +98,11 @@ public class CrmRegion implements java.io.Serializable {
 
 	public void setCrmCities(Set<CrmCity> crmCities) {
 		this.crmCities = crmCities;
+	}
+	
+	@Override
+	public String toString() {
+		return this.name;
 	}
 
 }
