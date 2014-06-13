@@ -94,6 +94,21 @@ public class CustomH extends DefaultHttpClient {
 		}
 	}
 
+	public JSONObject listTypes() throws JSONException {
+		Map<String, String> getdata = new HashMap<String, String>();
+		getdata.put("operation", "listtypes");
+		getdata.put("sessionName", sessionId);
+
+		Object response = this.doGet(getdata);
+
+		if (!getError(response).isResult()) {
+			return null;
+		}
+
+		JSONObject result = (JSONObject) ((JSONObject) response).get("result");
+		return result;
+	}
+
 	public JSONObject getDescribe(String module) throws JSONException {
 		Map<String, String> getdata = new HashMap<String, String>();
 		getdata.put("operation", "describe");
@@ -157,8 +172,8 @@ public class CustomH extends DefaultHttpClient {
 
 		Object response = this.doGet(postdata);
 		if (!getError(response).isResult()) {
-			//JSONObject result = (JSONObject) response;
-			//JSONObject resultError = (JSONObject) result.get("error");
+			// JSONObject result = (JSONObject) response;
+			// JSONObject resultError = (JSONObject) result.get("error");
 			return null;
 		}
 
