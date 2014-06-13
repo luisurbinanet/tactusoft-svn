@@ -134,4 +134,9 @@ public class CrmCountry implements java.io.Serializable {
 		this.crmRegions = crmRegions;
 	}
 
+	@Override
+	public String toString() {
+		return this.name;
+	}
+
 }

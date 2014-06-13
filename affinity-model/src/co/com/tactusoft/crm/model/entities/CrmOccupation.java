@@ -21,22 +21,26 @@ public class CrmOccupation implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private BigDecimal id;
 	private String name;
+	private Integer occupationType;
 	private int state;
 	private Set<CrmPatient> crmPatients = new HashSet<CrmPatient>(0);
 
 	public CrmOccupation() {
 	}
 
-	public CrmOccupation(BigDecimal id, String name, int state) {
+	public CrmOccupation(BigDecimal id, String name, Integer occupationType,
+			int state) {
 		this.id = id;
 		this.name = name;
+		this.occupationType = occupationType;
 		this.state = state;
 	}
 
-	public CrmOccupation(BigDecimal id, String name, int state,
-			Set<CrmPatient> crmPatients) {
+	public CrmOccupation(BigDecimal id, String name, Integer occupationType,
+			int state, Set<CrmPatient> crmPatients) {
 		this.id = id;
 		this.name = name;
+		this.occupationType = occupationType;
 		this.state = state;
 		this.crmPatients = crmPatients;
 	}
@@ -60,6 +64,15 @@ public class CrmOccupation implements java.io.Serializable {
 		this.name = name;
 	}
 
+	@Column(name = "occupation_type", unique = true, nullable = false)
+	public Integer getOccupationType() {
+		return occupationType;
+	}
+
+	public void setOccupationType(Integer occupationType) {
+		this.occupationType = occupationType;
+	}
+
 	@Column(name = "state", nullable = false)
 	public int getState() {
 		return this.state;
@@ -76,6 +89,11 @@ public class CrmOccupation implements java.io.Serializable {
 
 	public void setCrmPatients(Set<CrmPatient> crmPatients) {
 		this.crmPatients = crmPatients;
+	}
+
+	@Override
+	public String toString() {
+		return this.name;
 	}
 
 }
