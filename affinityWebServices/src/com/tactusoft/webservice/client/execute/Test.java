@@ -150,13 +150,14 @@ public class Test {
 	}
 
 	public static void getJson() {
-		CreateSugarContact createSugarContact = new CreateSugarContact("http://192.168.1.47/vtigercrm6", "admin", "iMc5y2W2cDQg2vJr");
+		SugarWS createSugarContact = new SugarWS("http://192.168.1.47/vtigercrm6", "admin", "iMc5y2W2cDQg2vJr");
 		/*String result = /*createSugarContact.createAccounts(2,"8647362", "Sarmiento Royero",
 				"Carlos Arturo", "Colombia", "Cundinamarca", "Bogotá", "Carrera 55A 163 35", "00000", "6501550",
 				"3003044115", "tactusoft@hotmail.com");createSugarContact.getAccounts(5);*/
-		System.out.println(createSugarContact.updateAccount(5,"864736", "Sarmiento Royero",
+		System.out.println(createSugarContact.persitLead(5,"864736", "Sarmiento Royero",
 				"Carlos", "Colombia", "Cundinamarca", "Bogotá", "Carrera 55A 163 35", "00000", "6501550",
-				"3003044115", "tactusoft@hotmail.com"));
+				"3003044115", "tactusoft@hotmail.com",1));
+		//System.out.println(createSugarContact.getModules());
 		//System.out.println(result);
 	}
 
