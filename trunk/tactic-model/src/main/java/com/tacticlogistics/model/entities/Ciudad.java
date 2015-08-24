@@ -36,7 +36,6 @@ public class Ciudad implements java.io.Serializable {
 	}
 
 	@Id
-
 	@Column(name = "Id", unique = true, nullable = false)
 	public Integer getId() {
 		return this.id;
@@ -46,7 +45,7 @@ public class Ciudad implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "Id_Pais", nullable = false)
 	public Pais getPais() {
 		return this.pais;
